@@ -217,15 +217,25 @@
 }
 
 .blog-article-meta .blog-author-avatar{
-  flex: 0 0 48%;
-  width: 100%;
-  max-width: 100%;
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  max-width: 56px;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid rgba(148,163,184,0.7);
   box-shadow: 0 4px 14px rgba(0,0,0,0.6);
   margin-right: 0;
+}
+
+@media (max-width: 768px){
+  .blog-article-meta .blog-author-avatar{
+    flex: 0 0 112px;
+    width: 112px;
+    height: 112px;
+    max-width: 112px;
+  }
 }
 
 .blog-article-meta .blog-author-details{
