@@ -1,0 +1,22 @@
+name = "albaspace-api"
+main = "src/index.js"
+compatibility_date = "2026-04-06"
+
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "albaspace-auth"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[vars]
+PUBLIC_BASE_URL = "https://api.albaspace.com.tr"
+FRONTEND_URL = "https://albaspace.com.tr"
+ALLOWED_ORIGINS = "https://albaspace.com.tr,https://www.albaspace.com.tr"
+COOKIE_DOMAIN = ".albaspace.com.tr"
+COOKIE_SAME_SITE = "Lax"
+SESSION_TTL_SECONDS = "2592000"
+
+# Add secrets with:
+# wrangler secret put GOOGLE_CLIENT_ID
+# wrangler secret put GOOGLE_CLIENT_SECRET

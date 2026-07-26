@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Alba Space — AR</title>
+
+  <!-- MindAR + A-Frame: синхронно, до построения DOM -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      /* НЕТ background — MindAR сам рисует камеру в canvas */
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      color: #fff;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+    }
+
+    /* НЕ трогаем canvas, video, a-scene — MindAR управляет сам */
+
+    /* ── TOP BAR ── */
+    #top-bar {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex; align-items: center; gap: 12px;
+      padding: max(12px, env(safe-area-inset-top)) 16px 12px;
+      background: linear-gradient(to bottom, rgba(2,6,23,0.85) 65%, transparent);
+      pointer-events: none;
+    }
+    #back-btn {
+      pointer-events: auto;
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 99px;
+      background: rgba(2,6,23,0.7);
+      border: 1px solid rgba(0,194,255,0.35);
+      color: #00c2ff; text-decoration: none;
+      font-size: 13px; font-weight: 600;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    #top-logo { margin-left: auto; height: 24px; opacity: 0.9; }
+
+    /* ── STATUS BADGE ── */
+    #status-badge {
+      position: fixed;
+      top: max(68px, calc(env(safe-area-inset-top) + 56px));
+      left: 50%; transform: translateX(-50%);
+      z-index: 200;
+      padding: 7px 16px; border-radius: 99px;
+      background: rgba(2,6,23,0.72);
+      border: 1px solid rgba(148,163,184,0.25);
+      font-size: 13px; color: #cbd5e1;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    #status-badge.found {
+      background: rgba(0,60,35,0.88);
+      border-color: rgba(0,255,150,0.45);
+      color: #6ee7b7;
+    }
+
+    /* ── MODEL LABEL ── */
+    #model-label {
+      position: fixed;
+      bottom: max(40px, calc(env(safe-area-inset-bottom) + 40px));
+      left: 50%; transform: translateX(-50%);
+      z-index: 200;
+      padding: 14px 28px; border-radius: 18px;
+      background: rgba(2,6,23,0.85);
+      border: 1px solid rgba(0,194,255,0.4);
+      box-shadow: 0 0 32px rgba(0,194,255,0.18);
+      text-align: center; max-width: 85vw;
+      display: none;
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+    #model-label-name { font-size: 20px; font-weight: 700; color: #38bdf8; letter-spacing: 0.06em; text-transform: uppercase; }
+    #model-label-sub  { font-size: 11px; color: #64748b; margin-top: 3px; }
+
+    /* ── LOADING OVERLAY (max 10 сек) ── */
+    #loading-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: #020617;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 18px;
+      transition: opacity 0.6s ease;
+    }
+    #loading-overlay.gone { opacity: 0; pointer-events: none; }
+    #ld-logo { width: 68px; animation: lgP 2s ease-in-out infinite; }
+    @keyframes lgP { 0%,100%{transform:scale(1);opacity:.85} 50%{transform:scale(1.07);opacity:1} }
+    #ld-wordmark { height: 22px; opacity: 0.7; }
+    .ld-spin {
+      width: 42px; height: 42px;
+      border: 3px solid rgba(0,194,255,0.12);
+      border-top-color: #00c2ff; border-right-color: rgba(56,189,248,0.75);
+      border-radius: 50%; animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #ld-text { font-size: 13px; color: #94a3b8; letter-spacing: 0.1em; }
+    #ld-count { font-size: 12px; color: #334155; }
+
+    /* ── INSTRUCTION OVERLAY ── */
+    #instruction-overlay {
+      position: fixed; inset: 0; z-index: 400;
+      background: rgba(2,6,23,0.93);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0; padding: 28px 24px;
+      cursor: pointer;
+    }
+    #instruction-overlay.show { display: flex; }
+    #instruction-overlay.fade { opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
+    .inst-logo { height: 26px; opacity: 0.8; margin-bottom: 28px; }
+    .inst-anim {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 28px;
+    }
+    .inst-icon {
+      width: 54px; height: 54px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; font-size: 26px;
+      background: rgba(0,194,255,0.08);
+      border: 1px solid rgba(0,194,255,0.2);
+    }
+    .inst-icon.pulse { animation: iPulse 2s ease-in-out infinite; }
+    @keyframes iPulse { 0%,100%{box-shadow:0 0 0 0 rgba(0,194,255,0)} 50%{box-shadow:0 0 0 8px rgba(0,194,255,0.15)} }
+    .inst-arrow { font-size: 18px; color: #334155; }
+    .inst-texts { text-align: center; margin-bottom: 28px; }
+    .inst-lang { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(148,163,184,0.1); }
+    .inst-lang:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .inst-lang-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #334155; margin-bottom: 4px; }
+    .inst-lang-text { font-size: 15px; font-weight: 600; color: #e2e8f0; line-height: 1.45; }
+    .inst-lang-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
+    .inst-tap { font-size: 12px; color: #475569; letter-spacing: 0.06em; animation: tap 1.8s ease-in-out infinite; }
+    @keyframes tap { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── NO MIND ERROR ── */
+    #no-mind-error {
+      position: fixed; inset: 0; z-index: 600;
+      background: #020617;
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; padding: 32px; text-align: center;
+    }
+    #no-mind-error.show { display: flex; }
+    #no-mind-error h2 { color: #f87171; font-size: 20px; }
+    #no-mind-error p  { color: #94a3b8; font-size: 14px; line-height: 1.6; max-width: 300px; }
+    #no-mind-error a  {
+      padding: 10px 20px;
+      background: rgba(0,194,255,0.1); border: 1px solid rgba(0,194,255,0.35);
+      border-radius: 99px; color: #38bdf8; text-decoration: none;
+      font-size: 13px; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     A-FRAME СЦЕНА — СТАТИЧЕСКИ В HTML, не через innerHTML
+     MindAR управляет размерами canvas и видео сам
+═══════════════════════════════════════════════════════════════ -->
+<a-scene
+  mindar-image="imageTargetSrc:/scanner/targets.mind;filterMinCF:0.001;filterBeta:0.01;missTolerance:5;warmupTolerance:3;"
+  color-space="sRGB"
+  renderer="colorManagement:true;physicallyCorrectLights:true"
+  vr-mode-ui="enabled:false"
+  device-orientation-permission-ui="enabled:false"
+  loading-screen="enabled:false">
+
+  <a-assets timeout="90000"></a-assets>
+
+  <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+  <a-entity light="type:ambient;intensity:4.0"></a-entity>
+  <a-entity light="type:directional;intensity:3.0" position="1 2 1"></a-entity>
+  <a-entity light="type:directional;intensity:1.5" position="-1 1 -1"></a-entity>
+
+  <!-- 41 якорей — каждый пустой, модель добавляется при распознавании -->
+   
+  <a-entity id="a0"  mindar-image-target="targetIndex:0"></a-entity>
+  <a-entity id="a1"  mindar-image-target="targetIndex:1"></a-entity>
+  <a-entity id="a2"  mindar-image-target="targetIndex:2"></a-entity>
+  <a-entity id="a3"  mindar-image-target="targetIndex:3"></a-entity>
+  <a-entity id="a4"  mindar-image-target="targetIndex:4"></a-entity>
+  <a-entity id="a5"  mindar-image-target="targetIndex:5"></a-entity>
+  <a-entity id="a6"  mindar-image-target="targetIndex:6"></a-entity>
+  <a-entity id="a7"  mindar-image-target="targetIndex:7"></a-entity>
+  <a-entity id="a8"  mindar-image-target="targetIndex:8"></a-entity>
+  <a-entity id="a9"  mindar-image-target="targetIndex:9"></a-entity>
+  <a-entity id="a10" mindar-image-target="targetIndex:10"></a-entity>
+  <a-entity id="a11" mindar-image-target="targetIndex:11"></a-entity>
+  <a-entity id="a12" mindar-image-target="targetIndex:12"></a-entity>
+  <a-entity id="a13" mindar-image-target="targetIndex:13"></a-entity>
+  <a-entity id="a14" mindar-image-target="targetIndex:14"></a-entity>
+  <a-entity id="a15" mindar-image-target="targetIndex:15"></a-entity>
+  <a-entity id="a16" mindar-image-target="targetIndex:16"></a-entity>
+  <a-entity id="a17" mindar-image-target="targetIndex:17"></a-entity>
+  <a-entity id="a18" mindar-image-target="targetIndex:18"></a-entity>
+  <a-entity id="a19" mindar-image-target="targetIndex:19"></a-entity>
+  <a-entity id="a20" mindar-image-target="targetIndex:20"></a-entity>
+  <a-entity id="a21" mindar-image-target="targetIndex:21"></a-entity>
+  <a-entity id="a22" mindar-image-target="targetIndex:22"></a-entity>
+  <a-entity id="a23" mindar-image-target="targetIndex:23"></a-entity>
+  <a-entity id="a24" mindar-image-target="targetIndex:24"></a-entity>
+  <a-entity id="a25" mindar-image-target="targetIndex:25"></a-entity>
+  <a-entity id="a26" mindar-image-target="targetIndex:26"></a-entity>
+  <a-entity id="a27" mindar-image-target="targetIndex:27"></a-entity>
+  <a-entity id="a28" mindar-image-target="targetIndex:28"></a-entity>
+  <a-entity id="a29" mindar-image-target="targetIndex:29"></a-entity>
+  <a-entity id="a30" mindar-image-target="targetIndex:30"></a-entity>
+  <a-entity id="a31" mindar-image-target="targetIndex:31"></a-entity>
+  <a-entity id="a32" mindar-image-target="targetIndex:32"></a-entity>
+  <a-entity id="a33" mindar-image-target="targetIndex:33"></a-entity>
+  <a-entity id="a34" mindar-image-target="targetIndex:34"></a-entity>
+  <a-entity id="a35" mindar-image-target="targetIndex:35"></a-entity>
+  <a-entity id="a36" mindar-image-target="targetIndex:36"></a-entity>
+  <a-entity id="a37" mindar-image-target="targetIndex:37"></a-entity>
+  <a-entity id="a38" mindar-image-target="targetIndex:38"></a-entity>
+  <a-entity id="a39" mindar-image-target="targetIndex:39"></a-entity>
+  <a-entity id="a40" mindar-image-target="targetIndex:40"></a-entity>
+</a-scene>
+
+<!-- ── OVERLAYS (поверх сцены, высокий z-index) ── -->
+
+<div id="loading-overlay">
+  <img id="ld-logo" src="/assets/images/AlbaLogo.png" alt="" />
+  <img id="ld-wordmark" src="/assets/images/albaspace.png" alt="ALBASPACE" />
+  <div class="ld-spin"></div>
+  <p id="ld-text">AR Tarayıcı Yükleniyor...</p>
+  <p id="ld-count"></p>
+</div>
+
+<div id="instruction-overlay" onclick="dismissInstruction()">
+  <img class="inst-logo" src="/assets/images/albaspace.png" alt="ALBASPACE" />
+  <div class="inst-anim">
+    <div class="inst-icon">📖</div>
+    <span class="inst-arrow">→</span>
+    <div class="inst-icon pulse">📷</div>
+    <span class="inst-arrow">→</span>
+    <div class="inst-icon">🛸</div>
+  </div>
+  <div class="inst-texts">
+    <div class="inst-lang">
+      <div class="inst-lang-label">🇹🇷 Türkçe</div>
+      <div class="inst-lang-text">Kitabındaki görsele kameranı tut</div>
+      <div class="inst-lang-sub">3D model sayfanın üzerinde canlanacak</div>
+    </div>
+    <div class="inst-lang">
+      <div class="inst-lang-label">🇬🇧 English</div>
+      <div class="inst-lang-text">Point your camera at any image in the book</div>
+      <div class="inst-lang-sub">The 3D model will appear above the page</div>
+    </div>
+    <div class="inst-lang">
+      <div class="inst-lang-label">🇷🇺 Русский</div>
+      <div class="inst-lang-text">Наведи камеру на картинку в книге</div>
+      <div class="inst-lang-sub">3D модель оживёт прямо на странице</div>
+    </div>
+  </div>
+  <p class="inst-tap">Devam / Continue / Продолжить — ekrana dokun</p>
+</div>
+
+<div id="no-mind-error">
+  <h2>⚠️ Sistem Hazır Değil</h2>
+  <p>AR hedef dosyası bulunamadı.<br>Lütfen daha sonra tekrar deneyin.</p>
+  <a href="javascript:history.back()">← Geri Dön</a>
+</div>
+
+<div id="top-bar">
+  <a id="back-btn" href="javascript:history.back()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Geri
+  </a>
+  <img id="top-logo" src="/assets/images/albaspace-black.jpg" alt="Alba Space" />
+</div>
+
+<div id="status-badge">📷 Kitabındaki görsele kameranı tut</div>
+
+<div id="model-label">
+  <div id="model-label-name">—</div>
+  <div id="model-label-sub">Hedef bulundu ✓</div>
+</div>
+
+<script>
+const NAMES = [
+  'Curiosity','Dünya / Earth','ExoMars','Göktürk-1','Göktürk-2',
+  'Hubble Teleskobu','Hubble Teleskobu','İMECE','Ingenuity','Uzay İstasyonu (ISS)',
+  'James Webb Teleskobu','Jüpiter','Kepler Teleskobu','Lagari Hasan Çelebi','Mars',
+  'Mars Odyssey','Mars Reconnaissance Orbiter','Merkür','Neptün','Opportunity Rover',
+  'Perseverance Rover','RASAT','Satürn','Sojourner Rover','Spirit Rover',
+  'Sputnik','Türksat 1A','Türksat 1B','Türksat 1C','Türksat 2A',
+  'Türksat 3A','Türksat 3B','Türksat 4A','Türksat 5A','Türksat 5B',
+  'Türksat 6A','Uranüs','Venüs','Voyager 1','Voyager 2','Zhurong Rover'
+];
+const SCALES = [
+  '1.8 1.8 1.8','2.4 2.4 2.4','1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8',
+  '1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8','1.2 1.2 1.2',
+  '1.5 1.5 1.5','0.48 0.48 0.48','1.8 1.8 1.8','2.1 2.1 2.1','0.48 0.48 0.48',
+  '1.8 1.8 1.8','1.8 1.8 1.8','0.48 0.48 0.48','0.48 0.48 0.48','1.8 1.8 1.8',
+  '1.8 1.8 1.8','1.8 1.8 1.8','0.48 0.48 0.48','1.8 1.8 1.8','1.8 1.8 1.8',
+  '1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8',
+  '1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8',
+  '1.8 1.8 1.8','0.48 0.48 0.48','0.48 0.48 0.48','1.8 1.8 1.8','1.8 1.8 1.8','1.8 1.8 1.8'
+];
+
+// 41 якорей, но некоторые индексы не имеют модели; для них оставляем null.
+const MODEL_URLS = [
+  '/assets/models/curiosity.glb','/assets/models/earth.glb','/assets/models/exomars.glb','/assets/models/gokturk-1.glb','/assets/models/gokturk-2.glb',
+  '/assets/models/hubble.glb','/assets/models/hubble.glb','/assets/models/imece.glb','/assets/models/ingenuity.glb','/assets/models/iss.glb',
+  '/assets/models/jameswebb.glb','/assets/models/jupiter.glb','/assets/models/kepler.glb','/assets/models/lagari.glb','/assets/models/mars.glb',
+  '/assets/models/marsodyssey.glb','/assets/models/marsreconnaissance.glb','/assets/models/mercury.glb','/assets/models/neptune.glb','/assets/models/opportunity.glb',
+  '/assets/models/perseverance.glb','/assets/models/rasat.glb','/assets/models/saturn.glb','/assets/models/sputnik.glb','/assets/models/turksat-1a.glb',
+  '/assets/models/turksat-1b.glb','/assets/models/turksat-2a.glb', null, '/assets/models/turksat-3a.glb','/assets/models/turksat-3b.glb',
+  '/assets/models/turksat-4a.glb','/assets/models/turksat-5a.glb','/assets/models/turksat-5b.glb','/assets/models/turksat-6a.glb','/assets/models/uranus.glb',
+  '/assets/models/venus.glb','/assets/models/voyager1.glb','/assets/models/voyager2.glb','/assets/models/zhurong.glb', null, null
+];
+
+const loadingEl  = document.getElementById('loading-overlay');
+const instructEl = document.getElementById('instruction-overlay');
+const statusEl   = document.getElementById('status-badge');
+const labelEl    = document.getElementById('model-label');
+const labelNameEl= document.getElementById('model-label-name');
+const noMindEl   = document.getElementById('no-mind-error');
+const countEl    = document.getElementById('ld-count');
+
+// ── Таймер 10 секунд ──
+let arReady = false;
+let secs = 10;
+const timer = setInterval(() => {
+  secs--;
+  countEl.textContent = secs > 0 ? secs + 's' : '';
+  if (secs <= 0) {
+    clearInterval(timer);
+    if (!arReady) showInstruction();
+  }
+}, 1000);
+
+function hideLoading() {
+  if (!loadingEl.classList.contains('gone')) {
+    loadingEl.classList.add('gone');
+    setTimeout(() => { loadingEl.style.display = 'none'; }, 700);
+  }
+}
+
+function showInstruction() {
+  hideLoading();
+  instructEl.classList.add('show');
+}
+
+function dismissInstruction() {
+  instructEl.classList.add('fade');
+  setTimeout(() => { instructEl.style.display = 'none'; }, 500);
+}
+
+// ── Проверяем targets.mind ──
+fetch('/scanner/targets.mind', { method: 'HEAD' })
+  .then(r => { if (!r.ok) throw new Error(); })
+  .catch(() => {
+    clearInterval(timer);
+    hideLoading();
+    noMindEl.classList.add('show');
+  });
+
+// ── MindAR событие: камера и трекер готовы ──
+const sceneEl = document.querySelector('a-scene');
+sceneEl.addEventListener('arReady', () => {
+  arReady = true;
+  clearInterval(timer);
+  hideLoading();
+  if (instructEl.classList.contains('show')) {
+    setTimeout(dismissInstruction, 600);
+  }
+});
+
+sceneEl.addEventListener('loaded', () => {
+  if (!arReady) {
+    arReady = true;
+    clearInterval(timer);
+    hideLoading();
+  }
+});
+
+// ── Вешаем события на все 41 якорь ──
+for (let i = 0; i < 41; i++) {
+  const anchor = document.getElementById('a' + i);
+  if (!anchor) continue;
+
+  anchor.addEventListener('targetFound', () => {
+    statusEl.textContent = '✅ ' + NAMES[i] + ' bulundu!';
+    statusEl.classList.add('found');
+    labelNameEl.textContent = NAMES[i];
+    labelEl.style.display = 'block';
+
+    // Ленивая загрузка модели при первом нахождении
+    if (!anchor.querySelector('a-gltf-model')) {
+      const modelUrl = MODEL_URLS[i];
+      if (!modelUrl) {
+        console.warn('No model asset configured for target index', i);
+        return;
+      }
+
+      const m = document.createElement('a-gltf-model');
+      m.setAttribute('src', modelUrl);
+      m.setAttribute('scale', SCALES[i]);
+      m.setAttribute('position', '0 0.08 0');
+      m.setAttribute('rotation', '180 0 0');
+      anchor.appendChild(m);
+    }
+  });
+
+  anchor.addEventListener('targetLost', () => {
+    statusEl.textContent = '📷 Kitabındaki görsele kameranı tut';
+    statusEl.classList.remove('found');
+    labelEl.style.display = 'none';
+  });
+}
+</script>
+</body>
+</html>

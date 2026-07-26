@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<!-- Универсальный favicon-блок -->
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#020617" name="theme-color"/>
+<meta content="#020617" name="msapplication-TileColor"/>
+<meta content="/favicon.png" name="msapplication-TileImage"/>
+<meta charset="utf-8">
+<title>AlbaSpace – Кубсат</title>
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<!-- Общие стили хедера и футера -->
+<link href="/assets/css/site.css" rel="stylesheet">
+<script defer="" src="/assets/js/include.js"></script>
+<style> :root{ --header-bg: #020617; --accent: #00c2ff; } body{ margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background-size:cover; color:#ffffff; } .page-wrapper{ max-width:1200px; margin:70px auto 80px; padding:0 20px 40px; } .kupsat-title{ text-align:left; font-size:32px; margin-bottom:20px; } .kupsat-image{ text-align:left; margin-bottom:30px; } .kupsat-image img{ max-width:100%; height:auto; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.5); } .kupsat-content{ text-align:left; } .kupsat-content h2{ font-size:28px; margin-top:40px; margin-bottom:20px; } .kupsat-content p{ margin-bottom:20px; line-height:1.6; } .kupsat-content ul{ margin-left:20px; margin-bottom:20px; } .kupsat-content li{ margin-bottom:10px; } .highlight{ font-size:1.2em; font-weight:bold; color:#00c2ff; } </style>
+</link></meta></meta></head>
+<body>
+<!-- Header included via JS -->
+<div data-include="/header-ru.html"></div>
+<div class="kupsat-image">
+<img alt="КубСат" src="/assets/images/Gemini_Generated_Image_wirccmwirccmwirc(1).png"/>
+</div>
+<div class="page-wrapper">
+<div class="kupsat-content">
+<p>Мы — компания космических технологий, ориентированная на создание большого эффекта с помощью малых спутников. В области CubeSat и малых спутниковых систем мы разрабатываем комплексные инженерные решения: от проектирования до интеграции, от наземных испытаний до выполнения миссий.</p>
+<p>Являясь частью экосистемы нового поколения, делающей космос доступным, устойчивым и коммерческим, мы производим высоконадежные спутниковые платформы для академии, промышленности и государственного сектора.</p>
+<p>Каждый CubeSat для нас — это не просто спутник, а стратегический мост между данными, связью и открытиями. В будущем компании и учреждения будут хранить свои данные в космосе. Как <span class="highlight">АЛЬБА Спейс</span>, мы переносим ваши данные в космос с этим видением.</p>
+<p>С нашей командой опытных инженеров мы разрабатываем критически важные компоненты в соответствии с международными стандартами:</p>
+<ul>
+<li>Производство платформ и шасси CubeSat 1U - 3U - 6U - 12U</li>
+<li>Интеграция полезной нагрузки для конкретных миссий</li>
+<li>Подсистемы питания, связи, ADCS и OBC</li>
+<li>Процессы термических, вибрационных и экологических испытаний</li>
+<li>Программное обеспечение наземных станций и миссий</li>
+</ul>
+<p>и многое другое.</p>
+<h2>Почему мы?</h2>
+<ul>
+<li>Реальный опыт миссий и проверенные на практике конструкции</li>
+<li>Модульные и масштабируемые архитектуры CubeSat</li>
+<li>Инженерный подход, основанный на данных</li>
+<li>Гибкие решения, подходящие для академических и коммерческих миссий</li>
+<li>Высокая надежность миссии и устойчивость системы</li>
+</ul>
+<p><strong>В космосе нет права на ошибку.</strong> Осознавая это, мы проектируем, тестируем и производим.</p>
+<p>Наша цель:</p>
+<ul>
+<li>Вывести на орбиту первые спутники университетов,</li>
+<li>Позволить стартапам получать данные из космоса,</li>
+<li>Ускорить космические решения организаций.</li>
+</ul>
+<p><em>Мы верим, что малые спутники изменят большие миры, развивая науку и инженерию.</em></p>
+</div>
+</div>
+<!-- Footer included via JS -->
+<div data-include="/footer-ru.html"></div>
+<script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item, index) => {
+      const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
+      item.style.setProperty('--reveal-delay', `${delay}s`);
+      observer.observe(item);
+    });
+  </script>
+<script>
+</script>
+</body>
+</html>

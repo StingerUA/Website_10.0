@@ -1,0 +1,239 @@
+/* Overrides for neon model navigation buttons */
+
+/* Wrapper around the model title */
+/*
+ * Title wrapper adjustments
+ *
+ * The title and navigation buttons sit on a single horizontal line.  The
+ * wrapper spans the full available width of the page (within the page
+ * container) and uses space-between justification so the buttons hug
+ * the left and right edges while the title remains centred.  A top
+ * margin lifts the row away from the header bar.
+ */
+.model-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 32px;
+  margin: 40px auto 20px;
+}
+
+/* Force the wrapped <h1> to grow and centre its text so it sits
+   perfectly between the left and right buttons. */
+.model-title-wrap h1 {
+  flex: 1 1 auto;
+  text-align: center;
+  margin: 0;
+}
+
+/* Base button styling with brighter neon color and larger size */
+.model-nav__btn {
+   /* Primary neon colour: deep sky blue */
+  --neon: #00bfff;
+  --size: 56px;
+  width: var(--size);
+  height: var(--size);
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(0,191,255,0.18), rgba(0,191,255,0.08));
+  color: var(--neon);
+  font-size: 24px;
+  font-weight: bold;
+  border: 1px solid rgba(0,191,255,0.25);
+  box-shadow: 0 8px 24px rgba(0,191,255,0.30), 0 0 32px rgba(0,191,255,0.15) inset;
+  text-shadow: 0 0 8px var(--neon), 0 0 16px var(--neon);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  position: relative;
+  z-index: 5;
+
+  /* Hide overflow so wave effect doesn't break out of the button */
+  overflow: hidden;
+}
+
+/* Neon glow pseudo-element */
+.model-nav__btn::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 30%, rgba(0,191,255,0.35), transparent 50%);
+  filter: blur(10px);
+  opacity: 1;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: -1;
+}
+
+/* Hover interaction: lift and intensify glow */
+.model-nav__btn:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 16px 40px rgba(0,191,255,0.40), 0 0 36px rgba(0,191,255,0.20) inset;
+}
+
+/* Energy wave animation on hover */
+.model-nav__btn:hover::before {
+  content: '';
+  position: absolute;
+  inset: -100%;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(0,191,255,0.55), rgba(0,191,255,0) 70%);
+  animation: energyWave 0.9s forwards ease-out;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes energyWave {
+  from {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/*
+ * Reactor pulse on click
+ *
+ * When the user presses down on a button, a more intense pulse radiates
+ * outward from the centre, simulating a reactor shockwave.  The effect
+ * uses the same pseudo-element as the hover wave but with its own
+ * animation and colour values.  It automatically fades out when
+ * finished.
+ */
+.model-nav__btn:active::before {
+  content: '';
+  position: absolute;
+  inset: -100%;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(0,191,255,0.8), rgba(0,191,255,0) 70%);
+  animation: reactorPulse 0.6s forwards ease-out;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes reactorPulse {
+  from {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* Neon pulse animation for subtle breathing effect */
+@keyframes neonPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+.model-nav__btn.pulse {
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+/* Adjust button spacing when attached to the title */
+/* Reset margins on nav buttons when inside the title wrapper.  The
+   flex layout handles spacing, so individual margins are unnecessary. */
+.model-title-wrap .model-nav__btn.prev,
+.model-title-wrap .model-nav__btn.next {
+  margin: 0;
+}
+
+
+/* =========================
+   PIXEL-PERFECT MOBILE LAYOUT
+   ========================= */
+@media (max-width: 768px) {
+
+  /* Ряд заголовка: кнопки у краёв, заголовок строго по центру */
+  .model-title-wrap{
+    width: 100%;
+    max-width: 100%;
+    padding-left: 14px;
+    padding-right: 72px; /* ⬅️ увеличиваем запас справа под иконки */
+    margin: 26px auto 14px;
+  }
+
+  /* Заголовок строго по центру + чуть меньше */
+  .model-title-wrap h1{
+    text-align: center;
+    font-size: 26px;
+    line-height: 1.15;
+    padding: 0;
+  }
+
+  /* Кнопки: не вылазят за края */
+  .model-nav__btn_prev{
+    margin-left: 0;
+  }
+  .model-nav__btn_next{
+    margin-right: 0; /* кнопка помещается в безопасную зону */
+  }
+
+  /* Немного уменьшаем кнопки, чтобы не конфликтовали с текстом */
+  .model-nav__btn{
+    --size: 50px;
+    font-size: 22px;
+  }
+}
+
+/* Ультра-узкие экраны (iPhone SE/320px) */
+@media (max-width: 360px) {
+  .model-title-wrap{
+    padding-left: 10px;
+    padding-right: 64px; /* ⬅️ чуть меньше для самых узких экранов */
+  }
+  .model-nav__btn{
+    --size: 46px;
+    font-size: 20px;
+  }
+  .model-title-wrap h1{
+    font-size: 24px;
+  }
+}
+
+/* Increase cart icon by 20% relative to previous scale */
+.top-lang-switch .header-cart-icon img {
+  display: inline-block;
+  /* transform: scale(3); removed */
+  /* transform-origin: center center; removed */
+  /* transition: transform 150ms ease; removed */
+}
+
+.top-lang-switch .lang-flag img {
+  display: inline-block;
+  /* transform: scale(1.5); removed */
+  /* transform-origin: center center; removed */
+  /* transition: transform 150ms ease; removed */
+}
+
+.top-lang-switch .lang-flag,
+.top-lang-switch .header-cart-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px; 
+}
+
+/* Slightly reduce on small screens so layout stays usable */
+@media (max-width: 480px) {
+  .top-lang-switch .header-cart-icon img {
+    /* transform: scale(1.8); removed */
+  }
+  .top-lang-switch .lang-flag img {
+    /* transform: scale(1.125); removed */
+  }
+}
+

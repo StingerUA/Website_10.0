@@ -1,0 +1,164 @@
+/**
+ * Model Viewer Controls Visibility
+ * Ensures that built-in model-viewer controls are visible and functional
+ * These rules target the shadow DOM parts of model-viewer element
+ */
+
+/* ==========================================
+   PRIMARY: Show all model-viewer controls
+   ========================================== */
+
+/* Ensure the main model-viewer element is properly displayed */
+model-viewer {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+}
+
+/* Show camera controls - main control interface */
+model-viewer::part(camera-controls) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 10 !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  padding: 10px !important;
+}
+
+/* Show AR button/button group */
+model-viewer::part(ar-button) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 15 !important;
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(0, 194, 255, 0.5) !important;
+  border-radius: 8px !important;
+  padding: 10px 15px !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* Show AR prompt if available */
+model-viewer::part(ar-prompt) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 20 !important;
+}
+
+/* Show loading progress bar */
+model-viewer::part(progress-bar) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 5 !important;
+}
+
+/* Show poster/thumbnail if available */
+model-viewer::part(poster) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ==========================================
+   SECONDARY: Button and interactive styles
+   ========================================== */
+
+/* Ensure buttons inside controls are interactive */
+model-viewer button,
+model-viewer::part(camera-controls) button,
+model-viewer::part(ar-button) button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Hover states for buttons */
+model-viewer button:hover,
+model-viewer::part(camera-controls) button:hover,
+model-viewer::part(ar-button) button:hover {
+  opacity: 0.9 !important;
+}
+
+/* ==========================================
+   TERTIARY: Styling for control elements
+   ========================================== */
+
+/* Style the control container */
+model-viewer::part(camera-controls) {
+  background: rgba(0, 0, 0, 0.5) !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* Ensure slot content is visible */
+model-viewer slot {
+  display: block !important;
+}
+
+/* Fix for any clipped content */
+model-viewer {
+  overflow: visible !important;
+}
+
+/* Ensure AR button text is readable */
+model-viewer::part(ar-button)::after {
+  content: '' !important;
+}
+
+/* ==========================================
+   QUATERNARY: CSS custom properties
+   ========================================== */
+
+/* Control styling via CSS custom properties */
+model-viewer {
+  --model-viewer-controls-color: #00c2ff !important;
+  --model-viewer-controls-text-color: #ffffff !important;
+  --model-viewer-controls-background: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ==========================================
+   SPECIAL: Fix for touch devices
+   ========================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Make controls larger on touch devices */
+  model-viewer::part(camera-controls) {
+    padding: 12px !important;
+  }
+
+  model-viewer::part(ar-button) {
+    padding: 12px 18px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* ==========================================
+   RESET: Remove any conflicting styles
+   ========================================== */
+
+/* Disable any transforms that might clip controls */
+model-viewer {
+  transform: none !important;
+}
+
+/* Ensure no parent containers block the controls */
+.viewer-wrapper,
+.viewer-container,
+.model-viewer-wrapper {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: auto !important;
+}
+

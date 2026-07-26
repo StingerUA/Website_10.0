@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://albaspace.com.tr/sitemap.xml

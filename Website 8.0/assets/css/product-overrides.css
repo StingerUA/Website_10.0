@@ -1,0 +1,182 @@
+/* Product pages override: solid white background and black text */
+html, body {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Override CSS custom properties to ensure dark header/footer */
+html, :root {
+  --header-bg: #020617 !important;
+}
+
+/* ============ OVERRIDE SHOP.CSS HEADER/FOOTER RULES ============ */
+/* We want to allow product-text-black.css to control the header colors */
+/* The previous forced dark mode is now optional/removed */
+
+/* Hide decorative space background and any site-wide gradients */
+.space-bg {
+  display: none !important;
+  background: none !important;
+}
+
+
+/* Make most text black and remove translucent backgrounds from main content only */
+main,
+main * {
+  color: #000000 !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Replace glass / translucent cards with solid white */
+.glass-card {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.06) !important;
+  color: #000000 !important;
+  backdrop-filter: none !important;
+}
+
+/* Ensure main image container is neutral */
+.main-image-container {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+/* Make thumbnails neutral */
+.thumb-btn {
+  background: transparent !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Payment icons — small, consistent on product pages */
+.payment-icons img {
+  filter: none !important;
+  opacity: 0.85 !important;
+  height: 18px !important;
+  width: auto !important;
+  max-width: 40px !important;
+  object-fit: contain !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.payment-icons img:hover {
+  opacity: 1 !important;
+}
+
+/* Override utility text classes used in templates */
+.text-white, .text-gray-300, .text-gray-400, .text-gray-500 {
+  color: #000000 !important;
+}
+
+/* Ensure form controls remain readable */
+input, button, select, textarea {
+  color: #000000 !important;
+}
+
+/* Make the Add-to-cart button blue while keeping readable text */
+.btn-glow {
+  background: #60a5fa !important; /* blue-400 */
+  color: #000000 !important;
+  box-shadow: 0 8px 24px rgba(96,165,250,0.18) !important;
+  border: 1px solid rgba(37,99,235,0.12) !important;
+}
+
+/* If any elements used explicit white text, force them black */
+.btn-glow .text-white, .btn-glow.text-white {
+  color: #000000 !important;
+}
+
+/* Chart / analyze page specific overrides */
+.alba-card {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.06) !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Fixed space backgrounds used on analyze/chart pages */
+.space-bg-fixed, .space-overlay {
+  display: none !important;
+  background: none !important;
+}
+
+/* Accent/text classes used on chart pages */
+.text-accent { color: #000000 !important; }
+.text-slate-200, .text-slate-300, .text-slate-400, .text-slate-500 { color: #000000 !important; }
+
+/* ----- Product page specific visual fixes ----- */
+/* Apply only on product pages to avoid affecting other site areas */
+html.product-text-black .h-1.w-20.bg-blue-500 {
+  display: none !important; /* hide small blue stripe under "Bunları da beğenebilirsiniz" */
+}
+
+/* Remove large colored/rounded background in related-products section */
+html.product-text-black section.mt-24,
+html.product-text-black section.mt-24.reveal {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* Make sure the related-products container itself has no colored background */
+html.product-text-black #related-products-container,
+html.product-text-black #related-products-container > a,
+html.product-text-black #related-products-container > a > .relative {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Make the quantity selector clearly outlined with a black rounded rectangle */
+html.product-text-black [data-qty] {
+  background: transparent !important;
+  border: 2px solid #000000 !important;
+  border-radius: 12px !important;
+  padding: 2px !important;
+  height: auto !important;
+}
+
+html.product-text-black [data-qty] .qty-input {
+  color: #000000 !important;
+}
+
+/* Ensure add-to-cart button stays blue on product pages (extra specificity) */
+html.product-text-black .btn-glow {
+  background: #60a5fa !important;
+  color: #000000 !important;
+  box-shadow: 0 8px 24px rgba(96,165,250,0.18) !important;
+}
+
+
+
+/* ================================================================
+   PAYMENT ICONS — force small size on ALL product pages
+   Fixes 1280x832 mastercard.png and large visa.png
+   ================================================================ */
+.product-payment-icons {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+  flex-wrap: nowrap !important;
+}
+
+.product-payment-icons img,
+html.product-text-black .product-payment-icons img,
+html.product-text-black body .product-payment-icons img {
+  height: 20px !important;
+  width: auto !important;
+  max-width: 36px !important;
+  min-width: 0 !important;
+  max-height: 20px !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+  opacity: 0.9 !important;
+  filter: none !important;
+  fill: unset !important;
+  stroke: unset !important;
+}

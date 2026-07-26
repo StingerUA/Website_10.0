@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+  <meta charset="UTF-8">
+  <title>Alba Space – Космический атлас</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+
+  <style> :root { --header-bg:#020617; --accent:#00c2ff; --page-bg:#020617; --text-main:#f9fafb; --text-muted:#9ca3af; } * { margin:0; padding:0; box-sizing:border-box; } body { font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--text-main); } .atlas-shell { max-width:1100px; margin:40px auto 70px; padding:0 16px; } .atlas-inner { padding:0; border-radius:0; box-shadow:none; } .atlas-inner-core { border-radius:0; padding:22px 20px 30px; border:none; backdrop-filter:none; } .atlas-hero { padding:22px 20px 30px; border-radius:26px; background: rgba(13, 42, 87, 0.85); box-shadow:0 28px 90px rgba(0,0,0,0.85); border:1px solid rgba(148,163,184,0.4); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); } .atlas-hero-label { font-size:11px; text-transform:uppercase; letter-spacing:0.16em; color:#a5b4fc; display:inline-flex; align-items:center; gap:6px; margin-bottom:4px; } .atlas-hero-label::before { content:"●"; font-size:10px; color:#22c55e; } .atlas-hero-title { font-size:22px; margin-bottom:4px; } .atlas-hero-sub { font-size:13px; color:#cbd5f5; margin-bottom:16px; } .atlas-intro { font-size:13px; color:#d1d5db; margin-bottom:18px; line-height:1.5; } .filters { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; font-size:12px; } .filters span.label { color:#9ca3af; } .chip { padding:4px 10px; border-radius:999px; border:1px solid rgba(148,163,184,0.5); color:#e5e7eb; cursor:pointer; transition:background .15s,border-color .15s,transform .1s; user-select:none; } .chip:hover { border-color:rgba(96,165,250,0.9); transform:translateY(-1px); } .chip.active { border-color:transparent; background:#00c2ff; color:#020617; font-weight:600; } section.grid { margin-top:10px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; } @media (max-width:900px){ section.grid { grid-template-columns:repeat(2,minmax(0,1fr)); } } @media (max-width:600px){ section.grid { grid-template-columns:repeat(1,minmax(0,1fr)); } } .card { position:relative; border-radius:18px; padding:14px 12px 12px; background: rgba(13, 42, 87, 0.85); border:1px solid rgba(148,163,184,0.4); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85); text-decoration:none; color:inherit; display:flex; flex-direction:column; gap:6px; transition:transform .15s,box-shadow .15s,border-color .15s; } .card:hover { transform:translateY(-4px); box-shadow:0 18px 50px rgba(15,23,42,0.9); border-color:rgba(129,140,248,0.9); } .card .tag { font-size:11px; text-transform:uppercase; letter-spacing:0.16em; color:#a5b4fc; } .card h2 { font-size:15px; font-weight:600; color:#e5e7eb; } .card p { font-size:12px; color:#cbd5f5; line-height:1.5; } /* Быстрая анимация для первого блока */ .atlas-hero { --reveal-delay: 0s !important; transition-duration: 0.3s !important; padding:22px 20px 30px; border-radius:26px; background: rgba(13, 42, 87, 0.85); box-shadow:0 28px 90px rgba(0,0,0,0.85); border:1px solid rgba(148,163,184,0.4); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); } 
+    /* ── Card preview image ── */
+    .card-img-wrap {
+      width: 100%;
+      height: 140px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .35s ease;
+      display: block;
+    }
+    .card:hover .card-img-wrap img {
+      transform: scale(1.06);
+    }
+</style>
+</head>
+
+<body>
+  <style>
+    /* Отключаем анимации на странице, НО исключаем #star-bg — иначе particles.js не работает */
+    *:not(#star-bg) { animation: none !important; transition: none !important; }
+    *:not(#star-bg)::before, *:not(#star-bg)::after { animation: none !important; transition: none !important; }
+    body { scroll-behavior: auto !important; }
+    .voice-bar { animation: none !important; }
+    .voice-stop-btn { animation: none !important; }
+    [style*="animation"]:not(#star-bg) { animation: none !important; }
+    [style*="transition"]:not(#star-bg) { transition: none !important; }
+    .reveal { opacity: 1 !important; transform: translateY(0) !important; filter: none !important; }
+    .reveal[data-direction="left"] { transform: translateX(0) !important; }
+    .reveal[data-direction="right"] { transform: translateX(0) !important; }
+    /* Отступ между hero-блоком и кнопками категорий */
+    .atlas-hero { margin-bottom: 28px !important; }
+  </style>
+  <div data-include="/header-ru.html"></div>
+
+  <div class="atlas-shell">
+    <div class="atlas-inner">
+      <div class="atlas-inner-core">
+
+        <section class="atlas-hero">
+          <div class="atlas-hero-label"></div>
+          <h1 class="atlas-hero-title">Интерактивный космический атлас</h1>
+          <p class="atlas-hero-sub">Это 3D-галерея турецких спутников, планет и марсианских миссий. Откройте для себя турецкие спутники, планеты и марсоходы из коллекции Alba Space.
+          Каждая карточка открывает специальную 3D-страницу соответствующего объекта.</p>
+        </section>
+
+
+
+        <div class="filters" aria-label="Категории">
+          <span class="label">Категории:</span>
+          <div class="chip active" data-filter="all" role="button" tabindex="0">Все</div>
+          <div class="chip" data-filter="diğer" role="button" tabindex="0">Другое</div>
+          <div class="chip" data-filter="3dmodelleronizlemesi" role="button" tabindex="0">Предпросмотр 3D-моделей</div>
+          <div class="chip" data-filter="peoples" role="button" tabindex="0">Люди</div>
+          <div class="chip" data-filter="turk" role="button" tabindex="0">Турецкие спутники</div>
+          <div class="chip" data-filter="gezegen" role="button" tabindex="0">Планеты</div>
+          <div class="chip" data-filter="mars" role="button" tabindex="0">Марсианские аппараты</div>
+          <div class="chip" data-filter="teleskop" role="button" tabindex="0">Телескопы и зонды</div>
+        </div>
+
+        <section class="grid">
+          <a class="card" data-category="3dmodelleronizlemesi" href="/rus/gokturk-1/"><div class="card-img-wrap"><img src="/assets/models-pictures/gokturk-1.png" alt="gokturk-1" loading="lazy"></div><div class="tag">Спутник</div><h2>ГЁКТУРК-1</h2><p>Нажмите для подробной информации.</p></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-gokturk-2/"><div class="card-img-wrap"><img src="/assets/models-pictures/gokturk-2.png" alt="gokturk-2" loading="lazy"></div><div class="tag">Спутник</div><h2>ГЁКТУРК-2</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-gokturk-2" data-name="Atlas Gokturk 2" data-img="/assets/models-pictures/gokturk-2.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="3dmodelleronizlemesi" href="/rus/rasat/"><div class="card-img-wrap"><img src="/assets/models-pictures/rasat.png" alt="rasat" loading="lazy"></div><div class="tag">Спутник</div><h2>РАСАТ</h2><p>Нажмите для подробной информации.</p></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-imece/"><div class="card-img-wrap"><img src="/assets/models-pictures/Imece2.png" alt="Imece2" loading="lazy"></div><div class="tag">Спутник</div><h2>ИМЕЧЕ</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-imece" data-name="Atlas Imece" data-img="/assets/models-pictures/Imece2.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-1A/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-1A.png" alt="turksat-1A" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 1А</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-1A" data-name="Atlas Turksat 1A" data-img="/assets/models-pictures/turksat-1A.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-1B/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-1B.png" alt="turksat-1B" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 1Б</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-1B" data-name="Atlas Turksat 1B" data-img="/assets/models-pictures/turksat-1B.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-1C/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-1C.png" alt="turksat-1C" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 1С</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-1C" data-name="Atlas Turksat 1C" data-img="/assets/models-pictures/turksat-1C.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-2A/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-2A.png" alt="turksat-2A" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 2А</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-2A" data-name="Atlas Turksat 2A" data-img="/assets/models-pictures/turksat-2A.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-3A/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-3A.png" alt="turksat-3A" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 3А</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-3A" data-name="Atlas Turksat 3A" data-img="/assets/models-pictures/turksat-3A.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-3B/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-3B.png" alt="turksat-3B" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 3Б</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-3B" data-name="Atlas Turksat 3B" data-img="/assets/models-pictures/turksat-3B.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-4A/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-4A.png" alt="turksat-4A" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 4А</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-4A" data-name="Atlas Turksat 4A" data-img="/assets/models-pictures/turksat-4A.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-5A/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-5A.png" alt="turksat-5A" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 5А</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-5A" data-name="Atlas Turksat 5A" data-img="/assets/models-pictures/turksat-5A.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-5B/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-5B.png" alt="turksat-5B" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 5Б</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-5B" data-name="Atlas Turksat 5B" data-img="/assets/models-pictures/turksat-5B.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-turksat-6A/"><div class="card-img-wrap"><img src="/assets/models-pictures/turksat-6A.png" alt="turksat-6A" loading="lazy"></div><div class="tag">Спутник</div><h2>ТУРКСАТ 6А</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-turksat-6A" data-name="Atlas Turksat 6A" data-img="/assets/models-pictures/turksat-6A.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="turk" href="/rus/atlas/atlas-lagari/"><div class="card-img-wrap"><img src="/assets/models-pictures/lagari.png" alt="lagari" loading="lazy"></div><div class="tag">Спутник</div><h2>Лагари</h2><p>Нажмите для подробной информации.</p><button class="card-add-cart" data-id="atlas-lagari" data-name="Atlas Lagari" data-img="/assets/models-pictures/lagari.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="Diğermodeller" href="/rus/atlas/atlas-iss/"><div class="card-img-wrap"><img src="/assets/models-pictures/iss.png" alt="iss" loading="lazy"></div><div class="tag">Станция</div><h2>МКС Международная космическая станция</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-iss" data-name="Atlas Iss" data-img="/assets/models-pictures/iss.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+
+          <a class="card" data-category="gezegen" href="/rus/atlas/atlas-mercury/"><div class="card-img-wrap"><img src="/assets/models-pictures/mercury.png" alt="mercury" loading="lazy"></div><div class="tag">Планета</div><h2>Меркурий</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-mercury" data-name="Atlas Mercury" data-img="/assets/models-pictures/mercury.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="gezegen" href="/rus/atlas/atlas-venus/"><div class="card-img-wrap"><img src="/assets/models-pictures/venus.png" alt="venus" loading="lazy"></div><div class="tag">Планета</div><h2>Венера</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-venus" data-name="Atlas Venus" data-img="/assets/models-pictures/venus.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="gezegen" href="/rus/atlas/atlas-earth/"><div class="card-img-wrap"><img src="/assets/models-pictures/earth.png" alt="earth" loading="lazy"></div><div class="tag">Планета</div><h2>Земля</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-earth" data-name="Atlas Earth" data-img="/assets/models-pictures/earth.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="gezegen" href="/rus/atlas/atlas-mars/"><div class="card-img-wrap"><img src="/assets/models-pictures/mars.png" alt="mars" loading="lazy"></div><div class="tag">Планета</div><h2>Марс</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-mars" data-name="Atlas Mars" data-img="/assets/models-pictures/mars.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="gezegen" href="/rus/atlas/atlas-jupiter/"><div class="card-img-wrap"><img src="/assets/models-pictures/jupiter.png" alt="jupiter" loading="lazy"></div><div class="tag">Планета</div><h2>Юпитер</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-jupiter" data-name="Atlas Jupiter" data-img="/assets/models-pictures/jupiter.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="gezegen" href="/rus/atlas/atlas-saturn/"><div class="card-img-wrap"><img src="/assets/models-pictures/saturn.png" alt="saturn" loading="lazy"></div><div class="tag">Планета</div><h2>Сатурн</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-saturn" data-name="Atlas Saturn" data-img="/assets/models-pictures/saturn.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="gezegen" href="/rus/atlas/atlas-uranus/"><div class="card-img-wrap"><img src="/assets/models-pictures/uranus.png" alt="uranus" loading="lazy"></div><div class="tag">Планета</div><h2>Уран</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-uranus" data-name="Atlas Uranus" data-img="/assets/models-pictures/uranus.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="gezegen" href="/rus/atlas/atlas-neptune/"><div class="card-img-wrap"><img src="/assets/models-pictures/neptune.png" alt="neptune" loading="lazy"></div><div class="tag">Планета</div><h2>Нептун</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-neptune" data-name="Atlas Neptune" data-img="/assets/models-pictures/neptune.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+
+          <a class="card" data-category="diğer" href="/rus/atlas/atlas-voyager1/"><div class="card-img-wrap"><img src="/assets/models-pictures/voyager1.png" alt="voyager1" loading="lazy"></div><div class="tag">Зонд</div><h2>Вояджер-1</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-voyager1" data-name="Atlas Voyager1" data-img="/assets/models-pictures/voyager1.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="diğer" href="/rus/atlas/atlas-voyager2/"><div class="card-img-wrap"><img src="/assets/models-pictures/voyager2.png" alt="voyager2" loading="lazy"></div><div class="tag">Зонд</div><h2>Вояджер-2</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-voyager2" data-name="Atlas Voyager2" data-img="/assets/models-pictures/voyager2.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="teleskop" href="/rus/atlas/atlas-hubble/"><div class="card-img-wrap"><img src="/assets/models-pictures/hubble1.png" alt="hubble1" loading="lazy"></div><div class="tag">Телескоп</div><h2>Космический телескоп Хабл</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-hubble" data-name="Atlas Hubble" data-img="/assets/models-pictures/hubble1.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="teleskop" href="/rus/atlas/atlas-jameswebb/"><div class="card-img-wrap"><img src="/assets/models-pictures/jameswebb.png" alt="jameswebb" loading="lazy"></div><div class="tag">Телескоп</div><h2>Космический телескоп Джеймс Вэб</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-jameswebb" data-name="Atlas Jameswebb" data-img="/assets/models-pictures/jameswebb.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="teleskop" href="/rus/atlas/atlas-kepler/"><div class="card-img-wrap"><img src="/assets/models-pictures/kepler.png" alt="kepler" loading="lazy"></div><div class="tag">Телескоп</div><h2>Космический телескоп Кеплер</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-kepler" data-name="Atlas Kepler" data-img="/assets/models-pictures/kepler.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="mars" href="/rus/atlas/atlas-exomars/"><div class="card-img-wrap"><img src="/assets/models-pictures/exomars.png" alt="exomars" loading="lazy"></div><div class="tag">Миссия</div><h2>Экзо-Марс</h2><p>Нажмите для подробностей о миссии.</p><button class="card-add-cart" data-id="atlas-exomars" data-name="Atlas Exomars" data-img="/assets/models-pictures/exomars.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="mars" href="/rus/atlas/atlas-marsodyssey/"><div class="card-img-wrap"><img src="/assets/models-pictures/marsodyssey.png" alt="marsodyssey" loading="lazy"></div><div class="tag">Миссия</div><h2>Марс-Одиссея</h2><p>Нажмите для подробностей о миссии.</p><button class="card-add-cart" data-id="atlas-marsodyssey" data-name="Atlas Marsodyssey" data-img="/assets/models-pictures/marsodyssey.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="mars" href="/rus/atlas/atlas-marsreconnaissance/"><div class="card-img-wrap"><img src="/assets/models-pictures/marsreconnaissance.png" alt="marsreconnaissance" loading="lazy"></div><div class="tag">Миссия</div><h2>Марсианский разведывательный орбитальный аппарат</h2><p>Нажмите для подробностей о миссии.</p><button class="card-add-cart" data-id="atlas-marsreconnaissance" data-name="Atlas Marsreconnaissance" data-img="/assets/models-pictures/marsreconnaissance.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+
+          <a class="card" data-category="3dmodelleronizlemesi" href="/rus/opportunity/"><div class="card-img-wrap"><img src="/assets/models-pictures/opportunity.png" alt="opportunity" loading="lazy"></div><div class="tag">Ровер</div><h2>Опортьюнити</h2><p>Нажмите для подробностей о миссии.</p></a>
+          <a class="card" data-category="3dmodelleronizlemesi" href="/rus/sojourner/"><div class="card-img-wrap"><img src="/assets/models-pictures/sojourner.png" alt="sojourner" loading="lazy"></div><div class="tag">Ровер</div><h2>Соджорнэр</h2><p>Нажмите для подробностей о миссии.</p></a>
+          <a class="card" data-category="3dmodelleronizlemesi" href="/rus/sputnik/"><div class="card-img-wrap"><img src="/assets/models-pictures/sputnik.png" alt="sputnik" loading="lazy"></div><div class="tag">Спутник</div><h2>Спутник-1</h2><p>Нажмите для просмотра в 3D.</p></a>
+
+  
+          <a class="card" data-category="mars" href="/rus/atlas/atlas-perseverance/"><div class="card-img-wrap"><img src="/assets/models-pictures/perseverance.png" alt="perseverance" loading="lazy"></div><div class="tag">Ровер</div><h2>Персивирэнс</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-perseverance" data-name="Atlas Perseverance" data-img="/assets/models-pictures/perseverance.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="mars" href="/rus/atlas/atlas-curiosity/"><div class="card-img-wrap"><img src="/assets/models-pictures/curiosity.png" alt="curiosity" loading="lazy"></div><div class="tag">Ровер</div><h2>Кюриосити</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-curiosity" data-name="Atlas Curiosity" data-img="/assets/models-pictures/curiosity.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="mars" href="/rus/atlas/atlas-ingenuity/"><div class="card-img-wrap"><img src="/assets/models-pictures/ingenuity.png" alt="ingenuity" loading="lazy"></div><div class="tag">Вертолёт</div><h2>Индженьюити</h2><p>Нажмите для подробностей о миссии.</p><button class="card-add-cart" data-id="atlas-ingenuity" data-name="Atlas Ingenuity" data-img="/assets/models-pictures/ingenuity.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="mars" href="/rus/sojourner/"><div class="card-img-wrap"><img src="/assets/models-pictures/sojourner.png" alt="sojourner" loading="lazy"></div><div class="tag">Ровер</div><h2>Соджорнер</h2><p>Нажмите для подробностей о миссии.</p></a>
+          <a class="card" data-category="mars" href="/rus/atlas/atlas-spirit/"><div class="card-img-wrap"><img src="/assets/models-pictures/spirit.png" alt="spirit" loading="lazy"></div><div class="tag">Ровер</div><h2>Спирит</h2><p>Нажмите для подробностей о миссии.</p><button class="card-add-cart" data-id="atlas-spirit" data-name="Atlas Spirit" data-img="/assets/models-pictures/spirit.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+          <a class="card" data-category="mars" href="/rus/atlas/atlas-zhurong/"><div class="card-img-wrap"><img src="/assets/models-pictures/zhurong.png" alt="zhurong" loading="lazy"></div><div class="tag">Ровер</div><h2>Журонг</h2><p>Нажмите для просмотра в 3D.</p><button class="card-add-cart" data-id="atlas-zhurong" data-name="Atlas Zhurong" data-img="/assets/models-pictures/zhurong.png" data-price="50" title="В корзину" aria-label="В корзину"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button></a>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <div data-include="/footer-ru.html"></div>
+
+  <script src="/assets/js/particles.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const chips = Array.from(document.querySelectorAll('.filters .chip[data-filter]'));
+      const cards = Array.from(document.querySelectorAll('.grid .card[data-category]'));
+      if (!chips.length || !cards.length) return;
+
+      const apply = (filter) => {
+        const f = String(filter || 'all').toLowerCase();
+        chips.forEach(c => c.classList.toggle('active', c.dataset.filter === f));
+        cards.forEach(card => {
+          const cat = String(card.dataset.category || '').toLowerCase();
+          card.style.display = (f === 'all' || cat === f) ? '' : 'none';
+        });
+
+        // Re-run global reveal scanner so newly-shown cards get observed
+        if (typeof initScrollReveal === 'function') {
+          try { initScrollReveal(); } catch (e) { /* ignore */ }
+        }
+      };
+
+      const onActivate = (chip) => apply(chip.dataset.filter);
+
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => onActivate(chip));
+        chip.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onActivate(chip);
+          }
+        });
+      });
+
+      const active = chips.find(c => c.classList.contains('active')) || chips[0];
+      apply(active?.dataset.filter || 'all');
+    });
+  </script>
+
+  <script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item, index) => {
+      const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
+      item.style.setProperty('--reveal-delay', `${delay}s`);
+      observer.observe(item);
+    });
+  </script>
+
+  <script>
+      // Sayfa Yüklendiğinde Popup Kontrolü
+      document.addEventListener("DOMContentLoaded", function() {
+          // localStorage kontrolü: Kullanıcı daha önce "kabul ettim" dedi mi?
+          if (!localStorage.getItem("albaCookieSeen")) {
+              document.getElementById("cookie-overlay").style.display = "flex";
+          }
+      });
+
+      const acceptBtn = document.getElementById("btnAccept");
+      const settingsBtn = document.getElementById("btnSettings");
+
+      // Üst buton: Animasyon ve Kapatma
+      if(acceptBtn) {
+          acceptBtn.addEventListener("click", function() {
+              // Butona basıldığını hissettirmek için ufak bir bekleme (opsiyonel)
+              setTimeout(() => {
+                  document.getElementById("cookie-overlay").style.display = "none";
+                  // Kullanıcının gördüğünü tarayıcıya kaydet
+                  localStorage.setItem("albaCookieSeen", "true");
+              }, 200);
+          });
+      }
+
+      // Alt buton: Çerez politikası sayfasına yönlendirir
+      if(settingsBtn) {
+          settingsBtn.addEventListener("click", function() {
+               window.location.href = "/rus/cerez-politikasi.html";
+          });
+      }
+  </script>
+
+<script>
+/* ── Atlas card: add-to-cart ── */
+(function(){
+  var PRICE = 50;
+  var CURRENCY = 'TL';
+
+  function showToast(name) {
+    var t = document.getElementById('albaCartToast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'albaCartToast';
+      t.className = 'alba-cart-toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = '🛒 ' + name + ' добавлен в корзину!';
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+  }
+
+  function addModelToCart(id, name, imageUrl, price) {
+    if (window.cartManager && window.cartManager.addItem) {
+      window.cartManager.addItem({
+        id:    id,
+        name:  name,
+        price: price || PRICE,
+        image: imageUrl || '/assets/icons/alien.png',
+        url:   window.location.origin + '/atlas/' + id + '/',
+        qty:   1
+      });
+    } else {
+      // fallback: direct localStorage
+      try {
+        var cart = JSON.parse(localStorage.getItem('alba_space_cart_v1') || '[]');
+        var idx  = cart.findIndex(function(e){ return e.id === id; });
+        if (idx >= 0) { cart[idx].qty += 1; }
+        else { cart.push({ id:id, name:name, price:price||PRICE, image:imageUrl||'/assets/icons/alien.png', url:window.location.origin+'/atlas/'+id+'/', qty:1 }); }
+        localStorage.setItem('alba_space_cart_v1', JSON.stringify(cart));
+        // update badge
+        var badges = document.querySelectorAll('[data-cart-count], .cart-count');
+        var total = cart.reduce(function(s,e){ return s + (Number(e.qty)||0); }, 0);
+        badges.forEach(function(b){ b.textContent = String(total); });
+      } catch(e){}
+    }
+    showToast(name);
+  }
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.card-add-cart');
+    if (!btn) return;
+    e.preventDefault(); e.stopPropagation();
+    var id    = btn.dataset.id;
+    var name  = btn.dataset.name;
+    var img   = btn.dataset.img;
+    var price = parseFloat(btn.dataset.price) || PRICE;
+    addModelToCart(id, name, img, price);
+  });
+}());
+</script>
+
+</body>
+</html>

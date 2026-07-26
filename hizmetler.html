@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+  <meta charset="UTF-8" />
+  <title>Hizmetlerimiz – VR/AR, Stratosfer, Planetaryum, Turlar | ALBA Space</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ALBA Space hizmetleri: VR/AR deneyimleri, dijital ikiz, 3B tarama, teleskop gözlemi, Jidoka robot etkinliği, stratosfer reklam & bilim, mobil planetaryum, NASA & CERN turları ve daha fazlası." />
+  <link rel="canonical" href="https://albaspace.com.tr/hizmetler.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="ALBA Space" />
+  <meta property="og:title" content="Hizmetlerimiz – VR/AR, Stratosfer, Planetaryum, Turlar | ALBA Space" />
+  <meta property="og:description" content="ALBA Space hizmetleri: VR/AR deneyimleri, dijital ikiz, 3B tarama, teleskop gözlemi, Jidoka robot etkinliği, stratosfer reklam & bilim, mobil planetaryum, NASA & CERN turları ve daha fazlası." />
+  <meta property="og:image" content="https://Alba Space.com.tr/assets/images/vr.jpg" />
+  <meta property="og:url" content="https://Alba Space.com.tr/hizmetler.html" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+
+    <style>
+      /* Override default site stylesheet background for services page */
+      body{ background-color: #020617 !important; }
+      html{ background-color: #020617 !important; }
+    </style>
+  <style> :root{ --accent:#00c2ff; --text-main:#e5e7eb; --text-muted:#9ca3af; } *{ box-sizing:border-box; margin:0; padding:0; } body{ font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--text-main); } .page{ max-width:1200px; margin:10px auto 70px; padding:32px 26px 40px; } /* ===== Glass box ===== */ .glass-box{ background: rgba(13, 42, 87, 0.85); border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 20px; padding: 20px 24px; box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); } .glass-box--fit{ width:fit-content; max-width:calc(100% - 40px); margin:0 auto 22px; padding:14px 18px; text-align:center; } h1{ font-size:36px; line-height:1.1; margin-bottom:10px; } .lead{ color:var(--text-muted); font-size:15px; max-width:760px; margin:0 auto; line-height:1.6; } /* ===== Grid ===== */ .grid{ margin-top:22px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; } .card{ background: rgba(13, 42, 87, 0.85); border-radius: 24px; overflow: hidden; border: 1px solid rgba(148, 163, 184, 0.4); box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85); padding:18px 18px 16px; display:flex; flex-direction:column; gap:10px; min-height:170px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; } /* Görseller için yeni stil (İngilizce versiyonla aynı) */ .card img { width: 100%; height: 180px; /* Sabit yükseklik */ object-fit: cover; border-radius: 12px; margin-bottom: 5px; background-color: #0f172a; /* Yüklenene kadar görünecek renk */ } .card:hover{ transform: translateY(-4px); border-color: rgba(56, 189, 248, 0.7); box-shadow: 0 0 26px rgba(56, 189, 248, 0.35), 0 18px 40px rgba(0, 0, 0, 0.95); } .card h3{ font-size:16px; color:#f9fafb; line-height:1.25; } .card p{ font-size:13px; color:var(--text-muted); line-height:1.45; } /* ===== Buttons (same vibe as your home page) ===== */ .btn{ margin-top:auto; display:inline-flex; align-items:center; justify-content:center; padding:10px 16px; border-radius:999px; border:1px solid var(--accent); background:var(--accent); font-size:14px; font-weight:700; text-decoration:none; cursor:pointer; color:#020617; box-shadow:0 10px 28px rgba(56,189,248,0.35); transition: transform .15s ease, box-shadow .2s ease, background .2s ease; } .btn:hover{ transform: translateY(-2px); box-shadow: 0 18px 45px rgba(56, 189, 248, 0.6); } @media (max-width: 980px){ .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } .page{ padding:26px 16px 34px; } h1{ font-size:30px; } } @media (max-width: 768px){ .grid{ grid-template-columns:1fr; } } /* ===== Scroll reveal ===== */ .reveal-card{ opacity:1; transform:translateX(0); } </style>
+
+  <style>
+    /* Remove white cookie/modal bg on services page */
+    .cookie-modal { background-color: transparent !important; color: #ffffff !important; box-shadow: none !important; border: none !important; }
+    .cookie-header, .cookie-text, .cookie-link { color: #e5e7eb !important; }
+    .btn-settings { background-color: transparent !important; color: #ffffff !important; border-color: rgba(255,255,255,0.12) !important; }
+    .btn-accept { background-color: #000 !important; color: #fff !important; }
+  </style>
+
+  <style>
+    /* Disable reveal animation for text visibility */
+    .reveal, .reveal.is-visible {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none !important;
+    }
+    
+    /* Ensure white cookie/modal background on this page */
+    .cookie-modal { background-color: #ffffff !important; color: #000000 !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important; border: none !important; }
+    .cookie-header, .cookie-text, .cookie-link { color: #000000 !important; }
+    .btn-settings { background-color: transparent !important; color: #000000 !important; border-color: rgba(0,0,0,0.2) !important; }
+    .btn-accept { background-color: #000 !important; color: #fff !important; }
+  </style>
+</head>
+
+<body>
+  <div data-include="/header-tr.html"></div>
+
+  <main class="page">
+    <div class="glass-box glass-box--fit">
+      <h1>Hizmetlerimiz</h1>
+      <p class="lead">
+        ALBA Space olarak eğitim, etkinlik ve uzay teknolojileri alanlarında yenilikçi çözümler sunuyoruz.
+      </p>
+    </div>
+
+    <section class="grid">
+      <article class="card">
+        <img src="/assets/images/vr.png" alt="VR/AR Çözümleri" loading="lazy">
+        <h3>VR/AR Çözümleri ve İnteraktif Oyunlar</h3>
+        <p>Oculus Quest 3 ile ISS ortamı, görevler ve uzay yürüyüşü deneyimi.</p>
+        <a class="btn" href="/vr-ar-interaktif-oyunlar.html">Detay</a>
+      </article>
+
+      <article class="card">
+        <img src="/assets/images/avatar.jpg" alt="Avatar Tasarımı" loading="lazy">
+        <h3>Avatar ve Dijital İkiz Tasarımı</h3>
+        <p>Dijital mekan + avatarlar ile VR veya mobil app üzerinden interaktif deneyim.</p>
+        <a class="btn" href="/avatar-dijital-ikiz.html">Detay</a>
+      </article>
+
+      <article class="card">
+        <img src="/assets/images/Gemini_Generated_Image_yk5xbwyk5xbwyk5x.png" alt="3B Tarama" loading="lazy">
+        <h3>3B Tarama ve 3B Mekan Tasarlama</h3>
+        <p>3B tarama ile dijital ikiz; 3B yazıcılarla üretim imkanı.</p>
+        <a class="btn" href="/3b-tarama-mekan.html">Detay</a>
+      </article>
+
+      <article class="card">
+        <img src="/assets/images/telescope.jpg" alt="Teleskop Gözlemi" loading="lazy">
+        <h3>Teleskopla Güneş, Ay ve Gezegen Gözlemi</h3>
+        <p>Gündüz Güneş lekeleri; akşam Ay ve gezegen gözlemleri.</p>
+        <a class="btn" href="/teleskop-gozlem.html">Detay</a>
+      </article>
+
+      <article class="card">
+        <img src="/assets/images/robot-jidoka.jpg" alt="Robot Jidoka" loading="lazy">
+        <h3>İnsansı Robot ve Robot Köpek Jidoka İle Etkinlik</h3>
+        <p>Jidoka insansı robot + robot köpek ile unutulmaz etkinlik deneyimi.</p>
+        <a class="btn" href="/jidoka-etkinlik.html">Detay</a>
+      </article>
+
+      <article class="card">
+         <img src="/assets/images/2025-12-08_21-01-19.png" alt="Stratosfer" loading="lazy">
+        <h3>Stratosfer Tabakasında Reklam ve Bilimsel Çalışma</h3>
+        <p>Stratosfere gönderim, uzay koşulları deneyimi ve geri dönüş.</p>
+        <a class="btn" href="/stratosfer-reklam-bilim.html">Detay</a>
+      </article>
+
+      <article class="card">
+        <img src="/assets/images/planetarium.jpg" alt="Mobil Planetaryum" loading="lazy">
+        <h3>Mobil Planetaryum İle Astronomi Etkinliği</h3>
+        <p>6×6 m şişme gezegenevi içinde 180° uzay içerikleri.</p>
+        <a class="btn" href="/mobil-planetaryum.html">Detay</a>
+      </article>
+
+      <article class="card">
+        <img src="/assets/images/nasa-cern.jpg" alt="NASA CERN Turları" loading="lazy">
+        <h3>NASA ve CERN Turları</h3>
+        <p>Özel tur programları ile tesis ziyareti ve benzersiz deneyim.</p>
+        <a class="btn" href="/nasa-cern-turlari.html">Detay</a>
+      </article>
+
+      <article class="card">
+        <img src="/assets/images/astronauts.jpg" alt="Türk Astronotlar" loading="lazy">
+        <h3>Türk Astronotlar İle Etkinlik</h3>
+        <p>Alper Gezeravcı ve Tuva Cihangir Atasever ile sunum ve buluşma.</p>
+        <a class="btn" href="/turk-astronotlar-etkinlik.html">Detay</a>
+      </article>
+
+      <article class="card">
+        <img src="/assets/images/albamenvelara.jpg" alt="Albamen Kitabı" loading="lazy">
+        <h3>“Albamen ve Lara Uzayda” Kitabı</h3>
+        <p>AR destekli öğrenme ile çocuklar için uzay ansiklopedisi.</p>
+        <a class="btn" href="/albamen-kitap.html">Detay</a>
+      </article>
+    </section>
+  </main>
+
+  <div data-include="/footer-tr.html"></div>
+
+  <script>
+      // Sayfa Yüklendiğinde Popup Kontrolü
+      document.addEventListener("DOMContentLoaded", function() {
+          // localStorage kontrolü: Kullanıcı daha önce "kabul ettim" dedi mi?
+          if (!localStorage.getItem("albaCookieSeen")) {
+              const overlay = document.getElementById("cookie-overlay");
+              if (overlay) overlay.style.display = "flex";
+          }
+      });
+
+      const acceptBtn = document.getElementById("btnAccept");
+      const settingsBtn = document.getElementById("btnSettings");
+
+      // Üst buton: Animasyon ve Kapatma
+      if(acceptBtn) {
+          acceptBtn.addEventListener("click", function() {
+              // Butona basıldığını hissettirmek için ufak bir bekleme (opsiyonel)
+              setTimeout(() => {
+                  const overlay = document.getElementById("cookie-overlay");
+                  if (overlay) overlay.style.display = "none";
+                  // Kullanıcının gördüğünü tarayıcıya kaydet
+                  localStorage.setItem("albaCookieSeen", "true");
+              }, 200);
+          });
+      }
+
+      // Alt buton: Çerez politikası sayfasına yönlendirir
+      if(settingsBtn) {
+          settingsBtn.addEventListener("click", function() {
+               window.location.href = "cerez-politikasi.html";
+          });
+      }
+  </script>
+</body>
+</html>

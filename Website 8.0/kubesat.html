@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+  <meta charset="UTF-8" />
+  <title>Alba Space – Küpsat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Общие стили хедера и футера -->
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <script src="/assets/js/include.js" defer></script>
+
+  <style> :root{ --header-bg: #020617; --accent: #00c2ff; } body{ margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background-color: #020617 !important; color:#ffffff !important; } .page-wrapper{ max-width:1200px; margin:70px auto 80px; padding:0 20px 40px; } .kupsat-title{ text-align:left; font-size:32px; margin-bottom:20px; } .kupsat-image{ text-align:left; margin-bottom:30px; position: relative; z-index: 1; } .kupsat-image img{ max-width:100%; height:auto; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.5); } .kupsat-content{ text-align:left; position: relative; z-index: 1; } .kupsat-content h2{ font-size:28px; margin-top:40px; margin-bottom:20px; } .kupsat-content p{ margin-bottom:20px; line-height:1.6; } .kupsat-content ul{ margin-left:20px; margin-bottom:20px; } .kupsat-content li{ margin-bottom:10px; } .highlight{ font-size:1.2em; font-weight:bold; color:#00c2ff; } </style>
+</head>
+<body>
+
+  <!-- Header included via JS -->
+  <div data-include="/header-tr.html"></div>
+
+  
+
+
+    <div class="kupsat-image">
+      <img src="/assets/images/Gemini_Generated_Image_wirccmwirccmwirc(1).png" alt="CubeSat" />
+    </div>
+
+  <div class="page-wrapper">
+
+    <div class="kupsat-content">
+      <p>Biz, küçük uydularla büyük etkiler yaratmaya odaklanan bir uzay teknolojileri şirketiyiz. CubeSat ve küçük uydu sistemleri alanında; tasarımdan entegrasyona, yer testlerinden görev operasyonlarına kadar uçtan uca mühendislik çözümleri geliştiriyoruz.</p>
+
+      <p>Uzayı erişilebilir, sürdürülebilir ve ticari hale getiren yeni nesil uzay ekosisteminin bir parçası olarak; akademi, sanayi ve kamu için yüksek güvenilirlikte uydu platformları üretiyoruz.</p>
+
+      <p>Her CubeSat bizim için yalnızca bir uydu değil; veri, bağlantı ve keşif arasında kurulan stratejik bir köprüdür. Gelecekte şirketler ve kurumlar verilerini uzayda depolayacaklar. <span class="highlight">ALBA Space</span> olarak bizler de bu vizyonla verilerinizi uzaya taşımaktayız.</p>
+
+      <p>Alanında uzman mühendis kadromuz ile:</p>
+      <ul>
+        <li>1U - 3U - 6U - 12U CubeSat platformları ve şase üretimi</li>
+        <li>Göreve özel payload entegrasyonu</li>
+        <li>Güç, haberleşme, ADCS ve OBC alt sistemleri</li>
+        <li>Termal, titreşim ve çevresel test süreçleri</li>
+        <li>Yer istasyonu ve görev yazılımları</li>
+      </ul>
+      <p>gibi kritik bileşenleri uluslararası standartlara uygun şekilde geliştiriyoruz.</p>
+
+      <h2>Neden Biz?</h2>
+      <ul>
+        <li>Gerçek görev deneyimi ve sahada test edilmiş tasarımlar</li>
+        <li>Modüler ve ölçeklenebilir CubeSat mimarileri</li>
+        <li>Mühendislik temelli, veriye dayalı yaklaşım</li>
+        <li>Akademik ve ticari misyonlara uygun esnek çözümler</li>
+        <li>Yüksek görev güvenilirliği ve sistem dayanıklılığı</li>
+      </ul>
+
+      <p><strong>Uzayda hata payı yoktur.</strong> Biz bu bilinçle tasarlar, test eder ve üretiriz.</p>
+
+      <p>Amacımız;</p>
+      <ul>
+        <li>Üniversitelerin ilk uydularını yörüngeye taşımak,</li>
+        <li>Girişimlerin uzaydan veri üretmesini sağlamak,</li>
+        <li>Kurumların uzay tabanlı çözümlerini hızlandırmak.</li>
+      </ul>
+
+      <p><em>Küçük uyduların bilimi ve mühendisliği geliştirerek büyük dünyalar değiştireceğine inanıyoruz.</em></p>
+    </div>
+  </div>
+
+  <!-- Footer included via JS -->
+  <div data-include="/footer-tr.html"></div>
+
+  <script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item, index) => {
+      const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
+      item.style.setProperty('--reveal-delay', `${delay}s`);
+      observer.observe(item);
+    });
+  </script>
+
+  <script>
+</script>
+</body>
+</html>

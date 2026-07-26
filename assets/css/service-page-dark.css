@@ -1,0 +1,68 @@
+/* Service pages dark theme styles */
+/* Applied to override any black text defaults and ensure a unified dark mode */
+
+html.service-page-dark body {
+  background-color: #020617 !important; /* Dark blue background */
+  color: #ffffff !important;
+}
+
+/* Make all text white, similar to how product-text-black made all text black */
+html.service-page-dark body *:not(.signup-modal-overlay):not(.signup-modal-overlay *):not(.cookie-modal):not(.cookie-modal *):not(.btn):not(.btn *):not([class*="ai-"]):not([class*="ai-"] *) {
+  color: #ffffff !important;
+}
+
+/* Ensure inputs and selects are readable if any exist */
+html.service-page-dark input,
+html.service-page-dark textarea,
+html.service-page-dark select {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+/* Specific for svg icons on service pages to match white text */
+html.service-page-dark svg:not(.btn svg) {
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Transparent backgrounds for header and footer to blend with the dark page */
+html.service-page-dark .site-header,
+html.service-page-dark header.site-header,
+html.service-page-dark header,
+html.service-page-dark footer,
+html.service-page-dark .footer,
+html.service-page-dark .footer--tr,
+html.service-page-dark .footer--en,
+html.service-page-dark .footer--ru {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-bottom: none !important;
+  border-top: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure links in header/footer are white */
+html.service-page-dark .site-header a,
+html.service-page-dark footer a,
+html.service-page-dark .footer a {
+  color: #ffffff !important;
+}
+
+/* Force transparent background on header/footer children */
+html.service-page-dark header *:not(img):not(svg),
+html.service-page-dark .site-header *:not(img):not(svg),
+html.service-page-dark footer *:not(img):not(svg),
+html.service-page-dark .footer *:not(img):not(svg) {
+  background-color: transparent !important;
+}
+
+/* Ensure icons are not inverted if they were dark originally */
+html.service-page-dark .site-header img,
+html.service-page-dark footer img {
+  filter: none !important;
+}
+
+/* Make button text white on service pages */
+html.service-page-dark .btn-primary {
+  color: #ffffff !important;
+}

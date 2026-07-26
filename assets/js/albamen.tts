@@ -1,0 +1,125 @@
+/**
+ * albamen-tts.js
+ * Google Cloud TTS для Альбамена — мужской голос мудрого учителя
+ * Подключи этот файл в любой HTML-странице где нужен AI-голос Альбамена
+ *
+ * Как подключить: добавь в <body> перед закрывающим тегом </body>:
+ *   <script src="/assets/js/albamen-tts.js"></script>
+ */
+
+(function () {
+  // ══════════════════════════════════════════════════════
+  // НАСТРОЙКИ — отредактируй URL воркера если нужно
+  // ══════════════════════════════════════════════════════
+  const ALBAMEN_WORKER_URL = "https://divine-flower-a0ae.nncdecdgc.workers.dev";
+
+  // Текущее аудио (чтобы останавливать предыдущее)
+  let currentAudio = null;
+  let isSpeaking = false;
+
+  /**
+   * Определяем язык текста автоматически
+   */
+  function detectLanguage(text) {
+    if (/[а-яёА-ЯЁ]/.test(text)) return "ru";
+    if (/[ğüşıöçĞÜŞİÖÇ]/.test(text)) return "tr";
+    return "tr"; // дефолт — турецкий
+  }
+
+  /**
+   * Главная функция озвучки — вызывай её отовсюду:
+   *   window.albamenSpeak("текст", "tr")
+   *   window.albamenSpeak("текст")  ← язык определится автоматически
+   */
+  async function albamenSpeak(text, language) {
+    if (!text || !text.trim()) return;
+
+    // Стопаем предыдущее воспроизведение
+    albamenStopSpeaking();
+
+    const lang = language || detectLanguage(text);
+    isSpeaking = true;
+
+    try {
+      const response = await fetch(`${ALBAMEN_WORKER_URL}/tts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: text.trim(), language: lang })
+      });
+
+      if (!response.ok) {
+        throw new Error(`TTS response: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.audioBase64) {
+        throw new Error("No audio data in response");
+      }
+
+      // Конвертим base64 → Blob → Audio
+      const binaryStr = atob(data.audioBase64);
+      const bytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) {
+        bytes[i] = binaryStr.charCodeAt(i);
+      }
+      const blob = new Blob([bytes], { type: "audio/mpeg" });
+      const audioUrl = URL.createObjectURL(blob);
+
+      currentAudio = new Audio(audioUrl);
+      currentAudio.onended = () => {
+        URL.revokeObjectURL(audioUrl);
+        isSpeaking = false;
+        currentAudio = null;
+      };
+      currentAudio.onerror = () => {
+        URL.revokeObjectURL(audioUrl);
+        isSpeaking = false;
+        currentAudio = null;
+      };
+
+      await currentAudio.play();
+
+    } catch (error) {
+      console.warn("[Albamen TTS] Google TTS failed, using browser fallback:", error.message);
+      isSpeaking = false;
+
+      // Фолбэк на браузерный голос
+      if (window.speechSynthesis) {
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = lang === "ru" ? "ru-RU" : lang === "en" ? "en-US" : "tr-TR";
+        utter.rate = 0.9;
+        utter.pitch = 0.85;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+  }
+
+  /**
+   * Стоп — останавливает текущее воспроизведение
+   */
+  function albamenStopSpeaking() {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    isSpeaking = false;
+  }
+
+  /**
+   * Проверка: сейчас говорит или нет
+   */
+  function albamenIsSpeaking() {
+    return isSpeaking;
+  }
+
+  // Экспортируем в window — доступно глобально из любого скрипта
+  window.albamenSpeak = albamenSpeak;
+  window.albamenStopSpeaking = albamenStopSpeaking;
+  window.albamenIsSpeaking = albamenIsSpeaking;
+
+  console.log("[Albamen TTS] Google TTS module loaded ✅");
+})();

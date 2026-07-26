@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alba Space — targets.mind Компилятор</title>
+
+  <!-- A-Frame (нужен для инициализации aframe-бандла MindAR) -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <!-- MindAR aframe-бандл — IIFE, создаёт window.MINDAR.IMAGE.Compiler глобально -->
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #020617;
+      color: #e5e7eb;
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      padding: 32px 20px 60px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    h1 { font-size: 22px; color: #38bdf8; margin-bottom: 6px; letter-spacing: 0.05em; }
+    .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 28px; line-height: 1.6; }
+
+    .section { margin-bottom: 28px; }
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(100,116,139,0.2);
+    }
+
+    /* Image grid */
+    #images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+    }
+    .img-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(148,163,184,0.15);
+      background: rgba(15,23,42,0.6);
+      padding: 8px;
+      text-align: center;
+    }
+    .img-item .idx {
+      position: absolute;
+      top: 4px; left: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(2,6,23,0.8);
+      border-radius: 4px;
+      padding: 1px 4px;
+    }
+    .img-item img { width: 72px; height: 72px; object-fit: contain; display: block; margin: 0 auto 4px; border-radius: 6px; }
+    .img-item span { font-size: 9px; color: #94a3b8; word-break: break-all; }
+    .img-item.loaded { border-color: rgba(0,194,255,0.3); }
+    .img-item.error { border-color: rgba(248,113,113,0.4); opacity: 0.6; }
+
+    /* Button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 99px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #00c2ff, #0077b6);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(0,194,255,0.3);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 28px rgba(0,194,255,0.5); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-secondary {
+      background: rgba(15,23,42,0.8);
+      color: #38bdf8;
+      border: 1px solid rgba(56,189,248,0.35);
+    }
+    .btn-secondary:hover { background: rgba(0,194,255,0.12); }
+
+    /* Progress */
+    #progress-wrap { display: none; margin-top: 16px; }
+    #progress-bar-bg {
+      height: 6px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    #progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg,#00c2ff,#0077b6); border-radius: 99px; transition: width 0.2s; }
+    #progress-text { font-size: 12px; color: #94a3b8; }
+
+    /* Status box */
+    #status-box {
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      display: none;
+    }
+    #status-box.info  { background: rgba(14,165,233,0.1); border: 1px solid rgba(14,165,233,0.3); color: #7dd3fc; }
+    #status-box.ok    { background: rgba(0,80,40,0.3);    border: 1px solid rgba(0,255,150,0.3);  color: #6ee7b7; }
+    #status-box.error { background: rgba(200,30,30,0.2);  border: 1px solid rgba(248,113,113,0.4);color: #fca5a5; }
+
+    /* Instructions */
+    .instructions {
+      padding: 16px 20px;
+      border-radius: 12px;
+      background: rgba(15,23,42,0.5);
+      border: 1px solid rgba(148,163,184,0.15);
+      font-size: 13px;
+      line-height: 1.8;
+      color: #cbd5e1;
+    }
+    .instructions ol { padding-left: 18px; }
+    .instructions li { margin-bottom: 4px; }
+    .instructions code {
+      background: rgba(0,194,255,0.1);
+      color: #38bdf8;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .instructions strong { color: #f0f9ff; }
+
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a href="/scanner/" style="color:#64748b;font-size:13px;text-decoration:none;display:inline-block;margin-bottom:20px;">← Вернуться к сканеру</a>
+
+  <h1>🔧 targets.mind Компилятор</h1>
+  <p class="subtitle">
+    Этот инструмент последовательно загружает все изображения из папки <code>assets/models-pictures/</code> и создаёт файл <code>targets.mind</code> для MindAR.<br>
+    Процесс компиляции может занять несколько минут. Не закрывайте вкладку браузера.
+  </p>
+
+  <!-- Instructions -->
+  <div class="section">
+    <div class="section-title">Инструкция по использованию</div>
+    <div class="instructions">
+      <ol>
+        <li>Изображения ниже перечислены <strong>в правильном порядке</strong> (этот порядок должен совпадать с <code>scanner/index.html</code>).</li>
+        <li>Нажмите кнопку <strong>«Запустить компиляцию»</strong> и дождитесь завершения процесса.</li>
+        <li>По завершении появится кнопка <strong>«Скачать targets.mind»</strong>. Скачайте файл.</li>
+        <li>Скопируйте скачанный <code>targets.mind</code> в папку <strong><code>scanner/</code></strong>.</li>
+        <li>Теперь AR-сканер готов к работе!</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Image grid -->
+  <div class="section">
+    <div class="section-title">Целевые изображения (41 — порядок компиляции)</div>
+    <div id="images-grid"></div>
+  </div>
+
+  <!-- Compile controls -->
+  <div class="section">
+    <div class="section-title">Компиляция</div>
+    <div class="row">
+      <button class="btn btn-primary" id="compile-btn" onclick="startCompile()">
+        ⚙️ Запустить компиляцию
+      </button>
+      <button class="btn btn-secondary" id="download-btn" onclick="downloadMind()" style="display:none">
+        ⬇️ Скачать targets.mind
+      </button>
+    </div>
+    <div id="progress-wrap">
+      <div id="progress-bar-bg"><div id="progress-bar"></div></div>
+      <div id="progress-text">Подготовка...</div>
+    </div>
+    <div id="status-box"></div>
+  </div>
+</div>
+
+<script>
+// ── Image list (MUST match scanner/index.html MODEL_TARGETS order) ──
+const IMAGES = [
+  { name: 'curiosity',            file: 'curiosity.png' },
+  { name: 'earth',                file: 'earth.png' },
+  { name: 'exomars',              file: 'exomars.png' },
+  { name: 'gokturk-1',           file: 'gokturk-1.png' },
+  { name: 'gokturk-2',           file: 'gokturk-2.png' },
+  { name: 'hubble',               file: 'hubble.png' },
+  { name: 'hubble (alt)',         file: 'hubble1.png' },
+  { name: 'imece',                file: 'Imece2.png' },
+  { name: 'ingenuity',            file: 'ingenuity.png' },
+  { name: 'iss',                  file: 'iss.png' },
+  { name: 'jameswebb',            file: 'jameswebb.png' },
+  { name: 'jupiter',              file: 'jupiter.png' },
+  { name: 'kepler',               file: 'kepler.png' },
+  { name: 'lagari',               file: 'lagari.png' },
+  { name: 'mars',                 file: 'mars.png' },
+  { name: 'marsodyssey',          file: 'marsodyssey.png' },
+  { name: 'marsreconnaissance',   file: 'marsreconnaissance.png' },
+  { name: 'mercury',              file: 'mercury.png' },
+  { name: 'neptune',              file: 'neptune.png' },
+  { name: 'opportunity',          file: 'opportunity.png' },
+  { name: 'perseverance',         file: 'perseverance.png' },
+  { name: 'rasat',                file: 'rasat.png' },
+  { name: 'saturn',               file: 'saturn.png' },
+
+  { name: 'sputnik',              file: 'sputnik.png' },
+  { name: 'turksat-1A',           file: 'turksat-1A.png' },
+  { name: 'turksat-1B',           file: 'turksat-1B.png' },
+  { name: 'turksat-1C',           file: 'turksat-1C.png' },
+  { name: 'turksat-2A',           file: 'turksat-2A.png' },
+  { name: 'turksat-3A',           file: 'turksat-3A.png' },
+  { name: 'turksat-3B',           file: 'turksat-3B.png' },
+  { name: 'turksat-4A',           file: 'turksat-4A.png' },
+  { name: 'turksat-5A',           file: 'turksat-5A.png' },
+  { name: 'turksat-5B',           file: 'turksat-5B.png' },
+  { name: 'turksat-6A',           file: 'turksat-6A.png' },
+  { name: 'uranus',               file: 'uranus.png' },
+  { name: 'venus',                file: 'venus.png' },
+  { name: 'voyager1',             file: 'voyager1.png' },
+  { name: 'voyager2',             file: 'voyager2.png' },
+  { name: 'zhurong',              file: 'zhurong.png' },
+];
+
+const BASE = '/assets/models-pictures/book/';
+let compiledBuffer = null;
+
+// Build grid
+const grid = document.getElementById('images-grid');
+IMAGES.forEach((img, i) => {
+  const item = document.createElement('div');
+  item.className = 'img-item';
+  item.id = `img-item-${i}`;
+  item.innerHTML = `
+    <span class="idx">${i}</span>
+    <img src="${BASE}${img.file}" alt="${img.name}"
+         onload="document.getElementById('img-item-${i}').classList.add('loaded')"
+         onerror="document.getElementById('img-item-${i}').classList.add('error')" />
+    <span>${img.name}</span>`;
+  grid.appendChild(item);
+});
+
+function setStatus(msg, type = 'info') {
+  const box = document.getElementById('status-box');
+  box.className = `status-box ${type}`;
+  box.style.display = 'block';
+  box.innerHTML = msg;
+}
+
+function setProgress(pct, text) {
+  document.getElementById('progress-wrap').style.display = 'block';
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = text;
+}
+
+async function loadImageAsHTMLImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error(`Не удалось загрузить: ${url}`));
+    img.src = url + '?t=' + Date.now(); // cache bust
+  });
+}
+
+async function startCompile() {
+  const btn = document.getElementById('compile-btn');
+  btn.disabled = true;
+  compiledBuffer = null;
+  document.getElementById('download-btn').style.display = 'none';
+
+  setStatus('⏳ Загружаются изображения...', 'info');
+  setProgress(0, 'Подготовка изображений...');
+
+  try {
+    // 1. Load all images
+    const htmlImages = [];
+    for (let i = 0; i < IMAGES.length; i++) {
+      setProgress(Math.round((i / IMAGES.length) * 40), `Загрузка изображения: ${IMAGES[i].name} (${i+1}/${IMAGES.length})`);
+      const img = await loadImageAsHTMLImage(BASE + IMAGES[i].file);
+      htmlImages.push(img);
+    }
+
+    setStatus('⚙️ Идёт компиляция... Этот процесс может занять 2–5 минут. Не закрывайте страницу.', 'info');
+    setProgress(40, 'Компилятор MindAR работает...');
+
+    // 2. Compile with MindAR
+    const compiler = new MINDAR.IMAGE.Compiler();
+    await compiler.compileImageTargets(htmlImages, (progress) => {
+      const pct = 40 + Math.round(progress * 58);
+      setProgress(pct, `Компиляция... ${Math.round(progress * 100)}%`);
+    });
+
+    setProgress(99, 'Подготовка файла...');
+    compiledBuffer = await compiler.exportData();
+
+    setProgress(100, 'Готово!');
+    setStatus(`✅ Компиляция успешно завершена! Сгенерировано <strong>${IMAGES.length} целей</strong>.<br>
+      Нажмите кнопку «Скачать targets.mind» и сохраните файл как <code>scanner/targets.mind</code>.`, 'ok');
+
+    document.getElementById('download-btn').style.display = 'inline-flex';
+  } catch (err) {
+    setStatus(`❌ Ошибка: ${err.message}`, 'error');
+    setProgress(0, 'Произошла ошибка');
+  }
+
+  btn.disabled = false;
+}
+
+function downloadMind() {
+  if (!compiledBuffer) return;
+  const blob = new Blob([compiledBuffer]);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'targets.mind';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

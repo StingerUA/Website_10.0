@@ -1,0 +1,219 @@
+/* Override to force black text on product pages (exclude signup modal and alienMenu) */
+/* Applied with high specificity and !important to beat existing styles */
+html.product-text-black body,
+html.product-text-black body *:not(.signup-modal-overlay):not(.signup-modal-overlay *):not(#alienMenu):not(#alienMenu *) {
+  color: #000000 !important;
+  fill: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Keep header and footer text/icons white */
+html.product-text-black header,
+html.product-text-black footer,
+html.product-text-black header *,
+html.product-text-black footer *,
+html.product-text-black [data-include^="/header"],
+html.product-text-black [data-include^="/header"] *,
+html.product-text-black [data-include*="header"],
+html.product-text-black [data-include*="header"] *,
+html.product-text-black [data-include^="/footer"],
+html.product-text-black [data-include^="/footer"] *,
+html.product-text-black [data-include*="footer"],
+html.product-text-black [data-include*="footer"] * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Ensure inputs and buttons text are also black */
+html.product-text-black input,
+html.product-text-black textarea,
+html.product-text-black select,
+html.product-text-black button {
+  color: #000000 !important;
+}
+
+/* Specific for svg icons */
+html.product-text-black svg {
+  fill: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Make header and footer backgrounds light on product pages with separation */
+html.product-text-black .site-header,
+html.product-text-black header.site-header,
+html.product-text-black header {
+  background: #ffffff !important; /* White background */
+  background-color: #ffffff !important;
+  color: #000000 !important; /* Black text */
+  border-bottom: 1px solid rgba(0,0,0,0.1) !important; /* Subtle separator */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important; /* Subtle shadow */
+}
+
+html.product-text-black footer,
+html.product-text-black .footer,
+html.product-text-black .footer--tr,
+html.product-text-black .footer--en,
+html.product-text-black .footer--ru {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-top: 1px solid rgba(0,0,0,0.1) !important; /* Subtle separator */
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05) !important; /* Subtle shadow above footer */
+}
+
+/* Ensure links in header/footer are black */
+html.product-text-black .site-header a,
+html.product-text-black footer a {
+  color: #000000 !important;
+}
+
+/* Ensure icons are not inverted (if any filter was applied) */
+html.product-text-black .site-header img,
+html.product-text-black footer img {
+  filter: none !important;
+}
+
+/* Make cart icon visible on white header - invert blue icon to black */
+html.product-text-black .header-cart-icon img {
+  filter: invert(100%) !important;
+}
+
+/* Force dark background on header/footer children too */
+html.product-text-black header *,
+html.product-text-black .site-header *,
+html.product-text-black footer *,
+html.product-text-black .footer * {
+  background-color: transparent !important;
+}
+
+/* Explicitly set dark background for header/footer container elements */
+html.product-text-black .header-inner,
+html.product-text-black .footer-grid,
+html.product-text-black .footer-grid--3 {
+  background: transparent !important;
+}
+
+/* Ensure links and icons in header/footer are visible */
+html.product-text-black .site-header a,
+html.product-text-black .site-header img,
+html.product-text-black footer a,
+html.product-text-black footer img,
+html.product-text-black .footer a,
+html.product-text-black .footer img {
+  color: #ffffff !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* If header uses CSS variable --header-bg, override it */
+html.product-text-black { --header-bg: #020617 !important; }
+
+/* ===== WHITE DROPDOWN MENU FOR PRODUCT PAGES ===== */
+
+/* Dropdown menu white background on product/shop pages */
+html.product-text-black .header-inner .main-nav .dropdown-menu {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Dropdown menu items text color on product pages */
+html.product-text-black .header-inner .main-nav .dropdown-menu a,
+html.product-text-black .header-inner .main-nav .dropdown-menu button {
+  color: #000000 !important;
+}
+
+/* Dropdown hover state on product pages */
+html.product-text-black .header-inner .main-nav .dropdown-menu a:hover,
+html.product-text-black .header-inner .main-nav .dropdown-menu button:hover {
+  background-color: #f3f4f6 !important;
+  color: #000000 !important;
+}
+
+/* Desktop-specific menus for products/shop pages */
+@media (min-width: 1024px) {
+  /* Services menu white on product pages */
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  /* Services menu items color on product pages */
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu a,
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu button {
+    color: #000000 !important;
+  }
+
+  /* Services menu hover on product pages */
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu a:hover,
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu button:hover {
+    background-color: #f3f4f6 !important;
+    color: #000000 !important;
+  }
+
+  /* About menu white on product pages */
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  /* About menu items color on product pages */
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu a,
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu button {
+    color: #000000 !important;
+  }
+
+  /* About menu hover on product pages */
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu a:hover,
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu button:hover {
+    background-color: #f3f4f6 !important;
+    color: #000000 !important;
+  }
+
+  /* Albamen menu white on product pages */
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  /* Albamen menu items color on product pages */
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu a,
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu button {
+    color: #000000 !important;
+  }
+
+  /* Albamen menu hover on product pages */
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu a:hover,
+  html.product-text-black .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu button:hover {
+    background-color: #f3f4f6 !important;
+    color: #000000 !important;
+  }
+}
+
+/* ============================================================
+   MOBILE DROPDOWN FIX — product/shop/cart pages (black header)
+   Overrides dropdown-optimized.css which forces #020617 bg
+   ============================================================ */
+@media (max-width: 1023px) {
+  html.product-text-black .dropdown-menu {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  html.product-text-black .dropdown-menu a,
+  html.product-text-black .dropdown-menu button {
+    color: #111827 !important;
+    pointer-events: auto !important;
+  }
+
+  html.product-text-black .dropdown-menu a:hover,
+  html.product-text-black .dropdown-menu button:hover {
+    background-color: #f3f4f6 !important;
+    color: #111827 !important;
+  }
+}

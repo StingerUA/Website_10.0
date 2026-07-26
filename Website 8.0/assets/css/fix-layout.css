@@ -1,0 +1,931 @@
+/* Fix for Header Icons and Layout */
+
+/* ===== LOGO & SYSTEM ICONS REPOSITIONING ===== */
+.header-logo-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+}
+
+.logo-sub-icons {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    margin-top: 2px !important;
+    padding-left: 4px !important;
+}
+
+.main-center-logo .albaspace-img {
+    height: 44px !important;
+    max-height: 44px !important;
+    width: auto !important;
+}
+
+.logo-sub-icons img {
+    width: 28px !important;
+    height: 28px !important;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.logo-sub-icons img:hover {
+    opacity: 1;
+}
+
+.header-logo-icon img {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+/* Hide original AI/Alien in the right switch to avoid duplicates */
+.top-lang-switch .ai-widget-toggle,
+.top-lang-switch .alien-dropdown-container {
+    display: none !important;
+}
+
+/* ===== DESKTOP LAYOUT (1024px and above) ===== */
+@media (min-width: 1024px) {
+    /* Universal Header Container */
+    .site-header {
+        height: auto !important; /* Changed from 80px to auto to allow dropdown overflow */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: relative !important;
+        z-index: 50 !important; /* Let shared z-index fixes manage dropdown stacking */
+        overflow: visible !important;
+        min-height: 80px !important; /* Maintain minimum visual height */
+    }
+
+    .header-inner {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        height: auto !important; /* Changed from 100% to auto */
+        max-width: 100% !important;
+        padding: 0 20px !important;
+        gap: 20px !important;
+        position: relative !important;
+        z-index: 50 !important; /* Keep header context stable for dropdown fix layers */
+        overflow: visible !important;
+    }
+
+    /* Prevent overflow on flex items */
+    .logo-sub-icons,
+    .main-center-logo,
+    .header-inner .main-nav,
+    .header-social {
+        min-width: 0 !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* ORDERING */
+    .logo-sub-icons {
+        order: 1 !important;
+        flex: 0 0 auto !important;
+    }
+
+    .main-center-logo {
+        order: 2 !important;
+        margin-left: 10px !important;
+        margin-right: auto !important; /* Push nav to the right */
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    /* Reduce logo size */
+    .main-center-logo .albaspace-img {
+        height: 33px !important;
+        max-height: 33px !important;
+        width: auto !important;
+    }
+
+    /* NAVIGATION */
+    .header-inner .main-nav {
+        order: 3 !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 1 1 auto !important; /* Allow growing */
+        gap: 15px !important; /* Base gap */
+        position: relative !important;
+        z-index: 51 !important; /* Keep nav above header content while shared fixes handle final layering */
+        overflow: visible !important;
+    }
+
+    /* Desktop navigation alignment */
+    @media (min-width: 1024px) {
+        .header-inner .main-nav > * {
+            display: flex !important;
+            align-items: center !important;
+            height: auto !important;
+        }
+    }
+
+    /* Align regular links (like MAĞAZA) with dropdowns */
+    .header-inner .main-nav > a {
+        display: inline-flex !important;
+        align-items: center !important;
+        padding: 8px 12px !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        color: inherit !important;
+        transition: background-color 0.2s ease, color 0.2s ease !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+        height: auto !important;
+    }
+
+    .header-inner .main-nav > a:hover {
+        background-color: rgba(0, 194, 255, 0.1) !important;
+        color: rgba(0, 194, 255, 1) !important;
+    }
+
+    /* Align dropdown triggers with regular nav links */
+    .header-inner .main-nav .dropdown-trigger {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 8px 12px !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        color: inherit !important;
+        transition: background-color 0.2s ease, color 0.2s ease !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+        height: auto !important;
+        border: none !important;
+        background: transparent !important;
+        user-select: none !important;
+    }
+
+    .header-inner .main-nav .dropdown-trigger::after {
+        content: '▾' !important;
+        font-size: 12px !important;
+        transition: transform 0.3s ease !important;
+        color: #9ca3af !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        margin-left: 2px !important;
+    }
+
+    .header-inner .main-nav .dropdown-trigger:hover {
+        background-color: rgba(0, 194, 255, 0.1) !important;
+        color: rgba(0, 194, 255, 1) !important;
+    }
+
+    .header-inner .main-nav .dropdown-trigger:hover::after {
+        color: #00c2ff !important;
+    }
+
+    .header-inner .main-nav .dropdown.active .dropdown-trigger::after {
+        transform: rotate(180deg) !important;
+        color: #00c2ff !important;
+    }
+
+    .header-inner .main-nav .dropdown {
+        display: flex !important;
+        align-items: center !important;
+        position: relative !important;
+        height: auto !important; /* Changed from 100% to auto */
+        overflow: visible !important; /* Ensure dropdowns are visible */
+        z-index: 51 !important; /* Keep dropdown parent above nav siblings */
+    }
+
+    /* Dropdown positioning */
+    .header-inner .main-nav .dropdown-menu {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        z-index: 2147483647 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        display: block !important;
+        background: #020617 !important;
+        border: 1px solid rgba(255,255,255,0.08) !important;
+        min-width: 200px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+        padding: 8px 0;
+        margin-top: 5px;
+        opacity: 0 !important; /* Add opacity for smooth transitions */
+        transition: visibility 0.2s ease, opacity 0.2s ease !important;
+        border-radius: 8px !important; /* Add border radius */
+        transform: none !important; /* No transform to avoid stacking context */
+    }
+    
+    /* Show dropdown only when active (click-open) */
+    .header-inner .main-nav .dropdown.active .dropdown-menu {
+        visibility: visible !important;
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        z-index: 2147483647 !important;
+        background: #020617 !important;
+    }
+    
+    .header-inner .main-nav .dropdown-menu a {
+        display: block;
+        padding: 12px 20px;
+        color: #e2e8f0;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        z-index: 99999 !important; /* Ensure links are clickable */
+    }
+    
+    .header-inner .main-nav .dropdown-menu a:hover {
+        background: rgba(0, 194, 255, 0.1);
+        color: #ffffff;
+        padding-left: 24px;
+    }
+
+    /* Preserve services/about desktop row flyouts */
+    @media (min-width: 1024px) {
+        .header-inner .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu {
+            left: auto !important;
+            right: -25px !important;
+            top: 100% !important;
+            transform: none !important;
+            display: flex !important;
+            flex-direction: row-reverse !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 8px !important;
+            padding: 8px !important;
+            width: auto !important;
+            min-width: auto !important;
+            background: linear-gradient(180deg, #001a33 0%, #003366 100%) !important;
+            border: 1px solid #003366 !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+            border-radius: 8px !important;
+        }
+
+        .header-inner .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu {
+            left: -25px !important;
+            right: auto !important;
+            top: 100% !important;
+            transform: none !important;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 8px !important;
+            padding: 8px !important;
+            width: auto !important;
+            min-width: auto !important;
+            background: linear-gradient(180deg, #001a33 0%, #003366 100%) !important;
+            border: 1px solid #003366 !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+            border-radius: 8px !important;
+        }
+
+        .header-inner .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu a,
+        .header-inner .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu button,
+        .header-inner .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu a,
+        .header-inner .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu button {
+            width: auto !important;
+            min-width: 0 !important;
+            display: inline-flex !important;
+            justify-content: center !important;
+            white-space: nowrap !important;
+            padding: 10px 14px !important;
+        }
+    }
+
+    /* SOCIAL */
+    .header-social {
+        order: 4 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 12px !important;
+        flex: 0 0 auto !important;
+    }
+
+    .header-social .social-row {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 8px !important;
+        align-items: center !important;
+    }
+
+    .header-social a img {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .top-lang-switch {
+        display: flex !important;
+        gap: 8px !important;
+        align-items: center !important;
+    }
+
+    .menu-toggle {
+        display: none !important;
+    }
+
+    /* MEDIA QUERIES FOR FINE TUNING */
+    
+    /* 1280px (Laptop) */
+    @media (min-width: 1280px) {
+        .header-inner { gap: 30px !important; padding: 0 40px !important; }
+        .header-inner .main-nav { gap: 25px !important; }
+        .main-nav a { font-size: 14px !important; }
+    }
+
+    /* 1366px (Large Laptop) */
+    @media (min-width: 1366px) {
+        .header-inner { max-width: 1320px !important; margin: 0 auto !important; }
+        .header-inner .main-nav { gap: 30px !important; }
+    }
+
+    /* 1920px (Desktop) */
+    @media (min-width: 1920px) {
+        .header-inner { max-width: 1800px !important; }
+        .main-nav a { font-size: 16px !important; }
+        .header-social { gap: 20px !important; }
+    }
+}
+
+/* ===== MOBILE LAYOUT (max-width: 1023px) ===== */
+@media (max-width: 1023px) {
+    /* Prevent horizontal scrolling globally */
+    html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        position: relative !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .site-header {
+        background: rgba(2, 6, 23, 0.95) !important;
+        position: relative !important;
+        z-index: 50 !important; /* Reduced to let dropdown-fix-final.css manage z-index */
+        height: auto !important;
+        min-height: 100px !important;
+    }
+
+    .header-inner {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 12px 16px !important;
+        height: auto !important;
+        position: relative !important;
+    }
+
+    /* 1. TOP LINE: Logo icons on left, Social + Lang on right */
+
+    /* Logo icons on the left */
+    .logo-sub-icons {
+        order: 1 !important;
+        flex: 0 0 auto !important;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 12px !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+    }
+
+    /* Social and language switches on the right */
+    .header-social {
+        order: 2 !important;
+        flex: 0 0 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+        align-items: flex-end !important;
+        justify-content: center !important;
+        margin-left: auto !important;
+    }
+
+    /* Social row - ensure all 4 icons are visible */
+    .header-social .social-row {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 8px !important;
+        align-items: center !important;
+        flex-wrap: wrap !important; /* Allow wrapping if needed */
+        justify-content: flex-end !important;
+    }
+
+    /* Language switches */
+    .header-social .top-lang-switch {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 6px !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+    }
+
+    /* Hide cart from header-social/top-lang-switch on mobile (show it in logo-sub-icons instead) */
+    .header-social .header-cart-link,
+    .top-lang-switch .header-cart-link {
+        display: none !important;
+    }
+
+    /* Show cart in logo-sub-icons — flows naturally after alien button */
+    .logo-sub-icons > .header-cart-link {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        order: 4 !important; /* after AlbaLogo(1), AI(2), alien(3) */
+    }
+
+    /* Style cart icon image on mobile */
+    .logo-sub-icons > .header-cart-icon img,
+    .logo-sub-icons > .header-cart-link img,
+    .logo-sub-icons > .header-cart-link .header-cart-icon img {
+        width: 28px !important;
+        height: 28px !important;
+        display: block !important;
+    }
+
+    /* Ensure alien icon is visible on mobile */
+    .alien-dropdown-container {
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    /* 2. SECOND LINE: Center Logo */
+    .main-center-logo {
+        order: 3 !important;
+        flex: 0 0 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin: 8px 0 !important;
+    }
+
+    /* 3. THIRD LINE: Navigation */
+    .header-inner .main-nav {
+        order: 4 !important;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 100% !important;
+        margin-top: 8px !important;
+        justify-content: space-between !important;
+        flex: 0 0 100% !important;
+        position: relative !important;
+        z-index: 51 !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0 !important;
+        overflow: visible !important;
+    }
+
+    /* Social icons sizing for mobile */
+    .header-social .social-row img {
+        width: 20px !important;
+        height: 20px !important;
+        display: block !important;
+    }
+
+    /* Language flag sizing for mobile */
+    .header-social .top-lang-switch img {
+        width: 18px !important;
+        height: 12px !important;
+        display: block !important;
+    }
+
+    /* Logo sub-icons sizing */
+    .logo-sub-icons img {
+        width: 28px !important;
+        height: 28px !important;
+        display: block !important;
+    }
+
+    /* Ensure proper spacing */
+    .logo-sub-icons a,
+    .header-social .social-row a,
+    .header-social .top-lang-switch a {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-decoration: none !important;
+    }
+    .header-inner .main-nav .dropdown {
+        display: inline-flex !important;
+        position: relative !important;
+        z-index: 52 !important;
+        overflow: visible !important;
+    }
+
+    .header-inner .main-nav .dropdown > .dropdown-trigger {
+        position: relative !important;
+        z-index: 1 !important;
+    }
+
+    .header-inner .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"],
+    .header-inner .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] {
+        z-index: 0 !important;
+    }
+
+    .header-inner .main-nav .dropdown-menu {
+        position: fixed !important;
+        top: 120px !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) translateY(100%) scaleY(0.95) !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        max-height: 72vh !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        background: rgba(2, 6, 23, 0.98) !important;
+        border: 1px solid rgba(0, 191, 255, 0.3) !important;
+        border-radius: 12px !important;
+        padding: 12px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(0,194,255,0.1) !important;
+        z-index: 1600 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                    opacity 0.35s ease, 
+                    visibility 0.35s ease !important;
+        transform-origin: top center;
+    }
+
+    .header-inner .main-nav .dropdown.active .dropdown-menu {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translateX(-50%) translateY(0) scaleY(1) !important;
+        z-index: 1500 !important;
+    }
+
+    .header-inner .main-nav .dropdown:not(.active) .dropdown-menu {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        z-index: 0 !important;
+        transform: translateX(-50%) translateY(100%) scaleY(0.95) !important;
+    }
+
+    .header-inner .main-nav .dropdown-menu a {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: calc(25% - 8px) !important; /* 4 items per row with gap */
+        min-width: 60px !important;
+        padding: 10px 4px !important;
+        background-color: #00BFFF !important; /* Alien menu color */
+        color: #ffffff !important;
+        text-decoration: none !important;
+        border-radius: 999px !important;
+        font-weight: 700 !important;
+        font-size: clamp(7px, 2.2vw, 11px) !important; /* Slightly smaller for 4 in a row */
+        text-transform: uppercase !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 6px rgba(0, 191, 255, 0.2) !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        box-sizing: border-box !important;
+        flex: 0 0 auto !important;
+    }
+    
+    .header-inner .main-nav .dropdown-menu a:hover {
+        background-color: #009ACD !important;
+        box-shadow: 0 0 15px rgba(0, 191, 255, 0.6) !important;
+        transform: translateY(-2px) scale(1.03) !important;
+    }
+
+    .header-inner .main-nav a, 
+    .header-inner .main-nav .dropdown-trigger {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        padding: 6px 4px !important; /* Minimal padding */
+        border: none !important; /* Remove border */
+        border-radius: 0 !important; /* Remove radius */
+        background: transparent !important; /* Remove background */
+        font-size: 11px !important; 
+        white-space: nowrap !important;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        flex-shrink: 0 !important; 
+        text-transform: uppercase !important; /* Ensure uppercase */
+        font-weight: 600 !important; /* Make text bolder */
+    }
+
+    .header-inner .main-nav .dropdown-trigger::after {
+        content: '▾' !important;
+        font-size: 10px !important;
+        transition: transform 0.3s ease !important;
+        color: #9ca3af !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        margin-left: 2px !important;
+    }
+
+    .header-inner .main-nav .dropdown-trigger:hover::after {
+        color: #00c2ff !important;
+    }
+
+    .header-inner .main-nav .dropdown.active .dropdown-trigger::after {
+        transform: rotate(180deg) !important;
+        color: #00c2ff !important;
+    }
+
+    .header-social .social-row {
+        display: flex;
+        gap: 8px;
+    }
+
+    .header-social a img {
+        width: 14px !important;
+    }
+}
+
+/* ===== CART BADGE STYLES (NEW) ===== */
+.header-cart-icon {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    overflow: visible !important;
+}
+
+.header-cart-count {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-2px, -3px) !important;
+    background-color: #00c2ff !important;
+    color: white !important;
+    width: 16px !important;
+    height: 16px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 10px !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+    transform: none !important;
+    z-index: 10 !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ===== ALIEN MENU ===== */
+.alien-dropdown-container {
+    position: relative !important;
+    display: inline-flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+}
+
+#alienMenu {
+    position: absolute !important;
+    top: 100% !important;
+    left: auto !important;
+    right: 0 !important;
+    transform: none !important;
+    margin-top: 0 !important;
+    z-index: 5000 !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(0,194,255,0.1) !important;
+    width: 200px !important;
+    max-width: calc(100vw - 20px) !important;
+    text-align: center;
+    background: rgba(2, 6, 23, 0.98) !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 191, 255, 0.3) !important;
+    display: none !important;
+    grid-template-columns: 1fr;
+    gap: 6px;
+}
+
+@media (max-width: 1023px) {
+    .alien-dropdown-container {
+        position: relative !important;
+    }
+
+    #alienMenu {
+        position: absolute !important;
+        top: 100% !important;
+        left: auto !important;
+        right: 0 !important;
+        transform: none !important;
+        margin-top: 0 !important;
+        min-width: min(92vw, 360px) !important;
+        width: auto !important;
+        max-width: calc(100vw - 20px) !important;
+    }
+}
+
+#alienMenu:not([hidden]) {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+}
+
+#alienMenu .alien-menu-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    min-width: 100px !important;
+    padding: 10px 14px !important;
+    background-color: #00BFFF !important; /* Deep Sky Blue */
+    color: #ffffff !important;
+    text-decoration: none !important;
+    border-radius: 999px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    text-transform: uppercase !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 6px rgba(0, 191, 255, 0.2) !important;
+    text-align: center !important;
+    border: none !important;
+    margin: 0 !important;
+}
+
+#alienMenu .alien-menu-item:hover,
+#alienMenu .alien-menu-item:focus {
+    background-color: #009ACD !important; /* Darker Blue on hover */
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.6) !important;
+    transform: translateY(-2px) !important;
+    outline: none !important;
+}
+
+/* Ensure social icons and langs are always flex row as requested */
+.header-social {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important; /* Center align vertically */
+    justify-content: flex-end;
+    gap: 12px !important;
+    flex-wrap: wrap !important; /* Allow wrapping on very small screens */
+}
+
+.social-row {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    margin-bottom: 0 !important;
+    order: 2 !important; /* Place social icons after lang switch (in the corner) */
+}
+
+.top-lang-switch {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    justify-content: center;
+    order: 1 !important; /* Place lang switch before social icons */
+}
+
+/* Ensure icons are small enough to fit in one line */
+.header-social a img {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* Override previous mobile styles if needed to keep the column layout or switch to row?
+   User didn't specify, but usually header is compact on mobile.
+   I'll keep column for consistency if space permits, or let them wrap.
+*/
+
+/* ===== MOBILE HEADER - CART ICON FIX ===== */
+@media (max-width: 1024px) {
+    /* Reposition cart to the right of alien button */
+    .logo-sub-icons {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 12px !important;
+        margin-left: 0 !important;
+        padding-left: 10px !important;
+    }
+
+    .header-cart-link {
+        position: static !important;
+        order: 4 !important; /* Move to the end of logo-sub-icons (right of alien) */
+    }
+
+    .header-cart-icon img {
+        width: 28px !important; /* Match alien button size */
+        height: 28px !important;
+    }
+}
+
+/* Global fix for horizontal scroll and blue background */
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #020617 !important; /* Ensure dark background */
+}
+
+* {
+    box-sizing: border-box !important;
+}
+
+/* ===== MOBILE BACKDROP - Block clicks outside dropdown menu ===== */
+@media (max-width: 1023px) {
+    /* When dropdown is active, create a full-screen invisible overlay */
+    .header-inner .main-nav .dropdown.active::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1499;
+        background: rgba(0, 0, 0, 0.5);
+        cursor: default;
+        pointer-events: auto;
+        animation: fadeInBackdrop 0.25s ease forwards;
+    }
+
+    /* Ensure all elements behind the dropdown cannot receive clicks */
+    body.has-active-dropdown {
+        pointer-events: none;
+    }
+
+    body.has-active-dropdown .dropdown.active,
+    body.has-active-dropdown .dropdown.active .dropdown-menu,
+    body.has-active-dropdown .dropdown.active .dropdown-menu * {
+        pointer-events: auto;
+    }
+
+    @keyframes fadeInBackdrop {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}
+
+/* ===== EXTRA SMALL SCREENS (max-width: 767px) ===== */
+@media (max-width: 767px) {
+    /* Additional prevention of horizontal scrolling for very small screens */
+    html, body, #root, main {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        min-width: 0 !important;
+        position: relative !important;
+    }
+
+    /* Force all elements to stay within viewport */
+    *, *::before, *::after {
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+
+    /* Images and media elements */
+    img, video, iframe {
+        max-width: 100% !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Model-viewer should keep its defined height */
+    model-viewer {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    /* Text elements */
+    h1, h2, h3, p, span, div {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        max-width: 100% !important;
+    }
+}

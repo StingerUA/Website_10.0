@@ -1,0 +1,6 @@
+echo "alias gp='git add . && git commit -m \"update\" && git pull --rebase && git push'" >> ~/.bashrc
+
+source ~/.bashrc
+
+python -m http.server 8000
+

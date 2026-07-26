@@ -1,0 +1,238 @@
+/* Final overrides loaded at end of page (via footer) */
+/* Ensures these rules apply after Tailwind and inline styles */
+
+html.product-text-black section.mt-24,
+html.product-text-black section.mt-24.reveal {
+  background: #ffffff !important;
+  box-shadow: none !important;
+  border-radius: 12px !important;
+  padding: 28px !important;
+}
+
+/* Hide the small blue stripe under the title */
+html.product-text-black .h-1.w-20.bg-blue-500 {
+  display: none !important;
+}
+
+/* Make related product cards neutral (white background) */
+html.product-text-black #related-products-container,
+html.product-text-black #related-products-container .group,
+html.product-text-black #related-products-container .relative,
+html.product-text-black #related-products-container .bg-gray-900 {
+  background: #ffffff !important;
+  box-shadow: none !important;
+  border-radius: 12px !important;
+}
+
+/* Ensure titles and prices inside related cards are visible on white */
+html.product-text-black #related-products-container h3,
+html.product-text-black #related-products-container p {
+  color: #000000 !important;
+}
+
+/* Re-enforce Add-to-cart color */
+html.product-text-black .btn-glow {
+  background: #60a5fa !important;
+  color: #000000 !important;
+  border: 1px solid rgba(37,99,235,0.12) !important;
+}
+
+/* Ensure qty box remains outlined */
+html.product-text-black [data-qty] {
+  background: transparent !important;
+  border: 2px solid #000000 !important;
+  border-radius: 12px !important;
+}
+
+/* Force the main product panel and surrounding container to white */
+html.product-text-black body,
+html.product-text-black main,
+html.product-text-black .max-w-7xl,
+html.product-text-black .product-grid,
+html.product-text-black .product-grid > div,
+html.product-text-black .reveal,
+html.product-text-black .main-image-container {
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove any background gradients applied via inline styles or pseudo-elements */
+html.product-text-black body::before,
+html.product-text-black main::before,
+html.product-text-black .product-grid::before,
+html.product-text-black .reveal::before {
+  background: none !important;
+  display: none !important;
+}
+
+/* Strong override: remove any background images/gradients inside main on product pages (exclude signup modal and alienMenu) */
+html.product-text-black main *:not(.signup-modal-overlay):not(.signup-modal-overlay *):not(#alienMenu):not(#alienMenu *),
+html.product-text-black .product-grid *:not(.signup-modal-overlay):not(.signup-modal-overlay *):not(#alienMenu):not(#alienMenu *),
+html.product-text-black .reveal *:not(.signup-modal-overlay):not(.signup-modal-overlay *):not(#alienMenu):not(#alienMenu *) {
+  background-image: none !important;
+  background: transparent !important;
+}
+
+/* Force the product panel to be white (covers gradient panels) */
+html.product-text-black main,
+html.product-text-black .product-grid,
+html.product-text-black .reveal {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+}
+
+/* Hide breadcrumb/bar pseudo-elements above titles (thin blue stripe) */
+html.product-text-black nav::before,
+html.product-text-black h1::before,
+html.product-text-black nav::after,
+html.product-text-black h1::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+/* Also hide any element that matches typical stripe classes */
+html.product-text-black .stripe, html.product-text-black .title-underline, html.product-text-black .breadcrumb-bar {
+  display: none !important;
+}
+
+/* ============ FINAL ABSOLUTE OVERRIDE - Loaded at the end from footer ============ */
+/* This file has the HIGHEST priority as it's loaded last from footer */
+
+/* Make header and footer ALWAYS dark blue - no exceptions */
+header,
+footer,
+header.site-header,
+footer.footer,
+.site-header,
+.footer,
+.footer--tr,
+.footer--en,
+.footer--ru,
+.header-inner,
+.footer-grid,
+.footer-grid--3 {
+  background: #020617 !important;
+  background-color: #020617 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Ultra-specific: ensure no child element can change the header/footer background */
+header *,
+footer *,
+.site-header *,
+.footer *,
+[data-include*="header"] *,
+[data-include*="footer"] * {
+  background-color: transparent !important;
+}
+
+/* Keep specific elements visible on dark background */
+header a,
+header img,
+footer a,
+footer img,
+.footer a,
+.footer img {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Also apply for the product-text-black class context */
+html.product-text-black header,
+html.product-text-black footer,
+html.product-text-black .site-header,
+html.product-text-black .footer {
+  background: #020617 !important;
+  background-color: #020617 !important;
+  color: #ffffff !important;
+}
+
+html.product-text-black header *,
+html.product-text-black footer *,
+html.product-text-black .site-header *,
+html.product-text-black .footer * {
+  background-color: transparent !important;
+}
+
+/* ============================================================
+   MOBILE DROPDOWN - Force opaque white dropdown on mobile
+   Ensures dropdown menus are not transparent and do not show
+   underlying page content through the menu.
+   This file is loaded last (footer) so rules win over earlier !important.
+   ============================================================ */
+@media (max-width: 1023px) {
+  /* Ensure 4-column horizontal grid on mobile for all dropdown menus */
+  .dropdown-menu,
+  .header-inner .main-nav .dropdown-menu {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(120px, 1fr)) !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: min(95vw, 520px) !important;
+    max-width: 95vw !important;
+  }
+
+  /* Neutralize any pseudo-element transparency that may tint the menu */
+  .dropdown.active .dropdown-menu::before,
+  .dropdown.active .dropdown-menu::after,
+  .dropdown::before,
+  .dropdown::after {
+    background: none !important;
+  }
+
+  /* Prevent overlay pseudo-element from dimming or tinting the menu */
+  .dropdown.active::before {
+    background: transparent !important;
+    pointer-events: none !important;
+  }
+
+  /* White logo pages - Dark blue opaque background */
+  html.header-white .dropdown.active .dropdown-menu {
+    background: rgba(14, 31, 66, 1) !important;
+    border: 1px solid rgba(74, 155, 204, 0.25) !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(74, 155, 204, 0.15) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  html.header-white .dropdown.active .dropdown-menu a,
+  html.header-white .dropdown.active .dropdown-menu button {
+    color: #a8d5ff !important;
+    background: rgba(74, 155, 204, 0.15) !important;
+  }
+
+  /* Black logo pages - Light blue opaque background */
+  html.header-black .dropdown.active .dropdown-menu {
+    background: rgba(74, 155, 204, 1) !important;
+    border: 1px solid rgba(74, 155, 204, 0.4) !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  html.header-black .dropdown.active .dropdown-menu a,
+  html.header-black .dropdown.active .dropdown-menu button {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+  }
+
+  /* Product pages text black - Keep light blue background */
+  html.product-text-black .dropdown.active .dropdown-menu {
+    background: rgba(74, 155, 204, 1) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  html.product-text-black .dropdown.active .dropdown-menu a,
+  html.product-text-black .dropdown.active .dropdown-menu button {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+  }
+}

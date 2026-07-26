@@ -1,0 +1,13 @@
+{
+  "name": "albaspace-site",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build:atlas-nav": "node scripts/build-atlas-nav.mjs",
+    "screenshot:models": "node scripts/screenshot-models.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.42.0",
+    "puppeteer": "^24.33.0"
+  }
+}

@@ -1,0 +1,747 @@
+/* ============================================================================
+   OPTIMIZED DROPDOWN MENU - Professional, Simple, Fast
+   ============================================================================ */
+
+/* Reset specific dropdown styles */
+/* Dropdown container with safe hover zone */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  z-index: auto;
+}
+
+/* Invisible hover zone to prevent menu collapse - desktop only */
+.dropdown::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: -10px;
+  right: -10px;
+  height: 30px;
+  pointer-events: auto;
+  z-index: 999;
+  background: transparent;
+  display: none;
+}
+
+.dropdown-trigger {
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-trigger::after {
+  content: '▾';
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  color: #9ca3af;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 2px;
+}
+
+.dropdown-trigger:hover {
+  background-color: rgba(0, 194, 255, 0.1);
+  color: rgba(0, 194, 255, 1);
+}
+
+.dropdown-trigger:hover::after {
+  color: #00c2ff;
+}
+
+.dropdown.active .dropdown-trigger::after {
+  transform: rotate(180deg);
+  color: #00c2ff;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: #020617 !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 8px;
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding: 12px 10px;
+  min-width: 260px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform-origin: top center;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+  z-index: 1001;
+  margin-top: 8px;
+  /* opaque gradient used, no backdrop filter for contrast */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .dropdown::after {
+    display: block;
+  }
+}
+
+/* Desktop-specific flyouts: match all language variants using href$= selector */
+@media (min-width: 1024px) {
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu {
+    left: 0;
+    right: auto;
+    top: calc(100% + 6px);
+    transform: none;
+    transform-origin: top left;
+    min-width: 180px;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    background: #020617 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    z-index: 2147483647 !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu::before,
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu::after {
+    display: none;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu a,
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu button {
+    width: auto;
+    white-space: nowrap;
+    display: inline-flex;
+    padding: 10px 14px;
+    pointer-events: auto !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu {
+    left: -25px;
+    right: auto;
+    top: calc(100% + 10%);
+    transform: none;
+    transform-origin: top left;
+    min-width: auto;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    background: #020617 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    opacity: 1;
+    z-index: 2147483647 !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu::before,
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu::after {
+    display: none;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu a,
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu button {
+    width: auto;
+    white-space: nowrap;
+    display: inline-flex;
+    padding: 10px 14px;
+    pointer-events: auto !important;
+  }
+
+  /* ALBAMEN: horizontal dropdown like other menus, centered between hizmetler and hakkimizda */
+
+  /* Ensure header dropdown items are clickable */
+  .main-nav .dropdown .dropdown-menu a,
+  .main-nav .dropdown .dropdown-menu button,
+  .main-nav .dropdown .dropdown-menu [role="menuitem"] {
+    pointer-events: auto !important;
+    z-index: 10040 !important;
+  }
+}
+
+/* Show menu when active class is added */
+.dropdown.active .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+/* Keep menu open when hovering over buffer zone */
+.dropdown-menu:hover {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) !important;
+}
+
+
+/* Dropdown menu items - fully clickable */
+.dropdown-menu a,
+.dropdown-menu button {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 14px;
+  text-align: center;
+  color: #e5e7eb;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex: 0 1 auto;
+  pointer-events: auto !important;
+  position: relative;
+  border-radius: 6px;
+  user-select: none;
+}
+
+@media (min-width: 1024px) {
+  .dropdown-menu a,
+  .dropdown-menu button {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    justify-content: flex-start !important;
+  }
+}
+
+.dropdown-menu a::before,
+.dropdown-menu button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 20px;
+  background: rgba(0, 194, 255, 0.2);
+}
+
+.dropdown-menu a:first-child::before {
+  display: none;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: rgba(0, 194, 255, 0.2);
+  color: #00c2ff;
+  border-radius: 6px;
+}
+
+.dropdown-menu a:active,
+.dropdown-menu button:active {
+  background-color: rgba(0, 194, 255, 0.25);
+}
+
+/* Hyperclub link styling aligned with other dropdown items */
+.dropdown-menu a.hyperclub-link {
+  color: inherit !important;
+  font-weight: 500 !important;
+}
+
+.dropdown-menu a.hyperclub-link:hover {
+  background-color: rgba(0, 194, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.dropdown-menu a.hyperclub-link::after {
+  content: none !important;
+}
+
+/* ============================================================================
+   MOBILE ADJUSTMENTS
+   ============================================================================ */
+@media (max-width: 1023px) {
+  .dropdown-menu a:hover,
+  .dropdown-menu button:hover {
+    background-color: rgba(0, 194, 255, 0.15) !important;
+    color: #00c2ff !important;
+    transform: none !important;
+  }
+
+  .dropdown-trigger {
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+  }
+}
+
+/* ============================================================================
+   MOBILE BACKDROP
+   ============================================================================ */
+
+@media (max-width: 1023px) {
+  .dropdown.active::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1499;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: default;
+    pointer-events: auto;
+    animation: fadeIn 0.2s ease forwards;
+  }
+
+  body.has-active-dropdown {
+    pointer-events: none;
+  }
+
+  body.has-active-dropdown .dropdown.active,
+  body.has-active-dropdown .dropdown.active .dropdown-menu,
+  body.has-active-dropdown .dropdown.active .dropdown-menu * {
+    pointer-events: auto;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+}
+
+/* ============================================================================
+   Accessibility & Performance
+   ============================================================================ */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .dropdown-menu,
+  .dropdown-menu a,
+  .dropdown-menu button,
+  .dropdown-trigger {
+    transition: none;
+  }
+}
+
+/* Focus states for keyboard navigation */
+.dropdown-trigger:focus,
+.dropdown-menu a:focus,
+.dropdown-menu button:focus {
+  outline: 2px solid #00c2ff;
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   CRITICAL FIX: Prevent hidden dropdown menu items from being clickable
+   ============================================================================ */
+
+@media (max-width: 1023px) {
+  /* Block all clicks on inactive dropdown menus and their children */
+  .dropdown:not(.active) .dropdown-menu,
+  .dropdown:not(.active) .dropdown-menu * {
+    pointer-events: none !important;
+  }
+
+  /* Explicitly allow clicks on active dropdown menus */
+  .dropdown.active .dropdown-menu,
+  .dropdown.active .dropdown-menu * {
+    pointer-events: auto !important;
+  }
+}
+
+/* ============================================================
+   WHITE DROPDOWN FIX — product/shop/cart pages (product-text-black)
+   Must be at end of file to win specificity over all !important above
+   ============================================================ */
+html.product-text-black .dropdown-menu {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+html.product-text-black .dropdown-menu a,
+html.product-text-black .dropdown-menu button,
+html.product-text-black .dropdown-menu [role="menuitem"] {
+  color: #111827 !important;
+  pointer-events: auto !important;
+}
+
+html.product-text-black .dropdown-menu a:hover,
+html.product-text-black .dropdown-menu button:hover {
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+/* =================================================================== */
+/* Alien account menu — styles to match screenshot (stacked blue buttons) */
+/* =================================================================== */
+
+.alien-dropdown-container {
+  position: relative;
+}
+
+.alien-dropdown-container .alien-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 999px;
+}
+
+.alien-dropdown-container .account-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.alien-dropdown-container .alien-menu {
+  position: fixed;  /* overridden by #alienMenu { position: fixed !important } in site.css */
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: linear-gradient(180deg, rgba(2,6,23,0.98), rgba(6,12,30,0.98));
+  border: 1px solid rgba(0,194,255,0.12);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.6), 0 0 26px rgba(0,194,255,0.04);
+  border-radius: 12px;
+  z-index: 2150;
+}
+
+.alien-menu .alien-menu-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  color: #e6f7fb;
+  background: transparent;
+  border: none;
+}
+
+.alien-auth-logged-out .alien-menu-item {
+  background: linear-gradient(180deg, #00d4ff, #00a8e6) !important;
+  color: #021024 !important;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(0,194,255,0.12);
+}
+
+.alien-auth-logged-out .alien-menu-google {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alien-auth-logged-in {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alien-auth-logged-in .alien-menu-account {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: #e6f7fb;
+}
+
+.alien-menu-account img {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.06);
+}
+
+.alien-auth-logged-in .alien-menu-item {
+  background: transparent !important;
+  color: #e6f7fb !important;
+}
+
+.alien-menu .alien-menu-item:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1023px) {
+  .alien-dropdown-container .alien-menu {
+    right: 12px;
+    left: auto;
+    min-width: min(92vw, 360px);
+  }
+  .alien-auth-logged-out .alien-menu-item {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1023px) {
+  html.product-text-black .dropdown-menu {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  html.product-text-black .dropdown-menu a,
+  html.product-text-black .dropdown-menu button {
+    color: #111827 !important;
+    pointer-events: auto !important;
+  }
+
+  html.product-text-black .dropdown-menu a:hover,
+  html.product-text-black .dropdown-menu button:hover {
+    background-color: #f3f4f6 !important;
+    color: #111827 !important;
+  }
+}
+
+.alien-auth-logged-out[hidden],
+.alien-auth-logged-in[hidden] {
+  display: none !important;
+}
+
+.alien-menu-account {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alien-menu-account img,
+.alien-dropdown-container .account-avatar {
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.alien-menu-account img {
+  width: 28px;
+  height: 28px;
+}
+
+/* ================================================================
+   LANG DROPDOWN — single flag button, expands to 3 on click
+   ================================================================ */
+.lang-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.lang-dropdown-trigger {
+  background: none;
+  border: none;
+  padding: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: opacity 0.15s;
+}
+.lang-dropdown-trigger:hover { opacity: 0.8; }
+.lang-dropdown-trigger img  { display: block; border-radius: 2px; }
+
+.lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  padding: 6px 8px;
+  background: rgba(2, 6, 23, 0.97);
+  border: 1px solid rgba(0,194,255,0.2);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  z-index: 2147483647;
+  white-space: nowrap;
+  animation: langFadeIn 0.15s ease;
+}
+@keyframes langFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.lang-dropdown-menu[hidden] { display: none !important; }
+
+.lang-dropdown-menu a {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border-radius: 3px;
+  transition: transform 0.15s, opacity 0.15s;
+  opacity: 0.75;
+}
+.lang-dropdown-menu a:hover { opacity: 1; transform: scale(1.1); }
+.lang-dropdown-menu img { border-radius: 2px; display: block; }
+
+
+/* ================================================================
+   ALIEN MENU — position: fixed, desktop column / mobile row
+   ================================================================ */
+#alienMenu {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  background: linear-gradient(160deg, rgba(2,6,23,0.99), rgba(6,12,30,0.99)) !important;
+  border: 1px solid rgba(0,194,255,0.22) !important;
+  border-radius: 14px !important;
+  padding: 10px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7), 0 0 20px rgba(0,194,255,0.07) !important;
+  /* vertical column by default */
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  min-width: 190px !important;
+  width: auto !important;
+}
+#alienMenu[hidden] { display: none !important; }
+
+/* Mobile: horizontal strip pinned under header */
+@media (max-width: 767px) {
+  #alienMenu {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    min-width: unset !important;
+    border-radius: 0 0 12px 12px !important;
+    padding: 8px 14px !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    overflow-x: auto !important;
+  }
+  #alienMenu .alien-auth-logged-out,
+  #alienMenu .alien-auth-logged-in {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+  }
+  #alienMenu .alien-menu-item {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    padding: 7px 14px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+  }
+  /* hide duplicate "Hesap/Account/Аккаунт" account link row on mobile logged-in */
+  #alienMenu .alien-menu-account {
+    display: none !important;
+  }
+}
+
+/* User name — always white */
+.alien-user-name, #accountMenuName,
+#alienMenu .alien-user-name, #alienMenu #accountMenuName {
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+/* Avatars — always round */
+#accountMenuAvatar, #accountAvatar,
+.alien-ghost img, .alien-user-summary img {
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: block !important;
+}
+
+/* Logout button accent */
+.alien-menu-logout {
+  color: #fca5a5 !important;
+  background: rgba(239,68,68,0.1) !important;
+  border: 1px solid rgba(239,68,68,0.25) !important;
+}
+.alien-menu-logout:hover {
+  background: rgba(239,68,68,0.22) !important;
+}
+
+
+/* ================================================================
+   NAV DROPDOWN — smaller buttons, opens DOWN
+   ================================================================ */
+@media (max-width: 1023px) {
+  .dropdown-trigger {
+    font-size: 11px !important;
+    padding: 5px 7px !important;
+    font-weight: 600 !important;
+  }
+  .main-nav > a {   /* MAĞAZA plain link */
+    font-size: 11px !important;
+    padding: 5px 7px !important;
+  }
+  .dropdown-menu {
+    top: calc(100% + 4px) !important;
+    bottom: auto !important;
+  }
+  .dropdown-menu a,
+  .dropdown-menu button {
+    font-size: 11px !important;
+    padding: 6px 9px !important;
+  }
+}
+
+/* No stacking context on page containers */
+main, .page, .home-main, .shop-container, section,
+.product-grid, .card-container, .category-card {
+  z-index: auto !important;
+}
+
+/* ================================================================
+   DESKTOP NAV DROPDOWNS — horizontal row, opens BELOW the button
+   ================================================================ */
+@media (min-width: 768px) {
+  .main-nav .dropdown-menu {
+    position: absolute !important;
+    top: calc(100% + 6px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    width: auto !important;
+    min-width: unset !important;
+    gap: 4px !important;
+    padding: 6px 8px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+  }
+
+  .main-nav .dropdown-menu a,
+  .main-nav .dropdown-menu button {
+    white-space: nowrap !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    border-radius: 6px !important;
+  }
+}

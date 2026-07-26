@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WebAR: Albaspace Gelişmiş Deneme</title>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; overflow: hidden; background: #000;
+            font-family: 'Segoe UI', sans-serif; color: white;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #app-container {
+            position: relative; width: 100vw; height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: flex-end; align-items: center;
+        }
+        video, #three_canvas {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; transform: scaleX(-1);
+        }
+        video { z-index: 1; }
+        #three_canvas { z-index: 2; pointer-events: none; }
+
+        /* ── UI CONTAINER ── */
+        .ui-container {
+            position: relative; z-index: 100; width: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 10px; padding-bottom: calc(22px + 1cm);
+        }
+
+        /* STATUS */
+        .status-badge {
+            background: rgba(0,0,0,0.65); padding: 5px 14px;
+            border-radius: 20px; font-size: 13px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* ── SIZE CONTROLS ── */
+        .size-controls {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(0,0,0,0.55); padding: 6px 16px;
+            border-radius: 30px; backdrop-filter: blur(8px);
+        }
+        .size-label { font-size: 12px; opacity: 0.7; }
+        .size-btn {
+            width: 34px; height: 34px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.45);
+            background: rgba(255,255,255,0.15);
+            color: white; font-size: 20px; font-weight: bold;
+            cursor: pointer; display: flex; align-items: center;
+            justify-content: center; line-height: 1; padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.15s;
+        }
+        .size-btn:active { background: rgba(255,255,255,0.35); transform: scale(0.92); }
+
+        /* ── BOTTOM ROW: [−] [◀] [📷] [▶] [+] — same as rings.html ── */
+        .bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            padding: 0 16px;
+        }
+
+        /* Scale buttons */
+        .scale-btn {
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 40px; height: 40px;
+            font-size: 20px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            background: transparent;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            -webkit-tap-highlight-color: transparent;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+        .scale-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.92); }
+
+        /* Arrow buttons (prev/next model) */
+        .arrow-btn {
+            border: none;
+            border-radius: 50%;
+            width: 50px; height: 50px;
+            font-size: 22px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            cursor: pointer;
+            background: rgba(255,255,255,0.18);
+            color: white;
+            -webkit-tap-highlight-color: transparent;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+        .arrow-btn:active { background: rgba(255,255,255,0.35); transform: scale(0.92); }
+
+        /* Photo button */
+        .record-button {
+            width: 70px; height: 70px; border-radius: 50%;
+            border: 4px solid white; background: transparent;
+            cursor: pointer; display: flex; justify-content: center;
+            align-items: center; transition: all 0.2s ease;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+        }
+        .record-button i { font-size: 28px; color: white; }
+        .record-button:active { transform: scale(0.9); background: rgba(255,255,255,0.2); }
+
+        /* ── PHOTO PREVIEW ── */
+        #photo-preview {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92); z-index: 200;
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 20px; gap: 16px;
+        }
+        #photo-preview img { max-width: 100%; max-height: 75%; border-radius: 12px; }
+        .preview-controls { display: flex; gap: 16px; }
+        .preview-controls button {
+            padding: 12px 24px; border: none; border-radius: 10px;
+            font-size: 15px; font-weight: 700; cursor: pointer; color: white;
+        }
+        #hidden_composite_canvas { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    <video id="webcam" autoplay playsinline></video>
+    <canvas id="three_canvas"></canvas>
+    <canvas id="hidden_composite_canvas"></canvas>
+
+    <div class="ui-container">
+        <div class="status-badge" id="status">Sistem başlatılıyor...</div>
+
+        <!-- Single row matching rings.html: [−] [◀ model] [📷] [model ▶] [+] -->
+        <div class="bottom-row">
+            <button class="scale-btn" onclick="changeSize(-1)" id="btn-scale-down">−</button>
+
+            <button class="arrow-btn" id="btn-prev" onclick="prevModel()">◀</button>
+
+            <button class="record-button" id="photo_button" onclick="capturePhoto()">
+                <i class="fas fa-camera"></i>
+            </button>
+
+            <button class="arrow-btn" id="btn-next" onclick="nextModel()">▶</button>
+
+            <button class="scale-btn" onclick="changeSize(+1)" id="btn-scale-up">+</button>
+        </div>
+    </div>
+
+    <div id="photo-preview">
+        <img id="preview-image" src="" alt="Önizleme">
+        <div class="preview-controls">
+            <button onclick="closePreview()" style="background:rgba(231,76,60,0.7);">İptal</button>
+            <button id="download_link" style="background:#2ecc71;">Kaydet</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { FaceLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js";
+
+    // ── MODEL CONFIG ──────────────────────────────────────────────────
+    const MODELS_CONFIG = {
+        cap1:     { type: 'cap',     url: 'cap1.glb',     scale: 1.02, yOffset: 0.10 },
+        glasses1: { type: 'glasses', url: 'glasses1.glb', scale: 1.2  },
+        glasses2: { type: 'glasses', url: 'glasses2.glb', scale: 1.28 }
+    };
+
+    // ── Landmark indices ──────────────────────────────────────────────
+    const LM = { BRIDGE: 168, FOREHEAD: 10, L_CHEEK: 234, R_CHEEK: 454, L_BROW: 105, R_BROW: 334 };
+
+    // Glasses: lower = smaller value (0 = at brow midpoint, negative = lower)
+    const GLASSES_LIFT = -0.43;  // опустить очки на ~45% ширины лица
+    const CAP_LIFT     = 0.0;
+
+    // ── User scale ────────────────────────────────────────────────────
+    let userScale = 1.0;
+    const SCALE_STEP = 0.10, SCALE_MIN = 0.3, SCALE_MAX = 2.5;
+
+    const MODEL_KEYS = ['cap1', 'glasses1', 'glasses2'];
+    let currentModelIdx = 0;
+
+    window.prevModel = () => {
+        currentModelIdx = (currentModelIdx - 1 + MODEL_KEYS.length) % MODEL_KEYS.length;
+        switchModel(MODEL_KEYS[currentModelIdx]);
+    };
+    window.nextModel = () => {
+        currentModelIdx = (currentModelIdx + 1) % MODEL_KEYS.length;
+        switchModel(MODEL_KEYS[currentModelIdx]);
+    };
+
+    window.changeSize = (dir) => {
+        userScale = Math.min(SCALE_MAX, Math.max(SCALE_MIN, userScale + dir * SCALE_STEP));
+        document.getElementById('size-display').textContent = Math.round(userScale * 100) + '%';
+    };
+
+    // ── Three.js state ────────────────────────────────────────────────
+    const video  = document.getElementById('webcam');
+    const status = document.getElementById('status');
+    let faceLandmarker, scene, camera, renderer, gltfLoader;
+    let currentModel = null;
+    let activeKey = 'cap1';
+    let lastVideoTime = -1;
+
+    function initThreeJS() {
+        scene = new THREE.Scene();
+        const aspect = window.innerWidth / window.innerHeight;
+        camera = new THREE.OrthographicCamera(-aspect, aspect, 1, -1, 0.1, 1000);
+        camera.position.z = 10;
+
+        renderer = new THREE.WebGLRenderer({
+            canvas: document.getElementById('three_canvas'),
+            alpha: true, antialias: true, preserveDrawingBuffer: true
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        scene.add(new THREE.AmbientLight(0xffffff, 2.5));
+        const dl = new THREE.DirectionalLight(0xffffff, 2.0);
+        dl.position.set(0, 1, 2);
+        scene.add(dl);
+
+        gltfLoader = new GLTFLoader();
+    }
+
+    window.switchModel = async (key) => {
+        const _ki = MODEL_KEYS ? MODEL_KEYS.indexOf(key) : -1;
+        if (_ki !== -1) currentModelIdx = _ki;
+        if (currentModel) { scene.remove(currentModel); currentModel = null; }
+        document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+
+        if (key === 'none') { activeKey = 'none'; status.innerText = 'İzleme Modu'; return; }
+
+        const config = MODELS_CONFIG[key];
+        if (!config) return;
+
+        document.getElementById(`btn-${key}`)?.classList.add('active');
+        status.innerText = 'Yükleniyor...';
+
+        gltfLoader.load(
+            config.url,
+            (gltf) => {
+                currentModel = gltf.scene;
+                scene.add(currentModel);
+                activeKey = key;
+                status.innerText = 'Hazır';
+            },
+            undefined,
+            (err) => { console.error('Model yüklenemedi:', err); status.innerText = 'Hata!'; }
+        );
+    };
+
+    async function initAR() {
+        try {
+            const filesetResolver = await FilesetResolver.forVisionTasks(
+                'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm'
+            );
+            faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
+                baseOptions: {
+                    modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+                    delegate: 'GPU'
+                },
+                runningMode: 'VIDEO', numFaces: 1
+            });
+            initThreeJS();
+            startCamera();
+        } catch(e) {
+            console.error('AR başlatılamadı:', e);
+            status.innerText = 'AR yüklenemedi!';
+        }
+    }
+
+    async function startCamera() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+            setupVideo(stream);
+        } catch {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                setupVideo(stream);
+            } catch { status.innerText = 'Kamera bulunamadı!'; }
+        }
+    }
+
+    function setupVideo(stream) {
+        video.srcObject = stream;
+        video.addEventListener('loadeddata', () => {
+            video.play();
+            predictWebcam();
+            switchModel('cap1');
+        });
+    }
+
+    function predictWebcam() {
+        if (lastVideoTime !== video.currentTime) {
+            lastVideoTime = video.currentTime;
+            const results = faceLandmarker.detectForVideo(video, performance.now());
+            const face = results.faceLandmarks?.[0];
+            if (face && currentModel && activeKey !== 'none') {
+                updateTransform(face);
+            } else if (currentModel) {
+                currentModel.visible = !!face;
+            }
+        }
+        renderer.render(scene, camera);
+        requestAnimationFrame(predictWebcam);
+    }
+
+    function updateTransform(landmarks) {
+        if (!currentModel) return;
+        currentModel.visible = true;
+
+        const config = MODELS_CONFIG[activeKey];
+        const aspect = window.innerWidth / window.innerHeight;
+
+        const getPos = (idx) => ({
+            x:  (landmarks[idx].x * 2 - 1) * aspect,
+            y: -(landmarks[idx].y * 2 - 1),
+            z:  -landmarks[idx].z * 10
+        });
+
+        const bridge   = getPos(LM.BRIDGE);
+        const forehead = getPos(LM.FOREHEAD);
+        const left     = getPos(LM.L_CHEEK);
+        const right    = getPos(LM.R_CHEEK);
+        const lBrow    = getPos(LM.L_BROW);
+        const rBrow    = getPos(LM.R_BROW);
+
+        const faceWidth = Math.hypot(right.x - left.x, right.y - left.y);
+        const angle     = Math.atan2(right.y - left.y, right.x - left.x);
+
+        const s = faceWidth * config.scale * userScale * 10;
+        currentModel.scale.set(s, s, s);
+
+        if (config.type === 'glasses') {
+            // Anchor point = midpoint between the two brow-top landmarks
+            // This places centre of glasses between the eyebrows
+            const browMidX = (lBrow.x + rBrow.x) / 2;
+            const browMidY = (lBrow.y + rBrow.y) / 2;
+            // Apply small additional upward lift so centre is between brows, not at brow base
+            const lift = faceWidth * GLASSES_LIFT;
+            currentModel.position.set(browMidX, browMidY + lift, bridge.z);
+        } else {
+            // Cap: sit on forehead, no extra lift needed
+            const lift = faceWidth * CAP_LIFT;
+            currentModel.position.set(
+                forehead.x,
+                forehead.y + config.yOffset + lift,
+                forehead.z
+            );
+        }
+
+        currentModel.rotation.z = angle;
+    }
+
+    // ── Photo capture ─────────────────────────────────────────────────
+    window.capturePhoto = () => {
+        const composite   = document.getElementById('hidden_composite_canvas');
+        const ctx         = composite.getContext('2d');
+        const threeCanvas = document.getElementById('three_canvas');
+        const W = window.innerWidth, H = window.innerHeight;
+
+        composite.width = W; composite.height = H;
+
+        const vW = video.videoWidth, vH = video.videoHeight;
+        const sc = Math.max(W / vW, H / vH);
+        const dW = vW * sc, dH = vH * sc;
+        const ox = (W - dW) / 2, oy = (H - dH) / 2;
+
+        ctx.save();
+        ctx.translate(W, 0); ctx.scale(-1, 1);
+        ctx.drawImage(video, ox, oy, dW, dH);
+        ctx.restore();
+        ctx.drawImage(threeCanvas, 0, 0, W, H);
+
+        const dataUrl = composite.toDataURL('image/png');
+        document.getElementById('preview-image').src = dataUrl;
+        document.getElementById('photo-preview').style.display = 'flex';
+        document.getElementById('download_link').onclick = () => {
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = `Albaspace-AR-${Date.now()}.png`;
+            a.click();
+        };
+    };
+
+    window.closePreview = () => document.getElementById('photo-preview').style.display = 'none';
+
+    window.addEventListener('resize', () => {
+        const aspect = window.innerWidth / window.innerHeight;
+        camera.left = -aspect; camera.right = aspect;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    initAR();
+</script>
+</body>
+</html>

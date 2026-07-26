@@ -1,0 +1,61 @@
+{
+  "categories": {
+    "uzay": { "tr": "Uzay", "en": "Space", "ru": "Космос" },
+    "egitim": { "tr": "Eğitim", "en": "Education", "ru": "Образование" },
+    "haberler": { "tr": "AlbaSpace Haberleri", "en": "AlbaSpace News", "ru": "Новости AlbaSpace" }
+  },
+  "posts": [
+    {
+      "slug": "uzay-teleskoplari",
+      "category": "uzay",
+      "publishAt": "2026-07-26T08:00:00+03:00",
+      "cover": "/assets/images/blog/uzay-teleskoplari-cover.jpg",
+      "readingMinutes": 4,
+      "author": { "tr": "Aslı Bolat", "en": "Aslı Bolat", "ru": "Аслы Болат" },
+      "authorRole": { "tr": "Astronom ve Eğitmen", "en": "Astronomer & Educator", "ru": "Астроном и преподаватель" },
+      "locales": {
+        "tr": {
+          "title": "Gökyüzünün Ötesine Bakmak: Neden Uzay Teleskoplarına İhtiyaç Duyuyoruz?",
+          "excerpt": "Yer teleskopları neden yeterli değil? Hubble ve James Webb'in gökyüzünün ötesine gönderilme nedenlerini keşfedin.",
+          "url": "/blog/uzay-teleskoplari.html"
+        },
+        "en": {
+          "title": "Looking Beyond the Sky: Why Do We Need Space Telescopes?",
+          "excerpt": "Why aren't ground telescopes enough? Discover why instruments like Hubble and James Webb are sent beyond the sky.",
+          "url": "/eng/blog/uzay-teleskoplari.html"
+        },
+        "ru": {
+          "title": "Взгляд за пределы неба: зачем нужны космические телескопы?",
+          "excerpt": "Почему наземных телескопов недостаточно? Разбираемся, зачем «Хаббл» и телескоп Уэбба отправляют за пределы атмосферы.",
+          "url": "/rus/blog/uzay-teleskoplari.html"
+        }
+      }
+    },
+    {
+      "slug": "yeni-uzay-cagi",
+      "category": "uzay",
+      "publishAt": "2026-08-02T00:08:00+03:00",
+      "cover": "/assets/images/blog/yeni-uzay-cagi-cover.jpg",
+      "readingMinutes": 4,
+      "author": { "tr": "Aslı Bolat", "en": "Aslı Bolat", "ru": "Аслы Болат" },
+      "authorRole": { "tr": "Astronom ve Eğitmen", "en": "Astronomer & Educator", "ru": "Астроном и преподаватель" },
+      "locales": {
+        "tr": {
+          "title": "Yeni Uzay Çağı: Gökyüzünün Ötesinde Yeni Bir Dönem Başlıyor",
+          "excerpt": "Devletlerden özel şirketlere: uzay artık herkesin erişebileceği bir alan. Yeni Uzay Çağı'nı yakından tanıyın.",
+          "url": "/blog/yeni-uzay-cagi.html"
+        },
+        "en": {
+          "title": "The New Space Age: A New Era Begins Beyond the Sky",
+          "excerpt": "From governments to private companies: space is now within everyone's reach. Get to know the New Space Age.",
+          "url": "/eng/blog/yeni-uzay-cagi.html"
+        },
+        "ru": {
+          "title": "Новая космическая эра: за пределами неба начинается новый этап",
+          "excerpt": "От государств — к частным компаниям: космос становится доступнее. Знакомимся с Новой космической эрой.",
+          "url": "/rus/blog/yeni-uzay-cagi.html"
+        }
+      }
+    }
+  ]
+}

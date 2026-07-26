@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+  <meta charset="UTF-8">
+  <title>Alba Space – Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style> body{ margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color: #ffffff; } .site-header{ color:#e5e7eb; border-bottom:1px solid #0f172a; } .header-inner{ max-width:1200px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; } .header-logo{ display:flex; align-items:center; gap:8px; text-decoration:none; color:#e5e7eb; } .header-logo img{ width:40px;height:40px; border-radius:999px; padding:4px; } .header-logo span{ font-weight:600; font-size:16px; letter-spacing:.08em; text-transform:uppercase; } .main-nav{ display:flex; gap:16px; flex-wrap:wrap; font-size:14px; margin-left:20px; } .main-nav a{ color:#d1d5db; text-decoration:none; padding-bottom:2px; position:relative; } .main-nav a:hover, .main-nav a.active{ color:#ffffff; } .main-nav a.active::after{ content:""; position:absolute; left:0; bottom:-2px; width:100%; height:2px; border-radius:999px; } .header-social{ margin-left:auto; display:flex; gap:14px; } .social-icon-svg{ width:22px; height:22px; fill:none; stroke:#e5e7eb; stroke-width:1.6; } .top-lang-switch{ display:flex; gap:6px; align-items:center; margin-left:10px; font-size:13px; } .top-lang-switch a{ padding:4px 10px; border-radius:999px; border:1px solid #4b5563; color:#e5e7eb; text-decoration:none; } .top-lang-switch a.active{ color:#020617; font-weight:600; } .page-wrapper{ max-width:900px; margin:50px auto 70px; padding:0 20px; text-align:center; } .page-wrapper img.hero{ max-width:420px; width:100%; border-radius:20px; margin-bottom:24px; box-shadow:0 8px 26px rgba(0,0,0,0.28); } .page-title{ font-size:32px; margin-bottom:6px; } .page-sub{ font-size:14px; color:#4b5563; margin-bottom:24px; } .coming-title{ font-size:42px; font-weight:700; text-transform:uppercase; letter-spacing:2px; } footer.footer{ color:#d1d5db; padding:26px 20px; font-size:13px; } .footer-grid{ max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; text-align:center; } .footer-logo img{ width:52px;height:52px; border-radius:999px; padding:4px; } .footer-social{ display:flex; justify-content:center; gap:14px; margin-bottom:6px; } .footer-address p, .footer-center p{ margin:2px 0; } @media(max-width:900px){ .footer-grid{grid-template-columns:1fr;} .header-inner{justify-content:center;} .header-social{margin-left:0;} } </style>
+
+<link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+<script src="/assets/js/include.js" defer></script>
+<script src="/assets/js/menu-toggle.js" defer></script>
+</head>
+<body>
+  <div data-include="/header-tr.html"></div>
+
+
+
+
+<div class="page-wrapper">
+<h1 class="page-title">Blog</h1><p class="page-sub">Uzay, eğitim ve deneyim tasarımı üzerine kısa yazılar.</p><img src="/assets/images/blog-space-branding.jpg" class="hero" alt="Blog">
+</div>
+
+
+
+  <div data-include="/footer-tr.html"></div>
+
+  <script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item, index) => {
+      const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
+      item.style.setProperty('--reveal-delay', `${delay}s`);
+      observer.observe(item);
+    });
+  </script>
+
+  <script>
+</script>
+</body>
+</html>

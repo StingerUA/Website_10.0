@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html class="service-page-dark" lang="en">
+<head>
+<!-- Универсальный favicon-блок -->
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#020617" name="theme-color"/>
+<meta content="#020617" name="msapplication-TileColor"/>
+<meta content="/favicon.png" name="msapplication-TileImage"/>
+<meta charset="utf-8">
+<title>Jidoka Humanoid Robot and Robot Dog Event | ALBA Space</title>
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<meta content="Stage, reception and STEM-focused experience areas with Jidoka humanoid robot and robot dog: brand activation and event solutions." name="description">
+<link href="https://albaspace.com.tr/jidoka-etkinlik.html" rel="canonical">
+<meta content="website" property="og:type"/>
+<meta content="ALBA Space" property="og:site_name"/>
+<meta content="Jidoka Humanoid Robot and Robot Dog Event | ALBA Space" property="og:title"/>
+<meta content="Stage, reception and STEM-focused experience areas with Jidoka humanoid robot and robot dog: brand activation and event solutions." property="og:description"/>
+<meta content="https://Alba Space.com.tr/assets/images/anasayfa-hero.jpg" property="og:image"/>
+<meta content="https://Alba Space.com.tr/jidoka-etkinlik.html" property="og:url"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<link href="/assets/css/site.css" rel="stylesheet">
+<link href="/assets/css/fix-layout.css" rel="stylesheet"/>
+<script defer="" src="/assets/js/include.js"></script>
+<script defer="" src="/assets/js/menu-toggle.js"></script>
+<style> :root{--accent:#00c2ff;--text-main:#e5e7eb;--text-muted:#9ca3af;} *{box-sizing:border-box;margin:0;padding:0;} body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text-main);} .page{max-width:1100px;margin:40px auto 70px;padding:32px 26px 40px;} .glass{background: rgba(13, 42, 87, 0.85);border:1px solid rgba(148, 163, 184, 0.4);border-radius:20px;padding:22px 24px;box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);} .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center;margin-bottom:18px;} h1{font-size:34px;line-height:1.1;margin-bottom:10px;} .lead{color:var(--text-muted);font-size:15px;line-height:1.6;} .img{width:100%;height:260px;border-radius:18px;object-fit:cover;box-shadow:0 18px 45px rgba(0,0,0,.75);border:1px solid rgba(148,163,184,.25);} .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;} .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;border:1px solid var(--accent);font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;transition:transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease;} .btn-primary{background:var(--accent);color:#020617;box-shadow:0 10px 28px rgba(56,189,248,.35);} .btn-outline{color:var(--accent);box-shadow:0 6px 18px rgba(15,23,42,.7);} .btn:hover{transform:translateY(-2px);box-shadow:0 18px 45px rgba(56,189,248,.55);color:#020617;} .section{margin-top:16px;} .section h2{font-size:18px;margin-bottom:8px;} .section p{color:var(--text-muted);line-height:1.7;font-size:14px;} @media (max-width:900px){.hero{grid-template-columns:1fr;}.page{padding:26px 16px 34px;}h1{font-size:28px;}.img{height:220px;}} </style>
+<link href="/assets/css/service-page-dark.css" rel="stylesheet"/>
+</link></link></meta></meta></meta></head>
+<body>
+<div data-include="/header-en.html"></div>
+<main class="page">
+<section class="hero">
+<div class="glass">
+<h1>Activity with Humanoid Robot and Robot Dog Jidoka</h1>
+<p class="lead">
+          Participants will be presented with Jidoka, the first and only humanoid robot whose software was developed in Turkey, and Jidoka, the first robot dog.
+          has an unforgettable and unique experience.
+        </p>
+<div class="btns">
+<a class="btn btn-primary" href="/iletisim.html">Teklif Al</a>
+<a class="btn btn-outline" href="/jidoka-etkinlik.html">All Services</a>
+</div>
+</div>
+<img alt="Jidoka robot event" class="img" src="/assets/images/urun-uzay-tanitimi.jpg"/>
+</section>
+<section class="glass section">
+<h2>Event formats</h2>
+<p>
+        It can be adapted to formats such as stage show, welcome/host, photo area, brand activation and STEM-focused experience areas.
+      </p>
+</section>
+</main>
+<div data-include="/footer-en.html"></div>
+<script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item, index) => {
+      const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
+      item.style.setProperty('--reveal-delay', `${delay}s`);
+      observer.observe(item);
+    });
+  </script>
+<script>
+</script>
+</body>
+</html>

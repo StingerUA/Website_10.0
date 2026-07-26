@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<!-- Универсальный favicon-блок -->
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#020617" name="theme-color"/>
+<meta content="#020617" name="msapplication-TileColor"/>
+<meta content="/favicon.png" name="msapplication-TileImage"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Sign Up – Alba Space</title>
+<link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/fix-layout.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+<script defer="" src="/assets/js/include.js"></script>
+<style>
+    :root {
+      --page-bg: #020617;
+      --accent: #00c2ff;
+      --text-main: #f3f4f6;
+    }
+    body {
+      background-color: var(--page-bg);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid rgba(2,6,23,0.06);
+      position: relative;
+      z-index: 10;
+    }
+    .input-field {
+      background: #ffffff;
+      border: 1px solid #e6e6e6;
+      color: #000000;
+      transition: all 0.3s ease;
+    }
+    .input-field:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0, 194, 255, 0.2);
+    }
+    .btn-primary {
+      background-color: var(--accent);
+      color: #000;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #38bdf8;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+    .btn-google {
+      background: white;
+      color: #000 !important;
+      transition: all 0.3s ease;
+    }
+    .btn-google:hover {
+      background: #f3f4f6;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<div data-include="/header-en.html"></div>
+<main class="flex-grow flex items-center justify-center px-4 py-20">
+<div class="glass-card w-full max-w-md p-8 rounded-3xl shadow-2xl">
+<h1 class="text-3xl font-bold text-center mb-8 text-black">Sign Up</h1>
+<form action="/profile.html" class="space-y-6">
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2">Username</label>
+<input class="input-field w-full px-4 py-3 rounded-xl" placeholder="Enter your username" required="" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-400 mb-2">Password</label>
+<input class="input-field w-full px-4 py-3 rounded-xl" placeholder="••••••••" required="" type="password"/>
+</div>
+<button class="btn-primary w-full py-3 rounded-xl text-lg mt-6" type="submit">
+          Sign Up
+        </button>
+</form>
+<div class="flex items-center my-6">
+<div class="flex-grow h-px bg-gray-700"></div>
+<span class="px-4 text-gray-500 text-sm">or</span>
+<div class="flex-grow h-px bg-gray-700"></div>
+</div>
+<button class="btn-google w-full py-3 rounded-xl flex items-center justify-center gap-3 font-medium">
+<img alt="Google" class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg"/>
+        Sign in with Google
+      </button>
+<p class="text-center mt-6 text-gray-400 text-sm">
+        Already have an account? <a class="text-[#00c2ff] hover:underline" href="#">Sign In</a>
+</p>
+</div>
+</main>
+<div data-include="/footer-en.html"></div>
+</body>
+</html>

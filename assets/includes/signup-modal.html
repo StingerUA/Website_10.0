@@ -1,0 +1,204 @@
+<!-- Auth modal include: white card, black text, close X -->
+<div id="signup-modal-overlay" class="signup-modal-overlay" aria-hidden="true" style="display:none;">
+  <div class="signup-modal-card" role="dialog" aria-modal="true" aria-labelledby="signup-modal-title" aria-describedby="signup-modal-description">
+    <button class="signup-modal-close" aria-label="Close">✕</button>
+    <h2 id="signup-modal-title">Registration</h2>
+    <p id="signup-modal-description" class="signup-modal-description">Create your  account or continue with Google.</p>
+    <form id="signup-modal-form" action="#" class="signup-form">
+      <label data-auth-label="username">Username
+        <input type="text" name="username" required placeholder="Enter username">
+      </label>
+      <label data-auth-label="password">Password
+        <input type="password" name="password" required placeholder="••••••••">
+      </label>
+      <button type="submit" class="signup-submit">Confirm</button>
+    </form>
+    <div class="signup-or">— or —</div>
+    <button type="button" class="signup-google" data-google-login aria-label="Sign in with Google">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="" class="gicon" aria-hidden="true"> Sign in with Google
+    </button>
+  </div>
+</div>
+
+<style>
+  /* Overlay */
+  .signup-modal-overlay { position: fixed; inset: 0; background: rgba(2,6,23,0.8); display: none; align-items:flex-start; justify-content:center; z-index:2147483647 !important; padding-top: 120px; backdrop-filter: blur(5px); }
+  .signup-modal-card { width:100%; max-width:520px; background:#fff !important; color:#000 !important; padding:28px; border-radius:18px; box-shadow:0 20px 60px rgba(2,6,23,0.5); position:relative; font-family: Inter, system-ui, -apple-system, sans-serif; }
+  .signup-modal-close { position:absolute; right:12px; top:10px; background:transparent !important; border:none; font-size:20px; cursor:pointer; color:#333 !important; }
+  .signup-modal-card h2 { margin:0 0 18px 0; font-size:28px; text-align:center; color:#000 !important; }
+  .signup-modal-description { margin:0 0 18px 0; font-size:14px; line-height:1.5; text-align:center; color:#4b5563 !important; }
+  .signup-form { display:flex; flex-direction:column; gap:12px; }
+  .signup-form label { display:flex; flex-direction:column; font-size:14px; color:#111 !important; }
+  .signup-form input { margin-top:8px; padding:12px 14px; border:1px solid #e6e6e6 !important; border-radius:10px; background:#fff !important; color:#000 !important; font-size:15px; }
+  .signup-submit { margin-top:8px; background:#00c2ff !important; border:none; color:#000 !important; padding:12px 16px; border-radius:10px; font-weight:600; cursor:pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .signup-submit:hover, .signup-submit:focus-visible { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(0, 194, 255, 0.25); outline:none; }
+  .signup-google { margin-top:12px; width:100%; justify-content:center; background:#fff !important; border:1px solid #d1d5db !important; padding:12px 14px; border-radius:10px; display:flex; align-items:center; gap:10px; cursor:pointer; color:#111 !important; font-weight:600; font-size:15px; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+  .signup-google:hover, .signup-google:focus-visible { transform: translateY(-1px); border-color:#00c2ff !important; box-shadow:0 12px 24px rgba(0, 194, 255, 0.18); outline:none; }
+  .signup-google .gicon { width:20px; height:20px; }
+  .signup-or { text-align:center; color:#888; margin-top:12px; }
+  @media (max-width:600px) {
+    .signup-modal-overlay { padding-top: 88px; }
+    .signup-modal-card { margin:24px; padding:22px; border-radius:12px; }
+    .signup-modal-card h2 { font-size:24px; }
+  }
+</style>
+
+<script>
+  (function(){
+    function $(sel, root=document){ return root.querySelector(sel); }
+    const overlay = $('#signup-modal-overlay');
+    const modalCard = $('.signup-modal-card');
+    const form = $('#signup-modal-form');
+    const firstInput = form ? form.querySelector('input') : null;
+    const googleButton = $('[data-google-login]');
+    let lastTrigger = null;
+
+    const i18n = {
+      tr: {
+        close: 'Kapat',
+        signupTitle: 'Kayıt Ol',
+        signupDescription: ' hesabınızı oluşturun veya Google ile devam edin.',
+        loginTitle: 'Giriş Yap',
+        loginDescription: 'Alba Space hesabınızla giriş yapın veya Google ile devam edin.',
+        username: 'Kullanıcı Adı',
+        usernamePlaceholder: 'Kullanıcı adı girin',
+        password: 'Şifre',
+        submitSignup: 'Kaydı Tamamla',
+        submitLogin: 'Giriş Yap',
+        google: 'Google ile Giriş Yap'
+      },
+      en: {
+        close: 'Close',
+        signupTitle: 'Sign Up',
+        signupDescription: 'Create your Alba Space account or continue with Google.',
+        loginTitle: 'Sign In',
+        loginDescription: 'Sign in to your Alba Space account or continue with Google.',
+        username: 'Username',
+        usernamePlaceholder: 'Enter username',
+        password: 'Password',
+        submitSignup: 'Create Account',
+        submitLogin: 'Sign In',
+        google: 'Sign in with Google'
+      },
+      ru: {
+        close: 'Закрыть',
+        signupTitle: 'Регистрация',
+        signupDescription: 'Создайте аккаунт Alba Space или продолжите через Google.',
+        loginTitle: 'Войти',
+        loginDescription: 'Войдите в аккаунт Alba Space или продолжите через Google.',
+        username: 'Имя пользователя',
+        usernamePlaceholder: 'Введите имя пользователя',
+        password: 'Пароль',
+        submitSignup: 'Зарегистрироваться',
+        submitLogin: 'Войти',
+        google: 'Войти через Google'
+      }
+    };
+
+    function getLang() {
+      const path = location.pathname || '/';
+      if (path.startsWith('/eng/')) return 'en';
+      if (path.startsWith('/rus/')) return 'ru';
+      return 'tr';
+    }
+
+    function applyModalText(mode) {
+      const lang = getLang();
+      const t = i18n[lang];
+      const title = $('#signup-modal-title');
+      const description = $('#signup-modal-description');
+      const closeBtn = $('.signup-modal-close');
+      const submit = $('.signup-submit');
+      const usernameLabel = $('[data-auth-label="username"]');
+      const passwordLabel = $('[data-auth-label="password"]');
+      const usernameInput = form ? form.querySelector('input[name="username"]') : null;
+      const passwordInput = form ? form.querySelector('input[name="password"]') : null;
+
+      if (title) title.textContent = mode === 'login' ? t.loginTitle : t.signupTitle;
+      if (description) description.textContent = mode === 'login' ? t.loginDescription : t.signupDescription;
+      if (closeBtn) closeBtn.setAttribute('aria-label', t.close);
+      if (submit) submit.textContent = mode === 'login' ? t.submitLogin : t.submitSignup;
+      if (usernameLabel) usernameLabel.childNodes[0].textContent = t.username;
+      if (passwordLabel) passwordLabel.childNodes[0].textContent = t.password;
+      if (usernameInput) usernameInput.placeholder = t.usernamePlaceholder;
+      if (passwordInput) passwordInput.placeholder = '••••••••';
+      if (googleButton) {
+        googleButton.setAttribute('aria-label', t.google);
+        googleButton.lastChild.textContent = ' ' + t.google;
+      }
+      if (overlay) {
+        overlay.dataset.authMode = mode;
+      }
+    }
+
+    function openModal(mode, trigger) {
+      // Ensure it's on top of everything by moving to body if not already
+      if (overlay && overlay.parentNode !== document.body) {
+        document.body.appendChild(overlay);
+      }
+      lastTrigger = trigger || document.activeElement;
+      applyModalText(mode || 'signup');
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      // Принудительное обновление layout для точного центрирования
+      void overlay.offsetHeight;
+      window.requestAnimationFrame(() => {
+        if (firstInput) firstInput.focus();
+      });
+    }
+    function closeModal() {
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      if (lastTrigger && typeof lastTrigger.focus === 'function') {
+        lastTrigger.focus();
+      }
+      try { if (['/signup.html','/eng/signup.html','/rus/signup.html'].includes(location.pathname)) history.replaceState({}, '', '/'); } catch(e){}
+    }
+
+    // Delegate click to open buttons (may be injected later)
+    document.addEventListener('click', function(e){
+      const signupTrigger = e.target.closest && e.target.closest('.open-signup');
+      const loginTrigger = e.target.closest && e.target.closest('.open-login');
+      if (signupTrigger) { e.preventDefault(); openModal('signup', signupTrigger); }
+      if (loginTrigger) { e.preventDefault(); openModal('login', loginTrigger); }
+      if (e.target.closest && e.target.closest('#signup-modal-overlay') && e.target.id === 'signup-modal-overlay') {
+        closeModal();
+      }
+    });
+
+    // Close button
+    document.addEventListener('click', function(e){
+      if (e.target.closest && e.target.closest('.signup-modal-close')) closeModal();
+    });
+
+    // Escape key
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeModal(); });
+
+    // Auto-open when loaded directly via signup pages
+    document.addEventListener('DOMContentLoaded', function(){
+      const path = (location.pathname || '/').replace(/\/+$/, '');
+      if (['/signup.html','/eng/signup.html','/rus/signup.html'].includes(path)) {
+        openModal('signup');
+      }
+    });
+
+    // Prevent form submission (demo)
+    if (form) form.addEventListener('submit', function(e){ e.preventDefault(); alert('Form submitted (demo)'); closeModal(); });
+
+    if (googleButton) {
+      googleButton.addEventListener('click', function(){
+        if (typeof window.login === 'function') {
+          window.login({ closeModal: true, source: 'auth-modal' });
+        }
+      });
+    }
+
+    if (modalCard) {
+      modalCard.addEventListener('click', function(e){
+        e.stopPropagation();
+      });
+    }
+  })();
+</script>

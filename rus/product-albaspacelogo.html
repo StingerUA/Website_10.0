@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html class="product-text-black" lang="ru">
+<head>
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#020617" name="theme-color"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>3D-модель логотипа Alba Space – Alba Space</title>
+<meta content="STL-файл логотипа Alba Space для 3D-печати — высокая детализация, мгновенное скачивание." name="description"/>
+<meta content="3D-модель логотипа Alba Space – Alba Space" property="og:title"/>
+<meta content="STL-файл логотипа Alba Space для 3D-печати — высокая детализация, мгновенное скачивание." property="og:description"/>
+<meta content="/assets/images/albaspacelogo3dmodel.png" property="og:image"/>
+<meta content="https://albaspace.com.tr/rus/product-albaspacelogo.html" property="og:url"/>
+<meta content="product" property="og:type"/>
+<link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/fix-layout.css" rel="stylesheet"/>
+<link href="/assets/css/product.css" rel="stylesheet"/>
+<link href="/assets/css/product-overrides.css" rel="stylesheet"/>
+<link href="/assets/css/product-text-black.css" rel="stylesheet"/>
+<style>
+    :root { --header-bg: #020617; }
+    body { background: #ffffff; margin: 0; }
+  </style>
+<script defer="" src="/assets/js/include.js"></script>
+<script defer="" src="/assets/js/menu-toggle.js"></script>
+<script defer="" src="/assets/js/cart.js"></script>
+</head>
+<body>
+<div data-include="/header-ru-black"></div>
+<main class="product-page-wrap">
+<nav class="product-breadcrumb">
+<a href="/rus/shop.html" style="color:inherit;text-decoration:none">Магазин</a><span>/</span>Цифровые товары
+    </nav>
+<div class="product-main-grid">
+<div class="product-image-col p-reveal">
+<div class="product-main-image-wrap">
+<img alt="3D-модель логотипа Alba Space" id="mainImage" src="/assets/images/albaspacelogo3dmodel.png"/>
+</div>
+<div class="product-thumbs">
+<button aria-label="3D модель" class="thumb-btn active" onclick="changeImage(this,'/assets/images/albaspacelogo3dmodel.png')">
+<img alt="3D модель" loading="lazy" src="/assets/images/albaspacelogo3dmodel.png"/>
+</button>
+<button aria-label="3D 2" class="thumb-btn" onclick="changeImage(this,'/assets/images/albaspacelogo3dmodel1.png')">
+<img alt="3D 2" loading="lazy" src="/assets/images/albaspacelogo3dmodel1.png"/>
+</button>
+<button aria-label="3D 3" class="thumb-btn" onclick="changeImage(this,'/assets/images/albaspacelogo3dmodel2.png')">
+<img alt="3D 3" loading="lazy" src="/assets/images/albaspacelogo3dmodel2.png"/>
+</button>
+<button aria-label="3D 4" class="thumb-btn" onclick="changeImage(this,'/assets/images/albaspacelogo3dmodel3.png')">
+<img alt="3D 4" loading="lazy" src="/assets/images/albaspacelogo3dmodel3.png"/>
+</button>
+</div>
+</div>
+<div class="product-info-col p-reveal" style="transition-delay:0.12s">
+<h1 class="product-title">3D-модель логотипа Alba Space</h1>
+<div class="product-price-block">
+<span class="product-price-current">300,00 ₺</span>
+</div>
+<div class="product-features-card">
+<h3>Характеристики</h3>
+<ul class="product-features-list">
+<li><span class="feature-dot"></span>Готовый STL-файл для 3D-печати</li>
+<li><span class="feature-dot"></span>Высокое разрешение деталей</li>
+<li><span class="feature-dot"></span>Совместимость со всеми принтерами</li>
+<li><span class="feature-dot"></span>Цифровой файл — мгновенное скачивание</li>
+</ul>
+</div>
+<div class="product-payment-icons">
+<img alt="Мастеркард" src="/assets/icons/mastercard.png"/>
+<img alt="Виза" src="/assets/icons/visa.png"/>
+</div>
+<div class="product-cta-row">
+<div class="qty-control">
+<button class="qty-btn" onclick="updateQty(-1)">−</button>
+<input class="qty-input" id="qtyInput" min="1" type="number" value="1"/>
+<button class="qty-btn" onclick="updateQty(1)">+</button>
+</div>
+<button class="btn-add-cart" data-add-label="В КОРЗИНУ" data-added-label="✓ ДОБАВЛЕНО!" data-product-id="albaspacelogo" data-product-image="/assets/images/albaspacelogo3dmodel.png" data-product-name="3D-модель логотипа Alba Space" id="addToCartBtn">
+            В КОРЗИНУ
+          </button>
+</div>
+</div>
+</div>
+<section class="related-section p-reveal">
+<h2>Вам также может понравиться</h2>
+<div class="related-accent-line"></div>
+<div id="related-products-container"></div>
+</section>
+</main>
+<div data-include="/footer-ru-black"></div>
+<script>
+    function changeImage(btn, src) {
+      document.getElementById('mainImage').src = src;
+      document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    function updateQty(d) {
+      const i = document.getElementById('qtyInput');
+      i.value = Math.max(1, parseInt(i.value || 1) + d);
+    }
+    function selectSize(btn) {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    const obs = new IntersectionObserver(
+      es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.08 }
+    );
+    document.querySelectorAll('.p-reveal').forEach(el => obs.observe(el));
+    document.getElementById('addToCartBtn').addEventListener('click', function() {
+      const btn = this, qty = parseInt(document.getElementById('qtyInput').value || 1, 10);
+      if (typeof cartManager !== 'undefined') {
+        cartManager.addItem({
+          id: btn.dataset.productId, name: btn.dataset.productName,
+          image: btn.dataset.productImage, url: window.location.pathname, qty
+        });
+      }
+      btn.classList.add('added');
+      btn.textContent = btn.dataset.addedLabel;
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.classList.remove('added');
+        btn.textContent = btn.dataset.addLabel;
+        btn.disabled = false;
+      }, 1600);
+    });
+  </script>
+<script defer="" src="/assets/js/related-products.js"></script>
+</body>
+</html>

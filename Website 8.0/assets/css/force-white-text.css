@@ -1,0 +1,46 @@
+/* Force readable text color: make dark/transparent text white */
+:root {
+  --force-white: #ffffff;
+}
+
+/* Make most text white to ensure visibility on dark backgrounds. */
+body, body * {
+  color: var(--force-white) !important;
+}
+
+/* SVG icons and strokes */
+svg, svg * {
+  stroke: var(--force-white) !important;
+  fill: var(--force-white) !important;
+}
+
+/* Form controls */
+button, input, textarea, select, option {
+  color: var(--force-white) !important;
+}
+
+/* Ensure any inline/author styles using dark hex values are overridden */
+[style*="#020617"], [style*="#000"], [style*="#000000"] {
+  color: var(--force-white) !important;
+}
+
+/* Keep structural content containers transparent site-wide */
+.container,
+.page-wrapper,
+.page-card,
+.contact-card,
+section,
+article,
+main,
+.content {
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  color: var(--force-white) !important;
+}
+
+/* Keep structural elements (header/nav/footer) unaffected by the gradient rule and ensure they are dark blue */
+header, nav, footer, .site-header, .site-footer, .header-inner, .footer-grid { 
+  background: #07143a !important; 
+}

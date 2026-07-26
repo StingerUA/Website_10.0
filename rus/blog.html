@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+  <meta charset="UTF-8">
+  <title>Блог – Alba Space</title>
+  <meta name="description" content="Статьи о космосе, образовании и мире AlbaSpace. Новая статья каждое воскресенье.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    :root{ --header-bg:#020617; }
+    body{ margin:0; background:#020617; color:#e5e7eb; }
+  </style>
+
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/blog.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+</head>
+<body>
+  <div data-include="/header-ru.html"></div>
+
+  <div class="blog-hero">
+    <h1 class="page-title">Блог</h1>
+    <p class="page-sub">Статьи о космосе, образовании и мире AlbaSpace. Новая статья каждое воскресенье в 08:00.</p>
+  </div>
+
+  <nav class="blog-tabs" id="blog-tabs" aria-label="Категории"></nav>
+
+  <div class="blog-page-wrapper">
+    <div class="blog-grid" id="blog-grid"></div>
+  </div>
+
+  <div data-include="/footer-ru.html"></div>
+
+  <script src="/assets/js/blog.js" defer></script>
+</body>
+</html>

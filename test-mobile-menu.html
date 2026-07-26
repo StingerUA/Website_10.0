@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Mobile Menu - Alba Space</title>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/dropdown-optimized.css">
+  <link rel="stylesheet" href="/assets/css/force-white-text.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <style>
+    .test-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #1a1f3a;
+      padding: 20px;
+      border-radius: 8px;
+      color: #e5e7eb;
+    }
+    h1 { color: #00c2ff; margin-top: 0; }
+    .test-log {
+      background: #0a0e1a;
+      border: 1px solid #003366;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #00c2ff;
+      padding-left: 10px;
+    }
+    .warning { color: #ffa500; border-left-color: #ffa500; }
+    .error { color: #ff6b6b; border-left-color: #ff6b6b; }
+    .success { color: #51cf66; border-left-color: #51cf66; }
+  </style>
+</head>
+<body>
+  <div data-include="/header-tr.html"></div>
+
+  <div class="test-container">
+    <h1>🧪 Mobile Menu Dropdown Test</h1>
+    <p>Откройте этот файл в мобильном режиме (max-width: 1023px).</p>
+    
+    <h2>Test Log:</h2>
+    <div class="test-log" id="testLog"></div>
+  </div>
+
+  <script src="/assets/js/include-loader.js"></script>
+  <script src="/assets/js/menu-toggle.js"></script>
+
+  <script>
+    const testLog = document.getElementById('testLog');
+
+    function log(message, type = 'info') {
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      const timestamp = new Date().toLocaleTimeString();
+      entry.textContent = `[${timestamp}] ${message}`;
+      testLog.appendChild(entry);
+      testLog.scrollTop = testLog.scrollHeight;
+      console.log(`[${type}] ${message}`);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const dropdowns = document.querySelectorAll('.dropdown');
+        log('✅ Found ' + dropdowns.length + ' dropdowns', 'success');
+
+        // Test pointer-events on inactive menus
+        let issuesFound = false;
+        dropdowns.forEach((dropdown) => {
+          const menu = dropdown.querySelector('.dropdown-menu');
+          const trigger = dropdown.querySelector('.dropdown-trigger');
+          if (menu && trigger) {
+            const pointerEvents = window.getComputedStyle(menu).pointerEvents;
+            const text = trigger.textContent.trim();
+            if (pointerEvents !== 'none' && !dropdown.classList.contains('active')) {
+              log(`❌ "${text}": pointer-events=${pointerEvents} (should be none)`, 'error');
+              issuesFound = true;
+            }
+          }
+        });
+
+        if (!issuesFound) {
+          log('✅ All inactive menus have pointer-events: none', 'success');
+        }
+
+        // Monitor clicks
+        document.querySelectorAll('.dropdown-trigger').forEach((trigger) => {
+          trigger.addEventListener('click', () => {
+            log(`Clicked: "${trigger.textContent.trim()}"`, 'warning');
+            setTimeout(() => {
+              dropdowns.forEach((dd) => {
+                const t = dd.querySelector('.dropdown-trigger');
+                const m = dd.querySelector('.dropdown-menu');
+                if (dd.classList.contains('active')) {
+                  const pe = window.getComputedStyle(m).pointerEvents;
+                  log(`"${t.textContent.trim()}" is ACTIVE - pointer-events: ${pe}`, 'success');
+                } else {
+                  const pe = window.getComputedStyle(m).pointerEvents;
+                  if (pe !== 'none') {
+                    log(`"${t.textContent.trim()}" is INACTIVE - pointer-events: ${pe} ❌`, 'error');
+                  }
+                }
+              });
+            }, 100);
+          });
+        });
+      }, 500);
+    });
+
+    log('📱 Test script loaded. Use mobile viewport (max-width: 1023px)', 'warning');
+  </script>
+</body>
+</html>

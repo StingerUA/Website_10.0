@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR: Виртуальная примерка</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        /* Контейнер для видео и 3D-графики */
+        #container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 4/3;
+            background: #000;
+        }
+        /* Видео с камеры */
+        #webcam {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1); /* Делаем зеркальное отображение, так привычнее */
+        }
+        /* Холст для 3D и точек скелета */
+        #output_canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            transform: scaleX(-1); /* Зеркалим холст синхронно с видео */
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <video id="webcam" autoplay playsinline></video>
+        <canvas id="output_canvas"></canvas>
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('webcam');
+
+        // Функция для запроса доступа к камере и запуска видео
+        async function startCamera() {
+            try {
+                // Запрашиваем фронтальную камеру телефона или обычную вебку
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'user', 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                });
+                videoElement.srcObject = stream;
+                console.log("Камера успешно запущена!");
+            } catch (error) {
+                console.error("Ошибка доступа к камере: ", error);
+                alert("Пожалуйста, разрешите доступ к камере в браузере.");
+            }
+        }
+
+        // Запускаем камеру сразу при загрузке страницы
+        startCamera();
+    </script>
+</body>
+</html>

@@ -1,0 +1,526 @@
+/* ===========================================
+   MODERN DROPDOWN MENU STYLES
+   Modern, sleek dropdown menus for Alba Space
+   =========================================== */
+
+:root {
+  --dropdown-bg: #001a33;
+  --dropdown-border: #003366;
+  --dropdown-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  --dropdown-item-hover: rgba(0, 194, 255, 0.15);
+  --dropdown-item-active: rgba(0, 194, 255, 0.25);
+  --dropdown-radius: 16px;
+  --dropdown-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Main dropdown container */
+.dropdown {
+  position: relative;
+  overflow: visible !important;
+  z-index: 51 !important;
+}
+
+/* Invisible hover zone to prevent menu collapse */
+.dropdown::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: -15px;
+  right: -15px;
+  height: 35px;
+  pointer-events: auto;
+  z-index: 99998;
+}
+
+/* Dropdown trigger button */
+.dropdown-trigger {
+  position: relative;
+  color: #d1d5db;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.025em;
+  transition: var(--dropdown-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.dropdown-trigger::after {
+  content: '▾';
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  color: #9ca3af;
+}
+
+.dropdown-trigger:hover {
+  color: #ffffff;
+  background: rgba(0, 194, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.dropdown-trigger:hover::after {
+  color: #00c2ff;
+  transform: translateY(1px);
+}
+
+.dropdown.active .dropdown-trigger {
+  color: #ffffff;
+  background: rgba(0, 194, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 194, 255, 0.2);
+}
+
+.dropdown.active .dropdown-trigger::after {
+  transform: rotate(180deg) translateY(-1px);
+  color: #00c2ff;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: linear-gradient(180deg, #001a33 0%, #003366 100%);
+  opacity: 1 !important;
+  border: 1px solid #003366;
+  border-radius: var(--dropdown-radius);
+  min-width: 240px;
+  z-index: 99999 !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: var(--dropdown-transition);
+  padding: 12px 8px;
+  margin: 0;
+  overflow: visible;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid var(--dropdown-bg);
+  z-index: 1;
+}
+
+.dropdown-menu::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 7px solid var(--dropdown-border);
+  z-index: 0;
+}
+
+/* Show dropdown on hover/active */
+.dropdown:hover .dropdown-menu,
+.dropdown.active .dropdown-menu,
+.dropdown-menu:hover {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Dropdown menu items - fully clickable */
+.dropdown-menu a,
+.dropdown-menu button,
+.dropdown-menu [role="menuitem"] {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 16px;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+  flex: 0 1 auto;
+  pointer-events: auto !important;
+  border-radius: 6px;
+}
+
+@media (min-width: 1024px) {
+  .dropdown-menu a,
+  .dropdown-menu button,
+  .dropdown-menu [role="menuitem"] {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    justify-content: flex-start !important;
+  }
+}
+
+.dropdown-menu a::before,
+.dropdown-menu button::before,
+.dropdown-menu [role="menuitem"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 18px;
+  background: rgba(0, 194, 255, 0.2);
+}
+
+.dropdown-menu a:first-child::before {
+  display: none;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover,
+.dropdown-menu [role="menuitem"]:hover {
+  background: rgba(0, 194, 255, 0.2);
+  color: #00c2ff;
+  border-radius: 6px;
+}
+
+.dropdown-menu a:active,
+.dropdown-menu button:active {
+  background: var(--dropdown-item-active);
+}
+
+/* Hyperclub link styling - no special arrow for external links */
+.dropdown-menu a.hyperclub-link {
+  color: inherit !important;
+  font-weight: 500 !important;
+}
+
+.dropdown-menu a.hyperclub-link::after {
+  content: none !important;
+}
+
+.dropdown-menu a[target="_blank"]::after {
+  content: none !important;
+}
+
+/* Divider between menu sections */
+.dropdown-menu .divider {
+  height: 1px;
+  background: var(--dropdown-border);
+  margin: 8px 0;
+  border: none;
+}
+
+/* Mobile styles */
+@media (max-width: 1024px) {
+  .dropdown::after {
+    display: none !important;
+  }
+
+  .dropdown-menu {
+    position: fixed !important;
+    bottom: auto !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    transform: translateY(100%) scaleY(0.95) !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 100vw !important;
+    max-height: 240px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    z-index: 1500 !important;
+    background: linear-gradient(135deg, #001a33 0%, #003366 100%);
+    border-radius: 0;
+    border: none;
+    border-top: 2px solid rgba(0, 194, 255, 0.4);
+    border-bottom: 1px solid rgba(0, 194, 255, 0.2);
+    padding: 14px 10px;
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                opacity 0.35s ease, 
+                visibility 0.35s ease;
+    transform-origin: top center;
+  }
+
+  .dropdown-menu::before,
+  .dropdown-menu::after {
+    display: none !important;
+  }
+
+  .dropdown:hover .dropdown-menu,
+  .dropdown.active .dropdown-menu {
+    transform: translateY(0) scaleY(1) !important;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .dropdown-menu a,
+  .dropdown-menu button,
+  .dropdown-menu [role="menuitem"] {
+    display: inline-flex;
+    width: 100%;
+    text-align: center;
+    padding: 10px 12px;
+    font-size: 13px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    margin: 0;
+    transition: all 0.2s ease;
+    pointer-events: auto !important;
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+
+  .dropdown-menu a:hover,
+  .dropdown-menu button:hover,
+  .dropdown-menu [role="menuitem"]:hover {
+    background-color: rgba(0, 194, 255, 0.2);
+    padding-left: 16px;
+    color: #00c2ff;
+  }
+
+  .dropdown-menu a:active,
+  .dropdown-menu button:active {
+    background-color: rgba(0, 194, 255, 0.3);
+  }
+}
+
+/* Animation for menu appearance */
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdownSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Enhanced hover effects */
+.dropdown-menu a {
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdown-menu a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: linear-gradient(135deg, #00c2ff, #0099cc);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+  transform-origin: bottom;
+}
+
+.dropdown-menu a:hover::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+/* Focus states for accessibility */
+.dropdown-menu a:focus,
+.dropdown-menu button:focus {
+  outline: 2px solid #00c2ff;
+  outline-offset: 2px;
+  background: var(--dropdown-item-hover);
+}
+
+/* Loading state */
+.dropdown-menu.loading {
+  pointer-events: none;
+}
+
+.dropdown-menu.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 194, 255, 0.3);
+  border-top: 2px solid #00c2ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .dropdown-menu {
+    --dropdown-bg: rgba(2, 6, 23, 0.98);
+    --dropdown-border: rgba(0, 194, 255, 0.3);
+  }
+}
+
+/* === Desktop-specific flyouts for header dropdowns === */
+@media (min-width: 1024px) {
+  /* Hizmetler: top edge directly under trigger, right edge shifted 25px right */
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu {
+    left: auto !important;
+    right: -25px !important;
+    top: 100% !important;
+    transform: none !important;
+    transform-origin: top right !important;
+    min-width: auto !important;
+    width: auto !important;
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu::before,
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu::after {
+    display: none !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu a,
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu button {
+    width: auto !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    padding: 10px 14px !important;
+    pointer-events: auto !important;
+  }
+
+  /* Hakkimizda: top edge directly under trigger, left edge shifted 25px left */
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu {
+    left: -25px !important;
+    right: auto !important;
+    top: 100% !important;
+    transform: none !important;
+    transform-origin: top left !important;
+    min-width: auto !important;
+    width: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu::before,
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu::after {
+    display: none !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu a,
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu button {
+    width: auto !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    padding: 10px 14px !important;
+    pointer-events: auto !important;
+  }
+
+  /* ALBAMEN: smaller vertical dropdown under trigger */
+  .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu {
+    left: auto !important;
+    right: 0 !important;
+    transform: none !important;
+    top: 100% !important;
+    min-width: 160px !important;
+    width: auto !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 4px !important;
+    padding: 8px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+    z-index: 10050 !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu::before,
+  .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu::after {
+    display: none !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu a,
+  .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu button {
+    width: 100% !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    pointer-events: auto !important;
+    z-index: 10050 !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .dropdown-menu {
+    --dropdown-border: rgba(255, 255, 255, 0.5);
+    --dropdown-item-hover: rgba(255, 255, 255, 0.2);
+  }
+
+  .dropdown-menu a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .dropdown-trigger,
+  .dropdown-menu,
+  .dropdown-menu a,
+  .dropdown-menu button {
+    transition: none;
+  }
+
+  .dropdown-trigger::after {
+    transition: none;
+  }
+}

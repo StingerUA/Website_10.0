@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<!-- Универсальный favicon-блок -->
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#020617" name="theme-color"/>
+<meta content="#020617" name="msapplication-TileColor"/>
+<meta content="/favicon.png" name="msapplication-TileImage"/>
+<meta charset="utf-8">
+<title>Alba Space – CubeSat</title>
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<!-- Общие стили хедера и футера -->
+<link href="/assets/css/site.css" rel="stylesheet">
+<link href="/assets/css/fix-layout.css" rel="stylesheet"/>
+<script defer="" src="/assets/js/include.js"></script>
+<style> :root{ --header-bg: #020617; --accent: #00c2ff; } body{ margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background-color: #020617 !important; color:#ffffff !important; } .page-wrapper{ max-width:1200px; margin:70px auto 80px; padding:0 20px 40px; } .kupsat-title{ text-align:left; font-size:32px; margin-bottom:20px; } .kupsat-image{ text-align:left; margin-bottom:30px; position: relative; z-index: 1; } .kupsat-image img{ max-width:100%; height:auto; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.5); } .kupsat-content{ text-align:left; position: relative; z-index: 1; } .kupsat-content h2{ font-size:28px; margin-top:40px; margin-bottom:20px; } .kupsat-content p{ margin-bottom:20px; line-height:1.6; } .kupsat-content ul{ margin-left:20px; margin-bottom:20px; } .kupsat-content li{ margin-bottom:10px; } .highlight{ font-size:1.2em; font-weight:bold; color:#00c2ff; } </style>
+</link></meta></meta></head>
+<body>
+<!-- Header included via JS -->
+<div data-include="/header-en.html"></div>
+<div class="kupsat-image">
+<img alt="CubeSat" src="/assets/images/Gemini_Generated_Image_wirccmwirccmwirc(1).png"/>
+</div>
+<div class="page-wrapper">
+<div class="kupsat-content">
+<p>We are a space technologies company focused on making big impacts with small satellites. In the field of CubeSat and small satellite systems; We develop end-to-end engineering solutions from design to integration, from ground tests to mission operations.</p>
+<p>As part of the new generation space ecosystem that makes space accessible, sustainable and commercial; We produce high reliability satellite platforms for academia, industry and the public.</p>
+<p>Every CubeSat is not just a satellite for us; It is a strategic bridge built between data, connection and discovery. In the future, companies and institutions will store their data in space. <span class="highlight">ALBA Space</span> With this vision, we carry your data to space.</p>
+<p>With our team of engineers who are experts in their fields:</p>
+<ul>
+<li>1U - 3U - 6U - 12U CubeSat platforms and chassis production</li>
+<li>Mission-specific payload integration</li>
+<li>Power, communications, ADCS and OBC subsystems</li>
+<li>Thermal, vibration and environmental testing processes</li>
+<li>Ground station and mission software</li>
+</ul>
+<p>We develop critical components such as in accordance with international standards.</p>
+<h2>Why Us?</h2>
+<ul>
+<li>Real mission experience and field tested designs</li>
+<li>Modular and scalable CubeSat architectures</li>
+<li>Engineering-based, data-driven approach</li>
+<li>Flexible solutions suitable for academic and commercial missions</li>
+<li>High mission reliability and system endurance</li>
+</ul>
+<p><strong>There is no margin for error in space.</strong> We design, test, and produce with this awareness.</p>
+<p>Our goal is;</p>
+<ul>
+<li>To launch the first satellites of universities into orbit,</li>
+<li>To enable startups to produce data from space,</li>
+<li>To accelerate corporate space-based solutions.</li>
+</ul>
+<p><em>We believe that by developing the science and engineering of small satellites, we can change big worlds.</em></p>
+</div>
+</div>
+<!-- Footer included via JS -->
+<div data-include="/footer-en.html"></div>
+<script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item, index) => {
+      const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
+      item.style.setProperty('--reveal-delay', `${delay}s`);
+      observer.observe(item);
+    });
+  </script>
+<script>
+</script>
+</body>
+</html>

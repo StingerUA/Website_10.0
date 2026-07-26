@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<!-- Универсальный favicon-блок -->
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#020617" name="theme-color"/>
+<meta content="#020617" name="msapplication-TileColor"/>
+<meta content="/favicon.png" name="msapplication-TileImage"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AlbaSpace – Стратегия анимации</title>
+<link href="/assets/css/site.css" rel="stylesheet">
+<link href="/assets/css/product-overrides.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script defer="" src="/assets/js/include.js"></script>
+<style> /* Основные настройки темы AlbaSpace */ body { background-color: #020617; color: white; font-family: system-ui, -apple-system, sans-serif; } /* Фиксированный фон */ .space-bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-size: cover; opacity: 1; } .space-overlay { position: absolute; inset: 0; } /* Стили карточек - прозрачные */ .alba-card { background: rgba(13, 42, 87, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(148, 163, 184, 0.4); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85); transition: all 0.3s ease; } .alba-card:hover { border-color: #00c2ff; box-shadow: 0 0 20px rgba(0, 194, 255, 0.15), 0 28px 90px rgba(0, 0, 0, 0.85); transform: translateY(-2px); } /* Контейнер графика */ .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 350px; } /* Акцентный текст */ .text-accent { color: #00c2ff; } /* СТРАХОВКА: Гарантируем видимость контента на мобильных */ .reveal, .alba-card, section, canvas, .chart-container { opacity: 1 !important; transform: none !important; visibility: visible !important; filter: none !important; display: block; /* Убираем возможные display: none */ } /* Возвращаем display:flex для карточек, где это нужно (чтобы не сломать верстку) */ .alba-card.flex { display: flex !important; } </style>
+</link></link></head>
+<body class="antialiased selection:bg-[#00c2ff] selection:text-black">
+<div class="space-bg-fixed">
+<div class="space-overlay"></div>
+</div>
+<div data-include="/header-ru.html"></div>
+<main class="max-w-[1200px] mx-auto px-4 py-12 mb-20">
+<section class="text-center mb-16 mt-8">
+<h1 class="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">
+                Наш мультфильм <span class="text-accent">Можем ли мы продать?</span>
+</h1>
+<p class="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                Анализ исследований моделей приобретения Netflix, Amazon и Disney+.
+            </p>
+<div class="mt-6 inline-block bg-[#00c2ff]/10 border border-[#00c2ff]/30 rounded-full px-6 py-2">
+<span class="text-accent font-bold">Решение:</span> <span class="text-slate-200">Да, но стратегия зависит от платформы.</span>
+</div>
+</section>
+<nav class="flex flex-wrap justify-center gap-4 mb-16">
+<a class="px-4 py-2 rounded-lg bg-slate-800/50 hover:bg-[#00c2ff] hover:text-black transition text-sm font-medium border border-slate-700" href="#market">Анализ рынка</a>
+<a class="px-4 py-2 rounded-lg bg-slate-800/50 hover:bg-[#00c2ff] hover:text-black transition text-sm font-medium border border-slate-700" href="#buyers">Профили покупателей</a>
+<a class="px-4 py-2 rounded-lg bg-slate-800/50 hover:bg-[#00c2ff] hover:text-black transition text-sm font-medium border border-slate-700" href="#money">Модели дохода</a>
+<a class="px-4 py-2 rounded-lg bg-slate-800/50 hover:bg-[#00c2ff] hover:text-black transition text-sm font-medium border border-slate-700" href="#strategy">Дорожная карта</a>
+</nav>
+<section class="mb-24 scroll-mt-24" id="market">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div>
+<div class="flex items-center gap-3 mb-6">
+<i class="text-accent w-8 h-8" data-lucide="globe"></i>
+<h2 class="text-3xl font-bold text-white">Аудитория войны</h2>
+</div>
+<p class="text-slate-300 mb-6 text-lg leading-relaxed">
+                        Чтобы понять, кому продать свой мультфильм, нужно сначала понять, у кого есть аудитория. Хотя Netflix возглавил революцию, рынок сейчас фрагментирован.
+                    </p>
+<p class="text-slate-400 mb-6">
+<strong>Нетфликс</strong>является объемным лидером «Анимации для взрослых». <strong>Амазонка</strong> является спящим гигантом; <strong>Дисней+</strong> представляет собой «огороженный сад», в основном закрытый для внешних IP-адресов (интеллектуальная собственность).
+                    </p>
+<div class="bg-[#00c2ff]/10 p-5 rounded-xl border border-[#00c2ff]/30">
+<strong class="text-accent block mb-2">💡Инсайт:</strong>
+<span class="text-slate-200">У Netflix самый высокий уровень «оттока», что делает их наиболее вероятным покупателем новых независимых IP-адресов.</span>
+</div>
+</div>
+<div class="alba-card flex flex-col items-center justify-center">
+<h3 class="text-xl font-bold mb-6 text-center text-white">Глобальная доля подписчиков</h3>
+<div class="chart-container">
+<canvas id="marketShareChart"></canvas>
+</div>
+<p class="text-xs text-slate-500 mt-4 text-center">Источник: Глобальные прогнозы потокового вещания на 2024 год.</p>
+</div>
+</div>
+</section>
+<section class="mb-24 scroll-mt-24" id="buyers">
+<div class="flex items-center gap-3 mb-8">
+<i class="text-accent w-8 h-8" data-lucide="scan-face"></i>
+<h2 class="text-3xl font-bold text-white">ДНК покупателя: что они ищут?</h2>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+<div class="alba-card border-t-4 border-t-red-600">
+<h3 class="text-xl font-bold text-red-500 mb-2">Нетфликс</h3>
+<p class="text-sm text-slate-400 mb-4">Фабрика «Пьяная». Любит аниме и комедии для взрослых.</p>
+<ul class="text-sm space-y-2 text-slate-300">
+<li class="flex items-center"><i class="w-4 h-4 text-green-400 mr-2" data-lucide="check"></i> Открыт для презентаций</li>
+<li class="flex items-center"><i class="w-4 h-4 text-green-400 mr-2" data-lucide="check"></i> Высокий бюджет</li>
+<li class="flex items-center"><i class="w-4 h-4 text-red-400 mr-2" data-lucide="x"></i> Полная эксклюзивность обязательна</li>
+</ul>
+</div>
+<div class="alba-card border-t-4 border-t-blue-400">
+<h3 class="text-xl font-bold text-blue-400 mb-2">АМАЗОН ПРАЙМ</h3>
+<p class="text-sm text-slate-400 mb-4">Гибридная модель. Подходит для нишевого контента.</p>
+<ul class="text-sm space-y-2 text-slate-300">
+<li class="flex items-center"><i class="w-4 h-4 text-green-400 mr-2" data-lucide="check"></i> Вы можете опубликовать его самостоятельно</li>
+<li class="flex items-center"><i class="w-4 h-4 text-yellow-400 mr-2" data-lucide="minus"></i> Средний бюджет</li>
+<li class="flex items-center"><i class="w-4 h-4 text-green-400 mr-2" data-lucide="check"></i> Неэксклюзивный вариант</li>
+</ul>
+</div>
+<div class="alba-card border-t-4 border-t-indigo-600">
+<h3 class="text-xl font-bold text-indigo-400 mb-2">ДИСНЕЙ+</h3>
+<p class="text-sm text-slate-400 mb-4">Закрытый замок. Почти полностью внутренняя IP (Marvel, Pixar).</p>
+<ul class="text-sm space-y-2 text-slate-300">
+<li class="flex items-center"><i class="w-4 h-4 text-red-400 mr-2" data-lucide="x"></i> Закрытая экосистема</li>
+<li class="flex items-center"><i class="w-4 h-4 text-green-400 mr-2" data-lucide="check"></i> Массивный маркетинг</li>
+<li class="flex items-center"><i class="w-4 h-4 text-yellow-400 mr-2" data-lucide="alert-triangle"></i> Одержимость безопасностью бренда</li>
+</ul>
+</div>
+</div>
+<div class="alba-card">
+<h3 class="text-xl font-bold mb-4 text-center text-white">Анализ совместимости платформ</h3>
+<div class="chart-container mx-auto">
+<canvas id="buyerRadarChart"></canvas>
+</div>
+<div class="flex justify-center gap-6 mt-4 text-sm">
+<span class="flex items-center text-slate-300"><span class="w-3 h-3 rounded-full bg-red-600 mr-2"></span> Нетфликс</span>
+<span class="flex items-center text-slate-300"><span class="w-3 h-3 rounded-full bg-blue-400 mr-2"></span> Амазонка</span>
+<span class="flex items-center text-slate-300"><span class="w-3 h-3 rounded-full bg-indigo-600 mr-2"></span> Дисней+</span>
+</div>
+</div>
+</section>
+<section class="mb-24 scroll-mt-24" id="money">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div class="alba-card h-full">
+<h3 class="text-xl font-bold mb-6 text-center text-white">Модели предполагаемого дохода</h3>
+<div class="chart-container">
+<canvas id="revenueChart"></canvas>
+</div>
+<div class="mt-4 text-xs text-slate-500 text-center">
+                        *Прогнозы рассчитаны на 1 сезон мультсериала.
+                    </div>
+</div>
+<div>
+<div class="flex items-center gap-3 mb-6">
+<i class="text-accent w-8 h-8" data-lucide="coins"></i>
+<h2 class="text-3xl font-bold text-white">Покажи деньги</h2>
+</div>
+<div class="space-y-4">
+<div class="p-5 rounded-xl border-l-4 border-indigo-500 bg-slate-900/50">
+<h4 class="font-bold text-lg text-white">1. Стоимость + Премиум (Netflix)</h4>
+<p class="text-sm text-slate-400 mt-1">100% затрат + 20% прибыли. Вы зарабатываете деньги мгновенно, но теряете IP (право собственности).</p>
+</div>
+<div class="p-5 rounded-xl border-l-4 border-teal-500 bg-slate-900/50">
+<h4 class="font-bold text-lg text-white">2. Лицензионный сбор (Amazon/Hulu)</h4>
+<p class="text-sm text-slate-400 mt-1">Фиксированная плата за аренду на 1-3 года. Вы сохраняете интеллектуальную собственность, но принимаете на себя производственный риск.</p>
+</div>
+<div class="p-5 rounded-xl border-l-4 border-yellow-500 bg-slate-900/50">
+<h4 class="font-bold text-lg text-white">3. Доля дохода (AVOD)</h4>
+<p class="text-sm text-slate-400 mt-1">Платят копейки за просмотр. Денег вперед нет. Архив хорош для содержания.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="mb-24 scroll-mt-24" id="strategy">
+<div class="flex items-center gap-3 mb-8">
+<i class="text-accent w-8 h-8" data-lucide="map"></i>
+<h2 class="text-3xl font-bold text-white">Дорога к соглашению</h2>
+</div>
+<p class="text-slate-300 mb-10">
+                Вы не можете загрузить PDF-файл на Netflix.com. Чтобы получить контракт, необходимо одолеть «Привратников».
+            </p>
+<div class="relative">
+<div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 transform -translate-y-1/2"></div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+<div class="alba-card bg-[#0b1120] border-accent/20">
+<div class="text-4xl mb-3">📦</div>
+<h4 class="font-bold text-white mb-2">1. Пакет</h4>
+<p class="text-xs text-slate-400">Файл (Библия), пилотный сценарий, рекламный видеоролик.</p>
+</div>
+<div class="md:hidden flex justify-center text-slate-600"><i data-lucide="arrow-down"></i></div>
+<div class="alba-card bg-[#0b1120] border-accent/20">
+<div class="text-4xl mb-3">🤝</div>
+<h4 class="font-bold text-white mb-2">2. Я вожу машину</h4>
+<p class="text-xs text-slate-400">CAA, WME или FilmHub. У них есть ключ доступа.</p>
+</div>
+<div class="md:hidden flex justify-center text-slate-600"><i data-lucide="arrow-down"></i></div>
+<div class="alba-card bg-[#0b1120] border-accent/20">
+<div class="text-4xl mb-3">🎤</div>
+<h4 class="font-bold text-white mb-2">3. Презентация</h4>
+<p class="text-xs text-slate-400">Встреча с менеджерами. Фокус: Удержание аудитории.</p>
+</div>
+<div class="md:hidden flex justify-center text-slate-600"><i data-lucide="arrow-down"></i></div>
+<div class="alba-card border-green-500/50 bg-green-900/10">
+<div class="text-4xl mb-3">✍️</div>
+<h4 class="font-bold text-white mb-2">4. Контракт</h4>
+<p class="text-xs text-slate-400">Примечание к соглашению -&gt; Подпись -&gt; План оплаты.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="mb-16">
+<div class="alba-card">
+<div class="flex flex-col md:flex-row justify-between items-center mb-6">
+<h3 class="text-2xl font-bold text-white">Матрица вероятности успеха</h3>
+<div class="text-xs bg-slate-800 text-accent px-3 py-1 rounded-full border border-slate-700">
+                        Данные: Независимые предложения анимации на 2024 г.
+                    </div>
+</div>
+<p class="text-slate-400 mb-6 text-sm">
+                    Этот график <strong>Качество проекта/Отделка</strong> с <strong>Нишевая актуальность платформы</strong> Он отображает вероятность сделки на основе сравнения.
+                </p>
+<div class="chart-container" style="max-width: 800px; height: 400px;">
+<canvas id="probabilityChart"></canvas>
+</div>
+<div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-center text-slate-500">
+<div>🟣 Высокобюджетный оригинал</div>
+<div>🔵 Покупка (Готовый фильм)</div>
+<div>🔴 Совместное производство (Co-Pro)</div>
+<div>🟡 Зона отклонения</div>
+</div>
+</div>
+</section>
+<div class="bg-gradient-to-r from-slate-900 to-slate-800 p-8 rounded-2xl border border-slate-700">
+<h2 class="text-2xl font-bold mb-6 text-white border-b border-slate-700 pb-2">Стратегический совет</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<p class="mb-4 text-slate-300 leading-relaxed">
+                        Для новой студии без представительства практически невозможно напрямую перейти к Netflix или Disney.
+                    </p>
+<p class="text-slate-200">
+<strong class="text-accent">Ваш лучший ход:</strong> Подготовьте «Промо-видео» (1–2 минуты) и мощную презентационную Библию. Для доступа к Amazon/Tubi <strong>ФильмХаб</strong> подойдите к агрегаторам, поставьте лайк или посмотрите на анимационные рынки (Анси) <strong>Торговый представитель</strong> найди это.
+                    </p>
+</div>
+<div class="border-l border-slate-600 pl-6">
+<h4 class="font-bold text-accent mb-4">Контрольный список для начала работы:</h4>
+<ul class="space-y-3 text-sm text-slate-400">
+<li class="flex items-center"><i class="w-4 h-4 mr-2" data-lucide="square"></i> Определите целевую аудиторию (дети 6–11 лет и взрослые)</li>
+<li class="flex items-center"><i class="w-4 h-4 mr-2" data-lucide="square"></i> Подготовьте «Доказательство концепции»</li>
+<li class="flex items-center"><i class="w-4 h-4 mr-2" data-lucide="square"></i> Перечислите 10 лучших торговых представителей вашего типа</li>
+<li class="flex items-center"><i class="w-4 h-4 mr-2" data-lucide="square"></i> Выделите бюджет на юридическую консультацию</li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+<div data-include="/footer-ru.html"></div>
+<script>
+        // Init Icons
+        lucide.createIcons();
+
+        // --- GLOBAL CHART CONFIG FOR DARK THEME ---
+        Chart.defaults.color = '#94a3b8'; // text-slate-400
+        Chart.defaults.borderColor = '#334155'; // border-slate-700
+        Chart.defaults.font.family = "system-ui";
+
+        // --- Helper: Label Wrap ---
+        function wrapLabel(str, maxChars) {
+            if (str.length <= maxChars) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxChars) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        const commonTooltipConfig = {
+            backgroundColor: 'rgba(15, 23, 42, 0.9)', // dark bg
+            titleColor: '#fff',
+            bodyColor: '#cbd5e1',
+            borderColor: '#334155',
+            borderWidth: 1,
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                }
+            }
+        };
+
+        // --- CHART 1: Market Share ---
+        const marketCtx = document.getElementById('marketShareChart').getContext('2d');
+        new Chart(marketCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Netflix', 'Amazon Prime', 'Disney+', 'Diğerleri'],
+                datasets: [{
+                    data: [260, 210, 150, 300],
+                    backgroundColor: ['#E50914', '#00A8E1', '#4f46e5', '#475569'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true } },
+                    tooltip: commonTooltipConfig
+                }
+            }
+        });
+
+        // --- CHART 2: Radar ---
+        const radarCtx = document.getElementById('buyerRadarChart').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Yetişkin Anim.', 'Çocuk/Aile', 'Bağımsız Dostu', 'Bütçe', 'Münhasırlık'],
+                datasets: [
+                    {
+                        label: 'Netflix',
+                        data: [90, 80, 60, 95, 100],
+                        borderColor: '#E50914',
+                        backgroundColor: 'rgba(229, 9, 20, 0.2)',
+                        pointBackgroundColor: '#E50914'
+                    },
+                    {
+                        label: 'Amazon',
+                        data: [60, 50, 80, 70, 40],
+                        borderColor: '#00A8E1',
+                        backgroundColor: 'rgba(0, 168, 225, 0.2)',
+                        pointBackgroundColor: '#00A8E1'
+                    },
+                    {
+                        label: 'Disney+',
+                        data: [20, 100, 10, 90, 100],
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        pointBackgroundColor: '#4f46e5'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: '#334155' },
+                        grid: { color: '#334155' },
+                        pointLabels: { color: '#e2e8f0', font: { size: 11, weight: 'bold' } },
+                        suggestedMin: 0, suggestedMax: 100
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: '#cbd5e1' } },
+                    tooltip: commonTooltipConfig
+                }
+            }
+        });
+
+        // --- CHART 3: Revenue (Bar) ---
+        const revCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Maliyet + Prim', 'Lisans Ücreti', 'Gelir Payı'].map(l => wrapLabel(l, 16)),
+                datasets: [{
+                    label: 'Potansiyel Kazanç',
+                    data: [500, 150, 30],
+                    backgroundColor: ['#6C63FF', '#4BC0C0', '#FFCE56'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false }, ticks: { display: false } },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: commonTooltipConfig
+                }
+            }
+        });
+
+        // --- CHART 4: Probability (Bubble) ---
+        const probCtx = document.getElementById('probabilityChart').getContext('2d');
+        new Chart(probCtx, {
+            type: 'bubble',
+            data: {
+                datasets: [{
+                    label: 'Anlaşma Bölgesi',
+                    data: [
+                        { x: 90, y: 90, r: 20, type: 'Netflix Orijinali' },
+                        { x: 80, y: 60, r: 15, type: 'Amazon Özel' },
+                        { x: 70, y: 80, r: 10, type: 'Hulu Lisansı' },
+                        { x: 40, y: 30, r: 8, type: 'Tub/Pluto (Rev Share)' },
+                        { x: 95, y: 20, r: 5, type: 'Red (Yanlış Uyum)' }
+                    ],
+                    backgroundColor: (ctx) => {
+                        const val = ctx.raw?.x;
+                        if (val > 85) return 'rgba(108, 99, 255, 0.8)';
+                        if (val > 60) return 'rgba(75, 192, 192, 0.8)';
+                        return 'rgba(255, 206, 86, 0.8)';
+                    }
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { 
+                        title: { display: true, text: 'Üretim Kalitesi / Cila', color: '#94a3b8' },
+                        min: 0, max: 100, grid: { color: '#334155' }
+                    },
+                    y: { 
+                        title: { display: true, text: 'Platform Niş Uyumu', color: '#94a3b8' },
+                        min: 0, max: 100, grid: { color: '#334155' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        ...commonTooltipConfig,
+                        callbacks: {
+                            label: (ctx) => ctx.raw.type
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+<script>
+      // Sayfa Yüklendiğinde Popup Kontrolü
+      document.addEventListener("DOMContentLoaded", function() {
+          // localStorage kontrolü: Kullanıcı daha önce "kabul ettim" dedi mi?
+          if (!localStorage.getItem("albaCookieSeen")) {
+              document.getElementById("cookie-overlay").style.display = "flex";
+          }
+      });
+
+      const acceptBtn = document.getElementById("btnAccept");
+      const settingsBtn = document.getElementById("btnSettings");
+
+      // Üst buton: Animasyon ve Kapatma
+      if(acceptBtn) {
+          acceptBtn.addEventListener("click", function() {
+              // Butona basıldığını hissettirmek için ufak bir bekleme (opsiyonel)
+              setTimeout(() => {
+                  document.getElementById("cookie-overlay").style.display = "none";
+                  // Kullanıcının gördüğünü tarayıcıya kaydet
+                  localStorage.setItem("albaCookieSeen", "true");
+              }, 200);
+          });
+      }
+
+      // Alt buton: Çerez politikası sayfasına yönlendirir
+      if(settingsBtn) {
+          settingsBtn.addEventListener("click", function() {
+               window.location.href = "cerez-politikasi.html";
+          });
+      }
+  </script>
+</body>
+</html>

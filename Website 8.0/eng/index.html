@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Alba Space – Take Your Future to Space!</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<!-- Favicon Block -->
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#020617" name="theme-color"/>
+<meta content="#020617" name="msapplication-TileColor"/>
+<meta content="/favicon.png" name="msapplication-TileImage"/>
+<link href="/assets/css/site.css" rel="stylesheet">
+<link href="/assets/css/fix-layout.css" rel="stylesheet"/>
+<script defer="" src="/assets/js/include.js"></script>
+<script defer="" src="/assets/js/menu-toggle.js"></script>
+<script defer="" src="/assets/js/carousel.js"></script>
+<script defer="" src="/assets/js/mobile-header-cart.js"></script>
+</link></head>
+<style> :root { --header-bg: #020617; --accent: #00c2ff; --page-bg: #020617; --text-main: #e5e7eb; --text-muted: #9ca3af; /* logo strip controls */ --logo-strip-h: 120px; --logo-gap: 14px; --logo-pad-x: 12px; } * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text-main); } /* ===== Glass box ===== */ .glass-box { border: none; border-radius: 0; padding: 20px 24px; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; background: transparent; } /* glass box that fits text width */ .glass-box--fit { display: block; width: fit-content; max-width: calc(100% - 40px); margin: 0 auto 22px; padding: 14px 18px; text-align: center; background: transparent; border: none; box-shadow: none; } .glass-box--fit .section-title, .glass-box--fit .logo-section-title { margin: 0; } .glass-box--fit .section-subtitle { margin: 10px 0 0; } /* ===== Page layout ===== */ .home-main { max-width: 1200px; margin: 120px auto 70px; padding: 32px 26px 40px; } /* ===== HERO ===== */ .hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 32px; align-items: center; margin-bottom: 60px; } .hero h1 { font-size: 42px; line-height: 1.1; margin-bottom: 10px; } .hero .lead { font-size: 16px; color: var(--text-muted); margin-bottom: 20px; max-width: 480px; } .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; } .btn-primary, .btn-outline { padding: 10px 18px; border-radius: 999px; border: 1px solid var(--accent); font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease; } .btn-primary { color: #020617; font-weight: 600; box-shadow: 0 10px 28px rgba(56, 189, 248, 0.35); animation: buttonGlow 2.8s ease-in-out infinite; } .btn-outline { color: var(--accent); box-shadow: 0 6px 18px rgba(15, 23, 42, 0.7); } .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 45px rgba(56, 189, 248, 0.6); } .btn-outline:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(56, 189, 248, 0.45); color: #e5e7eb; } @keyframes buttonGlow { 0%, 100% { box-shadow: 0 8px 22px rgba(56, 189, 248, 0.25); } 50% { box-shadow: 0 16px 40px rgba(56, 189, 248, 0.55); } } .hero-stats { display: flex; gap: 30px; margin-top: 10px; font-size: 14px; color: var(--text-muted); } .hero-stats strong { display: block; font-size: 20px; color: var(--accent); } .hero-image img { width: 100%; border-radius: 24px; object-fit: cover; box-shadow: none; } /* ===== Categories ===== */ .section-title { text-align: center; font-size: 28px; margin-bottom: 8px; } .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 15px; } .card-container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; margin-top: 20px; } .category-card { max-width: 420px; border-radius: 24px; overflow: hidden; border: none; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; background: transparent; } .category-card img { width: 100%; height: 220px; object-fit: cover; display: block; border-radius: 16px; } .category-body { padding: 18px 20px 22px; } .category-card h3 { margin-bottom: 8px; font-size: 18px; color: #f9fafb; } .category-card p { font-size: 14px; color: #9ca3af; } .category-btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; margin-top: 14px; border-radius: 999px; border: 1px solid var(--accent); background: var(--accent); font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; color: #020617; box-shadow: 0 10px 28px rgba(56, 189, 248, 0.35); position: relative; overflow: hidden; animation: buttonGlow 2.8s ease-in-out infinite; transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease; } .category-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 45px rgba(56, 189, 248, 0.6); } /* ===== Scroll reveal animations ===== */ .reveal { opacity: 0; transform: translateY(16px); filter: blur(6px); transition: transform 0.65s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.65s ease, filter 0.65s ease; will-change: transform, opacity; } .reveal[data-direction="left"] { transform: translateX(-70px); } .reveal[data-direction="right"] { transform: translateX(70px); } .reveal.is-visible { opacity: 1; transform: translateX(0); filter: none; } .reveal { transition-delay: var(--reveal-delay, 0s); } /* ===== Logo carousels ===== */ .logo-section-title { text-align: center; font-size: 24px; margin-top: 60px; margin-bottom: 0; } .logo-carousel{ height: var(--logo-strip-h); overflow-x: auto; overflow-y: hidden; margin-bottom: 40px; padding: 0 var(--logo-pad-x); -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-x; } .carousel-track{ height: 100%; display: flex; align-items: center; gap: var(--logo-gap); will-change: transform; } .logo-card{ flex: 0 0 auto; height: 100%; width: auto; border-radius: 0; overflow: visible; border: none; box-shadow: none; display: flex; align-items: center; justify-content: center; padding: 0; min-width: 80px; } @media (min-width: 901px){ .logo-card{ min-width: 140px; } } .logo-card img{ height: 100%; width: auto; max-height: 100%; max-width: 260px; object-fit: contain; opacity: 0.95; display: block; } /* ===== Responsive ===== */ @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .home-main { padding: 26px 16px 34px; } :root { --logo-strip-h: 110px; --logo-gap: 12px; } .logo-card img { max-width: 220px; } .carousel-track { animation: none !important; } } .home-page .hero, .home-page .card-container { border: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; } /* ========================================= */ /* === COOKIE POPUP STYLES === */ /* ========================================= */ #cookie-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 9999; display: none; justify-content: center; align-items: center; padding: 20px; } .cookie-modal { background-color: transparent; color: #ffffff; width: 100%; max-width: 500px; padding: 40px 30px; box-sizing: border-box; text-align: center; position: relative; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; border-radius: 4px; } .cookie-header { font-size: 16px; font-weight: 600; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; } .cookie-text { font-size: 13px; line-height: 1.5; color: #333; margin-bottom: 20px; text-align: left; } .cookie-link { display: block; margin-bottom: 25px; font-size: 13px; text-decoration: underline; color: #ffffff; cursor: pointer; } .cookie-buttons { display: flex; flex-direction: column; gap: 10px; } .btn-cookie { width: 100%; padding: 15px; font-size: 14px; font-weight: bold; text-transform: uppercase; cursor: pointer; border: 1px solid #000; transition: transform 0.1s ease, opacity 0.2s; } .btn-accept { background-color: #000; color: #fff; } .btn-settings { background-color: #fff; color: #000000; } .btn-cookie:active { transform: scale(0.96); } @media (max-width: 600px) { .cookie-modal { padding: 20px; } } </style>
+<style>
+  /* Ensure page bg is set after other styles */
+  html, body { background-color: #020617 !important; }
+
+  /* White background for logo carousels */
+  .logo-carousel-wrap {
+    background: #ffffff !important;
+    border-radius: 20px;
+    padding: 30px 20px;
+    margin: 20px 0 60px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border: 1px solid rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), 
+                box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.8s ease-out;
+  }
+
+  .logo-carousel-wrap:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+  }
+
+  /* Make placeholder logos look better on white */
+  .logo-card {
+    background: #f8fafc !important;
+    border: 1px solid #edf2f7 !important;
+    border-radius: 12px !important;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .logo-card:hover {
+    transform: scale(1.08);
+    background: #ffffff !important;
+    border-color: var(--accent) !important;
+  }
+
+  .logo-card img {
+    filter: grayscale(0.2);
+    transition: filter 0.3s ease;
+  }
+
+  .logo-card:hover img {
+    filter: grayscale(0);
+  }
+
+  /* Smooth scroll for the carousel */
+  .logo-carousel {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+</style>
+<!-- Override site-wide cookie/modal white background for this page -->
+<style>
+  .cookie-modal { background-color: #ffffff !important; color: #000000 !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important; border: none !important; }
+  .cookie-header, .cookie-text, .cookie-link { color: #000000 !important; }
+  .btn-settings { background-color: transparent !important; color: #000000 !important; border-color: rgba(0,0,0,0.2) !important; }
+  .btn-accept { background-color: #000 !important; color: #fff !important; }
+  /* Ensure primary hero button is blue on this page */
+  .btn-primary { background: var(--accent) !important; color: #020617 !important; }
+</style>
+
+<body class="home-page">
+<div data-include="/header-en.html"></div>
+<main class="home-main">
+<section class="hero reveal" data-direction="left">
+<div class="hero-content">
+<h1>Take Your Future to Space!</h1>
+<p class="lead">
+      We send your brand to space! With our space-themed advertising and education solutions, 
+      we provide your brand with a unique and unforgettable experience.
+    </p>
+<div class="hero-buttons">
+<a class="btn-primary" href="/eng/hizmetler.html">Explore Services</a>
+<a class="btn-outline" href="/eng/galleri.html">View Gallery</a>
+</div>
+<div class="hero-stats">
+<div>
+<strong>150+</strong>
+<span>Innovative Solutions</span>
+</div>
+<div>
+<strong>15</strong>
+<span>Space Achievements</span>
+</div>
+</div>
+</div>
+<div class="hero-image">
+<img alt="Space satellite" src="/assets/images/anasayfa-hero.jpg"/>
+</div>
+</section>
+<section>
+<div class="glass-box glass-box--fit reveal" data-direction="left">
+<h2 class="section-title">Product Categories</h2>
+<p class="section-subtitle">
+          We offer innovative solutions to promote your brand in space.
+        </p>
+</div>
+<div class="card-container">
+<div class="category-card reveal" data-direction="left">
+<img alt="Space promotion" src="/assets/images/urun-uzay-tanitimi.jpg"/>
+<div class="category-body">
+<h3>Space Promotion</h3>
+<p>We create eye-catching and distinctive campaigns by taking your brand to space.</p>
+<a class="category-btn" href="/eng/hizmetler.html">Explore</a>
+</div>
+</div>
+<div class="category-card reveal" data-direction="right">
+<img alt="Space advertising" src="/assets/images/urun-uzay-reklamlari.jpg"/>
+<div class="category-body">
+<h3>Space Advertising</h3>
+<p>We take your brand to a whole new dimension with real space imagery and virtual scenes.</p>
+<a class="category-btn" href="/eng/hizmetler.html">Discover</a>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="glass-box glass-box--fit reveal" data-direction="right">
+<h2 class="logo-section-title">Our References</h2>
+</div>
+<div class="logo-carousel-wrap reveal" data-direction="left">
+<div class="logo-carousel">
+<div class="carousel-track">
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo1.jpg"/></div>
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo2.jpg"/></div>
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo3.jpg"/></div>
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo4.jpg"/></div>
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo5.jpg"/></div>
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo6.jpg"/></div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="glass-box glass-box--fit reveal" data-direction="left">
+<h2 class="logo-section-title">Our Solution Partners</h2>
+</div>
+<div class="logo-carousel-wrap reveal" data-direction="right">
+<div class="logo-carousel">
+<div class="carousel-track">
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo27.jpg"/></div>
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo28.jpg"/></div>
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo29.jpg"/></div>
+<div class="logo-card"><img alt="Placeholder logo" src="/assets/images/placeholder-logo30.jpg"/></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<div data-include="/footer-en.html"></div>
+<div id="cookie-overlay">
+<div class="cookie-modal">
+<div class="cookie-header">BEFORE YOU SHOP</div>
+<div class="cookie-text">
+              To provide full functionality of our website, personalize your user experience, conduct analytics, and serve personalized advertisements through other tracking technologies, we use first and third-party cookies including other tracking technologies from third-party publishers. We collect information about your browsing patterns, user profiles and devices for these purposes.<br/><br/>
+              By clicking "Accept All Cookies", you consent to and authorize us to share this information with third parties such as our advertising partners. When "Only Required Cookies" is selected, optional cookies are blocked, which restricts our ability to provide customized content and features. Click "Cookie Settings" to customize your choices. For more information, visit our Cookie Policy.
+          </div>
+<a class="cookie-link" href="/eng/cookie-policy.html">Cookie Policy</a>
+<div class="cookie-buttons">
+<button class="btn-cookie btn-accept" id="btnAccept">ACCEPT ALL COOKIES</button>
+<button class="btn-cookie btn-settings" id="btnSettings">COOKIE SETTINGS</button>
+</div>
+</div>
+</div>
+<script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item, index) => {
+      const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
+      item.style.setProperty('--reveal-delay', `${delay}s`);
+      observer.observe(item);
+    });
+  </script>
+<script>
+      // Check on Page Load if Cookie Popup should show
+      document.addEventListener("DOMContentLoaded", function() {
+          // localStorage check: Did the user previously "accept"?
+          if (!localStorage.getItem("albaCookieSeen")) {
+              document.getElementById("cookie-overlay").style.display = "flex";
+          }
+      });
+
+      const acceptBtn = document.getElementById("btnAccept");
+      const settingsBtn = document.getElementById("btnSettings");
+
+      // Top button: Animation and Close
+      if(acceptBtn) {
+          acceptBtn.addEventListener("click", function() {
+              setTimeout(() => {
+                  document.getElementById("cookie-overlay").style.display = "none";
+                  // Save to browser that user has seen it
+                  localStorage.setItem("albaCookieSeen", "true");
+              }, 200);
+          });
+      }
+
+      // Bottom button: Navigate to Cookie Policy
+      if(settingsBtn) {
+          settingsBtn.addEventListener("click", function() {
+               window.location.href = "/eng/cookie-policy.html";
+          });
+      }
+  </script>
+</body>
+</html>

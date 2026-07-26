@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profil – Alba Space</title>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="/assets/js/include.js" defer></script>
+  <style>
+    :root {
+      --page-bg: #020617;
+      --accent: #00c2ff;
+      --text-main: #000000;
+    }
+    body {
+      background-color: var(--page-bg);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .input-field, .select-field {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgb(0, 0, 0);
+      transition: all 0.3s ease;
+    }
+    .input-field:focus, .select-field:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0, 194, 255, 0.2);
+    }
+    /* Option styling for select */
+    .select-field option {
+      background-color: #020617;
+      color: rgb(0, 0, 0);
+    }
+    .btn-primary {
+      background-color: var(--accent);
+      color: #000;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #38bdf8;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+  <div data-include="/header-tr.html"></div>
+
+  <main class="flex-grow flex items-center justify-center px-4 py-20">
+    <div class="glass-card w-full max-w-2xl p-8 rounded-3xl shadow-2xl">
+      <h1 class="text-3xl font-bold text-center mb-8 text-white">Profilini Tamamla</h1>
+      
+      <form class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2">Ad Soyad</label>
+            <input type="text" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="Adınız Soyadınız">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2">Yaş</label>
+            <input type="number" min="1" max="120" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="Yaşınız">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2">Cinsiyet</label>
+            <select required class="select-field w-full px-4 py-3 rounded-xl">
+              <option value="" disabled selected>Seçiniz</option>
+              <option value="male">Erkek</option>
+              <option value="female">Kadın</option>
+              <option value="other">Diğer</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2">Yaşadığınız Şehir</label>
+            <input type="text" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="Şehir">
+          </div>
+        </div>
+
+        <div class="pt-6">
+          <button type="submit" class="btn-primary w-full py-4 rounded-xl text-lg font-bold uppercase tracking-wider">
+            Kaydet
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div data-include="/footer-tr.html"></div>
+</body>
+</html>

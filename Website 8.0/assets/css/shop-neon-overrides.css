@@ -1,0 +1,96 @@
+/* Neon-blue overrides for shop, cart and product pages
+   Applies white page backgrounds and neon-cyan text+shadow for
+   improved readability on shop/cart/product pages (desktop + mobile).
+*/
+
+/* ===== Header and Footer Separation for Shop Pages ===== */
+/* Apply separation styles when this CSS is loaded (shop pages) */
+.site-header, header {
+  border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15) !important;
+}
+
+.footer, footer {
+  border-top: 1px solid rgba(255,255,255,0.15) !important;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* White background for shop / product containers only (exclude cart & main site) */
+.shop-container,
+.product-page,
+.product-list,
+.product-detail,
+.product-gallery,
+.product-card,
+.detail-info,
+.glass-card {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Neon text + soft glow */
+.shop-container *,
+.product-page *,
+.product-card .product-info *,
+.detail-info *,
+.cart-item * {
+  color: #000000 !important;
+  text-shadow: none !important;
+}
+
+/* Headings stronger glow */
+.shop-container h1,
+.product-page h1,
+.product-card h3,
+.detail-info h1,
+.detail-info h3,
+.related-products h2 {
+  color: #000000 !important;
+  text-shadow: none !important;
+}
+
+/* Make product cards lighter and readable on white */
+.product-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.04) !important;
+}
+
+.detail-info,
+.glass-card {
+  background: rgba(255,255,255,0.98) !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.04) !important;
+}
+
+/* Cart items */
+.cart-item {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+}
+
+/* Prices keep accent but ensure contrast */
+.product-price,
+.cart-item .item-price,
+.cart-summary .total {
+  color: #000000 !important;
+  text-shadow: none !important;
+}
+
+/* Buttons: keep original backgrounds but ensure text readable */
+.btn-primary,
+.btn-glow,
+.btn-secondary {
+  color: #000000 !important;
+}
+
+/* Mobile: reduce shadow intensity for small screens */
+@media (max-width: 600px) {
+  .shop-container *, .product-page * {
+    text-shadow: none !important;
+  }
+  .product-card img { height: auto !important; }
+}
+
+/* Small utility: ensure link texts also use neon color in these pages */
+.shop-container a, .product-page a { color: #000000 !important; text-shadow: none !important; }

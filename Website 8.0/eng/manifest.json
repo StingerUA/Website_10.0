@@ -1,0 +1,20 @@
+{
+  "name": "Alba Space",
+  "short_name": "Alba Space",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#00c2ff"
+}

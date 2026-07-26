@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR тестирование</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #222; color: #fff; padding: 20px; margin: 0; }
+        .test-container { max-width: 1000px; margin: 0 auto; }
+        .test-result { margin: 15px 0; padding: 15px; border-radius: 8px; border-left: 4px solid; }
+        .test-result.pass { background: #2d5016; border-color: #4caf50; }
+        .test-result.fail { background: #5a2d2d; border-color: #f44336; }
+        .test-result.warn { background: #4a3d1a; border-color: #ff9800; }
+        h1 { color: #4caf50; border-bottom: 2px solid #4caf50; padding-bottom: 10px; }
+        .code { background: #111; padding: 10px; border-radius: 4px; margin: 10px 0; font-family: monospace; font-size: 12px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 WebAR тестирование</h1>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const results = document.getElementById('results');
+        let passCount = 0, failCount = 0, warnCount = 0;
+
+        function addResult(title, status, message) {
+            const div = document.createElement('div');
+            div.className = `test-result ${status}`;
+            div.innerHTML = `<strong>${title}</strong><br>${message}`;
+            results.appendChild(div);
+            
+            if (status === 'pass') passCount++;
+            else if (status === 'fail') failCount++;
+            else warnCount++;
+        }
+
+        // Тест 1: Проверка браузера
+        addResult(
+            '✓ Проверка браузера',
+            'pass',
+            `Браузер: ${navigator.userAgent.split('Chrome/')[1] ? 'Chrome' : 'Firefox'}`
+        );
+
+        // Тест 2: Поддержка WebGL
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+            if (gl) {
+                addResult('✓ WebGL 2.0 поддержка', 'pass', 'WebGL инициализирован');
+            } else {
+                addResult('✗ WebGL ошибка', 'fail', 'WebGL не поддерживается');
+            }
+        } catch (e) {
+            addResult('✗ WebGL ошибка', 'fail', e.message);
+        }
+
+        // Тест 3: Поддержка getUserMedia
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            addResult('✓ getUserMedia API', 'pass', 'API доступна (но камера может быть недоступна)');
+        } else {
+            addResult('✗ getUserMedia API', 'fail', 'API не доступна в этом браузере');
+        }
+
+        // Тест 4: Проверка файлов моделей
+        const modelUrls = ['cap1.glb', 'glasses1.glb', 'glasses2.glb'];
+        const checkModel = async (url) => {
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                return response.ok;
+            } catch {
+                return false;
+            }
+        };
+
+        (async () => {
+            for (const model of modelUrls) {
+                const exists = await checkModel(model);
+                if (exists) {
+                    addResult(`✓ Модель ${model}`, 'pass', 'Файл найден и доступен');
+                } else {
+                    addResult(`✗ Модель ${model}`, 'warn', 'Файл не найден. Проверьте путь и разрешения');
+                }
+            }
+        })();
+
+        // Тест 5: Проверка импортов
+        (async () => {
+            try {
+                const response = await fetch('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+                if (response.ok) {
+                    addResult('✓ Three.js CDN', 'pass', 'Библиотека доступна');
+                } else {
+                    addResult('✗ Three.js CDN', 'fail', 'Ошибка загрузки');
+                }
+            } catch (e) {
+                addResult('✗ Three.js CDN', 'fail', e.message);
+            }
+
+            try {
+                const response = await fetch('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.js');
+                if (response.ok) {
+                    addResult('✓ MediaPipe CDN', 'pass', 'Библиотека доступна');
+                } else {
+                    addResult('✗ MediaPipe CDN', 'fail', 'Ошибка загрузки');
+                }
+            } catch (e) {
+                addResult('✗ MediaPipe CDN', 'fail', e.message);
+            }
+
+            try {
+                const response = await fetch('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+                if (response.ok) {
+                    addResult('✓ Font Awesome CDN', 'pass', 'Библиотека доступна');
+                } else {
+                    addResult('✗ Font Awesome CDN', 'fail', 'Ошибка загрузки');
+                }
+            } catch (e) {
+                addResult('✗ Font Awesome CDN', 'fail', e.message);
+            }
+
+            // Тест 6: Тестирование Three.js
+            try {
+                const scene = new (await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js')).Scene();
+                addResult('✓ Three.js загрузка', 'pass', 'Scene создана успешно');
+            } catch (e) {
+                addResult('✗ Three.js загрузка', 'fail', e.message);
+            }
+        })();
+
+        // Итого
+        setTimeout(() => {
+            const summary = document.createElement('div');
+            summary.className = 'test-result pass';
+            summary.innerHTML = `<h2>📊 Итого: ${passCount} ✓ | ${warnCount} ⚠ | ${failCount} ✗</h2>`;
+            results.appendChild(summary);
+        }, 3000);
+    </script>
+</body>
+</html>

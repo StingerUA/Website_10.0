@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indext Data Lab - LinkedIn Carousel Planner (Customizer)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        
+        .font-sans-custom {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .font-mono-custom {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Стилизация скроллбара */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0D1117;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1F2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3B82F6;
+        }
+
+        /* Анимация перехода тем */
+        .theme-transition {
+            transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+        }
+    </style>
+</head>
+<body class="bg-[#0B0F17] text-gray-100 font-sans-custom min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Хедер -->
+    <header class="border-b border-[#1E293B] bg-[#0F172A]/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5 font-bold text-xl tracking-tight text-white">
+                <span class="text-blue-500 font-extrabold">//</span> indext<span class="text-blue-400 font-light">.data</span>
+            </div>
+            <span class="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-full font-mono-custom">v1.2 Interactive Style Editor</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="copyAllText()" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-lg shadow-blue-500/20 active:scale-95">
+                <i data-lucide="copy" class="w-4 h-4"></i> Копировать все тексты
+            </button>
+        </div>
+    </header>
+
+    <!-- Основная рабочая область -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Левая часть: Панель кастомизации и навигации (5 колонок) -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- Инструменты кастомизации стиля (Новая секция по запросу пользователя) -->
+            <div class="bg-[#111827] border border-[#1F2937] p-6 rounded-2xl shadow-xl space-y-5">
+                <h2 class="text-md font-bold text-white flex items-center gap-2">
+                    <i data-lucide="sliders" class="text-blue-400 w-5 h-5"></i>
+                    Настройка внешнего вида (Canva Live)
+                </h2>
+                
+                <!-- 1. Выбор темы фона (Темная / Светлая) -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Цветовая схема слайда</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="setTheme('dark')" id="theme-dark-btn" class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-medium transition-all bg-blue-600/10 border-blue-500 text-white">
+                            <i data-lucide="moon" class="w-4 h-4"></i> Темная тема
+                        </button>
+                        <button onclick="setTheme('light')" id="theme-light-btn" class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-gray-800 text-gray-400 hover:text-white transition-all">
+                            <i data-lucide="sun" class="w-4 h-4"></i> Светлая тема
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Выбор цвета для хайлайтов ключевых слов -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Цвет выделения ключевых слов</label>
+                    <div class="grid grid-cols-3 gap-2" id="accent-colors-container">
+                        <!-- Сгенерируется JS динамически для адаптации под темную/свелую тему -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Список слайдов-переключателей -->
+            <div class="bg-[#111827] border border-[#1F2937] p-4 rounded-2xl shadow-xl flex-1 flex flex-col">
+                <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">Структура карусели</h3>
+                <div class="space-y-1.5 overflow-y-auto max-h-[280px] pr-2 flex-1" id="slides-list">
+                    <!-- Сгенерировано JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая часть: Визуальный интерактивный превьюер слайда (7 колонок) -->
+        <div class="lg:col-span-7 flex flex-col gap-4">
+            
+            <!-- Информационная панель над слайдом -->
+            <div class="flex items-center justify-between px-2 text-sm text-gray-400">
+                <span class="flex items-center gap-2 font-mono-custom">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Слайд <span id="current-index-display" class="text-white font-bold">1</span> из <span id="total-slides-display">8</span>
+                </span>
+                <span class="text-xs bg-gray-800 px-3 py-1 rounded-full border border-gray-700">Canva Ratio: 4:5 (1080×1350px)</span>
+            </div>
+
+            <!-- Контейнер слайда (имитирует Canva холст с соотношением 4:5) -->
+            <div class="relative w-full max-w-[430px] mx-auto aspect-[4/5] rounded-3xl shadow-2xl overflow-hidden flex flex-col justify-between p-10 theme-transition" id="slide-canvas">
+                
+                <!-- Верхняя плашка (Брендинг) -->
+                <div class="flex justify-between items-center" id="slide-top-bar">
+                    <div class="flex items-center gap-1 font-bold text-xs tracking-wider uppercase" id="brand-logo-text">
+                        <span class="text-blue-500">//</span> Indext Data Lab
+                    </div>
+                    <div class="text-[10px] font-mono-custom border px-2 py-0.5 rounded transition-colors duration-300" id="status-badge">
+                        SYSTEM.STATUS: <span class="text-emerald-500">ACTIVE</span>
+                    </div>
+                </div>
+
+                <!-- Центральный контент слайда -->
+                <div class="flex-1 flex flex-col justify-center my-6" id="slide-content">
+                    <!-- Генерируется динамически -->
+                </div>
+
+                <!-- Нижняя плашка -->
+                <div class="flex justify-between items-center text-xs border-t pt-4 transition-colors duration-300" id="slide-bottom-bar">
+                    <span class="font-mono-custom" id="slide-number">01 / 08</span>
+                    <span class="flex items-center gap-1 font-medium text-[11px]" id="slide-action-hint">
+                        Свайпните дальше <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Кнопки управления слайдером -->
+            <div class="flex justify-between items-center max-w-[430px] w-full mx-auto mt-2">
+                <button onclick="prevSlide()" class="flex items-center gap-2 bg-[#111827] hover:bg-gray-800 border border-[#1F2937] text-white px-4 py-2.5 rounded-xl transition-all disabled:opacity-30 disabled:pointer-events-none">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i> Назад
+                </button>
+                
+                <div class="flex gap-1.5" id="pagination-dots">
+                    <!-- Сгенерировано JS -->
+                </div>
+
+                <button onclick="nextSlide()" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-500/10 disabled:opacity-30 disabled:pointer-events-none">
+                    Далее <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Инструкции по реализации элемента в Canva -->
+            <div class="bg-[#111827]/50 border border-[#1F2937] p-5 rounded-2xl mt-2 max-w-[430px] mx-auto w-full">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-blue-400 mb-2 flex items-center gap-1.5">
+                    <i data-lucide="info" class="w-4 h-4"></i> Как воссоздать этот слайд в Canva:
+                </h4>
+                <p id="canva-instructions" class="text-xs text-gray-400 leading-relaxed">
+                    --
+                </p>
+                <div class="mt-3 pt-3 border-t border-[#1F2937] hidden" id="cta-explanation-box">
+                    <span class="text-[10px] uppercase font-bold text-amber-400 block mb-1">💡 Секрет кликабельности в LinkedIn:</span>
+                    <span class="text-[11px] text-gray-400">Это псевдо-кнопка (визуальный триггер). Обязательно продублируйте ссылку в описании самого поста и напишите: «Ссылка на бесплатный аудит — в первом комментарии 👇»</span>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Тост-уведомление -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-emerald-600 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300">
+        <i data-lucide="check-circle" class="w-5 h-5"></i>
+        <span>Тексты карусели успешно скопированы!</span>
+    </div>
+
+    <script>
+        // Глобальное состояние
+        let activeTheme = 'dark'; // 'dark' или 'light'
+        let currentSlideIndex = 0;
+        
+        // Пресеты цветов для акцентов в зависимости от темы
+        const accentPresets = {
+            dark: [
+                { name: 'Аметист (Aleko)', value: '#9C8CFC', class: 'bg-[#9C8CFC]' },
+                { name: 'Кибернетический синий', value: '#38BDF8', class: 'bg-[#38BDF8]' },
+                { name: 'Мятный неон', value: '#34D399', class: 'bg-[#34D399]' }
+            ],
+            light: [
+                { name: 'Глубокий индиго', value: '#4F46E5', class: 'bg-[#4F46E5]' },
+                { name: 'Технологичный синий', value: '#2563EB', class: 'bg-[#2563EB]' },
+                { name: 'Изумрудный', value: '#0D9488', class: 'bg-[#0D9488]' }
+            ]
+        };
+        
+        let activeAccentColor = accentPresets.dark[0].value; // По умолчанию фиолетовый
+
+        // База данных слайдов с тегами [hl] для выделения ключевых слов
+        const slidesData = [
+            {
+                type: "hook",
+                title: "ПОЧЕМУ ВАШ КОРПОРАТИВНЫЙ AI [hl]ВРЕТ[/hl]?",
+                subtitle: "И как бизнес теряет бюджеты, пытаясь «просто прикрутить» ChatGPT к внутренним документам без подготовки.",
+                visual: `
+                    <div class="flex flex-col items-center justify-center py-6">
+                        <div class="relative w-32 h-32 flex items-center justify-center">
+                            <div class="absolute inset-0 border-2 border-dashed rounded-full animate-spin theme-spin-border" style="animation-duration: 25s"></div>
+                            <div class="absolute w-24 h-24 border rounded-lg rotate-45 flex items-center justify-center theme-box-border">
+                                <div class="w-16 h-16 border-2 rounded-lg -rotate-45 flex items-center justify-center font-mono-custom text-2xl font-bold theme-error-text">
+                                    ? !
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <span class="text-xs font-mono-custom px-3 py-1 rounded-full theme-badge-error">
+                                ERROR: HALLUCINATION_DETECTED
+                            </span>
+                        </div>
+                    </div>
+                `,
+                instructions: "Для темной или светлой темы: Используйте два квадрата со скругленными углами толщиной 1.5px. Наложите один на другой с поворотом 45°. По центру напишите '? !'. Ключевое слово 'ВРЕТ' выделите акцентным цветом.",
+                bulletText: "1. Заголовок (Hook) — цепляем болью об ИИ-галлюцинациях"
+            },
+            {
+                type: "problem",
+                title: "ПРОБЛЕМА: [hl]СЛЕПАЯ ВЕРА[/hl] В МОДЕЛИ",
+                subtitle: "Стандартные LLM обучались на общих данных из интернета. Они ничего не знают о вашей [hl]внутренней CRM[/hl], тарифах или документах.",
+                visual: `
+                    <div class="space-y-4 py-4">
+                        <div class="flex items-center justify-between border rounded-xl p-4 theme-card-bg theme-card-border">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center theme-db-icon-box">
+                                    <i data-lucide="database" class="w-5 h-5 text-blue-500"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold theme-card-title">Внутренние PDF и Wiki компании</h4>
+                                    <p class="text-[10px] text-gray-400 font-mono-custom">sales_2026.pdf / wiki_db</p>
+                                </div>
+                            </div>
+                            <div class="text-red-500"><i data-lucide="x-circle" class="w-5 h-5"></i></div>
+                        </div>
+
+                        <div class="flex justify-center my-1">
+                            <div class="h-6 w-0.5 border-r border-dashed theme-dashed-connector"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between border rounded-xl p-4 theme-card-bg theme-card-border">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center theme-brain-icon-box">
+                                    <i data-lucide="brain" class="w-5 h-5 text-red-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold theme-card-title">Базовая модель ChatGPT / Claude</h4>
+                                    <p class="text-[10px] text-gray-400 font-mono-custom">Додумывает факты ради вежливости</p>
+                                </div>
+                            </div>
+                            <span class="text-[9px] font-mono-custom text-red-500 bg-red-500/10 px-2 py-0.5 rounded">Галлюцинации</span>
+                        </div>
+                    </div>
+                `,
+                instructions: "В Canva: Создайте две горизонтальные карточки с тонкими границами. Соедините их вертикальной пунктирной линией. Для иконок используйте простые контурные иконки базы данных и мозга.",
+                bulletText: "2. Проблема — почему базовые LLM не подходят для бизнеса"
+            },
+            {
+                type: "solution-intro",
+                title: "РЕШЕНИЕ: [hl]ТЕХНОЛОГИЯ RAG[/hl]",
+                subtitle: "Вместо переобучения нейросети за миллионы, мы подключаем ее к вашей [hl]актуальной базе знаний[/hl] в реальном времени.",
+                visual: `
+                    <div class="flex flex-col gap-3 py-4">
+                        <p class="text-xs text-gray-500 text-center leading-relaxed">
+                            ИИ работает не по памяти, а как юрист: сначала находит нужный параграф в регламенте, а затем комментирует его.
+                        </p>
+                        <div class="h-20 flex items-center justify-center gap-4 mt-2">
+                            <div class="w-8 h-8 rounded-full border flex items-center justify-center text-xs theme-circle-node">DOC</div>
+                            <div class="w-12 h-0.5 theme-line-node relative">
+                                <div class="absolute -top-1 right-0 w-2 h-2 rounded-full bg-blue-500 animate-ping"></div>
+                            </div>
+                            <div class="w-10 h-10 rounded-lg border flex items-center justify-center theme-search-box">
+                                <i data-lucide="search" class="w-5 h-5 text-blue-500"></i>
+                            </div>
+                            <div class="w-12 h-0.5 theme-line-node"></div>
+                            <div class="w-8 h-8 rounded-full border flex items-center justify-center text-xs theme-circle-node">AI</div>
+                        </div>
+                    </div>
+                `,
+                instructions: "В Canva: По центру разместите цепочку: Круг (DOC) -> Стрелка -> Квадрат с лупой -> Стрелка -> Круг (AI). Максимально чистая геометрия без лишнего шума.",
+                bulletText: "3. Решение — как архитектура RAG спасает от ошибок"
+            },
+            {
+                type: "process-1",
+                title: "ШАГ 1: [hl]ВЕКТОРНЫЙ ПОИСК[/hl]",
+                subtitle: "Мы переводим ваши документы в математические векторы. ИИ находит информацию не по ключевым словам, а по [hl]контексту и смыслу[/hl].",
+                visual: `
+                    <div class="border rounded-xl p-5 font-mono-custom space-y-3 theme-card-bg theme-card-border">
+                        <div class="text-[11px] text-gray-500 flex justify-between">
+                            <span>Запрос: "Как сделать возврат?"</span>
+                            <span class="font-bold tracking-wider" style="color: var(--active-accent)">МАТЕМАТИКА</span>
+                        </div>
+                        <div class="text-[10px] p-3 rounded border theme-code-block font-bold">
+                            [0.12, -0.45, 0.89, ... 1536 dim]
+                        </div>
+                        <div class="text-[10px] text-gray-400 leading-relaxed">
+                            ИИ за миллисекунды сопоставляет числовые коды и вытаскивает нужный абзац из сотен инструкций.
+                        </div>
+                    </div>
+                `,
+                instructions: "В Canva: Нарисуйте один прямоугольный блок (окно терминала) с фоном чуть контрастнее основного. Внутрь поместите массив чисел в квадратных скобках.",
+                bulletText: "4. Шаг 1 — Математика смыслов вместо точных совпадений"
+            },
+            {
+                type: "process-2",
+                title: "ШАГ 2: [hl]ЧИСТКА ДАННЫХ[/hl] (CLEANING)",
+                subtitle: "Грязные данные — глупый ИИ. Мы вычищаем PDF от мусора, дубликатов, колонтитулов и делим текст на [hl]логические чанки[/hl].",
+                visual: `
+                    <div class="grid grid-cols-2 gap-4 py-4">
+                        <div class="border p-3 rounded-lg theme-card-bg theme-card-border">
+                            <span class="text-[10px] font-mono-custom text-red-400 font-bold">Грязный PDF</span>
+                            <div class="space-y-1.5 mt-2">
+                                <div class="h-1.5 w-full bg-red-400/20 rounded"></div>
+                                <div class="h-1.5 w-4/5 bg-red-400/20 rounded"></div>
+                                <div class="h-1.5 w-1/2 bg-red-400/10 rounded"></div>
+                                <span class="text-[8px] text-gray-400 font-mono">Шум: "Стр. 4 из 12"</span>
+                            </div>
+                        </div>
+                        <div class="border p-3 rounded-lg theme-card-bg theme-card-border-success">
+                            <span class="text-[10px] font-mono-custom text-emerald-500 font-bold">Чистый Чанк</span>
+                            <div class="space-y-1.5 mt-2">
+                                <div class="h-1.5 w-full bg-emerald-500/40 rounded"></div>
+                                <div class="h-1.5 w-full bg-emerald-500/40 rounded"></div>
+                                <div class="h-1.5 w-3/4 bg-emerald-500/40 rounded"></div>
+                                <span class="text-[8px] text-emerald-500 font-mono">Только факты</span>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                instructions: "В Canva: Разместите два одинаковых прямоугольника рядом. Используйте встроенные отрезки-линии разной длины для имитации строк текста. Слева сделайте их красными, справа — зелеными.",
+                bulletText: "5. Шаг 2 — Как правильное дробление повышает точность"
+            },
+            {
+                type: "process-3",
+                title: "ШАГ 3: [hl]КОНТРОЛЬ ГАЛЛЮЦИНАЦИЙ[/hl]",
+                subtitle: "Мы внедряем строгие промпт-ограничения (Guardrails). Модель обязана сказать «Я не знаю», если информации [hl]нет в вашей базе[/hl].",
+                visual: `
+                    <div class="space-y-3 py-2">
+                        <div class="flex items-center gap-3 border rounded-xl p-3 theme-card-bg theme-card-border">
+                            <div class="w-8 h-8 rounded flex items-center justify-center theme-icon-shield">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-emerald-500"></i>
+                            </div>
+                            <div class="text-[11px] leading-relaxed">
+                                <span class="font-bold text-emerald-500">Промпт-Гардрейлы:</span> Блокируют любые фантазии и вольный пересказ модели.
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 border rounded-xl p-3 theme-card-bg theme-card-border">
+                            <div class="w-8 h-8 rounded flex items-center justify-center theme-icon-activity">
+                                <i data-lucide="activity" class="w-5 h-5 text-blue-500"></i>
+                            </div>
+                            <div class="text-[11px] leading-relaxed">
+                                <span class="font-bold text-blue-500">Метрики близости:</span> Проверка соответствия ответа исходному параграфу перед выводом.
+                            </div>
+                        </div>
+                    </div>
+                `,
+                instructions: "В Canva: Создайте два горизонтальных плашечных блока. Слева добавьте иконки Щита (Shield) и Пульса (Activity). Это подчеркивает надежность вашей системы разработки.",
+                bulletText: "6. Шаг 3 — Методы технической проверки вывода"
+            },
+            {
+                type: "results",
+                title: "ЭФФЕКТ ДЛЯ [hl]ВАШЕГО БИЗНЕСА[/hl]",
+                subtitle: "Внедрение RAG-пайплайна от Indext превращает хайпового ИИ-ассистента в [hl]надежный бизнес-инструмент[/hl] с осязаемыми метриками.",
+                visual: `
+                    <div class="grid grid-cols-2 gap-4 py-2 font-mono-custom">
+                        <div class="border p-4 rounded-xl text-center theme-card-bg theme-card-border">
+                            <div class="text-2xl font-bold" style="color: var(--active-accent)">0%</div>
+                            <div class="text-[9px] text-gray-400 mt-1 uppercase">Галлюцинаций в продакшене</div>
+                        </div>
+                        <div class="border p-4 rounded-xl text-center theme-card-bg theme-card-border">
+                            <div class="text-2xl font-bold text-emerald-500">98%</div>
+                            <div class="text-[9px] text-gray-400 mt-1 uppercase">Точность ответов клиентам</div>
+                        </div>
+                        <div class="border p-4 rounded-xl text-center col-span-2 theme-card-bg theme-card-border">
+                            <div class="text-xl font-bold">Ускорение в 10 раз</div>
+                            <div class="text-[9px] text-gray-400 mt-1 uppercase">Поиска документов внутри техподдержки</div>
+                        </div>
+                    </div>
+                `,
+                instructions: "В Canva: Нарисуйте 3 аккуратных серых бокса, в центре каждого крупно напишите ключевые показатели вашим акцентным шрифтом.",
+                bulletText: "7. Метрики — измеримый результат внедрения"
+            },
+            {
+                type: "cta",
+                title: "[hl]НУЖЕН НАДЕЖНЫЙ AI?[/hl]",
+                subtitle: "Разработаем и внедрим промышленную RAG-систему на ваших корпоративных файлах [hl]за 60 дней[/hl]. С полной гарантией точности.",
+                visual: `
+                    <div class="flex flex-col items-center justify-center gap-4 py-2">
+                        <!-- Визуальная псевдо-кнопка (для LinkedIn) -->
+                        <div class="text-white font-bold py-3 px-6 rounded-xl text-sm tracking-wide text-center w-full max-w-[280px] shadow-lg cursor-pointer transition-all hover:scale-105" style="background-color: var(--active-accent)">
+                            👉 Написать нам в DM
+                        </div>
+                        <p class="text-[11px] text-gray-400 text-center leading-relaxed">
+                            Оценим ваши документы и предложим архитектуру на бесплатной консультации.
+                        </p>
+                        <div class="flex items-center gap-2 mt-1 px-4 py-1.5 rounded-full border theme-upwork-badge">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span class="text-[10px] font-mono text-gray-400">Upwork: Top Rated Plus (28k+ hours)</span>
+                        </div>
+                    </div>
+                `,
+                instructions: "В Canva: Создайте крупную кнопку по центру с призывом к действию. Окрасьте ее в акцентный цвет. Снизу добавьте маленькую аккуратную плашку с упоминанием вашей топ-репутации на Upwork.",
+                bulletText: "8. Финальный слайд (CTA) — Призыв к действию"
+            }
+        ];
+
+        // Стилизация элементов под темную / светлую тему
+        const themeStyles = {
+            dark: {
+                bodyBg: '#0B0F17',
+                canvasBg: '#0D1117',
+                canvasBorder: '#1F2937',
+                primaryText: '#FFFFFF',
+                secondaryText: '#94A3B8',
+                cardBg: 'bg-[#111827]/60',
+                cardBorder: 'border-[#1F2937]',
+                cardBorderSuccess: 'border-emerald-500/20',
+                dashedConnector: 'border-red-500/40',
+                codeBlockBg: 'bg-[#070A0F] border-[#1F2937] text-blue-300',
+                circleNode: 'bg-[#111827] border-gray-700 text-gray-400',
+                lineNode: 'bg-gray-800',
+                statusBadge: 'border-[#1F2937] bg-gray-900 text-gray-400',
+                spinBorder: 'border-red-500/20',
+                boxBorder: 'border-blue-500/30',
+                errorText: 'text-red-400',
+                badgeError: 'bg-red-500/10 border-red-500/20 text-red-400',
+                upworkBadge: 'border-gray-800 bg-[#111827] text-gray-400'
+            },
+            light: {
+                bodyBg: '#F1F5F9',
+                canvasBg: '#FFFFFF',
+                canvasBorder: '#E2E8F0',
+                primaryText: '#0F172A',
+                secondaryText: '#475569',
+                cardBg: 'bg-[#F8FAFC]',
+                cardBorder: 'border-[#E2E8F0]',
+                cardBorderSuccess: 'border-emerald-500/30',
+                dashedConnector: 'border-red-400/40',
+                codeBlockBg: 'bg-[#F1F5F9] border-[#E2E8F0] text-blue-700',
+                circleNode: 'bg-[#F8FAFC] border-gray-300 text-gray-600',
+                lineNode: 'bg-gray-300',
+                statusBadge: 'border-[#E2E8F0] bg-gray-100 text-gray-600',
+                spinBorder: 'border-red-400/30',
+                boxBorder: 'border-blue-500/20',
+                errorText: 'text-red-500',
+                badgeError: 'bg-red-500/5 border-red-200 text-red-500',
+                upworkBadge: 'border-gray-200 bg-gray-50 text-gray-600'
+            }
+        };
+
+        // Функция динамического парсинга ключевых слов [hl]...[/hl]
+        function parseHighlights(text) {
+            const regex = /\[hl\](.*?)\[\/hl\]/g;
+            return text.replace(regex, `<span class="font-extrabold" style="color: ${activeAccentColor}">$1</span>`);
+        }
+
+        // Рендеринг цветовых пресетов в зависимости от активной темы
+        function renderAccentColors() {
+            const container = document.getElementById('accent-colors-container');
+            container.innerHTML = '';
+            
+            const currentPresets = accentPresets[activeTheme];
+            
+            currentPresets.forEach(preset => {
+                const isActive = activeAccentColor.toLowerCase() === preset.value.toLowerCase();
+                const btn = document.createElement('button');
+                btn.className = `flex flex-col items-center gap-1.5 p-2 rounded-xl border text-center transition-all ${
+                    isActive 
+                    ? 'border-blue-500 bg-blue-500/10 text-white font-semibold' 
+                    : 'border-gray-800 hover:border-gray-700 text-gray-400 hover:text-white'
+                }`;
+                btn.onclick = () => {
+                    activeAccentColor = preset.value;
+                    renderAccentColors();
+                    renderSlide(currentSlideIndex);
+                };
+
+                const dot = document.createElement('span');
+                dot.className = `w-4 h-4 rounded-full ${preset.class} shadow-md`;
+
+                const label = document.createElement('span');
+                label.className = 'text-[9px] truncate w-full';
+                label.innerText = preset.name;
+
+                btn.appendChild(dot);
+                btn.appendChild(label);
+                container.appendChild(btn);
+            });
+        }
+
+        // Функция переключения тем
+        function setTheme(theme) {
+            activeTheme = theme;
+            
+            // Сброс активного цвета под выбранную тему
+            activeAccentColor = accentPresets[theme][0].value;
+            
+            // Обновление кнопок темы
+            const darkBtn = document.getElementById('theme-dark-btn');
+            const lightBtn = document.getElementById('theme-light-btn');
+            
+            if (theme === 'dark') {
+                darkBtn.className = "flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-medium transition-all bg-blue-600/10 border-blue-500 text-white";
+                lightBtn.className = "flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-gray-800 text-gray-400 hover:text-white transition-all";
+                document.body.className = "bg-[#0B0F17] text-gray-100 font-sans-custom min-h-screen flex flex-col transition-colors duration-300";
+            } else {
+                lightBtn.className = "flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-medium transition-all bg-blue-600/10 border-blue-500 text-white";
+                darkBtn.className = "flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-gray-800 text-gray-400 hover:text-white transition-all";
+                document.body.className = "bg-[#F8FAFC] text-slate-800 font-sans-custom min-h-screen flex flex-col transition-colors duration-300";
+            }
+
+            renderAccentColors();
+            renderSlide(currentSlideIndex);
+        }
+
+        // Отрисовка конкретного слайда
+        function renderSlide(index) {
+            currentSlideIndex = index;
+            const slide = slidesData[index];
+            const theme = themeStyles[activeTheme];
+
+            // Сохраняем акцентный цвет в CSS-переменную для динамического применения внутри HTML-строк
+            document.documentElement.style.setProperty('--active-accent', activeAccentColor);
+            
+            // Обновление индикаторов навигации
+            document.getElementById('current-index-display').innerText = index + 1;
+            document.getElementById('total-slides-display').innerText = slidesData.length;
+            document.getElementById('slide-number').innerText = `0${index + 1} / 0${slidesData.length}`;
+            
+            // Применение стилей темы к Canvas
+            const canvas = document.getElementById('slide-canvas');
+            canvas.style.backgroundColor = theme.canvasBg;
+            canvas.style.borderColor = theme.canvasBorder;
+            canvas.style.color = theme.primaryText;
+
+            // Брендинг и статус
+            document.getElementById('brand-logo-text').style.color = theme.primaryText;
+            const statusBadge = document.getElementById('status-badge');
+            statusBadge.className = `text-[10px] font-mono-custom border px-2 py-0.5 rounded transition-colors duration-300 ${theme.statusBadge}`;
+            
+            // Нижняя плашка
+            const bottomBar = document.getElementById('slide-bottom-bar');
+            bottomBar.className = `flex justify-between items-center text-xs border-t pt-4 transition-colors duration-300 ${theme.canvasBorder}`;
+            bottomBar.style.color = theme.secondaryText;
+
+            const hint = document.getElementById('slide-action-hint');
+            if (index === slidesData.length - 1) {
+                hint.innerHTML = `Свяжитесь с нами <i data-lucide="send" class="w-3.5 h-3.5" style="color: ${activeAccentColor}"></i>`;
+                document.getElementById('cta-explanation-box').classList.remove('hidden');
+            } else {
+                hint.innerHTML = `Свайпните дальше <i data-lucide="arrow-right" class="w-3.5 h-3.5" style="color: ${activeAccentColor}"></i>`;
+                document.getElementById('cta-explanation-box').classList.add('hidden');
+            }
+            
+            // Рендер контента слайда с учетом темы
+            const contentContainer = document.getElementById('slide-content');
+            
+            // Внедрение и парсинг текстов с хайлайтами
+            const titleHtml = parseHighlights(slide.title);
+            const subtitleHtml = parseHighlights(slide.subtitle);
+
+            if (slide.type === 'hook') {
+                contentContainer.innerHTML = `
+                    <div class="space-y-4 text-center mt-6">
+                        <span class="text-[10px] font-mono-custom tracking-widest px-3 py-1 rounded-full uppercase" style="color: ${activeAccentColor}; background-color: ${activeAccentColor}15; border: 1px solid ${activeAccentColor}30">INDEXT INSIGHTS</span>
+                        <h1 class="text-2xl font-extrabold tracking-tight leading-none" style="color: ${theme.primaryText}">${titleHtml}</h1>
+                        <p class="text-xs leading-relaxed px-2" style="color: ${theme.secondaryText}">${subtitleHtml}</p>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center">
+                        ${slide.visual}
+                    </div>
+                `;
+            } else {
+                contentContainer.innerHTML = `
+                    <div class="space-y-2 mt-4">
+                        <h2 class="text-lg font-extrabold tracking-tight leading-snug" style="color: ${theme.primaryText}">${titleHtml}</h2>
+                        <p class="text-xs leading-relaxed font-light" style="color: ${theme.secondaryText}">${subtitleHtml}</p>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-center my-4">
+                        ${slide.visual}
+                    </div>
+                `;
+            }
+
+            // Динамическая адаптация внутренних элементов визуализации под тему
+            applyThemeClasses();
+
+            // Настройка инструкций для Canva
+            document.getElementById('canva-instructions').innerText = slide.instructions;
+
+            // Обновление элементов навигации
+            renderSlidesList();
+            renderPaginationDots();
+            lucide.createIcons();
+        }
+
+        // Вспомогательная функция для замены временных CSS-классов темы в слайдах
+        function applyThemeClasses() {
+            const theme = themeStyles[activeTheme];
+            
+            // Находим все элементы с префиксами "theme-" и проставляем соответствующие классы
+            document.querySelectorAll('.theme-card-bg').forEach(el => {
+                el.className = el.className.replace(/bg-\[.*?\]\/?\d*|theme-card-bg/g, '').trim() + ' ' + theme.cardBg;
+            });
+            document.querySelectorAll('.theme-card-border').forEach(el => {
+                el.className = el.className.replace(/border-\[.*?\]\/?\d*|theme-card-border/g, '').trim() + ' ' + theme.cardBorder;
+            });
+            document.querySelectorAll('.theme-card-border-success').forEach(el => {
+                el.className = el.className.replace(/border-\[.*?\]\/?\d*|theme-card-border-success/g, '').trim() + ' ' + theme.cardBorderSuccess;
+            });
+            document.querySelectorAll('.theme-dashed-connector').forEach(el => {
+                el.className = el.className.replace(/border-r|border-dashed|theme-dashed-connector/g, '').trim() + ' border-r border-dashed ' + theme.dashedConnector;
+            });
+            document.querySelectorAll('.theme-code-block').forEach(el => {
+                el.className = el.className.replace(/bg-\[.*?\]|border-\[.*?\]|text-\w+-\d+|theme-code-block/g, '').trim() + ' ' + theme.codeBlockBg;
+            });
+            document.querySelectorAll('.theme-circle-node').forEach(el => {
+                el.className = el.className.replace(/bg-\[.*?\]|border-\w+-\d+|text-\w+-\d+|theme-circle-node/g, '').trim() + ' ' + theme.circleNode;
+            });
+            document.querySelectorAll('.theme-line-node').forEach(el => {
+                el.className = el.className.replace(/bg-\w+-\d+|theme-line-node/g, '').trim() + ' ' + theme.lineNode;
+            });
+            document.querySelectorAll('.theme-search-box').forEach(el => {
+                el.className = el.className.replace(/bg-\[.*?\]|border-\w+-\d+|text-\w+-\d+|theme-search-box/g, '').trim() + ' ' + theme.circleNode;
+            });
+            document.querySelectorAll('.theme-spin-border').forEach(el => {
+                el.className = el.className.replace(/border-2|border-dashed|theme-spin-border/g, '').trim() + ' border-2 border-dashed ' + theme.spinBorder;
+            });
+            document.querySelectorAll('.theme-box-border').forEach(el => {
+                el.className = el.className.replace(/border|theme-box-border/g, '').trim() + ' border ' + theme.boxBorder;
+            });
+            document.querySelectorAll('.theme-error-text').forEach(el => {
+                el.className = el.className.replace(/text-\w+-\d+|theme-error-text/g, '').trim() + ' ' + theme.errorText;
+            });
+            document.querySelectorAll('.theme-badge-error').forEach(el => {
+                el.className = el.className.replace(/theme-badge-error/g, '').trim() + ' ' + theme.badgeError;
+            });
+            document.querySelectorAll('.theme-upwork-badge').forEach(el => {
+                el.className = el.className.replace(/theme-upwork-badge/g, '').trim() + ' ' + theme.upworkBadge;
+            });
+
+            // Иконки в карточках
+            document.querySelectorAll('.theme-db-icon-box').forEach(el => {
+                el.className = `w-10 h-10 rounded-lg flex items-center justify-center ${activeTheme === 'dark' ? 'bg-blue-500/10' : 'bg-blue-100'}`;
+            });
+            document.querySelectorAll('.theme-brain-icon-box').forEach(el => {
+                el.className = `w-10 h-10 rounded-lg flex items-center justify-center ${activeTheme === 'dark' ? 'bg-red-500/10' : 'bg-red-100'}`;
+            });
+            document.querySelectorAll('.theme-icon-shield').forEach(el => {
+                el.className = `w-8 h-8 rounded flex items-center justify-center ${activeTheme === 'dark' ? 'bg-emerald-500/10' : 'bg-emerald-100'}`;
+            });
+            document.querySelectorAll('.theme-icon-activity').forEach(el => {
+                el.className = `w-8 h-8 rounded flex items-center justify-center ${activeTheme === 'dark' ? 'bg-blue-500/10' : 'bg-blue-100'}`;
+            });
+        }
+
+        // Генерация списка слайдов слева
+        function renderSlidesList() {
+            const listContainer = document.getElementById('slides-list');
+            listContainer.innerHTML = '';
+            
+            slidesData.forEach((slide, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3 rounded-xl border transition-all text-xs flex items-start gap-2.5 ${
+                    index === currentSlideIndex 
+                    ? 'bg-blue-600/10 border-blue-500 text-white font-semibold' 
+                    : 'bg-[#1F2937]/30 border-transparent text-gray-400 hover:bg-[#1F2937]/60 hover:text-gray-200'
+                }`;
+                btn.onclick = () => selectSlide(index);
+                
+                const badge = document.createElement('span');
+                badge.className = `px-1.5 py-0.5 rounded text-[10px] font-mono-custom ${
+                    index === currentSlideIndex ? 'bg-blue-500 text-white' : 'bg-gray-800 text-gray-400'
+                }`;
+                badge.innerText = `0${index + 1}`;
+                
+                const labelText = document.createElement('span');
+                // Убираем теги [hl] из левой панели для красоты
+                labelText.innerText = slide.title.replace(/\[hl\](.*?)\[\/hl\]/g, '$1');
+                labelText.className = 'truncate flex-1';
+
+                btn.appendChild(badge);
+                btn.appendChild(labelText);
+                listContainer.appendChild(btn);
+            });
+        }
+
+        function selectSlide(index) {
+            renderSlide(index);
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < slidesData.length - 1) {
+                renderSlide(currentSlideIndex + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                renderSlide(currentSlideIndex - 1);
+            }
+        }
+
+        function renderPaginationDots() {
+            const container = document.getElementById('pagination-dots');
+            container.innerHTML = '';
+            slidesData.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = `w-1.5 h-1.5 rounded-full transition-all ${
+                    index === currentSlideIndex ? 'bg-blue-500 w-4' : 'bg-gray-700 hover:bg-gray-500'
+                }`;
+                dot.onclick = () => renderSlide(index);
+                container.appendChild(dot);
+            });
+        }
+
+        // Копирование всего текста карусели в буфер обмена
+        function copyAllText() {
+            let textToCopy = "СПИСОК СЛАЙДОВ ДЛЯ CANVA (INDEXT DATA LAB)\n=========================================\n\n";
+            slidesData.forEach((slide, index) => {
+                // Очищаем заголовки от тегов перед копированием
+                const cleanTitle = slide.title.replace(/\[hl\]/g, '*').replace(/\[\/hl\]/g, '*');
+                const cleanSubtitle = slide.subtitle.replace(/\[hl\]/g, '*').replace(/\[\/hl\]/g, '*');
+                
+                textToCopy += `СЛАЙД 0${index + 1}:\n`;
+                textToCopy += `ЗАГОЛОВОК: ${cleanTitle}\n`;
+                textToCopy += `ПОДЗАГОЛОВОК/ТЕКСТ: ${cleanSubtitle}\n`;
+                textToCopy += `ИНСТРУКЦИЯ ПО ДИЗАЙНУ: ${slide.instructions}\n`;
+                textToCopy += `-----------------------------------------\n\n`;
+            });
+
+            const el = document.createElement('textarea');
+            el.value = textToCopy;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            const toast = document.getElementById('toast');
+            toast.className = toast.className.replace('translate-y-20 opacity-0', 'translate-y-0 opacity-100');
+            setTimeout(() => {
+                toast.className = toast.className.replace('translate-y-0 opacity-100', 'translate-y-20 opacity-0');
+            }, 2500);
+        }
+
+        // Сборка панели при старте
+        setTheme('dark');
+    </script>
+</body>
+</html>

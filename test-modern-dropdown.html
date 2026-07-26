@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+
+  <meta charset="UTF-8">
+  <title>Modern Dropdown Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/css/modern-dropdown.css">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #020617;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 20px;
+    }
+    .test-nav {
+      background: rgba(2, 6, 23, 0.95);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 194, 255, 0.3);
+      backdrop-filter: blur(10px);
+      margin-bottom: 20px;
+    }
+    .main-nav {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .dropdown-trigger {
+      color: #e5e7eb;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    .dropdown-menu {
+      background: rgba(2, 6, 23, 0.98);
+      border: 1px solid rgba(0, 194, 255, 0.3);
+      border-radius: 12px;
+      padding: 10px;
+      min-width: 200px;
+    }
+    .dropdown-menu a {
+      display: block;
+      color: #e5e7eb;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .dropdown-menu a:hover {
+      background: rgba(0, 194, 255, 0.1);
+      color: #00c2ff;
+    }
+    .test-info {
+      background: rgba(0, 194, 255, 0.1);
+      border: 1px solid rgba(0, 194, 255, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    .test-info h3 {
+      color: #00c2ff;
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Modern Dropdown Menu Test</h1>
+
+  <div class="test-nav">
+    <nav class="main-nav">
+      <div class="dropdown">
+        <a href="#" class="dropdown-trigger" aria-expanded="false">HİZMETLER</a>
+        <div class="dropdown-menu">
+          <a href="#">HİZMETLER</a>
+          <a href="#">ÜRÜNLERİMİZ</a>
+          <a href="#">KÜPSAT</a>
+          <a href="#">Hyper Club</a>
+        </div>
+      </div>
+
+      <a href="#">MAĞAZA</a>
+
+      <div class="dropdown">
+        <a href="#" class="dropdown-trigger" aria-expanded="false">ALBAMEN</a>
+        <div class="dropdown-menu">
+          <a href="#">ALBAMEN</a>
+          <a href="#">ATLAS</a>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <a href="#" class="dropdown-trigger" aria-expanded="false">HAKKIMIZDA</a>
+        <div class="dropdown-menu">
+          <a href="#">HAKKIMIZDA</a>
+          <a href="#">BASINDA BİZ</a>
+          <a href="#">GALERİ</a>
+          <a href="#">İLETİŞİM</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="test-info">
+    <h3>Test Instructions:</h3>
+    <ul>
+      <li><strong>Desktop:</strong> Hover over dropdown triggers to see smooth animations</li>
+      <li><strong>Mobile:</strong> Click dropdown triggers to toggle menus</li>
+      <li><strong>Keyboard:</strong> Use Tab to navigate, Enter/Space to open, Escape to close</li>
+      <li><strong>Touch:</strong> Tap dropdown triggers on touch devices</li>
+    </ul>
+    <p><strong>Features tested:</strong> Smooth animations, backdrop blur, glassmorphism effects, accessibility, touch support, keyboard navigation, responsive design</p>
+  </div>
+
+  <script src="/assets/js/modern-dropdown.js"></script>
+</body>
+</html>

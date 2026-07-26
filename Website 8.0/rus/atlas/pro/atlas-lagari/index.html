@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Лагари Хасан Челеби – Alba Space</title>
+<link href="/favicon.png" rel="icon" type="image/png"/>
+<script crossorigin="anonymous" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js" type="module"></script>
+<!-- styles via site.css -->
+<link href="/assets/css/site.css" rel="stylesheet"/>
+<script defer="" src="/assets/js/include.js"></script>
+<script defer="" src="/assets/js/menu-toggle.js"></script>
+<script defer="" src="/assets/js/model-viewer-debug.js"></script>
+<style>
+    html, body {
+      overflow-x: hidden !important;
+      width: 100% !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    * {
+      box-sizing: border-box !important;
+    }
+    
+</style></head>
+<body>
+<div data-include="/header-ru.html"></div>
+<h1 style="margin-top: 20px;">Лагари Хасан Челеби</h1>
+<div class="container">
+<p>Лагари Хасан Челеби — легендарный первопроходец, который, по преданию, совершил попытку полета на ракете.</p>
+<model-viewer ar="" ar-modes="webxr scene-viewer quick-look" camera-controls="" data-model-name="lagari" data-track="model_view" src="/assets/models/zaglushka.glb"></model-viewer>
+</div>
+
+  <!-- ═══════════════════════════════════════
+       ADD TO CART — 50 TL
+  ════════════════════════════════════════════ -->
+  <div class="mv-add-cart-wrap" id="mvCartWrap">
+    <button class="mv-add-cart-btn" id="mvAddCartBtn">
+      <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;flex-shrink:0"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Sepete Ekle
+    </button>
+    <span class="mv-price-label">50 TL</span>
+  </div>
+
+  <script>
+  (function(){
+    var btn = document.getElementById('mvAddCartBtn');
+    if (!btn) return;
+    function getModelName() {
+      var h1 = document.querySelector('h1');
+      if (h1) return h1.textContent.trim();
+      return document.title.split('\u2013')[0].split('-')[0].trim() || 'Model';
+    }
+    function getSlug() {
+      var m = window.location.pathname.match(/atlas\/([^\/]+)/);
+      return m ? m[1] : 'model';
+    }
+    function getImage() {
+      var v = document.getElementById('mainViewer');
+      if (v) {
+        var src = v.getAttribute('src') || '';
+        var m = src.match(/\/assets\/models\/([^.]+)\.glb/);
+        if (m) return '/assets/models-pictures/' + m[1] + '.png';
+      }
+      return '/assets/icons/alien.png';
+    }
+    function showToast(name) {
+      var t = document.getElementById('albaCartToast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'albaCartToast';
+        t.className = 'alba-cart-toast';
+        document.body.appendChild(t);
+      }
+      t.textContent = '\uD83D\uDED2 ' + name + ' sepete eklendi!';
+      t.classList.add('show');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+    }
+    btn.addEventListener('click', function(){
+      var id = getSlug(), name = getModelName(), img = getImage(), price = 50;
+      if (window.cartManager && window.cartManager.addItem) {
+        window.cartManager.addItem({ id:id, name:name, price:price, image:img, url:window.location.href, qty:1 });
+      } else {
+        try {
+          var cart = JSON.parse(localStorage.getItem('alba_space_cart_v1') || '[]');
+          var idx = cart.findIndex(function(e){ return e.id === id; });
+          if (idx >= 0) { cart[idx].qty += 1; }
+          else { cart.push({ id:id, name:name, price:price, image:img, url:window.location.href, qty:1 }); }
+          localStorage.setItem('alba_space_cart_v1', JSON.stringify(cart));
+          var total = cart.reduce(function(s,e){ return s+(Number(e.qty)||0); }, 0);
+          document.querySelectorAll('[data-cart-count],.cart-count').forEach(function(b){ b.textContent=String(total); });
+        } catch(ex){}
+      }
+      showToast(name);
+    });
+  }());
+  </script>
+
+  <div data-include="/footer-ru.html"></div>
+<!-- Model Viewer Fix Script - Direct initialization -->
+<script>
+    (function() {
+      console.log('[Model-Viewer Init] Checking model-viewer status...');
+      
+      // Wait for model-viewer to be loaded
+      const checkModelViewer = () => {
+        const viewer = document.querySelector('model-viewer');
+        if (!viewer) {
+          console.log('[Model-Viewer Init] No model-viewer element found');
+          return;
+        }
+        
+        // Check if custom element is registered
+        if (window.customElements && window.customElements.get('model-viewer')) {
+          console.log('[Model-Viewer Init] model-viewer element is registered ✓');
+          return;
+        }
+        
+        // If not registered yet, check again in 500ms
+        setTimeout(checkModelViewer, 500);
+      };
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkModelViewer);
+      } else {
+        setTimeout(checkModelViewer, 100);
+      }
+    })();
+  </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var viewer = document.getElementById('mainViewer');
+        if (!viewer) return;
+        var pathMatch = window.location.pathname.match(/atlas-[^\/]+/);
+        var slug = pathMatch ? pathMatch[0] : null;
+        if (!slug) return;
+
+        viewer.setAttribute('src', '/assets/models/zaglushka.glb');
+
+        fetch('https://albaspace-api.nncdecdgc.workers.dev/product-access?slug=' + slug, {
+          credentials: 'include'
+        })
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(data){
+          if (data && data.access === 'premium') {
+            return fetch(
+              'https://albaspace-api.nncdecdgc.workers.dev/model?slug=' + slug,
+              { credentials: 'include' }
+            )
+            .then(function(r){ return r.blob(); })
+            .then(function(blob){ viewer.setAttribute('src', URL.createObjectURL(blob)); });
+          }
+        })
+        .catch(function(e){ console.error('Model load error:', e); });
+      });
+    </script>
+</body>
+</html>

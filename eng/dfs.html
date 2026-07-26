@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<!-- Универсальный favicon-блок -->
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="/assets/icons/AlbaLogo.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="/manifest.json" rel="manifest"/>
+<meta content="#020617" name="theme-color"/>
+<meta content="#020617" name="msapplication-TileColor"/>
+<meta content="/favicon.png" name="msapplication-TileImage"/>
+<meta charset="utf-8"/>
+<title>Alba Space – DFS</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="/assets/css/site.css" rel="stylesheet">
+<link href="/assets/css/fix-layout.css" rel="stylesheet"/>
+<script defer="" src="/assets/js/include.js"></script>
+<script defer="" src="/assets/js/menu-toggle.js"></script>
+<!-- Подключаем трекинг событий (GA4 + Yandex) -->
+<script defer="" src="/assets/js/tracking.js"></script>
+<style> body{ margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background-size:cover; color:#e5e7eb; } /* ---------- CONTENT WRAPPER ---------- */ .page-wrapper{ max-width:900px; margin:50px auto 70px; padding:24px 20px 40px; text-align:center; border-radius:24px; background: rgba(13, 42, 87, 0.85); border: 1px solid rgba(148, 163, 184, 0.4); box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); } /* --------- CONTACT FORM (DFS) --------- */ .contact-section{ margin-top:10px; display:flex; justify-content:center; } .contact-card{ width:100%; max-width:720px; margin:0 auto; text-align:left; color:#e5e7eb; border-radius:24px; padding:24px 24px 28px; background: rgba(13, 42, 87, 0.85); border:1px solid rgba(148,163,184,0.4); box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); } .contact-title{ font-size:22px; margin:0 0 4px; } .contact-title span{ font-size:11px; text-transform:uppercase; letter-spacing:.18em; display:inline-block; margin-bottom:4px; color:#38bdf8; } .contact-sub{ font-size:13px; color:#9ca3af; margin-bottom:20px; } .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; } .form-full{ grid-column:1 / -1; } .form-label{ display:block; font-size:13px; margin-bottom:4px; color:#e5e7eb; } .form-control{ width:100%; box-sizing:border-box; border-radius:999px; border:1px solid #1f2937; padding:10px 14px; font-size:14px; color:#e5e7eb; outline:none; transition:border-color .15s ease, box-shadow .15s ease, background .15s ease; } .form-control::placeholder{ color:#6b7280; } .form-control:focus{ border-color:#38bdf8; box-shadow:0 0 0 1px rgba(56,189,248,0.55); } textarea.form-control{ min-height:110px; border-radius:18px; resize:vertical; } select.form-control{ appearance:none; -webkit-appearance:none; -moz-appearance:none; background-image: linear-gradient(45deg,transparent 50%,#9ca3af 50%), linear-gradient(135deg,#9ca3af 50%,transparent 50%); background-position:calc(100% - 14px) 13px, calc(100% - 9px) 13px; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:34px; } .form-checkbox-row{ display:flex; align-items:flex-start; gap:8px; font-size:12px; color:#9ca3af; margin-top:4px; } .form-checkbox-row input[type="checkbox"]{ margin-top:2px; } .contact-note{ font-size:11px; color:#6b7280; margin-top:6px; } .contact-submit{ margin-top:18px; } .contact-submit button{ width:100%; border:none; border-radius:999px; padding:11px 16px; font-size:14px; font-weight:600; cursor:pointer; color:#0b1120; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 16px 32px rgba(8,47,73,0.55); } .contact-submit button span.icon{ font-size:15px; transform:translateY(1px); } .contact-submit button:hover{ filter:brightness(1.03); } .contact-submit button:active{ transform:translateY(1px); box-shadow:0 10px 24px rgba(8,47,73,0.7); } @media(max-width:640px){ .contact-card{ padding:20px 18px 22px; } .form-grid{ grid-template-columns:1fr; } } </style>
+</link></head>
+<body>
+<div data-include="/header-en.html"></div>
+<div class="page-wrapper">
+<section class="contact-section">
+<div class="contact-card">
+<div class="contact-header">
+<p class="contact-title">
+<span>CONTACT WITH DFS LAB</span><br/>
+            Connect with us
+          </p>
+<p class="contact-sub">
+            For your collaborations, projects, experimental works or space-themed
+            Fill out the form for your branding ideas; Let us get back to you as soon as possible.
+          </p>
+</div>
+<form action="mailto:hello@albaspace.com.tr" class="contact-form" data-form-name="dfs_tr" data-track="contact_form" enctype="text/plain" method="POST">
+<input id="istek-turu-label" name="istek_turu_label" type="hidden" value=""/>
+<div class="form-grid">
+<div class="form-full">
+<label class="form-label" for="istek-turu">Request type</label>
+<select class="form-control" id="istek-turu" name="istek_turu" required="">
+<option disabled="" selected="" value="">Choose an option</option>
+<option value="iletisim">General contact / contact us</option>
+<option value="kolaborasyon">Cooperation / collaboration with us</option>
+<option value="hizmet">I want to request one of our services</option>
+</select>
+</div>
+<div>
+<label class="form-label" for="ad-soyad">Ad Soyad</label>
+<input class="form-control" id="ad-soyad" name="ad_soyad" placeholder="Your name and surname" required="" type="text"/>
+</div>
+<div>
+<label class="form-label" for="email">E-mail adresi</label>
+<input class="form-control" id="email" name="email" placeholder="ornek@albaspace.com.tr" required="" type="email"/>
+</div>
+<div>
+<label class="form-label" for="sirket">Company / Brand (optional)</label>
+<input class="form-control" id="sirket" name="sirket" placeholder="Your company or brand name" type="text"/>
+</div>
+<div>
+<label class="form-label" for="konu">Subject</label>
+<input class="form-control" id="konu" name="konu" placeholder="Briefly, what do you write about?" required="" type="text"/>
+</div>
+<div class="form-full">
+<label class="form-label" for="mesaj">Your message</label>
+<textarea class="form-control" id="mesaj" name="mesaj" placeholder="Describe your project, idea or request as clearly as possible." required=""></textarea>
+</div>
+<div class="form-full">
+<div class="form-checkbox-row">
+<input id="kvkk" name="kvkk" required="" type="checkbox"/>
+<label for="kvkk">
+                  I have read the KVKK and privacy policy, my personal data
+                  I agree to the processing within the scope of this contact form.
+                </label>
+</div>
+<p class="contact-note">
+                By submitting the form, you consent to us contacting you via email or phone.
+              </p>
+</div>
+</div>
+<div class="contact-submit">
+<button type="submit">
+              Submit Form
+              <span class="icon">↗</span>
+</button>
+</div>
+</form>
+</div>
+</section>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const select = document.getElementById("istek-turu");
+      const hidden = document.getElementById("istek-turu-label");
+
+      function updateLabel() {
+        const option = select.options[select.selectedIndex];
+        hidden.value = option ? option.text : "";
+      }
+
+      updateLabel();
+      select.addEventListener("change", updateLabel);
+    });
+  </script>
+<div data-include="/footer-en.html"></div>
+<script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item, index) => {
+      const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
+      item.style.setProperty('--reveal-delay', `${delay}s`);
+      observer.observe(item);
+    });
+  </script>
+<script>
+      // Sayfa Yüklendiğinde Popup Kontrolü
+      document.addEventListener("DOMContentLoaded", function() {
+          // localStorage kontrolü: Kullanıcı daha önce "kabul ettim" dedi mi?
+          if (!localStorage.getItem("albaCookieSeen")) {
+              document.getElementById("cookie-overlay").style.display = "flex";
+          }
+      });
+
+      const acceptBtn = document.getElementById("btnAccept");
+      const settingsBtn = document.getElementById("btnSettings");
+
+      // Üst buton: Animasyon ve Kapatma
+      if(acceptBtn) {
+          acceptBtn.addEventListener("click", function() {
+              // Butona basıldığını hissettirmek için ufak bir bekleme (opsiyonel)
+              setTimeout(() => {
+                  document.getElementById("cookie-overlay").style.display = "none";
+                  // Kullanıcının gördüğünü tarayıcıya kaydet
+                  localStorage.setItem("albaCookieSeen", "true");
+              }, 200);
+          });
+      }
+
+      // Alt buton: Çerez politikası sayfasına yönlendirir
+      if(settingsBtn) {
+          settingsBtn.addEventListener("click", function() {
+               window.location.href = "cerez-politikasi.html";
+          });
+      }
+  </script>
+</body>
+</html>
+<!-- Правая колонка: телефон, почта, два адреса -->

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hesap – Alba Space</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <style>
+    html, body { margin:0; padding:0; min-height:100vh; background:#020617; color:#fff; font-family:'Inter',system-ui,sans-serif; }
+
+    /* ── Центрированная карточка ── */
+    .am-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 16px 40px;
+      box-sizing: border-box;
+    }
+    .am-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(0,194,255,0.18);
+      border-radius: 20px;
+      padding: 36px 32px 32px;
+      box-shadow: 0 0 0 1px rgba(0,194,255,0.06), 0 24px 60px rgba(0,0,0,0.7), 0 0 40px rgba(0,194,255,0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-sizing: border-box;
+    }
+
+    /* ── Лого ── */
+    .am-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .am-logo img { width: 36px; height: 36px; }
+    .am-logo-text { font-size: 20px; font-weight: 700; letter-spacing: .02em; color: #e2e8f0; }
+    .am-logo-text span { color: #00c2ff; }
+
+    /* ── Заголовок ── */
+    .am-heading { text-align: center; margin-bottom: 28px; }
+    .am-heading h2 { font-size: 22px; font-weight: 700; margin: 0 0 4px; color: #f1f5f9; }
+    .am-heading p  { font-size: 13px; color: rgba(255,255,255,0.45); margin: 0; }
+
+    /* ── Google кнопка ── */
+    .am-btn-google {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 13px 20px;
+      background: #fff; color: #1f2937;
+      border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+      transition: box-shadow .18s, transform .12s;
+      text-decoration: none;
+    }
+    .am-btn-google:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.25); transform: translateY(-1px); }
+    .am-btn-google:active { transform: scale(.98); }
+    .am-btn-google img { width: 20px; height: 20px; }
+
+    /* ── Разделитель ── */
+    .am-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 20px 0;
+    }
+    .am-divider::before, .am-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+    .am-divider span { font-size: 12px; color: rgba(255,255,255,0.3); white-space: nowrap; }
+
+    /* ── Вкладки ── */
+    .am-tabs {
+      display: flex; gap: 4px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 4px;
+      margin-bottom: 18px;
+    }
+    .am-tab {
+      flex: 1; padding: 9px 0;
+      background: transparent; border: none; border-radius: 9px;
+      color: rgba(255,255,255,0.45); font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+      transition: all .18s;
+    }
+    .am-tab.active {
+      background: rgba(0,194,255,0.15);
+      border: 1px solid rgba(0,194,255,0.35);
+      color: #e2e8f0;
+    }
+
+    /* ── Поля ── */
+    .am-field { margin-bottom: 12px; }
+    .am-field label { display: block; font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 6px; font-weight: 500; }
+    .am-input {
+      width: 100%; padding: 12px 14px;
+      background: rgba(2,6,23,0.7);
+      border: 1px solid rgba(0,194,255,0.18);
+      border-radius: 10px; color: #e2e8f0;
+      font-size: 15px; font-family: inherit;
+      outline: none; box-sizing: border-box;
+      transition: border-color .18s;
+    }
+    .am-input:focus { border-color: rgba(0,194,255,0.5); box-shadow: 0 0 0 3px rgba(0,194,255,0.08); }
+    .am-input::placeholder { color: rgba(255,255,255,0.22); }
+
+    /* ── Пароль с глазком ── */
+    .am-pw-wrap { position: relative; }
+    .am-pw-wrap .am-input { padding-right: 44px; }
+    .am-pw-eye {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.35);
+      padding: 0; display: flex; align-items: center;
+      transition: color .18s;
+    }
+    .am-pw-eye:hover { color: #00c2ff; }
+    .am-pw-eye svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+    /* ── Ошибка ── */
+    .am-error { font-size: 12px; color: #f87171; min-height: 16px; margin-bottom: 4px; text-align: center; }
+
+    /* ── Кнопка submit ── */
+    .am-submit {
+      width: 100%; padding: 13px;
+      background: #00c2ff; color: #020617;
+      border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      transition: background .18s, transform .12s;
+      margin-top: 4px;
+    }
+    .am-submit:hover { background: #22d3ff; }
+    .am-submit:active { transform: scale(.98); }
+    .am-submit:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* ── Залогинен ── */
+    .am-user-card {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 10px; padding: 8px 0 24px;
+    }
+    .am-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(0,194,255,0.45); box-shadow: 0 0 20px rgba(0,194,255,0.2); }
+    .am-user-name  { font-size: 18px; font-weight: 600; color: #f1f5f9; }
+    .am-user-email { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: -4px; }
+    .am-menu-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    .am-menu-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; color: #e2e8f0;
+      text-decoration: none; font-size: 15px; font-weight: 500;
+      transition: background .18s, border-color .18s;
+    }
+    .am-menu-item:hover { background: rgba(0,194,255,0.08); border-color: rgba(0,194,255,0.25); }
+    .am-menu-item svg { width: 20px; height: 20px; stroke: #00c2ff; fill: none; stroke-width: 1.8; flex-shrink: 0; }
+    .am-menu-item.am-logout { color: #fca5a5; background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.18); cursor:pointer; width:100%; font-family:inherit; border-width:1px; border-style:solid; }
+    .am-menu-item.am-logout:hover { background: rgba(239,68,68,0.14); border-color: rgba(239,68,68,0.3); }
+    .am-menu-item.am-logout svg { stroke: #f87171; }
+    .am-menu-arrow { margin-left: auto; width: 16px; height: 16px; stroke: rgba(255,255,255,0.25); flex-shrink: 0; }
+
+    /* ── Спиннер ── */
+    .am-spinner { display: flex; justify-content: center; padding: 40px 0; }
+    .am-spinner::after { content:''; width:32px; height:32px; border:3px solid rgba(255,255,255,0.1); border-top-color:#00c2ff; border-radius:50%; animation:am-spin .7s linear infinite; }
+    @keyframes am-spin { to { transform:rotate(360deg); } }
+
+    /* ── Скрытые секции ── */
+    .am-section { display: none; }
+    .am-section.visible { display: block; }
+
+    /* ── Checkbox для Terms ── */
+    .am-terms {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 12px; color: rgba(255,255,255,0.45);
+      margin-bottom: 8px; margin-top: -4px;
+    }
+    .am-terms input[type="checkbox"] { margin-top: 2px; accent-color: #00c2ff; flex-shrink: 0; }
+    .am-terms a { color: rgba(0,194,255,0.8); text-decoration: underline; }
+
+    /* Мобильная кнопка назад */
+    .am-back-btn {
+      display: none;
+      align-items: center; gap: 6px;
+      color: rgba(255,255,255,0.6); text-decoration: none;
+      font-size: 14px; margin-bottom: 16px;
+      transition: color .18s;
+    }
+    .am-back-btn:hover { color: #fff; }
+    .am-back-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+    @media (max-width: 600px) {
+      .am-back-btn { display: flex; }
+      .am-card { padding: 28px 20px 24px; border-radius: 16px; }
+      .am-wrap { align-items: flex-start; padding-top: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div data-include="/header-tr.html"></div>
+
+  <div class="am-wrap">
+    <div class="am-card">
+
+      <a href="javascript:history.back()" class="am-back-btn">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Geri
+      </a>
+
+
+      <!-- СПИННЕР -->
+      <div class="am-spinner" id="amSpinner"></div>
+
+      <!-- ЗАЛОГИНЕН -->
+      <div class="am-section" id="amSectionIn">
+        <div class="am-user-card">
+          <img id="amPageAvatar" class="am-avatar" src="/assets/icons/alien.png" alt="">
+          <div class="am-user-name" id="amPageName">Kullanıcı</div>
+          <div class="am-user-email" id="amPageEmail"></div>
+        </div>
+        <div class="am-menu-list">
+          <a href="/account.html" class="am-menu-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Hesap
+            <svg class="am-menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <a href="/favorites.html" class="am-menu-item">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Favoriler
+            <svg class="am-menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <a href="/orders.html" class="am-menu-item">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            Satın Aldıklarım
+            <svg class="am-menu-arrow" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <button class="am-menu-item am-logout" id="amLogoutBtn">
+            <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Çıkış Yap
+          </button>
+        </div>
+      </div>
+
+      <!-- НЕ ЗАЛОГИНЕН -->
+      <div class="am-section" id="amSectionOut">
+
+        <div class="am-heading">
+          <h2>Hesap Oluşturun</h2>
+          <p>Uzay modellerine erişmek için giriş yapın</p>
+        </div>
+
+        <!-- Google -->
+        <button class="am-btn-google" id="amGoogleBtn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+          Google ile devam edin
+        </button>
+
+        <div class="am-divider"><span>veya e-posta ile</span></div>
+
+        <!-- Вкладки -->
+        <div class="am-tabs">
+          <button class="am-tab active" data-tab="register">Kayıt Ol</button>
+          <button class="am-tab" data-tab="login">Giriş Yap</button>
+        </div>
+
+        <!-- Форма регистрации -->
+        <div id="amFormReg">
+          <div class="am-field">
+            <label>Ad Soyad</label>
+            <input class="am-input" id="amRegName" type="text" placeholder="Adınız" autocomplete="name">
+          </div>
+          <div class="am-field">
+            <label>E-posta</label>
+            <input class="am-input" id="amRegEmail" type="email" placeholder="ornek@email.com" autocomplete="email">
+          </div>
+          <div class="am-field">
+            <label>Şifre</label>
+            <div class="am-pw-wrap">
+              <input class="am-input" id="amRegPw" type="password" placeholder="En az 8 karakter" autocomplete="new-password">
+              <button class="am-pw-eye" type="button" onclick="togglePw('amRegPw',this)" aria-label="Şifreyi göster">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="am-terms">
+            <input type="checkbox" id="amRegTerms">
+            <label for="amRegTerms">
+              <a href="/cerez-politikasi.html" target="_blank">Kullanım Şartları</a>'nı kabul ediyorum ve <a href="/gizlilik-sozlesmesi.html" target="_blank">Gizlilik Politikası</a>'nı onaylıyorum
+            </label>
+          </div>
+          <div class="am-error" id="amRegErr"></div>
+          <button class="am-submit" id="amRegBtn">Kayıt Ol</button>
+        </div>
+
+        <!-- Форма входа -->
+        <div id="amFormLogin" style="display:none">
+          <div class="am-field">
+            <label>E-posta</label>
+            <input class="am-input" id="amLoginEmail" type="email" placeholder="ornek@email.com" autocomplete="email">
+          </div>
+          <div class="am-field">
+            <label>Şifre</label>
+            <div class="am-pw-wrap">
+              <input class="am-input" id="amLoginPw" type="password" placeholder="Şifreniz" autocomplete="current-password">
+              <button class="am-pw-eye" type="button" onclick="togglePw('amLoginPw',this)" aria-label="Şifreyi göster">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="am-error" id="amLoginErr"></div>
+          <button class="am-submit" id="amLoginBtn">Giriş Yap</button>
+        </div>
+
+      </div><!-- /amSectionOut -->
+
+    </div><!-- /am-card -->
+  </div><!-- /am-wrap -->
+
+  <div data-include="/footer-tr.html"></div>
+
+<script>
+(function () {
+  'use strict';
+  var API = 'https://albaspace-api.nncdecdgc.workers.dev';
+
+  var spinner   = document.getElementById('amSpinner');
+  var secIn     = document.getElementById('amSectionIn');
+  var secOut    = document.getElementById('amSectionOut');
+
+  function show(el) { if (el) { el.style.display=''; el.classList.add('visible'); } }
+  function hide(el) { if (el) { el.style.display='none'; el.classList.remove('visible'); } }
+
+  function applyUser(user) {
+    hide(spinner);
+    var loggedIn = !!(user && (user.name || user.email));
+    if (loggedIn) {
+      show(secIn); hide(secOut);
+      var av = document.getElementById('amPageAvatar');
+      var nm = document.getElementById('amPageName');
+      var em = document.getElementById('amPageEmail');
+      if (av) { av.src = user.avatar || '/assets/icons/alien.png'; if (user.avatar) av.crossOrigin='anonymous'; }
+      if (nm) nm.textContent = user.name || user.email || 'Kullanıcı';
+      if (em) em.textContent = user.email || '';
+    } else {
+      hide(secIn); show(secOut);
+    }
+  }
+
+  function checkAuth() {
+    fetch(API + '/me', { credentials:'include', mode:'cors' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(applyUser)
+      .catch(function(){ applyUser(null); });
+  }
+
+  /* ── Глазок ── */
+  window.togglePw = function(id, btn) {
+    var inp = document.getElementById(id);
+    if (!inp) return;
+    var hidden = inp.type === 'password';
+    inp.type = hidden ? 'text' : 'password';
+    var svg = btn.querySelector('svg');
+    if (svg) svg.style.opacity = hidden ? '1' : '0.4';
+  };
+
+  /* ── Google ── */
+  var googleBtn = document.getElementById('amGoogleBtn');
+  if (googleBtn) {
+    googleBtn.addEventListener('click', function() {
+      if (typeof window.login === 'function') window.login({ source:'account-menu' });
+      else window.location.href = API + '/auth/google?from=' + encodeURIComponent(window.location.href);
+    });
+  }
+
+  /* ── Logout ── */
+  var logoutBtn = document.getElementById('amLogoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+      if (typeof window.logout === 'function') window.logout();
+      setTimeout(function(){ window.location.href = '/'; }, 600);
+    });
+  }
+
+  /* ── Tabs ── */
+  document.querySelectorAll('.am-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.am-tab').forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      var which = tab.dataset.tab;
+      document.getElementById('amFormLogin').style.display = which === 'login' ? 'block' : 'none';
+      document.getElementById('amFormReg').style.display   = which === 'register' ? 'block' : 'none';
+    });
+  });
+
+  /* ── Enter ── */
+  ['amLoginEmail','amLoginPw'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('amLoginBtn').click(); });
+  });
+  ['amRegName','amRegEmail','amRegPw'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('amRegBtn').click(); });
+  });
+
+  /* ── Login ── */
+  document.getElementById('amLoginBtn').addEventListener('click', function() {
+    var email = document.getElementById('amLoginEmail').value.trim();
+    var pw    = document.getElementById('amLoginPw').value;
+    var errEl = document.getElementById('amLoginErr');
+    var btn   = this;
+    errEl.textContent = '';
+    if (!email || !pw) { errEl.textContent = 'E-posta ve şifre gereklidir.'; return; }
+    btn.disabled = true; btn.textContent = '...';
+    fetch(API + '/auth/login', {
+      method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email:email, password:pw})
+    })
+    .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }); })
+    .then(function(res){
+      btn.disabled = false; btn.textContent = 'Giriş Yap';
+      if (!res.ok) { errEl.textContent = res.d.error || 'Hata oluştu.'; return; }
+      checkAuth();
+    })
+    .catch(function(){ btn.disabled=false; btn.textContent='Giriş Yap'; errEl.textContent='Bağlantı hatası.'; });
+  });
+
+  /* ── Register ── */
+  document.getElementById('amRegBtn').addEventListener('click', function() {
+    var name  = document.getElementById('amRegName').value.trim();
+    var email = document.getElementById('amRegEmail').value.trim();
+    var pw    = document.getElementById('amRegPw').value;
+    var terms = document.getElementById('amRegTerms').checked;
+    var errEl = document.getElementById('amRegErr');
+    var btn   = this;
+    errEl.textContent = '';
+    if (!email || !pw) { errEl.textContent = 'E-posta ve şifre gereklidir.'; return; }
+    if (pw.length < 8) { errEl.textContent = 'Şifre en az 8 karakter olmalıdır.'; return; }
+    if (!terms) { errEl.textContent = 'Lütfen kullanım şartlarını kabul edin.'; return; }
+    btn.disabled = true; btn.textContent = '...';
+    fetch(API + '/auth/register', {
+      method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({name:name, email:email, password:pw})
+    })
+    .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }); })
+    .then(function(res){
+      btn.disabled = false; btn.textContent = 'Kayıt Ol';
+      if (!res.ok) { errEl.textContent = res.d.error || 'Hata oluştu.'; return; }
+      checkAuth();
+    })
+    .catch(function(){ btn.disabled=false; btn.textContent='Kayıt Ol'; errEl.textContent='Bağlantı hatası.'; });
+  });
+
+  /* ── Init ── */
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', checkAuth);
+  else checkAuth();
+}());
+</script>
+</body>
+</html>

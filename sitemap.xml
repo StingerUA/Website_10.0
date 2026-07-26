@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Главные страницы -->
+  <url>
+    <loc>https://albaspace.com.tr/</loc>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/hizmetler.html</loc>
+    <priority>0.95</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/iletisim.html</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Страницы услуг -->
+  <url>
+    <loc>https://albaspace.com.tr/vr-ar-interaktif-oyunlar.html</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/avatar-dijital-ikiz.html</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/3b-tarama-mekan.html</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/teleskop-gozlem.html</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/jidoka-etkinlik.html</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/stratosfer-reklam-bilim.html</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/mobil-planetaryum.html</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/nasa-cern-turlari.html</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/turk-astronotlar-etkinlik.html</loc>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/albamen-kitap.html</loc>
+    <priority>0.80</priority>
+  </url>
+
+</urlset>

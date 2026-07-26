@@ -1,0 +1,457 @@
+/* ============================================================
+   DROPDOWN Z-INDEX FIX - Ensures dropdown menus are always visible
+   This file fixes issues where dropdown menus appear behind content
+   ============================================================ */
+
+/* PHASE 1: RESET - Prevent any problematic z-index from blocking dropdown */
+
+/* Reset main content areas to have low z-index */
+main, .page, .home-main, .page-main, .container, section {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Reset any model viewers or 3D content */
+.model-viewer, model-viewer, .three-d-model, .model-container,
+canvas, iframe {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Reset any cards or grid items */
+.card, .category-card, .product-card, .grid-item,
+.hero, .card-container, .grid, .product-grid {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Reset modals and overlays (but keep them below dropdown) */
+.cookie-overlay, .modal, .overlay, .modal-overlay,
+.cookie-modal, .modal-content {
+  z-index: 8999 !important;
+  position: relative !important;
+}
+
+/* Reset AI widgets (but keep them below dropdown) */
+.ai-floating, .ai-panel-global, .ai-panel-voice, 
+#ai-floating-global, .ai-widget-toggle-btn, .alien-menu-container {
+  z-index: 8998 !important;
+  position: relative !important;
+}
+
+/* PHASE 2: HEADER - Keep header visible but dropdown will be higher */
+
+.site-header {
+  position: relative !important;
+  z-index: 100 !important;
+  overflow: visible !important;
+}
+
+.header-inner {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 100 !important;
+}
+
+/* PHASE 3: NAVIGATION - Main nav container */
+
+.main-nav {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 101 !important;
+}
+
+/* PHASE 4: DROPDOWN TRIGGER - The clickable items */
+
+.dropdown {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 102 !important;
+}
+
+.dropdown-trigger {
+  position: relative !important;
+  z-index: 102 !important;
+  cursor: pointer !important;
+}
+
+/* PHASE 5: DROPDOWN MENU - Must be HIGHEST */
+
+.dropdown-menu {
+  position: absolute !important;
+  z-index: 999999 !important;
+  overflow: visible !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  top: calc(100% + 8px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(140px, 1fr)) !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+}
+
+/* PHASE 6: DROPDOWN VISIBILITY STATES */
+
+.dropdown:hover .dropdown-menu,
+.dropdown.active .dropdown-menu,
+.dropdown-menu.visible {
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+/* PHASE 7: DROPDOWN MENU LINKS */
+
+.dropdown-menu a,
+.dropdown-menu button,
+.dropdown-menu [role="menuitem"] {
+  position: relative !important;
+  z-index: 999999 !important;
+  pointer-events: auto !important;
+}
+
+/* PHASE 8: MOBILE ADJUSTMENTS */
+
+@media (max-width: 1023px) {
+  /* Mobile dropdown should use fixed positioning to escape any containers */
+  .dropdown-menu,
+  .header-inner .main-nav .dropdown-menu {
+    position: fixed !important;
+    z-index: 999999 !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(120px, 1fr)) !important;
+    gap: 10px !important;
+    width: min(95vw, 520px) !important;
+    max-width: 95vw !important;
+  }
+  
+  /* Mobile overlay for dropdown - REMOVED
+     This overlay produced a dimming layer above dropdown items on some devices.
+     We neutralize the pseudo-element to avoid blocking clicks while keeping selector.
+  */
+  .dropdown.active::before {
+    content: none !important;
+    display: none !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* PHASE 9: SPECIAL ELEMENTS - Cart, Social, Lang Switch */
+
+.header-cart-icon, .cart-icon, .header-cart-link {
+  position: relative !important;
+  z-index: 103 !important;
+}
+
+.top-lang-switch, .lang-switch, .header-social {
+  position: relative !important;
+  z-index: 101 !important;
+}
+
+/* PHASE 10: SAFETY - Ensure nothing can create higher stacking context */
+
+/* Disable transforms on dropdown (transforms create new stacking context) */
+.dropdown, .dropdown-menu, .dropdown > * {
+  transform: none !important;
+}
+
+/* Ensure overflow:hidden doesn't clip dropdown */
+.header-inner, .main-nav, .dropdown {
+  overflow: visible !important;
+}
+
+/* PHASE 11: GLOBAL OVERFLOW - Allow dropdown to overflow */
+
+html, body {
+  position: relative !important;
+  z-index: 0 !important;
+}
+
+/* PHASE 12: NEGATIVE Z-INDEX RESET - Some elements might have negative z-index */
+
+/* Don't allow any element to have z-index higher than dropdown */
+.dropdown-menu::after,
+.dropdown-menu::before {
+  z-index: inherit !important;
+}
+
+/* PHASE 13: PSEUDO-ELEMENTS - Ensure dropdowns pseudo elements are visible */
+
+.dropdown::before, .dropdown::after,
+.dropdown-menu::before, .dropdown-menu::after {
+  z-index: 999999 !important;
+}
+
+/* PHASE 14: IMPORTANT OVERRIDE FOR SHOP CSS */
+
+/* Shop CSS might have conflicting rules, override them */
+.site-header .dropdown-menu {
+  z-index: 999999 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+.site-header .dropdown:hover .dropdown-menu,
+.site-header .dropdown.active .dropdown-menu {
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+/* PHASE 15: LAST RESORT - Ensure maximum z-index for critical states */
+
+.dropdown.open .dropdown-menu,
+.dropdown[aria-expanded="true"] .dropdown-menu {
+  z-index: 2147483647 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+/* PHASE 16: BACKDROP FILTER SAFETY */
+
+/* Don't apply backdrop-filter to dropdown container as it creates stacking context */
+.dropdown, .main-nav {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* PHASE 17: ANIMATION SAFETY */
+
+/* Ensure transitions don't break dropdown visibility */
+.dropdown-menu {
+  transition: opacity 0.2s ease, visibility 0.2s ease !important;
+}
+
+/* Final safeguard: If dropdown is in a container with bad stacking context, 
+   we need to make sure the dropdown is trapped in a high z-index container */
+.dropdown,
+.header-inner .main-nav .dropdown,
+[data-include] .dropdown {
+  isolation: isolate !important;
+  z-index: 102 !important;
+}
+
+/* Ensure the dropdown menu ALWAYS appears on top */
+.dropdown-menu {
+  isolation: isolate !important;
+  will-change: z-index !important;
+}
+/* ============================================================
+   DROPDOWN Z-INDEX FIX - Ensures dropdown menus are always visible
+   ============================================================ */
+
+/* CRITICAL: Prevent any element from having higher z-index than dropdown */
+
+/* 1. Ensure body and html allow stacking contexts */
+html, body {
+  position: relative !important;
+  z-index: 0 !important;
+}
+
+/* 2. Ensure page content does NOT have high z-index */
+main, .page, .home-main, .page-main, .container, section {
+  position: relative !important;
+  z-index: 0 !important;
+}
+
+/* 3. Ensure header is on top but dropdown will be higher */
+.site-header {
+  position: relative !important;
+  z-index: 1000 !important;
+  overflow: visible !important;
+}
+
+.header-inner {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 1000 !important;
+}
+
+.main-nav {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 1001 !important;
+}
+
+/* 4. CRITICAL: Dropdown container must be very high */
+.dropdown {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 9999 !important;
+}
+
+/* 5. CRITICAL: Dropdown menu must be HIGHEST */
+.dropdown-menu {
+  position: absolute !important;
+  z-index: 999999 !important;
+  overflow: visible !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* Show dropdown on hover and active */
+.dropdown:hover .dropdown-menu,
+.dropdown.active .dropdown-menu {
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+/* 6. Mobile version fixes */
+@media (max-width: 1023px) {
+  /* Ensure mobile dropdown is also highest */
+  .dropdown-menu {
+    z-index: 999999 !important;
+    position: fixed !important;
+  }
+  
+  /* Overlay for mobile neutralized */
+  .dropdown.active::before {
+    z-index: 0 !important;
+    pointer-events: none !important;
+    display: none !important;
+    content: none !important;
+  }
+}
+
+/* 7. Fix for any modal or overlay that might cover dropdown */
+.cookie-overlay, .modal, .overlay, .modal-overlay {
+  z-index: 8999 !important; /* Lower than dropdown */
+}
+
+/* 8. Ensure dropdown links are clickable */
+.dropdown-menu a {
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 999999 !important;
+}
+
+/* 9. CRITICAL: Reset any element that might have ridiculously high z-index */
+.model-viewer, model-viewer, .three-d-model, .model-container {
+  z-index: 0 !important;
+  position: relative !important;
+}
+
+/* 10. Ensure AI widget doesn't interfere */
+.ai-floating, .ai-panel-global, .ai-panel-voice, #ai-floating-global, .ai-widget-toggle-btn {
+  z-index: 8998 !important; /* Below dropdown */
+}
+
+/* 11. Fix for product pages and other content sections */
+.product-grid, .product-container, .hero, .card-container, .category-card {
+  z-index: 0 !important;
+  position: relative !important;
+}
+
+/* 12. Ensure cart icon doesn't interfere */
+.header-cart-icon, .cart-icon, .header-cart-link {
+  z-index: 1002 !important;
+  position: relative !important;
+}
+
+/* 13. Force dropdown to appear ABOVE EVERYTHING */
+.dropdown-menu::before,
+.dropdown-menu::after {
+  z-index: 999999 !important;
+}
+
+/* 14. Additional safety: dropdown triggers */
+.dropdown-trigger {
+  position: relative !important;
+  z-index: 1001 !important;
+}
+
+/* 15. Ensure language switch doesn't interfere */
+.top-lang-switch, .lang-switch {
+  z-index: 1000 !important;
+  position: relative !important;
+}
+
+/* 16. Social icons */
+.header-social {
+  z-index: 1000 !important;
+  position: relative !important;
+}
+
+/* 17. MEGA FIX: Disable any transform that might constrain stacking context */
+/* Transform properties can create new stacking contexts */
+.dropdown {
+  transform: none !important;
+}
+
+.dropdown-menu {
+  transform: none !important;
+}
+
+/* 18. Specific fixes for common page elements */
+.navbar, nav, header {
+  overflow: visible !important;
+}
+
+/* 19. Fix for pages with filters or sidebars */
+.sidebar, .filter-panel, .aside {
+  z-index: 0 !important;
+}
+
+/* 20. Ensure dropdown animation doesn't cause issues */
+.dropdown-menu {
+  transition: opacity 0.2s ease, visibility 0.2s ease !important;
+}
+
+/* 21. Fix for any scrollable areas that might clip dropdown */
+html, body {
+  overflow: visible !important;
+}
+
+body {
+  overflow-x: hidden !important; /* Allow only horizontal scroll hiding */
+}
+
+/* 22. CRITICAL for layout containers */
+.layout, .wrapper, .page-wrapper {
+  position: relative !important;
+  z-index: 0 !important;
+  overflow: visible !important;
+}
+
+/* 23. Fix scrollbar styles that might hide dropdown */
+::-webkit-scrollbar {
+  z-index: 0 !important;
+}
+
+/* 24. Prevent any filter or effect from creating stacking context in dropdown area */
+.dropdown-menu * {
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* 25. Last resort: Force dropdown to top-most position */
+.dropdown-menu {
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: 2147483647 !important; /* Maximum possible z-index */
+}
+
+/* Override for hover state to ensure it stays visible */
+.dropdown:hover .dropdown-menu,
+.dropdown.active .dropdown-menu {
+  z-index: 2147483647 !important;
+}

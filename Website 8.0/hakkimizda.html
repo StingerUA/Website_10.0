@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+  <meta charset="UTF-8">
+  <title>Alba Space – Hakkımızda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Alba Space - Uzayı, bilimi ve teknolojiyi herkes için erişilebilir kılan bir uzay girişimi.">
+
+  <!-- Стили сайта (оставляем твою структуру путей) -->
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+
+  <!-- Встроенные стили для этой страницы -->
+  <style> :root { --header-bg: #020617; --accent: #00c2ff; --page-bg: #020617; --text-main: #f9fafb; --text-muted: #9ca3af; } * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; } /* Fallback for background if image missing */ body { background-color: #020617; } .about-shell { max-width: 1100px; margin: 50px auto 80px; padding: 0 20px; flex: 1; /* Pushes footer down */ } .about-card { border-radius: 26px; box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85); padding: 28px 24px 36px; border: 1px solid rgba(148, 163, 184, 0.4); backdrop-filter: blur(12px); } .page-title { font-size: 32px; text-align: center; margin-bottom: 6px; color: #f9fafb; } .page-sub { font-size: 14px; text-align: center; color: var(--text-muted); margin-bottom: 26px; } .about-text { font-size: 16px; line-height: 1.7; color: #e5e7eb; margin-bottom: 32px; white-space: pre-line; } .about-text strong { color: #ffffff; } .team-title { font-size: 24px; text-align: center; margin-bottom: 18px; color: #f9fafb; text-transform: uppercase; letter-spacing: 0.12em; } .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 22px; margin-top: 10px; } .team-card { text-align: center; padding: 18px 14px 20px; border-radius: 18px; border: 1px solid rgba(55, 65, 81, 0.8); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6); transition: transform 0.2s ease; } .team-card:hover { transform: translateY(-5px); } .team-card img { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 10px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.8); border: 2px solid rgba(148, 163, 184, 0.7); background-color: #1e293b; /* Placeholder color */ } .team-card h3 { font-size: 17px; margin-bottom: 4px; color: #f9fafb; } .team-card p { font-size: 13px; color: var(--text-muted); } @media (max-width: 768px){ .about-shell { margin: 40px auto 60px; padding: 0 14px; } .about-card { padding: 22px 16px 26px; } .page-title { font-size: 26px; } .team-grid { gap: 16px; } } </style>
+</head>
+
+<body>
+  <!-- Header Placeholder -->
+  <div data-include="/header-tr.html" id="header-placeholder">
+     <!-- Fallback content if JS fails or file missing -->
+     <header style="padding: 20px; text-align: center; border-bottom: 1px solid #333;">
+        <span style="color: #00c2ff; font-weight: bold;">ALBA SPACE</span> Navigation
+     </header>
+  </div>
+
+  <div class="about-shell">
+    <div class="about-card">
+      <h1 class="page-title">ALBA SPACE</h1>
+      <p class="page-sub">
+        Uzayı, bilimi ve teknolojiyi herkes için erişilebilir kılan bir uzay girişimi.
+      </p>
+
+      <div class="about-text">
+        2022 yılında Türkiye’de kurulan <strong>ALBA SPACE</strong>, Türkiye’de ilk ve tek olarak markaları uzaya çıkaran ve stratosfer tabakasında bilimsel deneyler yapan lider bir uzay teknolojisi oluşumudur.
+
+        Profesyonel ve uzman ekibiyle uzay teknolojileri alanında; sosyal sorumluluk ve farkındalık projeleri, eğitim programları ve yenilikçi deneyim tasarımlarıyla karbon nötr prensibi doğrultusunda gelecek neslin ve gezegenimizin sağlığını önemseyerek geleceği olumlu tasarlamada önemli rol oynamaktadır.
+      </div>
+
+      <h2 class="team-title">EKİBİMİZ</h2>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <!-- Added onerror handlers for preview stability -->
+          <img src="/assets/images/team-idris.jpg" alt="İdris Albayrak" onerror="this.src='https://ui-avatars.com/api/?name=Idris+A&background=0D8ABC&color=fff'">
+          <h3>İdris ALBAYRAK</h3>
+          <p>Kurucu ve Genel Koordinatör</p>
+        </div>
+        <div class="team-card">
+          <img src="/assets/images/team-nick.jpg" alt="Nick Nesterenko" onerror="this.src='https://ui-avatars.com/api/?name=Nick+N&background=0D8ABC&color=fff'">
+          <h3>Nick NESTERENKO</h3>
+          <p>3B Tasarım Uzmanı/AR APP Developer</p>
+        </div>
+
+        <div class="team-card">
+          <img src="/assets/images/a2.jpg" alt="Sümeyye AKSOY" onerror="this.src='https://ui-avatars.com/api/?name=Sumeyye+A&background=0D8ABC&color=fff'">
+          <h3>Sümeyye AKSOY</h3>
+          <p>Kurumsal Satış Temsilcisi</p>
+        </div>
+        <div class="team-card">
+          <img src="/assets/images/a3.png" alt="Ahmet ÇAKAR" onerror="this.src='https://ui-avatars.com/api/?name=Ahmet+C&background=0D8ABC&color=fff'">
+          <h3>Ahmet ÇAKAR</h3>
+          <p>Yapay Zeka Uzmanı</p>
+        </div>
+
+        <div class="team-card">
+          <img src="/assets/images/team-doga.jpg" alt="Doğa TOPÇU" onerror="this.src='https://ui-avatars.com/api/?name=Doga+T&background=0D8ABC&color=fff'">
+          <h3>Doğa TOPÇU</h3>
+          <p>Kurumsal Satış Temsilcisi</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-include="/footer-tr.html"></div>
+
+  <!-- Scripts -->
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+
+  <script>
+    const revealItems = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.18,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item, index) => {
+      const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
+      item.style.setProperty('--reveal-delay', `${delay}s`);
+      observer.observe(item);
+    });
+  </script>
+</body>

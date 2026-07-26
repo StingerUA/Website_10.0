@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mars – Alba Space</title>
+<link href="/favicon.png" rel="icon" type="image/png"/>
+<script crossorigin="anonymous" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js" type="module"></script>
+<!-- styles via site.css -->
+<!-- Глобальные стили + include --
+<link href="/assets/css/site.css" rel="stylesheet"/>
+<!-- ДОП. СТИЛИ ИМЕННО ДЛЯ ФУТЕРА, ЧТОБЫ ПЕРЕБИТЬ site.css -->
+<style> footer.site-footer { color: #e5e7eb; border-top: 1px solid #0b1120; padding: 24px 0 28px; } .site-footer .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; } .site-footer .footer-left { display: flex; align-items: center; gap: 10px; } .site-footer .footer-left img { width: 44px; height: 44px; border-radius: 999px; box-shadow: 0 0 16px rgba(0, 194, 255, 0.7); } .site-footer .footer-tagline { font-size: 14px; color: #d1d5db; } .site-footer .footer-center, .site-footer .footer-right { font-size: 14px; color: #d1d5db; } .site-footer .footer-right { text-align: right; } .site-footer a { color: #e5e7eb; text-decoration: none; } .site-footer a:hover { color: #ffffff; text-decoration: underline; } .site-footer .footer-social { display: flex; gap: 14px; margin-top: 6px; justify-content: center; } .site-footer .footer-social svg { width: 22px; height: 22px; stroke: #e5e7eb; fill: none; transition: stroke 0.2s, transform 0.15s; } .site-footer .footer-social a:hover svg { stroke: #ffffff; transform: translateY(-1px); } @media (max-width: 900px) { .site-footer .footer-inner { flex-direction: column; align-items: center; text-align: center; } .site-footer .footer-right { text-align: center; } } 
+    html, body {
+      overflow-x: hidden !important;
+      width: 100% !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    * {
+      box-sizing: border-box !important;
+    }
+    </style>
+<script defer="" src="/assets/js/include.js"></script>
+<script defer="" src="/assets/js/menu-toggle.js"></script>
+<script defer="" src="/assets/js/model-viewer-debug.js"></script>
+</head>
+<body>
+<div data-include="/header-en.html"></div>
+<h1>Mars</h1>
+<div class="container">
+<p>
+      Mars, with its thin atmosphere and red surface, is an important target for future manned missions.
+    </p>
+<model-viewer ar="" ar-modes="webxr scene-viewer quick-look" camera-controls="" data-model-name="mars" data-track="model_view" src="/assets/models/mars.glb">
+</model-viewer>
+</div>
+<div data-include="/footer-en.html"></div>
+<!-- Model Viewer Fix Script - Direct initialization -->
+<script>
+    (function() {
+      console.log('[Model-Viewer Init] Checking model-viewer status...');
+      
+      // Wait for model-viewer to be loaded
+      const checkModelViewer = () => {
+        const viewer = document.querySelector('model-viewer');
+        if (!viewer) {
+          console.log('[Model-Viewer Init] No model-viewer element found');
+          return;
+        }
+        
+        // Check if custom element is registered
+        if (window.customElements && window.customElements.get('model-viewer')) {
+          console.log('[Model-Viewer Init] model-viewer element is registered ✓');
+          return;
+        }
+        
+        // If not registered yet, check again in 500ms
+        setTimeout(checkModelViewer, 500);
+      };
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkModelViewer);
+      } else {
+        setTimeout(checkModelViewer, 100);
+      }
+    })();
+  </script>
+</body>
+</html>

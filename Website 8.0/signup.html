@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kayıt Ol – Alba Space</title>
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="/assets/js/include.js" defer></script>
+  <style>
+    :root {
+      --page-bg: #020617;
+      --accent: #00c2ff;
+      --text-main: #f3f4f6;
+    }
+    body {
+      background-color: var(--page-bg);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid rgba(2,6,23,0.06);
+      position: relative;
+      z-index: 10;
+    }
+    .input-field {
+      background: #ffffff;
+      border: 1px solid #e6e6e6;
+      color: #000000;
+      transition: all 0.3s ease;
+    }
+    .input-field:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0, 194, 255, 0.2);
+    }
+    .btn-primary {
+      background-color: var(--accent);
+      color: #000;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #38bdf8;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+    .btn-google {
+      background: white;
+      color: #000 !important;
+      transition: all 0.3s ease;
+    }
+    .btn-google:hover {
+      background: #f3f4f6;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+  <div data-include="/header-tr.html"></div>
+
+  <main class="flex-grow flex items-center justify-center px-4 py-20">
+    <div class="glass-card w-full max-w-md p-8 rounded-3xl shadow-2xl">
+      <h1 class="text-3xl font-bold text-center mb-8 text-black">Kayıt Ol</h1>
+      
+      <form action="/profile.html" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-2">Kullanıcı Adı</label>
+          <input type="text" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="Kullanıcı adınızı girin">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-2">Şifre</label>
+          <input type="password" required class="input-field w-full px-4 py-3 rounded-xl" placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-3 rounded-xl text-lg mt-6">
+          Onayla
+        </button>
+      </form>
+
+      <div class="flex items-center my-6">
+        <div class="flex-grow h-px bg-gray-700"></div>
+        <span class="px-4 text-gray-500 text-sm">veya</span>
+        <div class="flex-grow h-px bg-gray-700"></div>
+      </div>
+
+      <button class="btn-google w-full py-3 rounded-xl flex items-center justify-center gap-3 font-medium">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-6 h-6">
+        Google ile Giriş Yap
+      </button>
+
+      <p class="text-center mt-6 text-gray-400 text-sm">
+        Zaten hesabınız var mı? <a href="#" class="text-[#00c2ff] hover:underline">Giriş Yap</a>
+      </p>
+    </div>
+  </main>
+
+  <div data-include="/footer-tr.html"></div>
+</body>
+</html>

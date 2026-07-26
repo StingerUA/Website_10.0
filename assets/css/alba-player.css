@@ -1,0 +1,340 @@
+/* ════════ ALBA UNIVERSAL AUDIO PLAYER STYLES ════════ */
+
+#albaPlayer {
+  margin-top: 20px;
+  padding: 14px 16px 10px;
+  background: linear-gradient(135deg, rgba(2, 6, 23, 0.92), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.08), 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 24px rgba(56, 189, 248, 0.12);
+  font-family: 'Courier New', monospace;
+}
+
+.alba-track-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  margin-bottom: 10px;
+  opacity: 0.85;
+}
+
+.alba-track-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: albaPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes albaPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 8px #38bdf8;
+  }
+  50% {
+    opacity: 0.4;
+    box-shadow: 0 0 3px #38bdf8;
+  }
+}
+
+.alba-player-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alba-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.08);
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+  padding: 0;
+}
+
+.alba-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.alba-btn:hover {
+  background: rgba(56, 189, 248, 0.22);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+  transform: scale(1.08);
+}
+
+.alba-btn:active {
+  transform: scale(0.95);
+}
+
+.alba-btn-stop {
+  border-color: rgba(168, 85, 247, 0.4);
+  background: rgba(168, 85, 247, 0.08);
+  color: #a855f7;
+}
+
+.alba-btn-stop:hover {
+  background: rgba(168, 85, 247, 0.22);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
+}
+
+.alba-progress-wrap {
+  flex: 1;
+  position: relative;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.alba-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  position: relative;
+  cursor: pointer;
+  display: none;
+}
+
+.alba-progress-track.visible {
+  display: block;
+}
+
+.alba-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #38bdf8, #a855f7);
+  border-radius: 99px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+.alba-progress-thumb {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+  transition: left 0.1s linear;
+  cursor: pointer;
+}
+
+.alba-loading-bars {
+  display: none;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+  width: 100%;
+  justify-content: center;
+}
+
+.alba-loading-bars.visible {
+  display: flex;
+}
+
+.alba-loading-bars span {
+  display: block;
+  width: 4px;
+  background: linear-gradient(to top, #38bdf8, #a855f7);
+  border-radius: 2px;
+  animation: albaLoadBar 0.8s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.alba-loading-bars span:nth-child(1) {
+  height: 8px;
+  animation-delay: 0s;
+}
+
+.alba-loading-bars span:nth-child(2) {
+  height: 14px;
+  animation-delay: 0.08s;
+}
+
+.alba-loading-bars span:nth-child(3) {
+  height: 20px;
+  animation-delay: 0.16s;
+}
+
+.alba-loading-bars span:nth-child(4) {
+  height: 14px;
+  animation-delay: 0.24s;
+}
+
+.alba-loading-bars span:nth-child(5) {
+  height: 8px;
+  animation-delay: 0.32s;
+}
+
+.alba-loading-bars span:nth-child(6) {
+  height: 14px;
+  animation-delay: 0.4s;
+}
+
+.alba-loading-bars span:nth-child(7) {
+  height: 20px;
+  animation-delay: 0.48s;
+}
+
+.alba-loading-bars span:nth-child(8) {
+  height: 14px;
+  animation-delay: 0.56s;
+}
+
+.alba-loading-bars span:nth-child(9) {
+  height: 8px;
+  animation-delay: 0.64s;
+}
+
+.alba-loading-bars span:nth-child(10) {
+  height: 4px;
+  animation-delay: 0.72s;
+}
+
+@keyframes albaLoadBar {
+  0%, 100% {
+    transform: scaleY(0.4);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.alba-eq {
+  display: none;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+  width: 100%;
+  justify-content: center;
+}
+
+.alba-eq.visible {
+  display: flex;
+}
+
+.alba-eq span {
+  display: block;
+  width: 4px;
+  background: linear-gradient(to top, #38bdf8, #a855f7);
+  border-radius: 2px;
+  animation: albaEqBar 0.6s ease-in-out infinite alternate;
+}
+
+.alba-eq span:nth-child(1) {
+  height: 8px;
+  animation-duration: 0.45s;
+}
+
+.alba-eq span:nth-child(2) {
+  height: 18px;
+  animation-duration: 0.6s;
+}
+
+.alba-eq span:nth-child(3) {
+  height: 22px;
+  animation-duration: 0.38s;
+}
+
+.alba-eq span:nth-child(4) {
+  height: 18px;
+  animation-duration: 0.52s;
+}
+
+.alba-eq span:nth-child(5) {
+  height: 12px;
+  animation-duration: 0.42s;
+}
+
+@keyframes albaEqBar {
+  0% {
+    transform: scaleY(0.4);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.alba-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.alba-time-sep {
+  margin: 0 2px;
+  opacity: 0.5;
+}
+
+.alba-status {
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(56, 189, 248, 0.7);
+  text-align: center;
+  min-height: 14px;
+  transition: color 0.2s;
+}
+
+.alba-status.active {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.alba-status.error {
+  color: #f87171;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  #albaPlayer {
+    padding: 12px 14px 8px;
+    margin-top: 16px;
+  }
+
+  .alba-track-name {
+    font-size: 10px;
+    margin-bottom: 8px;
+  }
+
+  .alba-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .alba-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .alba-time {
+    font-size: 10px;
+  }
+
+  .alba-status {
+    font-size: 10px;
+  }
+}
