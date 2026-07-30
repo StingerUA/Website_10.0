@@ -3139,6 +3139,7 @@ body:has(model-viewer) > p {
   margin-right: auto !important;
   padding: 0 20px 16px !important;
   box-sizing: border-box !important;
+  white-space: pre-line !important;
 }
 
 /* model-viewer direct child of body (non-container pages) */
@@ -3180,6 +3181,7 @@ body:has(model-viewer) .container p {
   margin-left: auto !important;
   margin-right: auto !important;
   margin-bottom: 20px !important;
+  white-space: pre-line !important;
 }
 
 body:has(model-viewer) .container model-viewer {

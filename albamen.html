@@ -709,20 +709,22 @@
 
       // ════════════════════════════════════════════════════════
       // ALBAMEN FUTURISTIC AUDIO PLAYER
-      // MP3 файлы: language-specific folder, e.g. /eng/assets/audio/models/{planet-id}.mp3
-      // Fallback: /assets/audio/models/
+      // MP3 файлы: /assets/audio/pro/models/ для обычных страниц,
+      // /assets/audio/models/ для atlas-страниц.
       // ════════════════════════════════════════════════════════
 
       function getLangAudioBase() {
         try {
-          const parts = window.location.pathname.split('/').filter(Boolean);
+          const pathname = (window.location && window.location.pathname) || '';
+          const parts = pathname.toLowerCase().split('/').filter(Boolean);
           const first = parts[0] || '';
+          const isAtlasPage = parts.some(part => part === 'atlas' || part.startsWith('atlas-'));
           const langs = ['eng', 'rus', 'tr', 'ru', 'en'];
           if (langs.includes(first)) {
-            return '/' + first + '/assets/audio/models/';
+            return isAtlasPage ? '/' + first + '/assets/audio/models/' : '/' + first + '/assets/audio/pro/models/';
           }
         } catch (e) {}
-        return '/assets/audio/models/';
+        return '/assets/audio/pro/models/';
       }
 
       const ALBA_AUDIO_PATH = getLangAudioBase();

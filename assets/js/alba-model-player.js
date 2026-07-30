@@ -5,9 +5,10 @@
  * страницу сайта где есть тег <model-viewer>.
  *
  * Порядок воспроизведения:
- *   1. /assets/audio/models/{slug}.mp3  ← твои AI-генерированные файлы
- *   2. Google TTS через воркер          ← если MP3 нет
- *   3. Браузерный speechSynthesis       ← если воркер недоступен
+ *   1. /assets/audio/pro/models/{slug}.mp3  ← треки для обычных страниц
+ *   2. /assets/audio/models/{slug}.mp3      ← треки для atlas-страниц
+ *   3. Google TTS через воркер              ← если MP3 нет
+ *   4. Браузерный speechSynthesis           ← если воркер недоступен
  *
  * Подключение: одна строка в include.js (уже добавлена)
  * ─────────────────────────────────────────────────────────────
@@ -17,13 +18,24 @@
   'use strict';
 
   const WORKER_URL   = 'https://divine-flower-a0ae.nncdecdgc.workers.dev';
-  const DEFAULT_AUDIO_PATH = '/assets/audio/models/';
+  const DEFAULT_AUDIO_PATH = '/assets/audio/pro/models/';
+  const ATLAS_AUDIO_PATH = '/assets/audio/models/';
 
   function getAudioPathPrefix() {
     const pathname = (window.location && window.location.pathname) || '';
-    if (pathname.startsWith('/eng/')) return '/eng/assets/audio/models/';
-    if (pathname.startsWith('/rus/')) return '/rus/assets/audio/models/';
-    return DEFAULT_AUDIO_PATH;
+    const normalizedPath = pathname.toLowerCase();
+    const pathParts = normalizedPath.split('/').filter(Boolean);
+    const isAtlasPage = pathParts.some(part => part === 'atlas' || part.startsWith('atlas-'));
+
+    if (normalizedPath.startsWith('/eng/')) {
+      return isAtlasPage ? '/eng/assets/audio/models/' : '/eng/assets/audio/pro/models/';
+    }
+
+    if (normalizedPath.startsWith('/rus/')) {
+      return isAtlasPage ? '/rus/assets/audio/models/' : '/rus/assets/audio/pro/models/';
+    }
+
+    return isAtlasPage ? ATLAS_AUDIO_PATH : DEFAULT_AUDIO_PATH;
   }
 
   const AUDIO_PATH = getAudioPathPrefix();
