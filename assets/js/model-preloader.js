@@ -87,6 +87,8 @@
     viewer.parentNode.insertBefore(wrapper, viewer);
     wrapper.appendChild(viewer);
 
+
+    
     const overlay = createOverlayNode(viewer);
     wrapper.insertBefore(overlay, viewer);
 
