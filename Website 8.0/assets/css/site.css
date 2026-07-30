@@ -2156,7 +2156,7 @@ select, select option {
   z-index: 9999;
   background: linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.85));
   color: #ffffff;
-  pointer-events: auto;
+  pointer-events: none;
   border-radius: 12px;
 }
 
@@ -2167,6 +2167,7 @@ select, select option {
   border-radius: 12px;
   background: rgba(0,0,0,0.28);
   backdrop-filter: blur(6px);
+  pointer-events: auto;
 }
 
 .model-loading-overlay .loading-logo img {

@@ -2237,7 +2237,7 @@ select, select option {
   z-index: 9999;
   background: linear-gradient(180deg, rgba(2,6,23,0.55), rgba(2,6,23,0.85));
   color: #ffffff;
-  pointer-events: auto;
+  pointer-events: none;
   border-radius: 12px;
 }
 
@@ -2252,6 +2252,7 @@ select, select option {
   border: 1px solid rgba(148, 163, 184, 0.3);
   box-shadow: 0 0 30px rgba(0, 194, 255, 0.45), 0 0 80px rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
+  pointer-events: auto;
 }
 
 .model-loading-overlay .loader-card::before {
