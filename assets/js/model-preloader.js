@@ -76,19 +76,26 @@
     return div;
   }
 
+  function setViewerInteractivity(viewer, enabled){
+    if (!viewer) return;
+    viewer.style.pointerEvents = enabled ? 'auto' : 'none';
+    viewer.style.touchAction = enabled ? 'auto' : 'none';
+  }
+
   function attachToViewer(viewer){
     if (!viewer) return;
     if (viewer.closest('.viewer-wrapper')) return; // already wrapped
 
     const wrapper = document.createElement('div');
     wrapper.className = 'viewer-wrapper';
+    wrapper.classList.remove('is-ready');
 
     // insert wrapper in place of viewer
     viewer.parentNode.insertBefore(wrapper, viewer);
     wrapper.appendChild(viewer);
 
 
-    
+
     const overlay = createOverlayNode(viewer);
     wrapper.insertBefore(overlay, viewer);
 
@@ -104,6 +111,11 @@
       overlay.classList.add('fade-out');
       overlay.setAttribute('aria-busy', 'false');
       setTimeout(() => { overlay?.remove(); }, 550);
+    };
+
+    const enableViewerInteractivity = () => {
+      setViewerInteractivity(viewer, true);
+      if (wrapper) wrapper.classList.add('is-ready');
     };
 
     const showError = () => {
@@ -128,10 +140,13 @@
       }
     }
 
+    setViewerInteractivity(viewer, false);
+    if (wrapper) wrapper.classList.remove('is-ready');
+
     viewer.addEventListener('progress', updateProgress);
-    viewer.addEventListener('load', () => { clearTimeout(fallback); if (progressFill) progressFill.style.width = '100%'; setTimeout(hideOverlay, 250); });
-    viewer.addEventListener('poster-dismissed', () => { clearTimeout(fallback); if (progressFill) progressFill.style.width = '100%'; setTimeout(hideOverlay, 250); });
-    viewer.addEventListener('error', showError);
+    viewer.addEventListener('load', () => { clearTimeout(fallback); if (progressFill) progressFill.style.width = '100%'; enableViewerInteractivity(); setTimeout(hideOverlay, 250); });
+    viewer.addEventListener('poster-dismissed', () => { clearTimeout(fallback); if (progressFill) progressFill.style.width = '100%'; enableViewerInteractivity(); setTimeout(hideOverlay, 250); });
+    viewer.addEventListener('error', () => { showError(); enableViewerInteractivity(); });
 
     // ── ФИКС ГОНКИ: заглушка/маленькая модель могла загрузиться
     // до того как мы повесили слушатели (скрипт грузится async).
@@ -143,6 +158,7 @@
           clearInterval(raceCheck);
           clearTimeout(fallback);
           if (progressFill) progressFill.style.width = '100%';
+          enableViewerInteractivity();
           hideOverlay();
         }
       } catch (e) { /* ignore */ }
@@ -161,7 +177,10 @@
         timeoutDuration = 120000; // 120 seconds for large models
       }
     }
-    fallback = setTimeout(hideOverlay, timeoutDuration);
+    fallback = setTimeout(() => {
+      enableViewerInteractivity();
+      hideOverlay();
+    }, timeoutDuration);
 
     // if viewer becomes removed, cleanup
     const obs = new MutationObserver(() => {
