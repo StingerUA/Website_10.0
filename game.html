@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>AlbaSpace — AR Labyrinth Game</title>
+    
+    <!-- A-Frame и AR.js -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    
+    <!-- Физический движок Ammo.js -->
+    <script src="https://mixedreality.mozilla.org/ammo.js/builds/ammo.wasm.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
+    
+    <!-- Извлечение child-mesh из GLB -->
+    <script src="https://unpkg.com/aframe-gltf-part-component/dist/aframe-gltf-part-component.min.js"></script>
+
+    <!-- Стили игры AlbaSpace -->
+    <link rel="stylesheet" href="./css/game.css">
+    
+    <!-- Игровая логика -->
+    <script src="./js/game-logic.js"></script>
+</head>
+<body>
+
+    <!-- Игровой интерфейс (UI Overlay) -->
+    <div id="game-ui">
+        <!-- Шапка -->
+        <header class="ui-header">
+            <div class="brand-badge">
+                <span class="brand-logo">ALBASPACE</span>
+                <span class="brand-sub">LABIRENT</span>
+            </div>
+            <div class="stats-badge">
+                <span class="stat-label">УРОВЕНЬ</span>
+                <span class="stat-value" id="level-num">01</span>
+            </div>
+        </header>
+
+        <!-- Подсказка отслеживания карточки -->
+        <div id="tracking-hint" class="hint-box">
+            <div class="pulse-icon"></div>
+            <span>НАВЕДИТЕ КАМЕРУ НА КАРТОЧКУ С ЛАБИРИНТОМ</span>
+        </div>
+
+        <!-- Нижняя панель управления -->
+        <footer class="ui-footer">
+            <button id="btn-restart" class="cyber-btn" onclick="resetCurrentLevel()">
+                <span>СБРОС</span>
+            </button>
+        </footer>
+
+        <!-- Модальное окно победы -->
+        <div id="win-modal" class="modal-overlay">
+            <div class="modal-card">
+                <h2>УРОВЕНЬ ПРОЙДЕН!</h2>
+                <p>Лабиринт успешно пройден</p>
+                <button class="cyber-btn primary" onclick="closeWinModal()">
+                    <span>ПРОДОЛЖИТЬ</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AR Сцена с физикой -->
+    <a-scene 
+        embedded 
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix;" 
+        physics="driver: ammo; debug: false; gravity: 0 -9.8 0;"
+        renderer="antialias: true; alpha: true; colorManagement: true;">
+
+        <a-assets>
+            <!-- Твоя 3D-модель лабиринта -->
+            <a-asset-item id="mazeModel1" src="./assets/maze1.glb"></a-asset-item>
+        </a-assets>
+
+        <!-- Камера без стандартных контроллеров -->
+        <a-camera position="0 0 0" look-controls="enabled: false;"></a-camera>
+
+        <!-- Маркер карточки (путь к твоему таргету из папки scanner) -->
+        <a-marker 
+            type="pattern" 
+            url="./scanner/targets/render_maze1.patt" 
+            id="game-marker"
+            level-manager="startPos: -0.55 0.15 0.55; finishPos: 0.55 0.15 -0.55; finishRadius: 0.12">
+            
+            <!-- 1. Визуальная часть лабиринта -->
+            <a-entity 
+                gltf-part="src: #mazeModel1; part: Maze_Visual" 
+                position="0 0 0"
+                scale="1 1 1">
+            </a-entity>
+
+            <!-- 2. Невидимый физический коллайдер для стенок -->
+            <a-entity 
+                gltf-part="src: #mazeModel1; part: Maze_Collider" 
+                visible="false"
+                position="0 0 0"
+                scale="1 1 1"
+                ammo-body="type: kinematic" 
+                ammo-shape="type: mesh">
+            </a-entity>
+
+            <!-- 3. Динамический шарик (металлическая сфера) -->
+            <a-sphere 
+                id="player-ball" 
+                radius="0.04" 
+                color="#00f3ff"
+                material="metalness: 0.8; roughness: 0.2; emissive: #00f3ff; emissiveIntensity: 0.3"
+                position="-0.55 0.15 0.55" 
+                ammo-body="type: dynamic; mass: 1; friction: 0.4; restitution: 0.2" 
+                ammo-shape="type: sphere"
+                tilt-logic="sensitivity: 0.15; maxForce: 0.6">
+            </a-sphere>
+
+        </a-marker>
+    </a-scene>
+
+</body>
+</html>
