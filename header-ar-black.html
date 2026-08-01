@@ -1,0 +1,271 @@
+<header class="site-header" role="banner" dir="rtl">
+  <div class="header-inner">
+
+    <!-- ── LEFT (visually RIGHT in RTL): logo · AI · account ── -->
+    <div class="logo-sub-icons">
+      <a href="/ar/atlas.html" class="header-logo-icon" aria-label="الصفحة الرئيسية لـ Alba Space">
+        <img src="/assets/images/AlbaLogo.png" alt="شعار Alba Space" width="32" height="32">
+      </a>
+
+      <a href="javascript:void(0);" class="ai-widget-toggle" aria-label="مساعد الذكاء الاصطناعي" title="AI">
+        <img src="/assets/images/albamenai.png" alt="مساعد الذكاء الاصطناعي" width="32" height="32">
+      </a>
+
+      <!-- ACCOUNT DROPDOWN -->
+      <div class="alien-dropdown-container" data-account-page="/ar/account-menu.html">
+        <a href="javascript:void(0);"
+           class="alien-ghost"
+           aria-label="قائمة الحساب"
+           aria-controls="alienMenu"
+           aria-expanded="false"
+           aria-haspopup="true"
+           title="الحساب"
+           onclick="alienClick(event)">
+          <img id="accountAvatar" class="account-avatar" src="/assets/icons/alien.png" alt="الحساب" width="32" height="32">
+        </a>
+
+        <div id="alienMenu" class="alien-menu" role="menu" hidden>
+          <!-- Logged OUT -->
+          <div class="alien-auth-logged-out">
+            <a href="javascript:void(0);" class="alien-menu-item open-login" role="menuitem">تسجيل الدخول</a>
+            <button type="button" class="alien-menu-item alien-menu-google"
+                    onclick="login({ closeMenu: true, source: 'header-menu' })" role="menuitem">
+              تسجيل الدخول عبر Google
+            </button>
+            <a href="javascript:void(0);" class="alien-menu-item open-signup" role="menuitem">إنشاء حساب</a>
+          </div>
+
+          <!-- Logged IN -->
+          <div class="alien-auth-logged-in" hidden>
+            <a id="accountMenuLink" href="/ar/account.html" data-account-page="/ar/account.html"
+               class="alien-menu-item alien-menu-account" role="menuitem">
+              <img id="accountMenuAvatar" src="/assets/icons/alien.png" alt="" width="28" height="28">
+              <span id="accountMenuName" data-default-text="الحساب">الحساب</span>
+            </a>
+            <a href="/ar/account.html" class="alien-menu-item" role="menuitem">الحساب</a>
+            <a href="/ar/favorites.html" class="alien-menu-item" role="menuitem">المفضلة</a>
+            <a href="/ar/orders.html" class="alien-menu-item" role="menuitem">مشترياتي</a>
+            <button type="button" class="alien-menu-item alien-menu-logout" onclick="logout()">تسجيل الخروج</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CART -->
+      <a href="/ar/cart.html" class="header-cart-link" aria-label="السلة">
+        <span class="header-cart-icon" aria-hidden="true">
+          <img src="/assets/icons/cart.png" alt="" width="26" height="26">
+          <span class="header-cart-count" data-cart-count>0</span>
+        </span>
+      </a>
+
+    </div>
+
+    <!-- ── CENTER: logo ── -->
+    <a href="/ar/index.html" class="header-logo main-center-logo" aria-label="Alba Space">
+      <img src="/assets/images/albaspaceblack.png" alt="Alba Space" class="albaspace-img">
+    </a>
+
+    <!-- ── NAV ── -->
+    <nav class="main-nav" aria-label="القائمة الرئيسية">
+      <div class="dropdown">
+        <a href="/ar/hizmetler.html" class="dropdown-trigger">الخدمات</a>
+        <div class="dropdown-menu">
+          <a href="/ar/hizmetler.html">الخدمات</a>
+          <a href="https://albaspace.com.tr/hyperclub" target="_blank" rel="noopener">Hyper Club</a>
+          <a href="/ar/kubesat.html">KubeSat</a>
+        </div>
+      </div>
+      <a href="/ar/shop.html">المتجر</a>
+      <a href="/ar/blog.html">المدونة</a>
+      <div class="dropdown">
+        <a href="/ar/albamen.html" class="dropdown-trigger">ALBAMEN</a>
+        <div class="dropdown-menu">
+          <a href="/ar/albamen.html">ALBAMEN</a>
+          <a href="/ar/atlas.html">ATLAS</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="/ar/hakkimizda.html" class="dropdown-trigger">من نحن</a>
+        <div class="dropdown-menu">
+          <a href="/ar/hakkimizda.html">من نحن</a>
+          <a href="/ar/basindabiz.html">الصحافة</a>
+          <a href="/ar/galeri.html">المعرض</a>
+          <a href="/ar/iletisim.html">اتصل بنا</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── RIGHT (visually LEFT in RTL): lang + social ── -->
+    <div class="header-social">
+      <div class="social-row">
+
+        <!-- LANG DROPDOWN -->
+        <div class="lang-dropdown" id="langDropdown">
+          <button class="lang-dropdown-trigger" onclick="toggleLangDropdown(event)" aria-label="اختيار اللغة" aria-expanded="false">
+            <span class="lang-flag-icon lang-flag-text" aria-hidden="true">AR</span>
+          </button>
+          <div class="lang-dropdown-menu" hidden>
+            <a href="/index.html" data-lang="tr" aria-label="Türkçe">
+              <img src="/assets/icons/flag-tr.png" alt="TR" width="22" height="16">
+            </a>
+            <a href="/eng/index.html" data-lang="en" aria-label="English">
+              <img src="/assets/icons/flag-us.png" alt="EN" width="22" height="16">
+            </a>
+            <a href="/rus/index.html" data-lang="ru" aria-label="Русский">
+              <img src="/assets/icons/flag-rus.png" alt="RU" width="22" height="16">
+            </a>
+            <a href="/ar/index.html" data-lang="ar" aria-label="العربية">
+              <span class="lang-flag-icon lang-flag-text" aria-hidden="true">AR</span>
+            </a>
+          </div>
+        </div>
+
+        <a href="https://www.instagram.com/albaspace_/" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="/assets/icons/instblack.png" alt="Instagram" width="22" height="22">
+        </a>
+        <a href="https://www.linkedin.com/in/idrisalbayrak/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <img src="/assets/icons/linkdinblack.png" alt="LinkedIn" width="22" height="22">
+        </a>
+        <a href="https://wa.me/905387781018" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <img src="/assets/icons/watsuppblack.png" alt="WhatsApp" width="22" height="22">
+        </a>
+        <a href="https://www.youtube.com/@AlbaSpaceTr" target="_blank" rel="noopener" aria-label="YouTube">
+          <img src="/assets/icons/youtubeblack.png" alt="YouTube" width="22" height="22">
+        </a>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<link rel="stylesheet" href="/assets/css/dropdown-optimized.css">
+<link rel="stylesheet" href="/assets/css/rtl.css">
+
+<script src="/assets/js/menu-toggle.js" defer></script>
+<script src="/assets/js/cart.js" defer></script>
+<script src="/assets/js/lang-switch.js" defer></script>
+<script src="/assets/js/ai-widget.js" defer></script>
+<script src="/assets/js/model-nav-loader.js" defer></script>
+<script src="/assets/js/worker-auth.js" defer></script>
+<script src="/assets/js/mobile-header-cart.js" defer></script>
+
+<script>
+(function () {
+
+  /* ── Белый фон: shop, cart, product-* ── */
+  function getHeaderBg() {
+    var header = document.querySelector('.site-header');
+    if (!header) return 'rgba(2,6,23,0.99)';
+    var bg = window.getComputedStyle(header).backgroundColor;
+    if (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') {
+      return document.documentElement.classList.contains('product-text-black')
+        ? '#ffffff' : 'rgba(2,6,23,0.99)';
+    }
+    return bg;
+  }
+
+  function isWhiteBgPage() {
+    return (
+      document.documentElement.classList.contains('product-text-black') ||
+      /\/(shop|cart)(\.html|\/)?/.test(window.location.pathname.toLowerCase()) ||
+      /\/product-[^/]+/.test(window.location.pathname.toLowerCase())
+    );
+  }
+
+  function positionAlienMenu(menu, trigger) {
+    var isMobile = window.innerWidth <= 767;
+    var headerEl = document.querySelector('.site-header');
+    var hb = headerEl ? headerEl.getBoundingClientRect().bottom : 60;
+
+    if (isMobile) {
+      menu.style.top = hb + 'px';
+      menu.style.left = '0';
+      menu.style.right = '0';
+      menu.style.width = '100vw';
+      menu.style.transform = 'none';
+      return;
+    }
+
+    menu.style.top = hb + 'px';
+    menu.style.left = '0';
+    menu.style.right = '0';
+    menu.style.width = '100%';
+    menu.style.transform = 'none';
+
+    var isWhite = isWhiteBgPage();
+    menu.style.background = isWhite ? '#ffffff' : 'rgba(2,6,23,0.99)';
+    menu.style.color = isWhite ? '#111827' : '#ffffff';
+    menu.style.borderTop = isWhite
+      ? '1px solid rgba(0,0,0,0.1)'
+      : '1px solid rgba(0,194,255,0.15)';
+  }
+
+  function closeAlienMenu() {
+    var menu = document.getElementById('alienMenu');
+    var trigger = document.querySelector('.alien-ghost');
+    if (menu) menu.setAttribute('hidden', '');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+  }
+
+  function alienClick(e) {
+    if (e) e.preventDefault();
+    toggleAlienMenu(e);
+  }
+
+  function toggleAlienMenu(e) {
+    if (e) e.preventDefault();
+    window.location.href = '/account-menu.html';
+  }
+
+  window.addEventListener('resize', function () {
+    var menu = document.getElementById('alienMenu');
+    var trigger = document.querySelector('.alien-ghost');
+    if (menu && trigger && !menu.hasAttribute('hidden')) positionAlienMenu(menu, trigger);
+  });
+
+  document.addEventListener('click', function (e) {
+    var container = document.querySelector('.alien-dropdown-container');
+    var menu = document.getElementById('alienMenu');
+    if (menu && !menu.hasAttribute('hidden') && container && !container.contains(e.target)) {
+      closeAlienMenu();
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeAlienMenu();
+  });
+
+  window.toggleAlienMenu = toggleAlienMenu;
+  window.alienClick = alienClick;
+
+  /* ── LANG DROPDOWN ── */
+  function toggleLangDropdown(e) {
+    if (e) e.preventDefault();
+    var wrap = document.getElementById('langDropdown');
+    var panel = wrap ? wrap.querySelector('.lang-dropdown-menu') : null;
+    var btn   = wrap ? wrap.querySelector('.lang-dropdown-trigger') : null;
+    if (!panel) return;
+    var isOpen = !panel.hasAttribute('hidden');
+    if (isOpen) {
+      panel.setAttribute('hidden', '');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    } else {
+      panel.removeAttribute('hidden');
+      if (btn) btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    var wrap = document.getElementById('langDropdown');
+    var panel = wrap ? wrap.querySelector('.lang-dropdown-menu') : null;
+    if (panel && wrap && !wrap.contains(e.target) && !panel.hasAttribute('hidden')) {
+      panel.setAttribute('hidden', '');
+      var btn = wrap.querySelector('.lang-dropdown-trigger');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  window.toggleLangDropdown = toggleLangDropdown;
+
+})();
+</script>

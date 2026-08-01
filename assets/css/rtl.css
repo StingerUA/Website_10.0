@@ -1,0 +1,69 @@
+/* ══════════════════════════════════════════════════════════
+   RTL layer — Arabic (/ar/) pages only
+   Loaded after site.css / fix-layout.css, scoped to [dir="rtl"]
+   so it never touches the tr/eng/rus (LTR) pages.
+   ══════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+html[dir="rtl"],
+html[dir="rtl"] body {
+  direction: rtl;
+}
+
+html[dir="rtl"] body {
+  font-family: 'Cairo', 'Inter', Arial, sans-serif;
+}
+
+/* Numbers, prices, and Latin brand names (ALBAMEN, ATLAS, KubeSat, Alba Space)
+   stay left-to-right even inside RTL text so they don't get visually reversed. */
+html[dir="rtl"] .price,
+html[dir="rtl"] [data-price],
+html[dir="rtl"] .footer-action__value,
+html[dir="rtl"] .albaspace-img,
+html[dir="rtl"] .lang-dropdown-trigger,
+html[dir="rtl"] .lang-dropdown-menu {
+  direction: ltr;
+}
+
+/* Default paragraph/heading alignment follows RTL unless a component
+   explicitly centers or justifies content. */
+html[dir="rtl"] p,
+html[dir="rtl"] li {
+  text-align: right;
+}
+
+html[dir="rtl"] .footer-logo{
+  align-items: flex-end !important;
+  text-align: right !important;
+}
+
+html[dir="rtl"] .footer-legal-links{
+  flex-direction: row-reverse;
+}
+
+/* Dropdown submenus: flip text alignment so items read naturally
+   right-to-left instead of hugging the left edge. */
+html[dir="rtl"] .dropdown-menu a{
+  text-align: right;
+}
+
+/* Cart badge / small absolute-positioned counters that were pinned
+   with a hardcoded left/right offset for LTR layouts. */
+html[dir="rtl"] .header-cart-count{
+  right: auto;
+  left: -4px;
+}
+
+/* Icon rows (social, nav) use flexbox `gap`, which is direction-agnostic —
+   no changes needed there. Form inputs / textareas should still type RTL: */
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select{
+  text-align: right;
+}
+
+/* Contact / office footer action cards: mirror the little hint/value stack */
+html[dir="rtl"] .footer-actions .footer-action{
+  text-align: right;
+}
