@@ -66,6 +66,37 @@
           "url": "/ar/blog/yeni-uzay-cagi.html"
         }
       }
+    },
+    {
+      "slug": "astrosistemler-kesifte-yapay-zeka-avantaji",
+      "category": "uzay",
+      "publishAt": "2026-08-02T08:00:00+03:00",
+      "cover": "/assets/images/blog/astrosistemler-kesifte-yapay-zeka-avantaji-cover.svg",
+      "readingMinutes": 4,
+      "author": { "tr": "Muzaffer Enes İpçi", "en": "Muzaffer Enes İpçi", "ru": "Музаффер Энес Ипчи", "ar": "مظفر إنس إيبجي" },
+      "authorRole": { "tr": "Astronom ve Eğitmen", "en": "Astronomer & Educator", "ru": "Астроном и преподаватель", "ar": "عالِم فلك ومعلّم" },
+      "locales": {
+        "tr": {
+          "title": "ASTROSİSTEMLER Keşifte Yapay Zeka Avantajı",
+          "excerpt": "Uzay araştırmalarında yapay zekanın rolü, büyük veri analizi ve keşif süreçlerindeki dönüşüm hakkında bir bakış.",
+          "url": "/blog/astrosistemler-kesifte-yapay-zeka-avantaji.html"
+        },
+        "en": {
+          "title": "ASTROSYSTEMS: The Advantage of AI in Exploration",
+          "excerpt": "A look at AI’s role in space research, big data analysis, and the transformation of exploration processes.",
+          "url": "/eng/blog/astrosistemler-kesifte-yapay-zeka-avantaji.html"
+        },
+        "ru": {
+          "title": "ASTROSYSTEMS: преимущество ИИ в исследовании космоса",
+          "excerpt": "Взгляд на роль ИИ в космических исследованиях, анализе больших данных и трансформации процессов открытия.",
+          "url": "/rus/blog/astrosistemler-kesifte-yapay-zeka-avantaji.html"
+        },
+        "ar": {
+          "title": "ASTROSYSTEMS: ميزة الذكاء الاصطناعي في الاستكشاف",
+          "excerpt": "نظرة على دور الذكاء الاصطناعي في أبحاث الفضاء وتحليل البيانات الضخمة والتحول في عمليات الاكتشاف.",
+          "url": "/ar/blog/astrosistemler-kesifte-yapay-zeka-avantaji.html"
+        }
+      }
     }
   ]
 }
