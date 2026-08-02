@@ -70,8 +70,8 @@
     {
       "slug": "astrosistemler-kesifte-yapay-zeka-avantaji",
       "category": "uzay",
-      "publishAt": "2026-08-02T08:00:00+03:00",
-      "cover": "/assets/images/blog/astrosistemler-kesifte-yapay-zeka-avantaji-cover.svg",
+      "publishAt": "2026-08-02T00:08:00+03:00",
+      "cover": "/assets/images/blog/astrosistemler-kesifte-yapay-zeka-avantaji-cover.jpg",
       "readingMinutes": 4,
       "author": { "tr": "Muzaffer Enes İpçi", "en": "Muzaffer Enes İpçi", "ru": "Музаффер Энес Ипчи", "ar": "مظفر إنس إيبجي" },
       "authorRole": { "tr": "Astronom ve Eğitmen", "en": "Astronomer & Educator", "ru": "Астроном и преподаватель", "ar": "عالِم فلك ومعلّم" },
@@ -95,6 +95,22 @@
           "title": "ASTROSYSTEMS: ميزة الذكاء الاصطناعي في الاستكشاف",
           "excerpt": "نظرة على دور الذكاء الاصطناعي في أبحاث الفضاء وتحليل البيانات الضخمة والتحول في عمليات الاكتشاف.",
           "url": "/ar/blog/astrosistemler-kesifte-yapay-zeka-avantaji.html"
+        }
+      }
+    },
+    {
+      "slug": "yasam-mars-basladi",
+      "category": "uzay",
+      "publishAt": "2026-08-02T00:08:00+03:00",
+      "cover": "/assets/images/blog/yasam-mars-basladi-cover.jpg",
+      "readingMinutes": 5,
+      "author": { "tr": "İdris Albayrak" },
+      "authorRole": { "tr": "Uzay Girişimcisi, Fütürist ve Eğitmen" },
+      "locales": {
+        "tr": {
+          "title": "Yaşam Mars'ta Mı Başladı? – Dr. Robert Zubrin'in Kitap İncelemesi",
+          "excerpt": "Dr. Robert Zubrin, Dr. Steven Benner'ın yeni kitabını ve yaşamın Mars'ta başlamış olabileceği fikrini ele alıyor.",
+          "url": "/blog/yasam-mars-basladi.html"
         }
       }
     }
