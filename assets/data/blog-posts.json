@@ -1,8 +1,8 @@
 {
   "categories": {
-    "uzay": { "tr": "Uzay", "en": "Space", "ru": "Космос" },
-    "egitim": { "tr": "Eğitim", "en": "Education", "ru": "Образование" },
-    "haberler": { "tr": "AlbaSpace Haberleri", "en": "AlbaSpace News", "ru": "Новости AlbaSpace" }
+    "uzay": { "tr": "Uzay", "en": "Space", "ru": "Космос", "ar": "الفضاء" },
+    "egitim": { "tr": "Eğitim", "en": "Education", "ru": "Образование", "ar": "التعليم" },
+    "haberler": { "tr": "AlbaSpace Haberleri", "en": "AlbaSpace News", "ru": "Новости AlbaSpace", "ar": "أخبار AlbaSpace" }
   },
   "posts": [
     {
@@ -11,8 +11,8 @@
       "publishAt": "2026-07-26T08:00:00+03:00",
       "cover": "/assets/images/blog/uzay-teleskoplari-cover.jpg",
       "readingMinutes": 4,
-      "author": { "tr": "Aslı Bolat", "en": "Aslı Bolat", "ru": "Аслы Болат" },
-      "authorRole": { "tr": "Astronom ve Eğitmen", "en": "Astronomer & Educator", "ru": "Астроном и преподаватель" },
+      "author": { "tr": "Aslı Bolat", "en": "Aslı Bolat", "ru": "Аслы Болат", "ar": "أصلي بولات" },
+      "authorRole": { "tr": "Astronom ve Eğitmen", "en": "Astronomer & Educator", "ru": "Астроном и преподаватель", "ar": "عالمة فلك ومعلّمة" },
       "locales": {
         "tr": {
           "title": "Gökyüzünün Ötesine Bakmak: Neden Uzay Teleskoplarına İhtiyaç Duyuyoruz?",
@@ -28,6 +28,11 @@
           "title": "Взгляд за пределы неба: зачем нужны космические телескопы?",
           "excerpt": "Почему наземных телескопов недостаточно? Разбираемся, зачем «Хаббл» и телескоп Уэбба отправляют за пределы атмосферы.",
           "url": "/rus/blog/uzay-teleskoplari.html"
+        },
+        "ar": {
+          "title": "الرؤية إلى ما وراء السماء: لماذا نحتاج إلى التلسكوبات الفضائية؟",
+          "excerpt": "لماذا لا تكفي التلسكوبات الأرضية؟ اكتشف لماذا تُرسَل أدوات مثل هابل وجيمس ويب إلى ما وراء السماء.",
+          "url": "/ar/blog/uzay-teleskoplari.html"
         }
       }
     },
@@ -37,8 +42,8 @@
       "publishAt": "2026-08-02T00:08:00+03:00",
       "cover": "/assets/images/blog/yeni-uzay-cagi-cover.jpg",
       "readingMinutes": 4,
-      "author": { "tr": "Aslı Bolat", "en": "Aslı Bolat", "ru": "Аслы Болат" },
-      "authorRole": { "tr": "Astronom ve Eğitmen", "en": "Astronomer & Educator", "ru": "Астроном и преподаватель" },
+      "author": { "tr": "Aslı Bolat", "en": "Aslı Bolat", "ru": "Аслы Болат", "ar": "أصلي بولات" },
+      "authorRole": { "tr": "Astronom ve Eğitmen", "en": "Astronomer & Educator", "ru": "Астроном и преподаватель", "ar": "عالمة فلك ومعلّمة" },
       "locales": {
         "tr": {
           "title": "Yeni Uzay Çağı: Gökyüzünün Ötesinde Yeni Bir Dönem Başlıyor",
@@ -54,6 +59,11 @@
           "title": "Новая космическая эра: за пределами неба начинается новый этап",
           "excerpt": "От государств — к частным компаниям: космос становится доступнее. Знакомимся с Новой космической эрой.",
           "url": "/rus/blog/yeni-uzay-cagi.html"
+        },
+        "ar": {
+          "title": "العصر الفضائي الجديد: مرحلة جديدة تبدأ وراء السماء",
+          "excerpt": "من الحكومات إلى الشركات الخاصة: أصبح الفضاء اليوم في متناول الجميع. تعرّف عن قرب على العصر الفضائي الجديد.",
+          "url": "/ar/blog/yeni-uzay-cagi.html"
         }
       }
     }

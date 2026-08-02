@@ -3,19 +3,22 @@
 
   var DATA_URL = '/assets/data/blog-posts.json';
   var LOCALE = (document.documentElement.getAttribute('lang') || 'tr').slice(0, 2);
-  if (['tr', 'en', 'ru'].indexOf(LOCALE) === -1) LOCALE = 'tr';
+  if (['tr', 'en', 'ru', 'ar'].indexOf(LOCALE) === -1) LOCALE = 'tr';
 
   var UI = {
     tr: { all: 'Tümü', by: '', min: 'dk okuma', empty: 'Bu kategoride henüz yazı yok.', prev: 'Önceki Yazı', next: 'Sonraki Yazı', related: 'Benzer Yazılar' },
     en: { all: 'All', by: 'by', min: 'min read', empty: 'No posts in this category yet.', prev: 'Previous Post', next: 'Next Post', related: 'Related Posts' },
-    ru: { all: 'Все', by: '', min: 'мин чтения', empty: 'В этой теме пока нет статей.', prev: 'Предыдущая статья', next: 'Следующая статья', related: 'Похожие статьи' }
+    ru: { all: 'Все', by: '', min: 'мин чтения', empty: 'В этой теме пока нет статей.', prev: 'Предыдущая статья', next: 'Следующая статья', related: 'Похожие статьи' },
+    ar: { all: 'الكل', by: '', min: 'دقائق قراءة', empty: 'لا توجد مقالات في هذه الفئة بعد.', prev: 'المقالة السابقة', next: 'المقالة التالية', related: 'مقالات ذات صلة' }
   }[LOCALE];
 
-  var DATE_LOCALE = { tr: 'tr-TR', en: 'en-US', ru: 'ru-RU' }[LOCALE];
+  var DATE_LOCALE = { tr: 'tr-TR', en: 'en-US', ru: 'ru-RU', ar: 'ar-SA' }[LOCALE];
 
   function fmtDate(iso) {
     try {
-      return new Date(iso).toLocaleDateString(DATE_LOCALE, { day: '2-digit', month: 'long', year: 'numeric' });
+      var opts = { day: '2-digit', month: 'long', year: 'numeric' };
+      if (LOCALE === 'ar') opts.calendar = 'gregory';
+      return new Date(iso).toLocaleDateString(DATE_LOCALE, opts);
     } catch (e) { return iso; }
   }
 
