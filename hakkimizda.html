@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="/assets/css/fix-layout.css">
 
   <!-- Встроенные стили для этой страницы -->
-  <style> :root { --header-bg: #020617; --accent: #00c2ff; --page-bg: #020617; --text-main: #f9fafb; --text-muted: #9ca3af; } * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; } /* Fallback for background if image missing */ body { background-color: #020617; } .about-shell { max-width: 1100px; margin: 50px auto 80px; padding: 0 20px; flex: 1; /* Pushes footer down */ } .about-card { border-radius: 26px; box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85); padding: 28px 24px 36px; border: 1px solid rgba(148, 163, 184, 0.4); backdrop-filter: blur(12px); } .page-title { font-size: 32px; text-align: center; margin-bottom: 6px; color: #f9fafb; } .page-sub { font-size: 14px; text-align: center; color: var(--text-muted); margin-bottom: 26px; } .about-text { font-size: 16px; line-height: 1.7; color: #e5e7eb; margin-bottom: 32px; white-space: pre-line; } .about-text strong { color: #ffffff; } .team-title { font-size: 24px; text-align: center; margin-bottom: 18px; color: #f9fafb; text-transform: uppercase; letter-spacing: 0.12em; } .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 22px; margin-top: 10px; } .team-card { text-align: center; padding: 18px 14px 20px; border-radius: 18px; border: 1px solid rgba(55, 65, 81, 0.8); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6); transition: transform 0.2s ease; } .team-card:hover { transform: translateY(-5px); } .team-card img { width: min(120px, 100%); height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 50%; margin-bottom: 10px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.8); border: 2px solid rgba(148, 163, 184, 0.7); background-color: #1e293b; /* Placeholder color */ } .team-card h3 { font-size: 17px; margin-bottom: 4px; color: #f9fafb; } .team-card p { font-size: 13px; color: var(--text-muted); } @media (max-width: 768px){ .about-shell { margin: 40px auto 60px; padding: 0 14px; } .about-card { padding: 22px 16px 26px; } .page-title { font-size: 26px; } .team-grid { gap: 16px; } } </style>
+  <style> :root { --header-bg: #020617; --accent: #00c2ff; --page-bg: #020617; --text-main: #f9fafb; --text-muted: #9ca3af; } * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; } /* Fallback for background if image missing */ body { background-color: #020617; } .about-shell { max-width: 1100px; margin: 50px auto 80px; padding: 0 20px; flex: 1; /* Pushes footer down */ } .about-card { border-radius: 26px; box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85); padding: 28px 24px 36px; border: 1px solid rgba(148, 163, 184, 0.4); backdrop-filter: blur(12px); } .page-title { font-size: 32px; text-align: center; margin-bottom: 6px; color: #f9fafb; } .page-sub { font-size: 14px; text-align: center; color: var(--text-muted); margin-bottom: 26px; } .about-text { font-size: 16px; line-height: 1.7; color: #e5e7eb; margin-bottom: 32px; white-space: pre-line; } .about-text strong { color: #ffffff; } .team-title { font-size: 24px; text-align: center; margin-bottom: 18px; color: #f9fafb; text-transform: uppercase; letter-spacing: 0.12em; } .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 22px; margin-top: 10px; } .team-card { text-align: center; padding: 18px 14px 20px; border-radius: 18px; border: 1px solid rgba(55, 65, 81, 0.8); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6); transition: transform 0.2s ease; } .team-card:hover { transform: translateY(-5px); } .team-card img { width: min(120px, 100%); height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 50%; margin-bottom: 10px; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.8); border: 2px solid rgba(148, 163, 184, 0.7); background-color: #1e293b; /* Placeholder color */ } .team-card h3 { font-size: 17px; margin-bottom: 4px; color: #f9fafb; } .team-card p { font-size: 13px; color: var(--text-muted); } .team-socials { display: flex; justify-content: center; gap: 8px; margin: 10px 0 12px; flex-wrap: wrap; } .team-socials a { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(148, 163, 184, 0.28); transition: transform 0.2s ease, background-color 0.2s ease; } .team-socials a:hover { transform: translateY(-2px); background: rgba(0, 194, 255, 0.16); } .team-socials img { width: 16px; height: 16px; } @media (max-width: 768px){ .about-shell { margin: 40px auto 60px; padding: 0 14px; } .about-card { padding: 22px 16px 26px; } .page-title { font-size: 26px; } .team-grid { gap: 16px; } } </style>
 </head>
 
 <body>
@@ -112,6 +112,33 @@
       const delay = item.dataset.direction === 'left' ? index * 0.025 : index * 0.03;
       item.style.setProperty('--reveal-delay', `${delay}s`);
       observer.observe(item);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.team-card').forEach((card) => {
+        if (card.querySelector('.team-socials')) return;
+
+        const socials = document.createElement('div');
+        socials.className = 'team-socials';
+
+        [
+          { href: 'https://www.instagram.com/albaspace_/', label: 'Instagram', icon: '/assets/icons/inst.png' },
+          { href: 'https://www.linkedin.com/in/idrisalbayrak/', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' },
+          { href: 'https://wa.me/905387781018', label: 'WhatsApp', icon: '/assets/icons/watsupp.png' },
+          { href: 'https://www.youtube.com/@AlbaSpaceTr', label: 'YouTube', icon: '/assets/icons/youtube.png' }
+        ].forEach(({ href, label, icon }) => {
+          const link = document.createElement('a');
+          link.href = href;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.setAttribute('aria-label', label);
+          link.innerHTML = `<img src="${icon}" alt="${label}" width="16" height="16">`;
+          socials.appendChild(link);
+        });
+
+        card.appendChild(socials);
+      });
     });
   </script>
 </body>
