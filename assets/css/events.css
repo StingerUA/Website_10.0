@@ -27,9 +27,11 @@
 }
 
 .events-grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 24px;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .events-card{
@@ -44,6 +46,9 @@
   box-shadow: 0 0 22px rgba(0,0,0,0.8), 0 0 32px rgba(0,194,255,0.12);
   backdrop-filter: blur(8px);
   transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  max-width: 420px;
+  min-width: 320px;
+  width: 100%;
 }
 
 .events-card:hover{
@@ -53,9 +58,8 @@
 }
 
 .events-card-cover{
-  position: relative;
   width: 100%;
-  aspect-ratio: 9 / 16;
+  height: 220px;
   overflow: hidden;
   background: #0b1220;
 }
@@ -116,7 +120,7 @@
 
 .events-article-cover{
   width: 100%;
-  aspect-ratio: 9 / 16;
+  height: 420px;
   object-fit: cover;
   border-radius: 22px;
   margin: 26px 0 26px;
