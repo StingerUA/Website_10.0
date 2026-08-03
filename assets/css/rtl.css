@@ -70,16 +70,26 @@ html[dir="rtl"] .footer-actions .footer-action{
 
 /* Arabic desktop header: move the small Alba logo slightly left and lower */
 @media (min-width: 1024px) {
-  html[dir="rtl"] .logo-sub-icons .header-logo-icon {
-    position: relative;
-    margin-right: 10px;
-    margin-top: 6px;
-    transform: translateX(-4px);
+  /* stronger rules that target the anchor and the image directly
+     using !important so inline styles or earlier rules don't win */
+  html[dir="rtl"] .logo-sub-icons .header-logo-icon,
+  html[dir="rtl"] .logo-sub-icons .header-logo-icon img {
+    position: relative !important;
+    top: 6px !important;
+    left: -12px !important;
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    transform: none !important;
+  }
+  html[dir="rtl"] .logo-sub-icons .header-logo-icon img {
+    display: inline-block !important;
   }
 }
 
 /* Arabic footer mobile: shrink the Alba logo and move it left/lower */
 @media (max-width: 767px) {
+  /* override inline margin-top and other rules with !important and use transform
+     to ensure consistent placement across devices */
   html[dir="rtl"] .footer .alba-logo,
   html[dir="rtl"] .footer .footer-social--xl .alba-logo {
     width: 40px !important;
@@ -89,6 +99,7 @@ html[dir="rtl"] .footer-actions .footer-action{
     margin-right: 10px !important;
     margin-left: 0 !important;
     margin-top: 8px !important;
-    flex-shrink: 0;
+    flex-shrink: 0 !important;
+    transform: translateX(-8px) translateY(6px) !important;
   }
 }
