@@ -1,0 +1,53 @@
+{
+  "categories": {
+    "astronomi": { "tr": "Astronomi", "en": "Astronomy", "ru": "Астрономия", "ar": "علم الفلك" },
+    "egitim": { "tr": "Eğitim", "en": "Education", "ru": "Образование", "ar": "التعليم" }
+  },
+  "events": [
+    {
+      "slug": "perseid-meteor-yagmuru-2026",
+      "category": "astronomi",
+      "startAt": "2026-08-13T21:00:00+03:00",
+      "endAt": "2026-08-14T03:00:00+03:00",
+      "cover": "/assets/pictures/meteor-event.jpeg",
+      "location": "Pozantı / Belemedik",
+      "contact": "0544 258 45 85",
+      "organizers": ["Yeşilay Adana", "AlbaSpace"],
+      "hashtags": ["#YeşilayAdana", "#AlbaSpace", "#Perseid", "#MeteorYağmuru", "#GökyüzüGözlemi", "#Belemedik", "#Pozantı", "#Adana"],
+      "locales": {
+        "tr": {
+          "title": "Perseid Meteor Yağmuru Gözlem Kampı",
+          "excerpt": "Gökyüzünün en etkileyici doğa olaylarından birine tanıklık etmeye hazırlanıyoruz.",
+          "url": "/etkinlikler/perseid-meteor-yagmuru-2026.html",
+          "hero": "13 Ağustos’u 14 Ağustos’a bağlayan gece, Pozantı Belemedik’te Perseid Meteor Yağmuru Gözlem Kampında buluşuyoruz.",
+          "body": [
+            "Perseidler 2026’da 13 Ağustos civarında en yoğun dönemine ulaşacak. 13’ünü 14’üne bağlayan gece de en yoğun dönemine ulaşacak. Meteor hareketliliğinin devam etmesi ve ay ışığının çok az olması sayesinde gözlem için oldukça elverişli bir gökyüzü bekleniyor. Uygun ve karanlık bir ortamda saatte onlarca meteor görülebilir.",
+            "Bu özel gece boyunca kamp ateşi eşliğinde bir araya gelerek, teleskoplarla Ay ve gökyüzünü keşfedecek, meteor yağmurunu birlikte izleyip bilgilendirici sunumlarla bu doğa olayını daha yakından tanıyacağız."
+          ],
+          "highlights": [
+            "Kamp ateşi",
+            "Teleskopla Ay ve gökyüzü gözlemi",
+            "Perseid meteor yağmuru gözlemi",
+            "Bilgilendirme sunumları"
+          ]
+        },
+        "en": {
+          "title": "Perseid Meteor Shower Observation Camp",
+          "excerpt": "We are preparing to witness one of the most impressive natural phenomena in the sky.",
+          "url": "/etkinlikler/perseid-meteor-yagmuru-2026.html",
+          "hero": "On the night connecting August 13 to August 14, we will meet at the Perseid Meteor Shower Observation Camp in Pozantı Belemedik.",
+          "body": [
+            "The Perseids will reach their peak around August 13 in 2026, and the night connecting the 13th to the 14th will be especially active. With continued meteor activity and very little moonlight, the sky is expected to be highly favorable for observation. In a dark and suitable setting, dozens of meteors can be seen per hour.",
+            "Throughout this special evening, we will gather around a campfire, observe the Moon and sky through telescopes, watch the meteor shower together, and learn more about this natural phenomenon through informative presentations."
+          ],
+          "highlights": [
+            "Campfire",
+            "Telescope observation of the Moon and sky",
+            "Perseid meteor shower observation",
+            "Informative presentations"
+          ]
+        }
+      }
+    }
+  ]
+}

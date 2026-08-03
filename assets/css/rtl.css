@@ -67,3 +67,28 @@ html[dir="rtl"] select{
 html[dir="rtl"] .footer-actions .footer-action{
   text-align: right;
 }
+
+/* Arabic desktop header: move the small Alba logo slightly left and lower */
+@media (min-width: 1024px) {
+  html[dir="rtl"] .logo-sub-icons .header-logo-icon {
+    position: relative;
+    margin-right: 10px;
+    margin-top: 6px;
+    transform: translateX(-4px);
+  }
+}
+
+/* Arabic footer mobile: shrink the Alba logo and move it left/lower */
+@media (max-width: 767px) {
+  html[dir="rtl"] .footer .alba-logo,
+  html[dir="rtl"] .footer .footer-social--xl .alba-logo {
+    width: 40px !important;
+    height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    margin-right: 10px !important;
+    margin-left: 0 !important;
+    margin-top: 8px !important;
+    flex-shrink: 0;
+  }
+}
