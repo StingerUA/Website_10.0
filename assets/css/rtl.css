@@ -68,23 +68,8 @@ html[dir="rtl"] .footer-actions .footer-action{
   text-align: right;
 }
 
-/* Arabic desktop header: move the small Alba logo slightly left and lower */
-@media (min-width: 1024px) {
-  /* stronger rules that target the anchor and the image directly
-     using !important so inline styles or earlier rules don't win */
-  html[dir="rtl"] .logo-sub-icons .header-logo-icon,
-  html[dir="rtl"] .logo-sub-icons .header-logo-icon img {
-    position: relative !important;
-    top: 6px !important;
-    left: -12px !important;
-    margin-top: 0 !important;
-    margin-right: 0 !important;
-    transform: none !important;
-  }
-  html[dir="rtl"] .logo-sub-icons .header-logo-icon img {
-    display: inline-block !important;
-  }
-}
+/* Header overrides were removed — header position must remain unchanged for all pages.
+   Footer-only adjustments remain below. */
 
 /* Arabic footer mobile: shrink the Alba logo and move it left/lower */
 @media (max-width: 767px) {
