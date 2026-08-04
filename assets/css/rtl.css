@@ -68,6 +68,26 @@ html[dir="rtl"] .footer-actions .footer-action{
   text-align: right;
 }
 
+/* ── BUG FIX: mobile header shifts right / white gutter on the left ──
+   `direction` is inherited from <html dir="rtl">. The mobile header
+   layout in site.css (@media max-width:767px) positions its rows purely
+   with flex `order` values and `justify-content: flex-end` on
+   `.header-inner` / `.header-social`, written assuming direction:ltr.
+   Once direction:rtl inherits into `.header-inner`, the flex main axis
+   flips, `order` positions mirror, and the row ends up shifted with
+   empty space exposed on one side. Pinning direction:ltr on just these
+   layout (not text) containers keeps the header's physical position
+   identical across tr/eng/rus/ar, matching the original intent below —
+   text-align / RTL text rules elsewhere in this file are untouched. */
+@media (max-width: 767px) {
+  html[dir="rtl"] .header-inner,
+  html[dir="rtl"] .header-social,
+  html[dir="rtl"] .header-social .social-row,
+  html[dir="rtl"] .logo-sub-icons {
+    direction: ltr;
+  }
+}
+
 /* Header overrides were removed — header position must remain unchanged for all pages.
    Footer-only adjustments remain below. */
 
