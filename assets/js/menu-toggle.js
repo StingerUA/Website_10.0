@@ -111,6 +111,10 @@
           child.style.pointerEvents = 'none';
         });
       }
+      // Only reveal the real nav row once no dropdown is left open
+      if (!document.querySelector('.dropdown.active')) {
+        setMobileNavRowHidden(false);
+      }
       updateBackdropClass();
     } else {
       dropdown.classList.add('active');
@@ -123,8 +127,31 @@
           child.style.pointerEvents = 'auto';
         });
       }
+      setMobileNavRowHidden(true);
       positionMobileMenu(menu);
       updateBackdropClass();
+    }
+  }
+
+  /**
+   * The floating mobile dropdown panel is positioned fixed, right below
+   * the logo — which is exactly where the real .main-nav row (HİZMETLER
+   * MAĞAZA BLOG ALBAMEN HAKKIMIZDA) also sits in normal flow. The panel's
+   * background is only opaque behind each pill, so the real nav labels
+   * bleed through in the gaps/margins around the pills. Hiding the real
+   * nav row while any dropdown is open removes that bleed-through; it's
+   * restored the moment every dropdown is closed.
+   */
+  function setMobileNavRowHidden(hidden) {
+    if (window.innerWidth >= CONFIG.desktop_breakpoint) return;
+    const nav = document.querySelector('.main-nav');
+    if (!nav) return;
+    if (hidden) {
+      nav.style.setProperty('visibility', 'hidden', 'important');
+      nav.style.setProperty('pointer-events', 'none', 'important');
+    } else {
+      nav.style.removeProperty('visibility');
+      nav.style.removeProperty('pointer-events');
     }
   }
 
@@ -139,7 +166,7 @@
 
     if (window.innerWidth >= CONFIG.desktop_breakpoint) {
       // Desktop: let the normal CSS (flyout under the trigger) handle it.
-      ['position', 'top', 'left', 'right', 'width', 'max-width', 'display', 'flex-direction', 'flex-wrap', 'justify-content', 'gap', 'padding']
+      ['position', 'top', 'left', 'right', 'width', 'max-width', 'display', 'flex-direction', 'flex-wrap', 'justify-content', 'gap', 'padding', 'background', 'border-radius', 'z-index']
         .forEach(prop => menu.style.removeProperty(prop));
       items.forEach(item => {
         ['width', 'max-width', 'flex', 'white-space', 'padding', 'font-size', 'height'].forEach(prop => item.style.removeProperty(prop));
@@ -170,6 +197,12 @@
     set('justify-content', 'center');
     set('gap', '4px');
     set('padding', '4px');
+    // Opaque background so nothing behind the panel (e.g. the real nav
+    // row, which sits in this same spot) can show through the gaps
+    // around/between the pills.
+    set('background', '#0a1628');
+    set('border-radius', '10px');
+    set('z-index', '2147483647');
 
     // Four items per row (25% each), all in one horizontal line, compact sizing
     items.forEach(item => {
@@ -216,6 +249,7 @@
           const trigger = dropdown.querySelector('.dropdown-trigger');
           if (trigger) trigger.setAttribute('aria-expanded', 'false');
         });
+        setMobileNavRowHidden(false);
         updateBackdropClass();
       }
     });
@@ -228,6 +262,7 @@
           const trigger = dropdown.querySelector('.dropdown-trigger');
           if (trigger) trigger.setAttribute('aria-expanded', 'false');
         });
+        setMobileNavRowHidden(false);
         updateBackdropClass();
       }
     });
@@ -251,6 +286,7 @@
           const trigger = dropdown.querySelector('.dropdown-trigger');
           if (trigger) trigger.setAttribute('aria-expanded', 'false');
         });
+        setMobileNavRowHidden(false);
         updateBackdropClass();
 
         lastWindowWidth = currentWidth;
