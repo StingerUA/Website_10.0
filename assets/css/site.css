@@ -2415,54 +2415,15 @@ select, select option {
     white-space: nowrap !important;
   }
 
-  /* Mobile dropdown: use opacity/visibility (consistent with dropdown-optimized.css) */
+  /* Mobile dropdown positioning/sizing consolidated into a single source of
+     truth: assets/css/fix-layout.css (.header-inner .main-nav .dropdown-menu).
+     This block used to duplicate that logic with left:50% + flex-wrap:nowrap,
+     which centered the panel on the trigger's own (off-center) position
+     instead of the viewport, and could grow wider than the screen with long
+     items like "Yaklaşan Etkinlikler" — causing the panel to render shifted
+     and clipped instead of centered. Removed to stop the two rules fighting. */
   .dropdown {
     position: relative !important;
-  }
-
-  .dropdown-menu {
-    position: absolute !important;
-    top: calc(100% + 4px) !important;
-    left: 50% !important;
-    transform: translateX(-50%) translateY(-4px) !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    width: max-content !important;
-    max-width: calc(100vw - 24px) !important;
-    min-width: unset !important;
-    overflow-x: auto !important;
-    background: #0d1b35 !important;
-    border: 1px solid rgba(0,194,255,0.25) !important;
-    border-radius: 8px !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
-    z-index: 50000 !important;
-    padding: 6px !important;
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    gap: 4px !important;
-    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease !important;
-  }
-
-  .dropdown.active .dropdown-menu {
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-    transform: translateX(-50%) translateY(0) !important;
-  }
-
-  .dropdown-menu a {
-    padding: 8px 12px !important;
-    font-size: 12px !important;
-    color: #e5e7eb !important;
-    border-radius: 5px !important;
-    white-space: nowrap !important;
-  }
-
-  .dropdown-menu a:hover {
-    background: rgba(0,194,255,0.1) !important;
-    color: #fff !important;
   }
 }
 
@@ -3568,51 +3529,11 @@ body:has(model-viewer) .container model-viewer {
     flex-shrink: 0 !important;
   }
 
-  /* ─ Dropdown panel: 4 per row on mobile ─ */
-  .main-nav .dropdown-menu,
-  .header-inner .main-nav .dropdown-menu {
-    display: none;
-    position: fixed !important;
-    top: auto !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100vw !important;
-    max-width: 100vw !important;
-    box-sizing: border-box !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    padding: 12px 10px !important;
-    background: rgba(2,6,23,0.98) !important;
-    border-top: 1px solid rgba(0,194,255,0.2) !important;
-    border-radius: 0 !important;
-    z-index: 99999 !important;
-  }
-
-  .main-nav .dropdown.active .dropdown-menu,
-  .header-inner .main-nav .dropdown.active .dropdown-menu {
-    display: flex !important;
-  }
-
-  /* Each dropdown item: ~25% width → 4 per row */
-  .main-nav .dropdown-menu a,
-  .header-inner .main-nav .dropdown-menu a {
-    flex: 0 0 calc(25% - 8px) !important;
-    min-width: 70px !important;
-    max-width: calc(25% - 8px) !important;
-    text-align: center !important;
-    padding: 8px 4px !important;
-    font-size: 11px !important;
-    font-weight: 600 !important;
-    border: 1px solid rgba(0,194,255,0.3) !important;
-    border-radius: 8px !important;
-    background: rgba(0,194,255,0.08) !important;
-    color: #e5e7eb !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-    box-sizing: border-box !important;
-  }
+  /* Dropdown panel positioning/sizing lives in fix-layout.css now
+     (.header-inner .main-nav .dropdown-menu) — see comment there.
+     This used to be a second, slightly different copy of the same rule
+     (different top/background/font-size), which made the two blocks
+     race each other for identical properties. */
 }
 
 /* ── 3. Remove focus rectangle from nav globally ── */
