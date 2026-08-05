@@ -123,8 +123,61 @@
           child.style.pointerEvents = 'auto';
         });
       }
+      positionMobileMenu(menu);
       updateBackdropClass();
     }
+  }
+
+  /**
+   * On mobile, force the dropdown to render as a horizontal row anchored
+   * right below the ALBASPACE logo (above the nav row), via inline styles.
+   * Inline styles always beat stylesheet rules, so this can't be pulled out
+   * of position by any competing CSS block.
+   */
+  function positionMobileMenu(menu) {
+    const items = menu.querySelectorAll('a, button');
+
+    if (window.innerWidth >= CONFIG.desktop_breakpoint) {
+      // Desktop: let the normal CSS (flyout under the trigger) handle it.
+      ['position', 'top', 'left', 'right', 'width', 'max-width', 'display', 'flex-direction', 'flex-wrap', 'justify-content']
+        .forEach(prop => menu.style.removeProperty(prop));
+      items.forEach(item => {
+        ['width', 'max-width', 'flex', 'white-space'].forEach(prop => item.style.removeProperty(prop));
+      });
+      return;
+    }
+
+    const logo = document.querySelector('.main-center-logo');
+    const gap = 8;
+    const top = logo ? Math.round(logo.getBoundingClientRect().bottom) + gap : 120;
+
+    // setProperty(..., 'important') is required here: this codebase's
+    // stylesheets are full of `!important` rules for .dropdown-menu, and a
+    // plain inline style (element.style.x = ...) loses to any of them.
+    // Only an inline !important reliably wins, regardless of which
+    // stylesheet block happens to match on a given page/viewport.
+    const set = (prop, value) => menu.style.setProperty(prop, value, 'important');
+    set('position', 'fixed');
+    set('top', top + 'px');
+    set('left', '12px');
+    set('right', '12px');
+    set('width', 'auto');
+    set('max-width', 'none');
+    set('display', 'flex');
+    set('flex-direction', 'row');
+    set('flex-wrap', 'wrap');
+    set('justify-content', 'center');
+
+    // Two items per row, wrapping text instead of stretching to 100% width
+    // or spilling past the screen edge.
+    items.forEach(item => {
+      const setItem = (prop, value) => item.style.setProperty(prop, value, 'important');
+      setItem('flex', '0 0 calc(50% - 4px)');
+      setItem('width', 'calc(50% - 4px)');
+      setItem('max-width', 'calc(50% - 4px)');
+      setItem('box-sizing', 'border-box');
+      setItem('white-space', 'normal');
+    });
   }
 
   /**
@@ -194,6 +247,11 @@
         lastWindowWidth = currentWidth;
         initialized = false;
         init();
+      } else {
+        // Same side of the breakpoint — just keep an already-open menu
+        // anchored under the logo if the viewport size changed.
+        const openMenu = document.querySelector('.dropdown.active .dropdown-menu');
+        if (openMenu) positionMobileMenu(openMenu);
       }
     });
   }
