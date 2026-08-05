@@ -6,13 +6,25 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
 
-html[dir="rtl"],
-html[dir="rtl"] body {
+html[dir="rtl"] {
   direction: rtl;
+  /* FIX: site.css sets html { overflow-x: hidden !important } on mobile
+     (@media max-width:767px, line ~3059), overriding its own earlier
+     `overflow-x: clip` (which the codebase's own comment notes is the
+     RTL/position:fixed-safe variant). `hidden` turns the element into a
+     scroll container whose scroll-anchor flips side under direction:rtl,
+     which clips the *visible* (physical-left) edge of the page and shows
+     it as a white gutter while the content is pushed right. `clip` does
+     not establish a scroll container, so it isn't subject to that RTL
+     anchor shift, while still preventing the page from overflowing. */
+  overflow-x: clip !important;
 }
 
 html[dir="rtl"] body {
+  direction: rtl;
   font-family: 'Cairo', 'Inter', Arial, sans-serif;
+  /* Same reasoning as above for <body>. */
+  overflow-x: clip !important;
 }
 
 /* Numbers, prices, and Latin brand names (ALBAMEN, ATLAS, KubeSat, Alba Space)
