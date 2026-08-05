@@ -168,13 +168,12 @@
     set('flex-wrap', 'wrap');
     set('justify-content', 'center');
 
-    // Two items per row, wrapping text instead of stretching to 100% width
-    // or spilling past the screen edge.
+    // Four items per row (25% each), all in one horizontal line
     items.forEach(item => {
       const setItem = (prop, value) => item.style.setProperty(prop, value, 'important');
-      setItem('flex', '0 0 calc(50% - 4px)');
-      setItem('width', 'calc(50% - 4px)');
-      setItem('max-width', 'calc(50% - 4px)');
+      setItem('flex', '0 0 calc(25% - 6px)');
+      setItem('width', 'calc(25% - 6px)');
+      setItem('max-width', 'calc(25% - 6px)');
       setItem('box-sizing', 'border-box');
       setItem('white-space', 'normal');
     });
