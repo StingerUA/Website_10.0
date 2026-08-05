@@ -148,10 +148,9 @@
     }
 
     const logo = document.querySelector('.main-center-logo');
-    const menuHeight = 48; // approximate height of the menu row
-    const gap = 6;
-    // Position above the logo (not below)
-    const top = logo ? Math.round(logo.getBoundingClientRect().top) - menuHeight - gap : 60;
+    const gap = 8;
+    // Position BELOW the logo (not above)
+    const top = logo ? Math.round(logo.getBoundingClientRect().bottom) + gap : 120;
 
     // setProperty(..., 'important') is required here: this codebase's
     // stylesheets are full of `!important` rules for .dropdown-menu, and a
