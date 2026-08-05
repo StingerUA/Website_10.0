@@ -139,17 +139,19 @@
 
     if (window.innerWidth >= CONFIG.desktop_breakpoint) {
       // Desktop: let the normal CSS (flyout under the trigger) handle it.
-      ['position', 'top', 'left', 'right', 'width', 'max-width', 'display', 'flex-direction', 'flex-wrap', 'justify-content']
+      ['position', 'top', 'left', 'right', 'width', 'max-width', 'display', 'flex-direction', 'flex-wrap', 'justify-content', 'gap', 'padding']
         .forEach(prop => menu.style.removeProperty(prop));
       items.forEach(item => {
-        ['width', 'max-width', 'flex', 'white-space'].forEach(prop => item.style.removeProperty(prop));
+        ['width', 'max-width', 'flex', 'white-space', 'padding', 'font-size', 'height'].forEach(prop => item.style.removeProperty(prop));
       });
       return;
     }
 
     const logo = document.querySelector('.main-center-logo');
-    const gap = 8;
-    const top = logo ? Math.round(logo.getBoundingClientRect().bottom) + gap : 120;
+    const menuHeight = 48; // approximate height of the menu row
+    const gap = 6;
+    // Position above the logo (not below)
+    const top = logo ? Math.round(logo.getBoundingClientRect().top) - menuHeight - gap : 60;
 
     // setProperty(..., 'important') is required here: this codebase's
     // stylesheets are full of `!important` rules for .dropdown-menu, and a
@@ -159,23 +161,32 @@
     const set = (prop, value) => menu.style.setProperty(prop, value, 'important');
     set('position', 'fixed');
     set('top', top + 'px');
-    set('left', '12px');
-    set('right', '12px');
+    set('left', '8px');
+    set('right', '8px');
     set('width', 'auto');
     set('max-width', 'none');
     set('display', 'flex');
     set('flex-direction', 'row');
-    set('flex-wrap', 'wrap');
+    set('flex-wrap', 'nowrap');
     set('justify-content', 'center');
+    set('gap', '4px');
+    set('padding', '4px');
 
-    // Four items per row (25% each), all in one horizontal line
+    // Four items per row (25% each), all in one horizontal line, compact sizing
     items.forEach(item => {
       const setItem = (prop, value) => item.style.setProperty(prop, value, 'important');
-      setItem('flex', '0 0 calc(25% - 6px)');
-      setItem('width', 'calc(25% - 6px)');
-      setItem('max-width', 'calc(25% - 6px)');
+      setItem('flex', '0 0 calc(25% - 3px)');
+      setItem('width', 'calc(25% - 3px)');
+      setItem('max-width', 'calc(25% - 3px)');
+      setItem('height', '40px');
+      setItem('padding', '6px 4px');
+      setItem('font-size', '11px');
       setItem('box-sizing', 'border-box');
       setItem('white-space', 'normal');
+      setItem('display', 'flex');
+      setItem('align-items', 'center');
+      setItem('justify-content', 'center');
+      setItem('text-align', 'center');
     });
   }
 
