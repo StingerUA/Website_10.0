@@ -37,7 +37,9 @@
 
   function cardHtml(data, post) {
     var loc = post.locales[LOCALE] || post.locales.tr;
-    var authorLine = post.author[LOCALE] || post.author.tr;
+    var authorLine = typeof post.author === 'object' 
+      ? (post.author[LOCALE] || post.author.tr) 
+      : post.author;
     return (
       '<a class="blog-card reveal" data-direction="up" href="' + loc.url + '">' +
         '<div class="blog-card-cover">' +
