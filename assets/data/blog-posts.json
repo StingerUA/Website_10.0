@@ -209,6 +209,47 @@
           "url": "/ar/blog/uzay-teleskoplari.html"
         }
       }
+    },
+    {
+      "slug": "alba-space-blog-yasam-marsta-baslamis-olabilir-mi-bu-dusundurucu-incelemede-dr-robert-zubrin-dr-steven-bennerin-y-2",
+      "category": "uzay",
+      "publishAt": "2026-08-05T08:00:00+03:00",
+      "cover": "/assets/images/blog/alba-space-blog-yasam-marsta-baslamis-olabilir-mi-bu-dusundurucu-incelemede-dr-robert-zubrin-dr-steven-bennerin-y-2-cover.jpg",
+      "readingMinutes": 2,
+      "author": {
+        "tr": "Nick Nesterenko",
+        "en": "Nick Nesterenko",
+        "ru": "Nick Nesterenko",
+        "ar": "Nick Nesterenko"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "ALBA SPACE BLOG Yaşam Mars'ta başlamış olabilir mi? Bu düşündürücü incelemede, Dr. Robert Zubrin, Dr. Steven Benner'ın y",
+          "excerpt": "ALBA SPACE BLOG Yaşam Mars'ta başlamış olabilir mi? Bu düşündürücü incelemede, Dr. Robert Zubrin, Dr. Steven Benner'ın yeni kitabını ve gezegen bilimi",
+          "url": "/blog/alba-space-blog-yasam-marsta-baslamis-olabilir-mi-bu-dusundurucu-incelemede-dr-robert-zubrin-dr-steven-bennerin-y-2.html"
+        },
+        "en": {
+          "title": "ALBA SPACE BLOG Could Life Have Started on Mars?",
+          "excerpt": "Dr. Robert Zubrin reviews Dr. Steven Benner's new book",
+          "url": "/eng/blog/alba-space-blog-yasam-marsta-baslamis-olabilir-mi-bu-dusundurucu-incelemede-dr-robert-zubrin-dr-steven-bennerin-y-2.html"
+        },
+        "ru": {
+          "title": "ALBA SPACE BLOG Может ли жизнь начаться на Марсе?",
+          "excerpt": "Доктор Роберт Зубрин рецензирует новую книгу доктора Стивена Беннера",
+          "url": "/rus/blog/alba-space-blog-yasam-marsta-baslamis-olabilir-mi-bu-dusundurucu-incelemede-dr-robert-zubrin-dr-steven-bennerin-y-2.html"
+        },
+        "ar": {
+          "title": "ALBA SPACE BLOG هل بدأت الحياة على كوكب المريخ؟",
+          "excerpt": "الدكتور روبرت زوبرين يراجع كتاب الدكتور ستيفن بنر الجديد",
+          "url": "/ar/blog/alba-space-blog-yasam-marsta-baslamis-olabilir-mi-bu-dusundurucu-incelemede-dr-robert-zubrin-dr-steven-bennerin-y-2.html"
+        }
+      }
     }
   ]
 }
