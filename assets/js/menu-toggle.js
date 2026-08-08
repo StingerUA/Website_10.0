@@ -169,15 +169,17 @@
       ['position', 'top', 'left', 'right', 'width', 'max-width', 'display', 'flex-direction', 'flex-wrap', 'justify-content', 'gap', 'padding', 'background', 'border-radius', 'z-index']
         .forEach(prop => menu.style.removeProperty(prop));
       items.forEach(item => {
-        ['width', 'max-width', 'flex', 'white-space', 'padding', 'font-size', 'height'].forEach(prop => item.style.removeProperty(prop));
+        ['width', 'max-width', 'flex', 'white-space', 'padding', 'font-size', 'height', 'line-height'].forEach(prop => item.style.removeProperty(prop));
       });
       return;
     }
 
     const logo = document.querySelector('.main-center-logo');
     const gap = 8;
-    // Position BELOW the logo (not above)
-    const top = logo ? Math.round(logo.getBoundingClientRect().bottom) + gap : 120;
+    const raise = 76; // ~2cm (96dpi CSS reference: 1cm ≈ 37.8px) — lands the
+                       // panel in the empty gap between the logo and the
+                       // real nav row instead of directly on top of it.
+    const top = logo ? Math.round(logo.getBoundingClientRect().bottom) + gap - raise : 60;
 
     // setProperty(..., 'important') is required here: this codebase's
     // stylesheets are full of `!important` rules for .dropdown-menu, and a
@@ -195,24 +197,25 @@
     set('flex-direction', 'row');
     set('flex-wrap', 'nowrap');
     set('justify-content', 'center');
-    set('gap', '4px');
-    set('padding', '4px');
+    set('gap', '3px');
+    set('padding', '3px');
     // Opaque background so nothing behind the panel (e.g. the real nav
     // row, which sits in this same spot) can show through the gaps
     // around/between the pills.
     set('background', '#0a1628');
-    set('border-radius', '10px');
+    set('border-radius', '8px');
     set('z-index', '2147483647');
 
-    // Four items per row (25% each), all in one horizontal line, compact sizing
+    // Four items per row (25% each), all in one horizontal line, extra compact
     items.forEach(item => {
       const setItem = (prop, value) => item.style.setProperty(prop, value, 'important');
       setItem('flex', '0 0 calc(25% - 3px)');
       setItem('width', 'calc(25% - 3px)');
       setItem('max-width', 'calc(25% - 3px)');
-      setItem('height', '40px');
-      setItem('padding', '6px 4px');
-      setItem('font-size', '11px');
+      setItem('height', '30px');
+      setItem('padding', '2px 3px');
+      setItem('font-size', '9px');
+      setItem('line-height', '1.1');
       setItem('box-sizing', 'border-box');
       setItem('white-space', 'normal');
       setItem('display', 'flex');
@@ -323,4 +326,3 @@
     init();
   };
 })();
-
