@@ -378,7 +378,7 @@
 
     .header-inner {
         flex-wrap: wrap !important;
-        gap: 8px !important;
+        gap: 4px !important;
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
@@ -469,7 +469,7 @@
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        margin: 8px 0 !important;
+        margin: 0 !important;
     }
 
     /* 3. THIRD LINE: Navigation */
@@ -479,7 +479,7 @@
         visibility: visible !important;
         opacity: 1 !important;
         width: 100% !important;
-        margin-top: 8px !important;
+        margin-top: 0 !important;
         justify-content: center !important;
         flex: 0 0 100% !important;
         position: relative !important;
