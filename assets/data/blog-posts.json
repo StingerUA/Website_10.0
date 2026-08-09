@@ -20,7 +20,84 @@
     }
   },
   "posts": [
-  
+    {
+      "slug": "uzayi-copluge-ceviriyoruz-gelecegin-uzay-yolculuklari-tehlikede-mi",
+      "category": "uzay",
+      "publishAt": "2026-08-09T08:00:00+03:00",
+      "cover": "/assets/images/blog/uzayi-copluge-ceviriyoruz-gelecegin-uzay-yolculuklari-tehlikede-mi-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Музаффер Энес Ипчи",
+        "ar": "مظفر إنس إيبجي"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Uzayı Çöplüğe Çeviriyoruz: Geleceğin Uzay Yolculukları Tehlikede Mi?",
+          "excerpt": "Dünya yörüngesindeki uzay çöpleri, Kessler Sendromu riski ve uzayı temizlemek için geliştirilen teknolojiler üzerine bir bakış.",
+          "url": "/blog/uzayi-copluge-ceviriyoruz-gelecegin-uzay-yolculuklari-tehlikede-mi.html"
+        }
+      }
+    },
+    {
+      "slug": "asteroit-madenciligi-gelecegin-altin-madeni",
+      "category": "uzay",
+      "publishAt": "2026-08-09T08:01:00+03:00",
+      "cover": "/assets/images/blog/asteroit-madenciligi-gelecegin-altin-madeni-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Музаффер Энес Ипчи",
+        "ar": "مظفر إنس إيبجي"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Geleceğin Altın Madeni: Uzayda Madencilik ve Asteroitler",
+          "excerpt": "Asteroitlerde bulunan değerli madenler, uzay madenciliğinin nasıl yapılacağı ve önündeki en büyük zorluklar üzerine bir inceleme.",
+          "url": "/blog/asteroit-madenciligi-gelecegin-altin-madeni.html"
+        }
+      }
+    },
+    {
+      "slug": "gokyuzu-kaybolmadi-biz-onu-sildik",
+      "category": "egitim",
+      "publishAt": "2026-08-09T08:02:00+03:00",
+      "cover": "/assets/images/blog/gokyuzu-kaybolmadi-biz-onu-sildik-cover.jpg",
+      "readingMinutes": 5,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Музаффер Энес Ипчи",
+        "ar": "مظفر إنس إيبجي"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Gökyüzü Kaybolmadı, Biz Onu Sildik",
+          "excerpt": "Işık kirliliği nedir, gökyüzü karanlığı neden önemlidir ve Türkiye'de yıldız gözlemi için karanlık noktalar nasıl bulunur?",
+          "url": "/blog/gokyuzu-kaybolmadi-biz-onu-sildik.html"
+        }
+      }
+    },
     {
       "slug": "yasam-mars-basladi",
       "category": "uzay",
