@@ -489,7 +489,8 @@
         overflow-x: hidden !important;
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
-        padding-bottom: 0 !important;
+        padding: 0 !important;
+        border-top: none !important;
         min-width: 0 !important;
     }
 
