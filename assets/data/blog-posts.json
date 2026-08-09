@@ -53,16 +53,16 @@
       "cover": "/assets/images/blog/asteroit-madenciligi-gelecegin-altin-madeni-cover.jpg",
       "readingMinutes": 3,
       "author": {
-        "tr": "Muzaffer Enes İpçi",
-        "en": "Muzaffer Enes İpçi",
-        "ru": "Музаффер Энес Ипчи",
-        "ar": "مظفر إنس إيبجي"
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Аслы Болат",
+        "ar": "أصلي بولات"
       },
       "authorRole": {
-        "tr": "Misafir Yazar",
-        "en": "Guest Writer",
-        "ru": "Приглашённый автор",
-        "ar": "كاتب ضيف"
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer & Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومعلّمة"
       },
       "locales": {
         "tr": {
@@ -79,10 +79,10 @@
       "cover": "/assets/images/blog/gokyuzu-kaybolmadi-biz-onu-sildik-cover.jpg",
       "readingMinutes": 5,
       "author": {
-        "tr": "Muzaffer Enes İpçi",
-        "en": "Muzaffer Enes İpçi",
-        "ru": "Музаффер Энес Ипчи",
-        "ar": "مظفر إنس إيبجي"
+        "tr": "Ali Batuhan Özsürmeli",
+        "en": "Ali Batuhan Özsürmeli",
+        "ru": "Али Батухан Озсюрмели",
+        "ar": "علي باتوهان أوزسورملي"
       },
       "authorRole": {
         "tr": "Misafir Yazar",
