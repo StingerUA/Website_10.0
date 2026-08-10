@@ -136,11 +136,19 @@
       closeBtn.innerHTML = '&times;';
       overlay.appendChild(closeBtn);
 
-      /* Clone model-viewer into overlay */
-      var clone = mv.cloneNode(true);
-      clone.className = (clone.className || '') + ' mv-fs-viewer';
-      clone.removeAttribute('id');
-      clone.style.cssText = '';
+      /* Create a FRESH model-viewer and copy its attributes over.
+         NOTE: we deliberately do NOT use mv.cloneNode(true) here — model-viewer
+         renders via WebGL/Three.js internally, and cloning the node copies only
+         the DOM attributes, not the live WebGL/canvas render state. The clone
+         ends up an empty shell with no visible 3D model. Creating a brand new
+         <model-viewer> and copying over its attributes makes it initialize and
+         load the model properly, just like the original element did. */
+      var clone = document.createElement('model-viewer');
+      Array.prototype.forEach.call(mv.attributes, function (attr) {
+        if (attr.name === 'id') return; // avoid duplicate id in the DOM
+        clone.setAttribute(attr.name, attr.value);
+      });
+      clone.className = 'mv-fs-viewer';
       clone.setAttribute('camera-controls', '');
       clone.setAttribute('auto-rotate', '');
 
