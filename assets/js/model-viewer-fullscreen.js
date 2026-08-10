@@ -33,6 +33,17 @@
     .mv-expand-btn:active { transform: scale(0.92); background: rgba(0,194,255,0.25); }
     .mv-expand-btn svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; }
 
+    /* Tight wrapper we create ourselves around just the model-viewer, so the
+       expand button is always anchored to the model itself — not whatever
+       bigger block (heading, description, audio player...) happens to be
+       its parent on a given page. */
+    .mv-btn-anchor {
+      position: relative;
+      display: block;
+    }
+    /* Hide the expand button while its model is inside the fullscreen overlay */
+    .mv-fs-overlay .mv-expand-btn { display: none; }
+
     /* ── Fullscreen overlay (model-viewer is MOVED into this, not cloned) ── */
     .mv-fs-overlay {
       position: fixed;
@@ -103,43 +114,40 @@
     viewers.forEach(function (mv) {
       if (mv.__mvFsWired) return; // avoid wiring the same viewer twice
       mv.__mvFsWired = true;
-
-      /* IMPORTANT: model-preloader.js (a separate, independently-timed script)
-         may asynchronously wrap this <model-viewer> in its own ".viewer-wrapper"
-         div (used for the loading-spinner overlay) shortly after page load.
-         If we grab mv.parentElement too early and that wrapping happens
-         afterwards, our cached "parent" reference goes stale — mv is no longer
-         actually inside it — and any later insertBefore() call throws, which
-         silently breaks the button (click does nothing, error only in console).
-         To avoid this race we wait until that wrapping has settled (or a
-         short timeout elapses, in case model-preloader.js isn't present on
-         this page at all) before wiring anything up. */
-      var wireAttempts = 0;
-      (function waitForStableParent() {
-        wireAttempts++;
-        if (mv.closest('.viewer-wrapper') || wireAttempts > 40) {
-          wireViewer(mv);
-        } else {
-          setTimeout(waitForStableParent, 50);
-        }
-      })();
+      wireViewer(mv);
     });
   }
 
   function wireViewer(mv) {
-      /* Wrap model-viewer in relative-positioned container if not already */
-      var parent = mv.parentElement;
-      if (getComputedStyle(parent).position === 'static') {
-        parent.style.position = 'relative';
-      }
+      /* IMPORTANT: a separate, independently-timed script (model-preloader.js)
+         asynchronously wraps this <model-viewer> in its own ".viewer-wrapper"
+         div (used for the loading-spinner overlay) shortly after page load.
+         If we anchor the expand button to mv's ORIGINAL parent (e.g. the big
+         page ".container" that also holds the heading, description, audio
+         player, etc.) the button ends up positioned relative to that whole
+         block — landing near the top of the page instead of over the model.
+         And if we wait for the other script's wrapper before wiring, we're
+         racing it, which previously made the button silently unresponsive.
 
-      /* Create expand button */
+         Fix: create OUR OWN tight wrapper around just the model-viewer,
+         synchronously, right now — before anything else can touch it. This
+         wrapper shrinks to exactly the model-viewer's own box (same trick
+         model-preloader.js uses for its overlay), so the button is always
+         anchored to the model itself. If model-preloader.js later wraps
+         again, it'll just nest its wrapper inside ours — harmless, since
+         both are plain non-sized "position:relative" boxes. */
+      var anchor = document.createElement('div');
+      anchor.className = 'mv-btn-anchor';
+      mv.parentNode.insertBefore(anchor, mv);
+      anchor.appendChild(mv);
+
+      /* Create expand button — anchored to our tight wrapper, not the page */
       var btn = document.createElement('button');
       btn.className = 'mv-expand-btn';
       btn.setAttribute('aria-label', 'Tam ekran');
       btn.title = 'Tam ekran';
       btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
-      parent.appendChild(btn);
+      anchor.appendChild(btn);
 
       /* Create overlay (initially empty — model-viewer is moved into it on open) */
       var overlay = document.createElement('div');
@@ -174,8 +182,7 @@
       function openOverlay() {
         if (isOpen) return;
         isOpen = true;
-        var livingParent = mv.parentElement || parent;
-        livingParent.insertBefore(placeholder, mv);
+        mv.parentNode.insertBefore(placeholder, mv);
         overlay.appendChild(mv);
         overlay.classList.add('open');
         _activeClose = closeOverlay;
