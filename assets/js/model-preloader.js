@@ -140,7 +140,12 @@
       }
     }
 
-    setViewerInteractivity(viewer, false);
+    // NOTE: we intentionally do NOT disable pointer-events on the viewer while
+    // loading anymore — this used to make every AR/camera-control button on the
+    // model unusable for the entire load time (up to 2 minutes for large models).
+    // The overlay itself already has pointer-events:none, so it never blocked
+    // anything on its own; only this call did. Buttons stay clickable immediately,
+    // the overlay is purely a visual loading indicator on top.
     if (wrapper) wrapper.classList.remove('is-ready');
 
     viewer.addEventListener('progress', updateProgress);

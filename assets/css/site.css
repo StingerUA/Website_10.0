@@ -2245,10 +2245,6 @@ select, select option {
   pointer-events: auto;
 }
 
-.viewer-wrapper:not(.is-ready) > model-viewer {
-  pointer-events: none;
-}
-
 .model-loading-overlay .loader-card {
   position: relative;
   width: 90%;
