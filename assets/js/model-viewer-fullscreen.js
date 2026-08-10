@@ -33,23 +33,24 @@
     .mv-expand-btn:active { transform: scale(0.92); background: rgba(0,194,255,0.25); }
     .mv-expand-btn svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; }
 
-    /* ── Fullscreen overlay ── */
+    /* ── Fullscreen overlay (model-viewer is MOVED into this, not cloned) ── */
     .mv-fs-overlay {
       position: fixed;
       inset: 0;
       z-index: 99999;
       background: #020617;
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
     }
     .mv-fs-overlay.open {
-      opacity: 1;
-      pointer-events: all;
+      display: flex;
+    }
+    .mv-fs-overlay model-viewer {
+      width: 100vw !important;
+      height: 100vh !important;
+      display: block !important;
     }
 
     /* ── Close button ── */
@@ -75,13 +76,6 @@
       padding: 0;
     }
     .mv-fs-close:active { background: rgba(255,255,255,0.28); }
-
-    /* ── The cloned model-viewer inside overlay ── */
-    .mv-fs-viewer {
-      width: 100vw;
-      height: 100vh;
-      display: block;
-    }
   `;
 
   /* Inject CSS */
@@ -91,14 +85,12 @@
 
   // Bug fix: single shared Escape handler — prevents N listeners accumulating
   // when there are N model-viewer elements on the same page
-  var _activeOverlay = null;
+  var _activeClose = null;
   if (!document.__mvFsEscHandler) {
     document.__mvFsEscHandler = true;
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && _activeOverlay) {
-        _activeOverlay.classList.remove('open');
-        document.body.style.overflow = '';
-        _activeOverlay = null;
+      if (e.key === 'Escape' && _activeClose) {
+        _activeClose();
       }
     });
   }
@@ -109,6 +101,9 @@
     if (!viewers.length) return;
 
     viewers.forEach(function (mv) {
+      if (mv.__mvFsWired) return; // avoid wiring the same viewer twice
+      mv.__mvFsWired = true;
+
       /* Wrap model-viewer in relative-positioned container if not already */
       var parent = mv.parentElement;
       if (getComputedStyle(parent).position === 'static') {
@@ -123,7 +118,7 @@
       btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
       parent.appendChild(btn);
 
-      /* Create overlay */
+      /* Create overlay (initially empty — model-viewer is moved into it on open) */
       var overlay = document.createElement('div');
       overlay.className = 'mv-fs-overlay';
       overlay.setAttribute('role', 'dialog');
@@ -136,55 +131,55 @@
       closeBtn.innerHTML = '&times;';
       overlay.appendChild(closeBtn);
 
-      /* Create a FRESH model-viewer and copy its attributes over.
-         NOTE: we deliberately do NOT use mv.cloneNode(true) here — model-viewer
-         renders via WebGL/Three.js internally, and cloning the node copies only
-         the DOM attributes, not the live WebGL/canvas render state. The clone
-         ends up an empty shell with no visible 3D model. Creating a brand new
-         <model-viewer> and copying over its attributes makes it initialize and
-         load the model properly, just like the original element did. */
-      var clone = document.createElement('model-viewer');
-      Array.prototype.forEach.call(mv.attributes, function (attr) {
-        if (attr.name === 'id') return; // avoid duplicate id in the DOM
-        clone.setAttribute(attr.name, attr.value);
-      });
-      clone.className = 'mv-fs-viewer';
-      clone.setAttribute('camera-controls', '');
-      clone.setAttribute('auto-rotate', '');
-
-      /* Copy src from live viewer so auth-loaded blob URL is preserved */
-      function syncSrc() {
-        var liveSrc = mv.getAttribute('src');
-        if (liveSrc && liveSrc !== clone.getAttribute('src')) {
-          clone.setAttribute('src', liveSrc);
-        }
-      }
-
-      overlay.appendChild(clone);
       document.body.appendChild(overlay);
+
+      /* Remember where mv originally lived so we can put it back */
+      var placeholder = document.createComment('mv-fs-original-slot');
+      var savedInlineWidth = mv.style.width;
+      var savedInlineHeight = mv.style.height;
 
       /* Защита от «phantom tap» — блокируем клики первые 600мс после создания кнопки */
       var btnReady = false;
       setTimeout(function () { btnReady = true; }, 600);
 
-      /* Open */
+      var isOpen = false;
+
+      /* Open — move the REAL model-viewer (already loaded) into the overlay.
+         We never clone or recreate the element, so there's no re-loading of
+         the .glb and no empty/blank viewer — it's the exact same live
+         WebGL canvas the user was already looking at, just resized. */
+      function openOverlay() {
+        if (isOpen) return;
+        isOpen = true;
+        parent.insertBefore(placeholder, mv);
+        overlay.appendChild(mv);
+        overlay.classList.add('open');
+        _activeClose = closeOverlay;
+        document.body.style.overflow = 'hidden';
+        /* trigger resize so model-viewer's internal renderer picks up the new size */
+        setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 50);
+      }
+
+      /* Close — move model-viewer back to its original spot in the page */
+      function closeOverlay() {
+        if (!isOpen) return;
+        isOpen = false;
+        mv.style.width = savedInlineWidth;
+        mv.style.height = savedInlineHeight;
+        placeholder.parentNode.insertBefore(mv, placeholder);
+        placeholder.remove();
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+        if (_activeClose === closeOverlay) _activeClose = null;
+        setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 50);
+      }
+
       btn.addEventListener('click', function (e) {
         /* Блокируем: не от реального пользователя, или слишком рано */
         if (!e.isTrusted || !btnReady) return;
-        syncSrc();
-        overlay.classList.add('open');
-        _activeOverlay = overlay;
-        document.body.style.overflow = 'hidden';
-        /* trigger resize so model-viewer renders correctly at full size */
-        setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 50);
+        openOverlay();
       });
 
-      /* Close */
-      function closeOverlay() {
-        overlay.classList.remove('open');
-        document.body.style.overflow = '';
-        if (_activeOverlay === overlay) _activeOverlay = null;
-      }
       closeBtn.addEventListener('click', closeOverlay);
       overlay.addEventListener('click', function (e) {
         if (e.target === overlay) closeOverlay();
