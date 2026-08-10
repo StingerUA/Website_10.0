@@ -104,6 +104,29 @@
       if (mv.__mvFsWired) return; // avoid wiring the same viewer twice
       mv.__mvFsWired = true;
 
+      /* IMPORTANT: model-preloader.js (a separate, independently-timed script)
+         may asynchronously wrap this <model-viewer> in its own ".viewer-wrapper"
+         div (used for the loading-spinner overlay) shortly after page load.
+         If we grab mv.parentElement too early and that wrapping happens
+         afterwards, our cached "parent" reference goes stale — mv is no longer
+         actually inside it — and any later insertBefore() call throws, which
+         silently breaks the button (click does nothing, error only in console).
+         To avoid this race we wait until that wrapping has settled (or a
+         short timeout elapses, in case model-preloader.js isn't present on
+         this page at all) before wiring anything up. */
+      var wireAttempts = 0;
+      (function waitForStableParent() {
+        wireAttempts++;
+        if (mv.closest('.viewer-wrapper') || wireAttempts > 40) {
+          wireViewer(mv);
+        } else {
+          setTimeout(waitForStableParent, 50);
+        }
+      })();
+    });
+  }
+
+  function wireViewer(mv) {
       /* Wrap model-viewer in relative-positioned container if not already */
       var parent = mv.parentElement;
       if (getComputedStyle(parent).position === 'static') {
@@ -151,7 +174,8 @@
       function openOverlay() {
         if (isOpen) return;
         isOpen = true;
-        parent.insertBefore(placeholder, mv);
+        var livingParent = mv.parentElement || parent;
+        livingParent.insertBefore(placeholder, mv);
         overlay.appendChild(mv);
         overlay.classList.add('open');
         _activeClose = closeOverlay;
@@ -185,7 +209,6 @@
         if (e.target === overlay) closeOverlay();
       });
       // Escape is handled by the single shared listener above
-    });
   }
 
   if (document.readyState === 'loading') {
