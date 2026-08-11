@@ -82,6 +82,56 @@
     viewer.style.touchAction = enabled ? 'auto' : 'none';
   }
 
+  // ── Очередь загрузок: не даём всем model-viewer на странице тянуть
+  // тяжёлые .glb одновременно — не больше MAX_CONCURRENT штук разом,
+  // остальные ждут своей очереди и стартуют по мере освобождения слотов.
+  const MAX_CONCURRENT = 2;
+  let activeLoads = 0;
+  const loadQueue = [];
+
+  function runNextInQueue(){
+    while (activeLoads < MAX_CONCURRENT && loadQueue.length > 0){
+      const next = loadQueue.shift();
+      activeLoads++;
+      next();
+    }
+  }
+
+  function enqueueLoad(startFn, eager){
+    if (eager){
+      // hero/приоритетные модели не ждут очереди — стартуют сразу
+      activeLoads++;
+      startFn();
+      return;
+    }
+    loadQueue.push(startFn);
+    runNextInQueue();
+  }
+
+  function releaseQueueSlot(){
+    activeLoads = Math.max(0, activeLoads - 1);
+    runNextInQueue();
+  }
+
+  // ── Lazy init: страницы держат тяжёлую модель ниже сгиба (после
+  // заголовка/описания/аудио-плеера), поэтому нет смысла качать .glb
+  // пока пользователь до него не долистал. Наблюдаем издалека —
+  // rootMargin 200px — чтобы модель успела подгрузиться к моменту,
+  // когда область реально попадёт в кадр.
+  let lazyObserver = null;
+  function getLazyObserver(onIntersect){
+    if (lazyObserver) return lazyObserver;
+    lazyObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting){
+          lazyObserver.unobserve(entry.target);
+          onIntersect(entry.target);
+        }
+      });
+    }, { rootMargin: '200px' });
+    return lazyObserver;
+  }
+
   function attachToViewer(viewer){
     if (!viewer) return;
     if (viewer.closest('.viewer-wrapper')) return; // already wrapped
@@ -105,6 +155,15 @@
     const orb = overlay.querySelector('.loader-orb');
 
     let fallback;
+    let raceCheck;
+    let completed = false;
+    let queueReleased = false;
+
+    const releaseQueueOnce = () => {
+      if (queueReleased) return;
+      queueReleased = true;
+      releaseQueueSlot();
+    };
 
     const hideOverlay = () => {
       if (!overlay || overlay.classList.contains('fade-out')) return;
@@ -118,13 +177,31 @@
       if (wrapper) wrapper.classList.add('is-ready');
     };
 
+    // ── onComplete: единая точка «модель готова» — раньше этот же набор
+    // действий (снять progress, включить интерактивность, спрятать
+    // оверлей, погасить таймеры) был продублирован в 4 разных местах
+    // (raceCheck, 'load', 'poster-dismissed', fallback-таймаут), из-за
+    // чего было легко забыть один из них при правках. Теперь один callback.
+    const onComplete = () => {
+      if (completed) return;
+      completed = true;
+      clearTimeout(fallback);
+      clearInterval(raceCheck);
+      if (progressFill) progressFill.style.width = '100%';
+      enableViewerInteractivity();
+      hideOverlay();
+      releaseQueueOnce();
+    };
+
     const showError = () => {
       clearTimeout(fallback);
+      clearInterval(raceCheck);
       if (progressFill) progressFill.style.width = '100%';
       if (progressFill) progressFill.style.backgroundColor = '#ef4444'; // red
       if (loadingTextEl) loadingTextEl.textContent = getTextsForViewer(viewer).errorText;
       if (loadingSubtextEl) loadingSubtextEl.textContent = '';
       if (orb) orb.style.display = 'none';
+      releaseQueueOnce();
       // Do not hide overlay automatically on error
     };
 
@@ -133,10 +210,7 @@
       if (t !== null && progressFill){
         const percent = Math.max(0, Math.min(100, Math.round(t*100)));
         progressFill.style.width = percent + '%';
-        if (percent >= 100) {
-          clearTimeout(fallback);
-          setTimeout(hideOverlay, 200);
-        }
+        if (percent >= 100) onComplete();
       }
     }
 
@@ -149,56 +223,70 @@
     if (wrapper) wrapper.classList.remove('is-ready');
 
     viewer.addEventListener('progress', updateProgress);
-    viewer.addEventListener('load', () => { clearTimeout(fallback); if (progressFill) progressFill.style.width = '100%'; enableViewerInteractivity(); setTimeout(hideOverlay, 250); });
-    viewer.addEventListener('poster-dismissed', () => { clearTimeout(fallback); if (progressFill) progressFill.style.width = '100%'; enableViewerInteractivity(); setTimeout(hideOverlay, 250); });
+    viewer.addEventListener('load', onComplete);
+    viewer.addEventListener('poster-dismissed', onComplete);
     viewer.addEventListener('error', () => { showError(); enableViewerInteractivity(); });
 
-    // ── ФИКС ГОНКИ: заглушка/маленькая модель могла загрузиться
-    // до того как мы повесили слушатели (скрипт грузится async).
-    // Проверяем уже через 300мс и каждые 500мс до 10с.
-    const raceCheck = setInterval(() => {
-      try {
-        // model-viewer выставляет .loaded = true когда модель готова
-        if (viewer.loaded) {
-          clearInterval(raceCheck);
-          clearTimeout(fallback);
-          if (progressFill) progressFill.style.width = '100%';
-          enableViewerInteractivity();
-          hideOverlay();
-        }
-      } catch (e) { /* ignore */ }
-    }, 300);
-    setTimeout(() => clearInterval(raceCheck), 10000); // максимум 10 сек polling
+    function startWatchers(){
+      // ── ФИКС ГОНКИ: заглушка/маленькая модель могла загрузиться
+      // до того как мы повесили слушатели (скрипт грузится async).
+      // Проверяем уже через 300мс и каждые 500мс до 10с.
+      raceCheck = setInterval(() => {
+        try {
+          // model-viewer выставляет .loaded = true когда модель готова
+          if (viewer.loaded) onComplete();
+        } catch (e) { /* ignore */ }
+      }, 300);
+      setTimeout(() => clearInterval(raceCheck), 10000); // максимум 10 сек polling
 
-    // Improved fallback: detect file size and adjust timeout accordingly
-    // Large files (>20MB) may need more time on slower connections
-    let timeoutDuration = 60000; // Default 60 seconds
-    const src = viewer.getAttribute('src');
-    if (src) {
-      // Quick check of potential file size based on URL patterns
-      if (src.includes('imece') || src.includes('turksat-5') || src.includes('hubble') || 
+      // Improved fallback: detect file size and adjust timeout accordingly
+      // Large files (>20MB) may need more time on slower connections
+      let timeoutDuration = 60000; // Default 60 seconds
+      const src = viewer.getAttribute('src') || viewer.dataset.src || '';
+      if (src.includes('imece') || src.includes('turksat-5') || src.includes('hubble') ||
           src.includes('lagari') || src.includes('gokturk-1')) {
         // These are known large models
         timeoutDuration = 120000; // 120 seconds for large models
       }
+      fallback = setTimeout(onComplete, timeoutDuration);
     }
-    fallback = setTimeout(() => {
-      enableViewerInteractivity();
-      hideOverlay();
-    }, timeoutDuration);
 
-    // if viewer becomes removed, cleanup
+    // if viewer becomes removed, cleanup (raceCheck AND fallback — a removed
+    // element can no longer fire 'load'/'error', so both timers must stop
+    // right away instead of leaking until their own timeout expires)
     const obs = new MutationObserver(() => {
       if (!document.body.contains(viewer)){
         clearTimeout(fallback);
+        clearInterval(raceCheck);
+        releaseQueueOnce();
         obs.disconnect();
       }
     });
     obs.observe(document.body, { childList: true, subtree: true });
 
-    // If the model-viewer is already complete, hide immediately
-    if (viewer.hasAttribute('reveal') || viewer.getAttribute('src') === '') {
-      // don't assume loaded; keep overlay until progress/load events
+    // ── Lazy vs eager loading ──
+    // Pages use data-src (not src) for models that should wait until
+    // scrolled near. A plain "src" already present in the HTML (legacy
+    // pages, or pages that set src themselves via JS e.g. protected/
+    // premium models) is left completely alone — already-loading models
+    // just get the overlay/queue-release bookkeeping above, unchanged.
+    const lazySrc = viewer.dataset.src;
+    const isEager = viewer.getAttribute('data-preload') === 'eager';
+
+    if (lazySrc && !viewer.getAttribute('src')){
+      const startLoad = () => {
+        startWatchers();
+        viewer.setAttribute('src', lazySrc);
+      };
+      if (isEager){
+        enqueueLoad(startLoad, true);
+      } else {
+        getLazyObserver((el) => enqueueLoad(startLoad, false)).observe(wrapper);
+      }
+    } else {
+      // already has a real src (or will get one from other page logic) —
+      // behave exactly as before: start watching immediately, no queueing.
+      startWatchers();
     }
   }
 
