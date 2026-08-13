@@ -43,6 +43,21 @@
           "title": "Uzayı Çöplüğe Çeviriyoruz: Geleceğin Uzay Yolculukları Tehlikede Mi?",
           "excerpt": "Dünya yörüngesindeki uzay çöpleri, Kessler Sendromu riski ve uzayı temizlemek için geliştirilen teknolojiler üzerine bir bakış.",
           "url": "/blog/uzayi-copluge-ceviriyoruz-gelecegin-uzay-yolculuklari-tehlikede-mi.html"
+        },
+        "en": {
+          "title": "We're Turning Space Into a Junkyard: Are Future Space Journeys at Risk?",
+          "excerpt": "A look at the space debris orbiting Earth, the risk of Kessler Syndrome, and the technologies being developed to clean up space.",
+          "url": "/eng/blog/uzayi-copluge-ceviriyoruz-gelecegin-uzay-yolculuklari-tehlikede-mi.html"
+        },
+        "ru": {
+          "title": "Превращаем космос в свалку: под угрозой ли космические полёты будущего?",
+          "excerpt": "Обзор космического мусора на орбите Земли, риска синдрома Кесслера и технологий для очистки космоса.",
+          "url": "/rus/blog/uzayi-copluge-ceviriyoruz-gelecegin-uzay-yolculuklari-tehlikede-mi.html"
+        },
+        "ar": {
+          "title": "نحوّل الفضاء إلى مكب نفايات: هل مستقبل الرحلات الفضائية في خطر؟",
+          "excerpt": "نظرة على الحطام الفضائي في مدار الأرض، وخطر متلازمة كيسلر، والتقنيات التي يجري تطويرها لتنظيف الفضاء.",
+          "url": "/ar/blog/uzayi-copluge-ceviriyoruz-gelecegin-uzay-yolculuklari-tehlikede-mi.html"
         }
       }
     },
@@ -69,6 +84,21 @@
           "title": "Geleceğin Altın Madeni: Uzayda Madencilik ve Asteroitler",
           "excerpt": "Asteroitlerde bulunan değerli madenler, uzay madenciliğinin nasıl yapılacağı ve önündeki en büyük zorluklar üzerine bir inceleme.",
           "url": "/blog/asteroit-madenciligi-gelecegin-altin-madeni.html"
+        },
+        "en": {
+          "title": "The Gold Mine of the Future: Mining in Space and Asteroids",
+          "excerpt": "A look at the valuable minerals found on asteroids, how space mining would actually work, and the biggest challenges standing in its way.",
+          "url": "/eng/blog/asteroit-madenciligi-gelecegin-altin-madeni.html"
+        },
+        "ru": {
+          "title": "Золотая жила будущего: космическая добыча и астероиды",
+          "excerpt": "Обзор ценных ископаемых на астероидах, того, как будет вестись космическая добыча, и главных трудностей на этом пути.",
+          "url": "/rus/blog/asteroit-madenciligi-gelecegin-altin-madeni.html"
+        },
+        "ar": {
+          "title": "منجم الذهب المستقبلي: التعدين في الفضاء والكويكبات",
+          "excerpt": "نظرة على المعادن الثمينة الموجودة في الكويكبات، وكيفية إجراء التعدين الفضائي، وأكبر التحديات التي تواجهه.",
+          "url": "/ar/blog/asteroit-madenciligi-gelecegin-altin-madeni.html"
         }
       }
     },
@@ -95,6 +125,21 @@
           "title": "Gökyüzü Kaybolmadı, Biz Onu Sildik",
           "excerpt": "Işık kirliliği nedir, gökyüzü karanlığı neden önemlidir ve Türkiye'de yıldız gözlemi için karanlık noktalar nasıl bulunur?",
           "url": "/blog/gokyuzu-kaybolmadi-biz-onu-sildik.html"
+        },
+        "en": {
+          "title": "The Sky Didn't Disappear — We Erased It",
+          "excerpt": "What is light pollution, why does sky darkness matter, and how do you find dark spots for stargazing in Turkey? A practical guide.",
+          "url": "/eng/blog/gokyuzu-kaybolmadi-biz-onu-sildik.html"
+        },
+        "ru": {
+          "title": "Небо не исчезло — это мы его стёрли",
+          "excerpt": "Что такое световое загрязнение, почему темнота неба так важна и как найти тёмные места для наблюдения за звёздами в Турции? Практическое руководство.",
+          "url": "/rus/blog/gokyuzu-kaybolmadi-biz-onu-sildik.html"
+        },
+        "ar": {
+          "title": "السماء لم تختفِ، نحن من محَاها",
+          "excerpt": "ما هو التلوث الضوئي، ولماذا تهم عتمة السماء، وكيف تجد بقعًا مظلمة لمراقبة النجوم في تركيا؟ دليل عملي.",
+          "url": "/ar/blog/gokyuzu-kaybolmadi-biz-onu-sildik.html"
         }
       }
     },
