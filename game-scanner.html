@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>Alba Space — AR Прятки: поиск</title>
+
+<script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #fff; }
+
+  #ar-container { position: fixed; inset: 0; z-index: 1; }
+
+  #top-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: max(12px, env(safe-area-inset-top)) 16px 12px;
+    background: linear-gradient(to bottom, rgba(2,6,23,0.85) 65%, transparent);
+    pointer-events: none;
+  }
+  #back-btn {
+    pointer-events: auto;
+    padding: 8px 14px; border-radius: 99px;
+    background: rgba(2,6,23,0.7); border: 1px solid rgba(0,194,255,0.35);
+    color: #00c2ff; text-decoration: none; font-size: 13px; font-weight: 600;
+  }
+  #timer-badge {
+    pointer-events: none;
+    padding: 8px 18px; border-radius: 99px;
+    background: rgba(2,6,23,0.75); border: 1px solid rgba(148,163,184,0.3);
+    font-size: 17px; font-weight: 800; color: #38bdf8; letter-spacing: 0.05em;
+  }
+  #timer-badge.low { color: #fca5a5; border-color: rgba(248,113,113,0.4); }
+
+  #status-badge {
+    position: fixed; top: max(68px, calc(env(safe-area-inset-top) + 56px));
+    left: 50%; transform: translateX(-50%); z-index: 300;
+    padding: 7px 16px; border-radius: 99px;
+    background: rgba(2,6,23,0.72); border: 1px solid rgba(148,163,184,0.25);
+    font-size: 13px; color: #cbd5e1; white-space: nowrap; pointer-events: none;
+  }
+  #status-badge.found { background: rgba(0,60,35,0.88); border-color: rgba(0,255,150,0.45); color: #6ee7b7; }
+
+  /* ── Оверлеи-состояния (загрузка / ошибки / итог) ── */
+  .overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: #020617;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; padding: 32px; text-align: center;
+  }
+  .overlay.show { display: flex; }
+  .overlay h2 { font-size: 20px; color: #38bdf8; }
+  .overlay p { font-size: 14px; color: #94a3b8; line-height: 1.6; max-width: 320px; }
+  .overlay .big-emoji { font-size: 46px; }
+
+  .spin {
+    width: 42px; height: 42px;
+    border: 3px solid rgba(0,194,255,0.12);
+    border-top-color: #00c2ff; border-right-color: rgba(56,189,248,0.75);
+    border-radius: 50%; animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #progress-bar-bg { width: 220px; height: 6px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; }
+  #progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg,#00c2ff,#0077b6); transition: width 0.2s; }
+
+  .action-btn {
+    padding: 12px 26px; border-radius: 99px; border: none;
+    background: linear-gradient(135deg, #00c2ff, #0077b6);
+    color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+    text-decoration: none; display: inline-block;
+  }
+  .action-btn.secondary {
+    background: rgba(15,23,42,0.8); border: 1px solid rgba(56,189,248,0.35); color: #38bdf8;
+  }
+
+  #model-label {
+    position: fixed;
+    bottom: max(40px, calc(env(safe-area-inset-bottom) + 40px));
+    left: 50%; transform: translateX(-50%); z-index: 300;
+    padding: 14px 28px; border-radius: 18px;
+    background: rgba(2,6,23,0.85); border: 1px solid rgba(0,194,255,0.4);
+    text-align: center; max-width: 85vw; display: none; pointer-events: none;
+  }
+  #model-label-sub { font-size: 12px; color: #6ee7b7; margin-top: 3px; }
+</style>
+</head>
+<body>
+
+<div id="ar-container"></div>
+
+<div id="top-bar">
+  <a id="back-btn" href="game-zones.html">← Выйти</a>
+  <div id="timer-badge">60s</div>
+</div>
+
+<div id="status-badge">Наведи камеру на место, где мог быть спрятан якорь</div>
+
+<div id="model-label">
+  <div>🛸 Найдено!</div>
+  <div id="model-label-sub">Модель обнаружена</div>
+</div>
+
+<!-- Загрузка списка якорей -->
+<div class="overlay show" id="loading-overlay">
+  <div class="spin"></div>
+  <h2>Подготовка зоны…</h2>
+  <p id="loading-text">Загружаем список якорей поблизости</p>
+  <div id="progress-bar-bg" style="display:none;"><div id="progress-bar"></div></div>
+</div>
+
+<!-- Нет якорей в зоне -->
+<div class="overlay" id="empty-overlay">
+  <div class="big-emoji">🕳️</div>
+  <h2>В этой зоне пока пусто</h2>
+  <p>Никто ещё не спрятал модель здесь. Попробуй другую зону или спрячь свою!</p>
+  <a class="action-btn" href="game-zones.html">К зонам</a>
+  <a class="action-btn secondary" href="game-hide.html">Спрятать модель</a>
+</div>
+
+<!-- Ошибка геолокации / далеко от зоны -->
+<div class="overlay" id="geo-overlay">
+  <div class="big-emoji">📍</div>
+  <h2 id="geo-title">Проверяем геолокацию…</h2>
+  <p id="geo-text"></p>
+  <button class="action-btn" id="geo-continue-btn" style="display:none">Всё равно продолжить</button>
+  <a class="action-btn secondary" href="game-zones.html">К зонам</a>
+</div>
+
+<!-- Раунд окончен: нашёл -->
+<div class="overlay" id="win-overlay">
+  <div class="big-emoji">🎉</div>
+  <h2>Найдено!</h2>
+  <p>Ты отыскал спрятанную 3D-модель. Отличная работа!</p>
+  <a class="action-btn" href="game-zones.html">К зонам</a>
+</div>
+
+<!-- Раунд окончен: время вышло -->
+<div class="overlay" id="timeout-overlay">
+  <div class="big-emoji">⏱️</div>
+  <h2>Время вышло</h2>
+  <p>За 60 секунд не удалось найти якорь. Попробуй ещё раз или выбери другую зону.</p>
+  <button class="action-btn" onclick="location.reload()">Попробовать снова</button>
+  <a class="action-btn secondary" href="game-zones.html">К зонам</a>
+</div>
+
+<script>
+// ⚠️ ПОСЛЕ ДЕПЛОЯ WORKER'А — впиши сюда его адрес.
+const API_BASE = "ВСТАВЬ_СЮДА_АДРЕС_ТВОЕГО_WORKER";
+
+// Одна общая 3D-модель для всех найденных якорей (MVP).
+// Замени на путь к любой модели, которая уже есть на сайте.
+const MODEL_URL = "/assets/models/earth.glb";
+const MODEL_SCALE = "1.2 1.2 1.2";
+
+const ROUND_SECONDS = 60;
+const GEO_TOLERANCE_M = 80; // допуск неточности GPS сверх радиуса зоны
+
+const params = new URLSearchParams(location.search);
+const zoneId = params.get('zone');
+
+let anchors = [];
+let timerInterval = null;
+let secsLeft = ROUND_SECONDS;
+let roundEnded = false;
+let arStarted = false;
+
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2-lat1), dLon = toRad(lon2-lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+
+function showOverlay(id) {
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+}
+function hideAllOverlays() {
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show'));
+}
+
+async function reportSession(anchorId, result) {
+  const name = localStorage.getItem('albaspace_player_name') || 'Игрок';
+  try {
+    await fetch(`${API_BASE}/api/sessions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ zone_id: zoneId, anchor_id: anchorId || null, result, seeker_name: name }),
+    });
+  } catch (e) { /* не критично, если не отправилось */ }
+}
+
+// ── ШАГ 1: проверка зоны и геолокации ──
+async function start() {
+  if (!zoneId) {
+    document.getElementById('geo-title').textContent = 'Зона не выбрана';
+    document.getElementById('geo-text').textContent = 'Вернись к списку зон и выбери одну из них.';
+    showOverlay('geo-overlay');
+    return;
+  }
+
+  if (!navigator.geolocation) {
+    document.getElementById('geo-title').textContent = 'Геолокация недоступна';
+    document.getElementById('geo-text').textContent = 'Этот браузер не поддерживает геолокацию, которая нужна для игры.';
+    showOverlay('geo-overlay');
+    return;
+  }
+
+  showOverlay('loading-overlay');
+  document.getElementById('loading-text').textContent = 'Проверяем твоё местоположение…';
+
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const { latitude, longitude } = pos.coords;
+      await checkZoneAndLoad(latitude, longitude);
+    },
+    () => {
+      document.getElementById('geo-title').textContent = 'Нет доступа к геолокации';
+      document.getElementById('geo-text').textContent = 'Разреши доступ к местоположению в браузере, чтобы искать якоря.';
+      showOverlay('geo-overlay');
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+async function checkZoneAndLoad(userLat, userLon) {
+  try {
+    const zonesRes = await fetch(`${API_BASE}/api/zones`);
+    const zonesData = await zonesRes.json();
+    const zone = (zonesData.zones || []).find(z => z.id === zoneId);
+    if (!zone) {
+      document.getElementById('geo-title').textContent = 'Зона не найдена';
+      document.getElementById('geo-text').textContent = 'Возможно, ссылка устарела.';
+      showOverlay('geo-overlay');
+      return;
+    }
+
+    const dist = haversine(userLat, userLon, zone.lat, zone.lon);
+    if (dist > zone.radius_m + GEO_TOLERANCE_M) {
+      document.getElementById('geo-title').textContent = 'Ты не в зоне "' + zone.name + '"';
+      document.getElementById('geo-text').textContent = `До зоны примерно ${Math.round(dist)}м. Подойди ближе, чтобы начать поиск.`;
+      const contBtn = document.getElementById('geo-continue-btn');
+      contBtn.style.display = 'inline-block';
+      contBtn.onclick = () => loadAnchors();
+      showOverlay('geo-overlay');
+      return;
+    }
+
+    await loadAnchors();
+  } catch (err) {
+    document.getElementById('geo-title').textContent = 'Ошибка загрузки';
+    document.getElementById('geo-text').textContent = err.message;
+    showOverlay('geo-overlay');
+  }
+}
+
+// ── ШАГ 2: загрузить якоря зоны ──
+async function loadAnchors() {
+  showOverlay('loading-overlay');
+  document.getElementById('loading-text').textContent = 'Загружаем якоря зоны…';
+
+  try {
+    const res = await fetch(`${API_BASE}/api/anchors?zone_id=${encodeURIComponent(zoneId)}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+    anchors = data.anchors || [];
+
+    if (anchors.length === 0) {
+      showOverlay('empty-overlay');
+      return;
+    }
+
+    await compileAndBuildScene();
+  } catch (err) {
+    document.getElementById('loading-text').textContent = '⚠️ ' + err.message;
+  }
+}
+
+// ── ШАГ 3: скомпилировать targets.mind из фото якорей (прямо в браузере) ──
+function loadImageAsHTMLImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Не удалось загрузить изображение'));
+    img.src = url;
+  });
+}
+
+async function compileAndBuildScene() {
+  document.getElementById('progress-bar-bg').style.display = 'block';
+  document.getElementById('loading-text').textContent = `Загрузка фото… (0/${anchors.length})`;
+
+  const images = [];
+  for (let i = 0; i < anchors.length; i++) {
+    const img = await loadImageAsHTMLImage(anchors[i].photo_url);
+    images.push(img);
+    document.getElementById('loading-text').textContent = `Загрузка фото… (${i+1}/${anchors.length})`;
+    document.getElementById('progress-bar').style.width = Math.round(((i+1)/anchors.length)*35) + '%';
+  }
+
+  document.getElementById('loading-text').textContent = 'Анализируем место (это займёт немного времени)…';
+
+  const compiler = new MINDAR.IMAGE.Compiler();
+  await compiler.compileImageTargets(images, (progress) => {
+    const pct = 35 + Math.round(progress * 60);
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+
+  const buffer = await compiler.exportData();
+  const blob = new Blob([buffer]);
+  const mindUrl = URL.createObjectURL(blob);
+
+  document.getElementById('progress-bar').style.width = '100%';
+  document.getElementById('loading-text').textContent = 'Запускаем камеру…';
+
+  buildScene(mindUrl);
+}
+
+// ── ШАГ 4: построить AR-сцену с найденными якорями ──
+function buildScene(mindUrl) {
+  const container = document.getElementById('ar-container');
+  const entities = anchors.map((a, i) => `<a-entity id="anchor-${i}" mindar-image-target="targetIndex:${i}"></a-entity>`).join('\n');
+
+  container.innerHTML = `
+    <a-scene
+      mindar-image="imageTargetSrc:${mindUrl};filterMinCF:0.001;filterBeta:0.01;missTolerance:5;warmupTolerance:3;"
+      color-space="sRGB"
+      renderer="colorManagement:true;physicallyCorrectLights:true"
+      vr-mode-ui="enabled:false"
+      device-orientation-permission-ui="enabled:false"
+      loading-screen="enabled:false">
+      <a-assets timeout="60000"></a-assets>
+      <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+      <a-entity light="type:ambient;intensity:4.0"></a-entity>
+      <a-entity light="type:directional;intensity:3.0" position="1 2 1"></a-entity>
+      ${entities}
+    </a-scene>`;
+
+  const sceneEl = container.querySelector('a-scene');
+
+  sceneEl.addEventListener('arReady', () => {
+    if (arStarted) return;
+    arStarted = true;
+    hideAllOverlays();
+    startTimer();
+  });
+
+  // На случай если arReady не сработает (некоторые устройства) — стартуем по 'loaded'
+  sceneEl.addEventListener('loaded', () => {
+    setTimeout(() => {
+      if (!arStarted) {
+        arStarted = true;
+        hideAllOverlays();
+        startTimer();
+      }
+    }, 1500);
+  });
+
+  anchors.forEach((anchor, i) => {
+    const ent = container.querySelector('#anchor-' + i);
+    if (!ent) return;
+
+    ent.addEventListener('targetFound', () => {
+      if (roundEnded) return;
+      onFound(anchor, i, ent);
+    });
+  });
+}
+
+function onFound(anchor, index, entityEl) {
+  roundEnded = true;
+  clearInterval(timerInterval);
+
+  document.getElementById('status-badge').textContent = '✅ Якорь найден!';
+  document.getElementById('status-badge').classList.add('found');
+  document.getElementById('model-label').style.display = 'block';
+
+  if (!entityEl.querySelector('a-gltf-model')) {
+    const m = document.createElement('a-gltf-model');
+    m.setAttribute('src', MODEL_URL);
+    m.setAttribute('scale', MODEL_SCALE);
+    m.setAttribute('position', '0 0.08 0');
+    m.setAttribute('rotation', '90 0 0');
+    entityEl.appendChild(m);
+  }
+
+  reportSession(anchor.id, 'found');
+
+  setTimeout(() => showOverlay('win-overlay'), 1800);
+}
+
+// ── Таймер игрового раунда (60 сек), стартует ТОЛЬКО когда AR готов ──
+function startTimer() {
+  secsLeft = ROUND_SECONDS;
+  updateTimerBadge();
+  timerInterval = setInterval(() => {
+    secsLeft--;
+    updateTimerBadge();
+    if (secsLeft <= 0) {
+      clearInterval(timerInterval);
+      if (!roundEnded) {
+        roundEnded = true;
+        reportSession(null, 'timeout');
+        showOverlay('timeout-overlay');
+      }
+    }
+  }, 1000);
+}
+
+function updateTimerBadge() {
+  const badge = document.getElementById('timer-badge');
+  badge.textContent = secsLeft + 's';
+  badge.classList.toggle('low', secsLeft <= 10);
+}
+
+start();
+</script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alba Space — AR Прятки: спрятать модель</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #020617; color: #e5e7eb;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    min-height: 100vh; padding: 20px 16px 60px;
+  }
+  .container { max-width: 480px; margin: 0 auto; }
+  a.back { color: #64748b; font-size: 13px; text-decoration: none; display: inline-block; margin-bottom: 16px; }
+  h1 { font-size: 20px; color: #38bdf8; margin-bottom: 6px; }
+  p.sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; line-height: 1.5; }
+
+  .step { margin-bottom: 24px; }
+  .step-title {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #64748b; margin-bottom: 10px;
+  }
+
+  #photo-input-wrap {
+    border: 2px dashed rgba(56,189,248,0.35); border-radius: 16px;
+    padding: 28px 16px; text-align: center; cursor: pointer;
+  }
+  #photo-input-wrap.has-photo { border-style: solid; padding: 12px; }
+  #photo-preview { max-width: 100%; max-height: 260px; border-radius: 12px; display: none; margin: 0 auto; }
+  #photo-input-wrap .hint { font-size: 13px; color: #94a3b8; }
+  #photo-input { display: none; }
+
+  #quality-msg { margin-top: 10px; font-size: 13px; padding: 10px 14px; border-radius: 10px; display: none; }
+  #quality-msg.good { background: rgba(0,80,40,0.3); border: 1px solid rgba(0,255,150,0.3); color: #6ee7b7; display: block; }
+  #quality-msg.warn { background: rgba(180,120,0,0.15); border: 1px solid rgba(250,180,60,0.35); color: #fcd34d; display: block; }
+
+  #map { width: 100%; height: 240px; border-radius: 14px; margin-top: 8px; display: none; }
+  #zone-status { font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-top: 10px; }
+  #zone-status.ok { background: rgba(0,80,40,0.3); border: 1px solid rgba(0,255,150,0.3); color: #6ee7b7; }
+  #zone-status.bad { background: rgba(200,30,30,0.15); border: 1px solid rgba(248,113,113,0.35); color: #fca5a5; }
+  #zone-status.wait { color: #94a3b8; }
+
+  input[type=text] {
+    width: 100%; padding: 12px 14px; border-radius: 10px;
+    background: rgba(15,23,42,0.7); border: 1px solid rgba(148,163,184,0.2);
+    color: #e5e7eb; font-size: 14px;
+  }
+
+  .btn-primary {
+    width: 100%; padding: 15px; border-radius: 14px; border: none;
+    background: linear-gradient(135deg, #00c2ff, #0077b6);
+    color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+    margin-top: 8px;
+  }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  #result-msg { margin-top: 16px; padding: 14px 18px; border-radius: 12px; font-size: 14px; display: none; }
+  #result-msg.ok { background: rgba(0,80,40,0.3); border: 1px solid rgba(0,255,150,0.3); color: #6ee7b7; display: block; }
+  #result-msg.error { background: rgba(200,30,30,0.15); border: 1px solid rgba(248,113,113,0.35); color: #fca5a5; display: block; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back" href="game-zones.html">← К зонам</a>
+  <h1>📸 Спрятать 3D-модель</h1>
+  <p class="sub">Сфотографируй стену, дерево, знак или любой узнаваемый объект. Другие игроки будут искать его в этом месте, наводя камеру.</p>
+
+  <div class="step">
+    <div class="step-title">1. Фото места</div>
+    <div id="photo-input-wrap" onclick="document.getElementById('photo-input').click()">
+      <img id="photo-preview" />
+      <div class="hint" id="photo-hint">Нажми, чтобы сделать фото</div>
+    </div>
+    <input type="file" id="photo-input" accept="image/*" capture="environment" />
+    <div id="quality-msg"></div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">2. Твоя точка на карте</div>
+    <div id="zone-status" class="wait">Определяем геолокацию…</div>
+    <div id="map"></div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">3. Имя (необязательно)</div>
+    <input type="text" id="hider-name" placeholder="Твой ник" maxlength="40" />
+  </div>
+
+  <button class="btn-primary" id="submit-btn" disabled onclick="submitAnchor()">
+    🔒 Спрятать здесь
+  </button>
+
+  <div id="result-msg"></div>
+</div>
+
+<script>
+// ⚠️ ПОСЛЕ ДЕПЛОЯ WORKER'А — впиши сюда его адрес.
+const API_BASE = "ВСТАВЬ_СЮДА_АДРЕС_ТВОЕГО_WORKER";
+
+let photoFile = null;
+let userLat = null, userLon = null;
+let map, marker;
+let zones = [];
+let matchedZone = null;
+
+// ── Сохраняем имя игрока между визитами ──
+const savedName = localStorage.getItem('albaspace_player_name');
+if (savedName) document.getElementById('hider-name').value = savedName;
+
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2-lat1), dLon = toRad(lon2-lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+
+// ── Простая оценка "годится ли фото" (без нейросетей и без MindAR) ──
+// Считаем разброс яркости на уменьшенной картинке. Ровная стена одного
+// цвета даст маленький разброс — предупреждаем, но не блокируем.
+function estimatePhotoQuality(imgEl) {
+  const c = document.createElement('canvas');
+  c.width = 48; c.height = 48;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(imgEl, 0, 0, 48, 48);
+  const data = ctx.getImageData(0, 0, 48, 48).data;
+  let sum = 0, sumSq = 0, n = 48*48;
+  for (let i = 0; i < data.length; i += 4) {
+    const lum = 0.299*data[i] + 0.587*data[i+1] + 0.114*data[i+2];
+    sum += lum; sumSq += lum*lum;
+  }
+  const mean = sum / n;
+  const variance = sumSq / n - mean*mean;
+  return Math.sqrt(variance); // чем выше — тем "богаче" деталями фото
+}
+
+document.getElementById('photo-input').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  photoFile = file;
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const preview = document.getElementById('photo-preview');
+    preview.src = ev.target.result;
+    preview.style.display = 'block';
+    document.getElementById('photo-hint').textContent = 'Нажми, чтобы выбрать другое фото';
+    document.getElementById('photo-input-wrap').classList.add('has-photo');
+
+    preview.onload = () => {
+      const score = estimatePhotoQuality(preview);
+      const qEl = document.getElementById('quality-msg');
+      if (score < 18) {
+        qEl.className = 'warn';
+        qEl.textContent = '⚠️ Фото выглядит слишком однотонным (гладкая стена, небо). Сканеру будет сложно распознать такое место — попробуй объект с текстурой: кирпич, кору дерева, знак, граффити.';
+      } else {
+        qEl.className = 'good';
+        qEl.textContent = '✅ Хорошее фото — на нём достаточно деталей для распознавания.';
+      }
+      checkReady();
+    };
+  };
+  reader.readAsDataURL(file);
+});
+
+async function loadZonesAndCheck() {
+  try {
+    const res = await fetch(`${API_BASE}/api/zones`);
+    const data = await res.json();
+    zones = data.zones || [];
+  } catch (err) {
+    document.getElementById('zone-status').className = 'bad';
+    document.getElementById('zone-status').textContent = '⚠️ Не удалось загрузить зоны: ' + err.message;
+    return;
+  }
+  updateZoneMatch();
+}
+
+function updateZoneMatch() {
+  if (userLat == null || zones.length === 0) return;
+  let nearest = null, nearestDist = Infinity;
+  for (const z of zones) {
+    const d = haversine(userLat, userLon, z.lat, z.lon);
+    if (d < nearestDist) { nearestDist = d; nearest = z; }
+  }
+  const statusEl = document.getElementById('zone-status');
+  if (nearest && nearestDist <= nearest.radius_m) {
+    matchedZone = nearest;
+    statusEl.className = 'ok';
+    statusEl.textContent = `✅ Ты внутри зоны "${nearest.name}" — можно прятать здесь.`;
+  } else {
+    matchedZone = null;
+    const nearName = nearest ? nearest.name : '—';
+    const nearDist = nearest ? Math.round(nearestDist) : '?';
+    statusEl.className = 'bad';
+    statusEl.textContent = `❌ Ты не в игровой зоне. Ближайшая — "${nearName}", ${nearDist}м от тебя. Подойди ближе или перетащи метку на карте, если стоишь на краю зоны.`;
+  }
+  checkReady();
+}
+
+function initMap(lat, lon) {
+  document.getElementById('map').style.display = 'block';
+  map = L.map('map').setView([lat, lon], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap', maxZoom: 19,
+  }).addTo(map);
+  marker = L.marker([lat, lon], { draggable: true }).addTo(map);
+  marker.on('dragend', () => {
+    const pos = marker.getLatLng();
+    userLat = pos.lat; userLon = pos.lng;
+    updateZoneMatch();
+  });
+}
+
+function checkReady() {
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = !(photoFile && matchedZone);
+}
+
+// ── Геолокация ──
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      userLat = pos.coords.latitude;
+      userLon = pos.coords.longitude;
+      initMap(userLat, userLon);
+      loadZonesAndCheck();
+    },
+    () => {
+      document.getElementById('zone-status').className = 'bad';
+      document.getElementById('zone-status').textContent = '❌ Нужен доступ к геолокации, чтобы прятать модели.';
+    },
+    { enableHighAccuracy: true, timeout: 8000 }
+  );
+} else {
+  document.getElementById('zone-status').textContent = 'Геолокация не поддерживается этим браузером.';
+}
+
+async function submitAnchor() {
+  const btn = document.getElementById('submit-btn');
+  const resultEl = document.getElementById('result-msg');
+  btn.disabled = true;
+  btn.textContent = '⏳ Загружаем...';
+
+  const name = document.getElementById('hider-name').value.trim() || 'Игрок';
+  localStorage.setItem('albaspace_player_name', name);
+
+  try {
+    const form = new FormData();
+    form.append('photo', photoFile);
+    form.append('lat', userLat);
+    form.append('lon', userLon);
+    form.append('zone_id', matchedZone.id);
+    form.append('hider_name', name);
+
+    const res = await fetch(`${API_BASE}/api/anchors`, { method: 'POST', body: form });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+
+    resultEl.className = 'ok';
+    resultEl.textContent = '🎉 Готово! Модель спрятана в зоне "' + matchedZone.name + '". Другие игроки уже могут её искать.';
+    btn.textContent = '✅ Спрятано';
+  } catch (err) {
+    resultEl.className = 'error';
+    resultEl.textContent = '⚠️ ' + err.message;
+    btn.disabled = false;
+    btn.textContent = '🔒 Спрятать здесь';
+  }
+}
+</script>
+</body>
+</html>
