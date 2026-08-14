@@ -162,3 +162,71 @@ model-viewer {
   z-index: auto !important;
 }
 
+/* ==========================================
+   AUTHORIZATION OVERLAY (NEW)
+   ========================================== */
+
+/* Контейнер-оболочка для страницы Opportunity */
+.model-gate {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  margin-top: 30px;
+}
+
+/* Переопределяем стили model-viewer, когда он внутри .model-gate */
+.model-gate model-viewer {
+  width: 100% !important;
+  height: 100% !important;
+  margin-top: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 0 30px rgba(0, 150, 255, 0.5) !important;
+}
+
+/* Заглушка, которая перекрывает всё */
+.model-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999; /* ОЧЕНЬ ВАЖНО: должно быть выше, чем z-index: 20 у твоих AR-кнопок */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(2, 6, 23, 0.95);
+  border-radius: 12px;
+  color: #e5e7eb;
+  text-align: center;
+  padding: 24px;
+  border: 1px solid rgba(0, 194, 255, 0.2);
+}
+
+.model-overlay p {
+  font-size: 1.2rem;
+  margin-bottom: 24px;
+  text-shadow: none;
+}
+
+.model-overlay a {
+  background: #00c2ff;
+  color: #020617;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  font-size: 16px;
+}
+
+.model-overlay a:hover {
+  opacity: 0.8;
+}
+
+/* Адаптив для мобильных (меняем высоту контейнера) */
+@media (max-width: 768px) {
+  .model-gate {
+    height: 420px;
+  }
+}
