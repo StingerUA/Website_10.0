@@ -223,16 +223,24 @@ html.product-text-black .footer * {
     background: rgba(255, 255, 255, 0.25) !important;
   }
 
-  /* Product pages text black - Keep light blue background */
+  /* Product pages text black - White background, black text */
   html.product-text-black .dropdown.active .dropdown-menu {
-    background: rgba(74, 155, 204, 1) !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35) !important;
     opacity: 1 !important;
     visibility: visible !important;
   }
 
   html.product-text-black .dropdown.active .dropdown-menu a,
   html.product-text-black .dropdown.active .dropdown-menu button {
-    color: #ffffff !important;
-    background: rgba(255, 255, 255, 0.25) !important;
+    color: #000000 !important;
+    background: #ffffff !important;
+  }
+
+  html.product-text-black .dropdown.active .dropdown-menu a:hover,
+  html.product-text-black .dropdown.active .dropdown-menu button:hover {
+    background: #f3f4f6 !important;
+    color: #000000 !important;
   }
 }
