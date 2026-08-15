@@ -20,6 +20,14 @@
   h1 { font-size: 20px; color: #38bdf8; margin-bottom: 6px; }
   p.sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; line-height: 1.5; }
 
+  #player-chip {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 20px;
+    padding: 8px 14px; border-radius: 99px; width: fit-content;
+    background: rgba(15,23,42,0.7); border: 1px solid rgba(148,163,184,0.2);
+    font-size: 13px; color: #cbd5e1;
+  }
+  #player-chip img { width: 24px; height: 24px; border-radius: 50%; }
+
   .step { margin-bottom: 24px; }
   .step-title {
     font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
@@ -45,12 +53,6 @@
   #zone-status.bad { background: rgba(200,30,30,0.15); border: 1px solid rgba(248,113,113,0.35); color: #fca5a5; }
   #zone-status.wait { color: #94a3b8; }
 
-  input[type=text] {
-    width: 100%; padding: 12px 14px; border-radius: 10px;
-    background: rgba(15,23,42,0.7); border: 1px solid rgba(148,163,184,0.2);
-    color: #e5e7eb; font-size: 14px;
-  }
-
   .btn-primary {
     width: 100%; padding: 15px; border-radius: 14px; border: none;
     background: linear-gradient(135deg, #00c2ff, #0077b6);
@@ -62,13 +64,51 @@
   #result-msg { margin-top: 16px; padding: 14px 18px; border-radius: 12px; font-size: 14px; display: none; }
   #result-msg.ok { background: rgba(0,80,40,0.3); border: 1px solid rgba(0,255,150,0.3); color: #6ee7b7; display: block; }
   #result-msg.error { background: rgba(200,30,30,0.15); border: 1px solid rgba(248,113,113,0.35); color: #fca5a5; display: block; }
+
+  .overlay {
+    position: fixed; inset: 0; z-index: 500; background: #020617;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; padding: 32px; text-align: center;
+  }
+  .overlay.show { display: flex; }
+  .overlay h2 { font-size: 20px; color: #38bdf8; }
+  .overlay p { font-size: 14px; color: #94a3b8; line-height: 1.6; max-width: 320px; }
+  .overlay .big-emoji { font-size: 46px; }
+  .action-btn {
+    padding: 12px 26px; border-radius: 99px; border: none;
+    background: linear-gradient(135deg, #00c2ff, #0077b6);
+    color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+    text-decoration: none; display: inline-block;
+  }
+  .spin {
+    width: 42px; height: 42px;
+    border: 3px solid rgba(0,194,255,0.12);
+    border-top-color: #00c2ff; border-right-color: rgba(56,189,248,0.75);
+    border-radius: 50%; animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
-<div class="container">
+
+<div class="overlay show" id="auth-checking">
+  <div class="spin"></div>
+  <h2>Проверяем вход…</h2>
+</div>
+
+<div class="overlay" id="auth-required">
+  <div class="big-emoji">🔒</div>
+  <h2>Нужно войти</h2>
+  <p>Чтобы прятать модели, нужно авторизоваться. Войди через аккаунт сайта, а затем вернись сюда.</p>
+  <a class="action-btn" href="/account-menu.html">Войти</a>
+</div>
+
+<div class="container" id="game-content" style="display:none">
   <a class="back" href="game-zones.html">← К зонам</a>
   <h1>📸 Спрятать 3D-модель</h1>
   <p class="sub">Сфотографируй стену, дерево, знак или любой узнаваемый объект. Другие игроки будут искать его в этом месте, наводя камеру.</p>
+
+  <div id="player-chip"></div>
 
   <div class="step">
     <div class="step-title">1. Фото места</div>
@@ -86,11 +126,6 @@
     <div id="map"></div>
   </div>
 
-  <div class="step">
-    <div class="step-title">3. Имя (необязательно)</div>
-    <input type="text" id="hider-name" placeholder="Твой ник" maxlength="40" />
-  </div>
-
   <button class="btn-primary" id="submit-btn" disabled onclick="submitAnchor()">
     🔒 Спрятать здесь
   </button>
@@ -99,18 +134,15 @@
 </div>
 
 <script>
-// ⚠️ ПОСЛЕ ДЕПЛОЯ WORKER'А — впиши сюда его адрес.
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
+const MAIN_API = "https://albaspace-api.nncdecdgc.workers.dev";
 
 let photoFile = null;
 let userLat = null, userLon = null;
 let map, marker;
 let zones = [];
 let matchedZone = null;
-
-// ── Сохраняем имя игрока между визитами ──
-const savedName = localStorage.getItem('albaspace_player_name');
-if (savedName) document.getElementById('hider-name').value = savedName;
+let currentUser = null;
 
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371000;
@@ -120,9 +152,14 @@ function haversine(lat1, lon1, lat2, lon2) {
   return 2*R*Math.asin(Math.sqrt(a));
 }
 
-// ── Простая оценка "годится ли фото" (без нейросетей и без MindAR) ──
-// Считаем разброс яркости на уменьшенной картинке. Ровная стена одного
-// цвета даст маленький разброс — предупреждаем, но не блокируем.
+async function checkLogin() {
+  try {
+    const res = await fetch(`${MAIN_API}/me`, { credentials: 'include' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) { return null; }
+}
+
 function estimatePhotoQuality(imgEl) {
   const c = document.createElement('canvas');
   c.width = 48; c.height = 48;
@@ -136,7 +173,7 @@ function estimatePhotoQuality(imgEl) {
   }
   const mean = sum / n;
   const variance = sumSq / n - mean*mean;
-  return Math.sqrt(variance); // чем выше — тем "богаче" деталями фото
+  return Math.sqrt(variance);
 }
 
 document.getElementById('photo-input').addEventListener('change', (e) => {
@@ -157,7 +194,7 @@ document.getElementById('photo-input').addEventListener('change', (e) => {
       const qEl = document.getElementById('quality-msg');
       if (score < 18) {
         qEl.className = 'warn';
-        qEl.textContent = '⚠️ Фото выглядит слишком однотонным (гладкая стена, небо). Сканеру будет сложно распознать такое место — попробуй объект с текстурой: кирпич, кору дерева, знак, граффити.';
+        qEl.textContent = '⚠️ Фото выглядит слишком однотонным. Попробуй объект с текстурой: кирпич, кору дерева, знак, граффити.';
       } else {
         qEl.className = 'good';
         qEl.textContent = '✅ Хорошее фото — на нём достаточно деталей для распознавания.';
@@ -198,7 +235,7 @@ function updateZoneMatch() {
     const nearName = nearest ? nearest.name : '—';
     const nearDist = nearest ? Math.round(nearestDist) : '?';
     statusEl.className = 'bad';
-    statusEl.textContent = `❌ Ты не в игровой зоне. Ближайшая — "${nearName}", ${nearDist}м от тебя. Подойди ближе или перетащи метку на карте, если стоишь на краю зоны.`;
+    statusEl.textContent = `❌ Ты не в игровой зоне. Ближайшая — "${nearName}", ${nearDist}м от тебя.`;
   }
   checkReady();
 }
@@ -222,23 +259,36 @@ function checkReady() {
   btn.disabled = !(photoFile && matchedZone);
 }
 
-// ── Геолокация ──
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      userLat = pos.coords.latitude;
-      userLon = pos.coords.longitude;
-      initMap(userLat, userLon);
-      loadZonesAndCheck();
-    },
-    () => {
-      document.getElementById('zone-status').className = 'bad';
-      document.getElementById('zone-status').textContent = '❌ Нужен доступ к геолокации, чтобы прятать модели.';
-    },
-    { enableHighAccuracy: true, timeout: 8000 }
-  );
-} else {
-  document.getElementById('zone-status').textContent = 'Геолокация не поддерживается этим браузером.';
+async function init() {
+  currentUser = await checkLogin();
+  document.getElementById('auth-checking').classList.remove('show');
+
+  if (!currentUser || !currentUser.email) {
+    document.getElementById('auth-required').classList.add('show');
+    return;
+  }
+
+  document.getElementById('game-content').style.display = 'block';
+  document.getElementById('player-chip').innerHTML =
+    `${currentUser.avatar ? `<img src="${currentUser.avatar}">` : ''}<span>Прячет: ${currentUser.name || currentUser.email}</span>`;
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        userLat = pos.coords.latitude;
+        userLon = pos.coords.longitude;
+        initMap(userLat, userLon);
+        loadZonesAndCheck();
+      },
+      () => {
+        document.getElementById('zone-status').className = 'bad';
+        document.getElementById('zone-status').textContent = '❌ Нужен доступ к геолокации, чтобы прятать модели.';
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  } else {
+    document.getElementById('zone-status').textContent = 'Геолокация не поддерживается этим браузером.';
+  }
 }
 
 async function submitAnchor() {
@@ -247,16 +297,14 @@ async function submitAnchor() {
   btn.disabled = true;
   btn.textContent = '⏳ Загружаем...';
 
-  const name = document.getElementById('hider-name').value.trim() || 'Игрок';
-  localStorage.setItem('albaspace_player_name', name);
-
   try {
     const form = new FormData();
     form.append('photo', photoFile);
     form.append('lat', userLat);
     form.append('lon', userLon);
     form.append('zone_id', matchedZone.id);
-    form.append('hider_name', name);
+    form.append('hider_name', currentUser.name || currentUser.email.split('@')[0]);
+    form.append('user_email', currentUser.email);
 
     const res = await fetch(`${API_BASE}/api/anchors`, { method: 'POST', body: form });
     const data = await res.json();
@@ -272,6 +320,8 @@ async function submitAnchor() {
     btn.textContent = '🔒 Спрятать здесь';
   }
 }
+
+init();
 </script>
 </body>
 </html>

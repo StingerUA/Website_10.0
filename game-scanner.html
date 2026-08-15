@@ -35,6 +35,7 @@
     font-size: 17px; font-weight: 800; color: #38bdf8; letter-spacing: 0.05em;
   }
   #timer-badge.low { color: #fca5a5; border-color: rgba(248,113,113,0.4); }
+  #timer-badge.done { color: #6ee7b7; border-color: rgba(0,255,150,0.35); }
 
   #status-badge {
     position: fixed; top: max(68px, calc(env(safe-area-inset-top) + 56px));
@@ -45,7 +46,6 @@
   }
   #status-badge.found { background: rgba(0,60,35,0.88); border-color: rgba(0,255,150,0.45); color: #6ee7b7; }
 
-  /* ── Оверлеи-состояния (загрузка / ошибки / итог) ── */
   .overlay {
     position: fixed; inset: 0; z-index: 500;
     background: #020617;
@@ -78,15 +78,35 @@
     background: rgba(15,23,42,0.8); border: 1px solid rgba(56,189,248,0.35); color: #38bdf8;
   }
 
-  #model-label {
+  #found-toast {
     position: fixed;
-    bottom: max(40px, calc(env(safe-area-inset-bottom) + 40px));
-    left: 50%; transform: translateX(-50%); z-index: 300;
-    padding: 14px 28px; border-radius: 18px;
-    background: rgba(2,6,23,0.85); border: 1px solid rgba(0,194,255,0.4);
-    text-align: center; max-width: 85vw; display: none; pointer-events: none;
+    bottom: max(90px, calc(env(safe-area-inset-bottom) + 90px));
+    left: 50%; transform: translateX(-50%) translateY(10px);
+    z-index: 300;
+    padding: 9px 20px; border-radius: 99px;
+    background: rgba(2,6,23,0.72); border: 1px solid rgba(0,255,150,0.35);
+    color: #6ee7b7; font-size: 13px; font-weight: 600;
+    text-align: center; white-space: nowrap;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
   }
-  #model-label-sub { font-size: 12px; color: #6ee7b7; margin-top: 3px; }
+  #found-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── Кнопка "Добавить в коллекцию" — появляется после находки ── */
+  #collect-btn {
+    position: fixed;
+    bottom: max(24px, env(safe-area-inset-bottom));
+    left: 50%; transform: translateX(-50%);
+    z-index: 300;
+    padding: 13px 24px; border-radius: 99px; border: none;
+    background: linear-gradient(135deg, #00c2ff, #0077b6);
+    color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+    display: none; align-items: center; gap: 8px;
+    box-shadow: 0 6px 24px rgba(0,194,255,0.35);
+  }
+  #collect-btn.show { display: inline-flex; }
+  #collect-btn:disabled { opacity: 0.6; }
+  #collect-btn.done { background: rgba(0,80,40,0.85); }
 </style>
 </head>
 <body>
@@ -100,20 +120,29 @@
 
 <div id="status-badge">Наведи камеру на место, где мог быть спрятан якорь</div>
 
-<div id="model-label">
-  <div>🛸 Найдено!</div>
-  <div id="model-label-sub">Модель обнаружена</div>
+<div id="found-toast">🎉 Найдено! Можешь рассмотреть модель со всех сторон</div>
+
+<button id="collect-btn" onclick="addToCollection()">➕ Добавить в коллекцию</button>
+
+<div class="overlay show" id="auth-checking">
+  <div class="spin"></div>
+  <h2>Проверяем вход…</h2>
 </div>
 
-<!-- Загрузка списка якорей -->
-<div class="overlay show" id="loading-overlay">
+<div class="overlay" id="auth-required">
+  <div class="big-emoji">🔒</div>
+  <h2>Нужно войти</h2>
+  <p>Чтобы искать модели, нужно авторизоваться. Войди через аккаунт сайта, а затем вернись сюда.</p>
+  <a class="action-btn" href="/account-menu.html">Войти</a>
+</div>
+
+<div class="overlay" id="loading-overlay">
   <div class="spin"></div>
   <h2>Подготовка зоны…</h2>
   <p id="loading-text">Загружаем список якорей поблизости</p>
   <div id="progress-bar-bg" style="display:none;"><div id="progress-bar"></div></div>
 </div>
 
-<!-- Нет якорей в зоне -->
 <div class="overlay" id="empty-overlay">
   <div class="big-emoji">🕳️</div>
   <h2>В этой зоне пока пусто</h2>
@@ -122,7 +151,6 @@
   <a class="action-btn secondary" href="game-hide.html">Спрятать модель</a>
 </div>
 
-<!-- Ошибка геолокации / далеко от зоны -->
 <div class="overlay" id="geo-overlay">
   <div class="big-emoji">📍</div>
   <h2 id="geo-title">Проверяем геолокацию…</h2>
@@ -131,15 +159,6 @@
   <a class="action-btn secondary" href="game-zones.html">К зонам</a>
 </div>
 
-<!-- Раунд окончен: нашёл -->
-<div class="overlay" id="win-overlay">
-  <div class="big-emoji">🎉</div>
-  <h2>Найдено!</h2>
-  <p>Ты отыскал спрятанную 3D-модель. Отличная работа!</p>
-  <a class="action-btn" href="game-zones.html">К зонам</a>
-</div>
-
-<!-- Раунд окончен: время вышло -->
 <div class="overlay" id="timeout-overlay">
   <div class="big-emoji">⏱️</div>
   <h2>Время вышло</h2>
@@ -149,16 +168,14 @@
 </div>
 
 <script>
-// ⚠️ ПОСЛЕ ДЕПЛОЯ WORKER'А — впиши сюда его адрес.
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
+const MAIN_API = "https://albaspace-api.nncdecdgc.workers.dev";
 
-// Одна общая 3D-модель для всех найденных якорей (MVP).
-// Замени на путь к любой модели, которая уже есть на сайте.
-const MODEL_URL = "/assets/models/opportunity.glb";
+const MODEL_URL = "/assets/models/earth.glb";
 const MODEL_SCALE = "1.2 1.2 1.2";
 
 const ROUND_SECONDS = 60;
-const GEO_TOLERANCE_M = 80; // допуск неточности GPS сверх радиуса зоны
+const GEO_TOLERANCE_M = 80;
 
 const params = new URLSearchParams(location.search);
 const zoneId = params.get('zone');
@@ -168,6 +185,8 @@ let timerInterval = null;
 let secsLeft = ROUND_SECONDS;
 let roundEnded = false;
 let arStarted = false;
+let currentUser = null;
+let foundAnchor = null;
 
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371000;
@@ -185,26 +204,44 @@ function hideAllOverlays() {
   document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show'));
 }
 
+async function checkLogin() {
+  try {
+    const res = await fetch(`${MAIN_API}/me`, { credentials: 'include' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) { return null; }
+}
+
 async function reportSession(anchorId, result) {
-  const name = localStorage.getItem('albaspace_player_name') || 'Игрок';
   try {
     await fetch(`${API_BASE}/api/sessions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ zone_id: zoneId, anchor_id: anchorId || null, result, seeker_name: name }),
+      body: JSON.stringify({
+        zone_id: zoneId,
+        anchor_id: anchorId || null,
+        result,
+        seeker_name: currentUser.name || currentUser.email,
+        user_email: currentUser.email,
+      }),
     });
-  } catch (e) { /* не критично, если не отправилось */ }
+  } catch (e) {}
 }
 
-// ── ШАГ 1: проверка зоны и геолокации ──
 async function start() {
+  currentUser = await checkLogin();
+  if (!currentUser || !currentUser.email) {
+    hideAllOverlays();
+    showOverlay('auth-required');
+    return;
+  }
+
   if (!zoneId) {
     document.getElementById('geo-title').textContent = 'Зона не выбрана';
     document.getElementById('geo-text').textContent = 'Вернись к списку зон и выбери одну из них.';
     showOverlay('geo-overlay');
     return;
   }
-
   if (!navigator.geolocation) {
     document.getElementById('geo-title').textContent = 'Геолокация недоступна';
     document.getElementById('geo-text').textContent = 'Этот браузер не поддерживает геолокацию, которая нужна для игры.';
@@ -260,7 +297,6 @@ async function checkZoneAndLoad(userLat, userLon) {
   }
 }
 
-// ── ШАГ 2: загрузить якоря зоны ──
 async function loadAnchors() {
   showOverlay('loading-overlay');
   document.getElementById('loading-text').textContent = 'Загружаем якоря зоны…';
@@ -282,7 +318,6 @@ async function loadAnchors() {
   }
 }
 
-// ── ШАГ 3: скомпилировать targets.mind из фото якорей (прямо в браузере) ──
 function loadImageAsHTMLImage(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -323,7 +358,6 @@ async function compileAndBuildScene() {
   buildScene(mindUrl);
 }
 
-// ── ШАГ 4: построить AR-сцену с найденными якорями ──
 function buildScene(mindUrl) {
   const container = document.getElementById('ar-container');
   const entities = anchors.map((a, i) => `<a-entity id="anchor-${i}" mindar-image-target="targetIndex:${i}"></a-entity>`).join('\n');
@@ -352,7 +386,6 @@ function buildScene(mindUrl) {
     startTimer();
   });
 
-  // На случай если arReady не сработает (некоторые устройства) — стартуем по 'loaded'
   sceneEl.addEventListener('loaded', () => {
     setTimeout(() => {
       if (!arStarted) {
@@ -366,7 +399,6 @@ function buildScene(mindUrl) {
   anchors.forEach((anchor, i) => {
     const ent = container.querySelector('#anchor-' + i);
     if (!ent) return;
-
     ent.addEventListener('targetFound', () => {
       if (roundEnded) return;
       onFound(anchor, i, ent);
@@ -376,11 +408,16 @@ function buildScene(mindUrl) {
 
 function onFound(anchor, index, entityEl) {
   roundEnded = true;
+  foundAnchor = anchor;
   clearInterval(timerInterval);
 
-  document.getElementById('status-badge').textContent = '✅ Якорь найден!';
+  const badge = document.getElementById('timer-badge');
+  badge.textContent = '✓';
+  badge.classList.remove('low');
+  badge.classList.add('done');
+
+  document.getElementById('status-badge').textContent = '✅ Якорь найден — рассмотри модель';
   document.getElementById('status-badge').classList.add('found');
-  document.getElementById('model-label').style.display = 'block';
 
   if (!entityEl.querySelector('a-gltf-model')) {
     const m = document.createElement('a-gltf-model');
@@ -393,10 +430,41 @@ function onFound(anchor, index, entityEl) {
 
   reportSession(anchor.id, 'found');
 
-  setTimeout(() => showOverlay('win-overlay'), 1800);
+  const toast = document.getElementById('found-toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+
+  document.getElementById('collect-btn').classList.add('show');
 }
 
-// ── Таймер игрового раунда (60 сек), стартует ТОЛЬКО когда AR готов ──
+async function addToCollection() {
+  const btn = document.getElementById('collect-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Добавляем...';
+  try {
+    const res = await fetch(`${API_BASE}/api/collection`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_email: currentUser.email,
+        user_name: currentUser.name || currentUser.email,
+        anchor_id: foundAnchor ? foundAnchor.id : null,
+        zone_id: zoneId,
+        model_url: MODEL_URL,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+
+    btn.classList.add('done');
+    btn.textContent = '✅ В коллекции';
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = '➕ Добавить в коллекцию';
+    alert('Не удалось добавить: ' + err.message);
+  }
+}
+
 function startTimer() {
   secsLeft = ROUND_SECONDS;
   updateTimerBadge();

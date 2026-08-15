@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Alba Space — AR Прятки: выбери зону</title>
 
-<!-- Leaflet — бесплатная библиотека карт, без API-ключа -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -19,9 +18,21 @@
   header {
     padding: 18px 20px 14px;
     background: linear-gradient(to bottom, rgba(2,6,23,0.95), rgba(2,6,23,0.7));
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
   h1 { font-size: 18px; color: #38bdf8; letter-spacing: 0.04em; }
   p.sub { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+
+  #user-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 12px; border-radius: 99px;
+    background: rgba(15,23,42,0.7); border: 1px solid rgba(148,163,184,0.2);
+    font-size: 12px; color: #cbd5e1; white-space: nowrap;
+  }
+  #user-chip img { width: 22px; height: 22px; border-radius: 50%; }
+  #collection-link {
+    color: #38bdf8; text-decoration: none; font-size: 12px; font-weight: 600;
+  }
 
   #map { width: 100%; height: 48vh; min-height: 300px; }
 
@@ -51,36 +62,70 @@
     border: 1px dashed rgba(56,189,248,0.35);
     color: #38bdf8; text-decoration: none; font-size: 13px; font-weight: 600;
   }
+
+  /* ── Экран "нужно войти" ── */
+  .overlay {
+    position: fixed; inset: 0; z-index: 500; background: #020617;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; padding: 32px; text-align: center;
+  }
+  .overlay.show { display: flex; }
+  .overlay h2 { font-size: 20px; color: #38bdf8; }
+  .overlay p { font-size: 14px; color: #94a3b8; line-height: 1.6; max-width: 320px; }
+  .overlay .big-emoji { font-size: 46px; }
+  .action-btn {
+    padding: 12px 26px; border-radius: 99px; border: none;
+    background: linear-gradient(135deg, #00c2ff, #0077b6);
+    color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+    text-decoration: none; display: inline-block;
+  }
+  .spin {
+    width: 42px; height: 42px;
+    border: 3px solid rgba(0,194,255,0.12);
+    border-top-color: #00c2ff; border-right-color: rgba(56,189,248,0.75);
+    border-radius: 50%; animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>🗺️ AR Прятки — выбери зону</h1>
-  <p class="sub">Найди зону поблизости и начни поиск спрятанной 3D-модели</p>
-</header>
+<!-- Проверка входа -->
+<div class="overlay show" id="auth-checking">
+  <div class="spin"></div>
+  <h2>Проверяем вход…</h2>
+</div>
 
-<div id="map"></div>
-<div id="status-msg">Определяем твоё местоположение…</div>
-<div id="zone-list"></div>
+<div class="overlay" id="auth-required">
+  <div class="big-emoji">🔒</div>
+  <h2>Нужно войти</h2>
+  <p>AR Прятки доступны только авторизованным игрокам. Войди через аккаунт сайта, а затем вернись на эту страницу.</p>
+  <a class="action-btn" href="/account-menu.html">Войти</a>
+</div>
 
-<a class="hide-link" href="game-hide.html">📸 Хочу спрятать модель</a>
+<div id="game-content" style="display:none">
+  <header>
+    <div>
+      <h1>🗺️ AR Прятки — выбери зону</h1>
+      <p class="sub">Найди зону поблизости и начни поиск спрятанной 3D-модели</p>
+    </div>
+    <div id="user-chip"></div>
+  </header>
+
+  <div id="map"></div>
+  <div id="status-msg">Определяем твоё местоположение…</div>
+  <div id="zone-list"></div>
+
+  <a class="hide-link" href="game-hide.html">📸 Хочу спрятать модель</a>
+  <a class="hide-link" id="collection-link-block" href="found-models.html">🏆 Мои найденные модели</a>
+</div>
 
 <script>
-// ⚠️ ПОСЛЕ ДЕПЛОЯ WORKER'А — впиши сюда его адрес.
-// Пример: "https://albaspace-game-api.твой-логин.workers.dev"
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
+const MAIN_API = "https://albaspace-api.nncdecdgc.workers.dev";
 
 let map;
-let userMarker = null;
-
-function initMap(centerLat, centerLon) {
-  map = L.map('map').setView([centerLat, centerLon], 14);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap',
-    maxZoom: 19,
-  }).addTo(map);
-}
+let currentUser = null;
 
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371000;
@@ -90,10 +135,24 @@ function haversine(lat1, lon1, lat2, lon2) {
   return 2*R*Math.asin(Math.sqrt(a));
 }
 
+async function checkLogin() {
+  try {
+    const res = await fetch(`${MAIN_API}/me`, { credentials: 'include' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) { return null; }
+}
+
+function initMap(centerLat, centerLon) {
+  map = L.map('map').setView([centerLat, centerLon], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap', maxZoom: 19,
+  }).addTo(map);
+}
+
 async function loadZones(userLat, userLon) {
   const statusEl = document.getElementById('status-msg');
   const listEl = document.getElementById('zone-list');
-
   try {
     const res = await fetch(`${API_BASE}/api/zones`);
     const data = await res.json();
@@ -103,8 +162,6 @@ async function loadZones(userLat, userLon) {
     listEl.innerHTML = '';
 
     data.zones.forEach(zone => {
-      // Круг зоны на карте
-      const inRange = userLat != null ? haversine(userLat, userLon, zone.lat, zone.lon) <= zone.radius_m : false;
       const circle = L.circle([zone.lat, zone.lon], {
         radius: zone.radius_m,
         color: zone.anchor_count > 0 ? '#00c2ff' : '#475569',
@@ -113,7 +170,6 @@ async function loadZones(userLat, userLon) {
       }).addTo(map);
       circle.bindPopup(`<b>${zone.name}</b><br>Якорей: ${zone.anchor_count}`);
 
-      // Карточка в списке
       const card = document.createElement('div');
       card.className = 'zone-card';
       card.innerHTML = `
@@ -133,28 +189,42 @@ async function loadZones(userLat, userLon) {
   }
 }
 
-// ── Геолокация пользователя ──
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const { latitude, longitude } = pos.coords;
-      initMap(latitude, longitude);
-      L.marker([latitude, longitude]).addTo(map).bindPopup('Ты здесь').openPopup();
-      loadZones(latitude, longitude);
-    },
-    () => {
-      // Геолокация не разрешена — центрируем карту на первой зоне после загрузки
-      initMap(37.9144, 40.2306);
-      loadZones(null, null);
-      document.getElementById('status-msg').textContent =
-        '📍 Разреши доступ к геолокации, чтобы видеть расстояние до зон';
-    },
-    { enableHighAccuracy: true, timeout: 8000 }
-  );
-} else {
-  initMap(37.9144, 40.2306);
-  loadZones(null, null);
+async function init() {
+  currentUser = await checkLogin();
+  document.getElementById('auth-checking').classList.remove('show');
+
+  if (!currentUser || !currentUser.email) {
+    document.getElementById('auth-required').classList.add('show');
+    return;
+  }
+
+  document.getElementById('game-content').style.display = 'block';
+  const chip = document.getElementById('user-chip');
+  chip.innerHTML = `${currentUser.avatar ? `<img src="${currentUser.avatar}">` : ''}<span>${currentUser.name || currentUser.email}</span>`;
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        initMap(latitude, longitude);
+        L.marker([latitude, longitude]).addTo(map).bindPopup('Ты здесь').openPopup();
+        loadZones(latitude, longitude);
+      },
+      () => {
+        initMap(37.9144, 40.2306);
+        loadZones(null, null);
+        document.getElementById('status-msg').textContent =
+          '📍 Разреши доступ к геолокации, чтобы видеть расстояние до зон';
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  } else {
+    initMap(37.9144, 40.2306);
+    loadZones(null, null);
+  }
 }
+
+init();
 </script>
 </body>
 </html>
