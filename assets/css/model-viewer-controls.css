@@ -166,35 +166,44 @@ model-viewer {
    AUTHORIZATION OVERLAY (NEW)
    ========================================== */
 
-/* Контейнер-оболочка для страницы Opportunity */
+/* Контейнер-оболочка для страницы Opportunity.
+   height: auto + padding — раньше была жёсткая высота 600px под размер
+   только самой модели, из-за чего аудио-плеер (его вставляет
+   alba-model-player.js прямо перед <model-viewer>, тем же родителем)
+   либо вылезал за пределы контейнера, либо оверлей его не полностью
+   накрывал. Теперь контейнер сам растягивается под весь контент
+   (плеер + модель + отступы), а оверлей (inset: 0) всегда точно
+   повторяет его фактический размер, что бы внутри ни было. */
 .model-gate {
   position: relative;
   width: 100%;
-  height: 600px;
+  padding: 56px 0;
   margin-top: 30px;
 }
 
-/* Переопределяем стили model-viewer, когда он внутри .model-gate */
+/* Явная высота у самой модели (раньше была 100% от родителя,
+   но родитель теперь auto-height, так что процент не сработает) */
 .model-gate model-viewer {
+  display: block !important;
   width: 100% !important;
-  height: 100% !important;
+  height: 600px !important;
   margin-top: 0 !important;
   border-radius: 12px !important;
   box-shadow: 0 0 30px rgba(0, 150, 255, 0.5) !important;
 }
 
-/* Заглушка, которая перекрывает всё */
+/* Заглушка, которая перекрывает всё: модель И аудио-плеер над ней.
+   inset: 0 (а не top/left + width/height: 100%) — так оверлей корректно
+   растягивается под родителя с auto-высотой. z-index выше, чем у
+   #albaModelPlayer (10000), иначе плеер остаётся поверх заглушки. */
 .model-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 9999; /* ОЧЕНЬ ВАЖНО: должно быть выше, чем z-index: 20 у твоих AR-кнопок */
+  inset: 0;
+  z-index: 10001; /* выше плеера (10000) и AR-кнопок (20) */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
   background: rgba(2, 6, 23, 0.95);
   border-radius: 12px;
   color: #e5e7eb;
@@ -224,9 +233,13 @@ model-viewer {
   opacity: 0.8;
 }
 
-/* Адаптив для мобильных (меняем высоту контейнера) */
+/* Адаптив для мобильных: чуть меньше воздуха сверху/снизу и меньше сама модель,
+   но тот же принцип — контейнер растягивается под весь контент */
 @media (max-width: 768px) {
   .model-gate {
-    height: 420px;
+    padding: 40px 0;
+  }
+  .model-gate model-viewer {
+    height: 420px !important;
   }
 }
