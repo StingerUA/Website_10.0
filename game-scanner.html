@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="tr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>Alba Space — AR Прятки: поиск</title>
+<title>Alba Space — AR Saklambaç: Ara</title>
 
 <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
 
+
+
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #fff; }
+  html, body { width: 100%; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #fff; touch-action: none; }
 
   #ar-container { position: fixed; inset: 0; z-index: 1; }
 
@@ -20,22 +22,20 @@
     display: flex; align-items: center; justify-content: space-between;
     padding: max(12px, env(safe-area-inset-top)) 16px 12px;
     background: linear-gradient(to bottom, rgba(2,6,23,0.85) 65%, transparent);
-    pointer-events: none;
+    transition: opacity 0.4s ease;
   }
+  #top-bar.hidden { opacity: 0; pointer-events: none; }
   #back-btn {
-    pointer-events: auto;
     padding: 8px 14px; border-radius: 99px;
     background: rgba(2,6,23,0.7); border: 1px solid rgba(0,194,255,0.35);
     color: #00c2ff; text-decoration: none; font-size: 13px; font-weight: 600;
   }
   #timer-badge {
-    pointer-events: none;
     padding: 8px 18px; border-radius: 99px;
     background: rgba(2,6,23,0.75); border: 1px solid rgba(148,163,184,0.3);
     font-size: 17px; font-weight: 800; color: #38bdf8; letter-spacing: 0.05em;
   }
   #timer-badge.low { color: #fca5a5; border-color: rgba(248,113,113,0.4); }
-  #timer-badge.done { color: #6ee7b7; border-color: rgba(0,255,150,0.35); }
 
   #status-badge {
     position: fixed; top: max(68px, calc(env(safe-area-inset-top) + 56px));
@@ -43,8 +43,19 @@
     padding: 7px 16px; border-radius: 99px;
     background: rgba(2,6,23,0.72); border: 1px solid rgba(148,163,184,0.25);
     font-size: 13px; color: #cbd5e1; white-space: nowrap; pointer-events: none;
+    transition: opacity 0.4s ease;
   }
-  #status-badge.found { background: rgba(0,60,35,0.88); border-color: rgba(0,255,150,0.45); color: #6ee7b7; }
+  #status-badge.hidden { opacity: 0; }
+
+  /* Минимальная кнопка выхода — появляется вместо top-bar после находки */
+  #mini-exit {
+    position: fixed; top: max(12px, env(safe-area-inset-top)); right: 16px; z-index: 300;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(2,6,23,0.6); border: 1px solid rgba(148,163,184,0.25);
+    color: #cbd5e1; font-size: 16px; display: none; align-items: center; justify-content: center;
+    text-decoration: none;
+  }
+  #mini-exit.show { display: flex; }
 
   .overlay {
     position: fixed; inset: 0; z-index: 500;
@@ -78,21 +89,27 @@
     background: rgba(15,23,42,0.8); border: 1px solid rgba(56,189,248,0.35); color: #38bdf8;
   }
 
-  #found-toast {
+  #found-toast, #hint-toast {
     position: fixed;
-    bottom: max(90px, calc(env(safe-area-inset-bottom) + 90px));
     left: 50%; transform: translateX(-50%) translateY(10px);
     z-index: 300;
     padding: 9px 20px; border-radius: 99px;
-    background: rgba(2,6,23,0.72); border: 1px solid rgba(0,255,150,0.35);
-    color: #6ee7b7; font-size: 13px; font-weight: 600;
+    font-size: 13px; font-weight: 600;
     text-align: center; white-space: nowrap;
     opacity: 0; pointer-events: none;
     transition: opacity 0.5s ease, transform 0.5s ease;
   }
-  #found-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #found-toast {
+    bottom: max(90px, calc(env(safe-area-inset-bottom) + 90px));
+    background: rgba(2,6,23,0.72); border: 1px solid rgba(0,255,150,0.35); color: #6ee7b7;
+  }
+  #hint-toast {
+    top: max(112px, calc(env(safe-area-inset-top) + 100px));
+    background: rgba(2,6,23,0.72); border: 1px solid rgba(250,204,21,0.35); color: #fde68a;
+    max-width: 85vw; white-space: normal;
+  }
+  #found-toast.show, #hint-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ── Кнопка "Добавить в коллекцию" — появляется после находки ── */
   #collect-btn {
     position: fixed;
     bottom: max(24px, env(safe-area-inset-bottom));
@@ -107,6 +124,17 @@
   #collect-btn.show { display: inline-flex; }
   #collect-btn:disabled { opacity: 0.6; }
   #collect-btn.done { background: rgba(0,80,40,0.85); }
+
+  #gesture-hint {
+    position: fixed;
+    bottom: max(78px, calc(env(safe-area-inset-bottom) + 78px));
+    left: 50%; transform: translateX(-50%);
+    z-index: 299;
+    font-size: 11px; color: rgba(255,255,255,0.5);
+    opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+    white-space: nowrap;
+  }
+  #gesture-hint.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -114,66 +142,67 @@
 <div id="ar-container"></div>
 
 <div id="top-bar">
-  <a id="back-btn" href="game-zones.html">← Выйти</a>
+  <a id="back-btn" href="game-zones.html">← Çıkış</a>
   <div id="timer-badge">60s</div>
 </div>
+<a id="mini-exit" href="game-zones.html">✕</a>
 
-<div id="status-badge">Наведи камеру на место, где мог быть спрятан якорь</div>
+<div id="status-badge">Kameranı, işaretin gizli olabileceği yere doğrult</div>
+<div id="hint-toast"></div>
+<div id="found-toast">🎉 Bulundu! Modeli her açıdan inceleyebilirsin</div>
+<div id="gesture-hint">👆 Sürükle: taşı · 🤏 İki parmak: yakınlaştır</div>
 
-<div id="found-toast">🎉 Найдено! Можешь рассмотреть модель со всех сторон</div>
-
-<button id="collect-btn" onclick="addToCollection()">➕ Добавить в коллекцию</button>
+<button id="collect-btn" onclick="addToCollection()">➕ Koleksiyona Ekle</button>
 
 <div class="overlay show" id="auth-checking">
   <div class="spin"></div>
-  <h2>Проверяем вход…</h2>
+  <h2>Giriş kontrol ediliyor…</h2>
 </div>
 
 <div class="overlay" id="auth-required">
   <div class="big-emoji">🔒</div>
-  <h2>Нужно войти</h2>
-  <p>Чтобы искать модели, нужно авторизоваться. Войди через аккаунт сайта, а затем вернись сюда.</p>
-  <a class="action-btn" href="/account-menu.html">Войти</a>
+  <h2>Giriş Yapman Gerekiyor</h2>
+  <p>Aramak için giriş yapmış olman gerekiyor. Site hesabınla giriş yap, sonra bu sayfaya geri dön.</p>
+  <a class="action-btn" href="/account-menu.html">Giriş Yap</a>
 </div>
 
 <div class="overlay" id="loading-overlay">
   <div class="spin"></div>
-  <h2>Подготовка зоны…</h2>
-  <p id="loading-text">Загружаем список якорей поблизости</p>
+  <h2>Bölge hazırlanıyor…</h2>
+  <p id="loading-text">Yakındaki işaretler yükleniyor</p>
   <div id="progress-bar-bg" style="display:none;"><div id="progress-bar"></div></div>
 </div>
 
 <div class="overlay" id="empty-overlay">
   <div class="big-emoji">🕳️</div>
-  <h2>В этой зоне пока пусто</h2>
-  <p>Никто ещё не спрятал модель здесь. Попробуй другую зону или спрячь свою!</p>
-  <a class="action-btn" href="game-zones.html">К зонам</a>
-  <a class="action-btn secondary" href="game-hide.html">Спрятать модель</a>
+  <h2>Bu bölge henüz boş</h2>
+  <p>Henüz kimse burada model gizlememiş. Başka bir bölge dene ya da kendi modelini gizle!</p>
+  <a class="action-btn" href="game-zones.html">Bölgelere Dön</a>
+  <a class="action-btn secondary" href="game-hide.html">Model Gizle</a>
 </div>
 
 <div class="overlay" id="geo-overlay">
   <div class="big-emoji">📍</div>
-  <h2 id="geo-title">Проверяем геолокацию…</h2>
+  <h2 id="geo-title">Konum kontrol ediliyor…</h2>
   <p id="geo-text"></p>
-  <button class="action-btn" id="geo-continue-btn" style="display:none">Всё равно продолжить</button>
-  <a class="action-btn secondary" href="game-zones.html">К зонам</a>
+  <button class="action-btn" id="geo-continue-btn" style="display:none">Yine de devam et</button>
+  <a class="action-btn secondary" href="game-zones.html">Bölgelere Dön</a>
 </div>
 
 <div class="overlay" id="timeout-overlay">
   <div class="big-emoji">⏱️</div>
-  <h2>Время вышло</h2>
-  <p>За 60 секунд не удалось найти якорь. Попробуй ещё раз или выбери другую зону.</p>
-  <button class="action-btn" onclick="location.reload()">Попробовать снова</button>
-  <a class="action-btn secondary" href="game-zones.html">К зонам</a>
+  <h2>Süre doldu</h2>
+  <p>60 saniyede işaret bulunamadı. Tekrar dene ya da başka bir bölge seç.</p>
+  <button class="action-btn" onclick="location.reload()">Tekrar Dene</button>
+  <a class="action-btn secondary" href="game-zones.html">Bölgelere Dön</a>
 </div>
 
 <script>
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
 const MAIN_API = "https://albaspace-api.nncdecdgc.workers.dev";
+const FALLBACK_MODEL_URL = "/assets/models/opportunity.glb";
 
-const MODEL_URL = "/assets/models/earth.glb";
-const MODEL_SCALE = "1.2 1.2 1.2";
-
+const BASE_SCALE = 1.2;
 const ROUND_SECONDS = 60;
 const GEO_TOLERANCE_M = 80;
 
@@ -187,6 +216,13 @@ let roundEnded = false;
 let arStarted = false;
 let currentUser = null;
 let foundAnchor = null;
+
+// ── Состояние жестов (щипок/перемещение модели) ──
+let currentModelEl = null;
+let modelScale = 1;
+let modelPos = { x: 0, y: 0.08, z: 0 };
+let lastPinchDist = null;
+let lastDragPoint = null;
 
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371000;
@@ -237,20 +273,20 @@ async function start() {
   }
 
   if (!zoneId) {
-    document.getElementById('geo-title').textContent = 'Зона не выбрана';
-    document.getElementById('geo-text').textContent = 'Вернись к списку зон и выбери одну из них.';
+    document.getElementById('geo-title').textContent = 'Bölge seçilmedi';
+    document.getElementById('geo-text').textContent = 'Bölge listesine dön ve birini seç.';
     showOverlay('geo-overlay');
     return;
   }
   if (!navigator.geolocation) {
-    document.getElementById('geo-title').textContent = 'Геолокация недоступна';
-    document.getElementById('geo-text').textContent = 'Этот браузер не поддерживает геолокацию, которая нужна для игры.';
+    document.getElementById('geo-title').textContent = 'Konum kullanılamıyor';
+    document.getElementById('geo-text').textContent = 'Bu tarayıcı, oyun için gerekli olan konum özelliğini desteklemiyor.';
     showOverlay('geo-overlay');
     return;
   }
 
   showOverlay('loading-overlay');
-  document.getElementById('loading-text').textContent = 'Проверяем твоё местоположение…';
+  document.getElementById('loading-text').textContent = 'Konumun kontrol ediliyor…';
 
   navigator.geolocation.getCurrentPosition(
     async (pos) => {
@@ -258,8 +294,8 @@ async function start() {
       await checkZoneAndLoad(latitude, longitude);
     },
     () => {
-      document.getElementById('geo-title').textContent = 'Нет доступа к геолокации';
-      document.getElementById('geo-text').textContent = 'Разреши доступ к местоположению в браузере, чтобы искать якоря.';
+      document.getElementById('geo-title').textContent = 'Konuma erişim yok';
+      document.getElementById('geo-text').textContent = 'İşaretleri arayabilmek için tarayıcıda konum erişimine izin ver.';
       showOverlay('geo-overlay');
     },
     { enableHighAccuracy: true, timeout: 10000 }
@@ -272,16 +308,16 @@ async function checkZoneAndLoad(userLat, userLon) {
     const zonesData = await zonesRes.json();
     const zone = (zonesData.zones || []).find(z => z.id === zoneId);
     if (!zone) {
-      document.getElementById('geo-title').textContent = 'Зона не найдена';
-      document.getElementById('geo-text').textContent = 'Возможно, ссылка устарела.';
+      document.getElementById('geo-title').textContent = 'Bölge bulunamadı';
+      document.getElementById('geo-text').textContent = 'Bağlantı güncel olmayabilir.';
       showOverlay('geo-overlay');
       return;
     }
 
     const dist = haversine(userLat, userLon, zone.lat, zone.lon);
     if (dist > zone.radius_m + GEO_TOLERANCE_M) {
-      document.getElementById('geo-title').textContent = 'Ты не в зоне "' + zone.name + '"';
-      document.getElementById('geo-text').textContent = `До зоны примерно ${Math.round(dist)}м. Подойди ближе, чтобы начать поиск.`;
+      document.getElementById('geo-title').textContent = `"${zone.name}" bölgesinde değilsin`;
+      document.getElementById('geo-text').textContent = `Bölgeye yaklaşık ${Math.round(dist)}m uzaktasın. Aramaya başlamak için yaklaş.`;
       const contBtn = document.getElementById('geo-continue-btn');
       contBtn.style.display = 'inline-block';
       contBtn.onclick = () => loadAnchors();
@@ -291,7 +327,7 @@ async function checkZoneAndLoad(userLat, userLon) {
 
     await loadAnchors();
   } catch (err) {
-    document.getElementById('geo-title').textContent = 'Ошибка загрузки';
+    document.getElementById('geo-title').textContent = 'Yükleme hatası';
     document.getElementById('geo-text').textContent = err.message;
     showOverlay('geo-overlay');
   }
@@ -299,12 +335,12 @@ async function checkZoneAndLoad(userLat, userLon) {
 
 async function loadAnchors() {
   showOverlay('loading-overlay');
-  document.getElementById('loading-text').textContent = 'Загружаем якоря зоны…';
+  document.getElementById('loading-text').textContent = 'Bölgedeki işaretler yükleniyor…';
 
   try {
     const res = await fetch(`${API_BASE}/api/anchors?zone_id=${encodeURIComponent(zoneId)}`);
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+    if (!res.ok) throw new Error(data.error || 'Sunucu hatası');
     anchors = data.anchors || [];
 
     if (anchors.length === 0) {
@@ -323,24 +359,24 @@ function loadImageAsHTMLImage(url) {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error('Не удалось загрузить изображение'));
+    img.onerror = () => reject(new Error('Görsel yüklenemedi'));
     img.src = url;
   });
 }
 
 async function compileAndBuildScene() {
   document.getElementById('progress-bar-bg').style.display = 'block';
-  document.getElementById('loading-text').textContent = `Загрузка фото… (0/${anchors.length})`;
+  document.getElementById('loading-text').textContent = `Fotoğraflar yükleniyor… (0/${anchors.length})`;
 
   const images = [];
   for (let i = 0; i < anchors.length; i++) {
     const img = await loadImageAsHTMLImage(anchors[i].photo_url);
     images.push(img);
-    document.getElementById('loading-text').textContent = `Загрузка фото… (${i+1}/${anchors.length})`;
+    document.getElementById('loading-text').textContent = `Fotoğraflar yükleniyor… (${i+1}/${anchors.length})`;
     document.getElementById('progress-bar').style.width = Math.round(((i+1)/anchors.length)*35) + '%';
   }
 
-  document.getElementById('loading-text').textContent = 'Анализируем место (это займёт немного времени)…';
+  document.getElementById('loading-text').textContent = 'Yer analiz ediliyor (biraz zaman alabilir)…';
 
   const compiler = new MINDAR.IMAGE.Compiler();
   await compiler.compileImageTargets(images, (progress) => {
@@ -353,7 +389,7 @@ async function compileAndBuildScene() {
   const mindUrl = URL.createObjectURL(blob);
 
   document.getElementById('progress-bar').style.width = '100%';
-  document.getElementById('loading-text').textContent = 'Запускаем камеру…';
+  document.getElementById('loading-text').textContent = 'Kamera başlatılıyor…';
 
   buildScene(mindUrl);
 }
@@ -384,6 +420,7 @@ function buildScene(mindUrl) {
     arStarted = true;
     hideAllOverlays();
     startTimer();
+    showHints();
   });
 
   sceneEl.addEventListener('loaded', () => {
@@ -392,6 +429,7 @@ function buildScene(mindUrl) {
         arStarted = true;
         hideAllOverlays();
         startTimer();
+        showHints();
       }
     }, 1500);
   });
@@ -404,28 +442,39 @@ function buildScene(mindUrl) {
       onFound(anchor, i, ent);
     });
   });
+
+  setupGestures(container);
 }
 
+function showHints() {
+  const texts = anchors.map(a => a.hint).filter(Boolean);
+  if (texts.length === 0) return;
+  const el = document.getElementById('hint-toast');
+  el.textContent = '💡 İpucu: ' + texts.join(' • ');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 6000);
+}
+
+// ── Находка: убираем всю информационную обвязку, оставляем только модель ──
 function onFound(anchor, index, entityEl) {
   roundEnded = true;
   foundAnchor = anchor;
   clearInterval(timerInterval);
 
-  const badge = document.getElementById('timer-badge');
-  badge.textContent = '✓';
-  badge.classList.remove('low');
-  badge.classList.add('done');
+  document.getElementById('top-bar').classList.add('hidden');
+  document.getElementById('status-badge').classList.add('hidden');
+  document.getElementById('mini-exit').classList.add('show');
 
-  document.getElementById('status-badge').textContent = '✅ Якорь найден — рассмотри модель';
-  document.getElementById('status-badge').classList.add('found');
+  const modelUrl = anchor.model_url || FALLBACK_MODEL_URL;
 
   if (!entityEl.querySelector('a-gltf-model')) {
     const m = document.createElement('a-gltf-model');
-    m.setAttribute('src', MODEL_URL);
-    m.setAttribute('scale', MODEL_SCALE);
-    m.setAttribute('position', '0 0.08 0');
+    m.setAttribute('src', modelUrl);
+    m.setAttribute('scale', `${BASE_SCALE} ${BASE_SCALE} ${BASE_SCALE}`);
+    m.setAttribute('position', `${modelPos.x} ${modelPos.y} ${modelPos.z}`);
     m.setAttribute('rotation', '90 0 0');
     entityEl.appendChild(m);
+    currentModelEl = m;
   }
 
   reportSession(anchor.id, 'found');
@@ -434,13 +483,62 @@ function onFound(anchor, index, entityEl) {
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 4000);
 
+  const gestureHint = document.getElementById('gesture-hint');
+  gestureHint.classList.add('show');
+  setTimeout(() => gestureHint.classList.remove('show'), 5000);
+
   document.getElementById('collect-btn').classList.add('show');
+}
+
+// ── Жесты: одним пальцем — переместить модель, двумя — увеличить/уменьшить ──
+function setupGestures(container) {
+  function dist(t1, t2) {
+    return Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+  }
+
+  container.addEventListener('touchstart', (e) => {
+    if (!roundEnded || !currentModelEl) return;
+    if (e.touches.length === 2) {
+      lastPinchDist = dist(e.touches[0], e.touches[1]);
+      lastDragPoint = null;
+    } else if (e.touches.length === 1) {
+      lastDragPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      lastPinchDist = null;
+    }
+  }, { passive: true });
+
+  container.addEventListener('touchmove', (e) => {
+    if (!roundEnded || !currentModelEl) return;
+    e.preventDefault();
+
+    if (e.touches.length === 2) {
+      const d = dist(e.touches[0], e.touches[1]);
+      if (lastPinchDist) {
+        const factor = d / lastPinchDist;
+        modelScale = Math.min(4, Math.max(0.25, modelScale * factor));
+        const s = modelScale * BASE_SCALE;
+        currentModelEl.setAttribute('scale', `${s} ${s} ${s}`);
+      }
+      lastPinchDist = d;
+    } else if (e.touches.length === 1 && lastDragPoint) {
+      const dx = (e.touches[0].clientX - lastDragPoint.x) * 0.0025;
+      const dy = (e.touches[0].clientY - lastDragPoint.y) * 0.0025;
+      modelPos.x += dx;
+      modelPos.z += dy;
+      currentModelEl.setAttribute('position', `${modelPos.x} ${modelPos.y} ${modelPos.z}`);
+      lastDragPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  }, { passive: false });
+
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) { lastPinchDist = null; lastDragPoint = null; }
+  }, { passive: true });
 }
 
 async function addToCollection() {
   const btn = document.getElementById('collect-btn');
   btn.disabled = true;
-  btn.textContent = '⏳ Добавляем...';
+  btn.textContent = '⏳ Ekleniyor...';
   try {
     const res = await fetch(`${API_BASE}/api/collection`, {
       method: 'POST',
@@ -450,18 +548,18 @@ async function addToCollection() {
         user_name: currentUser.name || currentUser.email,
         anchor_id: foundAnchor ? foundAnchor.id : null,
         zone_id: zoneId,
-        model_url: MODEL_URL,
+        model_url: foundAnchor ? (foundAnchor.model_url || FALLBACK_MODEL_URL) : FALLBACK_MODEL_URL,
       }),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+    if (!res.ok) throw new Error(data.error || 'Sunucu hatası');
 
     btn.classList.add('done');
-    btn.textContent = '✅ В коллекции';
+    btn.textContent = '✅ Koleksiyonda';
   } catch (err) {
     btn.disabled = false;
-    btn.textContent = '➕ Добавить в коллекцию';
-    alert('Не удалось добавить: ' + err.message);
+    btn.textContent = '➕ Koleksiyona Ekle';
+    alert('Eklenemedi: ' + err.message);
   }
 }
 

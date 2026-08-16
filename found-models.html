@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="tr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Alba Space — Найденные модели</title>
+<title>Alba Space — Bulunan Modeller</title>
 
-<!-- model-viewer — простой веб-компонент Google для показа .glb моделей,
-     без AR и без камеры — просто крутящаяся 3D-модель -->
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -72,25 +72,25 @@
 
 <div class="overlay show" id="auth-checking">
   <div class="spin"></div>
-  <h2>Проверяем вход…</h2>
+  <h2>Giriş kontrol ediliyor…</h2>
 </div>
 
 <div class="overlay" id="auth-required">
   <div class="big-emoji">🔒</div>
-  <h2>Нужно войти</h2>
-  <p>Коллекция доступна только авторизованным игрокам.</p>
-  <a class="action-btn" href="/account-menu.html">Войти</a>
+  <h2>Giriş Yapman Gerekiyor</h2>
+  <p>Koleksiyon sadece giriş yapmış oyunculara açıktır.</p>
+  <a class="action-btn" href="/account-menu.html">Giriş Yap</a>
 </div>
 
 <div class="container" id="page-content" style="display:none">
-  <a class="back" href="game-zones.html">← К зонам</a>
-  <h1>🏆 Найденные модели</h1>
-  <p class="sub">Все 3D-модели, которые ты нашёл в AR Прятках</p>
+  <a class="back" href="game-zones.html">← Bölgelere Dön</a>
+  <h1>🏆 Bulunan Modeller</h1>
+  <p class="sub">AR Saklambaç'ta bulduğun tüm 3D modeller</p>
 
   <div id="grid"></div>
   <div id="empty-state" style="display:none">
     <div class="big-emoji">🕳️</div>
-    <div>Пока пусто — иди искать якоря в зонах!</div>
+    <div>Henüz boş — bölgelerde işaret aramaya git!</div>
   </div>
 </div>
 
@@ -107,7 +107,7 @@ async function checkLogin() {
 }
 
 function formatDate(ts) {
-  return new Date(ts).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+  return new Date(ts).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 async function init() {
@@ -136,16 +136,16 @@ async function init() {
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
-        <model-viewer src="${item.model_url}" auto-rotate camera-controls disable-zoom
+        <model-viewer src="${item.model_url}" auto-rotate camera-controls
           shadow-intensity="1" exposure="1" style="background:transparent;"></model-viewer>
         <div class="card-info">
-          <div class="zone">🎯 ${item.zone_name || 'Неизвестная зона'}</div>
-          <div class="date">Найдено ${formatDate(item.found_at)}</div>
+          <div class="zone">🎯 ${item.zone_name || 'Bilinmeyen bölge'}</div>
+          <div class="date">${formatDate(item.found_at)} tarihinde bulundu</div>
         </div>`;
       grid.appendChild(card);
     });
   } catch (err) {
-    document.getElementById('grid').innerHTML = `<p style="color:#fca5a5">⚠️ Не удалось загрузить коллекцию: ${err.message}</p>`;
+    document.getElementById('grid').innerHTML = `<p style="color:#fca5a5">⚠️ Koleksiyon yüklenemedi: ${err.message}</p>`;
   }
 }
 

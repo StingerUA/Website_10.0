@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="tr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Alba Space — AR Прятки: спрятать модель</title>
+<title>Alba Space — AR Saklambaç: Model Gizle</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,11 +50,31 @@
   #quality-msg.good { background: rgba(0,80,40,0.3); border: 1px solid rgba(0,255,150,0.3); color: #6ee7b7; display: block; }
   #quality-msg.warn { background: rgba(180,120,0,0.15); border: 1px solid rgba(250,180,60,0.35); color: #fcd34d; display: block; }
 
-  #map { width: 100%; height: 240px; border-radius: 14px; margin-top: 8px; display: none; }
-  #zone-status { font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-top: 10px; }
-  #zone-status.ok { background: rgba(0,80,40,0.3); border: 1px solid rgba(0,255,150,0.3); color: #6ee7b7; }
-  #zone-status.bad { background: rgba(200,30,30,0.15); border: 1px solid rgba(248,113,113,0.35); color: #fca5a5; }
-  #zone-status.wait { color: #94a3b8; }
+  /* ── Выбор модели ── */
+  #model-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  .model-pick {
+    border-radius: 14px; overflow: hidden; cursor: pointer;
+    border: 2px solid rgba(148,163,184,0.15);
+    background: rgba(15,23,42,0.6);
+    text-align: center;
+  }
+  .model-pick.selected { border-color: #00c2ff; box-shadow: 0 0 0 1px rgba(0,194,255,0.3); }
+  .model-pick model-viewer { width: 100%; height: 90px; --poster-color: transparent; }
+  .model-pick .name { font-size: 11px; color: #94a3b8; padding: 4px 2px 8px; }
+  .model-pick.selected .name { color: #38bdf8; font-weight: 700; }
+
+  input[type=text] {
+    width: 100%; padding: 12px 14px; border-radius: 10px;
+    background: rgba(15,23,42,0.7); border: 1px solid rgba(148,163,184,0.2);
+    color: #e5e7eb; font-size: 14px;
+  }
+
+  #map { width: 100%; height: 240px; border-radius: 14px; margin-top: 8px; }
+  #geo-status { font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-top: 10px; color: #94a3b8; }
+  #geo-status.ok { background: rgba(0,80,40,0.3); border: 1px solid rgba(0,255,150,0.3); color: #6ee7b7; }
+  #geo-status.bad { background: rgba(200,30,30,0.15); border: 1px solid rgba(248,113,113,0.35); color: #fca5a5; }
 
   .btn-primary {
     width: 100%; padding: 15px; border-radius: 14px; border: none;
@@ -93,41 +116,56 @@
 
 <div class="overlay show" id="auth-checking">
   <div class="spin"></div>
-  <h2>Проверяем вход…</h2>
+  <h2>Giriş kontrol ediliyor…</h2>
 </div>
 
 <div class="overlay" id="auth-required">
   <div class="big-emoji">🔒</div>
-  <h2>Нужно войти</h2>
-  <p>Чтобы прятать модели, нужно авторизоваться. Войди через аккаунт сайта, а затем вернись сюда.</p>
-  <a class="action-btn" href="/account-menu.html">Войти</a>
+  <h2>Giriş Yapman Gerekiyor</h2>
+  <p>Model gizlemek için giriş yapmış olman gerekiyor. Site hesabınla giriş yap, sonra bu sayfaya geri dön.</p>
+  <a class="action-btn" href="/account-menu.html">Giriş Yap</a>
 </div>
 
 <div class="container" id="game-content" style="display:none">
-  <a class="back" href="game-zones.html">← К зонам</a>
-  <h1>📸 Спрятать 3D-модель</h1>
-  <p class="sub">Сфотографируй стену, дерево, знак или любой узнаваемый объект. Другие игроки будут искать его в этом месте, наводя камеру.</p>
+  <a class="back" href="game-zones.html">← Bölgelere Dön</a>
+  <h1>📸 3D Model Gizle</h1>
+  <p class="sub">Bir duvarı, ağacı, tabelayı veya kolayca tanınabilecek bir nesneyi fotoğrafla. Diğer oyuncular burayı kamerayla arayarak modeli bulmaya çalışacak.</p>
 
   <div id="player-chip"></div>
 
   <div class="step">
-    <div class="step-title">1. Фото места</div>
+    <div class="step-title">1. Yerin Fotoğrafı</div>
     <div id="photo-input-wrap" onclick="document.getElementById('photo-input').click()">
       <img id="photo-preview" />
-      <div class="hint" id="photo-hint">Нажми, чтобы сделать фото</div>
+      <div class="hint" id="photo-hint">Fotoğraf çekmek için dokun</div>
     </div>
     <input type="file" id="photo-input" accept="image/*" capture="environment" />
     <div id="quality-msg"></div>
   </div>
 
   <div class="step">
-    <div class="step-title">2. Твоя точка на карте</div>
-    <div id="zone-status" class="wait">Определяем геолокацию…</div>
+    <div class="step-title">2. Model Seç</div>
+    <div id="model-grid"></div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">3. Yer Adı</div>
+    <input type="text" id="zone-name" placeholder="Örneğin: Gizli Duvar" maxlength="60" />
+  </div>
+
+  <div class="step">
+    <div class="step-title">4. İpucu (isteğe bağlı)</div>
+    <input type="text" id="hint-text" placeholder="Örneğin: bankın yanına bak" maxlength="200" />
+  </div>
+
+  <div class="step">
+    <div class="step-title">5. Haritada Konumun</div>
+    <div id="geo-status">Konum belirleniyor…</div>
     <div id="map"></div>
   </div>
 
   <button class="btn-primary" id="submit-btn" disabled onclick="submitAnchor()">
-    🔒 Спрятать здесь
+    🔒 Burada Gizle
   </button>
 
   <div id="result-msg"></div>
@@ -136,21 +174,21 @@
 <script>
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
 const MAIN_API = "https://albaspace-api.nncdecdgc.workers.dev";
+const MODEL_BASE = "/assets/models/";
+
+const MODEL_CATALOG = [
+  { key: 'sputnik',     name: 'Sputnik',     file: 'sputnik.glb' },
+  { key: 'sojourner',   name: 'Sojourner',   file: 'sojourner.glb' },
+  { key: 'rasat',       name: 'Rasat',       file: 'rasat.glb' },
+  { key: 'gokturk-1',   name: 'Göktürk-1',   file: 'gokturk-1.glb' },
+  { key: 'opportunity', name: 'Opportunity', file: 'opportunity.glb' },
+];
 
 let photoFile = null;
 let userLat = null, userLon = null;
 let map, marker;
-let zones = [];
-let matchedZone = null;
 let currentUser = null;
-
-function haversine(lat1, lon1, lat2, lon2) {
-  const R = 6371000;
-  const toRad = d => d * Math.PI / 180;
-  const dLat = toRad(lat2-lat1), dLon = toRad(lon2-lon1);
-  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
-  return 2*R*Math.asin(Math.sqrt(a));
-}
+let selectedModelKey = null;
 
 async function checkLogin() {
   try {
@@ -186,7 +224,7 @@ document.getElementById('photo-input').addEventListener('change', (e) => {
     const preview = document.getElementById('photo-preview');
     preview.src = ev.target.result;
     preview.style.display = 'block';
-    document.getElementById('photo-hint').textContent = 'Нажми, чтобы выбрать другое фото';
+    document.getElementById('photo-hint').textContent = 'Başka bir fotoğraf seçmek için dokun';
     document.getElementById('photo-input-wrap').classList.add('has-photo');
 
     preview.onload = () => {
@@ -194,10 +232,10 @@ document.getElementById('photo-input').addEventListener('change', (e) => {
       const qEl = document.getElementById('quality-msg');
       if (score < 18) {
         qEl.className = 'warn';
-        qEl.textContent = '⚠️ Фото выглядит слишком однотонным. Попробуй объект с текстурой: кирпич, кору дерева, знак, граффити.';
+        qEl.textContent = '⚠️ Fotoğraf çok düz görünüyor. Dokulu bir yüzey dene: tuğla, ağaç kabuğu, tabela, grafiti.';
       } else {
         qEl.className = 'good';
-        qEl.textContent = '✅ Хорошее фото — на нём достаточно деталей для распознавания.';
+        qEl.textContent = '✅ İyi fotoğraf — tanıma için yeterli detay var.';
       }
       checkReady();
     };
@@ -205,44 +243,30 @@ document.getElementById('photo-input').addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
-async function loadZonesAndCheck() {
-  try {
-    const res = await fetch(`${API_BASE}/api/zones`);
-    const data = await res.json();
-    zones = data.zones || [];
-  } catch (err) {
-    document.getElementById('zone-status').className = 'bad';
-    document.getElementById('zone-status').textContent = '⚠️ Не удалось загрузить зоны: ' + err.message;
-    return;
-  }
-  updateZoneMatch();
+function buildModelGrid() {
+  const grid = document.getElementById('model-grid');
+  MODEL_CATALOG.forEach(m => {
+    const cell = document.createElement('div');
+    cell.className = 'model-pick';
+    cell.id = 'model-pick-' + m.key;
+    cell.innerHTML = `
+      <model-viewer src="${MODEL_BASE}${m.file}" auto-rotate camera-controls disable-zoom disable-pan
+        interaction-prompt="none"></model-viewer>
+      <div class="name">${m.name}</div>`;
+    cell.addEventListener('click', () => selectModel(m.key));
+    grid.appendChild(cell);
+  });
 }
 
-function updateZoneMatch() {
-  if (userLat == null || zones.length === 0) return;
-  let nearest = null, nearestDist = Infinity;
-  for (const z of zones) {
-    const d = haversine(userLat, userLon, z.lat, z.lon);
-    if (d < nearestDist) { nearestDist = d; nearest = z; }
-  }
-  const statusEl = document.getElementById('zone-status');
-  if (nearest && nearestDist <= nearest.radius_m) {
-    matchedZone = nearest;
-    statusEl.className = 'ok';
-    statusEl.textContent = `✅ Ты внутри зоны "${nearest.name}" — можно прятать здесь.`;
-  } else {
-    matchedZone = null;
-    const nearName = nearest ? nearest.name : '—';
-    const nearDist = nearest ? Math.round(nearestDist) : '?';
-    statusEl.className = 'bad';
-    statusEl.textContent = `❌ Ты не в игровой зоне. Ближайшая — "${nearName}", ${nearDist}м от тебя.`;
-  }
+function selectModel(key) {
+  selectedModelKey = key;
+  document.querySelectorAll('.model-pick').forEach(el => el.classList.remove('selected'));
+  document.getElementById('model-pick-' + key).classList.add('selected');
   checkReady();
 }
 
 function initMap(lat, lon) {
-  document.getElementById('map').style.display = 'block';
-  map = L.map('map').setView([lat, lon], 16);
+  map = L.map('map').setView([lat, lon], 18);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap', maxZoom: 19,
   }).addTo(map);
@@ -250,14 +274,18 @@ function initMap(lat, lon) {
   marker.on('dragend', () => {
     const pos = marker.getLatLng();
     userLat = pos.lat; userLon = pos.lng;
-    updateZoneMatch();
   });
+  document.getElementById('geo-status').className = 'ok';
+  document.getElementById('geo-status').textContent = '✅ Konum alındı — gerekirse işaretçiyi haritada sürükleyerek düzeltebilirsin.';
 }
 
 function checkReady() {
+  const zoneName = document.getElementById('zone-name').value.trim();
   const btn = document.getElementById('submit-btn');
-  btn.disabled = !(photoFile && matchedZone);
+  btn.disabled = !(photoFile && selectedModelKey && zoneName && userLat != null);
 }
+
+document.getElementById('zone-name').addEventListener('input', checkReady);
 
 async function init() {
   currentUser = await checkLogin();
@@ -270,7 +298,9 @@ async function init() {
 
   document.getElementById('game-content').style.display = 'block';
   document.getElementById('player-chip').innerHTML =
-    `${currentUser.avatar ? `<img src="${currentUser.avatar}">` : ''}<span>Прячет: ${currentUser.name || currentUser.email}</span>`;
+    `${currentUser.avatar ? `<img src="${currentUser.avatar}">` : ''}<span>Gizleyen: ${currentUser.name || currentUser.email}</span>`;
+
+  buildModelGrid();
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -278,16 +308,16 @@ async function init() {
         userLat = pos.coords.latitude;
         userLon = pos.coords.longitude;
         initMap(userLat, userLon);
-        loadZonesAndCheck();
+        checkReady();
       },
       () => {
-        document.getElementById('zone-status').className = 'bad';
-        document.getElementById('zone-status').textContent = '❌ Нужен доступ к геолокации, чтобы прятать модели.';
+        document.getElementById('geo-status').className = 'bad';
+        document.getElementById('geo-status').textContent = '❌ Model gizlemek için konum erişimi gerekiyor.';
       },
       { enableHighAccuracy: true, timeout: 8000 }
     );
   } else {
-    document.getElementById('zone-status').textContent = 'Геолокация не поддерживается этим браузером.';
+    document.getElementById('geo-status').textContent = 'Bu tarayıcı konum özelliğini desteklemiyor.';
   }
 }
 
@@ -295,29 +325,31 @@ async function submitAnchor() {
   const btn = document.getElementById('submit-btn');
   const resultEl = document.getElementById('result-msg');
   btn.disabled = true;
-  btn.textContent = '⏳ Загружаем...';
+  btn.textContent = '⏳ Yükleniyor...';
 
   try {
     const form = new FormData();
     form.append('photo', photoFile);
     form.append('lat', userLat);
     form.append('lon', userLon);
-    form.append('zone_id', matchedZone.id);
+    form.append('zone_name', document.getElementById('zone-name').value.trim());
+    form.append('hint', document.getElementById('hint-text').value.trim());
+    form.append('model_key', selectedModelKey);
     form.append('hider_name', currentUser.name || currentUser.email.split('@')[0]);
     form.append('user_email', currentUser.email);
 
     const res = await fetch(`${API_BASE}/api/anchors`, { method: 'POST', body: form });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Ошибка сервера');
+    if (!res.ok) throw new Error(data.error || 'Sunucu hatası');
 
     resultEl.className = 'ok';
-    resultEl.textContent = '🎉 Готово! Модель спрятана в зоне "' + matchedZone.name + '". Другие игроки уже могут её искать.';
-    btn.textContent = '✅ Спрятано';
+    resultEl.textContent = '🎉 Hazır! Model burada gizlendi. Diğer oyuncular artık onu arayabilir.';
+    btn.textContent = '✅ Gizlendi';
   } catch (err) {
     resultEl.className = 'error';
     resultEl.textContent = '⚠️ ' + err.message;
     btn.disabled = false;
-    btn.textContent = '🔒 Спрятать здесь';
+    btn.textContent = '🔒 Burada Gizle';
   }
 }
 

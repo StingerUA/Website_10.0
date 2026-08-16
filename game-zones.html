@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="tr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Alba Space — AR Прятки: выбери зону</title>
+<title>Alba Space — AR Saklambaç: Bölge Seç</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,9 +32,6 @@
     font-size: 12px; color: #cbd5e1; white-space: nowrap;
   }
   #user-chip img { width: 22px; height: 22px; border-radius: 50%; }
-  #collection-link {
-    color: #38bdf8; text-decoration: none; font-size: 12px; font-weight: 600;
-  }
 
   #map { width: 100%; height: 48vh; min-height: 300px; }
 
@@ -55,6 +54,7 @@
   .go-btn.disabled { opacity: 0.35; pointer-events: none; }
 
   #status-msg { padding: 14px 20px; font-size: 13px; color: #94a3b8; text-align: center; }
+  #zones-empty { padding: 20px; text-align: center; color: #64748b; font-size: 13px; display: none; }
 
   .hide-link {
     display: block; margin: 6px 16px 20px; text-align: center;
@@ -63,7 +63,6 @@
     color: #38bdf8; text-decoration: none; font-size: 13px; font-weight: 600;
   }
 
-  /* ── Экран "нужно войти" ── */
   .overlay {
     position: fixed; inset: 0; z-index: 500; background: #020617;
     display: none; flex-direction: column; align-items: center; justify-content: center;
@@ -90,34 +89,34 @@
 </head>
 <body>
 
-<!-- Проверка входа -->
 <div class="overlay show" id="auth-checking">
   <div class="spin"></div>
-  <h2>Проверяем вход…</h2>
+  <h2>Giriş kontrol ediliyor…</h2>
 </div>
 
 <div class="overlay" id="auth-required">
   <div class="big-emoji">🔒</div>
-  <h2>Нужно войти</h2>
-  <p>AR Прятки доступны только авторизованным игрокам. Войди через аккаунт сайта, а затем вернись на эту страницу.</p>
-  <a class="action-btn" href="/account-menu.html">Войти</a>
+  <h2>Giriş Yapman Gerekiyor</h2>
+  <p>AR Saklambaç sadece giriş yapmış oyunculara açıktır. Site hesabınla giriş yap, sonra bu sayfaya geri dön.</p>
+  <a class="action-btn" href="/account-menu.html">Giriş Yap</a>
 </div>
 
 <div id="game-content" style="display:none">
   <header>
     <div>
-      <h1>🗺️ AR Прятки — выбери зону</h1>
-      <p class="sub">Найди зону поблизости и начни поиск спрятанной 3D-модели</p>
+      <h1>🗺️ AR Saklambaç — Bölge Seç</h1>
+      <p class="sub">Yakındaki bir bölgeyi bul ve gizlenmiş 3D modeli aramaya başla</p>
     </div>
     <div id="user-chip"></div>
   </header>
 
   <div id="map"></div>
-  <div id="status-msg">Определяем твоё местоположение…</div>
+  <div id="status-msg">Konumun belirleniyor…</div>
+  <div id="zones-empty">Henüz hiç bölge yok. İlk gizleyen sen ol!</div>
   <div id="zone-list"></div>
 
-  <a class="hide-link" href="game-hide.html">📸 Хочу спрятать модель</a>
-  <a class="hide-link" id="collection-link-block" href="found-models.html">🏆 Мои найденные модели</a>
+  <a class="hide-link" href="game-hide.html">📸 Model gizlemek istiyorum</a>
+  <a class="hide-link" href="found-models.html">🏆 Bulduğum modeller</a>
 </div>
 
 <script>
@@ -126,14 +125,6 @@ const MAIN_API = "https://albaspace-api.nncdecdgc.workers.dev";
 
 let map;
 let currentUser = null;
-
-function haversine(lat1, lon1, lat2, lon2) {
-  const R = 6371000;
-  const toRad = d => d * Math.PI / 180;
-  const dLat = toRad(lat2-lat1), dLon = toRad(lon2-lon1);
-  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
-  return 2*R*Math.asin(Math.sqrt(a));
-}
 
 async function checkLogin() {
   try {
@@ -144,7 +135,7 @@ async function checkLogin() {
 }
 
 function initMap(centerLat, centerLon) {
-  map = L.map('map').setView([centerLat, centerLon], 14);
+  map = L.map('map').setView([centerLat, centerLon], 16);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap', maxZoom: 19,
   }).addTo(map);
@@ -156,19 +147,24 @@ async function loadZones(userLat, userLon) {
   try {
     const res = await fetch(`${API_BASE}/api/zones`);
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Ошибка загрузки зон');
+    if (!res.ok) throw new Error(data.error || 'Bölgeler yüklenemedi');
 
     statusEl.style.display = 'none';
     listEl.innerHTML = '';
 
+    if (data.zones.length === 0) {
+      document.getElementById('zones-empty').style.display = 'block';
+      return;
+    }
+
     data.zones.forEach(zone => {
-      const circle = L.circle([zone.lat, zone.lon], {
-        radius: zone.radius_m,
+      const marker = L.circleMarker([zone.lat, zone.lon], {
+        radius: 8,
         color: zone.anchor_count > 0 ? '#00c2ff' : '#475569',
         fillColor: zone.anchor_count > 0 ? '#00c2ff' : '#475569',
-        fillOpacity: 0.15,
+        fillOpacity: 0.6,
       }).addTo(map);
-      circle.bindPopup(`<b>${zone.name}</b><br>Якорей: ${zone.anchor_count}`);
+      marker.bindPopup(`<b>${zone.name}</b><br>İşaret: ${zone.anchor_count}`);
 
       const card = document.createElement('div');
       card.className = 'zone-card';
@@ -176,16 +172,16 @@ async function loadZones(userLat, userLon) {
         <div class="zone-info">
           <div class="name">${zone.name}</div>
           <div class="count ${zone.anchor_count > 0 ? 'has-anchors' : ''}">
-            ${zone.anchor_count > 0 ? `🎯 ${zone.anchor_count} якорей` : 'Пока пусто'}
+            ${zone.anchor_count > 0 ? `🎯 ${zone.anchor_count} işaret` : 'Henüz boş'}
           </div>
         </div>
         <a class="go-btn ${zone.anchor_count === 0 ? 'disabled' : ''}" href="game-scanner.html?zone=${zone.id}">
-          Искать
+          Ara
         </a>`;
       listEl.appendChild(card);
     });
   } catch (err) {
-    statusEl.textContent = '⚠️ Не удалось загрузить зоны: ' + err.message;
+    statusEl.textContent = '⚠️ Bölgeler yüklenemedi: ' + err.message;
   }
 }
 
@@ -207,14 +203,14 @@ async function init() {
       (pos) => {
         const { latitude, longitude } = pos.coords;
         initMap(latitude, longitude);
-        L.marker([latitude, longitude]).addTo(map).bindPopup('Ты здесь').openPopup();
+        L.marker([latitude, longitude]).addTo(map).bindPopup('Buradasın').openPopup();
         loadZones(latitude, longitude);
       },
       () => {
         initMap(37.9144, 40.2306);
         loadZones(null, null);
         document.getElementById('status-msg').textContent =
-          '📍 Разреши доступ к геолокации, чтобы видеть расстояние до зон';
+          '📍 Bölgelere olan mesafeyi görmek için konum erişimine izin ver';
       },
       { enableHighAccuracy: true, timeout: 8000 }
     );
