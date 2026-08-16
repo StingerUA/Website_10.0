@@ -21,6 +21,47 @@
   },
   "posts": [
     {
+      "slug": "bir-gezegen-nasil-yasanabilir-hale-gelir",
+      "category": "uzay",
+      "publishAt": "2026-08-17T08:00:00+03:00",
+      "cover": "/assets/images/blog/bir-gezegen-nasil-yasanabilir-hale-gelir-cover.jpg",
+      "readingMinutes": 5,
+      "author": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Аслы Болат",
+        "ar": "أصلي بولات"
+      },
+      "authorRole": {
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer & Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومعلّمة"
+      },
+      "locales": {
+        "tr": {
+          "title": "Bir Gezegen Nasıl Yaşanabilir Hale Gelir?",
+          "excerpt": "Gökyüzüne baktığımızda milyarlarca yıldızın bulunduğu devasa bir evrenle karşı karşıya kalıyoruz. Peki, Dünya'yı yaşam için bu kadar özel yapan ne?",
+          "url": "/blog/bir-gezegen-nasil-yasanabilir-hale-gelir.html"
+        },
+        "en": {
+          "title": "How Does a Planet Become Habitable?",
+          "excerpt": "When we look at the sky, we face a massive universe with billions of stars. But what makes Earth so special for life in this cosmic ocean?",
+          "url": "/eng/blog/bir-gezegen-nasil-yasanabilir-hale-gelir.html"
+        },
+        "ru": {
+          "title": "Как планета становится пригодной для жизни?",
+          "excerpt": "Глядя в небо, мы видим огромную Вселенную с миллиардами звезд. Но что делает Землю такой особенной для жизни в этом космическом океане?",
+          "url": "/rus/blog/bir-gezegen-nasil-yasanabilir-hale-gelir.html"
+        },
+        "ar": {
+          "title": "كيف يصبح الكوكب صالحاً للحياة؟",
+          "excerpt": "عندما ننظر إلى السماء، نواجه كوناً هائلاً يضم مليارات النجوم. ولكن ما الذي يجعل الأرض مميزة جداً للحياة في هذا المحيط الكوني؟",
+          "url": "/ar/blog/bir-gezegen-nasil-yasanabilir-hale-gelir.html"
+        }
+      }
+    },
+    {
       "slug": "uzayi-copluge-ceviriyoruz-gelecegin-uzay-yolculuklari-tehlikede-mi",
       "category": "uzay",
       "publishAt": "2026-08-09T08:00:00+03:00",

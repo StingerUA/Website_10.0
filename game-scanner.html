@@ -6,10 +6,13 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <title>Alba Space — AR Saklambaç: Ara</title>
 
+<link rel="stylesheet" href="/assets/css/site.css" />
+<script src="/assets/js/include.js" defer></script>
+<script src="/assets/js/menu-toggle.js" defer></script>
+<script src="/assets/js/mobile-header-cart.js" defer></script>
+
 <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
-
-
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -139,6 +142,8 @@
 </head>
 <body>
 
+<div data-include="/header-tr.html"></div>
+
 <div id="ar-container"></div>
 
 <div id="top-bar">
@@ -196,6 +201,8 @@
   <button class="action-btn" onclick="location.reload()">Tekrar Dene</button>
   <a class="action-btn secondary" href="game-zones.html">Bölgelere Dön</a>
 </div>
+
+<div data-include="/footer-tr.html"></div>
 
 <script>
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
@@ -408,8 +415,9 @@ function buildScene(mindUrl) {
       loading-screen="enabled:false">
       <a-assets timeout="60000"></a-assets>
       <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
-      <a-entity light="type:ambient;intensity:4.0"></a-entity>
-      <a-entity light="type:directional;intensity:3.0" position="1 2 1"></a-entity>
+      <a-entity light="type:ambient;intensity:8.0;color:#ffffff"></a-entity>
+      <a-entity light="type:directional;intensity:6.0;color:#ffffff" position="1 2 1"></a-entity>
+      <a-entity light="type:directional;intensity:4.0;color:#ffffff" position="-1 1 -1"></a-entity>
       ${entities}
     </a-scene>`;
 
@@ -419,6 +427,7 @@ function buildScene(mindUrl) {
     if (arStarted) return;
     arStarted = true;
     hideAllOverlays();
+    hideBrandChrome();
     startTimer();
     showHints();
   });
@@ -428,6 +437,7 @@ function buildScene(mindUrl) {
       if (!arStarted) {
         arStarted = true;
         hideAllOverlays();
+        hideBrandChrome();
         startTimer();
         showHints();
       }
@@ -444,6 +454,16 @@ function buildScene(mindUrl) {
   });
 
   setupGestures(container);
+}
+
+// Живая камера AR должна быть видна на весь экран без помех —
+// прячем фирменный хедер/футер сайта именно в момент старта камеры
+// (на экранах загрузки/ошибок они остаются видны для брендинга).
+function hideBrandChrome() {
+  const header = document.querySelector('[data-include="/header-tr.html"]');
+  const footer = document.querySelector('[data-include="/footer-tr.html"]');
+  if (header) header.style.display = 'none';
+  if (footer) footer.style.display = 'none';
 }
 
 function showHints() {
@@ -467,14 +487,8 @@ function onFound(anchor, index, entityEl) {
 
   const modelUrl = anchor.model_url || FALLBACK_MODEL_URL;
 
-  if (!entityEl.querySelector('a-gltf-model')) {
-    const m = document.createElement('a-gltf-model');
-    m.setAttribute('src', modelUrl);
-    m.setAttribute('scale', `${BASE_SCALE} ${BASE_SCALE} ${BASE_SCALE}`);
-    m.setAttribute('position', `${modelPos.x} ${modelPos.y} ${modelPos.z}`);
-    m.setAttribute('rotation', '90 0 0');
-    entityEl.appendChild(m);
-    currentModelEl = m;
+  if (!entityEl.querySelector('a-gltf-model') && !entityEl.querySelector('#loading-group')) {
+    showModelLoadingUI(entityEl, modelUrl);
   }
 
   reportSession(anchor.id, 'found');
@@ -488,6 +502,64 @@ function onFound(anchor, index, entityEl) {
   setTimeout(() => gestureHint.classList.remove('show'), 5000);
 
   document.getElementById('collect-btn').classList.add('show');
+}
+
+// ── Скачивает .glb с отслеживанием прогресса (реальные проценты,
+// а не имитация) и возвращает локальный blob-URL для показа ──
+async function loadModelWithProgress(url, onProgress) {
+  const res = await fetch(url);
+  if (!res.ok || !res.body) throw new Error('Model indirilemedi');
+  const total = parseInt(res.headers.get('Content-Length') || '0', 10);
+  const reader = res.body.getReader();
+  const chunks = [];
+  let received = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    received += value.length;
+    if (total) onProgress(received / total);
+  }
+  const blob = new Blob(chunks);
+  return URL.createObjectURL(blob);
+}
+
+// ── Надпись "Bekleyin, bulunan model yükleniyor" + шкала прогресса,
+// отрисованные ПРЯМО НА ЯКОРЕ (в AR-пространстве, не поверх экрана) ──
+async function showModelLoadingUI(entityEl, modelUrl) {
+  const group = document.createElement('a-entity');
+  group.setAttribute('id', 'loading-group');
+  group.setAttribute('position', '0 0.32 0');
+  group.innerHTML = `
+    <a-text value="Bekleyin, bulunan model yükleniyor" align="center" width="1.3"
+      color="#ffffff" position="0 0.15 0"></a-text>
+    <a-plane width="0.5" height="0.03" color="#1e293b" position="0 0 0"></a-plane>
+    <a-plane id="progress-fill" width="0.01" height="0.03" color="#00c2ff" position="-0.245 0 0.001"></a-plane>
+  `;
+  entityEl.appendChild(group);
+
+  try {
+    const blobUrl = await loadModelWithProgress(modelUrl, (pct) => {
+      const fill = group.querySelector('#progress-fill');
+      if (!fill) return;
+      const w = Math.max(0.01, 0.5 * pct);
+      fill.setAttribute('width', w);
+      fill.setAttribute('position', `${-0.25 + w / 2} 0 0.001`);
+    });
+
+    const m = document.createElement('a-gltf-model');
+    m.setAttribute('src', blobUrl);
+    m.setAttribute('scale', `${BASE_SCALE} ${BASE_SCALE} ${BASE_SCALE}`);
+    m.setAttribute('position', `${modelPos.x} ${modelPos.y} ${modelPos.z}`);
+    m.setAttribute('rotation', '90 0 0'); // модель повёрнута на 90° по оси X
+    entityEl.appendChild(m);
+    currentModelEl = m;
+
+    group.remove();
+  } catch (err) {
+    const text = group.querySelector('a-text');
+    if (text) text.setAttribute('value', 'Model yüklenemedi');
+  }
 }
 
 // ── Жесты: одним пальцем — переместить модель, двумя — увеличить/уменьшить ──

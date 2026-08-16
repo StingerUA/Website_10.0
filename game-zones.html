@@ -5,10 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Alba Space — AR Saklambaç: Bölge Seç</title>
 
+<link rel="stylesheet" href="/assets/css/site.css" />
+<script src="/assets/js/include.js" defer></script>
+<script src="/assets/js/menu-toggle.js" defer></script>
+<script src="/assets/js/mobile-header-cart.js" defer></script>
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -89,6 +92,8 @@
 </head>
 <body>
 
+<div data-include="/header-tr.html"></div>
+
 <div class="overlay show" id="auth-checking">
   <div class="spin"></div>
   <h2>Giriş kontrol ediliyor…</h2>
@@ -118,6 +123,8 @@
   <a class="hide-link" href="game-hide.html">📸 Model gizlemek istiyorum</a>
   <a class="hide-link" href="found-models.html">🏆 Bulduğum modeller</a>
 </div>
+
+<div data-include="/footer-tr.html"></div>
 
 <script>
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
