@@ -551,7 +551,7 @@ async function showModelLoadingUI(entityEl, modelUrl) {
     m.setAttribute('src', blobUrl);
     m.setAttribute('scale', `${BASE_SCALE} ${BASE_SCALE} ${BASE_SCALE}`);
     m.setAttribute('position', `${modelPos.x} ${modelPos.y} ${modelPos.z}`);
-    m.setAttribute('rotation', '90 0 0'); // модель повёрнута на 90° по оси X
+    m.setAttribute('rotation', '0 0 0'); // модель повёрнута на 90° по оси X
     entityEl.appendChild(m);
     currentModelEl = m;
 
