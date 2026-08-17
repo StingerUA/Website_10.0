@@ -33,6 +33,14 @@
     });
 
     items.forEach((item, index) => {
+      const rect = item.getBoundingClientRect();
+      const inViewport = rect.top < window.innerHeight + 120 && rect.bottom > -120;
+
+      if (inViewport) {
+        item.classList.add('is-visible');
+        return;
+      }
+
       const delay = (item.dataset.direction === 'left') ? index * 0.02 : index * 0.025;
       item.style.setProperty('--reveal-delay', `${delay}s`);
       observer.observe(item);

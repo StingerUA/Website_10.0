@@ -48,6 +48,321 @@
           ]
         }
       }
+    },
+    {
+      "slug": "alba-hyper-kids-summer-camp-2026",
+      "category": "egitim",
+      "startAt": "2026-08-15T00:00:00+03:00",
+      "endAt": "2026-08-30T23:59:59+03:00",
+      "cover": "/assets/images/ivent.jpeg",
+      "location": "Adana / TÜRKİYE",
+      "contact": "AlbaSpace",
+      "organizers": ["AlbaSpace"],
+      "hashtags": ["#AlbaSpace", "#HyperKids", "#SummerCamp", "#Adana", "#UzayEğitimi"],
+      "locales": {
+        "tr": {
+          "title": "ALBA Hyper Kids Summer Camp",
+          "excerpt": "Yaz kampı programı ile çocuklar uzay, teknoloji ve bilim merakını keşfetmeye başlıyor.",
+          "url": "/etkinlikler.html",
+          "hero": "15-30 Ağustos 2026 tarihleri arasında Adana’da düzenlenecek ALBA Hyper Kids Summer Camp, çocukların uzay, teknoloji ve bilimle tanışmasını amaçlar.",
+          "body": [
+            "Kamp boyunca çocuklar, eğlenceli ve deneysel öğrenme aktiviteleriyle bilim, uzay ve teknoloji alanında merak duygusunu geliştirir. Etkinlikler, interaktif eğitim ve yaratıcı atölyelerle desteklenir.",
+            "Bu program, genç bireylerin farkındalığını artırırken, uzayla ilgili fikir üretmesini ve takım çalışmasını da teşvik eder."
+          ],
+          "highlights": [
+            "Uzay eğitimi",
+            "Teknoloji atölyeleri",
+            "Bilim temalı etkinlikler",
+            "Yaz kampı deneyimi"
+          ]
+        },
+        "en": {
+          "title": "ALBA Hyper Kids Summer Camp",
+          "excerpt": "Children begin exploring space, technology and science through a summer camp experience.",
+          "url": "/etkinlikler.html",
+          "hero": "From August 15 to August 30, 2026, the ALBA Hyper Kids Summer Camp in Adana will introduce children to space, technology and science.",
+          "body": [
+            "Throughout the camp, children develop curiosity in science, space and technology through engaging and hands-on learning activities. The program is supported by interactive education and creative workshops.",
+            "It encourages young participants to think creatively, work as a team and build awareness about space and innovation."
+          ],
+          "highlights": [
+            "Space education",
+            "Technology workshops",
+            "Science activities",
+            "Summer camp experience"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "tua-astro-hackathon-finali-2026",
+      "category": "egitim",
+      "startAt": "2026-09-07T00:00:00+03:00",
+      "endAt": "2026-09-13T23:59:59+03:00",
+      "cover": "/assets/images/ivent.jpeg",
+      "location": "Ankara / TÜRKİYE",
+      "contact": "AlbaSpace",
+      "organizers": ["AlbaSpace", "TUA"],
+      "hashtags": ["#TUA", "#AstroHackathon", "#AlbaSpace", "#Ankara", "#UzayTeknolojisi"],
+      "locales": {
+        "tr": {
+          "title": "TUA Astro Hackathon Finali",
+          "excerpt": "Uzay teknolojisi ve çözüm odaklı fikir üretiminin finali Ankara’da gerçekleşecek.",
+          "url": "/etkinlikler.html",
+          "hero": "7-13 Eylül 2026 tarihleri arasında Ankara’da düzenlenecek TUA Astro Hackathon Finali, gelecek neslin uzay çözümlerine odaklanır.",
+          "body": [
+            "Final aşaması, katılımcıların geliştirdiği fikirleri sergilemesi ve uzman değerlendirmeleriyle desteklenmesi için önemli bir platform sunar.",
+            "Uzay, veri, yapay zeka ve yenilikçi tasarım alanlarını bir araya getiren bu etkinlik, genç üreticileri teşvik eder."
+          ],
+          "highlights": [
+            "Final sunumları",
+            "Uzay teknolojisi",
+            "Yenilikçi fikirler",
+            "Takım çalışması"
+          ]
+        },
+        "en": {
+          "title": "TUA Astro Hackathon Final",
+          "excerpt": "The final of space technology and solution-focused idea generation is taking place in Ankara.",
+          "url": "/etkinlikler.html",
+          "hero": "The TUA Astro Hackathon Final will take place in Ankara between September 7 and September 13, 2026, with a focus on future space solutions.",
+          "body": [
+            "The final stage gives participants a platform to present their ideas and receive expert feedback on innovation and implementation.",
+            "By bringing together space, data, artificial intelligence and design, the event supports the next generation of creators."
+          ],
+          "highlights": [
+            "Final presentations",
+            "Space technology",
+            "Innovative ideas",
+            "Teamwork"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "aydin-tedx-2026",
+      "category": "egitim",
+      "startAt": "2026-09-26T00:00:00+03:00",
+      "endAt": "2026-09-26T23:59:59+03:00",
+      "cover": "/assets/images/ivent.jpeg",
+      "location": "Aydın / TÜRKİYE",
+      "contact": "AlbaSpace",
+      "organizers": ["TEDxAydın", "AlbaSpace"],
+      "hashtags": ["#TEDx", "#Aydın", "#AlbaSpace", "#İnovasyon", "#Yaratıcılık"],
+      "locales": {
+        "tr": {
+          "title": "Aydın TEDx",
+          "excerpt": "Fikirlerin, ilhamın ve yeni bakış açılarının buluştuğu TEDx etkinliği Aydın’da düzenlenecek.",
+          "url": "/etkinlikler.html",
+          "hero": "26 Eylül 2026’da Aydın’da gerçekleştirilecek Aydın TEDx, ilham verici konuşmalar ve düşünce paylaşımı için bir araya gelir.",
+          "body": [
+            "TEDx, bireylerin fikirlerini özgürce paylaşmasını ve yeni perspektiflerle üretmesine destek olur. Etkinlik, özellikle yaratıcı düşünceyi ve toplumsal katkıyı öne çıkarır.",
+            "Bu özel gecede konuşmacılar, ilham verici deneyimlerini ve değişim yaratma yolculuklarını paylaşacak."
+          ],
+          "highlights": [
+            "TEDx konuşmaları",
+            "İlham verici fikirler",
+            "Toplumsal katkı",
+            "Yaratıcı düşünce"
+          ]
+        },
+        "en": {
+          "title": "Aydın TEDx",
+          "excerpt": "TEDx brings ideas, inspiration and fresh perspectives together in Aydın.",
+          "url": "/etkinlikler.html",
+          "hero": "On September 26, 2026, Aydın TEDx will bring together inspiring talks and meaningful ideas in Aydın.",
+          "body": [
+            "TEDx creates space for individuals to share ideas freely and build new perspectives. The event highlights creativity and social impact.",
+            "At this special gathering, speakers will share life experiences and stories that inspire meaningful change."
+          ],
+          "highlights": [
+            "TEDx talks",
+            "Inspiring ideas",
+            "Social impact",
+            "Creative thinking"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "iac-antalya-2026",
+      "category": "egitim",
+      "startAt": "2026-10-04T00:00:00+03:00",
+      "endAt": "2026-10-05T23:59:59+03:00",
+      "cover": "/assets/images/ivent.jpeg",
+      "location": "Antalya / TÜRKİYE",
+      "contact": "AlbaSpace",
+      "organizers": ["IAC", "AlbaSpace"],
+      "hashtags": ["#IAC", "#Antalya", "#Uzay", "#UluslararasıEtkinlik", "#AlbaSpace"],
+      "locales": {
+        "tr": {
+          "title": "International Astronautical Congress (IAC)",
+          "excerpt": "Uluslararası uzay ve gökbilim topluluğunun önemli buluşma noktası Antalya’da gerçekleşecek.",
+          "url": "/etkinlikler.html",
+          "hero": "4-5 Ekim 2026’da Antalya’da düzenlenecek International Astronautical Congress (IAC), uzay alanındaki küresel iş birliğini öne çıkarır.",
+          "body": [
+            "IAC, uzay bilimleri, teknoloji, araştırma ve tasarım alanlarının buluştuğu küresel bir etkinliktir. Bu toplantı, uzmanlar ve paydaşlar için değerli iş birliği fırsatları sunar.",
+            "AlbaSpace olarak bu etkinlikte uzay ve bilim temasıyla yeni fikirlerin ve ortaklıkların gelişmesine katkı sağlamayı hedefliyoruz."
+          ],
+          "highlights": [
+            "Uluslararası uzay buluşması",
+            "Bilim ve teknoloji",
+            "Global iş birliği",
+            "Gelecek vizyonu"
+          ]
+        },
+        "en": {
+          "title": "International Astronautical Congress (IAC)",
+          "excerpt": "A major international meeting point for the space and astronomy community is coming to Antalya.",
+          "url": "/etkinlikler.html",
+          "hero": "The International Astronautical Congress (IAC) will be held in Antalya on October 4-5, 2026, highlighting global collaboration in space.",
+          "body": [
+            "IAC is a global event where space science, technology, research and design meet. It offers valuable opportunities for collaboration between experts and stakeholders.",
+            "As AlbaSpace, we aim to contribute to the development of new ideas and partnerships around space and science at this important gathering."
+          ],
+          "highlights": [
+            "International space gathering",
+            "Science and technology",
+            "Global collaboration",
+            "Future vision"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "dunya-uzay-haftasi-2026",
+      "category": "astronomi",
+      "startAt": "2026-10-04T00:00:00+03:00",
+      "endAt": "2026-10-10T23:59:59+03:00",
+      "cover": "/assets/images/ivent.jpeg",
+      "location": "TÜRKİYE",
+      "contact": "AlbaSpace",
+      "organizers": ["AlbaSpace"],
+      "hashtags": ["#DünyaUzayHaftası", "#Uzay", "#Bilim", "#AlbaSpace", "#Eğitim"],
+      "locales": {
+        "tr": {
+          "title": "Dünya Uzay Haftası",
+          "excerpt": "Uzayla ilgili farkındalığı artırmaya yönelik özel etkinlik ve eğitim serisi düzenlenecek.",
+          "url": "/etkinlikler.html",
+          "hero": "4-10 Ekim 2026 tarihleri arasında düzenlenecek Dünya Uzay Haftası, uzay bilincini artırmayı hedefleyen bir etkinlik serisidir.",
+          "body": [
+            "Bu haftalık seride uzay bilimi, gökyüzü gözlemleri ve eğitim içerikleri bir araya gelir. Etkinlikler, gençlerin ve ailelerin uzaya olan ilgisini artırmayı amaçlar.",
+            "Gökyüzü merakını besleyen bu platform, eğlenceli ve öğretici içeriklerle toplumda uzay farkındalığı oluşturur."
+          ],
+          "highlights": [
+            "Uzay farkındalığı",
+            "Eğitim içerikleri",
+            "Gökyüzü teması",
+            "Toplumla buluşma"
+          ]
+        },
+        "en": {
+          "title": "World Space Week",
+          "excerpt": "A special event and educational series aimed at increasing awareness of space.",
+          "url": "/etkinlikler.html",
+          "hero": "World Space Week, taking place from October 4 to October 10, 2026, aims to raise awareness about space and its importance.",
+          "body": [
+            "This week-long series brings together space science, sky observation and educational content. The goal is to increase interest in space among young people and families.",
+            "By combining informative and engaging activities, it helps create a stronger public awareness of space exploration and science."
+          ],
+          "highlights": [
+            "Space awareness",
+            "Educational content",
+            "Sky-themed activities",
+            "Community engagement"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "yesilay-aile-festivali-2026",
+      "category": "egitim",
+      "startAt": "2026-10-18T00:00:00+03:00",
+      "endAt": "2026-10-18T23:59:59+03:00",
+      "cover": "/assets/images/ivent.jpeg",
+      "location": "Adana / TÜRKİYE",
+      "contact": "AlbaSpace",
+      "organizers": ["Yeşilay Adana", "AlbaSpace"],
+      "hashtags": ["#Yeşilay", "#AileFestivali", "#Adana", "#AlbaSpace", "#Toplum"],
+      "locales": {
+        "tr": {
+          "title": "Yeşilay Aile Festivali",
+          "excerpt": "Ailelerin bir araya geldiği festival, eğlence ve bilinçlendirme için özel bir etkinlik sunar.",
+          "url": "/etkinlikler.html",
+          "hero": "18 Ekim 2026’da Adana’da düzenlenecek Yeşilay Aile Festivali, ailelerin bir araya gelerek keyifli ve bilinçli bir gün geçirmesini hedefler.",
+          "body": [
+            "Festival, eğlence, sosyal paylaşımlar ve farkındalık temalı etkinliklerle dolu bir gündür. Aile katılımı ön plandadır.",
+            "Bu özel günde, eğitici, yaratıcı ve sosyal içeriklerle birlikte olumlu bir deneyim hedeflenir."
+          ],
+          "highlights": [
+            "Aile katılımı",
+            "Festival atmosferi",
+            "Farkındalık",
+            "Eğlenceli deneyimler"
+          ]
+        },
+        "en": {
+          "title": "Yeşilay Family Festival",
+          "excerpt": "A family festival bringing people together for a fun and awareness-building experience.",
+          "url": "/etkinlikler.html",
+          "hero": "The Yeşilay Family Festival will take place in Adana on October 18, 2026, creating a joyful and meaningful day for families.",
+          "body": [
+            "The festival is full of entertainment, social sharing and awareness-focused activities, with family participation at its heart.",
+            "This special day aims to create a positive experience through educational, creative and social content."
+          ],
+          "highlights": [
+            "Family participation",
+            "Festival atmosphere",
+            "Awareness",
+            "Fun experiences"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "nasa-space-apps-challenge-2026",
+      "category": "egitim",
+      "startAt": "2026-11-14T00:00:00+03:00",
+      "endAt": "2026-11-15T23:59:59+03:00",
+      "cover": "/assets/images/ivent.jpeg",
+      "location": "Adana / TÜRKİYE",
+      "contact": "AlbaSpace",
+      "organizers": ["NASA Space Apps Challenge", "AlbaSpace"],
+      "hashtags": ["#NASA", "#SpaceApps", "#Adana", "#Uzay", "#AlbaSpace"],
+      "locales": {
+        "tr": {
+          "title": "NASA Space Apps Challenge",
+          "excerpt": "Uzay verilerini kullanarak çözüm üreten katılımcılar için yaratıcı bir hackathon etkinliği.",
+          "url": "/etkinlikler.html",
+          "hero": "14-15 Kasım 2026’da Adana’da düzenlenecek NASA Space Apps Challenge, uzay verilerini çözüm hedefiyle kullanmayı teşvik eder.",
+          "body": [
+            "Etkinlik, katılımcıların fikirlerini gerçek projelere dönüştürmesi için güçlü bir platform sunar. Uzay verileri, teknoloji ve yenilikçi düşünce bir araya gelir.",
+            "Bu hackathon, genç yetenekleri teşvik eder ve iletişim, tasarım ve teknik becerileri geliştirmeyi hedefler."
+          ],
+          "highlights": [
+            "Hackathon",
+            "Uzay verileri",
+            "Yaratıcı çözümler",
+            "Teknik gelişim"
+          ]
+        },
+        "en": {
+          "title": "NASA Space Apps Challenge",
+          "excerpt": "A creative hackathon for participants to build solutions using space data.",
+          "url": "/etkinlikler.html",
+          "hero": "The NASA Space Apps Challenge will take place in Adana on November 14-15, 2026, encouraging participants to use space data to solve real-world problems.",
+          "body": [
+            "The event provides a strong platform for turning ideas into projects. Space data, technology and innovative thinking come together in one experience.",
+            "This hackathon encourages young talent and aims to strengthen collaboration, design and technical skills."
+          ],
+          "highlights": [
+            "Hackathon",
+            "Space data",
+            "Creative solutions",
+            "Technical growth"
+          ]
+        }
+      }
     }
   ]
 }

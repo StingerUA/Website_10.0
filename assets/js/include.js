@@ -863,6 +863,18 @@ function initScrollReveal() {
       el.dataset.direction = (revealIndex % 2 === 0) ? 'left' : 'right';
     }
 
+    const rect = el.getBoundingClientRect ? el.getBoundingClientRect() : null;
+    const inViewport = rect
+      ? rect.top < window.innerHeight + 120 && rect.bottom > -120
+      : false;
+
+    if (inViewport) {
+      el.classList.add('is-visible');
+      processed.add(el);
+      revealIndex += 1;
+      return;
+    }
+
     const delay = el.dataset.direction === 'left' ? revealIndex * 0.05 : revealIndex * 0.06;
     el.style.setProperty('--reveal-delay', `${delay}s`);
 

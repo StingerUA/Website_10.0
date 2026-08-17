@@ -152,6 +152,14 @@
       });
     }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
     items.forEach(function (item, index) {
+      var rect = item.getBoundingClientRect();
+      var inViewport = rect.top < window.innerHeight + 120 && rect.bottom > -120;
+
+      if (inViewport) {
+        item.classList.add('is-visible');
+        return;
+      }
+
       item.style.setProperty('--reveal-delay', (index * 0.03) + 's');
       observer.observe(item);
     });
