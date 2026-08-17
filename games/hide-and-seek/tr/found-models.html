@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alba Space — Bulunan Modeller</title>
+
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #020617; color: #e5e7eb;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    min-height: 100vh; padding: 20px 16px 60px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  a.back { color: #64748b; font-size: 13px; text-decoration: none; display: inline-block; margin-bottom: 16px; }
+  h1 { font-size: 22px; color: #38bdf8; margin-bottom: 6px; }
+  p.sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; }
+
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: rgba(15,23,42,0.7);
+    border: 1px solid rgba(148,163,184,0.15);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .card model-viewer {
+    width: 100%; height: 200px;
+    background: radial-gradient(circle at center, rgba(0,194,255,0.08), transparent 70%);
+    --poster-color: transparent;
+  }
+  .card-info { padding: 12px 14px; }
+  .card-info .zone { font-size: 14px; font-weight: 700; color: #e2e8f0; }
+  .card-info .date { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+  .overlay {
+    position: fixed; inset: 0; z-index: 500; background: #020617;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; padding: 32px; text-align: center;
+  }
+  .overlay.show { display: flex; }
+  .overlay h2 { font-size: 20px; color: #38bdf8; }
+  .overlay p { font-size: 14px; color: #94a3b8; line-height: 1.6; max-width: 320px; }
+  .overlay .big-emoji { font-size: 46px; }
+  .action-btn {
+    padding: 12px 26px; border-radius: 99px; border: none;
+    background: linear-gradient(135deg, #00c2ff, #0077b6);
+    color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+    text-decoration: none; display: inline-block;
+  }
+  .spin {
+    width: 42px; height: 42px;
+    border: 3px solid rgba(0,194,255,0.12);
+    border-top-color: #00c2ff; border-right-color: rgba(56,189,248,0.75);
+    border-radius: 50%; animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #empty-state { text-align: center; padding: 60px 20px; color: #64748b; }
+  #empty-state .big-emoji { font-size: 42px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<div class="overlay show" id="auth-checking">
+  <div class="spin"></div>
+  <h2>Giriş kontrol ediliyor…</h2>
+</div>
+
+<div class="overlay" id="auth-required">
+  <div class="big-emoji">🔒</div>
+  <h2>Giriş Yapman Gerekiyor</h2>
+  <p>Koleksiyon sadece giriş yapmış oyunculara açıktır.</p>
+  <a class="action-btn" href="/account-menu.html">Giriş Yap</a>
+</div>
+
+<div class="container" id="page-content" style="display:none">
+  <a class="back" href="game-zones.html">← Bölgelere Dön</a>
+  <h1>🏆 Bulunan Modeller</h1>
+  <p class="sub">AR Saklambaç'ta bulduğun tüm 3D modeller</p>
+
+  <div id="grid"></div>
+  <div id="empty-state" style="display:none">
+    <div class="big-emoji">🕳️</div>
+    <div>Henüz boş — bölgelerde işaret aramaya git!</div>
+  </div>
+</div>
+
+<script>
+const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
+const MAIN_API = "https://albaspace-api.nncdecdgc.workers.dev";
+
+async function checkLogin() {
+  try {
+    const res = await fetch(`${MAIN_API}/me`, { credentials: 'include' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) { return null; }
+}
+
+function formatDate(ts) {
+  return new Date(ts).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+async function init() {
+  const user = await checkLogin();
+  document.getElementById('auth-checking').classList.remove('show');
+
+  if (!user || !user.email) {
+    document.getElementById('auth-required').classList.add('show');
+    return;
+  }
+
+  document.getElementById('page-content').style.display = 'block';
+
+  try {
+    const res = await fetch(`${API_BASE}/api/collection?email=${encodeURIComponent(user.email)}`);
+    const data = await res.json();
+    const items = data.items || [];
+
+    if (items.length === 0) {
+      document.getElementById('empty-state').style.display = 'block';
+      return;
+    }
+
+    const grid = document.getElementById('grid');
+    items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <model-viewer src="${item.model_url}" auto-rotate camera-controls
+          shadow-intensity="1" exposure="1" style="background:transparent;"></model-viewer>
+        <div class="card-info">
+          <div class="zone">🎯 ${item.zone_name || 'Bilinmeyen bölge'}</div>
+          <div class="date">${formatDate(item.found_at)} tarihinde bulundu</div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  } catch (err) {
+    document.getElementById('grid').innerHTML = `<p style="color:#fca5a5">⚠️ Koleksiyon yüklenemedi: ${err.message}</p>`;
+  }
+}
+
+init();
+</script>
+</body>
+</html>
