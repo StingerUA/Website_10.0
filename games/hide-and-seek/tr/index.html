@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alba Space — AR Saklambaç</title>
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: rgba(15, 23, 42, 0.78);
+      --panel-border: rgba(148, 163, 184, 0.18);
+      --accent: #00c2ff;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    .page-shell {
+      max-width: 900px;
+      margin: 40px auto 90px;
+      padding: 0 20px;
+    }
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      padding: 32px 28px;
+      box-shadow: 0 18px 40px rgba(2,6,23,0.45);
+    }
+    h1 { margin: 0 0 16px; font-size: clamp(28px, 5vw, 42px); }
+    p { color: var(--muted); line-height: 1.8; }
+    .actions { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 14px; }
+    .cta {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), #0077b6);
+      color: #fff;
+    }
+    .secondary {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid rgba(0,194,255,0.4);
+      color: var(--text);
+      background: rgba(15,23,42,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div data-include="/header-tr.html"></div>
+
+  <main class="page-shell">
+    <section class="hero">
+      <p style="margin:0 0 10px; text-transform: uppercase; letter-spacing: 0.14em; color:#38bdf8; font-size:12px; font-weight:700;">AR Saklambaç</p>
+      <h1>3D modeli bulup sakla, arkadaşlarını şaşırt!</h1>
+      <p>
+        Bu interaktif oyun, konum bazlı arama ve kamera desteğiyle 3D modelleri gizleme ve keşfetme deneyimi sunar.
+        Oyun, harita üzerinde bölge seçimiyle başlar ve sahibine ait gizli modelleri bulmayı amaçlar.
+      </p>
+      <div class="actions">
+        <a class="cta" href="/games/hide-and-seek/tr/game-zones.html">Oyunu Başlat</a>
+        <a class="secondary" href="/games/index.html">Tüm Oyunlar</a>
+      </div>
+    </section>
+  </main>
+
+  <div data-include="/footer-tr.html"></div>
+</body>
+</html>
