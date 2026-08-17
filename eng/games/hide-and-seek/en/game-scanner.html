@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<title>Alba Space — AR Saklambaç: Ara</title>
+<title>Alba Space — AR Hide & Seek: Search</title>
 
 <link rel="stylesheet" href="/assets/css/site.css" />
 <script src="/assets/js/include.js" defer></script>
@@ -66,7 +66,6 @@
   }
   #status-badge.hidden { opacity: 0; }
 
-  /* Минимальная кнопка выхода — появляется вместо top-bar после находки */
   #mini-exit {
     position: fixed; top: max(12px, env(safe-area-inset-top)); right: 16px; z-index: 300;
     width: 36px; height: 36px; border-radius: 50%;
@@ -242,81 +241,81 @@
 </head>
 <body>
 
-<div data-include="/header-tr.html"></div>
+<div data-include="/header-en.html"></div>
 
 <div id="ar-container"></div>
 
 <div id="top-bar">
-  <a id="back-btn" href="game-zones.html">← Çıkış</a>
+  <a id="back-btn" href="game-zones.html">← Exit</a>
   <div id="timer-badge">60s</div>
 </div>
 <a id="mini-exit" href="game-zones.html">✕</a>
 
-<div id="status-badge">Kameranı, işaretin gizli olabileceği yere doğrult</div>
+<div id="status-badge">Point your camera at a location where the model might be hiding</div>
 <div id="hint-toast"></div>
-<div id="found-toast">🎉 Bulundu! Modeli her açıdan inceleyebilirsin</div>
-<div id="gesture-hint">👆 Sürükle: taşı · 🤏 İki parmak: yakınlaştır</div>
+<div id="found-toast">🎉 Found! You can inspect the model from all angles</div>
+<div id="gesture-hint">👆 Drag: move · 🤏 Two fingers: zoom</div>
 
-<button id="collect-btn" onclick="addToCollection()">➕ Koleksiyona Ekle</button>
+<button id="collect-btn" onclick="addToCollection()">➕ Add to Collection</button>
 
 <div id="capture-panel" class="capture-panel">
-  <button id="capture-photo-btn" class="capture-btn" type="button">📸 Fotoğraf</button>
-  <button id="capture-video-btn" class="capture-btn secondary" type="button">🎥 Kısa Video</button>
+  <button id="capture-photo-btn" class="capture-btn" type="button">📸 Photo</button>
+  <button id="capture-video-btn" class="capture-btn secondary" type="button">🎥 Short Video</button>
 </div>
 
 <div id="photo-preview" class="capture-preview">
-  <img id="preview-image" src="" alt="Önizleme" />
+  <img id="preview-image" src="" alt="Preview" />
   <video id="preview-video" controls playsinline></video>
   <div class="preview-controls">
-    <button onclick="closeCapturePreview()" class="secondary">İptal</button>
-    <button id="download-capture-btn">Kaydet</button>
+    <button onclick="closeCapturePreview()" class="secondary">Cancel</button>
+    <button id="download-capture-btn">Save</button>
   </div>
 </div>
 
 <div class="overlay show" id="auth-checking">
   <div class="spin"></div>
-  <h2>Giriş kontrol ediliyor…</h2>
+  <h2>Checking login…</h2>
 </div>
 
 <div class="overlay" id="auth-required">
   <div class="big-emoji">🔒</div>
-  <h2>Giriş Yapman Gerekiyor</h2>
-  <p>Aramak için giriş yapmış olman gerekiyor. Site hesabınla giriş yap, sonra bu sayfaya geri dön.</p>
-  <a class="action-btn" href="/account-menu.html">Giriş Yap</a>
+  <h2>Login Required</h2>
+  <p>You need to be logged in to search. Sign in with your account, then come back here.</p>
+  <a class="action-btn" href="/account-menu.html">Log In</a>
 </div>
 
 <div class="overlay" id="loading-overlay">
   <div class="spin"></div>
-  <h2>Bölge hazırlanıyor…</h2>
-  <p id="loading-text">Yakındaki işaretler yükleniyor</p>
+  <h2>Preparing zone…</h2>
+  <p id="loading-text">Loading nearby markers</p>
   <div id="progress-bar-bg" style="display:none;"><div id="progress-bar"></div></div>
 </div>
 
 <div class="overlay" id="empty-overlay">
   <div class="big-emoji">🕳️</div>
-  <h2>Bu bölge henüz boş</h2>
-  <p>Henüz kimse burada model gizlememiş. Başka bir bölge dene ya da kendi modelini gizle!</p>
-  <a class="action-btn" href="game-zones.html">Bölgelere Dön</a>
-  <a class="action-btn secondary" href="game-hide.html">Model Gizle</a>
+  <h2>This zone is empty</h2>
+  <p>No one has hidden a model here yet. Try another zone or hide your own model!</p>
+  <a class="action-btn" href="game-zones.html">Back to Zones</a>
+  <a class="action-btn secondary" href="game-hide.html">Hide Model</a>
 </div>
 
 <div class="overlay" id="geo-overlay">
   <div class="big-emoji">📍</div>
-  <h2 id="geo-title">Konum kontrol ediliyor…</h2>
+  <h2 id="geo-title">Checking location…</h2>
   <p id="geo-text"></p>
-  <button class="action-btn" id="geo-continue-btn" style="display:none">Yine de devam et</button>
-  <a class="action-btn secondary" href="game-zones.html">Bölgelere Dön</a>
+  <button class="action-btn" id="geo-continue-btn" style="display:none">Continue anyway</button>
+  <a class="action-btn secondary" href="game-zones.html">Back to Zones</a>
 </div>
 
 <div class="overlay" id="timeout-overlay">
   <div class="big-emoji">⏱️</div>
-  <h2>Süre doldu</h2>
-  <p>60 saniyede işaret bulunamadı. Tekrar dene ya da başka bir bölge seç.</p>
-  <button class="action-btn" onclick="location.reload()">Tekrar Dene</button>
-  <a class="action-btn secondary" href="game-zones.html">Bölgelere Dön</a>
+  <h2>Time's up</h2>
+  <p>The 60-second timer ran out without finding a marker. Try again or pick another zone.</p>
+  <button class="action-btn" onclick="location.reload()">Try Again</button>
+  <a class="action-btn secondary" href="game-zones.html">Back to Zones</a>
 </div>
 
-<div data-include="/footer-tr.html"></div>
+<div data-include="/footer-en.html"></div>
 
 <script>
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
@@ -347,7 +346,6 @@ let captureStream = null;
 let mediaRecorder = null;
 let recordedChunks = [];
 
-// ── Состояние жестов (щипок/перемещение модели) ──
 let currentModelEl = null;
 let modelScale = 1;
 let modelPos = { x: 0, y: 0.08, z: 0 };
@@ -403,20 +401,20 @@ async function start() {
   }
 
   if (!zoneId) {
-    document.getElementById('geo-title').textContent = 'Bölge seçilmedi';
-    document.getElementById('geo-text').textContent = 'Bölge listesine dön ve birini seç.';
+    document.getElementById('geo-title').textContent = 'No zone selected';
+    document.getElementById('geo-text').textContent = 'Go back to the zone list and pick one.';
     showOverlay('geo-overlay');
     return;
   }
   if (!navigator.geolocation) {
-    document.getElementById('geo-title').textContent = 'Konum kullanılamıyor';
-    document.getElementById('geo-text').textContent = 'Bu tarayıcı, oyun için gerekli olan konum özelliğini desteklemiyor.';
+    document.getElementById('geo-title').textContent = 'Location unavailable';
+    document.getElementById('geo-text').textContent = 'This browser does not support the location feature needed for the game.';
     showOverlay('geo-overlay');
     return;
   }
 
   showOverlay('loading-overlay');
-  document.getElementById('loading-text').textContent = 'Konumun kontrol ediliyor…';
+  document.getElementById('loading-text').textContent = 'Checking your location…';
 
   navigator.geolocation.getCurrentPosition(
     async (pos) => {
@@ -424,8 +422,8 @@ async function start() {
       await checkZoneAndLoad(latitude, longitude);
     },
     () => {
-      document.getElementById('geo-title').textContent = 'Konuma erişim yok';
-      document.getElementById('geo-text').textContent = 'İşaretleri arayabilmek için tarayıcıda konum erişimine izin ver.';
+      document.getElementById('geo-title').textContent = 'No location access';
+      document.getElementById('geo-text').textContent = 'Allow the browser to access your location to search for markers.';
       showOverlay('geo-overlay');
     },
     { enableHighAccuracy: true, timeout: 10000 }
@@ -438,16 +436,16 @@ async function checkZoneAndLoad(userLat, userLon) {
     const zonesData = await zonesRes.json();
     const zone = (zonesData.zones || []).find(z => z.id === zoneId);
     if (!zone) {
-      document.getElementById('geo-title').textContent = 'Bölge bulunamadı';
-      document.getElementById('geo-text').textContent = 'Bağlantı güncel olmayabilir.';
+      document.getElementById('geo-title').textContent = 'Zone not found';
+      document.getElementById('geo-text').textContent = 'The connection may be outdated.';
       showOverlay('geo-overlay');
       return;
     }
 
     const dist = haversine(userLat, userLon, zone.lat, zone.lon);
     if (dist > zone.radius_m + GEO_TOLERANCE_M) {
-      document.getElementById('geo-title').textContent = `"${zone.name}" bölgesinde değilsin`;
-      document.getElementById('geo-text').textContent = `Bölgeye yaklaşık ${Math.round(dist)}m uzaktasın. Aramaya başlamak için yaklaş.`;
+      document.getElementById('geo-title').textContent = `You are not in "${zone.name}" zone`;
+      document.getElementById('geo-text').textContent = `You are approximately ${Math.round(dist)}m away. Get closer to start searching.`;
       const contBtn = document.getElementById('geo-continue-btn');
       contBtn.style.display = 'inline-block';
       contBtn.onclick = () => loadAnchors();
@@ -457,7 +455,7 @@ async function checkZoneAndLoad(userLat, userLon) {
 
     await loadAnchors();
   } catch (err) {
-    document.getElementById('geo-title').textContent = 'Yükleme hatası';
+    document.getElementById('geo-title').textContent = 'Loading error';
     document.getElementById('geo-text').textContent = err.message;
     showOverlay('geo-overlay');
   }
@@ -465,12 +463,12 @@ async function checkZoneAndLoad(userLat, userLon) {
 
 async function loadAnchors() {
   showOverlay('loading-overlay');
-  document.getElementById('loading-text').textContent = 'Bölgedeki işaretler yükleniyor…';
+  document.getElementById('loading-text').textContent = 'Loading zone markers…';
 
   try {
     const res = await fetch(`${API_BASE}/api/anchors?zone_id=${encodeURIComponent(zoneId)}`);
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Sunucu hatası');
+    if (!res.ok) throw new Error(data.error || 'Server error');
     anchors = data.anchors || [];
 
     if (anchors.length === 0) {
@@ -489,24 +487,24 @@ function loadImageAsHTMLImage(url) {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error('Görsel yüklenemedi'));
+    img.onerror = () => reject(new Error('Image failed to load'));
     img.src = url;
   });
 }
 
 async function compileAndBuildScene() {
   document.getElementById('progress-bar-bg').style.display = 'block';
-  document.getElementById('loading-text').textContent = `Fotoğraflar yükleniyor… (0/${anchors.length})`;
+  document.getElementById('loading-text').textContent = `Loading photos… (0/${anchors.length})`;
 
   const images = [];
   for (let i = 0; i < anchors.length; i++) {
     const img = await loadImageAsHTMLImage(anchors[i].photo_url);
     images.push(img);
-    document.getElementById('loading-text').textContent = `Fotoğraflar yükleniyor… (${i+1}/${anchors.length})`;
+    document.getElementById('loading-text').textContent = `Loading photos… (${i+1}/${anchors.length})`;
     document.getElementById('progress-bar').style.width = Math.round(((i+1)/anchors.length)*35) + '%';
   }
 
-  document.getElementById('loading-text').textContent = 'Yer analiz ediliyor (biraz zaman alabilir)…';
+  document.getElementById('loading-text').textContent = 'Analyzing location (this may take a moment)…';
 
   const compiler = new MINDAR.IMAGE.Compiler();
   await compiler.compileImageTargets(images, (progress) => {
@@ -519,7 +517,7 @@ async function compileAndBuildScene() {
   const mindUrl = URL.createObjectURL(blob);
 
   document.getElementById('progress-bar').style.width = '100%';
-  document.getElementById('loading-text').textContent = 'Kamera başlatılıyor…';
+  document.getElementById('loading-text').textContent = 'Starting camera…';
 
   buildScene(mindUrl);
 }
@@ -579,12 +577,9 @@ function buildScene(mindUrl) {
   setupGestures(container);
 }
 
-// Живая камера AR должна быть видна на весь экран без помех —
-// прячем фирменный хедер/футер сайта именно в момент старта камеры
-// (на экранах загрузки/ошибок они остаются видны для брендинга).
 function hideBrandChrome() {
-  const header = document.querySelector('[data-include="/header-tr.html"]');
-  const footer = document.querySelector('[data-include="/footer-tr.html"]');
+  const header = document.querySelector('[data-include="/header-en.html"]');
+  const footer = document.querySelector('[data-include="/footer-en.html"]');
   if (header) header.style.display = 'none';
   if (footer) footer.style.display = 'none';
 }
@@ -593,7 +588,7 @@ function showHints() {
   const texts = anchors.map(a => a.hint).filter(Boolean);
   if (texts.length === 0) return;
   const el = document.getElementById('hint-toast');
-  el.textContent = '💡 İpucu: ' + texts.join(' • ');
+  el.textContent = '💡 Hint: ' + texts.join(' • ');
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 6000);
 }
@@ -660,7 +655,7 @@ function captureStill() {
 function captureShortVideo() {
   const canvas = getArCanvas();
   if (!canvas || !canvas.captureStream) {
-    alert('Bu tarayıcı kısa video kaydı için destek vermiyor.');
+    alert('This browser does not support short video recording.');
     return;
   }
 
@@ -692,7 +687,6 @@ function captureShortVideo() {
   }, 4000);
 }
 
-// ── Находка: убираем всю информационную обвязку, оставляем только модель ──
 function onFound(anchor, index, entityEl) {
   roundEnded = true;
   foundAnchor = anchor;
@@ -722,11 +716,9 @@ function onFound(anchor, index, entityEl) {
   showCapturePanel();
 }
 
-// ── Скачивает .glb с отслеживанием прогресса (реальные проценты,
-// а не имитация) и возвращает локальный blob-URL для показа ──
 async function loadModelWithProgress(url, onProgress) {
   const res = await fetch(url);
-  if (!res.ok || !res.body) throw new Error('Model indirilemedi');
+  if (!res.ok || !res.body) throw new Error('Model failed to load');
   const total = parseInt(res.headers.get('Content-Length') || '0', 10);
   const reader = res.body.getReader();
   const chunks = [];
@@ -742,14 +734,12 @@ async function loadModelWithProgress(url, onProgress) {
   return URL.createObjectURL(blob);
 }
 
-// ── Надпись "Bekleyin, bulunan model yükleniyor" + шкала прогресса,
-// отрисованные ПРЯМО НА ЯКОРЕ (в AR-пространстве, не поверх экрана) ──
 async function showModelLoadingUI(entityEl, modelUrl) {
   const group = document.createElement('a-entity');
   group.setAttribute('id', 'loading-group');
   group.setAttribute('position', '0 0.32 0');
   group.innerHTML = `
-    <a-text value="Bekleyin, bulunan model yükleniyor" align="center" width="1.3"
+    <a-text value="Loading model…" align="center" width="1.3"
       color="#ffffff" position="0 0.15 0"></a-text>
     <a-plane width="0.5" height="0.03" color="#1e293b" position="0 0 0"></a-plane>
     <a-plane id="progress-fill" width="0.01" height="0.03" color="#00c2ff" position="-0.245 0 0.001"></a-plane>
@@ -769,18 +759,17 @@ async function showModelLoadingUI(entityEl, modelUrl) {
     m.setAttribute('src', blobUrl);
     m.setAttribute('scale', `${BASE_SCALE} ${BASE_SCALE} ${BASE_SCALE}`);
     m.setAttribute('position', `${modelPos.x} ${modelPos.y} ${modelPos.z}`);
-    m.setAttribute('rotation', '90 0 0'); // модель повёрнута на 90° по оси X
+    m.setAttribute('rotation', '90 0 0');
     entityEl.appendChild(m);
     currentModelEl = m;
 
     group.remove();
   } catch (err) {
     const text = group.querySelector('a-text');
-    if (text) text.setAttribute('value', 'Model yüklenemedi');
+    if (text) text.setAttribute('value', 'Model failed to load');
   }
 }
 
-// ── Жесты: одним пальцем — переместить модель, двумя — увеличить/уменьшить ──
 function setupGestures(container) {
   function dist(t1, t2) {
     return Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
@@ -828,7 +817,7 @@ function setupGestures(container) {
 async function addToCollection() {
   const btn = document.getElementById('collect-btn');
   btn.disabled = true;
-  btn.textContent = '⏳ Ekleniyor...';
+  btn.textContent = '⏳ Adding...';
   try {
     const res = await fetch(`${API_BASE}/api/collection`, {
       method: 'POST',
@@ -842,14 +831,14 @@ async function addToCollection() {
       }),
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Sunucu hatası');
+    if (!res.ok) throw new Error(data.error || 'Server error');
 
     btn.classList.add('done');
-    btn.textContent = '✅ Koleksiyonda';
+    btn.textContent = '✅ In Collection';
   } catch (err) {
     btn.disabled = false;
-    btn.textContent = '➕ Koleksiyona Ekle';
-    alert('Eklenemedi: ' + err.message);
+    btn.textContent = '➕ Add to Collection';
+    alert('Failed to add: ' + err.message);
   }
 }
 

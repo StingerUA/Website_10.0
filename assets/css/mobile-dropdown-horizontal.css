@@ -101,32 +101,32 @@
 }
 
 /* ============================================================================
-   ЧЕРНЫЙ ЛОГОТИП - Светло-синий фон
+   ЧЕРНЫЙ ЛОГОТИП - Белый фон с черным текстом
    ============================================================================ */
 
 @media (max-width: 1023px) {
   html.header-black .dropdown-menu {
-    background: rgb(74, 155, 204) !important;
-    border: 1px solid rgba(74, 155, 204, 0.4) !important;
-    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
   }
 
   html.header-black .dropdown-menu a,
   html.header-black .dropdown-menu button {
-    color: #ffffff !important;
-    background: rgba(255, 255, 255, 0.25) !important;
+    color: #1a1a1a !important;
+    background: rgba(200, 200, 200, 0.2) !important;
     transition: all 0.2s ease !important;
   }
 
   html.header-black .dropdown-menu a:hover,
   html.header-black .dropdown-menu button:hover {
-    background: rgba(255, 255, 255, 0.4) !important;
-    color: #ffffff !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    color: #000000 !important;
   }
 
   html.header-black .dropdown-menu a:active,
   html.header-black .dropdown-menu button:active {
-    background: rgba(255, 255, 255, 0.5) !important;
+    background: rgba(0, 0, 0, 0.15) !important;
   }
 }
 
