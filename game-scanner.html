@@ -16,9 +16,25 @@
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #fff; touch-action: none; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    color: #fff; touch-action: none; background: #000;
+  }
 
-  #ar-container { position: fixed; inset: 0; z-index: 1; }
+  #ar-container {
+    position: fixed; inset: 0; z-index: 1; width: 100vw; height: 100vh;
+    overflow: hidden; background: #000;
+  }
+  #ar-container .a-scene,
+  #ar-container a-scene,
+  #ar-container canvas,
+  #ar-container .a-canvas {
+    width: 100vw !important; height: 100vh !important;
+    max-width: 100vw !important; max-height: 100vh !important;
+    display: block; margin: 0; position: absolute !important; inset: 0 !important;
+    left: 0 !important; top: 0 !important; object-fit: cover !important;
+    transform: none !important;
+  }
 
   #top-bar {
     position: fixed; top: 0; left: 0; right: 0; z-index: 300;
@@ -128,6 +144,23 @@
   #collect-btn:disabled { opacity: 0.6; }
   #collect-btn.done { background: rgba(0,80,40,0.85); }
 
+  .capture-panel {
+    position: fixed;
+    left: 50%; bottom: max(90px, calc(env(safe-area-inset-bottom) + 90px));
+    transform: translateX(-50%); z-index: 300;
+    display: none; align-items: center; justify-content: center; gap: 12px;
+  }
+  .capture-panel.show { display: flex; }
+  .capture-btn {
+    border: none; border-radius: 99px; padding: 12px 18px;
+    background: linear-gradient(135deg, #00c2ff, #0077b6); color: #fff;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0,194,255,0.35);
+  }
+  .capture-btn.secondary {
+    background: rgba(15,23,42,0.8); border: 1px solid rgba(56,189,248,0.35); color: #38bdf8;
+  }
+
   #gesture-hint {
     position: fixed;
     bottom: max(78px, calc(env(safe-area-inset-bottom) + 78px));
@@ -138,6 +171,29 @@
     white-space: nowrap;
   }
   #gesture-hint.show { opacity: 1; }
+
+  .capture-preview {
+    position: fixed; inset: 0; z-index: 500; background: rgba(2,6,23,0.92);
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; padding: 20px; text-align: center;
+  }
+  .capture-preview.show { display: flex; }
+  #preview-image {
+    max-width: 100%; max-height: 72vh; border-radius: 12px; box-shadow: 0 10px 35px rgba(0,0,0,0.45);
+  }
+  #preview-video {
+    width: min(100%, 900px); max-height: 72vh; border-radius: 12px; background: #000;
+    display: none; box-shadow: 0 10px 35px rgba(0,0,0,0.45);
+  }
+  .preview-controls {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+  }
+  .preview-controls button {
+    border: none; border-radius: 10px; padding: 12px 24px; font-size: 15px; font-weight: 700;
+    cursor: pointer; color: white; background: rgba(255,255,255,0.12);
+  }
+  .preview-controls button:last-child { background: #2ecc71; }
+  .preview-controls button.secondary { background: rgba(231,76,60,0.7); }
 </style>
 </head>
 <body>
@@ -158,6 +214,20 @@
 <div id="gesture-hint">👆 Sürükle: taşı · 🤏 İki parmak: yakınlaştır</div>
 
 <button id="collect-btn" onclick="addToCollection()">➕ Koleksiyona Ekle</button>
+
+<div id="capture-panel" class="capture-panel">
+  <button id="capture-photo-btn" class="capture-btn" type="button">📸 Fotoğraf</button>
+  <button id="capture-video-btn" class="capture-btn secondary" type="button">🎥 Kısa Video</button>
+</div>
+
+<div id="photo-preview" class="capture-preview">
+  <img id="preview-image" src="" alt="Önizleme" />
+  <video id="preview-video" controls playsinline></video>
+  <div class="preview-controls">
+    <button onclick="closeCapturePreview()" class="secondary">İptal</button>
+    <button id="download-capture-btn">Kaydet</button>
+  </div>
+</div>
 
 <div class="overlay show" id="auth-checking">
   <div class="spin"></div>
@@ -216,6 +286,12 @@ const GEO_TOLERANCE_M = 80;
 const params = new URLSearchParams(location.search);
 const zoneId = params.get('zone');
 
+const capturePhotoBtn = document.getElementById('capture-photo-btn');
+const captureVideoBtn = document.getElementById('capture-video-btn');
+
+if (capturePhotoBtn) capturePhotoBtn.addEventListener('click', captureStill);
+if (captureVideoBtn) captureVideoBtn.addEventListener('click', captureShortVideo);
+
 let anchors = [];
 let timerInterval = null;
 let secsLeft = ROUND_SECONDS;
@@ -223,6 +299,9 @@ let roundEnded = false;
 let arStarted = false;
 let currentUser = null;
 let foundAnchor = null;
+let captureStream = null;
+let mediaRecorder = null;
+let recordedChunks = [];
 
 // ── Состояние жестов (щипок/перемещение модели) ──
 let currentModelEl = null;
@@ -475,6 +554,100 @@ function showHints() {
   setTimeout(() => el.classList.remove('show'), 6000);
 }
 
+function getArCanvas() {
+  return document.querySelector('#ar-container canvas')
+    || document.querySelector('#ar-container .a-canvas')
+    || document.querySelector('canvas.a-canvas')
+    || document.querySelector('canvas');
+}
+
+function showCapturePanel() {
+  document.getElementById('capture-panel').classList.add('show');
+}
+
+function hideCapturePanel() {
+  document.getElementById('capture-panel').classList.remove('show');
+}
+
+function showCapturePreview(dataUrl, type = 'image') {
+  const preview = document.getElementById('photo-preview');
+  const img = document.getElementById('preview-image');
+  const video = document.getElementById('preview-video');
+
+  if (type === 'image') {
+    img.style.display = 'block';
+    video.style.display = 'none';
+    video.pause();
+    video.removeAttribute('src');
+    img.src = dataUrl;
+  } else {
+    img.style.display = 'none';
+    video.style.display = 'block';
+    video.src = dataUrl;
+    video.load();
+    video.play().catch(() => {});
+  }
+
+  preview.classList.add('show');
+  document.getElementById('download-capture-btn').onclick = () => {
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = `Alba-Scan-${type === 'image' ? 'photo' : 'video'}-${Date.now()}.${type === 'image' ? 'png' : 'webm'}`;
+    a.click();
+  };
+}
+
+function closeCapturePreview() {
+  const preview = document.getElementById('photo-preview');
+  preview.classList.remove('show');
+  const video = document.getElementById('preview-video');
+  if (!video.paused) video.pause();
+  video.removeAttribute('src');
+  document.getElementById('preview-image').removeAttribute('src');
+}
+
+function captureStill() {
+  const canvas = getArCanvas();
+  if (!canvas) return;
+  const dataUrl = canvas.toDataURL('image/png');
+  showCapturePreview(dataUrl, 'image');
+}
+
+function captureShortVideo() {
+  const canvas = getArCanvas();
+  if (!canvas || !canvas.captureStream) {
+    alert('Bu tarayıcı kısa video kaydı için destek vermiyor.');
+    return;
+  }
+
+  const stream = canvas.captureStream(30);
+  const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+  const recorder = new MediaRecorder(stream, { mimeType });
+  recordedChunks = [];
+
+  recorder.ondataavailable = (event) => {
+    if (event.data.size > 0) recordedChunks.push(event.data);
+  };
+
+  recorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    showCapturePreview(url, 'video');
+    if (captureStream) {
+      captureStream.getTracks().forEach(track => track.stop());
+    }
+  };
+
+  captureStream = stream;
+  mediaRecorder = recorder;
+  recorder.start();
+  setTimeout(() => {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+    }
+  }, 4000);
+}
+
 // ── Находка: убираем всю информационную обвязку, оставляем только модель ──
 function onFound(anchor, index, entityEl) {
   roundEnded = true;
@@ -502,6 +675,7 @@ function onFound(anchor, index, entityEl) {
   setTimeout(() => gestureHint.classList.remove('show'), 5000);
 
   document.getElementById('collect-btn').classList.add('show');
+  showCapturePanel();
 }
 
 // ── Скачивает .glb с отслеживанием прогресса (реальные проценты,
@@ -551,7 +725,7 @@ async function showModelLoadingUI(entityEl, modelUrl) {
     m.setAttribute('src', blobUrl);
     m.setAttribute('scale', `${BASE_SCALE} ${BASE_SCALE} ${BASE_SCALE}`);
     m.setAttribute('position', `${modelPos.x} ${modelPos.y} ${modelPos.z}`);
-    m.setAttribute('rotation', '0 0 0'); // модель повёрнута на 90° по оси X
+    m.setAttribute('rotation', '90 0 0'); // модель повёрнута на 90° по оси X
     entityEl.appendChild(m);
     currentModelEl = m;
 

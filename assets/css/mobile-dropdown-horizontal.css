@@ -31,6 +31,21 @@
     overflow: visible !important;
   }
 
+  /* Force the open submenu to stay aligned with the viewport instead of drifting left
+     when the desktop origin rules are still applied on narrow screens. */
+  .dropdown.active .dropdown-menu,
+  .dropdown:hover .dropdown-menu,
+  .dropdown-menu.visible,
+  .dropdown[aria-expanded="true"] .dropdown-menu {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    transform: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
   .dropdown-menu a,
   .dropdown-menu button {
     width: 100% !important;
