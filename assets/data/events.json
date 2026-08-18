@@ -187,8 +187,8 @@
     {
       "slug": "iac-antalya-2026",
       "category": "egitim",
-      "startAt": "2026-10-04T00:00:00+03:00",
-      "endAt": "2026-10-05T23:59:59+03:00",
+      "startAt": "2026-10-05T00:00:00+03:00",
+      "endAt": "2026-10-09T23:59:59+03:00",
       "cover": "/assets/images/ivent3.jpeg",
       "location": "Antalya / TÜRKİYE",
       "contact": "AlbaSpace",
