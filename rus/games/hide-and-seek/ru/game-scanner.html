@@ -241,7 +241,7 @@
 </head>
 <body>
 
-<div data-include="/header-en.html"></div>
+<div data-include="/header-ru.html"></div>
 
 <div id="ar-container"></div>
 
@@ -281,7 +281,7 @@
   <div class="big-emoji">🔒</div>
   <h2>Требуется авторизация</h2>
   <p>Вам необходимо войти в систему для поиска. Войдите в свой аккаунт, а затем вернитесь сюда.</p>
-  <a class="action-btn" href="/account-menu.html">Войти</a>
+  <a class="action-btn" href="/rus/account-menu.html">Войти</a>
 </div>
 
 <div class="overlay" id="loading-overlay">
@@ -315,7 +315,7 @@
   <a class="action-btn secondary" href="game-zones.html">К зонам</a>
 </div>
 
-<div data-include="/footer-en.html"></div>
+<div data-include="/footer-ru.html"></div>
 
 <script>
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
@@ -578,8 +578,8 @@ function buildScene(mindUrl) {
 }
 
 function hideBrandChrome() {
-  const header = document.querySelector('[data-include="/header-en.html"]');
-  const footer = document.querySelector('[data-include="/footer-en.html"]');
+  const header = document.querySelector('[data-include="/header-ru.html"]');
+  const footer = document.querySelector('[data-include="/footer-ru.html"]');
   if (header) header.style.display = 'none';
   if (footer) footer.style.display = 'none';
 }
