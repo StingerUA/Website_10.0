@@ -315,6 +315,45 @@
   color: #22c55e;
 }
 
+.blog-share a,
+.blog-share button{
+  position: relative;
+}
+
+.blog-share-tooltip{
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  white-space: nowrap;
+  max-width: 220px;
+  white-space: normal;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #0f172a;
+  border: 1px solid rgba(148,163,184,0.3);
+  color: #e5e7eb;
+  text-transform: none;
+  letter-spacing: normal;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 5;
+}
+
+.blog-share button.is-active{
+  border-color: var(--accent, #00c2ff);
+  color: var(--accent, #00c2ff);
+}
+
+.blog-share button.is-active .blog-share-tooltip{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .blog-share svg{ width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; }
 
 /* ── Prev / next ── */

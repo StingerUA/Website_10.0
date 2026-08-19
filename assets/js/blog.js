@@ -181,6 +181,49 @@
     }
   });
 
+  // Instagram and WhatsApp-Status share buttons.
+  // NEITHER platform offers a public web link that posts directly into a
+  // Story / Status the way wa.me does for a chat message — that's an
+  // Instagram/WhatsApp platform limitation, not something fixable from the
+  // page. The honest, working approach: copy the link, show a short tooltip
+  // telling the person what to do next, and — on a phone — try to jump into
+  // the right app so all that's left is to paste.
+  function isMobile() {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+  }
+
+  function shareViaAppTooltip(btn, appDeepLink) {
+    var url = btn.getAttribute('data-url') || window.location.href;
+    var title = btn.getAttribute('data-title');
+    var text = title ? title + ' - ' + url : url;
+    var afterCopy = function () {
+      btn.classList.add('is-active');
+      setTimeout(function () { btn.classList.remove('is-active'); }, 3000);
+      if (isMobile() && appDeepLink) {
+        setTimeout(function () {
+          try { window.location.href = appDeepLink; } catch (err) { /* ignore */ }
+        }, 300);
+      }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(afterCopy).catch(afterCopy);
+    } else {
+      afterCopy();
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    var igBtn = e.target.closest('.blog-share-instagram');
+    if (igBtn) {
+      shareViaAppTooltip(igBtn, 'instagram://story-camera');
+      return;
+    }
+    var waBtn = e.target.closest('.blog-share-status');
+    if (waBtn) {
+      shareViaAppTooltip(waBtn, 'whatsapp://');
+    }
+  });
+
   document.addEventListener('DOMContentLoaded', function () {
     renderGrid();
     renderArticleExtras();
