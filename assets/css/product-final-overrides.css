@@ -9,7 +9,7 @@ html.product-text-black section.mt-24.reveal {
   padding: 28px !important;
 }
 
-/* Hide the small blue stripe under the title */
+/*     Hide the small blue stripe under the title */
 html.product-text-black .h-1.w-20.bg-blue-500 {
   display: none !important;
 }

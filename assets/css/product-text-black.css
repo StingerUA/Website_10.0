@@ -7,7 +7,7 @@ html.product-text-black body *:not(.signup-modal-overlay):not(.signup-modal-over
   stroke: #000000 !important;
 }
 
-/* Keep header and footer text/icons white */
+/*   Keep header and footer text/icons white */
 html.product-text-black header,
 html.product-text-black footer,
 html.product-text-black header *,
