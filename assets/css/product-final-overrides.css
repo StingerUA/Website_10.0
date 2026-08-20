@@ -194,6 +194,7 @@ html.product-text-black .footer * {
   }
 
   /* White logo pages - Dark blue opaque background */
+  html.header-white .header-inner .main-nav .dropdown.active .dropdown-menu,
   html.header-white .dropdown.active .dropdown-menu {
     background: rgba(14, 31, 66, 1) !important;
     border: 1px solid rgba(74, 155, 204, 0.25) !important;
@@ -202,6 +203,8 @@ html.product-text-black .footer * {
     visibility: visible !important;
   }
 
+  html.header-white .header-inner .main-nav .dropdown.active .dropdown-menu a,
+  html.header-white .header-inner .main-nav .dropdown.active .dropdown-menu button,
   html.header-white .dropdown.active .dropdown-menu a,
   html.header-white .dropdown.active .dropdown-menu button {
     color: #a8d5ff !important;
@@ -209,6 +212,7 @@ html.product-text-black .footer * {
   }
 
   /* Black logo pages - White background, black text (same as product-text-black) */
+  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu,
   html.header-black .dropdown.active .dropdown-menu {
     background: #ffffff !important;
     border: 1px solid rgba(0, 0, 0, 0.12) !important;
@@ -217,12 +221,16 @@ html.product-text-black .footer * {
     visibility: visible !important;
   }
 
+  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu a,
+  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu button,
   html.header-black .dropdown.active .dropdown-menu a,
   html.header-black .dropdown.active .dropdown-menu button {
     color: #000000 !important;
     background: #ffffff !important;
   }
 
+  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu a:hover,
+  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu button:hover,
   html.header-black .dropdown.active .dropdown-menu a:hover,
   html.header-black .dropdown.active .dropdown-menu button:hover {
     background: #f3f4f6 !important;
@@ -230,6 +238,7 @@ html.product-text-black .footer * {
   }
 
   /* Product pages text black - White background, black text */
+  html.product-text-black .header-inner .main-nav .dropdown.active .dropdown-menu,
   html.product-text-black .dropdown.active .dropdown-menu {
     background: #ffffff !important;
     border: 1px solid rgba(0, 0, 0, 0.12) !important;
@@ -238,12 +247,16 @@ html.product-text-black .footer * {
     visibility: visible !important;
   }
 
+  html.product-text-black .header-inner .main-nav .dropdown.active .dropdown-menu a,
+  html.product-text-black .header-inner .main-nav .dropdown.active .dropdown-menu button,
   html.product-text-black .dropdown.active .dropdown-menu a,
   html.product-text-black .dropdown.active .dropdown-menu button {
     color: #000000 !important;
     background: #ffffff !important;
   }
 
+  html.product-text-black .header-inner .main-nav .dropdown.active .dropdown-menu a:hover,
+  html.product-text-black .header-inner .main-nav .dropdown.active .dropdown-menu button:hover,
   html.product-text-black .dropdown.active .dropdown-menu a:hover,
   html.product-text-black .dropdown.active .dropdown-menu button:hover {
     background: #f3f4f6 !important;
