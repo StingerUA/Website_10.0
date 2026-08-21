@@ -9,7 +9,7 @@ html.product-text-black section.mt-24.reveal {
   padding: 28px !important;
 }
 
-/*     Hide the small blue stripe under the title */
+/* Hide the small blue stripe under the title */
 html.product-text-black .h-1.w-20.bg-blue-500 {
   display: none !important;
 }
@@ -193,49 +193,15 @@ html.product-text-black .footer * {
     pointer-events: none !important;
   }
 
-  /* White logo pages - Dark blue opaque background */
-  html.header-white .header-inner .main-nav .dropdown.active .dropdown-menu,
-  html.header-white .dropdown.active .dropdown-menu {
-    background: rgba(14, 31, 66, 1) !important;
-    border: 1px solid rgba(74, 155, 204, 0.25) !important;
-    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(74, 155, 204, 0.15) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
-  html.header-white .header-inner .main-nav .dropdown.active .dropdown-menu a,
-  html.header-white .header-inner .main-nav .dropdown.active .dropdown-menu button,
-  html.header-white .dropdown.active .dropdown-menu a,
-  html.header-white .dropdown.active .dropdown-menu button {
-    color: #a8d5ff !important;
-    background: rgba(74, 155, 204, 0.15) !important;
-  }
-
-  /* Black logo pages - White background, black text (same as product-text-black) */
-  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu,
-  html.header-black .dropdown.active .dropdown-menu {
-    background: #ffffff !important;
-    border: 1px solid rgba(0, 0, 0, 0.12) !important;
-    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
-  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu a,
-  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu button,
-  html.header-black .dropdown.active .dropdown-menu a,
-  html.header-black .dropdown.active .dropdown-menu button {
-    color: #000000 !important;
-    background: #ffffff !important;
-  }
-
-  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu a:hover,
-  html.header-black .header-inner .main-nav .dropdown.active .dropdown-menu button:hover,
-  html.header-black .dropdown.active .dropdown-menu a:hover,
-  html.header-black .dropdown.active .dropdown-menu button:hover {
-    background: #f3f4f6 !important;
-    color: #000000 !important;
-  }
+  /* NOTE: the header-black / header-white dropdown color rules that used to
+     live here were removed. They duplicated what html.product-text-black
+     already handles below, and — once header-type-detector.js actually
+     started running — the two competing rule sets could tie in specificity
+     and let load order decide the winner, which is exactly what caused the
+     dropdown to render blue instead of white on black-header pages. Keeping
+     a single source of truth (product-text-black) removes that whole class
+     of bug. See also: header-type-detector.js is no longer loaded either,
+     for the same reason — nothing on the site actually needs it now. */
 
   /* Product pages text black - White background, black text */
   html.product-text-black .header-inner .main-nav .dropdown.active .dropdown-menu,
