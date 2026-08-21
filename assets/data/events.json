@@ -363,6 +363,92 @@
           ]
         }
       }
+    },
+    {
+      "slug": "teleskopla-dolunay-gozlemi-2026",
+      "category": "astronomi",
+      "startAt": "2026-08-28T20:00:00+03:00",
+      "endAt": "2026-08-28T23:00:00+03:00",
+      "cover": "/assets/pictures/teleskopla-dolunay-2026.webp",
+      "location": "Merkez Park",
+      "contact": "+90 538 778 10 18",
+      "organizers": [
+        "AlbaSpace"
+      ],
+      "hashtags": [
+        "#AlbaSpace",
+        "#Dolunay",
+        "#Teleskop",
+        "#GökyüzüGözlemi",
+        "#MerkezPark",
+        "#Astronomi"
+      ],
+      "locales": {
+        "tr": {
+          "title": "Teleskopla Dolunay Gözlemi",
+          "excerpt": "Ay’ın büyüleyici yüzünü Merkez Park’ta teleskoplarla birlikte keşfedelim.",
+          "url": "/etkinlikler/teleskopla-dolunay-gozlemi-2026.html",
+          "hero": "28 Ağustos 2026 Cuma günü Merkez Park’ta teleskoplarla Dolunay’ın büyüleyici yüzünü birlikte keşfediyoruz.",
+          "body": [
+            "AlbaSpace olarak 28 Ağustos Cuma akşamı, Ay’ın kraterlerini ve parlak yüzeyini teleskoplarla yakından gözlemlemek için Merkez Park’ta buluşuyoruz.",
+            "Etkinlik 20:00–23:00 saatleri arasında gerçekleşecektir. Etkinlik ücreti kişi başı 400₺ olup kontenjan 50 kişiyle sınırlıdır. Katılım için profilimizdeki bağlantıda yer alan kayıt formunu doldurmanız gerekmektedir."
+          ],
+          "highlights": [
+            "Teleskopla Dolunay gözlemi",
+            "Ay’ın kraterlerini keşfetme",
+            "Merkez Park’ta gece gökyüzü deneyimi",
+            "Kayıt: Profildeki form bağlantısı"
+          ]
+        },
+        "en": {
+          "title": "Full Moon Observation Through a Telescope",
+          "excerpt": "Discover the Moon’s captivating surface together at Merkez Park through telescopes.",
+          "url": "/etkinlikler/teleskopla-dolunay-gozlemi-2026.html",
+          "hero": "On Friday, August 28, 2026, we will gather at Merkez Park to explore the captivating surface of the Full Moon through telescopes.",
+          "body": [
+            "On Friday evening, AlbaSpace invites you to Merkez Park for a close-up telescope observation of the Moon’s craters and illuminated surface.",
+            "The event will take place from 20:00 to 23:00. The participation fee is 400₺ per person and capacity is limited to 50 participants. To join, please complete the registration form available through the link in our profile."
+          ],
+          "highlights": [
+            "Full Moon observation through telescopes",
+            "Exploring lunar craters",
+            "A night-sky experience at Merkez Park",
+            "Registration: form link in the profile"
+          ]
+        },
+        "ru": {
+          "title": "Наблюдение полной Луны в телескоп",
+          "excerpt": "Давайте вместе откроем завораживающую поверхность Луны в парке Меркез с помощью телескопов.",
+          "url": "/etkinlikler/teleskopla-dolunay-gozlemi-2026.html",
+          "hero": "В пятницу, 28 августа 2026 года, мы встретимся в парке Меркез, чтобы рассмотреть завораживающую поверхность полной Луны в телескопы.",
+          "body": [
+            "Вечером 28 августа AlbaSpace приглашает вас в парк Меркез на наблюдение кратеров и освещённой поверхности Луны через телескопы.",
+            "Мероприятие пройдёт с 20:00 до 23:00. Стоимость участия — 400₺ с человека, количество мест ограничено 50 участниками. Для участия заполните регистрационную форму по ссылке в нашем профиле."
+          ],
+          "highlights": [
+            "Наблюдение полной Луны в телескоп",
+            "Изучение лунных кратеров",
+            "Ночное наблюдение неба в парке Меркез",
+            "Регистрация: ссылка на форму в профиле"
+          ]
+        },
+        "ar": {
+          "title": "رصد البدر بالتلسكوب",
+          "excerpt": "لنكتشف معًا سطح القمر الساحر في منتزه مركز من خلال التلسكوبات.",
+          "url": "/etkinlikler/teleskopla-dolunay-gozlemi-2026.html",
+          "hero": "يوم الجمعة 28 أغسطس 2026، نلتقي في منتزه مركز لاكتشاف سطح البدر الساحر من خلال التلسكوبات.",
+          "body": [
+            "تدعوكم AlbaSpace مساء 28 أغسطس إلى منتزه مركز لمشاهدة فوهات القمر وسطحه المضيء عن قرب باستخدام التلسكوبات.",
+            "يقام النشاط من الساعة 20:00 حتى 23:00. تبلغ رسوم المشاركة 400₺ للشخص الواحد، وتقتصر السعة على 50 مشاركًا. للمشاركة، يرجى ملء استمارة التسجيل عبر الرابط الموجود في ملفنا التعريفي."
+          ],
+          "highlights": [
+            "رصد البدر بالتلسكوب",
+            "اكتشاف فوهات القمر",
+            "تجربة لمشاهدة السماء ليلًا في منتزه مركز",
+            "التسجيل: رابط الاستمارة في الملف التعريفي"
+          ]
+        }
+      }
     }
   ]
 }
