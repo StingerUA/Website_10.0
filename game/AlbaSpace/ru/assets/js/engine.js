@@ -9,9 +9,10 @@ const AS = (() => {
     TURKISH_SATELLITES:{label:"🟡 Турецкие спутники"}
   };
   const MODES = {
-    SPRINT:{label:"⚡ Спринт", answer:{EASY:12,NORMAL:17,HARD:22,EXPERT:27}, station:7},
-    STANDARD:{label:"⚖️ Стандарт", answer:{EASY:15,NORMAL:24,HARD:30,EXPERT:36}, station:8},
-    LEARNING:{label:"🐢 Обучение", answer:{EASY:20,NORMAL:30,HARD:38,EXPERT:45}, station:9}
+    // На любой вопрос даём минимум 60 секунд даже в самом быстром режиме.
+    SPRINT:{label:"⚡ Спринт", answer:{EASY:60,NORMAL:65,HARD:70,EXPERT:75}, station:10},
+    STANDARD:{label:"⚖️ Стандарт", answer:{EASY:75,NORMAL:80,HARD:90,EXPERT:100}, station:12},
+    LEARNING:{label:"🐢 Обучение", answer:{EASY:90,NORMAL:100,HARD:110,EXPERT:120}, station:15}
   };
   const ECON = {start:300, participation:10, winner:30, graduation:350, small:650, large:950};
   const MAX = {small:7, large:3, knowledge:4};

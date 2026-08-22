@@ -1,6 +1,6 @@
 let roomCode=sessionStorage.getItem("as_player_room")||"";
 let playerId=sessionStorage.getItem("as_player_id")||"";
-let selectedTopics=[];
+let selectedTopics=[];let draftAnswer="";let draftRound=null;
 const app=document.getElementById("app"),hud=document.getElementById("hud"),phaseLabel=document.getElementById("phaseLabel"),toastEl=document.getElementById("toast");
 function toast(msg){toastEl.textContent=msg;toastEl.classList.remove("hidden");setTimeout(()=>toastEl.classList.add("hidden"),2200)}
 function room(){return roomCode?AS.loadRoom(roomCode):null}
@@ -12,9 +12,50 @@ function renderJoin(){app.innerHTML=`<section class="card"><div class="phase">В
 function renderCompany(r,p){app.innerHTML=`<section class="card"><div class="phase">Шаг 1 из 2</div><h1>Назови свою компанию</h1><input id="name" class="input big-input" maxlength="20" placeholder="ORION SPACE"><div style="margin-top:14px"><button id="save" class="btn primary">Продолжить</button></div></section>`;document.getElementById("save").onclick=()=>{try{AS.setCompany(r.code,p.id,document.getElementById("name").value);render()}catch(e){toast(e.message)}}}
 function renderCadetSetup(r,p){selectedTopics=[];app.innerHTML=`<section class="card"><div class="phase">Шаг 2 из 2</div><h1>Выбери 3 кадетов</h1><p class="muted">Каждый кадет специализируется на одной теме. Выбрано: <strong id="count">0/3</strong></p><div class="grid two" id="topics">${Object.entries(AS.TOPICS).map(([k,v])=>`<div class="topic-card" data-topic="${k}"><strong>${v.label}</strong><p class="muted">Кадет 0/4</p></div>`).join("")}</div><div style="margin-top:14px"><button id="confirm" class="btn primary" disabled>Подтвердить экипаж</button></div></section>`;document.querySelectorAll(".topic-card").forEach(el=>el.onclick=()=>{const t=el.dataset.topic;if(selectedTopics.includes(t)){selectedTopics=selectedTopics.filter(x=>x!==t);el.classList.remove("selected")}else if(selectedTopics.length<3){selectedTopics.push(t);el.classList.add("selected")}document.getElementById("count").textContent=selectedTopics.length+"/3";document.getElementById("confirm").disabled=selectedTopics.length!==3});document.getElementById("confirm").onclick=()=>{try{AS.setStartCadets(r.code,p.id,selectedTopics);render()}catch(e){toast(e.message)}}}
 function renderWaiting(r,p){app.innerHTML=`<section class="card hero"><div class="phase">Готово</div><h1>🚀 ${p.company}</h1><p>Экипаж сформирован. Ожидаем учителя…</p><div class="kpis" style="justify-content:center"><span class="kpi">💰 300</span><span class="kpi">🛰️ 2/10</span><span class="kpi">👨‍🚀 3/5</span></div></section>`}
-function renderQuestion(r,p){const q=r.currentQuestion,left=Math.max(0,Math.ceil((r.deadline-Date.now())/1000));if(p.answered){app.innerHTML=`<section class="card hero"><div class="phase">${q.topicLabel}</div><div class="timer">${left} c</div><h2>🔒 Ответ принят</h2><p class="muted">Ожидаем остальных игроков.</p></section>`;return}app.innerHTML=`<section class="card"><div class="topbar"><div class="phase">${q.topicLabel} · ${q.difficulty}</div><div class="timer">${left} c</div></div><h1 style="font-size:clamp(1.7rem,6vw,3rem)">${q.text}</h1><input id="answer" class="input big-input" ${q.type==="NUMBER"?'inputmode="decimal"':''} placeholder="${q.type==="NUMBER"?"Введите число":"Введите ответ"}">${q.unit?`<p class="center muted">${q.unit}</p>`:""}<button id="submit" class="btn primary" style="width:100%;margin-top:12px" ${left<=0?"disabled":""}>Ответить</button></section>`;document.getElementById("submit").onclick=()=>{try{AS.submitAnswer(r.code,p.id,document.getElementById("answer").value);render()}catch(e){toast(e.message)}}}
+function renderQuestion(r,p){
+const q=r.currentQuestion,left=Math.max(0,Math.ceil((r.deadline-Date.now())/1000));
+if(draftRound!==r.round){draftRound=r.round;draftAnswer=""}
+if(p.answered){
+draftAnswer="";
+app.innerHTML=`<section class="card hero"><div class="phase">${q.topicLabel}</div><div id="questionTimer" class="timer">${left} c</div><h2>🔒 Ответ принят</h2><p class="muted">Ожидаем остальных игроков.</p></section>`;
+return
+}
+const safeDraft=String(draftAnswer).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+app.innerHTML=`<section class="card"><div class="topbar"><div class="phase">${q.topicLabel} · ${q.difficulty}</div><div id="questionTimer" class="timer">${left} c</div></div><h1 style="font-size:clamp(1.7rem,6vw,3rem)">${q.text}</h1><input id="answer" class="input big-input" ${q.type==="NUMBER"?'inputmode="decimal"':''} value="${safeDraft}" autocomplete="off" placeholder="${q.type==="NUMBER"?"Введите число":"Введите ответ"}">${q.unit?`<p class="center muted">${q.unit}</p>`:""}<button id="submit" class="btn primary" style="width:100%;margin-top:12px" ${left<=0?"disabled":""}>Ответить</button></section>`;
+const input=document.getElementById("answer");
+input.addEventListener("input",()=>{draftAnswer=input.value});
+document.getElementById("submit").onclick=()=>{try{draftAnswer=input.value;AS.submitAnswer(r.code,p.id,draftAnswer);draftAnswer="";render()}catch(e){toast(e.message)}}
+}
+function updateQuestionTimerOnly(){
+const r=room();
+if(!r||r.phase!=="QUESTION")return;
+const el=document.getElementById("questionTimer");
+if(!el)return;
+const left=Math.max(0,Math.ceil((r.deadline-Date.now())/1000));
+el.textContent=`${left} c`;
+const btn=document.getElementById("submit");
+if(btn&&left<=0)btn.disabled=true
+}
 function renderResult(r,p){const x=r.results?.items.find(i=>i.playerId===p.id),q=r.currentQuestion;if(!x){app.innerHTML=`<section class="card"><h2>Результат обрабатывается…</h2></section>`;return}const cls=x.isWinner?"result-good":x.valid?"result-good":x.submitted?"result-warn":"result-bad";const title=x.isWinner?"🏆 Лучший ответ!":x.valid?"✅ Верно!":x.submitted?"🌌 Ответ принят":"⌛ Ответ не отправлен";app.innerHTML=`<section class="card"><div class="phase">${q.topicLabel}</div><h1 class="${cls}">${title}</h1><p>Твой ответ: <strong>${x.submitted?x.answer:"—"}</strong></p><p>Правильный: <strong>${r.results.correct}${q.unit?" "+q.unit:""}</strong></p><div class="grid two"><div class="card center"><h2>💰 +${x.credits}</h2><span class="muted">кредиты</span></div><div class="card center"><h2>🧠 +${x.knowledge}</h2><span class="muted">знания</span></div></div>${x.grads?.length?`<div class="notice" style="margin-top:14px">🎓 Выпускников в этом раунде: ${x.grads.length} · +${x.grads.length*AS.ECON.graduation} 💰</div>`:""}<div class="notice" style="margin-top:14px">🤖 ${r.results.explanation}</div><p class="muted" style="margin-top:14px">Ожидаем учителя…</p></section>`}
 function activeCadets(p){return p.cadets.filter(c=>c.status==="ACTIVE")}
 function renderStation(r,p){const free=AS.freeSeats(p),active=activeCadets(p);app.innerHTML=`<div class="grid two"><section class="card"><div class="phase">Твоя станция</div><h1>🛰️ ${p.small+p.large}/10</h1><div class="kpis"><span class="kpi">Малые ${p.small}/7</span><span class="kpi">Большие ${p.large}/3</span><span class="kpi">👨‍🚀 ${active.length}/${p.seatCapacity}</span></div><div class="station-map">${Array.from({length:p.large},(_,i)=>`<div class="station-node">🛰️<br>BIG ${i+1}<br>3 места</div>`).join("")}${Array.from({length:p.small},(_,i)=>`<div class="station-node">🛰️<br>SMALL ${i+1}<br>2 места</div>`).join("")}</div><div class="notice">Свободных мест: <strong>${free}</strong></div></section><section class="card"><div class="phase">Действия</div><h2>Строительство</h2><div class="grid two"><button id="small" class="btn" ${r.phase!=="STATION"||p.small>=7||p.credits<AS.ECON.small||(p.moduleBoughtRound===r.round&&r.round>0)?"disabled":""}>Малый<br>650 💰<br>+2 места</button><button id="large" class="btn" ${r.phase!=="STATION"||p.large>=3||p.credits<AS.ECON.large||(p.moduleBoughtRound===r.round&&r.round>0)?"disabled":""}>Большой<br>950 💰<br>+3 места</button></div><div class="sep"></div><h2>Принять кадета</h2>${free>0&&r.phase==="STATION"?`<div class="grid two">${Object.entries(AS.TOPICS).map(([k,v])=>`<button class="btn ghost recruit" data-topic="${k}">${v.label}</button>`).join("")}</div>`:`<p class="muted">${free<=0?"Свободных мест нет.":"Ожидаем следующую фазу станции."}</p>`}</section></div><section class="card" style="margin-top:14px"><div class="phase">Экипаж</div><div class="grid three">${active.map(c=>`<div class="cadet-card"><strong>${AS.TOPICS[c.topic].label}</strong><p>${c.knowledge}/4</p><div class="progress"><span style="width:${c.knowledge/4*100}%"></span></div></div>`).join("")||"<p class='muted'>Нет активных кадетов.</p>"}</div></section>`;const sm=document.getElementById("small");if(sm)sm.onclick=()=>{try{AS.buyModule(r.code,p.id,"SMALL");render()}catch(e){toast(e.message)}};const lg=document.getElementById("large");if(lg)lg.onclick=()=>{try{AS.buyModule(r.code,p.id,"LARGE");render()}catch(e){toast(e.message)}};document.querySelectorAll(".recruit").forEach(b=>b.onclick=()=>{try{AS.recruitCadet(r.code,p.id,b.dataset.topic);render()}catch(e){toast(e.message)}})}
 function renderEnd(r,p){const ranked=AS.rank(r),pos=ranked.findIndex(x=>x.id===p.id)+1,w=r.winnerId?r.players.find(x=>x.id===r.winnerId):ranked[0];app.innerHTML=`<section class="card hero"><div class="phase">Игра окончена</div><h1>${w?.id===p.id?"🏆 ПОБЕДА!":"🚀 "+w?.company}</h1><p>${p.company} · место: <strong>${pos}</strong></p><div class="kpis" style="justify-content:center"><span class="kpi">🛰️ ${p.small+p.large}/10</span><span class="kpi">🎓 ${p.graduates}</span><span class="kpi">✅ ${p.correct}</span><span class="kpi">💰 ${p.credits}</span></div></section>`}
-AS.bc.onmessage=e=>{if(!roomCode||e.data.code===roomCode||e.data.type==="RESET")render()};window.addEventListener("storage",render);setInterval(()=>{const r=room();if(r?.phase==="QUESTION")render()},1000);render();
+AS.bc.onmessage=e=>{
+if(!roomCode||e.data.code===roomCode||e.data.type==="RESET"){
+const r=room(),p=me(r);
+if(r?.phase==="QUESTION"&&p&&!p.answered&&document.getElementById("answer")){
+updateQuestionTimerOnly();return
+}
+render()
+}
+};
+window.addEventListener("storage",()=>{
+const r=room(),p=me(r);
+if(r?.phase==="QUESTION"&&p&&!p.answered&&document.getElementById("answer")){
+updateQuestionTimerOnly();return
+}
+render()
+});
+// Обновляем только цифру таймера. Полный render() во время набора больше не вызывается.
+setInterval(updateQuestionTimerOnly,250);
+render();
