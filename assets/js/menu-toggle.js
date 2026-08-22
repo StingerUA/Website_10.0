@@ -180,7 +180,10 @@
     const raise = 68; // all mobile headers: move down about 2 mm (96 dpi ≈ 7.6 px) — lands the
                        // panel in the empty gap between the logo and the
                        // real nav row instead of directly on top of it.
-    const top = logo ? Math.round(logo.getBoundingClientRect().bottom) + gap - raise : 60;
+    const expandUp = 11; // 3 mm at the CSS 96 dpi reference (3 × 96 / 25.4 ≈ 11.3 px)
+    const top = logo
+      ? Math.round(logo.getBoundingClientRect().bottom) + gap - raise - expandUp
+      : 60 - expandUp;
 
     // setProperty(..., 'important') is required here: this codebase's
     // stylesheets are full of `!important` rules for .dropdown-menu, and a
@@ -199,7 +202,9 @@
     set('flex-wrap', 'nowrap');
     set('justify-content', 'center');
     set('gap', '3px');
-    set('padding', '3px');
+    // Add the same amount to the top padding that we subtract from top, so the
+    // lower edge and the button row stay in place while the panel grows upward.
+    set('padding', 'calc(3px + 3mm) 3px 3px');
     // Opaque background so nothing behind the panel (e.g. the real nav
     // row, which sits in this same spot) can show through the gaps
     // around/between the pills.

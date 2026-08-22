@@ -841,3 +841,15 @@ main, .page, .home-main, .shop-container, section,
     margin-top: calc(8px + 2mm) !important;
   }
 }
+
+
+/* Global mobile expansion: grow the panel upward while keeping its lower edge. */
+@media (max-width: 767px) {
+  .main-nav .dropdown-menu {
+    top: calc(100% + 4px - 3mm) !important;
+    padding-top: calc(3px + 3mm) !important;
+    padding-right: 3px !important;
+    padding-bottom: 3px !important;
+    padding-left: 3px !important;
+  }
+}
