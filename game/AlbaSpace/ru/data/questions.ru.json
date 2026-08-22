@@ -1,0 +1,333 @@
+[
+  {
+    "id": "p1",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Планеты",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Какая планета называется Красной планетой?",
+    "answers": [
+      "марс",
+      "mars"
+    ],
+    "explanation": "Марс выглядит красноватым из-за оксидов железа в его грунте."
+  },
+  {
+    "id": "p2",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Планеты",
+    "difficulty": "EASY",
+    "type": "NUMBER",
+    "text": "Сколько естественных спутников у Марса?",
+    "correct": 2,
+    "tolerance": 0,
+    "unit": "спутника",
+    "explanation": "У Марса два небольших спутника — Фобос и Деймос."
+  },
+  {
+    "id": "p3",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Планеты",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "Сколько планет в Солнечной системе?",
+    "correct": 8,
+    "tolerance": 0,
+    "unit": "планет",
+    "explanation": "В Солнечной системе восемь планет — от Меркурия до Нептуна."
+  },
+  {
+    "id": "p4",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Планеты",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Какая планета находится ближе всего к Солнцу?",
+    "answers": [
+      "меркурий",
+      "mercury"
+    ],
+    "explanation": "Меркурий — самая близкая к Солнцу планета."
+  },
+  {
+    "id": "p5",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Планеты",
+    "difficulty": "HARD",
+    "type": "NUMBER",
+    "text": "Примерно сколько земных суток длится год на Марсе?",
+    "correct": 687,
+    "tolerance": 70,
+    "unit": "суток",
+    "explanation": "Марсианский год длится примерно 687 земных суток."
+  },
+  {
+    "id": "s1",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Спутники",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Как называется естественный спутник Земли?",
+    "answers": [
+      "луна",
+      "moon"
+    ],
+    "explanation": "Луна — единственный естественный спутник Земли."
+  },
+  {
+    "id": "s2",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Спутники",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Как назывался первый искусственный спутник Земли?",
+    "answers": [
+      "спутник 1",
+      "спутник-1",
+      "sputnik 1",
+      "sputnik-1"
+    ],
+    "explanation": "«Спутник-1» был запущен 4 октября 1957 года."
+  },
+  {
+    "id": "s3",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Спутники",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "В каком году был запущен «Спутник-1»?",
+    "correct": 1957,
+    "tolerance": 0,
+    "unit": "год",
+    "explanation": "Первый искусственный спутник Земли стартовал в 1957 году."
+  },
+  {
+    "id": "s4",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Спутники",
+    "difficulty": "HARD",
+    "type": "NUMBER",
+    "text": "Примерно за сколько минут Международная космическая станция делает один оборот вокруг Земли?",
+    "correct": 90,
+    "tolerance": 12,
+    "unit": "минут",
+    "explanation": "МКС совершает оборот вокруг Земли примерно за 90 минут."
+  },
+  {
+    "id": "s5",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Спутники",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Как называется крупнейший естественный спутник Земли?",
+    "answers": [
+      "луна",
+      "moon"
+    ],
+    "explanation": "Луна — спутник Земли и один из крупнейших спутников относительно своей планеты."
+  },
+  {
+    "id": "t1",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Телескопы",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Как называется знаменитый космический телескоп, запущенный в 1990 году?",
+    "answers": [
+      "хаббл",
+      "hubble",
+      "телескоп хаббл"
+    ],
+    "explanation": "Космический телескоп Hubble работает на орбите Земли с 1990 года."
+  },
+  {
+    "id": "t2",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Телескопы",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Как называется космический телескоп, часто сокращаемый как JWST?",
+    "answers": [
+      "джеймс уэбб",
+      "джеймс вебб",
+      "james webb",
+      "jwst",
+      "уэбб",
+      "вебб"
+    ],
+    "explanation": "JWST — космический телескоп имени Джеймса Уэбба."
+  },
+  {
+    "id": "t3",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Телескопы",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "В каком году был запущен телескоп Hubble?",
+    "correct": 1990,
+    "tolerance": 0,
+    "unit": "год",
+    "explanation": "Hubble был выведен на орбиту в апреле 1990 года."
+  },
+  {
+    "id": "t4",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Телескопы",
+    "difficulty": "HARD",
+    "type": "NUMBER",
+    "text": "Примерно какого диаметра главное зеркало James Webb?",
+    "correct": 6.5,
+    "tolerance": 1,
+    "unit": "метра",
+    "explanation": "Главное зеркало JWST имеет диаметр примерно 6,5 метра."
+  },
+  {
+    "id": "t5",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Телескопы",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Что используют астрономы для наблюдения очень далёких объектов в космосе?",
+    "answers": [
+      "телескоп",
+      "телескопы",
+      "telescope"
+    ],
+    "explanation": "Телескопы собирают свет и другое излучение от далёких космических объектов."
+  },
+  {
+    "id": "r1",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Марсоходы",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Как называется марсоход NASA, который высадился на Марсе в 2021 году?",
+    "answers": [
+      "perseverance",
+      "персеверанс",
+      "персеверенс"
+    ],
+    "explanation": "Perseverance совершил посадку в кратере Езеро в феврале 2021 года."
+  },
+  {
+    "id": "r2",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Марсоходы",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Как называется марсоход NASA, работающий на Марсе с 2012 года?",
+    "answers": [
+      "curiosity",
+      "кьюриосити"
+    ],
+    "explanation": "Curiosity исследует кратер Гейла с 2012 года."
+  },
+  {
+    "id": "r3",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Марсоходы",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Как назывался один из марсоходов-близнецов NASA, прибывших на Марс в 2004 году, вместе со Spirit?",
+    "answers": [
+      "opportunity",
+      "оппортьюнити",
+      "оппортюнити"
+    ],
+    "explanation": "Spirit и Opportunity прибыли на Марс в 2004 году."
+  },
+  {
+    "id": "r4",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Марсоходы",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "В каком году марсоход Curiosity совершил посадку на Марс?",
+    "correct": 2012,
+    "tolerance": 0,
+    "unit": "год",
+    "explanation": "Curiosity высадился на Марсе 6 августа 2012 года."
+  },
+  {
+    "id": "r5",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Марсоходы",
+    "difficulty": "HARD",
+    "type": "TEXT",
+    "text": "Как называется небольшой вертолёт, доставленный на Марс вместе с Perseverance?",
+    "answers": [
+      "ingenuity",
+      "индженьюити",
+      "инженюити"
+    ],
+    "explanation": "Ingenuity стал первым аппаратом, совершившим управляемый полёт на другой планете."
+  },
+  {
+    "id": "tr1",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Турецкие спутники",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Как называется турецкий спутник наблюдения Земли, запущенный в 2023 году?",
+    "answers": [
+      "imece",
+      "i̇mece",
+      "имедже"
+    ],
+    "explanation": "İMECE — турецкий спутник наблюдения Земли, запущенный в 2023 году."
+  },
+  {
+    "id": "tr2",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Турецкие спутники",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Как называется серия турецких телекоммуникационных спутников?",
+    "answers": [
+      "türksat",
+      "turksat",
+      "тюрксат"
+    ],
+    "explanation": "TÜRKSAT — серия турецких спутников связи."
+  },
+  {
+    "id": "tr3",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Турецкие спутники",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Как называется турецкий спутник наблюдения Земли, предшествовавший Göktürk-2 и запущенный в 2011 году?",
+    "answers": [
+      "rasat",
+      "расат"
+    ],
+    "explanation": "RASAT — первый спутник наблюдения Земли, спроектированный и изготовленный в Турции."
+  },
+  {
+    "id": "tr4",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Турецкие спутники",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "В каком году был запущен Göktürk-2?",
+    "correct": 2012,
+    "tolerance": 0,
+    "unit": "год",
+    "explanation": "Göktürk-2 был запущен 18 декабря 2012 года."
+  },
+  {
+    "id": "tr5",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Турецкие спутники",
+    "difficulty": "HARD",
+    "type": "TEXT",
+    "text": "Как называется первый турецкий спутник связи, построенный внутри страны и запущенный в 2024 году?",
+    "answers": [
+      "türksat 6a",
+      "turksat 6a",
+      "тюрксат 6a",
+      "тюрксат 6а"
+    ],
+    "explanation": "TÜRKSAT 6A — первый турецкий спутник связи отечественной разработки."
+  }
+]
