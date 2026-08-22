@@ -175,8 +175,9 @@
     }
 
     const logo = document.querySelector('.main-center-logo');
+    const isBlackHeader = !!document.querySelector('.site-header--black');
     const gap = 8;
-    const raise = 76; // ~2cm (96dpi CSS reference: 1cm ≈ 37.8px) — lands the
+    const raise = 68; // all mobile headers: move down about 2 mm (96 dpi ≈ 7.6 px) — lands the
                        // panel in the empty gap between the logo and the
                        // real nav row instead of directly on top of it.
     const top = logo ? Math.round(logo.getBoundingClientRect().bottom) + gap - raise : 60;
@@ -202,7 +203,10 @@
     // Opaque background so nothing behind the panel (e.g. the real nav
     // row, which sits in this same spot) can show through the gaps
     // around/between the pills.
-    set('background', '#0a1628');
+    set('background', isBlackHeader ? '#ffffff' : '#0a1628');
+    if (isBlackHeader) {
+      set('border', '1px solid rgba(0, 0, 0, 0.12)');
+    }
     set('border-radius', '8px');
     set('z-index', '2147483647');
 
@@ -222,6 +226,9 @@
       setItem('align-items', 'center');
       setItem('justify-content', 'center');
       setItem('text-align', 'center');
+      if (isBlackHeader) {
+        setItem('color', '#111827');
+      }
     });
   }
 

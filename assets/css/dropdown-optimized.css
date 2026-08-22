@@ -806,3 +806,38 @@ main, .page, .home-main, .shop-container, section,
     box-sizing: border-box !important;
   }
 }
+
+
+/* ============================================================================
+   BLACK HEADER MOBILE DROPDOWNS — white menu surface
+   The inline menu-toggle.js rule is the primary mobile positioning path;
+   this block covers stylesheet-only/fallback rendering for black headers.
+   ============================================================================ */
+@media (max-width: 767px) {
+  .site-header--black .main-nav .dropdown-menu {
+    top: calc(100% + 4px) !important;
+    margin-top: calc(8px + 2mm) !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24) !important;
+  }
+
+  .site-header--black .main-nav .dropdown-menu a,
+  .site-header--black .main-nav .dropdown-menu button {
+    color: #111827 !important;
+  }
+
+  .site-header--black .main-nav .dropdown-menu a:hover,
+  .site-header--black .main-nav .dropdown-menu button:hover {
+    background-color: #f3f4f6 !important;
+    color: #111827 !important;
+  }
+}
+
+
+/* Global mobile offset: applies to ordinary and black header variants. */
+@media (max-width: 767px) {
+  .main-nav .dropdown-menu {
+    margin-top: calc(8px + 2mm) !important;
+  }
+}
