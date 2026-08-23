@@ -6,6 +6,10 @@ const TOPICS = {
   TURKISH_SATELLITES: { label: "🟡 Турецкие спутники" }
 };
 
+const PRESENTATION_MODES = {
+  "3D": { label: "3D · ноутбуки на столах", description: "Полный интерфейс станции на ноутбуке каждого игрока." },
+  "AR": { label: "AR · телефоны и якоря", description: "Интерфейс станции поверх камеры телефона с якорем на столе." }
+};
 const MODES = {
   SPRINT: { label: "⚡ Спринт", answer: { EASY: 12, NORMAL: 17, HARD: 22, EXPERT: 27 } },
   STANDARD: { label: "⚖️ Стандарт", answer: { EASY: 15, NORMAL: 24, HARD: 30, EXPERT: 36 } },
@@ -63,6 +67,8 @@ function safeState(state, user) {
   const viewerId = userId(user);
   const role = isTeacher(state, viewerId) ? "teacher" : "player";
   const output = clone(state);
+  output.presentationMode = PRESENTATION_MODES[state.presentationMode] ? state.presentationMode : "3D";
+  output.presentation = PRESENTATION_MODES[output.presentationMode];
   output.currentQuestion = safeQuestion(state.currentQuestion, role, state.phase);
   output.players = output.players.map(player => {
     const item = { ...player, lastAnswer: null };
@@ -76,19 +82,19 @@ function safeState(state, user) {
   return { ...output, role };
 }
 
-function initialState(roomId, code, mode, teacher) {
+function initialState(roomId, code, mode, teacher, presentationMode = "3D") {
   return {
-    roomId, code, status: "LOBBY", phase: "LOBBY", mode: MODES[mode] ? mode : "STANDARD", round: 0,
+    roomId, code, status: "LOBBY", phase: "LOBBY", mode: MODES[mode] ? mode : "STANDARD", presentationMode: PRESENTATION_MODES[presentationMode] ? presentationMode : "3D", round: 0,
     teacherUserId: userId(teacher), teacher: { name: teacher.name || teacher.email || "Учитель", email: teacher.email || "" },
     players: [], usedQuestionIds: [], topicBag: [], currentQuestion: null, deadline: null, startedAt: null,
-    results: null, winnerId: null, createdAt: now(), updatedAt: now(), sessionId: id()
+    results: null, winnerId: null, createdAt: now(), updatedAt: now(), version: 1, anchorProtocol: "TABLE_ANCHOR_V1", sessionId: id()
   };
 }
 
 export class GameRoomDO {
   constructor(state, env) { this.state = state; this.env = env; this.subscribers = new Map(); }
   async load() { return (await this.state.storage.get("room")) || null; }
-  async save(room) { room.updatedAt = now(); await this.state.storage.put("room", room); return room; }
+  async save(room) { room.updatedAt = now(); room.version = Number(room.version || 0) + 1; await this.state.storage.put("room", room); return room; }
   async emit(room, type, payload = {}) {
     for (const [controller, subscriber] of this.subscribers) {
       try {
@@ -104,7 +110,7 @@ export class GameRoomDO {
       if (url.pathname === "/init" && request.method === "POST") {
         const body = await request.json();
         const current = await this.load();
-        if (!current) { const room = initialState(body.roomId, body.code, body.mode, user); await this.save(room); return json({ ok: true, state: safeState(room, user) }); }
+        if (!current) { const room = initialState(body.roomId, body.code, body.mode, user, body.presentationMode); await this.save(room); return json({ ok: true, state: safeState(room, user) }); }
         return json({ ok: true, state: safeState(current, user) });
       }
       if (url.pathname === "/snapshot") {
@@ -124,9 +130,10 @@ export class GameRoomDO {
     if (!isTeacher(room, userId(user)) && !playerFor(room, userId(user))) throw new GameError("Нет доступа к комнате", 403);
     const encoder = new TextEncoder();
     let controllerRef;
+    let heartbeat;
     const stream = new ReadableStream({
-      start: controller => { controllerRef = controller; this.subscribers.set(controller, { user }); controller.enqueue(encoder.encode(`event: ROOM_SNAPSHOT\ndata: ${JSON.stringify({ type: "ROOM_SNAPSHOT", state: safeState(room, user) })}\n\n`)); },
-      cancel: () => { if (controllerRef) this.subscribers.delete(controllerRef); }
+      start: controller => { controllerRef = controller; this.subscribers.set(controller, { user }); controller.enqueue(encoder.encode(`event: ROOM_SNAPSHOT\ndata: ${JSON.stringify({ type: "ROOM_SNAPSHOT", state: safeState(room, user) })}\n\n`)); heartbeat = setInterval(() => { try { controller.enqueue(encoder.encode(`: heartbeat ${Date.now()}\n\n`)); } catch { clearInterval(heartbeat); this.subscribers.delete(controller); } }, 15000); },
+      cancel: () => { clearInterval(heartbeat); if (controllerRef) this.subscribers.delete(controllerRef); }
     });
     return new Response(stream, { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", Connection: "keep-alive" } });
   }
@@ -168,7 +175,8 @@ export class GameRoomDO {
     if (room.players.some(player => player.userId === uid)) return;
     if (room.status !== "LOBBY") throw new GameError("Игра уже началась");
     if (room.players.length >= 10) throw new GameError("В комнате уже 10 игроков");
-    room.players.push({ id: id(), userId: uid, name: user.name || user.email || "Игрок", email: user.email || "", company: "", ready: false, credits: ECON.start, small: 1, large: 1, seatCapacity: 5, cadets: [], graduates: 0, correct: 0, wins: 0, answered: false, lastAnswer: null, moduleBoughtRound: 0, online: true });
+    const stationNumber = room.players.length + 1;
+    room.players.push({ id: id(), userId: uid, name: user.name || user.email || "Игрок", email: user.email || "", company: "", ready: false, credits: ECON.start, small: 1, large: 1, seatCapacity: 5, cadets: [], graduates: 0, correct: 0, wins: 0, answered: false, lastAnswer: null, moduleBoughtRound: 0, online: true, stationNumber, anchor: { id: `TABLE-${String(stationNumber).padStart(2, "0")}`, label: `Якорь стола ${stationNumber}`, protocol: "TABLE_ANCHOR_V1" } });
   }
   requireTeacher(room, user) { if (!isTeacher(room, userId(user))) throw new GameError("Только учитель может выполнить это действие", 403); }
   getPlayer(room, user) { const player = playerFor(room, userId(user)); if (!player) throw new GameError("Игрок не найден", 403); return player; }
@@ -194,9 +202,10 @@ export async function handleGameRequest(request, env, user, cors) {
     if (url.pathname === "/api/game/rooms" && request.method === "POST") {
       const body = await request.json().catch(() => ({}));
       const mode = MODES[body.mode] ? body.mode : "STANDARD";
+      const presentationMode = PRESENTATION_MODES[body.presentationMode] ? body.presentationMode : "3D";
       let roomId = id(), code = String(10000 + Math.floor(Math.random() * 90000));
       for (let attempt = 0; attempt < 8; attempt++) { try { await env.DB.prepare("INSERT INTO game_rooms (room_id, join_code, teacher_user_id, mode, status, phase, state_json, created_at, updated_at) VALUES (?, ?, ?, ?, 'LOBBY', 'LOBBY', ?, ?, ?)").bind(roomId, code, userId(user), mode, "{}", Math.floor(now() / 1000), Math.floor(now() / 1000)).run(); break; } catch (error) { if (attempt === 7) throw error; roomId = id(); code = String(10000 + Math.floor(Math.random() * 90000)); } }
-      const result = await roomFetch(env, roomId, "/init", "POST", user, { roomId, code, mode });
+      const result = await roomFetch(env, roomId, "/init", "POST", user, { roomId, code, mode, presentationMode });
       return json(result, 201, headers);
     }
     if (url.pathname === "/api/game/rooms/join" && request.method === "POST") {
