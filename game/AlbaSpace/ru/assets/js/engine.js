@@ -9,17 +9,64 @@ const AS = (() => {
     TURKISH_SATELLITES:{label:"🟡 Турецкие спутники"}
   };
   const MODES = {
-    // На любой вопрос даём минимум 60 секунд даже в самом быстром режиме.
-    SPRINT:{label:"⚡ Спринт", answer:{EASY:60,NORMAL:65,HARD:70,EXPERT:75}, station:10},
-    STANDARD:{label:"⚖️ Стандарт", answer:{EASY:75,NORMAL:80,HARD:90,EXPERT:100}, station:12},
-    LEARNING:{label:"🐢 Обучение", answer:{EASY:90,NORMAL:100,HARD:110,EXPERT:120}, station:15}
+    // Это только рекомендуемое время для преподавателя. Оно НЕ блокирует ответы игроков.
+    SPRINT:{label:"⚡ Спринт", answer:{EASY:12,NORMAL:17,HARD:22,EXPERT:27}, station:7},
+    STANDARD:{label:"⚖️ Стандарт", answer:{EASY:15,NORMAL:24,HARD:30,EXPERT:36}, station:8},
+    LEARNING:{label:"🐢 Обучение", answer:{EASY:20,NORMAL:30,HARD:38,EXPERT:45}, station:9}
   };
   const ECON = {start:300, participation:10, winner:30, graduation:350, small:650, large:950};
   const MAX = {small:7, large:3, knowledge:4};
 
   const clone = v => JSON.parse(JSON.stringify(v));
   const uid = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)+Date.now();
-  const normalize = s => String(s ?? "").trim().toLowerCase().replace(/\s+/g," ");
+  const normalize = s => String(s ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/ё/g,"е")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/[’'`´]/g,"")
+    .replace(/[^\p{L}\p{N}]+/gu," ")
+    .replace(/\s+/g," ")
+    .trim();
+
+  // Damerau-Levenshtein: разрешает обычные опечатки и перестановку соседних букв.
+  function damerauDistance(a,b){
+    a=normalize(a).replace(/\s/g,"");
+    b=normalize(b).replace(/\s/g,"");
+    const n=a.length,m=b.length;
+    const d=Array.from({length:n+1},()=>Array(m+1).fill(0));
+    for(let i=0;i<=n;i++)d[i][0]=i;
+    for(let j=0;j<=m;j++)d[0][j]=j;
+    for(let i=1;i<=n;i++){
+      for(let j=1;j<=m;j++){
+        const cost=a[i-1]===b[j-1]?0:1;
+        d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+cost);
+        if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]) d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1);
+      }
+    }
+    return d[n][m];
+  }
+
+  function textAnswerMatches(given,accepted){
+    const g=normalize(given);
+    if(!g)return false;
+    return (accepted||[]).some(raw=>{
+      const a=normalize(raw);
+      if(!a)return false;
+      if(g===a)return true;
+      const gc=g.replace(/\s/g,"");
+      const ac=a.replace(/\s/g,"");
+      if(gc===ac)return true;
+      const len=Math.max(gc.length,ac.length);
+      let allowed=0;
+      if(len<=5)allowed=1;
+      else if(len<=9)allowed=2;
+      else if(len<=15)allowed=3;
+      else allowed=4;
+      return damerauDistance(gc,ac)<=allowed;
+    });
+  }
   const roomKey = code => ROOM_PREFIX + code;
   const bc = new BroadcastChannel(CHANNEL);
 
@@ -111,6 +158,7 @@ const AS = (() => {
     if(room.players.length<2) throw new Error("Нужно минимум 2 игрока");
     if(room.players.some(p=>!p.ready)) throw new Error("Не все игроки готовы");
     room.status="ACTIVE"; room.phase="STATION"; room.round=0;
+    room.startedAt=Date.now();
     saveRoom(room); return room;
   }
 
@@ -129,7 +177,7 @@ const AS = (() => {
   function submitAnswer(code,playerId,value){
     const room=loadRoom(code); if(!room) throw new Error("Комната не найдена");
     if(room.phase!=="QUESTION") throw new Error("Сейчас нельзя отвечать");
-    if(Date.now()>room.deadline) throw new Error("Время ответа закончилось");
+    // deadline — только подсказка учителю; после его истечения ответы продолжают приниматься.
     const p=room.players.find(x=>x.id===playerId); if(!p) throw new Error("Игрок не найден");
     if(p.answered) throw new Error("Ответ уже отправлен");
     const q=room.currentQuestion;
@@ -150,8 +198,7 @@ const AS = (() => {
       const d=Math.abs(Number(answer)-Number(q.correct));
       return {submitted:true,valid:d<=Number(q.tolerance||0),distance:d};
     }
-    const a=normalize(answer);
-    return {submitted:true,valid:(q.answers||[]).some(x=>normalize(x)===a),distance:null};
+    return {submitted:true,valid:textAnswerMatches(answer,q.answers||[]),distance:null};
   }
 
   function allocateKnowledge(p,topic,amount){
