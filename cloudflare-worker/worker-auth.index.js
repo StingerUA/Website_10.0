@@ -30,6 +30,9 @@ const MANUAL_ACCESS = {
   ],
 };
 
+import { handleGameRequest, GameRoomDO } from "./game-backend.js";
+export { GameRoomDO };
+
 const SESSION_COOKIE     = "albaspace_session";
 const OAUTH_STATE_COOKIE = "albaspace_oauth_state";
 
@@ -53,6 +56,13 @@ async function handleRequest(request, env) {
 
   if (request.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: cors });
+  }
+
+  // 🎮 GAME BACKEND — uses the same AlbaSpace session as the rest of the site.
+  if (url.pathname.startsWith("/api/game/")) {
+    const user = await getSessionUser(request, env);
+    if (!user) return json({ error: "Войдите в AlbaSpace, чтобы играть" }, 401, cors);
+    return handleGameRequest(request, env, user, cors);
   }
 
   // =========================

@@ -1,8 +1,17 @@
 name = "albaspace-api"
-main = "src/index.js"
+main = "worker-auth.index.js"
 compatibility_date = "2026-04-06"
 
 workers_dev = true
+compatibility_flags = ["streams_enable_constructors"]
+
+[[durable_objects.bindings]]
+name = "GAME_ROOMS"
+class_name = "GameRoomDO"
+
+[[migrations]]
+tag = "game-v02"
+new_sqlite_classes = ["GameRoomDO"]
 
 [[d1_databases]]
 binding = "DB"

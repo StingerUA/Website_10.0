@@ -134,3 +134,25 @@ Check:
 - redirect URI matches exactly
 - OAuth consent screen is published
 - test user is added if the app is still in testing mode
+
+
+## AlbaSpace Game v0.2
+
+Этот же Worker теперь может обслуживать игру через `/api/game/*`, используя ту же `albaspace_session`, что и основной сайт. Игровые комнаты сериализуются Durable Object `GameRoomDO`, а D1 хранит durable snapshot и audit events.
+
+Перед деплоем примените обновлённый `schema.sql` к существующей D1 database и добавьте binding `GAME_ROOMS` из `wrangler.toml.example`. Entry point должен быть `worker-auth.index.js`; класс `GameRoomDO` экспортируется из этого entrypoint. Существующие Google OAuth secrets менять не нужно.
+
+Основные маршруты игры: `POST /api/game/rooms`, `POST /api/game/rooms/join`, `GET /api/game/rooms/<roomId>/snapshot`, `GET /api/game/rooms/<roomId>/events` и `POST /api/game/rooms/<roomId>/command`. Realtime используется через авторизованный SSE-канал; каждая команда содержит `requestId`, а Durable Object предотвращает повторное выполнение одной и той же команды.
+
+Для проверки логики без Cloudflare можно выполнить из корня репозитория:
+
+```bash
+node cloudflare-worker/tests/game-backend.smoke.mjs
+```
+
+Для рабочего запуска после применения D1 schema и настройки binding:
+
+```bash
+cd cloudflare-worker
+wrangler deploy
+```
