@@ -42,6 +42,7 @@ const ORBITAL_CREW_URL = "https://whoisinspace.com/";
 let orbitalLaunchesCache = null;
 let orbitalIssCache = null;
 let orbitalCrewCache = null;
+let orbitalMissionCache = null;
 
 // =========================
 // 🚀 ENTRY POINT
@@ -482,6 +483,44 @@ function orbitalDecodeHtml(value) {
   return String(value).replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&").replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").replace(/\s+/g, " ").trim();
 }
 
+function orbitalMissionLabel(value) {
+  return orbitalDecodeHtml(value).replace(/^ISS\s*-\s*/i, "").replace(/\s+/g, " ").trim();
+}
+
+function orbitalMissionName(value) {
+  return orbitalMissionLabel(value).replace(/^spacex\s+crew-/i, "SpaceX Crew-").replace(/^soyuz\s+ms-/i, "Soyuz MS-");
+}
+
+function orbitalMissionInfobox(html, label) {
+  const match = String(html).match(new RegExp(`>${label}<\\/th>\\s*<td[^>]*>([\\s\\S]*?)<\\/td>`, "i"));
+  return match ? orbitalDecodeHtml(match[1].replace(/<[^>]+>/g, " ")) : "";
+}
+
+function orbitalMissionDuration(value) {
+  const days = Number(String(value).match(/(\d+)\s*days?/i)?.[1] || 0);
+  const hours = Number(String(value).match(/(\d+)\s*hours?/i)?.[1] || 0);
+  const minutes = Number(String(value).match(/(\d+)\s*minutes?/i)?.[1] || 0);
+  const total = days * 86400000 + hours * 3600000 + minutes * 60000;
+  return Number.isFinite(total) && total > 0 ? total : null;
+}
+
+function normalizeOrbitalMission(mission, crew, html, now) {
+  const landing = orbitalMissionInfobox(html, "Landing date");
+  if (!landing) return null;
+  const name = orbitalMissionName(mission);
+  const dockedFor = orbitalMissionDuration(orbitalMissionInfobox(html, "Time docked"));
+  return {
+    id: name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+    name,
+    vehicle: /^spacex/i.test(name) ? "Dragon" : /^soyuz/i.test(name) ? "Soyuz" : name,
+    crew,
+    arrival: dockedFor ? new Date(now - dockedFor).toISOString() : null,
+    returnWindow: landing.replace(/\s*\((?:planned|in progress)\)\s*/i, "").trim(),
+    returnStatus: /planned/i.test(landing) ? "planned" : "target",
+    source: "Open mission record"
+  };
+}
+
 function normalizeOrbitalCrew(html) {
   const headings = [];
   const headerPattern = /<h2[^>]*>([\s\S]*?)<\/h2>/gi;
@@ -567,10 +606,34 @@ async function orbitalCrew(now) {
   }
 }
 
+async function orbitalMissions(crew, now) {
+  if (orbitalMissionCache?.expiresAt > now) return orbitalMissionCache.value;
+  const groups = {};
+  for (const member of crew) {
+    const label = orbitalMissionLabel(member.mission);
+    if (label) groups[label] = [...(groups[label] || []), member.name];
+  }
+  try {
+    const results = await Promise.all(Object.entries(groups).map(async ([label, members]) => {
+      const page = orbitalMissionName(label).replace(/\s+/g, "_");
+      const payload = await orbitalFetch(`https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(page)}&prop=text&format=json&origin=*`);
+      const html = payload?.parse?.text?.["*"] || "";
+      return html ? normalizeOrbitalMission(label, members, html, now) : null;
+    }));
+    const value = results.filter(Boolean);
+    if (value.length) orbitalMissionCache = { value, expiresAt: now + 30 * 60 * 1000 };
+    return value.length ? value : orbitalMissionCache?.value || [];
+  } catch (error) {
+    console.warn("Orbital Atlas mission source unavailable", error);
+    return orbitalMissionCache?.value || [];
+  }
+}
+
 async function orbitalOverview(cors) {
   const now = Date.now();
   const [launches, iss, crew] = await Promise.all([orbitalLaunches(now), orbitalIss(now), orbitalCrew(now)]);
-  return json({ launches, iss, crew, updatedAt: new Date(now).toISOString() }, 200, { ...cors, "Cache-Control": "public, max-age=15" });
+  const missions = await orbitalMissions(crew, now);
+  return json({ launches, iss, crew, missions, updatedAt: new Date(now).toISOString() }, 200, { ...cors, "Cache-Control": "public, max-age=15" });
 }
 
 function redirect(location, headers = {}) {
