@@ -2,22 +2,13 @@
 
 ## Цель
 
-Этот режим сохраняет Albamen AI в production без обязательной платы за Azure. Azure OpenAI, Azure Speech, Azure AI Search и Azure AI Content Safety не включаются автоматически, потому что для них нельзя гарантировать постоянную бесплатную эксплуатацию. Текущий LLM-контур остаётся `Groq → Cloudflare Workers AI fallback`, а голос остаётся на Workers AI.
+Этот режим сохраняет Albamen AI в production без обязательной платы за Azure. Azure OpenAI, Azure Speech, Azure AI Search и Azure AI Content Safety не включаются автоматически, потому что для них нельзя гарантировать постоянную бесплатную эксплуатацию. Текущий LLM-контур остаётся `Groq → Cloudflare Workers AI fallback`, а голос остаётся на Workers AI. Telegram-логирование пользовательского контента включено по решению владельца.
 
-## Что подключено бесплатно
+## Azure отключён в production
 
-Ресурс `albaspace-translator-2026` в Azure Portal создан как Azure Translator и проверен на тарифе `F0 Бесплатный`. Microsoft указывает для F0 до 2 миллионов символов в месяц. Worker поддерживает endpoint `POST /api/translate`, но по умолчанию он выключен через `AZURE_TRANSLATOR_ENABLED = "false"`.
+Ресурс `albaspace-translator-2026` в Azure Portal не используется. Endpoint `POST /api/translate` удалён и возвращает `404`, а любые Azure Translator настройки исключены из wrangler-конфига. Это сделано по прямому решению владельца.
 
-Для его включения необходимы только настройки в Cloudflare secrets/vars:
-
-```text
-AZURE_TRANSLATOR_ENABLED=true
-AZURE_TRANSLATOR_ENDPOINT=https://api.cognitive.microsofttranslator.com
-AZURE_TRANSLATOR_REGION=<если регион требуется ресурсом>
-AZURE_TRANSLATOR_KEY=<secret, не коммитить>
-```
-
-Worker самостоятельно ограничивает запросы перевода до 10 000 символов на один запрос, 20 запросов в минуту и 1,8 миллиона зарезервированных символов в месяц. Запас 200 000 символов оставлен для защиты от расхождения счётчиков и повторных запросов.
+Azure OpenAI, Azure Speech, Azure AI Search и Azure AI Content Safety можно рассматривать только как отдельные тестовые функции после подтверждения бюджета и лимитов. Ни одна из них не должна включаться через production-конфиг автоматически.
 
 ## Важная граница
 
@@ -32,15 +23,15 @@ Cloudflare Workers AI предоставляет бесплатную дневн
 - Для голоса добавлены лимит тела и отдельный rate limit 8 запросов в минуту.
 - Разрешены только языки `ru`, `tr`, `en`.
 - `sessionId` нормализуется и ограничивается безопасным шаблоном.
-- Telegram-логирование пользовательского контента выключено по умолчанию через `TELEGRAM_LOGGING_ENABLED`.
+- Telegram-логирование пользовательского контента включено по умолчанию; его можно отключить через `TELEGRAM_LOGGING_ENABLED=false`.
 - История KV защищена от повреждённого JSON.
-- Для Translator F0 добавлены endpoint, лимиты и graceful error handling.
+- Удалён Azure Translator route, чтобы он не мог случайно вызываться.
 
 ## Проверка перед production deploy
 
 Сначала запустить `node cloudflare-worker/free-mode.smoke.mjs`. Затем проверить `node --check cloudflare-worker/divine-flower-a0ae-full-final.worker.js` и `git diff --check`.
 
-Перед публикацией в Cloudflare необходимо проверить, что `ALLOWED_ORIGINS` содержит все реальные frontend-домены. Секрет `AZURE_TRANSLATOR_KEY` добавляется только в Cloudflare и никогда не помещается в GitHub. Нельзя нажимать переход Azure на оплату по мере использования, если требование `$0` остаётся обязательным.
+Перед публикацией в Cloudflare необходимо проверить, что `ALLOWED_ORIGINS` содержит все реальные frontend-домены, а `TELEGRAM_TOKEN` и `TELEGRAM_CHAT_ID` добавлены только как Cloudflare secrets. Секреты никогда не помещаются в GitHub. Нельзя нажимать переход Azure на оплату по мере использования, если требование `$0` остаётся обязательным.
 
 ## Источники
 

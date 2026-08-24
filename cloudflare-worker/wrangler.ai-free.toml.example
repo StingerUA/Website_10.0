@@ -18,16 +18,10 @@ binding = "AI"
 ALLOWED_ORIGINS = "https://albaspace.com.tr,https://www.albaspace.com.tr"
 
 # Azure OpenAI намеренно отсутствует: он не является постоянным бесплатным сервисом.
-# Azure Translator F0 включается отдельным флагом только после проверки тарифа.
-AZURE_TRANSLATOR_ENABLED = "false"
-AZURE_TRANSLATOR_ENDPOINT = "https://api.cognitive.microsofttranslator.com"
-# AZURE_TRANSLATOR_REGION = "..."  # добавьте только если ресурс требует региональный заголовок
+# Логирование пользовательского контента включено по решению владельца.
+TELEGRAM_LOGGING_ENABLED = "true"
 
-# Не отправлять пользовательский контент в Telegram по умолчанию.
-TELEGRAM_LOGGING_ENABLED = "false"
-
-# Секрет добавляется только в Cloudflare, не в Git:
+# Секреты добавляются только в Cloudflare, не в Git:
 # wrangler secret put GROQ_API_KEY
-# wrangler secret put AZURE_TRANSLATOR_KEY
 # wrangler secret put TELEGRAM_TOKEN
 # wrangler secret put TELEGRAM_CHAT_ID

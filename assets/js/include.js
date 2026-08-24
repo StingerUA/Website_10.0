@@ -335,32 +335,65 @@ runAfterDomReady(() => {
     const isRu = path.startsWith('/rus/');
 
     const strings = isEn ? {
+      title: 'Albamen AI',
       placeholder: 'Send a message...',
       listening: 'Listening...',
       connect: 'Connecting...',
+      thinking: 'Albamen is thinking…',
       initialStatus: 'How can I help you today?',
       talkPrompt: 'Tap and Talk 🔊',
       welcomeBack: 'Welcome back, ',
       voiceNotSupported: 'Voice not supported',
-      connectionError: 'Connection error.'
+      connectionError: 'Connection error.',
+      callTitle: 'Start voice conversation',
+      fullScreenTitle: 'Toggle full screen',
+      closeTitle: 'Close assistant',
+      clearTitle: 'Start a new conversation',
+      copy: 'Copy answer',
+      copied: 'Copied',
+      retry: 'Try again',
+      quickLabel: 'Try a topic',
+      quickPrompts: ['Explain a planet', 'Tell me a space fact', 'Ask me a riddle', 'Tell me about the book']
     } : isRu ? {
+      title: 'Albamen AI',
       placeholder: 'Напишите сообщение...',
       listening: 'Слушаю...',
       connect: 'Подключение...',
+      thinking: 'Альбамен думает…',
       initialStatus: 'Чем я могу вам помочь?',
       talkPrompt: 'Нажми и говори 🔊',
       welcomeBack: 'С возвращением, ',
       voiceNotSupported: 'Голос не поддерживается',
-      connectionError: 'Ошибка соединения.'
+      connectionError: 'Ошибка соединения.',
+      callTitle: 'Начать разговор голосом',
+      fullScreenTitle: 'Открыть на весь экран',
+      closeTitle: 'Закрыть ассистента',
+      clearTitle: 'Начать новый диалог',
+      copy: 'Скопировать ответ',
+      copied: 'Скопировано',
+      retry: 'Повторить',
+      quickLabel: 'Выбери тему',
+      quickPrompts: ['Расскажи о планете', 'Интересный факт о космосе', 'Загадай загадку', 'Расскажи о книге']
     } : {
+      title: 'Albamen AI',
       placeholder: 'Bir mesaj yazın...',
       listening: 'Dinliyorum...',
       connect: 'Bağlanıyor...',
+      thinking: 'Albamen düşünüyor…',
       initialStatus: 'Bugün sana nasıl yardım edebilirim?',
       talkPrompt: 'Tıkla ve Konuş 🔊',
       welcomeBack: 'Tekrar hoş geldin, ',
       voiceNotSupported: 'Ses desteği yok',
-      connectionError: 'Bağlantı hatası.'
+      connectionError: 'Bağlantı hatası.',
+      callTitle: 'Sesli konuşmayı başlat',
+      fullScreenTitle: 'Tam ekranı aç/kapat',
+      closeTitle: 'Asistanı kapat',
+      clearTitle: 'Yeni konuşma başlat',
+      copy: 'Yanıtı kopyala',
+      copied: 'Kopyalandı',
+      retry: 'Tekrar dene',
+      quickLabel: 'Bir konu seç',
+      quickPrompts: ['Bir gezegeni anlat', 'Uzay hakkında ilginç bilgi', 'Bana bilmece sor', 'Kitabı anlat']
     };
 
     // имя для приветствия
@@ -370,7 +403,7 @@ runAfterDomReady(() => {
     }
 
     // sessionId для памяти
-    const sessionId = getAlbamenSessionId();
+    let sessionId = getAlbamenSessionId();
 
     if (document.getElementById('ai-floating-global')) return;
 
@@ -424,24 +457,31 @@ runAfterDomReady(() => {
     panel.className = 'ai-panel-global';
     panel.innerHTML = `
       <div class="ai-panel-header">
-        <button class="ai-voice-btn" id="ai-voice-btn-panel" aria-label="Call AI">
+        <button class="ai-voice-btn" id="ai-voice-btn-panel" aria-label="${strings.callTitle}" title="${strings.callTitle}">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
           </svg>
         </button>
+        <div class="ai-header-title"><span class="ai-online-dot" aria-hidden="true"></span><span>${strings.title}</span></div>
         <div class="ai-header-actions">
-          <button class="ai-fullscreen-btn" id="ai-fullscreen-btn" aria-label="Toggle fullscreen">
+          <button class="ai-clear-btn" id="ai-clear-btn" aria-label="${strings.clearTitle}" title="${strings.clearTitle}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v5M14 11v5"></path></svg>
+          </button>
+          <button class="ai-fullscreen-btn" id="ai-fullscreen-btn" aria-label="${strings.fullScreenTitle}" title="${strings.fullScreenTitle}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M15 3h6v6"></path><path d="M9 21H3v-6"></path><path d="M21 3l-7 7"></path><path d="M3 21l7-7"></path>
             </svg>
           </button>
-          <button class="ai-close-icon" id="ai-close-btn">×</button>
+          <button class="ai-close-icon" id="ai-close-btn" aria-label="${strings.closeTitle}" title="${strings.closeTitle}">×</button>
         </div>
       </div>
       <div class="ai-panel-body">
-        <div class="ai-messages-list" id="ai-messages-list-legacy"></div>
+        <div class="ai-messages-list" id="ai-messages-list-legacy" aria-live="polite" aria-relevant="additions"></div>
         <div class="ai-chat-avatar-large"><img src="${avatarSrc}" alt="Albamen"></div>
         <div class="ai-status-text" id="ai-status-text">${strings.initialStatus}</div>
+        <div class="ai-quick-actions" id="ai-quick-actions" aria-label="${strings.quickLabel}">
+          ${strings.quickPrompts.map((prompt) => `<button type="button" class="ai-quick-action" data-prompt="${prompt.replace(/"/g, '&quot;')}">${prompt}</button>`).join('')}
+        </div>
         <div class="ai-status-text ai-voice-status" id="voice-status-text" style="display:none;">${strings.talkPrompt}</div>
         <div class="voice-controls hidden" id="voice-inline-controls">
           <div class="voice-wave hidden" id="voice-wave">
@@ -450,7 +490,7 @@ runAfterDomReady(() => {
           <button class="voice-stop-btn hidden" id="voice-stop-btn">■</button>
         </div>
         <div class="ai-input-area">
-          <button class="ai-action-btn ai-mic-btn-panel" id="ai-mic-btn">
+          <button type="button" class="ai-action-btn ai-mic-btn-panel" id="ai-mic-btn" aria-label="${strings.listening}" title="${strings.listening}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
               <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
@@ -458,8 +498,8 @@ runAfterDomReady(() => {
               <line x1="8" y1="23" x2="16" y2="23"></line>
             </svg>
           </button>
-          <input type="text" class="ai-input" id="ai-input-field-legacy" placeholder="${strings.placeholder}">
-          <button class="ai-action-btn ai-send-btn-panel" id="ai-send-btn">
+          <input type="text" class="ai-input" id="ai-input-field-legacy" placeholder="${strings.placeholder}" maxlength="2000" autocomplete="off" aria-label="${strings.placeholder}">
+          <button type="button" class="ai-action-btn ai-send-btn-panel" id="ai-send-btn" aria-label="${isEn ? 'Send message' : isRu ? 'Отправить сообщение' : 'Mesajı gönder'}" title="${isEn ? 'Send message' : isRu ? 'Отправить сообщение' : 'Mesajı gönder'}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="22" y1="2" x2="11" y2="13"></line>
               <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -475,10 +515,6 @@ runAfterDomReady(() => {
       panel.style.setProperty('bottom',   '80px',  'important');
       panel.style.setProperty('right',    '20px',  'important');
       panel.style.setProperty('z-index',  '2147481000', 'important');
-      panel.style.setProperty('width',    '380px', 'important');
-      panel.style.setProperty('max-width','92vw',  'important');
-      panel.style.setProperty('height',   '520px', 'important');
-      panel.style.setProperty('max-height','85vh', 'important');
       // Re-append as last body child to escape any stacking context
       if (document.body.lastChild !== panel) document.body.appendChild(panel);
     }
@@ -517,8 +553,10 @@ runAfterDomReady(() => {
           }
           const openVoice = ev.target.closest && ev.target.closest('#ai-voice-btn, .ai-voice-btn');
           if (openVoice) {
-            const vp = document.querySelector('.ai-panel-voice');
-            if (vp) vp.classList.add('ai-open');
+            const p = document.querySelector('.ai-panel-global');
+            if (p) p.classList.add('ai-open');
+            const mainMic = document.getElementById('ai-mic-btn');
+            if (mainMic && openVoice.id === 'ai-voice-btn-panel') mainMic.click();
             return;
           }
         }, { capture: false });
@@ -532,6 +570,8 @@ runAfterDomReady(() => {
     const inputField = document.getElementById('ai-input-field-legacy');
     const msgList = document.getElementById('ai-messages-list-legacy');
     const statusText = document.getElementById('ai-status-text');
+    const clearBtn = document.getElementById('ai-clear-btn');
+    const quickActions = document.querySelectorAll('.ai-quick-action');
 
     const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
     const recognition = SpeechRec ? new SpeechRec() : null;
@@ -545,8 +585,9 @@ runAfterDomReady(() => {
       panel.classList.add('ai-open');
     };
     const closePanel = () => {
-      panel.classList.remove('ai-open');
-      panel.classList.remove('chat-active');
+      if (recognition && isListening) recognition.stop();
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      panel.classList.remove('ai-open', 'chat-active', 'ai-fullscreen', 'ai-listening');
       statusText.style.display = 'block';
       statusText.textContent = strings.initialStatus;
     };
@@ -559,14 +600,51 @@ runAfterDomReady(() => {
       panel.classList.toggle('ai-fullscreen');
     });
 
-    function addMessage(text, type, id = null) {
+
+    function addMessage(text, type, id = null, options = {}) {
+      const group = document.createElement('div');
+      group.className = `ai-message-group ${type}`;
+      if (id) group.id = id;
+
       const div = document.createElement('div');
       div.className = `ai-msg ${type}`;
       div.textContent = text;
-      if (id) div.id = id;
-      msgList.appendChild(div);
+      group.appendChild(div);
+
+      if (type === 'bot' && !options.loading) {
+        const actions = document.createElement('div');
+        actions.className = 'ai-message-actions';
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'ai-copy-btn';
+        copyBtn.textContent = strings.copy;
+        copyBtn.setAttribute('aria-label', strings.copy);
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(text);
+            copyBtn.textContent = strings.copied;
+            setTimeout(() => { copyBtn.textContent = strings.copy; }, 1200);
+          } catch (error) {
+            copyBtn.textContent = strings.connectionError;
+          }
+        });
+        actions.appendChild(copyBtn);
+
+        if (typeof options.retry === 'function') {
+          const retryBtn = document.createElement('button');
+          retryBtn.type = 'button';
+          retryBtn.className = 'ai-retry-btn';
+          retryBtn.textContent = strings.retry;
+          retryBtn.setAttribute('aria-label', strings.retry);
+          retryBtn.addEventListener('click', options.retry);
+          actions.appendChild(retryBtn);
+        }
+        group.appendChild(actions);
+      }
+
+      msgList.appendChild(group);
       msgList.scrollTop = msgList.scrollHeight;
-      return div;
+      return group;
     }
 
     // ── Conversation history (kept in memory per session) ──
@@ -624,16 +702,18 @@ runAfterDomReady(() => {
       }
     }
 
-    function sendMessage() {
-      const txt = (inputField.value || '').trim();
-      if (!txt) return;
+    function sendMessage(presetText = null) {
+      const txt = (typeof presetText === 'string' ? presetText : inputField.value || '').trim();
+      if (!txt || inputField.disabled) return;
 
       panel.classList.add('chat-active');
       addMessage(txt, 'user');
       inputField.value = '';
+      sendBtn.disabled = true;
+      inputField.disabled = true;
 
       const loadingId = 'loading-' + Date.now();
-      addMessage('...', 'bot', loadingId);
+      addMessage(strings.thinking, 'bot', loadingId, { loading: true });
       statusText.textContent = strings.connect;
       statusText.style.display = 'block';
 
@@ -651,6 +731,7 @@ runAfterDomReady(() => {
         body: JSON.stringify({
           message: txt,
           sessionId,
+          language: isRu ? 'ru' : isEn ? 'en' : 'tr',
           savedName: currentName,
           savedAge: currentAge,
           history: historySlice
@@ -665,7 +746,7 @@ runAfterDomReady(() => {
           if (loader) loader.remove();
 
           if (!data || typeof data.reply !== 'string') {
-            addMessage(strings.connectionError, 'bot');
+            addMessage(strings.connectionError, 'bot', null, { retry: () => sendMessage(txt) });
             statusText.style.display = 'none';
             return;
           }
@@ -696,7 +777,7 @@ runAfterDomReady(() => {
           }
 
           if (/^(Grok Hatası|JS Hatası)/i.test(finalReply)) {
-            addMessage(strings.connectionError, 'bot');
+            addMessage(strings.connectionError, 'bot', null, { retry: () => sendMessage(txt) });
             statusText.style.display = 'none';
             return;
           }
@@ -719,9 +800,34 @@ runAfterDomReady(() => {
           console.error('AI Error:', err);
           const loader = document.getElementById(loadingId);
           if (loader) loader.remove();
-          addMessage(strings.connectionError, 'bot');
+          addMessage(strings.connectionError, 'bot', null, { retry: () => sendMessage(txt) });
           statusText.style.display = 'none';
+        })
+        .finally(() => {
+          sendBtn.disabled = false;
+          inputField.disabled = false;
+          inputField.focus();
         });
+    }
+
+    quickActions.forEach((button) => {
+      button.addEventListener('click', () => sendMessage(button.dataset.prompt || ''));
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        window.__albamenHistory.length = 0;
+        localStorage.removeItem('albamen_session_id');
+        sessionId = getAlbamenSessionId();
+        msgList.innerHTML = '';
+        panel.classList.remove('chat-active', 'ai-fullscreen');
+        statusText.textContent = strings.initialStatus;
+        statusText.style.display = 'block';
+        inputField.value = '';
+        inputField.disabled = false;
+        sendBtn.disabled = false;
+        inputField.focus();
+      });
     }
 
     sendBtn.addEventListener('click', sendMessage);
@@ -742,7 +848,8 @@ runAfterDomReady(() => {
         recognition.stop();
         return;
       }
-      panel.classList.add('chat-active');
+      panel.classList.add('chat-active', 'ai-listening');
+      micBtn.classList.add('ai-mic-active');
       statusText.textContent = strings.listening;
       statusText.style.display = 'block';
       inputField.focus();
@@ -771,12 +878,14 @@ runAfterDomReady(() => {
       });
       recognition.addEventListener('end', () => {
         isListening = false;
+        panel.classList.remove('ai-listening');
         statusText.textContent = strings.initialStatus;
         // Visual: reset mic button
         if (micBtn) micBtn.classList.remove('ai-mic-active');
       });
       recognition.addEventListener('error', () => {
         isListening = false;
+        panel.classList.remove('ai-listening');
         statusText.textContent = strings.voiceNotSupported;
         if (micBtn) micBtn.classList.remove('ai-mic-active');
       });

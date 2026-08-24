@@ -13,8 +13,6 @@ const DEFAULT_ALLOWED_ORIGINS = [
 const ALLOWED_LANGUAGES = new Set(["ru", "tr", "en"]);
 const MAX_TEXT_CHARS = 2000;
 const MAX_AUDIO_BASE64_CHARS = 900000;
-const MAX_TRANSLATION_CHARS_PER_REQUEST = 10000;
-const TRANSLATOR_SAFE_MONTHLY_LIMIT = 1800000;
 
 function getAllowedOrigins(env) {
   const configured = String(env.ALLOWED_ORIGINS || "").split(",").map((origin) => origin.trim()).filter(Boolean);
@@ -90,7 +88,7 @@ export default {
       return await handleVoiceChat(request, env, context, corsHeaders);
     }
     if (endpoint === "/api/translate") {
-      return await handleTranslation(request, env, context, corsHeaders);
+      return jsonResponse({ error: "Translation endpoint removed" }, 404, corsHeaders);
     }
     return await handleTextChat(request, env, context, corsHeaders);
   }
@@ -199,79 +197,6 @@ async function handleVoiceChat(request, env, context, corsHeaders) {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-// OPTIONAL AZURE TRANSLATOR F0 HANDLER
-// Disabled unless explicitly enabled. This is not an LLM and does not replace Groq.
-// ════════════════════════════════════════════════════════════════════════════
-
-async function handleTranslation(request, env, context, corsHeaders) {
-  if (env.AZURE_TRANSLATOR_ENABLED !== "true") {
-    return jsonResponse({ error: "Translation service is disabled in free mode" }, 404, corsHeaders);
-  }
-  if (!env.AZURE_TRANSLATOR_KEY) {
-    return jsonResponse({ error: "Translator is not configured" }, 503, corsHeaders);
-  }
-  if (requestTooLarge(request, 30000)) {
-    return jsonResponse({ error: "Translation payload is too large" }, 413, corsHeaders);
-  }
-  if (!await enforceRateLimit(request, env, context, "rll", 20, 60)) {
-    return jsonResponse({ error: "Translation rate limit exceeded" }, 429, corsHeaders);
-  }
-
-  let body = {};
-  try { body = await request.json(); } catch (_) {
-    return jsonResponse({ error: "Invalid JSON" }, 400, corsHeaders);
-  }
-  const text = String(body.text || "").trim();
-  const requestedTo = Array.isArray(body.to) ? body.to : [body.to || "ru"];
-  const to = requestedTo.map((item) => String(item).toLowerCase().split("-")[0]).filter((item, index, list) => ["ru", "tr", "en"].includes(item) && list.indexOf(item) === index);
-  const from = body.from ? String(body.from).toLowerCase().split("-")[0] : "";
-
-  if (!text || text.length > MAX_TRANSLATION_CHARS_PER_REQUEST || to.length === 0 || to.length > 3) {
-    return jsonResponse({ error: "Use 1–10000 characters and up to 3 target languages: ru, tr, en" }, 400, corsHeaders);
-  }
-
-  const KV = env.ALBAMEN_KV || env.SESSIONS || env.KV || null;
-  const month = new Date().toISOString().slice(0, 7);
-  const usageKey = `tr:chars:${month}`;
-  const requestedChars = text.length * to.length;
-  if (KV) {
-    const usedChars = Number(await KV.get(usageKey) || 0);
-    if (usedChars + requestedChars > TRANSLATOR_SAFE_MONTHLY_LIMIT) {
-      return jsonResponse({ error: "Free translation quota reached" }, 429, corsHeaders);
-    }
-    context.waitUntil(KV.put(usageKey, String(usedChars + requestedChars), { expirationTtl: 2678400 }));
-  }
-
-  const endpoint = String(env.AZURE_TRANSLATOR_ENDPOINT || "https://api.cognitive.microsofttranslator.com").replace(/\/$/, "");
-  const translateUrl = new URL(`${endpoint}/translate`);
-  translateUrl.searchParams.set("api-version", "3.0");
-  to.forEach((target) => translateUrl.searchParams.append("to", target));
-  if (from && ["ru", "tr", "en"].includes(from)) translateUrl.searchParams.set("from", from);
-
-  const headers = {
-    "Content-Type": "application/json",
-    "Ocp-Apim-Subscription-Key": env.AZURE_TRANSLATOR_KEY,
-  };
-  if (env.AZURE_TRANSLATOR_REGION) headers["Ocp-Apim-Subscription-Region"] = env.AZURE_TRANSLATOR_REGION;
-
-  const response = await fetch(translateUrl.toString(), {
-    method: "POST",
-    headers,
-    body: JSON.stringify([{ Text: text }]),
-  });
-  const responseText = await response.text();
-  if (!response.ok) {
-    console.error(`[Translator] HTTP ${response.status}: ${responseText.slice(0, 200)}`);
-    return jsonResponse({ error: "Translation service unavailable" }, response.status === 429 ? 429 : 502, corsHeaders);
-  }
-  let data;
-  try { data = JSON.parse(responseText); } catch (_) {
-    return jsonResponse({ error: "Invalid translation response" }, 502, corsHeaders);
-  }
-  return jsonResponse({ translations: data[0]?.translations || [], quota: { month, reservedCharacters: requestedChars } }, 200, corsHeaders);
-}
-
-// ════════════════════════════════════════════════════════════════════════════
 // TEXT CHAT HANDLER
 // ════════════════════════════════════════════════════════════════════════════
 
@@ -316,8 +241,8 @@ async function handleTextChat(request, env, context, corsHeaders) {
     });
   }
 
-  // Telegram Logging is opt-in to avoid sending user content to a third party by default.
-  if (env.TELEGRAM_LOGGING_ENABLED === "true" && env.TELEGRAM_TOKEN && env.TELEGRAM_CHAT_ID) {
+  // Telegram logging is enabled by default; set TELEGRAM_LOGGING_ENABLED=false to disable it.
+  if (env.TELEGRAM_LOGGING_ENABLED !== "false" && env.TELEGRAM_TOKEN && env.TELEGRAM_CHAT_ID) {
     context.waitUntil(
       fetch(`https://api.telegram.org/bot${env.TELEGRAM_TOKEN}/sendMessage`, {
         method: "POST",

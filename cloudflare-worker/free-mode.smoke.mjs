@@ -53,14 +53,9 @@ if (oversized.status !== 413) throw new Error('Text size limit test failed');
 const voiceUnavailable = await worker.fetch(request('/api/voice', { audio: 'AAAA' }), env, ctx());
 if (voiceUnavailable.status !== 503) throw new Error('Voice availability guard failed');
 
-const disabledTranslation = await worker.fetch(request('/api/translate', { text: 'Hello', to: ['ru'] }), env, ctx());
-if (disabledTranslation.status !== 404) throw new Error('Translator disabled guard failed');
-if (calls.some((url) => url.includes('cognitive.microsofttranslator.com'))) throw new Error('Disabled translator made an external call');
-
-const translatorEnv = { ...env, AZURE_TRANSLATOR_ENABLED: 'true', AZURE_TRANSLATOR_KEY: 'test-only', AZURE_TRANSLATOR_REGION: 'westeurope' };
-const translated = await worker.fetch(request('/api/translate', { text: 'Hello', to: ['ru'] }), translatorEnv, ctx());
-const translatedBody = await translated.json();
-if (translated.status !== 200 || translatedBody.translations?.[0]?.text !== 'Привет') throw new Error('Translator F0 smoke test failed');
+const removedTranslation = await worker.fetch(request('/api/translate', { text: 'Hello', to: ['ru'] }), env, ctx());
+if (removedTranslation.status !== 404) throw new Error('Removed Translator endpoint guard failed');
+if (calls.some((url) => url.includes('cognitive.microsofttranslator.com'))) throw new Error('Removed Translator made an external call');
 
 console.log('free-mode smoke tests passed');
 globalThis.fetch = originalFetch;

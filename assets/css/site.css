@@ -3704,3 +3704,238 @@ body.index-page .hero-content h1 {
   line-height: 1;
   font-family: Arial, sans-serif;
 }
+
+
+/* ================================================================
+   Albamen AI UX refresh — quick actions, contrast and mobile layout
+   ================================================================ */
+.ai-panel-global {
+  background: linear-gradient(180deg, rgba(9, 22, 42, 0.98), rgba(15, 23, 42, 0.97)) !important;
+  border-color: rgba(125, 211, 252, 0.28) !important;
+}
+
+.ai-panel-header {
+  min-height: 64px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(2, 6, 23, 0.32);
+}
+
+.ai-header-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;
+  margin-left: 12px;
+  color: #f8fafc;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.ai-online-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #34d399;
+  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.13), 0 0 12px rgba(52, 211, 153, 0.65);
+}
+
+.ai-clear-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.8);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.ai-clear-btn:hover,
+.ai-clear-btn:focus-visible {
+  background: rgba(59, 130, 246, 0.22);
+  color: #ffffff;
+  outline: none;
+}
+
+.ai-status-text {
+  color: #e2e8f0 !important;
+  text-shadow: 0 1px 12px rgba(2, 6, 23, 0.45);
+}
+
+.ai-quick-actions {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 auto 18px;
+}
+
+.ai-quick-action {
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid rgba(125, 211, 252, 0.24);
+  border-radius: 12px;
+  background: rgba(30, 41, 59, 0.74);
+  color: #dbeafe;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.25;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.ai-quick-action:hover,
+.ai-quick-action:focus-visible {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: rgba(125, 211, 252, 0.68);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.ai-panel-global.chat-active .ai-quick-actions {
+  display: none;
+}
+
+.ai-message-group {
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ai-message-group.user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.ai-message-group.bot {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.ai-message-group .ai-msg {
+  max-width: 100%;
+}
+
+.ai-message-actions {
+  display: flex;
+  gap: 8px;
+  padding-inline: 4px;
+  opacity: 0.78;
+}
+
+.ai-copy-btn,
+.ai-retry-btn {
+  border: 0;
+  background: transparent;
+  color: #93c5fd;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 3px 0;
+}
+
+.ai-copy-btn:hover,
+.ai-copy-btn:focus-visible,
+.ai-retry-btn:hover,
+.ai-retry-btn:focus-visible {
+  color: #ffffff;
+  outline: none;
+  text-decoration: underline;
+}
+
+.ai-input:disabled {
+  opacity: 0.62;
+  cursor: wait;
+}
+
+.ai-action-btn:disabled {
+  opacity: 0.48;
+  cursor: wait;
+}
+
+.ai-mic-btn-panel.ai-mic-active {
+  background: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.18), 0 0 18px rgba(239, 68, 68, 0.46);
+}
+
+@media (max-width: 600px) {
+  .ai-panel-global {
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: min(720px, calc(100dvh - 12px)) !important;
+    max-height: calc(100dvh - 12px) !important;
+    border-radius: 24px 24px 0 0 !important;
+  }
+
+  .ai-panel-global.ai-fullscreen {
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+
+  .ai-panel-header {
+    padding: 12px 14px;
+  }
+
+  .ai-panel-body {
+    padding: 0 14px max(14px, env(safe-area-inset-bottom));
+  }
+
+  .ai-quick-action {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-panel-global,
+  .ai-quick-action,
+  .ai-clear-btn {
+    transition: none !important;
+  }
+}
+
+
+/* Keep the character avatar readable when the quick-action grid is present. */
+.ai-chat-avatar-large {
+  flex: 0 0 160px;
+  min-height: 160px;
+}
+
+.ai-chat-avatar-large img {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .ai-chat-avatar-large {
+    flex-basis: 132px;
+    min-height: 132px;
+    width: 132px;
+    height: 132px;
+  }
+}
+
+
+.ai-panel-global.ai-listening .ai-status-text {
+  display: block !important;
+  position: relative;
+  z-index: 2;
+  margin: 0 auto 16px;
+  padding: 8px 14px;
+  border: 1px solid rgba(248, 113, 113, 0.36);
+  border-radius: 999px;
+  background: rgba(127, 29, 29, 0.28);
+  color: #fecaca !important;
+}
+
+.ai-panel-global.ai-listening .ai-messages-list {
+  opacity: 0.42;
+}
