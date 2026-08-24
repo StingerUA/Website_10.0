@@ -332,6 +332,47 @@
           "url": "/ar/blog/uzay-teleskoplari.html"
         }
       }
+    },
+    {
+      "slug": "uzaydaki-ilkeler",
+      "category": "uzay",
+      "publishAt": "2026-08-23T08:00:00+03:00",
+      "cover": "/assets/images/blog/uzaydaki-ilkeler-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "İdris Albayrak",
+        "en": "İdris Albayrak",
+        "ru": "İdris Albayrak",
+        "ar": "İdris Albayrak"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Uzaydaki İlkeler",
+          "excerpt": "ALBA Space Blog Yazısı - İdris ALBAYRAK UZAYDAKİ İLKLER - 21.08.2026 Uzaylarca selam uzaydaşlar! İlkler, unutulmazdır. İlkler, öncülerdir. İlkler cesu",
+          "url": "/blog/uzaydaki-ilkeler.html"
+        },
+        "en": {
+          "title": "Principles in Space",
+          "excerpt": "ALBA Space Blog Post - İdris ALBAYRAK FIRSTS IN SPACE - 21.08.2026 Greetings to space, spacers! Firsts are unforgettable. Firsts are pioneers. Firsts ",
+          "url": "/eng/blog/uzaydaki-ilkeler.html"
+        },
+        "ru": {
+          "title": "Принципы в космосе",
+          "excerpt": "ALBA Space Blog Post - Идрис АЛЬБАЙРАК ВПЕРВЫЕ В КОСМОСЕ - 21.08.2026 Привет космосу, космонатуры! Первые моменты незабываемы. Первые — это первопрохо",
+          "url": "/rus/blog/uzaydaki-ilkeler.html"
+        },
+        "ar": {
+          "title": "المبادئ في الفضاء",
+          "excerpt": "منشور مدونة ألبا للفضاء - إدريس البيراك أولى الإنجازات في الفضاء - 21.08.2026 تحية للفضاء، أيها الفضاء! التجارب الأولى لا تنسى. الأوائل هم الرواد. الن",
+          "url": "/ar/blog/uzaydaki-ilkeler.html"
+        }
+      }
     }
   ]
 }
