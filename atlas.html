@@ -42,6 +42,13 @@
       transform: scale(1.06);
     }
 </style>
+<style>
+  /* Orbital Atlas bridge: компактная навигационная ссылка из существующего 3D-атласа в живой раздел наблюдения. */
+  .atlas-live-link { margin:-9px 0 23px; }
+  .atlas-live-link a { display:inline-flex; align-items:center; gap:9px; padding:11px 14px; border:1px solid rgba(0,194,255,.7); color:#e8fbff; background:rgba(0,194,255,.11); font-size:13px; font-weight:600; text-decoration:none; transition:transform .18s ease,background .18s ease; }
+  .atlas-live-link a:hover { transform:translateY(-2px); background:rgba(0,194,255,.22); }
+  .atlas-live-link a::before { content:""; width:8px; height:8px; border-radius:50%; background:#42d5e8; box-shadow:0 0 0 4px rgba(66,213,232,.12); }
+</style>
 </head>
 
 <body>
@@ -72,6 +79,8 @@
           <p class="atlas-hero-sub">Türk uyduları, gezegenler ve Mars görevlerinin 3D galerisidir. Alba Space koleksiyonundaki Türk uydularını, gezegenleri ve Mars keşif araçlarını keşfedin.
           Her kart, ilgili objenin özel 3D sayfasını açar.</p>
         </section>
+
+        <div class="atlas-live-link"><a href="/orbital-atlas.html">Orbital Atlas — живые запуски, МКС и карты планет</a></div>
 
 
 

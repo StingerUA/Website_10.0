@@ -36,6 +36,10 @@ export { GameRoomDO };
 const SESSION_COOKIE     = "albaspace_session";
 const OAUTH_STATE_COOKIE = "albaspace_oauth_state";
 const AUTH_TOKEN_QUERY = "access_token";
+const ORBITAL_LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=3&mode=detailed";
+const ORBITAL_ISS_URL = "https://api.wheretheiss.at/v1/satellites/25544";
+let orbitalLaunchesCache = null;
+let orbitalIssCache = null;
 
 // =========================
 // 🚀 ENTRY POINT
@@ -57,6 +61,11 @@ async function handleRequest(request, env) {
 
   if (request.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: cors });
+  }
+
+  // 🛰️ ORBITAL ATLAS — public, cached data route for the live space section.
+  if (url.pathname === "/api/orbital/overview" && request.method === "GET") {
+    return orbitalOverview(cors);
   }
 
   // 🎮 GAME BACKEND — uses the same AlbaSpace session as the rest of the site.
@@ -461,6 +470,63 @@ function json(payload, status, headers = {}) {
     status,
     headers: { "Content-Type": "application/json", ...headers }
   });
+}
+
+function orbitalText(value, fallback) {
+  return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
+
+function normalizeOrbitalLaunch(raw) {
+  const provider = orbitalText(raw?.launch_service_provider?.name, "Оператор уточняется");
+  const video = Array.isArray(raw?.vidURLs) ? raw.vidURLs.find(item => typeof item?.url === "string") : null;
+  return {
+    name: orbitalText(raw?.name, "Миссия уточняется"),
+    net: typeof raw?.net === "string" ? raw.net : typeof raw?.window_start === "string" ? raw.window_start : null,
+    provider,
+    location: orbitalText(raw?.pad?.location?.name, orbitalText(raw?.pad?.name, "Площадка уточняется")),
+    status: orbitalText(raw?.status?.name, "Статус уточняется"),
+    streamUrl: video?.url || (/spacex/i.test(provider) ? "https://www.youtube.com/@SpaceX/live" : "https://www.youtube.com/@NASA/live")
+  };
+}
+
+async function orbitalFetch(url) {
+  const response = await fetch(url, { headers: { "Accept": "application/json", "User-Agent": "AlbaSpace-OrbitalAtlas/1.0" } });
+  if (!response.ok) throw new Error(`Orbital source returned ${response.status}`);
+  return response.json();
+}
+
+async function orbitalLaunches(now) {
+  if (orbitalLaunchesCache?.expiresAt > now) return orbitalLaunchesCache.value;
+  try {
+    const payload = await orbitalFetch(ORBITAL_LAUNCHES_URL);
+    const value = Array.isArray(payload?.results) ? payload.results.slice(0, 3).map(normalizeOrbitalLaunch) : [];
+    orbitalLaunchesCache = { value, expiresAt: now + 20 * 60 * 1000 };
+    return value;
+  } catch (error) {
+    console.warn("Orbital Atlas launch source unavailable", error);
+    return orbitalLaunchesCache?.value || [];
+  }
+}
+
+async function orbitalIss(now) {
+  if (orbitalIssCache?.expiresAt > now) return orbitalIssCache.value;
+  try {
+    const payload = await orbitalFetch(ORBITAL_ISS_URL);
+    const coordinates = [payload?.latitude, payload?.longitude, payload?.altitude, payload?.velocity];
+    if (!coordinates.every(value => typeof value === "number" && Number.isFinite(value))) throw new Error("Malformed ISS telemetry");
+    const value = { latitude: payload.latitude, longitude: payload.longitude, altitude: payload.altitude, velocity: payload.velocity, visibility: orbitalText(payload.visibility, "связь") };
+    orbitalIssCache = { value, expiresAt: now + 15 * 1000 };
+    return value;
+  } catch (error) {
+    console.warn("Orbital Atlas ISS source unavailable", error);
+    return orbitalIssCache?.value || null;
+  }
+}
+
+async function orbitalOverview(cors) {
+  const now = Date.now();
+  const [launches, iss] = await Promise.all([orbitalLaunches(now), orbitalIss(now)]);
+  return json({ launches, iss, updatedAt: new Date(now).toISOString() }, 200, { ...cors, "Cache-Control": "public, max-age=15" });
 }
 
 function redirect(location, headers = {}) {

@@ -1,0 +1,260 @@
+<!-- Orbital Atlas: научный редакционный интерфейс с графитовой основой, Orbital Cyan и асимметричным «пультом наблюдения». -->
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05080d" />
+    <meta name="description" content="Orbital Atlas — запуски, МКС, орбитальные объекты, прямые эфиры и карты планет." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="/manus-storage/orbital-atlas-logo_f9fbd235.png" />
+    <title>Orbital Atlas — Alba Space</title>
+    <style>
+      /* Orbital Atlas: премиальный научный пульт — данные первичны, движение объясняет орбиты, стеклянные панели вторичны. */
+      :root { --ink:#05080d; --panel:#0d131b; --panel-2:#111b26; --line:rgba(183,217,228,.16); --soft:#9bb2c0; --white:#eef7fb; --cyan:#42d5e8; --cyan-dim:#198d9e; --amber:#ffb34d; --coral:#fa7865; --sans:"IBM Plex Sans",sans-serif; --display:"Space Grotesk",sans-serif; --mono:"IBM Plex Mono",monospace; }
+      * { box-sizing:border-box; }
+      html { scroll-behavior:smooth; background:var(--ink); }
+      body { margin:0; overflow-x:hidden; color:var(--white); font-family:var(--sans); background:radial-gradient(circle at 70% -8%,rgba(27,93,111,.22),transparent 32rem), var(--ink); }
+      body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.14; z-index:6; background-image:radial-gradient(rgba(255,255,255,.33) .45px,transparent .55px); background-size:7px 7px; mix-blend-mode:soft-light; }
+      a { color:inherit; text-decoration:none; }
+      button { font:inherit; }
+      .shell { width:min(1440px,calc(100% - 40px)); margin:auto; }
+      .eyebrow { margin:0 0 11px; font:500 10px/1 var(--mono); letter-spacing:.15em; color:var(--cyan); text-transform:uppercase; }
+      .eyebrow .pulse { display:inline-block; width:7px; height:7px; margin-right:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 0 4px rgba(66,213,232,.14); }
+      .section-head { display:flex; align-items:end; justify-content:space-between; gap:24px; margin:82px 0 22px; }
+      .section-head h2 { max-width:650px; margin:0; font:600 clamp(28px,3vw,47px)/.98 var(--display); letter-spacing:-.055em; }
+      .section-note { max-width:360px; margin:0 0 4px; color:var(--soft); font-size:14px; line-height:1.5; }
+      .site-header { position:sticky; top:0; z-index:10; border-bottom:1px solid rgba(255,255,255,.08); background:rgba(5,8,13,.77); backdrop-filter:blur(18px); }
+      .topbar { min-height:74px; display:flex; align-items:center; justify-content:space-between; gap:22px; }
+      .brand { display:flex; align-items:center; gap:12px; min-width:max-content; }
+      .brand img { width:38px; height:38px; object-fit:contain; }
+      .brand-copy { display:flex; flex-direction:column; gap:1px; }
+      .brand-name { font:600 15px/1 var(--display); letter-spacing:-.035em; }
+      .brand-sub { font:500 9px/1 var(--mono); letter-spacing:.12em; color:var(--soft); }
+      .nav { display:flex; align-items:center; gap:7px; }
+      .nav a { color:#afc1cb; padding:8px 10px; font-size:13px; transition:color .18s ease,background .18s ease; }
+      .nav a:hover { color:var(--white); background:rgba(255,255,255,.06); }
+      .utc { display:flex; align-items:center; gap:9px; padding:8px 10px; border:1px solid var(--line); color:#c8d7dd; font:500 10px/1 var(--mono); letter-spacing:.04em; }
+      .utc-dot { width:6px; height:6px; border-radius:50%; background:#67e8a4; box-shadow:0 0 0 4px rgba(103,232,164,.1); }
+      .hero { position:relative; min-height:535px; display:grid; align-items:end; padding:82px 0 62px; overflow:hidden; border-bottom:1px solid rgba(255,255,255,.07); }
+      .hero::before { content:""; position:absolute; inset:0; z-index:-2; background-image:linear-gradient(90deg,#05080d 0%,rgba(5,8,13,.95) 36%,rgba(5,8,13,.46) 66%,rgba(5,8,13,.2) 100%),linear-gradient(0deg,#05080d 0%,transparent 40%),url('/manus-storage/orbital-atlas-earth-hero_9d92b8c8.jpg'); background-position:center,center,center; background-size:cover; }
+      .hero::after { content:""; position:absolute; inset:0; z-index:-1; background-image:linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.04) 1px,transparent 1px); background-size:76px 76px; mask-image:linear-gradient(90deg,#000,transparent 78%); opacity:.2; }
+      .hero-grid { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(270px,.55fr); gap:60px; align-items:end; }
+      h1 { max-width:830px; margin:0; font:600 clamp(47px,7.1vw,92px)/.9 var(--display); letter-spacing:-.07em; }
+      h1 em { color:var(--cyan); font-style:normal; }
+      .hero-lead { width:min(600px,100%); margin:26px 0 27px; color:#c8d7dd; font-size:17px; line-height:1.55; }
+      .hero-actions { display:flex; flex-wrap:wrap; gap:12px; }
+      .button { display:inline-flex; align-items:center; justify-content:center; min-height:44px; gap:9px; padding:0 17px; border:1px solid var(--line); color:var(--white); background:rgba(8,14,20,.7); cursor:pointer; font:600 12px/1 var(--sans); letter-spacing:.01em; transition:transform .16s cubic-bezier(.23,1,.32,1), border-color .16s ease, background .16s ease; }
+      .button:hover { transform:translateY(-2px); border-color:rgba(66,213,232,.8); background:rgba(66,213,232,.1); }
+      .button:active { transform:scale(.97); }
+      .button.primary { border-color:var(--cyan); color:#041015; background:var(--cyan); }
+      .button.primary:hover { background:#83e6ef; }
+      .button svg { width:15px; height:15px; }
+      .hero-metric { padding:19px; border:1px solid rgba(217,247,255,.18); background:linear-gradient(130deg,rgba(17,29,39,.9),rgba(10,14,20,.74)); box-shadow:0 20px 58px rgba(0,0,0,.32); }
+      .metric-top { display:flex; justify-content:space-between; gap:12px; color:var(--soft); font:500 10px/1 var(--mono); letter-spacing:.11em; text-transform:uppercase; }
+      .metric-status { color:#7bf0b0; }
+      .metric-title { margin:19px 0 9px; font:600 25px/1.04 var(--display); letter-spacing:-.045em; }
+      .metric-meta { min-height:35px; color:#afc1cb; font-size:12px; line-height:1.4; }
+      .metric-count { display:flex; align-items:baseline; gap:7px; margin-top:24px; color:var(--cyan); }
+      .metric-count strong { font:500 28px/1 var(--mono); letter-spacing:-.1em; }
+      .metric-count span { color:#9ab1bd; font:10px/1 var(--mono); text-transform:uppercase; letter-spacing:.07em; }
+      .orbit-layout { display:grid; grid-template-columns:minmax(0,1.42fr) minmax(300px,.58fr); gap:14px; }
+      .panel { position:relative; overflow:hidden; border:1px solid var(--line); background:linear-gradient(135deg,rgba(20,32,43,.78),rgba(8,13,19,.82)); box-shadow:0 18px 48px rgba(0,0,0,.16); }
+      .earth-panel { min-height:556px; isolation:isolate; }
+      .panel-head { display:flex; align-items:start; justify-content:space-between; gap:18px; padding:22px 23px; }
+      .panel-title { margin:0; font:600 19px/1.05 var(--display); letter-spacing:-.04em; }
+      .panel-sub { margin:6px 0 0; color:var(--soft); font:12px/1.45 var(--sans); }
+      .layer-switches { display:flex; gap:6px; }
+      .layer-switch { width:31px; height:30px; display:grid; place-items:center; border:1px solid var(--line); background:rgba(6,12,17,.42); color:#91a6b0; cursor:pointer; font:11px/1 var(--mono); transition:.16s ease; }
+      .layer-switch.active,.layer-switch:hover { color:var(--ink); background:var(--cyan); border-color:var(--cyan); }
+      .orbital-stage { position:absolute; inset:87px 0 0; overflow:hidden; background:radial-gradient(circle at 63% 46%,rgba(42,96,114,.18),transparent 13rem),linear-gradient(rgba(214,250,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(214,250,255,.06) 1px,transparent 1px); background-size:auto,42px 42px,42px 42px; }
+      .orbital-stage::before { content:""; position:absolute; inset:0; background:radial-gradient(ellipse at center,transparent 27%,rgba(5,8,13,.05) 36%,rgba(5,8,13,.65) 75%); pointer-events:none; }
+      .globe { position:absolute; width:min(47vw,460px); aspect-ratio:1; left:50%; top:53%; transform:translate(-30%,-50%); border-radius:50%; background:radial-gradient(circle at 32% 27%,#3f7f8f 0 2%,transparent 12%),radial-gradient(circle at 35% 35%,#21515b 0 7%,#102d37 29%,#08151c 66%,#03080d 79%); box-shadow:inset -38px -22px 58px #020508,inset 18px 10px 42px rgba(92,218,235,.21),0 0 0 1px rgba(149,235,246,.38),0 0 62px rgba(46,198,219,.2); }
+      .globe::before { content:""; position:absolute; inset:1.8%; border-radius:50%; opacity:.67; background:repeating-linear-gradient(22deg,transparent 0 11px,rgba(137,226,233,.1) 12px 13px,transparent 14px 32px),repeating-radial-gradient(ellipse at 38% 35%,rgba(128,224,232,.17) 0 1px,transparent 2px 22px); mix-blend-mode:screen; mask-image:radial-gradient(circle,#000 55%,transparent 75%); }
+      .globe::after { content:""; position:absolute; inset:-4%; border-radius:50%; border:1px solid rgba(80,219,235,.36); filter:blur(1px); }
+      .orbit { position:absolute; left:50%; top:53%; border:1px solid rgba(66,213,232,.5); border-radius:50%; transform:translate(-30%,-50%) rotate(var(--r)); width:var(--w); height:var(--h); box-shadow:0 0 12px rgba(66,213,232,.05); }
+      .orbit.o2 { border-color:rgba(255,179,77,.46); } .orbit.o3 { border-color:rgba(250,120,101,.38); } .orbit.o4 { border-style:dashed; opacity:.7; }
+      .map-coordinates { position:absolute; inset:0; z-index:2; pointer-events:none; }
+      .iss-pin { position:absolute; display:flex; align-items:center; gap:8px; transform:translate(-50%,-50%); transition:left 1.1s cubic-bezier(.23,1,.32,1),top 1.1s cubic-bezier(.23,1,.32,1); }
+      .iss-pin::before { content:""; width:11px; height:11px; border:2px solid var(--cyan); border-radius:50%; background:#041016; box-shadow:0 0 0 7px rgba(66,213,232,.13),0 0 18px rgba(66,213,232,.7); }
+      .iss-pin span { padding:5px 7px; background:rgba(4,10,15,.85); border:1px solid rgba(66,213,232,.46); color:#dffaff; font:500 10px/1 var(--mono); letter-spacing:.05em; white-space:nowrap; }
+      .catalog-key { position:absolute; bottom:18px; left:22px; z-index:3; display:flex; flex-wrap:wrap; gap:13px; color:#a6bac4; font:10px/1 var(--mono); letter-spacing:.04em; }
+      .catalog-key b { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; background:var(--cyan); } .catalog-key i { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; background:var(--amber); } .catalog-key em { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; background:var(--coral); font-style:normal; }
+      .side-stack { display:grid; gap:14px; }
+      .iss-card { min-height:304px; padding:24px; }
+      .iss-card::after { content:"25544"; position:absolute; right:-12px; bottom:-15px; color:rgba(174,234,241,.04); font:700 116px/.75 var(--display); letter-spacing:-.09em; }
+      .mini-row { display:flex; align-items:center; justify-content:space-between; gap:10px; color:var(--soft); font:10px/1 var(--mono); letter-spacing:.1em; text-transform:uppercase; }
+      .iss-name { position:relative; z-index:1; margin:24px 0 6px; font:600 29px/.98 var(--display); letter-spacing:-.055em; }
+      .iss-desc { position:relative; z-index:1; max-width:275px; margin:0; color:#b8cad1; font-size:13px; line-height:1.45; }
+      .telemetry { position:relative; z-index:1; display:grid; grid-template-columns:repeat(2,1fr); gap:1px; margin:23px 0 0; background:var(--line); border:1px solid var(--line); }
+      .telemetry div { padding:12px; background:rgba(5,8,13,.63); }
+      .telemetry small { display:block; color:#85a0aa; font:10px/1 var(--mono); letter-spacing:.07em; text-transform:uppercase; }
+      .telemetry strong { display:block; margin-top:7px; color:#e5f4f7; font:500 16px/1 var(--mono); letter-spacing:-.06em; }
+      .object-list { padding:21px 22px; }
+      .object-list h3 { margin:0; font:600 16px/1 var(--display); letter-spacing:-.035em; }
+      .object-list > p { margin:7px 0 16px; color:var(--soft); font-size:12px; }
+      .objects { display:grid; }
+      .object { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-top:1px solid rgba(202,232,240,.1); }
+      .object-l { display:flex; align-items:center; gap:10px; }
+      .object-mark { width:9px; height:9px; border-radius:50%; background:var(--cyan); box-shadow:0 0 0 4px rgba(66,213,232,.09); }
+      .object:nth-child(2) .object-mark { background:var(--amber); box-shadow:0 0 0 4px rgba(255,179,77,.09); } .object:nth-child(3) .object-mark { background:var(--coral); box-shadow:0 0 0 4px rgba(250,120,101,.09); }
+      .object strong { display:block; font:500 13px/1.1 var(--sans); }.object small { display:block; margin-top:4px; color:#7f99a5; font:10px/1 var(--mono); }.object > span { color:#adc1c9; font:10px/1 var(--mono); }
+      .launch-feed { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+      .launch { min-height:260px; display:flex; flex-direction:column; padding:21px; border:1px solid var(--line); background:linear-gradient(150deg,rgba(16,27,37,.96),rgba(7,11,16,.88)); transition:transform .22s cubic-bezier(.23,1,.32,1),border-color .22s ease; }
+      .launch:hover { transform:translateY(-4px); border-color:rgba(66,213,232,.63); }
+      .launch-meta { display:flex; justify-content:space-between; gap:10px; color:#91a7b1; font:10px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; }
+      .launch-state { color:var(--amber); }.launch-state.success { color:#74e2a0; }.launch-state.failure { color:var(--coral); }
+      .launch h3 { margin:21px 0 11px; font:600 22px/1.04 var(--display); letter-spacing:-.05em; }.launch p { margin:0; color:#afc0c8; font-size:13px; line-height:1.45; }.launch .launch-location { margin-top:auto; padding-top:19px; color:#728a95; font:11px/1.4 var(--sans); }.launch .watch { margin-top:14px; color:var(--cyan); font:500 11px/1 var(--mono); letter-spacing:.04em; }.launch .watch:hover { color:#c6fbff; }
+      .launch.skeleton { overflow:hidden; }.skeleton-line { height:11px; margin-bottom:10px; background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.13),rgba(255,255,255,.06)); background-size:200% 100%; animation:shimmer 1.4s linear infinite; }.skeleton-line.short { width:45%; }.skeleton-line.title { width:74%; height:26px; margin-top:24px; }.skeleton-line.last { width:61%; margin-top:auto; }
+      @keyframes shimmer { from { background-position:200% 0; } to { background-position:-200% 0; } }
+      .live-grid { display:grid; grid-template-columns:1.25fr .75fr; gap:14px; }
+      .video-panel { min-height:387px; position:relative; background:#020305; border:1px solid var(--line); }
+      .video-panel iframe { width:100%; height:100%; min-height:387px; border:0; }.video-note { position:absolute; left:15px; bottom:15px; max-width:360px; padding:10px 11px; color:#d4e9ef; background:rgba(4,8,13,.82); border-left:2px solid var(--cyan); font-size:11px; line-height:1.45; }
+      .streams { display:grid; gap:14px; }.stream-card { min-height:186px; padding:22px; border:1px solid var(--line); background:linear-gradient(140deg,rgba(18,30,41,.85),rgba(6,10,15,.9)); }.stream-top { display:flex; align-items:center; justify-content:space-between; gap:10px; }.stream-icon { width:33px; height:33px; display:grid; place-items:center; border:1px solid rgba(66,213,232,.55); color:var(--cyan); }.stream-icon svg { width:17px; }.stream-card h3 { margin:18px 0 7px; font:600 19px/1 var(--display); letter-spacing:-.04em; }.stream-card p { margin:0; color:#98afb9; font-size:12px; line-height:1.45; }.stream-card a { display:inline-block; margin-top:17px; color:var(--cyan); font:500 11px/1 var(--mono); letter-spacing:.05em; }.stream-card a:hover { color:#d2fbff; }
+      .atlas { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr); min-height:454px; border:1px solid var(--line); background:#0a0f15; }.atlas-scene { position:relative; overflow:hidden; min-height:400px; background:radial-gradient(circle at 70% 32%,rgba(255,209,132,.15),transparent 17rem),#13100c; }.atlas-scene::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(4,7,10,.62),transparent 58%),linear-gradient(0deg,rgba(4,7,10,.62),transparent 48%); pointer-events:none; }.atlas-scene.venus { background-image:linear-gradient(90deg,rgba(4,7,10,.74),transparent 65%),url('/manus-storage/orbital-atlas-venus_96e9d8bd.jpg'); background-position:center;background-size:cover; }.atlas-scene.mars { background-image:linear-gradient(90deg,rgba(4,7,10,.74),transparent 65%),url('/manus-storage/orbital-atlas-mars_576c2d69.jpg'); background-position:center;background-size:cover; }.atlas-scene.earth { background:radial-gradient(circle at 63% 40%,#4d91a6 0 5%,#163846 31%,#06131a 58%,#04070b 70%); }.atlas-scene.earth::before { content:""; position:absolute; width:325px; aspect-ratio:1; right:12%; top:12%; border-radius:50%; border:1px solid rgba(112,221,234,.54); box-shadow:inset -30px -15px 42px #02070a,0 0 39px rgba(58,204,224,.14); }.atlas-overlay { position:absolute; z-index:1; left:28px; bottom:27px; max-width:360px; }.atlas-overlay h3 { margin:0; font:600 clamp(33px,4vw,53px)/.95 var(--display); letter-spacing:-.065em; }.atlas-overlay p { margin:13px 0 0; color:#c6d3d8; font-size:13px; line-height:1.5; }.atlas-side { padding:28px; background:linear-gradient(145deg,rgba(19,30,40,.92),rgba(7,12,18,.93)); }.atlas-side .eyebrow { margin-bottom:16px; }.planet-tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }.planet-tab { padding:12px 6px; border:1px solid var(--line); background:rgba(6,10,15,.5); color:#93a9b3; cursor:pointer; font:500 11px/1 var(--mono); letter-spacing:.04em; }.planet-tab.active,.planet-tab:hover { border-color:var(--cyan); color:var(--cyan); }.feature-list { margin-top:26px; }.feature { display:grid; grid-template-columns:29px 1fr; gap:12px; padding:15px 0; border-top:1px solid rgba(213,240,245,.11); }.feature-index { color:var(--cyan); font:500 10px/1.25 var(--mono); }.feature strong { display:block; font:600 13px/1.2 var(--sans); }.feature p { margin:5px 0 0; color:#8fa7b0; font-size:12px; line-height:1.43; }
+      .crew-strip { display:grid; grid-template-columns:minmax(0,.75fr) 1.25fr; gap:14px; margin-top:14px; }.crew-intro { padding:24px; border:1px solid var(--line); background:linear-gradient(135deg,rgba(18,30,39,.82),rgba(7,11,16,.88)); }.crew-intro h3 { margin:0; font:600 25px/1 var(--display); letter-spacing:-.05em; }.crew-intro p { margin:12px 0 0; color:#a5b9c1; font-size:13px; line-height:1.5; }.crew-list { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--line); background:var(--line); gap:1px; }.crew { min-height:134px; padding:18px; background:#0d151e; }.crew-code { color:var(--cyan); font:500 10px/1 var(--mono); letter-spacing:.1em; }.crew h4 { margin:24px 0 0; font:600 15px/1.05 var(--display); letter-spacing:-.035em; }.crew p { margin:6px 0 0; color:#8199a3; font:11px/1.3 var(--sans); }
+      footer { display:flex; align-items:end; justify-content:space-between; gap:30px; padding:62px 0 34px; color:#8097a1; font-size:11px; line-height:1.5; }.footer-mark { color:#c2d7de; font:600 14px/1 var(--display); letter-spacing:-.03em; }.sources { max-width:670px; text-align:right; }
+      .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+      @media (max-width:1050px) { .hero-grid,.orbit-layout,.live-grid,.atlas,.crew-strip { grid-template-columns:1fr; }.earth-panel { min-height:500px; }.side-stack { grid-template-columns:1fr 1fr; }.launch-feed { grid-template-columns:repeat(3,minmax(230px,1fr)); overflow:auto; padding-bottom:4px; }.video-panel iframe { min-height:430px; }.section-head { align-items:start; flex-direction:column; }.section-note { max-width:560px; }.sources { text-align:left; }.crew-list { grid-template-columns:repeat(4,1fr); } }
+      @media (max-width:720px) { .shell { width:min(100% - 28px,1440px); }.topbar { min-height:66px; }.nav { display:none; }.utc { padding:7px; font-size:9px; }.hero { min-height:600px; padding:126px 0 40px; }.hero-grid { gap:38px; }.hero::before { background-position:59% center; }.hero-lead { font-size:15px; }.hero-metric { max-width:360px; }.side-stack { grid-template-columns:1fr; }.earth-panel { min-height:447px; }.globe { width:330px; transform:translate(-38%,-44%); }.orbit { left:55%; top:52%; }.panel-head { padding:18px; }.orbital-stage { inset:78px 0 0; }.iss-pin span { font-size:9px; }.launch-feed { margin-right:-14px; }.launch { min-width:274px; }.video-panel iframe { min-height:260px; }.atlas-side { padding:22px; }.atlas-scene { min-height:370px; }.crew-list { grid-template-columns:repeat(2,1fr); }.crew { min-height:118px; } footer { align-items:start; flex-direction:column; padding-top:45px; }.sources { text-align:left; }.section-head { margin-top:62px; }.section-head h2 { font-size:32px; } }
+      @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; }.launch,.button,.iss-pin { transition:none; }.skeleton-line { animation:none; } }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell topbar">
+        <a class="brand" href="#top" aria-label="Orbital Atlas — к началу страницы">
+          <img src="/manus-storage/orbital-atlas-logo_f9fbd235.png" alt="" />
+          <span class="brand-copy"><span class="brand-name">ALBA SPACE</span><span class="brand-sub">ORBITAL ATLAS</span></span>
+        </a>
+        <nav class="nav" aria-label="Разделы Orbital Atlas"><a href="#orbit">Орбита</a><a href="#launches">Запуски</a><a href="#live">Эфиры</a><a href="#atlas">Карты планет</a></nav>
+        <div class="utc"><span class="utc-dot"></span><span id="utcClock">UTC —:—:—</span></div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="shell hero-grid">
+          <div>
+            <p class="eyebrow"><span class="pulse"></span>Live space observatory</p>
+            <h1>Космос<br />в <em>движении.</em></h1>
+            <p class="hero-lead">Одна живая панель для запусков, спутников, Международной космической станции и карт планет. Смотрите траектории, сверяйте телеметрию и переходите к официальным эфирам, когда наступает момент старта.</p>
+            <div class="hero-actions"><a class="button primary" href="#orbit">Открыть орбиту <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg></a><a class="button" href="#launches">Ближайшие запуски</a></div>
+          </div>
+          <article class="hero-metric" aria-live="polite">
+            <div class="metric-top"><span>Следующая миссия</span><span class="metric-status" id="heroLaunchStatus">ПОИСК ДАННЫХ</span></div>
+            <h2 class="metric-title" id="heroLaunchName">Получаем расписание</h2>
+            <p class="metric-meta" id="heroLaunchMeta">Launch Library 2 подключается к актуальному каталогу запусков.</p>
+            <div class="metric-count"><strong id="heroCountdown">—</strong><span>до окна старта</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="shell" id="orbit">
+        <div class="section-head"><div><p class="eyebrow">01 / Live trajectory</p><h2>Орбита Земли<br />в настоящем времени.</h2></div><p class="section-note">Сцена показывает положение МКС на момент последнего ответа API. Орбитальные объекты отмечены как навигационный слой, а не как полный каталог космического мусора.</p></div>
+        <div class="orbit-layout">
+          <article class="panel earth-panel">
+            <div class="panel-head"><div><h3 class="panel-title">Низкая околоземная орбита</h3><p class="panel-sub">ISS · Hubble · Sentinel · TÜRKSAT · Starlink</p></div><div class="layer-switches" aria-label="Слои карты"><button class="layer-switch active" type="button" data-layer="orbit" aria-label="Показать орбиты">O</button><button class="layer-switch" type="button" data-layer="labels" aria-label="Показать названия">T</button></div></div>
+            <div class="orbital-stage" id="orbitalStage">
+              <div class="globe" aria-hidden="true"></div>
+              <div class="orbit" style="--w:640px;--h:238px;--r:18deg" aria-hidden="true"></div><div class="orbit o2" style="--w:590px;--h:180px;--r:-29deg" aria-hidden="true"></div><div class="orbit o3" style="--w:550px;--h:145px;--r:46deg" aria-hidden="true"></div><div class="orbit o4" style="--w:720px;--h:282px;--r:-9deg" aria-hidden="true"></div>
+              <div class="map-coordinates"><div class="iss-pin" id="issPin" style="left:50%;top:50%"><span>МКС · LIVE</span></div></div>
+              <div class="catalog-key"><span><b></b>пилотируемое</span><span><i></i>наблюдение</span><span><em></em>связь</span></div>
+            </div>
+          </article>
+          <aside class="side-stack">
+            <article class="panel iss-card" aria-live="polite"><div class="mini-row"><span>Объект 25544</span><span id="issVisibility">связь</span></div><h3 class="iss-name">МКС</h3><p class="iss-desc">Международная космическая станция. Координаты, высота и скорость обновляются через публичную телеметрию.</p><div class="telemetry"><div><small>Широта</small><strong id="issLat">—</strong></div><div><small>Долгота</small><strong id="issLon">—</strong></div><div><small>Высота</small><strong id="issAlt">—</strong></div><div><small>Скорость</small><strong id="issSpeed">—</strong></div></div></article>
+            <article class="panel object-list"><h3>Кураторский каталог</h3><p>Опорные объекты на сцене</p><div class="objects"><div class="object"><div class="object-l"><span class="object-mark"></span><div><strong>МКС</strong><small>пилотируемая орбита</small></div></div><span>25544</span></div><div class="object"><div class="object-l"><span class="object-mark"></span><div><strong>Hubble</strong><small>космический телескоп</small></div></div><span>20580</span></div><div class="object"><div class="object-l"><span class="object-mark"></span><div><strong>TÜRKSAT 6A</strong><small>геостационарная связь</small></div></div><span>60041</span></div></div></article>
+          </aside>
+        </div>
+      </section>
+
+      <section class="shell" id="launches">
+        <div class="section-head"><div><p class="eyebrow">02 / Launch cadence</p><h2>Ближайшие<br />окна запуска.</h2></div><p class="section-note">Расписание обновляется из Launch Library 2 и локально кэшируется в браузере, чтобы бережно использовать публичный лимит источника.</p></div>
+        <div class="launch-feed" id="launchFeed" aria-live="polite"><article class="launch skeleton"><div class="skeleton-line short"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line last"></div></article><article class="launch skeleton"><div class="skeleton-line short"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line last"></div></article><article class="launch skeleton"><div class="skeleton-line short"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line last"></div></article></div>
+      </section>
+
+      <section class="shell" id="live">
+        <div class="section-head"><div><p class="eyebrow">03 / Watch official</p><h2>Прямой эфир<br />без лишнего шума.</h2></div><p class="section-note">Встроенная трансляция — официальный канал NASA. Для запусков и эфиров МКС используются ясные переходы к первоисточникам: доступность изображения зависит от текущей связи и программы вещания.</p></div>
+        <div class="live-grid"><article class="video-panel"><iframe title="NASA Live" src="https://www.youtube.com/embed/21X5lGlDOfg?rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><div class="video-note">NASA TV — официальный поток. Когда видео с МКС недоступно, канал может показывать программу NASA или центр управления полётами.</div></article><div class="streams"><article class="stream-card"><div class="stream-top"><span class="eyebrow">NASA TV</span><span class="stream-icon"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 5.5v9l7-4.5-7-4.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /></svg></span></div><h3>Смотреть NASA TV</h3><p>Перейдите на официальный канал NASA для полноэкранного просмотра и чата трансляции.</p><a href="https://www.youtube.com/@NASA/live" target="_blank" rel="noreferrer">ОТКРЫТЬ ОФИЦИАЛЬНЫЙ ЭФИР ↗</a></article><article class="stream-card"><div class="stream-top"><span class="eyebrow">Launch / ISS</span><span class="stream-icon"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg></span></div><h3>SpaceX и МКС</h3><p>В день запуска в карточке миссии появляется доступный эфир. Для камер станции используйте официальный поток NASA.</p><a href="https://www.youtube.com/@SpaceX/live" target="_blank" rel="noreferrer">ОТКРЫТЬ SPACEX LIVE ↗</a></article></div></div>
+      </section>
+
+      <section class="shell" id="atlas">
+        <div class="section-head"><div><p class="eyebrow">04 / Planetary surfaces</p><h2>Карты, которые<br />хочется исследовать.</h2></div><p class="section-note">Первый экран атласа — Венера, с акцентом на кратеры, короны и вулканы. Переключите планету, чтобы сменить поверхность и набор научных слоёв.</p></div>
+        <div class="atlas"><div class="atlas-scene venus" id="atlasScene"><div class="atlas-overlay"><p class="eyebrow">Radar mosaic / magellan</p><h3 id="planetTitle">Венера</h3><p id="planetDescription">Радарная поверхность с кратерами, вулканическими равнинами и коронами — от общего обзора к детальному исследованию.</p></div></div><div class="atlas-side"><p class="eyebrow">Выберите поверхность</p><div class="planet-tabs" role="tablist" aria-label="Планетарные карты"><button class="planet-tab active" type="button" role="tab" aria-selected="true" data-planet="venus">Венера</button><button class="planet-tab" type="button" role="tab" aria-selected="false" data-planet="mars">Марс</button><button class="planet-tab" type="button" role="tab" aria-selected="false" data-planet="earth">Земля</button></div><div class="feature-list" id="featureList"><div class="feature"><span class="feature-index">01</span><div><strong>Кратеры</strong><p>Сравнивайте форму и плотность ударных следов на разных участках поверхности.</p></div></div><div class="feature"><span class="feature-index">02</span><div><strong>Короны</strong><p>Отмечайте крупные кольцевые структуры и открывайте научные карточки объектов.</p></div></div><div class="feature"><span class="feature-index">03</span><div><strong>Вулканы</strong><p>Включайте тематический слой, чтобы читать ландшафт как карту процессов.</p></div></div></div></div></div>
+        <div class="crew-strip"><article class="crew-intro"><p class="eyebrow">Station watch</p><h3>Экипаж на орбите</h3><p>Ниже — состав Crew-12 и Soyuz MS-29, добавленный по предоставленному вами списку. Для будущего обновления в реальном времени предусмотрен источник данных об экспедициях станции.</p></article><div class="crew-list"><article class="crew"><span class="crew-code">SOYUZ MS-29</span><h4>Anil Menon</h4><p>NASA</p></article><article class="crew"><span class="crew-code">SOYUZ MS-29</span><h4>Pyotr Dubrov</h4><p>Roscosmos</p></article><article class="crew"><span class="crew-code">SOYUZ MS-29</span><h4>Anna Kikina</h4><p>Roscosmos</p></article><article class="crew"><span class="crew-code">CREW-12</span><h4>Jessica Meir</h4><p>NASA</p></article></div></div>
+      </section>
+    </main>
+
+    <footer class="shell"><div><div class="footer-mark">ALBA SPACE / ORBITAL ATLAS</div><p>Оперативный раздел для наблюдения за космической деятельностью.</p></div><p class="sources">Источники: <a href="https://thespacedevs.com/llapi" target="_blank" rel="noreferrer">Launch Library 2</a> — расписание запусков; <a href="https://wheretheiss.at/w/developer" target="_blank" rel="noreferrer">Where The ISS At?</a> — положение МКС; <a href="https://celestrak.org/" target="_blank" rel="noreferrer">CelesTrak</a> — орбитальные элементы. Визуализация МКС имеет навигационный характер, не предназначена для пилотирования.</p></footer>
+
+    <script>
+      // Orbital Atlas: динамика только объясняет реальные данные; при отказе источника интерфейс сообщает об этом, не выдумывая миссии.
+      // При переносе на другой Worker укажите глобально window.ORBITAL_ATLAS_API до этого скрипта.
+      const api = { overview: window.ORBITAL_ATLAS_API || 'https://albaspace-api.nncdecdgc.workers.dev/api/orbital/overview' };
+      const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[char]);
+      const timeFormatter = new Intl.DateTimeFormat('ru-RU', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', timeZone:'UTC' });
+      const dateFormatter = new Intl.DateTimeFormat('ru-RU', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', timeZone:'UTC', timeZoneName:'short' });
+      let nextLaunch = null;
+
+      function updateUTC() { document.getElementById('utcClock').textContent = `UTC ${new Date().toLocaleTimeString('ru-RU', { hour12:false, timeZone:'UTC' })}`; }
+      function shortStatus(status) { const text = String(status || 'Статус уточняется'); if (/success/i.test(text)) return 'успешно'; if (/fail|hold|scrub/i.test(text)) return 'изменено'; return text; }
+      function streamFor(launch) { return launch.streamUrl || (/spacex/i.test(launch.provider || '') ? 'https://www.youtube.com/@SpaceX/live' : 'https://www.youtube.com/@NASA/live'); }
+      function launchCard(launch) {
+        const window = launch.net || launch.window_start || null;
+        const provider = launch.provider || 'Оператор уточняется';
+        const location = launch.location || 'Площадка уточняется';
+        const state = shortStatus(launch.status);
+        const stateClass = /успеш/i.test(state) ? 'success' : /измен/i.test(state) ? 'failure' : '';
+        return `<article class="launch"><div class="launch-meta"><span>${window ? escapeHtml(timeFormatter.format(new Date(window))) + ' UTC' : 'Дата уточняется'}</span><span class="launch-state ${stateClass}">${escapeHtml(state)}</span></div><h3>${escapeHtml(launch.name || 'Миссия уточняется')}</h3><p>${escapeHtml(provider)}</p><p class="launch-location">${escapeHtml(location)}</p><a class="watch" href="${escapeHtml(streamFor(launch))}" target="_blank" rel="noreferrer">СМОТРЕТЬ ОФИЦИАЛЬНЫЙ ЭФИР ↗</a></article>`;
+      }
+      function renderLaunches(launches) {
+        const feed = document.getElementById('launchFeed');
+        if (!Array.isArray(launches) || !launches.length) { feed.innerHTML = '<article class="launch"><div class="launch-meta"><span>LIVE CATALOGUE</span><span class="launch-state">ожидание</span></div><h3>Данные о запусках временно недоступны</h3><p>Пожалуйста, обновите страницу позже.</p></article>'; return; }
+        feed.innerHTML = launches.map(launchCard).join('');
+        nextLaunch = launches.find((item) => item.net && new Date(item.net) > new Date()) || launches[0];
+        const name = nextLaunch.name || 'Миссия уточняется'; const when = nextLaunch.net || nextLaunch.window_start;
+        document.getElementById('heroLaunchName').textContent = name;
+        document.getElementById('heroLaunchMeta').textContent = `${nextLaunch.provider || 'Оператор уточняется'} · ${when ? dateFormatter.format(new Date(when)) : 'дата уточняется'}`;
+        document.getElementById('heroLaunchStatus').textContent = shortStatus(nextLaunch.status).toUpperCase();
+        updateCountdown();
+      }
+      function updateCountdown() {
+        const target = nextLaunch?.net || nextLaunch?.window_start; const el = document.getElementById('heroCountdown');
+        if (!target) { el.textContent = '—'; return; }
+        const diff = new Date(target).getTime() - Date.now();
+        if (diff <= 0) { el.textContent = 'LIVE / T−0'; return; }
+        const days = Math.floor(diff / 86400000), hours = Math.floor((diff % 86400000) / 3600000), min = Math.floor((diff % 3600000) / 60000);
+        el.textContent = `${days ? days + 'д ' : ''}${String(hours).padStart(2,'0')}ч ${String(min).padStart(2,'0')}м`;
+      }
+      function setText(id, value) { document.getElementById(id).textContent = value; }
+      function degree(value, suffix) { return `${Math.abs(value).toFixed(2)}°${value < 0 ? (suffix === 'N' ? 'S' : 'W') : suffix}`; }
+      function renderISS(iss) {
+        const lat = Number(iss.latitude), lon = Number(iss.longitude); const visibility = String(iss.visibility || 'связь');
+        setText('issLat', degree(lat, 'N')); setText('issLon', degree(lon, 'E')); setText('issAlt', `${Number(iss.altitude).toFixed(0)} км`); setText('issSpeed', `${Math.round(Number(iss.velocity) / 100) / 10} тыс. км/ч`); setText('issVisibility', visibility);
+        const pin = document.getElementById('issPin'); pin.style.left = `${Math.max(9, Math.min(91, 50 + lon / 4.5))}%`; pin.style.top = `${Math.max(12, Math.min(88, 50 - lat / 2.6))}%`;
+        pin.title = `МКС: ${degree(lat,'N')}, ${degree(lon,'E')}`;
+      }
+      async function hydrateOverview() {
+        try {
+          const response = await fetch(api.overview, { headers: { Accept:'application/json' } });
+          if (!response.ok) throw new Error('orbital source unavailable');
+          const overview = await response.json();
+          renderLaunches(overview?.launches || []);
+          if (overview?.iss) renderISS(overview.iss); else setText('issVisibility', 'нет ответа');
+        } catch (error) { if (!nextLaunch) renderLaunches([]); setText('issVisibility', 'нет ответа'); }
+      }
+      const planetData = {
+        venus:{ title:'Венера', description:'Радарная поверхность с кратерами, вулканическими равнинами и коронами — от общего обзора к детальному исследованию.', features:[['Кратеры','Сравнивайте форму и плотность ударных следов на разных участках поверхности.'],['Короны','Отмечайте крупные кольцевые структуры и открывайте научные карточки объектов.'],['Вулканы','Включайте тематический слой, чтобы читать ландшафт как карту процессов.']] },
+        mars:{ title:'Марс', description:'Орбитальный обзор красной планеты: кратерированные плато, тёмные вулканические области и линии древних каналов.', features:[['Долины','Исследуйте протяжённые системы каньонов и следы эрозии.'],['Посадочные зоны','Связывайте поверхности с реальными миссиями и роверами.'],['Минералы','Собирайте слои состава для прочтения истории ландшафта.']] },
+        earth:{ title:'Земля', description:'Планета, вокруг которой сейчас проходит большая часть активной пилотируемой и спутниковой деятельности.', features:[['Орбиты','Сопоставляйте высоты, наклонения и типы космических объектов.'],['Станции','Следите за МКС и будущими станциями через телеметрию.'],['Запуски','Переходите от стартовой площадки к объекту на орбите.']] }
+      };
+      function changePlanet(key) { const data = planetData[key]; const scene = document.getElementById('atlasScene'); scene.className = `atlas-scene ${key}`; document.getElementById('planetTitle').textContent = data.title; document.getElementById('planetDescription').textContent = data.description; document.getElementById('featureList').innerHTML = data.features.map((feature,index) => `<div class="feature"><span class="feature-index">0${index + 1}</span><div><strong>${feature[0]}</strong><p>${feature[1]}</p></div></div>`).join(''); document.querySelectorAll('.planet-tab').forEach((button) => { const active = button.dataset.planet === key; button.classList.toggle('active',active); button.setAttribute('aria-selected',String(active)); }); }
+      document.querySelectorAll('.planet-tab').forEach((button) => button.addEventListener('click', () => changePlanet(button.dataset.planet)));
+      document.querySelectorAll('.layer-switch').forEach((button) => button.addEventListener('click', () => { document.querySelectorAll('.layer-switch').forEach((item) => item.classList.remove('active')); button.classList.add('active'); document.getElementById('orbitalStage').classList.toggle('labels-off', button.dataset.layer === 'orbit'); }));
+      updateUTC(); setInterval(updateUTC, 1000); setInterval(updateCountdown, 30000); hydrateOverview(); setInterval(hydrateOverview, 15000);
+    </script>
+  </body>
+</html>
