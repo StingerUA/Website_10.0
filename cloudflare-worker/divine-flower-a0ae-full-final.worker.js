@@ -6,13 +6,79 @@
  * + Telegram Logging & KV Memory
  */
 
+const DEFAULT_ALLOWED_ORIGINS = [
+  "https://albaspace.com.tr",
+  "https://www.albaspace.com.tr",
+];
+const ALLOWED_LANGUAGES = new Set(["ru", "tr", "en"]);
+const MAX_TEXT_CHARS = 2000;
+const MAX_AUDIO_BASE64_CHARS = 900000;
+const MAX_TRANSLATION_CHARS_PER_REQUEST = 10000;
+const TRANSLATOR_SAFE_MONTHLY_LIMIT = 1800000;
+
+function getAllowedOrigins(env) {
+  const configured = String(env.ALLOWED_ORIGINS || "").split(",").map((origin) => origin.trim()).filter(Boolean);
+  return configured.length > 0 ? configured : DEFAULT_ALLOWED_ORIGINS;
+}
+
+function getCorsHeaders(request, env) {
+  const origin = request.headers.get("Origin");
+  const allowedOrigins = getAllowedOrigins(env);
+  const headers = {
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Content-Length, X-Request-ID",
+    "Vary": "Origin",
+  };
+  if (origin && allowedOrigins.includes(origin)) {
+    headers["Access-Control-Allow-Origin"] = origin;
+  }
+  return headers;
+}
+
+function jsonResponse(payload, status, corsHeaders) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json; charset=utf-8" },
+  });
+}
+
+function normalizeLanguage(value) {
+  const language = String(value || "tr").toLowerCase().split("-")[0];
+  return ALLOWED_LANGUAGES.has(language) ? language : "tr";
+}
+
+function normalizedSessionId(value) {
+  const sessionId = String(value || "").trim();
+  return /^[a-zA-Z0-9._:-]{1,80}$/.test(sessionId) ? sessionId : "";
+}
+
+function requestTooLarge(request, maxBytes) {
+  const contentLength = Number(request.headers.get("Content-Length") || 0);
+  return Number.isFinite(contentLength) && contentLength > maxBytes;
+}
+
+async function enforceRateLimit(request, env, context, bucketName, limit, periodSeconds) {
+  const KV = env.ALBAMEN_KV || env.SESSIONS || env.KV || null;
+  if (!KV) return true;
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const bucket = Math.floor(Date.now() / (periodSeconds * 1000));
+  const key = `${bucketName}:${ip}`;
+  try {
+    let state = await KV.get(key, { type: "json" }) || { bucket, count: 0 };
+    if (state.bucket !== bucket) state = { bucket, count: 0 };
+    state.count += 1;
+    if (state.count > limit) return false;
+    context.waitUntil(KV.put(key, JSON.stringify(state), { expirationTtl: periodSeconds * 2 }));
+    return true;
+  } catch (error) {
+    console.error(`[rate-limit:${bucketName}]`, error);
+    return true;
+  }
+}
+
 export default {
   async fetch(request, env, context) {
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Content-Length",
-    };
+    const corsHeaders = getCorsHeaders(request, env);
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders });
     if (request.method !== "POST") return new Response("Use POST", { status: 200, headers: corsHeaders });
@@ -20,11 +86,12 @@ export default {
     const url = new URL(request.url);
     const endpoint = url.pathname;
 
-    // Route to handlers
     if (endpoint === "/api/voice") {
       return await handleVoiceChat(request, env, context, corsHeaders);
     }
-    // Default to chat
+    if (endpoint === "/api/translate") {
+      return await handleTranslation(request, env, context, corsHeaders);
+    }
     return await handleTextChat(request, env, context, corsHeaders);
   }
 };
@@ -55,10 +122,20 @@ function uint8ArrayToBase64(uint8Array) {
 
 async function handleVoiceChat(request, env, context, corsHeaders) {
   try {
+    if (requestTooLarge(request, 1200000)) {
+      return jsonResponse({ error: "Audio payload is too large" }, 413, corsHeaders);
+    }
+    if (!await enforceRateLimit(request, env, context, "rlv", 8, 60)) {
+      return jsonResponse({ error: "Voice rate limit exceeded" }, 429, corsHeaders);
+    }
     const body = await request.json();
-    const audioBase64 = body.audio;
-    const sessionId = (body.sessionId || "").trim();
-    const language = (body.language || "tr").toLowerCase();
+    const audioBase64 = String(body.audio || "");
+    const sessionId = normalizedSessionId(body.sessionId);
+    const language = normalizeLanguage(body.language);
+
+    if (audioBase64.length > MAX_AUDIO_BASE64_CHARS) {
+      return jsonResponse({ error: "Audio payload is too large" }, 413, corsHeaders);
+    }
 
     if (!audioBase64) {
       return new Response(JSON.stringify({ error: "Missing audio" }), {
@@ -67,6 +144,9 @@ async function handleVoiceChat(request, env, context, corsHeaders) {
     }
 
     // ── STT: Whisper ──────────────────────────────────────────────
+    if (!env.AI) {
+      return jsonResponse({ error: "Voice AI is temporarily unavailable" }, 503, corsHeaders);
+    }
     let userText = "";
     try {
       const audioUint8 = base64ToUint8Array(audioBase64);
@@ -119,38 +199,100 @@ async function handleVoiceChat(request, env, context, corsHeaders) {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
+// OPTIONAL AZURE TRANSLATOR F0 HANDLER
+// Disabled unless explicitly enabled. This is not an LLM and does not replace Groq.
+// ════════════════════════════════════════════════════════════════════════════
+
+async function handleTranslation(request, env, context, corsHeaders) {
+  if (env.AZURE_TRANSLATOR_ENABLED !== "true") {
+    return jsonResponse({ error: "Translation service is disabled in free mode" }, 404, corsHeaders);
+  }
+  if (!env.AZURE_TRANSLATOR_KEY) {
+    return jsonResponse({ error: "Translator is not configured" }, 503, corsHeaders);
+  }
+  if (requestTooLarge(request, 30000)) {
+    return jsonResponse({ error: "Translation payload is too large" }, 413, corsHeaders);
+  }
+  if (!await enforceRateLimit(request, env, context, "rll", 20, 60)) {
+    return jsonResponse({ error: "Translation rate limit exceeded" }, 429, corsHeaders);
+  }
+
+  let body = {};
+  try { body = await request.json(); } catch (_) {
+    return jsonResponse({ error: "Invalid JSON" }, 400, corsHeaders);
+  }
+  const text = String(body.text || "").trim();
+  const requestedTo = Array.isArray(body.to) ? body.to : [body.to || "ru"];
+  const to = requestedTo.map((item) => String(item).toLowerCase().split("-")[0]).filter((item, index, list) => ["ru", "tr", "en"].includes(item) && list.indexOf(item) === index);
+  const from = body.from ? String(body.from).toLowerCase().split("-")[0] : "";
+
+  if (!text || text.length > MAX_TRANSLATION_CHARS_PER_REQUEST || to.length === 0 || to.length > 3) {
+    return jsonResponse({ error: "Use 1–10000 characters and up to 3 target languages: ru, tr, en" }, 400, corsHeaders);
+  }
+
+  const KV = env.ALBAMEN_KV || env.SESSIONS || env.KV || null;
+  const month = new Date().toISOString().slice(0, 7);
+  const usageKey = `tr:chars:${month}`;
+  const requestedChars = text.length * to.length;
+  if (KV) {
+    const usedChars = Number(await KV.get(usageKey) || 0);
+    if (usedChars + requestedChars > TRANSLATOR_SAFE_MONTHLY_LIMIT) {
+      return jsonResponse({ error: "Free translation quota reached" }, 429, corsHeaders);
+    }
+    context.waitUntil(KV.put(usageKey, String(usedChars + requestedChars), { expirationTtl: 2678400 }));
+  }
+
+  const endpoint = String(env.AZURE_TRANSLATOR_ENDPOINT || "https://api.cognitive.microsofttranslator.com").replace(/\/$/, "");
+  const translateUrl = new URL(`${endpoint}/translate`);
+  translateUrl.searchParams.set("api-version", "3.0");
+  to.forEach((target) => translateUrl.searchParams.append("to", target));
+  if (from && ["ru", "tr", "en"].includes(from)) translateUrl.searchParams.set("from", from);
+
+  const headers = {
+    "Content-Type": "application/json",
+    "Ocp-Apim-Subscription-Key": env.AZURE_TRANSLATOR_KEY,
+  };
+  if (env.AZURE_TRANSLATOR_REGION) headers["Ocp-Apim-Subscription-Region"] = env.AZURE_TRANSLATOR_REGION;
+
+  const response = await fetch(translateUrl.toString(), {
+    method: "POST",
+    headers,
+    body: JSON.stringify([{ Text: text }]),
+  });
+  const responseText = await response.text();
+  if (!response.ok) {
+    console.error(`[Translator] HTTP ${response.status}: ${responseText.slice(0, 200)}`);
+    return jsonResponse({ error: "Translation service unavailable" }, response.status === 429 ? 429 : 502, corsHeaders);
+  }
+  let data;
+  try { data = JSON.parse(responseText); } catch (_) {
+    return jsonResponse({ error: "Invalid translation response" }, 502, corsHeaders);
+  }
+  return jsonResponse({ translations: data[0]?.translations || [], quota: { month, reservedCharacters: requestedChars } }, 200, corsHeaders);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
 // TEXT CHAT HANDLER
 // ════════════════════════════════════════════════════════════════════════════
 
 async function handleTextChat(request, env, context, corsHeaders) {
-  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-  const KV = env.ALBAMEN_KV || env.SESSIONS || env.KV || null;
-
-  // Rate Limiting
-  if (KV) {
-    try {
-      const rk = `rl:${ip}`;
-      const limit = 40, period = 60;
-      const now = Date.now();
-      const bucket = Math.floor(now / (period * 1000));
-      let rl = await KV.get(rk, { type: "json" }) || { b: bucket, c: 0 };
-      if (rl.b !== bucket) rl = { b: bucket, c: 0 };
-      rl.c++;
-      if (rl.c > limit) {
-        return new Response(JSON.stringify({ reply: "Biraz yavaş! 🚀 Sakin ol." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" }
-        });
-      }
-      context.waitUntil(KV.put(rk, JSON.stringify(rl), { expirationTtl: period * 2 }));
-    } catch (e) {}
+  if (requestTooLarge(request, 1500000)) {
+    return jsonResponse({ error: "Request body is too large" }, 413, corsHeaders);
+  }
+  if (!await enforceRateLimit(request, env, context, "rlt", 40, 60)) {
+    return jsonResponse({ reply: "Biraz yavaş! 🚀 Sakin ol." }, 429, corsHeaders);
   }
 
   let body = {};
   try { body = await request.json(); } catch (_) {}
 
-  const message = (body.message || "").trim();
-  const sessionId = (body.sessionId || "").trim();
-  const language = (body.language || "tr").toLowerCase();
+  const message = String(body.message || "").trim();
+  const sessionId = normalizedSessionId(body.sessionId);
+  const language = normalizeLanguage(body.language);
+
+  if (message.length > MAX_TEXT_CHARS) {
+    return jsonResponse({ error: `Message is limited to ${MAX_TEXT_CHARS} characters` }, 413, corsHeaders);
+  }
 
   if (!message) {
     return new Response(JSON.stringify({ reply: "Merhaba! Ben Albamen 👨‍🚀🚀", saveName: null, saveAge: null }), {
@@ -174,8 +316,8 @@ async function handleTextChat(request, env, context, corsHeaders) {
     });
   }
 
-  // Telegram Logging
-  if (env.TELEGRAM_TOKEN && env.TELEGRAM_CHAT_ID) {
+  // Telegram Logging is opt-in to avoid sending user content to a third party by default.
+  if (env.TELEGRAM_LOGGING_ENABLED === "true" && env.TELEGRAM_TOKEN && env.TELEGRAM_CHAT_ID) {
     context.waitUntil(
       fetch(`https://api.telegram.org/bot${env.TELEGRAM_TOKEN}/sendMessage`, {
         method: "POST",
@@ -203,7 +345,14 @@ async function generateLLMResponse(message, sessionId, env, language, context) {
 
   if (sessionId && KV) {
     const raw = await KV.get("s:" + sessionId);
-    if (raw) mem = JSON.parse(raw);
+    if (raw) {
+      try {
+        mem = { ...mem, ...JSON.parse(raw) };
+        if (!Array.isArray(mem.history)) mem.history = [];
+      } catch (error) {
+        console.error("[KV] Invalid session memory", error);
+      }
+    }
   }
 
   mem.msgCount++;

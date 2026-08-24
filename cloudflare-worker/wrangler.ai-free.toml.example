@@ -1,0 +1,33 @@
+# Бесплатная конфигурация только для AI-worker Albamen.
+# Этот файл не переводит Worker на платный Azure OpenAI.
+name = "divine-flower-a0ae"
+main = "divine-flower-a0ae-full-final.worker.js"
+compatibility_date = "2026-04-06"
+compatibility_flags = ["nodejs_compat", "streams_enable_constructors"]
+workers_dev = true
+
+[[kv_namespaces]]
+binding = "ALBAMEN_KV"
+id = "24b4817f550c4d26b7e61b29388f6ca4"
+
+[ai]
+binding = "AI"
+
+[vars]
+# Меняйте только на свои доверенные frontend-домены.
+ALLOWED_ORIGINS = "https://albaspace.com.tr,https://www.albaspace.com.tr"
+
+# Azure OpenAI намеренно отсутствует: он не является постоянным бесплатным сервисом.
+# Azure Translator F0 включается отдельным флагом только после проверки тарифа.
+AZURE_TRANSLATOR_ENABLED = "false"
+AZURE_TRANSLATOR_ENDPOINT = "https://api.cognitive.microsofttranslator.com"
+# AZURE_TRANSLATOR_REGION = "..."  # добавьте только если ресурс требует региональный заголовок
+
+# Не отправлять пользовательский контент в Telegram по умолчанию.
+TELEGRAM_LOGGING_ENABLED = "false"
+
+# Секрет добавляется только в Cloudflare, не в Git:
+# wrangler secret put GROQ_API_KEY
+# wrangler secret put AZURE_TRANSLATOR_KEY
+# wrangler secret put TELEGRAM_TOKEN
+# wrangler secret put TELEGRAM_CHAT_ID
