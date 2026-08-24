@@ -6,6 +6,7 @@ let draftRound = null;
 let stopEvents = null;
 let selectedTopics = [];
 let stationRenderer = null;
+let stationView = null;
 
 const app = document.getElementById("app");
 const hud = document.getElementById("hud");
@@ -84,14 +85,23 @@ function stationLayout(player, rightPanel) {
 function mount3D(player) {
   const host = document.getElementById("station3d");
   if (state.presentationMode === "AR") {
+    stationRenderer?.dispose(); stationRenderer = null; stationView = null;
     host.innerHTML = `<div class="ar-development-fallback"><div class="phase">AR mode</div><h2>Мобильный режим подготовки</h2><p>Настоящий AR Renderer пока не подключён. Комната и multiplayer продолжают работать через лёгкий интерфейс.</p><p class="muted">Позже к этому месту подключится: AR Anchor → StationRoot.</p></div>`;
     return;
   }
   if (!window.AlbaStation3D || !host) return;
-  stationRenderer?.dispose();
-  stationRenderer = new AlbaStation3D.Station3DRenderer(document.getElementById("station3d"), { onSelect: selection => openSelection(selection), onError: () => toast("3D режим недоступен на этом устройстве") });
-  stationRenderer.init();
-  stationRenderer.update(state, player);
+  if (stationRenderer?.ready && stationRenderer.canvas) {
+    // Keep the Babylon engine and ArcRotateCamera alive while the HTML side panel re-renders.
+    stationRenderer.host = host;
+    host.innerHTML = "";
+    host.appendChild(stationRenderer.canvas);
+    stationRenderer.update(state, player);
+  } else {
+    stationRenderer?.dispose();
+    stationRenderer = new AlbaStation3D.Station3DRenderer(host, { onSelect: selection => openSelection(selection), onError: () => toast("3D режим недоступен на этом устройстве") });
+    stationRenderer.init();
+    stationRenderer.update(state, player);
+  }
   document.getElementById("resetView")?.addEventListener("click", () => stationRenderer?.resetView());
 }
 
@@ -129,7 +139,7 @@ function renderStation(player) {
   const active = player.cadets.filter(cadet => cadet.status === "ACTIVE");
   const crew = active.map(cadet => `<button class="drawer-row recruit-like" data-cadet="${AlbaGame.esc(cadet.id)}"><span>${AlbaGame.esc(cadet.name || AlbaSpace.TOPICS[cadet.topic]?.label || "Кадет")}</span><span>${AlbaSpace.TOPICS[cadet.topic]?.label || cadet.topic} · ${cadet.knowledge}/4</span></button>`).join("");
   const ranking = AlbaSpace.rank(state).map((item, index) => `<div class="drawer-row"><span>${index + 1}. ${AlbaGame.esc(item.company)}</span><span>${item.correct}/${state.round || 0} · 🎓 ${item.graduates}</span></div>`).join("");
-  const panel = `<aside class="station-controls card"><div class="control-tabs"><button class="btn ghost compact" data-drawer="crew">Экипаж ▾</button><button class="btn ghost compact" data-drawer="ranking">Рейтинг ▾</button></div><div id="drawer" class="drawer hidden"></div><div class="phase">Станция · ${modeLabel()}</div><div class="notice">Свободных мест: <strong>${free}</strong><br><span class="muted">Кадеты находятся внутри модулей и парят в невесомости.</span></div><h2>+ Модуль</h2><div class="grid two"><button id="small" class="btn" ${player.small >= AlbaSpace.MAX.small || player.credits < AlbaSpace.ECON.small ? "disabled" : ""}>SMALL<br><strong>650 💰</strong><br>+2 места</button><button id="large" class="btn" ${player.large >= AlbaSpace.MAX.large || player.credits < AlbaSpace.ECON.large ? "disabled" : ""}>LARGE<br><strong>950 💰</strong><br>+3 места</button></div><p class="muted small-note">После подтверждения сервером доступные docking ports подсветятся в Build View.</p><div class="sep"></div><h2>Принять кадета</h2>${free > 0 ? `<div class="grid two">${Object.entries(AlbaSpace.TOPICS).map(([key, topic]) => `<button class="btn ghost recruit" data-topic="${key}">${topic.label}</button>`).join("")}</div>` : `<p class="muted">Свободных мест нет.</p>`}</aside>`;
+  const panel = `<aside class="station-controls card"><div class="control-tabs"><button class="btn ghost compact" data-drawer="crew">Экипаж ▾</button><button class="btn ghost compact" data-drawer="ranking">Рейтинг ▾</button></div><div id="drawer" class="drawer hidden"></div><div class="phase">Станция · ${modeLabel()}</div><div class="notice">Свободных мест: <strong>${free}</strong></div><h2>+ Модуль</h2><div class="grid two"><button id="small" class="btn" ${player.small >= AlbaSpace.MAX.small || player.credits < AlbaSpace.ECON.small ? "disabled" : ""}>SMALL<br><strong>650 💰</strong><br>+2 места</button><button id="large" class="btn" ${player.large >= AlbaSpace.MAX.large || player.credits < AlbaSpace.ECON.large ? "disabled" : ""}>LARGE<br><strong>950 💰</strong><br>+3 места</button></div><p class="muted small-note">После подтверждения сервером доступные docking ports подсветятся в Build View.</p><div class="sep"></div><h2>Принять кадета</h2>${free > 0 ? `<div class="grid two">${Object.entries(AlbaSpace.TOPICS).map(([key, topic]) => `<button class="btn ghost recruit" data-topic="${key}">${topic.label}</button>`).join("")}</div>` : `<p class="muted">Свободных мест нет.</p>`}</aside>`;
   app.innerHTML = stationLayout(player, panel) + `<section class="card station-summary"><div class="phase">Состояние станции</div><div class="kpis"><span class="kpi">LARGE ${player.large}/3</span><span class="kpi">SMALL ${player.small}/7</span><span class="kpi">Экипаж ${active.length}/${player.seatCapacity}</span></div>${player.small + player.large === 9 ? `<div class="milestone">🚨 Остался один модуль!</div>` : ""}</section>`;
   mount3D(player);
   document.getElementById("small")?.addEventListener("click", () => send("BUY_MODULE", { type: "SMALL" }));
