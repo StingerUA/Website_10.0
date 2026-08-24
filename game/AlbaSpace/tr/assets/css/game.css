@@ -8,3 +8,8 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
 .ar-development-fallback{height:100%;min-height:430px;display:grid;place-content:center;text-align:center;padding:32px;max-width:520px;margin:auto}.ar-development-fallback h2{margin-bottom:10px}.ar-development-fallback p{line-height:1.55}
+/* v0.3 interaction and responsive hardening */
+.question-panel h2,.classroom-question{overflow-wrap:anywhere;word-break:break-word;hyphens:auto}
+.teacher-header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.teacher-finish{white-space:nowrap}
+.station-readiness{display:grid;gap:8px;margin-top:14px}.station-readiness-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border:1px solid #203454;border-radius:10px;background:#071426}.station-readiness-row strong{overflow-wrap:anywhere}.station-ready{color:var(--good);font-weight:900;white-space:nowrap}.station-pending{color:var(--warn);font-weight:800;text-align:right}
+@media(max-width:720px){.teacher-topbar .teacher-header-actions{width:100%}.teacher-topbar .teacher-finish{width:auto;flex:0 1 auto}.teacher-topbar .kpis{width:100%;align-items:center}}

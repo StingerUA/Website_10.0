@@ -8,6 +8,26 @@ const WORKER_ME_URL = `${WORKER_BASE_URL}/me`;
 const WORKER_PROFILE_URL = `${WORKER_BASE_URL}/profile`;
 const AUTH_RETURN_KEY = "albaspace_auth_return_to";
 const AUTH_SOURCE_KEY = "albaspace_auth_source";
+const AUTH_TOKEN_KEY = "albaspace_access_token";
+
+
+function consumeAuthToken() {
+  const hash = window.location.hash.replace(/^#/, "");
+  const parts = hash ? hash.split("&") : [];
+  const tokenPart = parts.find(part => part.startsWith(AUTH_TOKEN_KEY + "="));
+  if (!tokenPart) return;
+  const token = decodeURIComponent(tokenPart.slice(AUTH_TOKEN_KEY.length + 1));
+  if (token) { try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (error) { console.warn("Unable to store auth token:", error); } }
+  const rest = parts.filter(part => !part.startsWith(AUTH_TOKEN_KEY + "="));
+  const clean = window.location.pathname + window.location.search + (rest.length ? "#" + rest.join("&") : "");
+  window.history.replaceState({}, document.title, clean);
+}
+function authHeaders() {
+  try {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY) || "";
+    return token ? { Authorization: "Bearer " + token } : {};
+  } catch (error) { return {}; }
+}
 
 function login(options = {}) {
   persistAuthState(options.source || "default");
@@ -17,12 +37,14 @@ function login(options = {}) {
 }
 
 async function checkUser() {
+  consumeAuthToken();
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5-second timeout
 
     const res = await fetch(WORKER_ME_URL, {
       credentials: "include",
+      headers: authHeaders(),
       signal: controller.signal,
       mode: "cors"
     });
@@ -190,7 +212,8 @@ async function saveAccountProfile(data) {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...authHeaders()
       },
       body: JSON.stringify(data)
     });
@@ -220,9 +243,11 @@ async function saveAccountProfile(data) {
 window.saveAccountProfile = saveAccountProfile;
 
 function logout() {
+  const logoutHeaders = authHeaders();
   try {
     localStorage.removeItem('user');
     localStorage.removeItem('albamen_session_id');
+    localStorage.removeItem(AUTH_TOKEN_KEY);
   } catch (e) {
     console.warn('Unable to clear local auth state', e);
   }
@@ -231,7 +256,7 @@ function logout() {
   document.cookie = 'albamen_session_id=; Max-Age=0; path=/;';
   document.cookie = 'albaspace_session=; Max-Age=0; path=/; SameSite=None; Secure;';
   // Удаляем сессию на сервере, потом перезагружаем
-  fetch(WORKER_BASE_URL + '/logout', { credentials: 'include' })
+  fetch(WORKER_BASE_URL + '/logout', { credentials: 'include', headers: logoutHeaders })
     .finally(() => window.location.reload());
 }
 

@@ -59,11 +59,11 @@
         this.camera.panningSensibility = 0;
         this.camera.attachControl(this.canvas, true);
         const hemi = new BABYLON.HemisphericLight("soft-space-light", new BABYLON.Vector3(0.2, 1, -0.3), this.scene);
-        hemi.intensity = 0.9;
+        hemi.intensity = 0.28;
         const rim = new BABYLON.PointLight("cyan-rim", new BABYLON.Vector3(-3, 5, -5), this.scene);
-        rim.diffuse = BABYLON.Color3.FromHexString("#68dfff"); rim.intensity = 52; rim.range = 18;
+        rim.diffuse = BABYLON.Color3.FromHexString("#68dfff"); rim.intensity = 3; rim.range = 18;
         const warm = new BABYLON.PointLight("earth-light", new BABYLON.Vector3(4, -5, 4), this.scene);
-        warm.diffuse = BABYLON.Color3.FromHexString("#ffbd77"); warm.intensity = 18; warm.range = 15;
+        warm.diffuse = BABYLON.Color3.FromHexString("#ffbd77"); warm.intensity = 1.5; warm.range = 15;
         this.createBackground();
         this.engine.runRenderLoop(() => { if (!this.hidden) this.scene.render(); });
         window.addEventListener("resize", this.resize);
@@ -86,16 +86,16 @@
 
     restoreView(view) {
       if (!this.camera || !view) return;
+      this.camera.setTarget(new BABYLON.Vector3(view.target.x, view.target.y, view.target.z));
       this.camera.alpha = view.alpha;
       this.camera.beta = view.beta;
       this.camera.radius = Math.max(this.camera.lowerRadiusLimit, Math.min(this.camera.upperRadiusLimit, view.radius));
-      this.camera.setTarget(new BABYLON.Vector3(view.target.x, view.target.y, view.target.z));
     }
 
     update(state, player) {
       this.state = state; this.player = player;
       if (!this.init()) return;
-      const savedView = this.captureView();
+      const savedView = this.hasRendered ? this.captureView() : null;
       this.stationRoot?.dispose(false, true);
       this.stationRoot = new BABYLON.TransformNode("StationRoot", this.scene);
       const modules = this.buildModules(player);
@@ -106,8 +106,10 @@
       if (savedView) this.restoreView(savedView);
       else {
         this.camera.setTarget(new BABYLON.Vector3(0, 0.2, 0));
-        this.camera.radius = state.phase === "ENDGAME" ? 17.5 : Math.min(16, 11.5 + modules.length * 0.38);
+        this.camera.radius = state.phase === "ENDGAME" ? 20 : Math.min(23, 12 + modules.length * 1.05);
       }
+      this.moduleCount = modules.length;
+      this.hasRendered = true;
       this.host.dataset.phase = state.phase;
       this.host.dataset.moduleCount = String(modules.length);
     }
@@ -116,17 +118,25 @@
       const large = Math.min(3, Number(player?.large || 1));
       const small = Math.min(7, Number(player?.small || 0));
       const out = [];
+      const largeX = large === 1 ? [0] : large === 2 ? [-1.8, 1.8] : [-3.6, 0, 3.6];
+      const smallSlots = large === 1 ? [
+        { x: 0, y: -2.25 }, { x: 0, y: 2.25 }, { x: 2.75, y: 0 }, { x: -2.75, y: 0 },
+        { x: 2.75, y: -2.25 }, { x: 2.75, y: 2.25 }, { x: -2.75, y: 2.25 }
+      ] : large === 2 ? [
+        { x: -4.55, y: 0 }, { x: 4.55, y: 0 }, { x: -4.55, y: -2.25 }, { x: 0, y: -2.25 },
+        { x: 4.55, y: -2.25 }, { x: -4.55, y: 2.25 }, { x: 0, y: 2.25 }
+      ] : [
+        { x: 6.35, y: 0 }, { x: -6.35, y: 0 }, { x: -3.6, y: -2.25 }, { x: 0, y: -2.25 },
+        { x: 3.6, y: -2.25 }, { x: -3.6, y: 2.25 }, { x: 0, y: 2.25 }
+      ];
       const largeNames = ["COMMAND", "SCIENCE", "OPERATIONS"];
-      for (let i = 0; i < large; i++) out.push({ id: `LARGE-${i + 1}`, type: "LARGE", name: largeNames[i], position: new BABYLON.Vector3((i - 1) * 3.35, 0, 0) });
+      largeX.forEach((x, index) => out.push({ id: `LARGE-${index + 1}`, type: "LARGE", name: largeNames[index], position: new BABYLON.Vector3(x, 0, 0) }));
       for (let i = 0; i < small; i++) {
-        const parent = Math.min(2, Math.floor(i / 3));
-        const side = i % 2 ? 1 : -1;
-        const row = Math.floor(i / 2);
-        out.push({ id: `SMALL-${i + 1}`, type: "SMALL", name: "SMALL", position: new BABYLON.Vector3((parent - 1) * 3.35 + (row % 2) * 0.55, side * (2.05 + Math.floor(i / 4) * 0.22), 0.05), side });
+        const slot = smallSlots[i];
+        out.push({ id: `SMALL-${i + 1}`, type: "SMALL", name: "SMALL", position: new BABYLON.Vector3(slot.x, slot.y, 0.05), side: slot.x < 0 ? -1 : 1 });
       }
       return out;
     }
-
     buildModule(meta) {
       const root = new BABYLON.TransformNode(meta.id, this.scene); root.parent = this.stationRoot; root.position = meta.position;
       const isLarge = meta.type === "LARGE";
@@ -134,8 +144,8 @@
       const diameter = isLarge ? 2.35 : 1.72;
       const radius = diameter / 2;
       const accent = MODULE_ACCENT[meta.name] || MODULE_ACCENT.SMALL;
-      const shellMat = this.material(isLarge ? "#d8e3ed" : "#b8c9d6", 0.98);
-      const innerMat = this.material("#10243a", 1);
+      const shellMat = this.material(isLarge ? "#718898" : "#5e7484", 0.94);
+      const innerMat = this.material("#061524", 1);
       const accentMat = this.material(accent, 0.9, true);
 
       // Open cutaway shell: back wall and floor remain, while the front/top are framed only.
@@ -150,14 +160,12 @@
       top.position.set(0, radius - 0.08, -0.02); top.parent = root; top.material = shellMat;
       const frontRail = BABYLON.MeshBuilder.CreateBox(meta.id + "_CutawayRail", { width: length * 0.92, height: 0.08, depth: 0.08 }, this.scene);
       frontRail.position.set(0, -radius + 0.4, -diameter * 0.4); frontRail.parent = root; frontRail.material = accentMat;
-      const ring = BABYLON.MeshBuilder.CreateTorus(meta.id + "_OpenDockRing", { diameter: diameter * 0.92, thickness: 0.075, tessellation: 24 }, this.scene);
-      ring.rotation.y = Math.PI / 2; ring.position.z = -diameter * 0.42; ring.parent = root; ring.material = accentMat;
       this.buildInterior(meta, root, length, diameter, accent, accentMat);
 
       if (isLarge) {
         ["AxialPort_A", "AxialPort_B"].forEach((name, index) => this.anchor(root, name, new BABYLON.Vector3(index ? length * 0.57 : -length * 0.57, 0, 0), "#63e7ff"));
         [1, 2, 3, 4].forEach((n, index) => this.anchor(root, `RadialPort_0${n}`, new BABYLON.Vector3((index - 1.5) * 0.55, index % 2 ? radius : -radius, 0), "#63e7ff"));
-        this.label(root, meta.name, new BABYLON.Vector3(0, radius + 0.22, -diameter * 0.42));
+        this.label(root, meta.name, new BABYLON.Vector3(0, 0.72, -diameter * 0.46));
       } else {
         this.anchor(root, "PrimaryPort", new BABYLON.Vector3(0, radius, 0), "#63e7ff");
         this.anchor(root, "ExtensionPort", new BABYLON.Vector3(0, -radius, 0), "#63e7ff");
@@ -166,13 +174,13 @@
     }
 
     buildInterior(meta, root, length, diameter, accent, accentMat) {
-      const consoleMat = this.material("#204665", 1);
+      const consoleMat = this.material("#123148", 1);
       const console = BABYLON.MeshBuilder.CreateBox(meta.id + "_Console", { width: Math.min(0.95, length * 0.34), height: 0.26, depth: 0.42 }, this.scene);
       console.position.set(0, -diameter * 0.22, -diameter * 0.18); console.parent = root; console.material = consoleMat;
       const core = BABYLON.MeshBuilder.CreateSphere(meta.id + "_InteriorCore", { diameter: Math.min(0.42, diameter * 0.24), segments: 12 }, this.scene);
       core.position.set(0, 0.25, -diameter * 0.2); core.parent = root; core.material = accentMat;
       const light = BABYLON.MeshBuilder.CreateBox(meta.id + "_InteriorLight", { width: length * 0.62, height: 0.035, depth: 0.035 }, this.scene);
-      light.position.set(0, diameter * 0.22, -diameter * 0.39); light.parent = root; light.material = this.material("#c5fbff", 0.95, true);
+      light.position.set(0, diameter * 0.22, -diameter * 0.39); light.parent = root; light.material = this.material("#2d8794", 0.34, true);
       [-1, 1].forEach(side => {
         const rack = BABYLON.MeshBuilder.CreateBox(`${meta.id}_Rack_${side}`, { width: 0.12, height: diameter * 0.42, depth: 0.22 }, this.scene);
         rack.position.set(side * length * 0.29, -diameter * 0.04, diameter * 0.12); rack.parent = root; rack.material = this.material(accent, 0.7, true);
@@ -194,12 +202,15 @@
 
     buildCadet(module, local, cadet) {
       const root = new BABYLON.TransformNode(`Cadet_${cadet.id}`, this.scene); root.parent = this.stationRoot; root.position = module.position.add(local);
-      const body = BABYLON.MeshBuilder.CreateCapsule(`CadetBody_${cadet.id}`, { height: 0.62, radius: 0.16, subdivisions: 3 }, this.scene); body.parent = root; body.material = this.material("#e9f1f5", 1);
-      const head = BABYLON.MeshBuilder.CreateSphere(`CadetHead_${cadet.id}`, { diameter: 0.28, segments: 12 }, this.scene); head.position.y = 0.38; head.parent = root; head.material = this.material("#e5ad8a", 1);
-      const patch = BABYLON.MeshBuilder.CreatePlane(`Patch_${cadet.id}`, { width: 0.13, height: 0.13 }, this.scene); patch.position.set(0.17, 0.04, -0.18); patch.parent = root; patch.material = this.material(TOPIC[cadet.topic]?.color || "#6ee7ff", 1, true);
+      const topicColor = TOPIC[cadet.topic]?.color || "#6ee7ff";
+      const body = BABYLON.MeshBuilder.CreateCapsule(`CadetBody_${cadet.id}`, { height: 0.62, radius: 0.16, subdivisions: 3 }, this.scene); body.parent = root; body.material = this.material("#697783", 1);
+      const head = BABYLON.MeshBuilder.CreateSphere(`CadetHead_${cadet.id}`, { diameter: 0.27, segments: 12 }, this.scene); head.position.y = 0.35; head.parent = root; head.material = this.material("#c68f73", 1);
+      const helmet = BABYLON.MeshBuilder.CreateSphere(`CadetHelmet_${cadet.id}`, { diameter: 0.36, segments: 12 }, this.scene); helmet.position.y = 0.42; helmet.parent = root; helmet.material = this.material(topicColor, 1, true);
+      const visor = BABYLON.MeshBuilder.CreateSphere(`CadetVisor_${cadet.id}`, { diameter: 0.17, segments: 10 }, this.scene); visor.position.set(0, 0.43, -0.16); visor.scaling.set(1.2, 0.58, 0.32); visor.parent = root; visor.material = this.material("#071321", 1);
+      const patch = BABYLON.MeshBuilder.CreateBox(`Patch_${cadet.id}`, { width: 0.18, height: 0.18, depth: 0.04 }, this.scene); patch.position.set(0.17, 0.04, -0.18); patch.parent = root; patch.material = this.material(topicColor, 1, true);
       root.metadata = { kind: "cadet", id: cadet.id, cadet };
       root.getChildMeshes().forEach(mesh => { mesh.actionManager = new BABYLON.ActionManager(this.scene); mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, () => this.onSelect({ kind: "cadet", cadet, module }))); });
-      this.label(root, cadet.name || TOPIC[cadet.topic]?.label || "Кадет", new BABYLON.Vector3(0, 0.76, 0));
+      this.label(root, cadet.name || TOPIC[cadet.topic]?.label || "Кадет", new BABYLON.Vector3(0, 0.82, 0));
     }
 
     buildHologram(module, local, index) {
@@ -210,7 +221,7 @@
     buildSolarArrays(count) {
       const arrays = Math.min(3, Math.ceil(count / 3));
       for (let i = 0; i < arrays; i++) {
-        const panel = BABYLON.MeshBuilder.CreateBox(`SolarArray_${i + 1}`, { width: 2.4, height: 0.06, depth: 0.7 }, this.scene); panel.position.set((i - 1) * 3.1, 0, 2.25); panel.parent = this.stationRoot; panel.material = this.material("#1c4d72", 0.9, true);
+        const panel = BABYLON.MeshBuilder.CreateBox(`SolarArray_${i + 1}`, { width: 2.4, height: 0.06, depth: 0.7 }, this.scene); panel.position.set(8.4 + i * 2.9, 3.8, 1.1); panel.parent = this.stationRoot; panel.material = this.material("#1c4d72", 0.9, true);
         for (let x = -1; x <= 1; x++) { const line = BABYLON.MeshBuilder.CreateBox(`SolarLine_${i}_${x}`, { width: 0.035, height: 0.07, depth: 0.74 }, this.scene); line.position.set(x * 0.78, 0, 0); line.parent = panel; line.material = this.material("#a9f4ff", 0.6, true); }
       }
     }
@@ -223,9 +234,19 @@
 
     buildDebug(modules) { modules.forEach(module => this.label(this.stationRoot, `${module.id} · depth ${module.depth || 0}`, module.position.add(new BABYLON.Vector3(0, -1.55, 0)))); }
     anchor(parent, name, position, color) { const anchor = BABYLON.MeshBuilder.CreateSphere(name, { diameter: 0.13, segments: 6 }, this.scene); anchor.position = position; anchor.parent = parent; anchor.material = this.material(color, 0.72, true); if (DEBUG) this.label(parent, name, position.add(new BABYLON.Vector3(0, 0.15, 0))); }
-    label(parent, text, position) { const plane = BABYLON.MeshBuilder.CreatePlane(`Label_${text}_${Math.random()}`, { width: 1.5, height: 0.28 }, this.scene); plane.position = position; plane.parent = parent; plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL; const texture = new BABYLON.DynamicTexture(`LabelTexture_${Math.random()}`, { width: 512, height: 96 }, this.scene, true); texture.hasAlpha = true; texture.drawText(text, 12, 62, "bold 34px Arial", "#dffaff", "transparent", true); const material = new BABYLON.StandardMaterial("LabelMaterial", this.scene); material.diffuseTexture = texture; material.emissiveColor = BABYLON.Color3.FromHexString("#76eaff"); material.opacityTexture = texture; material.backFaceCulling = false; plane.material = material; }
+    label(parent, text, position) {
+      const safeText = String(text || "").slice(0, 22);
+      const key = safeText.replace(/[^a-z0-9]/gi, "_");
+      const plate = BABYLON.MeshBuilder.CreateBox(`LabelPlate_${key}_${Math.random()}`, { width: 3.05, height: 0.62, depth: 0.08 }, this.scene);
+      plate.position = position.clone ? position.clone() : new BABYLON.Vector3(position.x, position.y, position.z); plate.parent = parent; plate.material = this.material("#5fe2f3", 0.94, false);
+      const plane = BABYLON.MeshBuilder.CreatePlane(`Label_${key}_${Math.random()}`, { width: 3.0, height: 0.56 }, this.scene);
+      plane.position = new BABYLON.Vector3(position.x, position.y, position.z - 0.06); plane.parent = parent; plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+      const texture = new BABYLON.DynamicTexture(`LabelTexture_${Math.random()}`, { width: 1024, height: 192 }, this.scene, true); texture.hasAlpha = true;
+      texture.drawText(safeText, 28, 132, "bold 60px Arial", "#020914", "#5fe2f3", true);
+      const material = new BABYLON.StandardMaterial(`LabelMaterial_${Math.random()}`, this.scene); material.diffuseTexture = texture; material.emissiveColor = BABYLON.Color3.FromHexString("#1b6e7a"); material.opacityTexture = texture; material.backFaceCulling = false; plane.material = material;
+    }
     material(hex, alpha = 1, emissive = false) { const material = new BABYLON.StandardMaterial(`mat_${hex}_${alpha}_${emissive}_${Math.random()}`, this.scene); material.diffuseColor = BABYLON.Color3.FromHexString(hex); material.specularColor = BABYLON.Color3.Black(); material.alpha = alpha; if (emissive) material.emissiveColor = BABYLON.Color3.FromHexString(hex); return material; }
-    resetView() { if (!this.camera) return; this.camera.alpha = -Math.PI / 3; this.camera.beta = 1.05; this.camera.radius = 14.5; this.camera.setTarget(new BABYLON.Vector3(0, 0.2, 0)); }
+    resetView() { if (!this.camera) return; this.camera.setTarget(new BABYLON.Vector3(0, 0.2, 0)); this.camera.alpha = -Math.PI / 3; this.camera.beta = 1.05; this.camera.radius = this.state?.phase === "ENDGAME" ? 20 : Math.min(23, 12 + (this.moduleCount || 1) * 1.05); }
     showFallback() { this.host?.querySelector("canvas")?.classList.add("hidden"); this.host?.querySelector(".station-fallback")?.classList.remove("hidden"); }
     dispose() { window.removeEventListener("resize", this.resize); document.removeEventListener("visibilitychange", this.visibility); this.engine?.stopRenderLoop(); this.scene?.dispose(); this.engine?.dispose(); this.ready = false; }
   }

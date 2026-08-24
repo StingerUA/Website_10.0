@@ -330,6 +330,19 @@
 (function () {
   'use strict';
   var API = 'https://albaspace-api.nncdecdgc.workers.dev';
+  var AUTH_TOKEN_KEY = 'albaspace_access_token';
+  function saveAuthToken(token) { if (!token) return; try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (e) {} }
+  function consumeAuthToken() {
+    var hash = window.location.hash.replace(/^#/, '');
+    var parts = hash ? hash.split('&') : [];
+    var tokenPart = parts.find(function(part){ return part.indexOf(AUTH_TOKEN_KEY + '=') === 0; });
+    if (!tokenPart) return;
+    saveAuthToken(decodeURIComponent(tokenPart.slice(AUTH_TOKEN_KEY.length + 1)));
+    var rest = parts.filter(function(part){ return part.indexOf(AUTH_TOKEN_KEY + '=') !== 0; });
+    window.history.replaceState({}, document.title, window.location.pathname + window.location.search + (rest.length ? '#' + rest.join('&') : ''));
+  }
+  function authHeaders() { try { var token = localStorage.getItem(AUTH_TOKEN_KEY) || ''; return token ? { Authorization:'Bearer ' + token } : {}; } catch (e) { return {}; } }
+
 
   var spinner   = document.getElementById('amSpinner');
   var secIn     = document.getElementById('amSectionIn');
@@ -355,7 +368,8 @@
   }
 
   function checkAuth() {
-    fetch(API + '/me', { credentials:'include', mode:'cors' })
+    consumeAuthToken();
+    fetch(API + '/me', { credentials:'include', mode:'cors', headers:authHeaders() })
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(applyUser)
       .catch(function(){ applyUser(null); });
@@ -384,7 +398,10 @@
   var logoutBtn = document.getElementById('amLogoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', function() {
-      if (typeof window.logout === 'function') window.logout();
+      var logoutHeaders = authHeaders();
+       if (typeof window.logout === 'function') window.logout();
+       else fetch(API + '/logout', { credentials:'include', headers:logoutHeaders });
+       try { localStorage.removeItem(AUTH_TOKEN_KEY); } catch (e) {}
       setTimeout(function(){ window.location.href = '/ar/index.html'; }, 600);
     });
   }
@@ -421,13 +438,14 @@
     btn.disabled = true; btn.textContent = '...';
     fetch(API + '/auth/login', {
       method:'POST', credentials:'include',
-      headers:{'Content-Type':'application/json'},
+      headers:Object.assign({'Content-Type':'application/json'}, authHeaders()),
       body: JSON.stringify({email:email, password:pw})
     })
     .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }); })
     .then(function(res){
       btn.disabled = false; btn.textContent = 'تسجيل الدخول';
       if (!res.ok) { errEl.textContent = res.d.error || 'حدث خطأ.'; return; }
+      saveAuthToken(res.d && res.d.token);
       checkAuth();
     })
     .catch(function(){ btn.disabled=false; btn.textContent='تسجيل الدخول'; errEl.textContent='خطأ في الاتصال.'; });
@@ -448,13 +466,14 @@
     btn.disabled = true; btn.textContent = '...';
     fetch(API + '/auth/register', {
       method:'POST', credentials:'include',
-      headers:{'Content-Type':'application/json'},
+      headers:Object.assign({'Content-Type':'application/json'}, authHeaders()),
       body: JSON.stringify({name:name, email:email, password:pw})
     })
     .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }); })
     .then(function(res){
       btn.disabled = false; btn.textContent = 'إنشاء حساب';
       if (!res.ok) { errEl.textContent = res.d.error || 'حدث خطأ.'; return; }
+      saveAuthToken(res.d && res.d.token);
       checkAuth();
     })
     .catch(function(){ btn.disabled=false; btn.textContent='إنشاء حساب'; errEl.textContent='خطأ في الاتصال.'; });

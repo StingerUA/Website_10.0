@@ -1,17 +1,32 @@
 (() => {
   const API = "https://albaspace-api.nncdecdgc.workers.dev";
   const REQUEST_PREFIX = "alba-game-request-";
+  const AUTH_TOKEN_KEY = "albaspace_access_token";
   const makeId = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const esc = value => String(value ?? "").replace(/[&<>\"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[char]));
+  const readAuthToken = () => { try { return localStorage.getItem(AUTH_TOKEN_KEY) || ""; } catch { return ""; } };
+  const authHeaders = () => { const token = readAuthToken(); return token ? { Authorization: `Bearer ${token}` } : {}; };
+  const consumeAuthToken = () => {
+    const hash = window.location.hash.replace(/^#/, "");
+    const parts = hash ? hash.split("&") : [];
+    const tokenPart = parts.find(part => part.startsWith(`${AUTH_TOKEN_KEY}=`));
+    if (!tokenPart) return;
+    const token = decodeURIComponent(tokenPart.slice(AUTH_TOKEN_KEY.length + 1));
+    if (token) { try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch {} }
+    const rest = parts.filter(part => !part.startsWith(`${AUTH_TOKEN_KEY}=`));
+    const clean = `${window.location.pathname}${window.location.search}${rest.length ? `#${rest.join("&")}` : ""}`;
+    window.history.replaceState({}, document.title, clean);
+  };
 
   async function request(path, options = {}) {
-    const response = await fetch(API + path, { credentials: "include", mode: "cors", headers: { "Content-Type": "application/json", ...(options.headers || {}) }, ...options });
+    const response = await fetch(API + path, { credentials: "include", mode: "cors", headers: { "Content-Type": "application/json", ...authHeaders(), ...(options.headers || {}) }, ...options });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || `Ошибка сервера (${response.status})`);
     return data;
   }
   async function currentUser() {
-    const response = await fetch(`${API}/me`, { credentials: "include", mode: "cors" });
+    consumeAuthToken();
+    const response = await fetch(`${API}/me`, { credentials: "include", mode: "cors", headers: authHeaders() });
     if (!response.ok) return null;
     return response.json();
   }
@@ -37,7 +52,9 @@
     let polling = false;
     const accept = next => {
       const version = Number(next?.version || 0);
-      if (!version || version >= lastVersion) { lastVersion = Math.max(lastVersion, version); onState(next); }
+      if (version <= lastVersion) return;
+      lastVersion = version;
+      onState(next);
     };
     const refresh = async () => {
       if (stopped || polling) return;
@@ -49,7 +66,9 @@
     const connect = () => {
       if (stopped) return;
       onStatus?.("connecting");
-      source = new EventSource(`${API}/api/game/rooms/${encodeURIComponent(roomId)}/events?ts=${Date.now()}`, { withCredentials: true });
+      const token = readAuthToken();
+      const tokenQuery = token ? `&access_token=${encodeURIComponent(token)}` : "";
+      source = new EventSource(`${API}/api/game/rooms/${encodeURIComponent(roomId)}/events?ts=${Date.now()}${tokenQuery}`, { withCredentials: true });
       source.onopen = () => { retry = 0; onStatus?.("connected"); refresh(); };
       source.onmessage = event => { try { const data = JSON.parse(event.data); if (data.state) accept(data.state); } catch (error) { console.warn("Invalid game event", error); } };
       source.onerror = () => { source.close(); onStatus?.("offline"); if (!stopped) { const wait = Math.min(1000 * 2 ** retry++, 10000); setTimeout(connect, wait); } };

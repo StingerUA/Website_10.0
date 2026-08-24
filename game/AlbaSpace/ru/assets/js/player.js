@@ -14,11 +14,26 @@ const phaseLabel = document.getElementById("phaseLabel");
 const toastEl = document.getElementById("toast");
 const toast = message => { toastEl.textContent = message; toastEl.classList.remove("hidden"); setTimeout(() => toastEl.classList.add("hidden"), 2600); };
 
+function playerViewKey(snapshot) {
+  const current = snapshot?.players?.find(player => player.id === snapshot.viewerPlayerId);
+  const result = snapshot?.results?.items?.find(item => item.playerId === snapshot.viewerPlayerId);
+  return JSON.stringify({
+    phase: snapshot?.phase || "",
+    round: snapshot?.round || 0,
+    questionId: snapshot?.currentQuestion?.id || "",
+    winnerId: snapshot?.winnerId || "",
+    player: current ? { company: current.company, credits: current.credits, small: current.small, large: current.large, seatCapacity: current.seatCapacity, graduates: current.graduates, correct: current.correct, wins: current.wins, answered: current.answered, lastAnswer: current.lastAnswer, moduleBoughtRound: current.moduleBoughtRound, cadets: current.cadets } : null,
+    result: result || null
+  });
+}
+
 function apply(next) {
   const input = document.getElementById("answer");
   if (input && document.activeElement === input) draftAnswer = input.value;
+  const previousKey = playerViewKey(state);
   state = next;
-  render();
+  if (previousKey !== playerViewKey(next) || !document.querySelector("#app > *")) render();
+  else renderHud(me());
 }
 
 async function send(type, payload = {}) {
@@ -116,7 +131,7 @@ function renderQuestion(player) {
   if (draftRound !== state.round) { draftRound = state.round; draftAnswer = ""; }
   const already = player.answered;
   const safe = AlbaGame.esc(draftAnswer);
-  const questionPanel = `<aside class="question-panel card"><div class="phase">${AlbaGame.esc(question.topicLabel)} · ${AlbaGame.esc(question.difficulty || "")}</div><h2>${AlbaGame.esc(question.text)}</h2>${already ? `<div class="notice"><strong>🔒 Ответ принят</strong><p class="muted">Твой ответ: ${AlbaGame.esc(player.answer || draftAnswer || "—")}</p><p class="muted">Ожидаем остальных игроков.</p></div>` : `<input id="answer" class="input" ${question.type === "NUMBER" ? 'inputmode="decimal"' : ""} value="${safe}" autocomplete="off" placeholder="${question.type === "NUMBER" ? "Введите число" : "Введите ответ"}">${question.unit ? `<p class="muted">${AlbaGame.esc(question.unit)}</p>` : ""}<button id="submit" class="btn primary" style="width:100%">Ответить</button><p class="muted small-note">Таймера на Player нет. Можно отвечать, пока Teacher не закроет ответы.</p>`}</aside>`;
+  const questionPanel = `<aside class="question-panel card"><div class="phase">${AlbaGame.esc(question.topicLabel)} · ${AlbaGame.esc(question.difficulty || "")}</div><h2>${AlbaGame.esc(question.text)}</h2>${already ? `<div class="notice"><strong>🔒 Ответ принят</strong><p class="muted">Твой ответ: ${AlbaGame.esc(player.answer || draftAnswer || "—")}</p><p class="muted">Ожидаем остальных игроков.</p></div>` : `<input id="answer" class="input" ${question.type === "NUMBER" ? 'inputmode="decimal"' : ""} value="${safe}" autocomplete="off" placeholder="${question.type === "NUMBER" ? "Введите число" : "Введите ответ"}">${question.unit ? `<p class="muted">${AlbaGame.esc(question.unit)}</p>` : ""}<button id="submit" class="btn primary" style="width:100%">Ответить</button>`}</aside>`;
   app.innerHTML = stationLayout(player, questionPanel);
   mount3D(player);
   const input = document.getElementById("answer");

@@ -35,6 +35,7 @@ export { GameRoomDO };
 
 const SESSION_COOKIE     = "albaspace_session";
 const OAUTH_STATE_COOKIE = "albaspace_oauth_state";
+const AUTH_TOKEN_QUERY = "access_token";
 
 // =========================
 // 🚀 ENTRY POINT
@@ -69,7 +70,7 @@ async function handleRequest(request, env) {
   // 🔐 GOOGLE LOGIN
   // =========================
   if (url.pathname === "/auth/google") {
-    const returnUrl    = url.searchParams.get("from") || env.FRONT_ORIGIN;
+    const returnUrl    = safeReturnUrl(url.searchParams.get("from") || env.FRONT_ORIGIN, env);
     const state        = randomToken();
     const statePayload = `${state}|${returnUrl}`;
     const redirect_uri = `${env.PUBLIC_BASE_URL}/auth/google/callback`;
@@ -107,7 +108,7 @@ async function handleRequest(request, env) {
     }
 
     const [receivedState, ...urlParts] = stateParam.split("|");
-    const returnUrl = urlParts.join("|") || env.FRONT_ORIGIN;
+    const returnUrl = safeReturnUrl(urlParts.join("|") || env.FRONT_ORIGIN, env);
 
     if (!cookieState || receivedState !== cookieState) {
       console.warn("CSRF state mismatch — cookieState:", cookieState, "received:", receivedState);
@@ -151,7 +152,7 @@ async function handleRequest(request, env) {
       "INSERT INTO sessions (id, user_google_id, expires_at) VALUES (?, ?, ?)"
     ).bind(sessionId, user.sub, now + sessionTtl).run();
 
-    return redirect(returnUrl, {
+    return redirect(withAuthToken(returnUrl, sessionId), {
       "Set-Cookie": [
         serializeCookie(SESSION_COOKIE, sessionId, {
           httpOnly: true, secure: true, sameSite: "None", path: "/", maxAge: sessionTtl
@@ -202,6 +203,7 @@ async function handleRequest(request, env) {
     return new Response(JSON.stringify({
       ok: true,
       message: "Kayıt başarılı.",
+      token: sessionId,
       user: { email, name, avatar: "" }
     }), {
       status: 200,
@@ -248,6 +250,7 @@ async function handleRequest(request, env) {
 
     return new Response(JSON.stringify({
       ok: true,
+      token: sessionId,
       user: { email: user.email, name: user.name, avatar: user.avatar || "" }
     }), {
       status: 200,
@@ -299,7 +302,7 @@ async function handleRequest(request, env) {
   // =========================
   if (url.pathname === "/logout") {
     const cookies   = parseCookies(request.headers.get("Cookie"));
-    const sessionId = cookies[SESSION_COOKIE];
+    const sessionId = getSessionToken(request);
     if (sessionId) {
       await env.DB.prepare("DELETE FROM sessions WHERE id = ?").bind(sessionId).run();
     }
@@ -353,10 +356,35 @@ async function handleRequest(request, env) {
 // =========================
 // 🛠️ HELPERS
 // =========================
+function getSessionToken(request) {
+  const authorization = request.headers.get("Authorization") || "";
+  const bearer = authorization.match(/^Bearer\s+([^\s]+)$/i)?.[1] || "";
+  if (bearer) return bearer;
+  const cookies = parseCookies(request.headers.get("Cookie"));
+  return cookies[SESSION_COOKIE] || new URL(request.url).searchParams.get(AUTH_TOKEN_QUERY) || "";
+}
+
+function safeReturnUrl(value, env) {
+  const fallback = env.FRONT_ORIGIN || "https://albaspace.com.tr";
+  try {
+    const target = new URL(value || fallback);
+    const allowed = new Set([new URL(fallback).origin, ...(env.ALLOWED_ORIGINS || "").split(",").map(item => item.trim()).filter(Boolean).map(item => new URL(item).origin)]);
+    return allowed.has(target.origin) ? target.toString() : fallback;
+  } catch { return fallback; }
+}
+
+function withAuthToken(value, token) {
+  const target = new URL(value);
+  const fragment = target.hash.replace(/^#/, "");
+  const rest = fragment ? `&${fragment}` : "";
+  target.hash = `${AUTH_TOKEN_QUERY}=${encodeURIComponent(token)}${rest}`;
+  return target.toString();
+}
+
 
 async function getSessionUser(request, env) {
   const cookies   = parseCookies(request.headers.get("Cookie"));
-  const sessionId = cookies[SESSION_COOKIE];
+  const sessionId = getSessionToken(request);
   if (!sessionId) return null;
   const now = Math.floor(Date.now() / 1000);
   const row = await env.DB.prepare(
@@ -409,7 +437,7 @@ async function verifyPassword(password, stored) {
 function buildCors(request, env) {
   const headers = {
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Vary": "Origin"
   };
   const origin  = request.headers.get("Origin");
