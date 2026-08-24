@@ -210,3 +210,25 @@
 @media (prefers-reduced-motion: reduce) {
   .oa-body *, .oa-body *::before, .oa-body *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }
+
+/* Alba Space surface alignment: rounded cards and a secondary route bar that never overlays the site header menus. */
+:root { --oa-radius-lg: 26px; --oa-radius-md: 20px; --oa-radius-sm: 14px; }
+.oa-contextnav { position: relative; z-index: 3; }
+.oa-button { border-radius: var(--oa-radius-sm); }
+.oa-card, .oa-route-card, .oa-crew-card, .oa-solar-model, .oa-solar-side { border-radius: var(--oa-radius-lg); }
+.oa-player, .oa-map { border-radius: var(--oa-radius-lg); }
+.oa-player { overflow: hidden; }
+.oa-camera-choice { border-radius: var(--oa-radius-md); }
+.oa-telemetry, .oa-fact-grid { overflow: hidden; border-radius: var(--oa-radius-lg); }
+.oa-pass-stats { overflow: hidden; border-radius: var(--oa-radius-sm); }
+.oa-roster span { border-radius: 999px; }
+.oa-model-switch button { border-radius: 10px; }
+.oa-info-note { border: 1px solid rgba(66,213,232,.28); border-left: 3px solid var(--oa-cyan); border-radius: var(--oa-radius-md); }
+@media (min-width: 1081px) {
+  .oa-contextnav { margin: 22px 20px 0 clamp(210px, 22vw, 340px); border: 1px solid rgba(213,248,255,.14); border-radius: var(--oa-radius-md); box-shadow: 0 14px 36px rgba(0,0,0,.18); }
+  .oa-contextnav__inner { width: 100%; padding: 0 22px; }
+}
+@media (max-width: 1080px) {
+  .oa-contextnav { margin: 12px 14px 0; border: 1px solid rgba(213,248,255,.12); border-radius: 18px; }
+  .oa-contextnav__inner { width: 100%; padding: 0 14px; }
+}
