@@ -40,6 +40,7 @@ const ORBITAL_LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/upcomin
 const ORBITAL_ISS_URL = "https://api.wheretheiss.at/v1/satellites/25544";
 const ORBITAL_CREW_URL = "https://whoisinspace.com/";
 const ORBITAL_ISS_TLE_URL = "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE";
+const ORBITAL_SNAPSHOT_KEY = "overview";
 let orbitalLaunchesCache = null;
 let orbitalIssCache = null;
 let orbitalCrewCache = null;
@@ -58,6 +59,10 @@ export default {
       console.error("Worker error:", error);
       return json({ error: "Internal Server Error" }, 500, buildCors(request, env));
     }
+  },
+  async scheduled(controller, env, ctx) {
+    if (controller.cron !== "0 */5 * * *") return;
+    ctx.waitUntil(orbitalRefreshSnapshot(env));
   }
 };
 
@@ -71,7 +76,7 @@ async function handleRequest(request, env) {
 
   // 🛰️ ORBITAL ATLAS — public, cached data route for the live space section.
   if (url.pathname === "/api/orbital/overview" && request.method === "GET") {
-    return orbitalOverview(cors);
+    return orbitalOverview(cors, env);
   }
   if (url.pathname === "/api/orbital/iss-tle" && request.method === "GET") {
     return orbitalIssTle(url, cors);
@@ -635,11 +640,51 @@ async function orbitalMissions(crew, now) {
   }
 }
 
-async function orbitalOverview(cors) {
+function orbitalOverviewUsable(value) {
+  return value.launches.length > 0 || value.iss !== null || value.crew.length > 0 || value.missions.length > 0;
+}
+
+async function orbitalReadSnapshot(env) {
+  if (!env.DB) return null;
+  try {
+    const row = await env.DB.prepare("SELECT payload_json FROM orbital_content_cache WHERE cache_key = ? LIMIT 1").bind(ORBITAL_SNAPSHOT_KEY).first();
+    const value = row?.payload_json ? JSON.parse(row.payload_json) : null;
+    return value && Array.isArray(value.launches) && Array.isArray(value.crew) && Array.isArray(value.missions) ? value : null;
+  } catch (error) {
+    console.warn("Orbital Atlas stored snapshot unavailable", error);
+    return null;
+  }
+}
+
+async function orbitalWriteSnapshot(env, value) {
+  if (!env.DB) return;
+  await env.DB.prepare("INSERT INTO orbital_content_cache (cache_key, payload_json, refreshed_at) VALUES (?, ?, ?) ON CONFLICT(cache_key) DO UPDATE SET payload_json = excluded.payload_json, refreshed_at = excluded.refreshed_at")
+    .bind(ORBITAL_SNAPSHOT_KEY, JSON.stringify(value), Date.now()).run();
+}
+
+async function orbitalFreshOverview() {
   const now = Date.now();
   const [launches, iss, crew] = await Promise.all([orbitalLaunches(now), orbitalIss(now), orbitalCrew(now)]);
   const missions = await orbitalMissions(crew, now);
-  return json({ launches, iss, crew, missions, updatedAt: new Date(now).toISOString() }, 200, { ...cors, "Cache-Control": "public, max-age=15" });
+  return { launches, iss, crew, missions, updatedAt: new Date(now).toISOString() };
+}
+
+async function orbitalRefreshSnapshot(env) {
+  const fresh = await orbitalFreshOverview();
+  if (!orbitalOverviewUsable(fresh)) throw new Error("No usable orbital data received; prior snapshot preserved");
+  await orbitalWriteSnapshot(env, fresh);
+  console.log("Orbital Atlas snapshot refreshed", fresh.updatedAt);
+  return fresh;
+}
+
+async function orbitalOverview(cors, env) {
+  let value = await orbitalFreshOverview();
+  try {
+    if (!orbitalOverviewUsable(value)) value = await orbitalReadSnapshot(env) || value;
+  } catch (error) {
+    console.warn("Orbital Atlas stored fallback unavailable", error);
+  }
+  return json(value, 200, { ...cors, "Cache-Control": "public, max-age=15" });
 }
 
 async function orbitalCurrentTle(now) {

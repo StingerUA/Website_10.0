@@ -4,6 +4,10 @@ compatibility_date = "2026-04-06"
 compatibility_flags = ["nodejs_compat", "streams_enable_constructors"]
 workers_dev = true
 
+[triggers]
+# Every five hours in UTC. The scheduled handler refreshes the latest safe Orbital Atlas snapshot.
+crons = ["0 */5 * * *"]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "albaspace-db"

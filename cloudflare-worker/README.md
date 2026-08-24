@@ -97,6 +97,14 @@ The Worker automatically:
 - `GET /me`
 - `POST /logout`
 
+## Orbital Atlas refresh worker
+
+The Worker also serves the public Orbital Atlas routes `GET /api/orbital/overview` and `GET /api/orbital/iss-tle`. The overview remains live when upstream sources respond, while the `orbital_content_cache` D1 table preserves the last usable normalized response for fallback.
+
+Apply `migrations/0002_orbital_content_cache.sql` (or the updated additive `schema.sql`) to the existing D1 database before deployment. The Wrangler configuration contains the UTC trigger `0 */5 * * *`; it invokes the Worker `scheduled()` handler every five hours and refreshes the stored snapshot without replacing a correct prior snapshot when every source fails.
+
+After deployment, use **Workers & Pages → Worker → Settings → Trigger Events → View events** to review the last cron invocations. Cron configuration changes can take several minutes to propagate.
+
 ## Frontend changes after custom domain
 
 After the Worker is live on `api.albaspace.com.tr`, update:

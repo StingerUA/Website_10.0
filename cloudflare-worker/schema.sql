@@ -89,3 +89,8 @@ CREATE TABLE IF NOT EXISTS game_idempotency (
   created_at INTEGER NOT NULL,
   PRIMARY KEY(room_id, user_id, request_id)
 );
+CREATE TABLE IF NOT EXISTS orbital_content_cache (
+  cache_key TEXT PRIMARY KEY,
+  payload_json TEXT NOT NULL,
+  refreshed_at INTEGER NOT NULL
+);
