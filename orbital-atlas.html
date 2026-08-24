@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
     <link rel="icon" type="image/png" href="/manus-storage/orbital-atlas-logo_f9fbd235.png" />
     <title>Orbital Atlas — Alba Space</title>
     <style>
@@ -26,18 +28,6 @@
       .section-head { display:flex; align-items:end; justify-content:space-between; gap:24px; margin:82px 0 22px; }
       .section-head h2 { max-width:650px; margin:0; font:600 clamp(28px,3vw,47px)/.98 var(--display); letter-spacing:-.055em; }
       .section-note { max-width:360px; margin:0 0 4px; color:var(--soft); font-size:14px; line-height:1.5; }
-      .site-header { position:sticky; top:0; z-index:10; border-bottom:1px solid rgba(255,255,255,.08); background:rgba(5,8,13,.77); backdrop-filter:blur(18px); }
-      .topbar { min-height:74px; display:flex; align-items:center; justify-content:space-between; gap:22px; }
-      .brand { display:flex; align-items:center; gap:12px; min-width:max-content; }
-      .brand img { width:38px; height:38px; object-fit:contain; }
-      .brand-copy { display:flex; flex-direction:column; gap:1px; }
-      .brand-name { font:600 15px/1 var(--display); letter-spacing:-.035em; }
-      .brand-sub { font:500 9px/1 var(--mono); letter-spacing:.12em; color:var(--soft); }
-      .nav { display:flex; align-items:center; gap:7px; }
-      .nav a { color:#afc1cb; padding:8px 10px; font-size:13px; transition:color .18s ease,background .18s ease; }
-      .nav a:hover { color:var(--white); background:rgba(255,255,255,.06); }
-      .utc { display:flex; align-items:center; gap:9px; padding:8px 10px; border:1px solid var(--line); color:#c8d7dd; font:500 10px/1 var(--mono); letter-spacing:.04em; }
-      .utc-dot { width:6px; height:6px; border-radius:50%; background:#67e8a4; box-shadow:0 0 0 4px rgba(103,232,164,.1); }
       .hero { position:relative; min-height:535px; display:grid; align-items:end; padding:82px 0 62px; overflow:hidden; border-bottom:1px solid rgba(255,255,255,.07); }
       .hero::before { content:""; position:absolute; inset:0; z-index:-2; background-image:linear-gradient(90deg,#05080d 0%,rgba(5,8,13,.95) 36%,rgba(5,8,13,.46) 66%,rgba(5,8,13,.2) 100%),linear-gradient(0deg,#05080d 0%,transparent 40%),url('/manus-storage/orbital-atlas-earth-hero_9d92b8c8.jpg'); background-position:center,center,center; background-size:cover; }
       .hero::after { content:""; position:absolute; inset:0; z-index:-1; background-image:linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(0deg,rgba(255,255,255,.04) 1px,transparent 1px); background-size:76px 76px; mask-image:linear-gradient(90deg,#000,transparent 78%); opacity:.2; }
@@ -116,6 +106,7 @@
       .atlas { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr); min-height:454px; border:1px solid var(--line); background:#0a0f15; }.atlas-scene { position:relative; overflow:hidden; min-height:400px; background:radial-gradient(circle at 70% 32%,rgba(255,209,132,.15),transparent 17rem),#13100c; }.atlas-scene::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(4,7,10,.62),transparent 58%),linear-gradient(0deg,rgba(4,7,10,.62),transparent 48%); pointer-events:none; }.atlas-scene.venus { background-image:linear-gradient(90deg,rgba(4,7,10,.74),transparent 65%),url('/manus-storage/orbital-atlas-venus_96e9d8bd.jpg'); background-position:center;background-size:cover; }.atlas-scene.mars { background-image:linear-gradient(90deg,rgba(4,7,10,.74),transparent 65%),url('/manus-storage/orbital-atlas-mars_576c2d69.jpg'); background-position:center;background-size:cover; }.atlas-scene.earth { background:radial-gradient(circle at 63% 40%,#4d91a6 0 5%,#163846 31%,#06131a 58%,#04070b 70%); }.atlas-scene.earth::before { content:""; position:absolute; width:325px; aspect-ratio:1; right:12%; top:12%; border-radius:50%; border:1px solid rgba(112,221,234,.54); box-shadow:inset -30px -15px 42px #02070a,0 0 39px rgba(58,204,224,.14); }.atlas-overlay { position:absolute; z-index:1; left:28px; bottom:27px; max-width:360px; }.atlas-overlay h3 { margin:0; font:600 clamp(33px,4vw,53px)/.95 var(--display); letter-spacing:-.065em; }.atlas-overlay p { margin:13px 0 0; color:#c6d3d8; font-size:13px; line-height:1.5; }.atlas-side { padding:28px; background:linear-gradient(145deg,rgba(19,30,40,.92),rgba(7,12,18,.93)); }.atlas-side .eyebrow { margin-bottom:16px; }.planet-tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }.planet-tab { padding:12px 6px; border:1px solid var(--line); background:rgba(6,10,15,.5); color:#93a9b3; cursor:pointer; font:500 11px/1 var(--mono); letter-spacing:.04em; }.planet-tab.active,.planet-tab:hover { border-color:var(--cyan); color:var(--cyan); }.feature-list { margin-top:26px; }.feature { display:grid; grid-template-columns:29px 1fr; gap:12px; padding:15px 0; border-top:1px solid rgba(213,240,245,.11); }.feature-index { color:var(--cyan); font:500 10px/1.25 var(--mono); }.feature strong { display:block; font:600 13px/1.2 var(--sans); }.feature p { margin:5px 0 0; color:#8fa7b0; font-size:12px; line-height:1.43; }
       .crew-strip { display:grid; grid-template-columns:minmax(0,.75fr) 1.25fr; gap:14px; margin-top:14px; }.crew-intro { padding:24px; border:1px solid var(--line); background:linear-gradient(135deg,rgba(18,30,39,.82),rgba(7,11,16,.88)); }.crew-intro h3 { margin:0; font:600 25px/1 var(--display); letter-spacing:-.05em; }.crew-intro p { margin:12px 0 0; color:#a5b9c1; font-size:13px; line-height:1.5; }.crew-count { display:inline-flex; margin-top:17px; color:var(--cyan); font:500 11px/1 var(--mono); letter-spacing:.08em; }.crew-list { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--line); background:var(--line); gap:1px; }.crew { min-height:134px; padding:18px; background:#0d151e; }.crew-code { color:var(--cyan); font:500 10px/1 var(--mono); letter-spacing:.1em; }.crew h4 { margin:24px 0 0; font:600 15px/1.05 var(--display); letter-spacing:-.035em; }.crew p { margin:6px 0 0; color:#8199a3; font:11px/1.3 var(--sans); }.crew-empty { grid-column:1/-1; display:flex; min-height:134px; align-items:center; padding:18px; color:#9bb2c0; font-size:13px; }
       .mission-board { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }.mission-card { position:relative; min-height:264px; padding:24px; overflow:hidden; border:1px solid var(--line); background:linear-gradient(145deg,rgba(18,31,43,.96),rgba(7,12,18,.92)); }.mission-card::after { content:""; position:absolute; width:160px; height:160px; right:-72px; top:-78px; border:1px solid rgba(66,213,232,.28); border-radius:50%; box-shadow:0 0 0 22px rgba(66,213,232,.035),0 0 0 44px rgba(66,213,232,.025); }.mission-top { position:relative; z-index:1; display:flex; justify-content:space-between; gap:14px; color:#9ab0ba; font:500 10px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; }.mission-state { color:var(--cyan); }.mission-card h3 { position:relative; z-index:1; margin:25px 0 7px; font:600 29px/1 var(--display); letter-spacing:-.06em; }.mission-vehicle { position:relative; z-index:1; margin:0; color:#b4c5cd; font-size:13px; }.mission-dates { position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:22px; }.mission-dates div { padding-top:11px; border-top:1px solid rgba(213,240,245,.13); }.mission-dates small { display:block; color:#79929d; font:10px/1 var(--mono); letter-spacing:.07em; text-transform:uppercase; }.mission-dates strong { display:block; margin-top:7px; color:#e5f7fb; font:500 14px/1.2 var(--sans); }.mission-crewline { position:relative; z-index:1; margin:17px 0 0; color:#9fb3bd; font:12px/1.42 var(--sans); }.locale-switch { display:flex; gap:5px; margin-left:auto; }.locale-switch a { padding:7px 8px; border:1px solid var(--line); color:#91a8b2; font:500 10px/1 var(--mono); letter-spacing:.06em; }.locale-switch a.active,.locale-switch a:hover { color:var(--cyan); border-color:var(--cyan); }
+      .pass-layout { display:grid; grid-template-columns:minmax(280px,.52fr) minmax(0,1fr); gap:14px; }.pass-card { min-height:344px; padding:26px; border:1px solid var(--line); background:linear-gradient(145deg,rgba(18,31,43,.96),rgba(7,12,18,.92)); }.pass-status { display:flex; justify-content:space-between; gap:12px; color:var(--soft); font:500 10px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; }.pass-card h3 { margin:22px 0 8px; font:600 clamp(28px,3vw,40px)/.96 var(--display); letter-spacing:-.06em; }.pass-card p { min-height:36px; margin:0; color:#9fb3bd; font-size:13px; line-height:1.45; }.pass-stats { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; margin:24px 0; border:1px solid var(--line); background:var(--line); }.pass-stats div { padding:12px; background:rgba(5,8,13,.64); }.pass-stats small { display:block; color:#79929d; font:10px/1 var(--mono); letter-spacing:.07em; text-transform:uppercase; }.pass-stats strong { display:block; margin-top:7px; color:#e5f7fb; font:500 15px/1.2 var(--mono); }.pass-map { min-height:344px; overflow:hidden; border:1px solid var(--line); background:#0a1118; }.pass-map .leaflet-control-attribution { background:rgba(4,8,13,.72); color:#8ca5b0; font-size:9px; }.pass-map .leaflet-control-attribution a { color:var(--cyan); }.leaflet-container { font-family:var(--sans); background:#0a1118; }.pass-map .leaflet-tile { filter:grayscale(1) hue-rotate(142deg) saturate(.55) brightness(.53) contrast(1.35); }.pass-pin { width:14px; height:14px; border-radius:50%; background:var(--cyan); border:2px solid #e9fcff; box-shadow:0 0 0 7px rgba(66,213,232,.18),0 0 16px rgba(66,213,232,.82); }.pass-map-empty { height:344px; display:grid; place-items:center; padding:28px; color:#8fa7b0; text-align:center; font-size:14px; line-height:1.5; }
       footer { display:flex; align-items:end; justify-content:space-between; gap:30px; padding:62px 0 34px; color:#8097a1; font-size:11px; line-height:1.5; }.footer-mark { color:#c2d7de; font:600 14px/1 var(--display); letter-spacing:-.03em; }.sources { max-width:670px; text-align:right; }
       .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
       @media (max-width:1050px) { .hero-grid,.orbit-layout,.live-grid,.atlas,.crew-strip { grid-template-columns:1fr; }.earth-panel { min-height:500px; }.side-stack { grid-template-columns:1fr 1fr; }.launch-feed { grid-template-columns:repeat(3,minmax(230px,1fr)); overflow:auto; padding-bottom:4px; }.video-panel iframe { min-height:430px; }.section-head { align-items:start; flex-direction:column; }.section-note { max-width:560px; }.sources { text-align:left; }.crew-list { grid-template-columns:repeat(4,1fr); } }
@@ -124,16 +115,7 @@
     </style>
   </head>
   <body>
-    <header class="site-header">
-      <div class="shell topbar">
-        <a class="brand" href="#top" aria-label="Orbital Atlas — к началу страницы">
-          <img src="/manus-storage/orbital-atlas-logo_f9fbd235.png" alt="" />
-          <span class="brand-copy"><span class="brand-name">ALBA SPACE</span><span class="brand-sub">ORBITAL ATLAS</span></span>
-        </a>
-        <nav class="nav" aria-label="Разделы Orbital Atlas"><a href="#orbit">Орбита</a><a href="#launches">Запуски</a><a href="#missions" id="navMissions">Миссии</a><a href="#live">Эфиры</a><a href="#atlas">Карты планет</a></nav>
-        <div class="locale-switch" aria-label="Язык раздела"><a class="active" href="/orbital-atlas.html">RU</a><a href="/eng/orbital-atlas.html">EN</a><a href="/tr/orbital-atlas.html">TR</a></div><div class="utc"><span class="utc-dot"></span><span id="utcClock">UTC —:—:—</span></div>
-      </div>
-    </header>
+    <div data-include="/header-ru.html"></div>
 
     <main id="top">
       <section class="hero">
@@ -154,7 +136,7 @@
       </section>
 
       <section class="shell" id="orbit">
-        <div class="section-head"><div><p class="eyebrow">01 / Live trajectory</p><h2>Орбита Земли<br />в настоящем времени.</h2></div><p class="section-note">Сцена показывает положение МКС на момент последнего ответа API. Орбитальные объекты отмечены как навигационный слой, а не как полный каталог космического мусора.</p></div>
+        <div class="section-head"><div><p class="eyebrow">01 / Live trajectory</p><h2>Орбита Земли<br />в настоящем времени.</h2></div></div>
         <div class="orbit-layout">
           <article class="panel earth-panel">
             <div class="panel-head"><div><h3 class="panel-title">Низкая околоземная орбита</h3><p class="panel-sub">ISS · Hubble · Sentinel · TÜRKSAT · Starlink</p></div><div class="layer-switches" aria-label="Слои карты"><button class="layer-switch active" type="button" data-layer="orbit" aria-label="Показать орбиты">O</button><button class="layer-switch" type="button" data-layer="labels" aria-label="Показать названия">T</button></div></div>
@@ -166,14 +148,22 @@
             </div>
           </article>
           <aside class="side-stack">
-            <article class="panel iss-card" aria-live="polite"><div class="mini-row"><span>Объект 25544</span><span id="issVisibility">связь</span></div><h3 class="iss-name">МКС</h3><p class="iss-desc">Международная космическая станция. Координаты, высота и скорость обновляются через публичную телеметрию.</p><div class="telemetry"><div><small>Широта</small><strong id="issLat">—</strong></div><div><small>Долгота</small><strong id="issLon">—</strong></div><div><small>Высота</small><strong id="issAlt">—</strong></div><div><small>Скорость</small><strong id="issSpeed">—</strong></div></div></article>
+            <article class="panel iss-card" aria-live="polite"><div class="mini-row"><span>Объект 25544</span><span id="issVisibility">связь</span></div><h3 class="iss-name">МКС</h3><div class="telemetry"><div><small>Широта</small><strong id="issLat">—</strong></div><div><small>Долгота</small><strong id="issLon">—</strong></div><div><small>Высота</small><strong id="issAlt">—</strong></div><div><small>Скорость</small><strong id="issSpeed">—</strong></div></div></article>
             <article class="panel object-list"><h3>Кураторский каталог</h3><p>Опорные объекты на сцене</p><div class="objects"><div class="object"><div class="object-l"><span class="object-mark"></span><div><strong>МКС</strong><small>пилотируемая орбита</small></div></div><span>25544</span></div><div class="object"><div class="object-l"><span class="object-mark"></span><div><strong>Hubble</strong><small>космический телескоп</small></div></div><span>20580</span></div><div class="object"><div class="object-l"><span class="object-mark"></span><div><strong>TÜRKSAT 6A</strong><small>геостационарная связь</small></div></div><span>60041</span></div></div></article>
           </aside>
         </div>
       </section>
 
+      <section class="shell" id="iss-pass">
+        <div class="section-head"><div><p class="eyebrow" id="passEyebrow">01A / ISS pass</p><h2 id="passTitle">Следующий пролёт<br />над вами.</h2></div></div>
+        <div class="pass-layout">
+          <article class="pass-card" aria-live="polite"><div class="pass-status"><span id="passCity">Ваше местоположение</span><span id="passStatus">ожидание геолокации</span></div><h3 id="passTime">Разрешите<br />геолокацию</h3><p id="passDetail">Мы рассчитаем ближайший видимый пролёт МКС после вашего согласия.</p><div class="pass-stats"><div><small id="passPeakLabel">Максимальная высота</small><strong id="passPeak">—</strong></div><div><small id="passDurationLabel">Продолжительность</small><strong id="passDuration">—</strong></div></div><button class="button primary" id="locatePass" type="button">Определить мой город</button></article>
+          <div class="pass-map" id="passMap"><div class="pass-map-empty" id="passMapEmpty">Карта маршрута появится после разрешения геолокации.</div></div>
+        </div>
+      </section>
+
       <section class="shell" id="launches">
-        <div class="section-head"><div><p class="eyebrow">02 / Launch cadence</p><h2>Ближайшие<br />окна запуска.</h2></div><p class="section-note">Расписание обновляется из Launch Library 2 и локально кэшируется в браузере, чтобы бережно использовать публичный лимит источника.</p></div>
+        <div class="section-head"><div><p class="eyebrow">02 / Launch cadence</p><h2>Ближайшие<br />окна запуска.</h2></div></div>
         <div class="launch-feed" id="launchFeed" aria-live="polite"><article class="launch skeleton"><div class="skeleton-line short"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line last"></div></article><article class="launch skeleton"><div class="skeleton-line short"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line last"></div></article><article class="launch skeleton"><div class="skeleton-line short"></div><div class="skeleton-line title"></div><div class="skeleton-line"></div><div class="skeleton-line last"></div></article></div>
       </section>
 
@@ -183,28 +173,32 @@
       </section>
 
       <section class="shell" id="atlas">
-        <div class="section-head"><div><p class="eyebrow">04 / Planetary surfaces</p><h2>Карты, которые<br />хочется исследовать.</h2></div><p class="section-note">Первый экран атласа — Венера, с акцентом на кратеры, короны и вулканы. Переключите планету, чтобы сменить поверхность и набор научных слоёв.</p></div>
+        <div class="section-head"><div><p class="eyebrow">04 / Planetary surfaces</p><h2>Карты, которые<br />хочется исследовать.</h2></div></div>
         <div class="atlas"><div class="atlas-scene venus" id="atlasScene"><div class="atlas-overlay"><p class="eyebrow">Radar mosaic / magellan</p><h3 id="planetTitle">Венера</h3><p id="planetDescription">Радарная поверхность с кратерами, вулканическими равнинами и коронами — от общего обзора к детальному исследованию.</p></div></div><div class="atlas-side"><p class="eyebrow">Выберите поверхность</p><div class="planet-tabs" role="tablist" aria-label="Планетарные карты"><button class="planet-tab active" type="button" role="tab" aria-selected="true" data-planet="venus">Венера</button><button class="planet-tab" type="button" role="tab" aria-selected="false" data-planet="mars">Марс</button><button class="planet-tab" type="button" role="tab" aria-selected="false" data-planet="earth">Земля</button></div><div class="feature-list" id="featureList"><div class="feature"><span class="feature-index">01</span><div><strong>Кратеры</strong><p>Сравнивайте форму и плотность ударных следов на разных участках поверхности.</p></div></div><div class="feature"><span class="feature-index">02</span><div><strong>Короны</strong><p>Отмечайте крупные кольцевые структуры и открывайте научные карточки объектов.</p></div></div><div class="feature"><span class="feature-index">03</span><div><strong>Вулканы</strong><p>Включайте тематический слой, чтобы читать ландшафт как карту процессов.</p></div></div></div></div></div>
-        <div class="crew-strip"><article class="crew-intro"><p class="eyebrow">Station watch / live registry</p><h3>Экипаж на орбите</h3><p id="crewDescription">Загружаем актуальный состав экипажа МКС из открытого каталога.</p><span class="crew-count" id="crewCount">ПОИСК ДАННЫХ</span></article><div class="crew-list" id="crewList" aria-live="polite"><div class="crew-empty">Получаем текущий состав экипажа МКС…</div></div></div>
+        <div class="crew-strip"><article class="crew-intro"><p class="eyebrow">Station watch / live registry</p><h3>Экипаж на орбите</h3><span class="crew-count" id="crewCount">ПОИСК ДАННЫХ</span></article><div class="crew-list" id="crewList" aria-live="polite"><div class="crew-empty">Получаем текущий состав экипажа МКС…</div></div></div>
       </section>
 
       <section class="shell" id="missions">
-        <div class="section-head"><div><p class="eyebrow" id="missionEyebrow">05 / ISS rotation</p><h2 id="missionTitle">Текущие миссии<br />и смена экипажа.</h2></div><p class="section-note" id="missionNote">Показываем только подтверждённые даты прибытия и объявленные окна возвращения. План полётов может меняться по оперативным причинам.</p></div>
+        <div class="section-head"><div><p class="eyebrow" id="missionEyebrow">05 / ISS rotation</p><h2 id="missionTitle">Текущие миссии<br />и смена экипажа.</h2></div></div>
         <div class="mission-board" id="missionBoard" aria-live="polite"><article class="mission-card"><div class="mission-top"><span>ISS rotation</span><span class="mission-state">проверка данных</span></div><h3>Загружаем миссии</h3></article></div>
       </section>
     </main>
 
-    <footer class="shell"><div><div class="footer-mark">ALBA SPACE / ORBITAL ATLAS</div><p>Оперативный раздел для наблюдения за космической деятельностью.</p></div><p class="sources">Источники: <a href="https://thespacedevs.com/llapi" target="_blank" rel="noreferrer">Launch Library 2</a> — расписание запусков; <a href="https://wheretheiss.at/w/developer" target="_blank" rel="noreferrer">Where The ISS At?</a> — положение МКС; <a href="https://whoisinspace.com/" target="_blank" rel="noreferrer">Who Is In Space</a> — открытый реестр экипажа МКС; <a href="https://celestrak.org/" target="_blank" rel="noreferrer">CelesTrak</a> — орбитальные элементы. Визуализация МКС имеет навигационный характер, не предназначена для пилотирования.</p></footer>
+    <div data-include="/footer-ru.html"></div>
 
+    <script defer src="/assets/js/include.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/satellite.js@5.0.0/dist/satellite.min.js"></script>
     <script src="/orbital-atlas-i18n.js"></script>
     <script>
       // Orbital Atlas: динамика только объясняет реальные данные; при отказе источника интерфейс сообщает об этом, не выдумывая миссии.
-      const api = { overview: window.ORBITAL_ATLAS_API || 'https://albaspace-api.nncdecdgc.workers.dev/api/orbital/overview' };
+      const workerBase = window.ORBITAL_ATLAS_API || 'https://albaspace-api.nncdecdgc.workers.dev';
+      const api = { overview: `${workerBase}/api/orbital/overview`, issPass: '', issTle: `${workerBase}/api/orbital/iss-tle` };
       const locale = (document.documentElement.lang || 'ru').slice(0, 2).toLowerCase();
       const localeCopy = {
-        ru: { dateLocale:'ru-RU', arrival:'Прибытие к МКС', return:'Плановый возврат', target:'целевое окно', planned:'план', crew:'экипаж', currentCrew:'текущий экипаж МКС', missionEyebrow:'05 / Смена на МКС', missionTitle:'Текущие миссии<br />и смена экипажа.', missionNote:'Показываем только подтверждённые даты прибытия и объявленные окна возвращения. План полётов может меняться по оперативным причинам.', missions:'Миссии', missionEmpty:'Данные о миссиях временно недоступны.', crewEmpty:'Актуальный состав экипажа временно недоступен. Попробуйте обновить страницу позже.', crewFallback:'Данные открытого реестра экипажей временно недоступны.', crewDescription:'Состав обновляется из открытого реестра по активным кораблям МКС. Данные кэшируются на сервере, чтобы бережно использовать источник.', aboard:'НА БОРТУ', launchFallback:'Данные о запусках временно недоступны', refresh:'Пожалуйста, обновите страницу позже.', noResponse:'нет ответа', watch:'СМОТРЕТЬ ОФИЦИАЛЬНЫЙ ЭФИР ↗' },
-        en: { dateLocale:'en-US', arrival:'ISS arrival', return:'Planned return', target:'target window', planned:'planned', crew:'crew', currentCrew:'current ISS crew', missionEyebrow:'05 / ISS rotation', missionTitle:'Current missions<br />and crew rotation.', missionNote:'Only confirmed arrival dates and announced return windows are shown. Flight plans may change for operational reasons.', missions:'Missions', missionEmpty:'Mission data is temporarily unavailable.', crewEmpty:'The current ISS crew list is temporarily unavailable. Please try again later.', crewFallback:'Open crew-registry data is temporarily unavailable.', crewDescription:'The roster is refreshed from an open registry of active ISS vehicles and cached server-side to respect the source.', aboard:'ON BOARD', launchFallback:'Launch data is temporarily unavailable', refresh:'Please refresh the page later.', noResponse:'no response', watch:'WATCH OFFICIAL STREAM ↗' },
-        tr: { dateLocale:'tr-TR', arrival:'ISS varışı', return:'Planlanan dönüş', target:'hedef aralığı', planned:'plan', crew:'mürettebat', currentCrew:'mevcut ISS mürettebatı', missionEyebrow:'05 / ISS rotasyonu', missionTitle:'Güncel görevler<br />ve mürettebat değişimi.', missionNote:'Yalnızca doğrulanmış varış tarihleri ve açıklanmış dönüş aralıkları gösterilir. Uçuş planları operasyonel nedenlerle değişebilir.', missions:'Görevler', missionEmpty:'Görev verileri geçici olarak kullanılamıyor.', crewEmpty:'Güncel ISS mürettebatı geçici olarak kullanılamıyor. Lütfen daha sonra tekrar deneyin.', crewFallback:'Açık mürettebat kayıt verisi geçici olarak kullanılamıyor.', crewDescription:'Liste, aktif ISS araçlarının açık kaydından yenilenir ve kaynağa saygı için sunucuda önbelleğe alınır.', aboard:'ARAÇTA', launchFallback:'Fırlatma verileri geçici olarak kullanılamıyor', refresh:'Lütfen sayfayı daha sonra yenileyin.', noResponse:'yanıt yok', watch:'RESMÎ YAYINI İZLE ↗' }
+        ru: { dateLocale:'ru-RU', arrival:'Прибытие к МКС', return:'Плановый возврат', target:'целевое окно', planned:'план', crew:'экипаж', currentCrew:'текущий экипаж МКС', missionEyebrow:'05 / Смена на МКС', missionTitle:'Текущие миссии<br />и смена экипажа.', missions:'Миссии', missionEmpty:'Данные о миссиях временно недоступны.', crewEmpty:'Актуальный состав экипажа временно недоступен. Попробуйте обновить страницу позже.', crewFallback:'Данные открытого реестра экипажей временно недоступны.', aboard:'НА БОРТУ', launchFallback:'Данные о запусках временно недоступны', refresh:'Пожалуйста, обновите страницу позже.', noResponse:'нет ответа', watch:'СМОТРЕТЬ ОФИЦИАЛЬНЫЙ ЭФИР ↗' },
+        en: { dateLocale:'en-US', arrival:'ISS arrival', return:'Planned return', target:'target window', planned:'planned', crew:'crew', currentCrew:'current ISS crew', missionEyebrow:'05 / ISS rotation', missionTitle:'Current missions<br />and crew rotation.', missions:'Missions', missionEmpty:'Mission data is temporarily unavailable.', crewEmpty:'The current ISS crew list is temporarily unavailable. Please try again later.', crewFallback:'Open crew-registry data is temporarily unavailable.', aboard:'ON BOARD', launchFallback:'Launch data is temporarily unavailable', refresh:'Please refresh the page later.', noResponse:'no response', watch:'WATCH OFFICIAL STREAM ↗' },
+        tr: { dateLocale:'tr-TR', arrival:'ISS varışı', return:'Planlanan dönüş', target:'hedef aralığı', planned:'plan', crew:'mürettebat', currentCrew:'mevcut ISS mürettebatı', missionEyebrow:'05 / ISS rotasyonu', missionTitle:'Güncel görevler<br />ve mürettebat değişimi.', missions:'Görevler', missionEmpty:'Görev verileri geçici olarak kullanılamıyor.', crewEmpty:'Güncel ISS mürettebatı geçici olarak kullanılamıyor. Lütfen daha sonra tekrar deneyin.', crewFallback:'Açık mürettebat kayıt verisi geçici olarak kullanılamıyor.', aboard:'ARAÇTA', launchFallback:'Fırlatma verileri geçici olarak kullanılamıyor', refresh:'Lütfen sayfayı daha sonra yenileyin.', noResponse:'yanıt yok', watch:'RESMÎ YAYINI İZLE ↗' }
       };
       const text = localeCopy[locale] || localeCopy.ru;
       const dynamic = window.orbitalAtlasI18n?.dynamic?.[locale] || window.orbitalAtlasI18n?.dynamic?.ru || {};
@@ -213,7 +207,7 @@
       const dateFormatter = new Intl.DateTimeFormat(text.dateLocale, { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', timeZone:'UTC', timeZoneName:'short' });
       let nextLaunch = null;
 
-      function updateUTC() { document.getElementById('utcClock').textContent = `UTC ${new Date().toLocaleTimeString(text.dateLocale, { hour12:false, timeZone:'UTC' })}`; }
+      function updateUTC() { const clock = document.getElementById('utcClock'); if (clock) clock.textContent = `UTC ${new Date().toLocaleTimeString(text.dateLocale, { hour12:false, timeZone:'UTC' })}`; }
       function shortStatus(status) { const value = String(status || dynamic.statusPending); if (/success/i.test(value)) return dynamic.statusSuccess; if (/fail|hold|scrub/i.test(value)) return dynamic.statusChanged; return value; }
       function streamFor(launch) { return launch.streamUrl || (/spacex/i.test(launch.provider || '') ? 'https://www.youtube.com/@SpaceX/live' : 'https://www.youtube.com/@NASA/live'); }
       function launchCard(launch) {
@@ -243,7 +237,7 @@
         const days = Math.floor(diff / 86400000), hours = Math.floor((diff % 86400000) / 3600000), min = Math.floor((diff % 3600000) / 60000);
         el.textContent = `${days ? days + dynamic.day + ' ' : ''}${String(hours).padStart(2,'0')}${dynamic.hour} ${String(min).padStart(2,'0')}${dynamic.minute}`;
       }
-      function setText(id, value) { document.getElementById(id).textContent = value; }
+      function setText(id, value) { const element = document.getElementById(id); if (element) element.textContent = value; }
       function degree(value, suffix) { return `${Math.abs(value).toFixed(2)}°${value < 0 ? (suffix === 'N' ? 'S' : 'W') : suffix}`; }
       function renderISS(iss) {
         const lat = Number(iss.latitude), lon = Number(iss.longitude); const visibility = String(iss.visibility || dynamic.visibility);
@@ -253,10 +247,9 @@
       }
       function crewMission(value) { return String(value || dynamic.iss).replace(/^ISS\s*-\s*/i, '').toUpperCase(); }
       function renderCrew(crew) {
-        const list = document.getElementById('crewList'); const description = document.getElementById('crewDescription'); const count = document.getElementById('crewCount');
-        if (!Array.isArray(crew) || !crew.length) { list.innerHTML = `<div class="crew-empty">${escapeHtml(text.crewEmpty)}</div>`; description.textContent = text.crewFallback; count.textContent = '—'; return; }
+        const list = document.getElementById('crewList'); const count = document.getElementById('crewCount');
+        if (!Array.isArray(crew) || !crew.length) { list.innerHTML = `<div class="crew-empty">${escapeHtml(text.crewEmpty)}</div>`; count.textContent = '—'; return; }
         list.innerHTML = crew.map((member) => `<article class="crew"><span class="crew-code">${escapeHtml(crewMission(member.mission))}</span><h4>${escapeHtml(member.name || '—')}</h4><p>${escapeHtml(text.currentCrew)}</p></article>`).join('');
-        description.textContent = text.crewDescription;
         count.textContent = `${crew.length} ${text.aboard}`;
       }
       function missionWindow(value) { return /^\d{4}-\d{2}$/.test(String(value || '')) ? new Intl.DateTimeFormat(text.dateLocale, { month:'long', year:'numeric', timeZone:'UTC' }).format(new Date(`${value}-01T00:00:00Z`)) : String(value || '—'); }
@@ -266,7 +259,7 @@
         if (!Array.isArray(missions) || !missions.length) { board.innerHTML = `<article class="mission-card"><div class="mission-top"><span>ISS</span><span class="mission-state">—</span></div><h3>${escapeHtml(text.missionEmpty)}</h3></article>`; return; }
         board.innerHTML = missions.map((mission) => `<article class="mission-card"><div class="mission-top"><span>${escapeHtml(mission.vehicle || dynamic.iss)}</span><span class="mission-state">${escapeHtml(mission.returnStatus === 'target' ? text.target : text.planned)}</span></div><h3>${escapeHtml(mission.name || '—')}</h3><p class="mission-vehicle">${escapeHtml(mission.source || dynamic.missionRecord)}</p><div class="mission-dates"><div><small>${escapeHtml(text.arrival)}</small><strong>${escapeHtml(missionArrival(mission.arrival))}</strong></div><div><small>${escapeHtml(text.return)}</small><strong>${escapeHtml(missionWindow(mission.returnWindow))}</strong></div></div><p class="mission-crewline">${escapeHtml(text.crew)} · ${escapeHtml((mission.crew || []).join(' · '))}</p></article>`).join('');
       }
-      function applyLocale() { window.orbitalAtlasI18n?.apply?.(locale); document.getElementById('missionEyebrow').textContent = text.missionEyebrow; document.getElementById('missionTitle').innerHTML = text.missionTitle; document.getElementById('missionNote').textContent = text.missionNote; document.getElementById('navMissions').textContent = text.missions; }
+      function applyLocale() { window.orbitalAtlasI18n?.apply?.(locale); setText('missionEyebrow', text.missionEyebrow); const title = document.getElementById('missionTitle'); if (title) title.innerHTML = text.missionTitle; setText('navMissions', text.missions); }
       async function hydrateOverview() {
         try {
           const response = await fetch(api.overview, { headers: { Accept:'application/json' } });
@@ -279,6 +272,73 @@
           renderMissions(overview?.missions || []);
         } catch (error) { if (!nextLaunch) renderLaunches([]); setText('issVisibility', text.noResponse); renderCrew([]); renderMissions([]); }
       }
+      const passCopy = {
+        ru: { eyebrow:'01A / Пролёт МКС', title:'Следующий пролёт<br />над вами.', location:'Ваше местоположение', waiting:'ожидание геолокации', request:'Разрешите<br />геолокацию', detail:'Мы рассчитаем ближайший видимый пролёт МКС после вашего согласия.', button:'Определить мой город', peak:'Максимальная высота', duration:'Продолжительность', locating:'получаем координаты', calculating:'считаем траекторию', noPass:'Нет видимого пролёта<br />в ближайшие 48 часов.', retry:'Попробовать ещё раз', mapWaiting:'Карта маршрута появится после разрешения геолокации.', denied:'Геолокация недоступна. Разрешите доступ к местоположению в браузере и повторите попытку.', unavailable:'Не удалось получить расчёт. Попробуйте позже.', start:'Начало', end:'Окончание', cityFallback:'Ваше местоположение' },
+        en: { eyebrow:'01A / ISS pass', title:'Next pass<br />above you.', location:'Your location', waiting:'location needed', request:'Allow<br />location', detail:'We will calculate the next visible ISS pass after you grant location access.', button:'Find my city', peak:'Maximum elevation', duration:'Duration', locating:'getting coordinates', calculating:'calculating track', noPass:'No visible pass<br />within 48 hours.', retry:'Try again', mapWaiting:'The route map will appear after location access is granted.', denied:'Location is unavailable. Allow browser location access and try again.', unavailable:'The pass calculation is unavailable. Please try again later.', start:'Start', end:'End', cityFallback:'Your location' },
+        tr: { eyebrow:'01A / ISS geçişi', title:'Sıradaki geçiş<br />konumunuzun üzerinde.', location:'Konumunuz', waiting:'konum bekleniyor', request:'Konuma<br />izin verin', detail:'Konum izni verdiğinizde sıradaki görünür ISS geçişini hesaplayacağız.', button:'Şehrimi bul', peak:'En yüksek irtifa', duration:'Süre', locating:'koordinatlar alınıyor', calculating:'rota hesaplanıyor', noPass:'Önümüzdeki 48 saatte<br />görünür geçiş yok.', retry:'Tekrar deneyin', mapWaiting:'Konum izni verildiğinde rota haritası görünür.', denied:'Konum kullanılamıyor. Tarayıcıda konum erişimine izin verip tekrar deneyin.', unavailable:'Geçiş hesabı alınamadı. Lütfen daha sonra tekrar deneyin.', start:'Başlangıç', end:'Bitiş', cityFallback:'Konumunuz' }
+      };
+      const passText = passCopy[locale] || passCopy.ru;
+      let passMap = null;
+      function passDate(value) { return new Intl.DateTimeFormat(text.dateLocale, { weekday:'short', hour:'2-digit', minute:'2-digit', timeZoneName:'short' }).format(new Date(value)); }
+      function passDuration(seconds) { const minutes = Math.round(Number(seconds || 0) / 60); return minutes ? `${minutes} min` : '—'; }
+      function passEmpty(message) { const map = document.getElementById('passMap'); map.innerHTML = `<div class="pass-map-empty">${escapeHtml(message)}</div>`; }
+      function drawPassMap(location, pass) {
+        const mapNode = document.getElementById('passMap');
+        if (!window.L) { passEmpty(passText.unavailable); return; }
+        mapNode.innerHTML = '';
+        if (passMap) passMap.remove();
+        passMap = L.map(mapNode, { zoomControl:true, scrollWheelZoom:false, attributionControl:true });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'© OpenStreetMap contributors' }).addTo(passMap);
+        const userIcon = L.divIcon({ className:'pass-pin', iconSize:[14,14], iconAnchor:[7,7] });
+        L.marker([location.latitude, location.longitude], { icon:userIcon, title:passText.location }).addTo(passMap);
+        const points = (pass.groundTrack || []).map((point) => [point.latitude, point.longitude]);
+        if (points.length > 1) { const track = L.polyline(points, { color:'#42d5e8', weight:3, opacity:.9 }).addTo(passMap); passMap.fitBounds(track.getBounds().pad(.28)); }
+        else passMap.setView([location.latitude, location.longitude], 6);
+        setTimeout(() => passMap?.invalidateSize(), 120);
+      }
+      function calculateBrowserPass(line1, line2, latitude, longitude) {
+        if (!window.satellite) throw new Error('SGP4 library unavailable');
+        const satrec = satellite.twoline2satrec(line1, line2); const observer = { longitude:satellite.degreesToRadians(longitude), latitude:satellite.degreesToRadians(latitude), height:0 };
+        let active = false, start = null, peak = null, maxElevation = -90; const track = []; const from = Date.now(); const until = from + 48 * 60 * 60 * 1000;
+        for (let time = from; time <= until; time += 30 * 1000) {
+          const date = new Date(time); const propagated = satellite.propagate(satrec, date); if (!propagated?.position) continue;
+          const gmst = satellite.gstime(date); const ecf = satellite.eciToEcf(propagated.position, gmst); const look = satellite.ecfToLookAngles(observer, ecf); const elevation = satellite.radiansToDegrees(look.elevation); const geodetic = satellite.eciToGeodetic(propagated.position, gmst); const visible = elevation >= 10;
+          if (!active && visible) { active = true; start = date; }
+          if (active) { if (elevation > maxElevation) { maxElevation = elevation; peak = date; } if (!track.length || time - new Date(track[track.length - 1].at).getTime() >= 60 * 1000) track.push({ latitude:satellite.degreesLat(geodetic.latitude), longitude:satellite.degreesLong(geodetic.longitude), at:date.toISOString() }); if (!visible && start && peak) return { start:start.toISOString(), end:date.toISOString(), peak:peak.toISOString(), peakElevation:Math.round(maxElevation), durationSeconds:Math.round((date.getTime() - start.getTime()) / 1000), groundTrack:track }; }
+        }
+        return null;
+      }
+      async function getPass(latitude, longitude) {
+        if (workerBase) {
+          const response = await fetch(`${api.issTle}?lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}`, { headers:{ Accept:'application/json' } });
+          if (!response.ok) throw new Error('iss tle unavailable'); const data = await response.json();
+          return { city:data.city || null, location:{ latitude, longitude }, pass:calculateBrowserPass(data.line1, data.line2, latitude, longitude) };
+        }
+        const input = encodeURIComponent(JSON.stringify({ 0:{ json:{ latitude, longitude } } }));
+        const response = await fetch(`${api.issPass}${input}`, { headers:{ Accept:'application/json' } });
+        if (!response.ok) throw new Error('iss pass unavailable');
+        const payload = await response.json(); const entry = Array.isArray(payload) ? payload[0] : payload;
+        return entry?.result?.data?.json || entry?.result?.data || entry;
+      }
+      async function renderPass(position) {
+        const button = document.getElementById('locatePass'); setText('passStatus', passText.calculating); button.disabled = true;
+        try {
+          const result = await getPass(position.coords.latitude, position.coords.longitude);
+          const city = result?.city || passText.cityFallback; const pass = result?.pass;
+          setText('passCity', city);
+          if (!pass) { document.getElementById('passTime').innerHTML = passText.noPass; setText('passDetail', '—'); setText('passPeak','—'); setText('passDuration','—'); passEmpty(passText.noPass.replace(/<br\s*\/?\s*>/gi,' ')); return; }
+          setText('passStatus', city); document.getElementById('passTime').textContent = passDate(pass.start); setText('passDetail', `${passText.start}: ${passDate(pass.start)} · ${passText.end}: ${passDate(pass.end)}`); setText('passPeak', `${Math.round(pass.peakElevation)}°`); setText('passDuration', passDuration(pass.durationSeconds)); drawPassMap(result.location, pass);
+        } catch (error) { console.error('[Orbital Atlas] ISS pass unavailable', error); setText('passStatus','—'); document.getElementById('passTime').innerHTML = passText.unavailable; setText('passDetail',''); setText('passPeak','—'); setText('passDuration','—'); passEmpty(passText.unavailable); }
+        finally { button.disabled = false; button.textContent = passText.retry; }
+      }
+      function requestPass() {
+        const button = document.getElementById('locatePass');
+        if (!navigator.geolocation) { document.getElementById('passTime').textContent = passText.denied; passEmpty(passText.denied); return; }
+        button.disabled = true; setText('passStatus', passText.locating);
+        navigator.geolocation.getCurrentPosition(renderPass, () => { button.disabled = false; document.getElementById('passTime').textContent = passText.denied; setText('passDetail',''); passEmpty(passText.denied); }, { enableHighAccuracy:true, timeout:15_000, maximumAge:300_000 });
+      }
+      function applyPassLocale() { setText('passEyebrow', passText.eyebrow); const title = document.getElementById('passTitle'); if (title) title.innerHTML = passText.title; setText('passCity', passText.location); setText('passStatus', passText.waiting); const time = document.getElementById('passTime'); if (time) time.innerHTML = passText.request; setText('passDetail', passText.detail); setText('passPeakLabel', passText.peak); setText('passDurationLabel', passText.duration); setText('locatePass', passText.button); passEmpty(passText.mapWaiting); }
+      document.getElementById('locatePass').addEventListener('click', requestPass);
       const planetData = {
         venus:{ title:'Венера', description:'Радарная поверхность с кратерами, вулканическими равнинами и коронами — от общего обзора к детальному исследованию.', features:[['Кратеры','Сравнивайте форму и плотность ударных следов на разных участках поверхности.'],['Короны','Отмечайте крупные кольцевые структуры и открывайте научные карточки объектов.'],['Вулканы','Включайте тематический слой, чтобы читать ландшафт как карту процессов.']] },
         mars:{ title:'Марс', description:'Орбитальный обзор красной планеты: кратерированные плато, тёмные вулканические области и линии древних каналов.', features:[['Долины','Исследуйте протяжённые системы каньонов и следы эрозии.'],['Посадочные зоны','Связывайте поверхности с реальными миссиями и роверами.'],['Минералы','Собирайте слои состава для прочтения истории ландшафта.']] },
@@ -288,7 +348,7 @@
       function changePlanet(key) { const data = planetData[key]; const scene = document.getElementById('atlasScene'); scene.className = `atlas-scene ${key}`; document.getElementById('planetTitle').textContent = data.title; document.getElementById('planetDescription').textContent = data.description; document.getElementById('featureList').innerHTML = data.features.map((feature,index) => `<div class="feature"><span class="feature-index">0${index + 1}</span><div><strong>${feature[0]}</strong><p>${feature[1]}</p></div></div>`).join(''); document.querySelectorAll('.planet-tab').forEach((button) => { const active = button.dataset.planet === key; button.classList.toggle('active',active); button.setAttribute('aria-selected',String(active)); }); }
       document.querySelectorAll('.planet-tab').forEach((button) => button.addEventListener('click', () => changePlanet(button.dataset.planet)));
       document.querySelectorAll('.layer-switch').forEach((button) => button.addEventListener('click', () => { document.querySelectorAll('.layer-switch').forEach((item) => item.classList.remove('active')); button.classList.add('active'); document.getElementById('orbitalStage').classList.toggle('labels-off', button.dataset.layer === 'orbit'); }));
-      applyLocale(); changePlanet('venus'); updateUTC(); setInterval(updateUTC, 1000); setInterval(updateCountdown, 30000); hydrateOverview(); setInterval(hydrateOverview, 15000);
+      applyLocale(); applyPassLocale(); changePlanet('venus'); updateUTC(); setInterval(updateUTC, 1000); setInterval(updateCountdown, 30000); hydrateOverview(); setInterval(hydrateOverview, 15000);
     </script>
   </body>
 </html>

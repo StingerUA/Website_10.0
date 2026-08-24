@@ -39,10 +39,13 @@ const AUTH_TOKEN_QUERY = "access_token";
 const ORBITAL_LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=3&mode=detailed";
 const ORBITAL_ISS_URL = "https://api.wheretheiss.at/v1/satellites/25544";
 const ORBITAL_CREW_URL = "https://whoisinspace.com/";
+const ORBITAL_ISS_TLE_URL = "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE";
 let orbitalLaunchesCache = null;
 let orbitalIssCache = null;
 let orbitalCrewCache = null;
 let orbitalMissionCache = null;
+let orbitalIssTleCache = null;
+const orbitalCityCache = new Map();
 
 // =========================
 // 🚀 ENTRY POINT
@@ -69,6 +72,9 @@ async function handleRequest(request, env) {
   // 🛰️ ORBITAL ATLAS — public, cached data route for the live space section.
   if (url.pathname === "/api/orbital/overview" && request.method === "GET") {
     return orbitalOverview(cors);
+  }
+  if (url.pathname === "/api/orbital/iss-tle" && request.method === "GET") {
+    return orbitalIssTle(url, cors);
   }
 
   // 🎮 GAME BACKEND — uses the same AlbaSpace session as the rest of the site.
@@ -634,6 +640,47 @@ async function orbitalOverview(cors) {
   const [launches, iss, crew] = await Promise.all([orbitalLaunches(now), orbitalIss(now), orbitalCrew(now)]);
   const missions = await orbitalMissions(crew, now);
   return json({ launches, iss, crew, missions, updatedAt: new Date(now).toISOString() }, 200, { ...cors, "Cache-Control": "public, max-age=15" });
+}
+
+async function orbitalCurrentTle(now) {
+  if (orbitalIssTleCache?.expiresAt > now) return orbitalIssTleCache.value;
+  const response = await fetch(ORBITAL_ISS_TLE_URL, { headers: { "Accept": "text/plain", "User-Agent": "AlbaSpace-OrbitalAtlas/1.0" } });
+  if (!response.ok) throw new Error(`CelesTrak TLE source returned ${response.status}`);
+  const lines = (await response.text()).split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+  const line1 = lines.find(line => line.startsWith("1 "));
+  const line2 = lines.find(line => line.startsWith("2 "));
+  if (!line1 || !line2) throw new Error("CelesTrak response did not include ISS TLE lines");
+  const value = { line1, line2 };
+  orbitalIssTleCache = { value, expiresAt: now + 30 * 60 * 1000 };
+  return value;
+}
+
+async function orbitalCity(latitude, longitude, now) {
+  const key = `${latitude.toFixed(2)},${longitude.toFixed(2)}`;
+  const cached = orbitalCityCache.get(key);
+  if (cached?.expiresAt > now) return cached.value;
+  try {
+    const endpoint = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}&zoom=10&addressdetails=1`;
+    const response = await fetch(endpoint, { headers: { "Accept": "application/json", "User-Agent": "AlbaSpace-OrbitalAtlas/1.0 (iss-pass-widget)" } });
+    if (!response.ok) throw new Error(`Nominatim returned ${response.status}`);
+    const address = (await response.json())?.address || {};
+    const value = address.city || address.town || address.village || address.municipality || address.county || null;
+    orbitalCityCache.set(key, { value, expiresAt: now + 10 * 60 * 1000 });
+    return value;
+  } catch (error) {
+    console.warn("Orbital Atlas city source unavailable", error);
+    orbitalCityCache.set(key, { value: null, expiresAt: now + 5 * 60 * 1000 });
+    return null;
+  }
+}
+
+async function orbitalIssTle(url, cors) {
+  const latitude = Number(url.searchParams.get("lat"));
+  const longitude = Number(url.searchParams.get("lon"));
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) return json({ error: "Invalid coordinates" }, 400, cors);
+  const now = Date.now();
+  const [tle, city] = await Promise.all([orbitalCurrentTle(now), orbitalCity(latitude, longitude, now)]);
+  return json({ ...tle, city, updatedAt: new Date(now).toISOString() }, 200, { ...cors, "Cache-Control": "public, max-age=300" });
 }
 
 function redirect(location, headers = {}) {
