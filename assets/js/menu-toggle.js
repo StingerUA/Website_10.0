@@ -166,7 +166,7 @@
 
     if (window.innerWidth >= CONFIG.desktop_breakpoint) {
       // Desktop: let the normal CSS (flyout under the trigger) handle it.
-      ['position', 'top', 'left', 'right', 'width', 'max-width', 'display', 'flex-direction', 'flex-wrap', 'justify-content', 'gap', 'padding', 'background', 'border-radius', 'z-index']
+      ['position', 'top', 'left', 'right', 'width', 'max-width', 'display', 'flex-direction', 'flex-wrap', 'justify-content', 'gap', 'padding', 'background', 'border', 'border-radius', 'transform', 'z-index']
         .forEach(prop => menu.style.removeProperty(prop));
       items.forEach(item => {
         ['width', 'max-width', 'flex', 'white-space', 'padding', 'font-size', 'height', 'line-height'].forEach(prop => item.style.removeProperty(prop));
@@ -197,6 +197,7 @@
     set('right', '8px');
     set('width', 'auto');
     set('max-width', 'none');
+    set('transform', 'none');
     set('display', 'flex');
     set('flex-direction', 'row');
     set('flex-wrap', 'nowrap');
