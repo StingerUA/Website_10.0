@@ -340,10 +340,34 @@
     updateCountdowns();
   }
 
+  function alignContextNavigation() {
+    const navigation = document.querySelector(".oa-contextnav");
+    if (!navigation) return;
+    const align = () => {
+      if (window.innerWidth <= 1080) {
+        navigation.style.removeProperty("--oa-context-start");
+        return true;
+      }
+      const logo = document.querySelector(".site-header .main-center-logo");
+      if (!logo) return false;
+      const left = Math.max(20, Math.round(logo.getBoundingClientRect().left));
+      navigation.style.setProperty("--oa-context-start", `${left}px`);
+      return true;
+    };
+    let attempts = 0;
+    const retry = window.setInterval(() => {
+      attempts += 1;
+      if (align() || attempts >= 24) window.clearInterval(retry);
+    }, 120);
+    align();
+    window.addEventListener("resize", align, { passive: true });
+  }
+
   initCameras();
   initPass();
   initSolar();
   initIssReference();
+  alignContextNavigation();
   hydrate();
   setInterval(updateCountdowns, 1000);
 })();

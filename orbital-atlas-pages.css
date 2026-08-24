@@ -225,7 +225,7 @@
 .oa-model-switch button { border-radius: 10px; }
 .oa-info-note { border: 1px solid rgba(66,213,232,.28); border-left: 3px solid var(--oa-cyan); border-radius: var(--oa-radius-md); }
 @media (min-width: 1081px) {
-  .oa-contextnav { margin: 22px 20px 0 clamp(210px, 22vw, 340px); border: 1px solid rgba(213,248,255,.14); border-radius: var(--oa-radius-md); box-shadow: 0 14px 36px rgba(0,0,0,.18); }
+  .oa-contextnav { margin: 22px 20px 0 var(--oa-context-start, clamp(210px, 22vw, 340px)); border: 1px solid rgba(213,248,255,.14); border-radius: var(--oa-radius-md); box-shadow: 0 14px 36px rgba(0,0,0,.18); }
   .oa-contextnav__inner { width: 100%; padding: 0 22px; }
 }
 @media (max-width: 1080px) {
