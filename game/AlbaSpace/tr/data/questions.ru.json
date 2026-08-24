@@ -1,0 +1,320 @@
+[
+  {
+    "id": "p1",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Gezegenler",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Hangi gezegene Kızıl Gezegen denir?",
+    "answers": [
+      "mars",
+      "Mars"
+    ],
+    "explanation": "Mars, yüzeyindeki demir oksitler nedeniyle kırmızımsı görünür."
+  },
+  {
+    "id": "p2",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Gezegenler",
+    "difficulty": "EASY",
+    "type": "NUMBER",
+    "text": "Mars'ın kaç doğal uydusu vardır?",
+    "correct": 2,
+    "tolerance": 0,
+    "unit": "uydu",
+    "explanation": "Mars'ın iki küçük uydusu vardır — Fobos ve Deimos."
+  },
+  {
+    "id": "p3",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Gezegenler",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "Güneş Sistemi'nde kaç gezegen vardır?",
+    "correct": 8,
+    "tolerance": 0,
+    "unit": "gezegen",
+    "explanation": "Güneş Sistemi'nde sekiz gezegen vardır — Merkür'den Neptün'e kadar."
+  },
+  {
+    "id": "p4",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Gezegenler",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Güneş'e en yakın gezegen hangisidir?",
+    "answers": [
+      "merkür",
+      "mercury"
+    ],
+    "explanation": "Merkür, Güneş'e en yakın gezegendir."
+  },
+  {
+    "id": "p5",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Gezegenler",
+    "difficulty": "HARD",
+    "type": "NUMBER",
+    "text": "Mars'ta bir yıl yaklaşık kaç Dünya günü sürer?",
+    "correct": 687,
+    "tolerance": 70,
+    "unit": "gün",
+    "explanation": "Mars yılı yaklaşık 687 Dünya günü sürer."
+  },
+  {
+    "id": "s1",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Uydular",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Dünya'nın doğal uydusunun adı nedir?",
+    "answers": [
+      "ay",
+      "moon"
+    ],
+    "explanation": "Ay, Dünya'nın tek doğal uydusudur."
+  },
+  {
+    "id": "s2",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Uydular",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Dünya'nın ilk yapay uydusunun adı neydi?",
+    "answers": [
+      "sputnik 1",
+      "sputnik-1",
+      "Sputnik 1",
+      "Sputnik-1"
+    ],
+    "explanation": "Sputnik-1, 4 Ekim 1957'de fırlatıldı."
+  },
+  {
+    "id": "s3",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Uydular",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "Sputnik-1 hangi yılda fırlatıldı?",
+    "correct": 1957,
+    "tolerance": 0,
+    "unit": "yıl",
+    "explanation": "Dünya'nın ilk yapay uydusu 1957 yılında fırlatıldı."
+  },
+  {
+    "id": "s4",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Uydular",
+    "difficulty": "HARD",
+    "type": "NUMBER",
+    "text": "Uluslararası Uzay İstasyonu Dünya etrafında bir turu yaklaşık kaç dakikada tamamlar?",
+    "correct": 90,
+    "tolerance": 12,
+    "unit": "dakika",
+    "explanation": "Uluslararası Uzay İstasyonu, Dünya etrafındaki bir turu yaklaşık 90 dakikada tamamlar."
+  },
+  {
+    "id": "s5",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Uydular",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Dünya'nın en büyük doğal uydusunun adı nedir?",
+    "answers": [
+      "ay",
+      "moon"
+    ],
+    "explanation": "Ay, Dünya'nın uydusu ve gezegenine göre nispeten büyük uydulardan biridir."
+  },
+  {
+    "id": "t1",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Teleskoplar",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "1990'da fırlatılan ünlü uzay teleskobunun adı nedir?",
+    "answers": [
+      "hubble",
+      "hubble uzay teleskobu"
+    ],
+    "explanation": "Hubble Uzay Teleskobu 1990'dan beri Dünya yörüngesinde çalışıyor."
+  },
+  {
+    "id": "t2",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Teleskoplar",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Genellikle JWST olarak kısaltılan uzay teleskobunun adı nedir?",
+    "answers": [
+      "james webb uzay teleskobu",
+      "james webb",
+      "jwst",
+      "webb"
+    ],
+    "explanation": "JWST, James Webb Uzay Teleskobudur."
+  },
+  {
+    "id": "t3",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Teleskoplar",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "Hubble teleskobu hangi yılda fırlatıldı?",
+    "correct": 1990,
+    "tolerance": 0,
+    "unit": "yıl",
+    "explanation": "Hubble Nisan 1990'da yörüngeye yerleştirildi."
+  },
+  {
+    "id": "t4",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Teleskoplar",
+    "difficulty": "HARD",
+    "type": "NUMBER",
+    "text": "James Webb'in ana aynasının çapı yaklaşık kaç metredir?",
+    "correct": 6.5,
+    "tolerance": 1,
+    "unit": "metre",
+    "explanation": "JWST'nin ana aynası yaklaşık 6,5 metre çapındadır."
+  },
+  {
+    "id": "t5",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Teleskoplar",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Astronomlar çok uzak uzay cisimlerini gözlemlemek için ne kullanır?",
+    "answers": [
+      "teleskop",
+      "teleskoplar",
+      "telescope"
+    ],
+    "explanation": "Teleskoplar, uzak gök cisimlerinden gelen ışığı ve diğer radyasyonu toplar."
+  },
+  {
+    "id": "r1",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars roverları",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "2021'de Mars'a iniş yapan NASA'nın mars gezgininin adı nedir?",
+    "answers": [
+      "perseverance",
+      "perseverans"
+    ],
+    "explanation": "Perseverance, Şubat 2021'de Jezero kraterine iniş yaptı."
+  },
+  {
+    "id": "r2",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars roverları",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "2012'den beri Mars'ta görev yapan NASA mars gezgininin adı nedir?",
+    "answers": [
+      "curiosity"
+    ],
+    "explanation": "Curiosity, 2012'den beri Gale kraterini araştırıyor."
+  },
+  {
+    "id": "r3",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars roverları",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Spirit ile birlikte 2004'te Mars'a gelen ikiz mars gezginlerinden birinin adı nedir?",
+    "answers": [
+      "opportunity"
+    ],
+    "explanation": "Spirit ve Opportunity, 2004 yılında Mars'a ulaştı."
+  },
+  {
+    "id": "r4",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars roverları",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "Curiosity hangi yılda Mars'a iniş yaptı?",
+    "correct": 2012,
+    "tolerance": 0,
+    "unit": "yıl",
+    "explanation": "Curiosity, 6 Ağustos 2012'de Mars'a iniş yaptı."
+  },
+  {
+    "id": "r5",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars roverları",
+    "difficulty": "HARD",
+    "type": "TEXT",
+    "text": "Perseverance ile Mars'a götürülen küçük helikopterin adı nedir?",
+    "answers": [
+      "ingenuity"
+    ],
+    "explanation": "Ingenuity, başka bir gezegende kontrollü uçuş yapan ilk cihaz oldu."
+  },
+  {
+    "id": "tr1",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Türk uyduları",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "2023'te fırlatılan Türkiye'nin yer gözlem uydusunun adı nedir?",
+    "answers": [
+      "imece",
+      "İMECE"
+    ],
+    "explanation": "İMECE, 2023'te fırlatılan Türkiye'nin yer gözlem uydusudur."
+  },
+  {
+    "id": "tr2",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Türk uyduları",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Türk telekomünikasyon uyduları serisinin adı nedir?",
+    "answers": [
+      "türksat",
+      "turksat"
+    ],
+    "explanation": "TÜRKSAT, Türkiye'nin haberleşme uyduları serisinin adıdır."
+  },
+  {
+    "id": "tr3",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Türk uyduları",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Göktürk-2'den önce 2011'de fırlatılan Türkiye'nin yer gözlem uydusunun adı nedir?",
+    "answers": [
+      "rasat"
+    ],
+    "explanation": "RASAT, Türkiye'de tasarlanıp üretilen ilk yer gözlem uydusudur."
+  },
+  {
+    "id": "tr4",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Türk uyduları",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "Göktürk-2 hangi yılda fırlatıldı?",
+    "correct": 2012,
+    "tolerance": 0,
+    "unit": "yıl",
+    "explanation": "Göktürk-2, 18 Aralık 2012'de fırlatıldı."
+  },
+  {
+    "id": "tr5",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Türk uyduları",
+    "difficulty": "HARD",
+    "type": "TEXT",
+    "text": "2024'te ülkede üretilen ilk Türk haberleşme uydusunun adı nedir?",
+    "answers": [
+      "türksat 6a",
+      "turksat 6a",
+      "türksat 6A"
+    ],
+    "explanation": "TÜRKSAT 6A, yurtiçinde üretilen ilk Türk haberleşme uydusudur."
+  }
+]
