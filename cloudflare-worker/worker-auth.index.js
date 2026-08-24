@@ -38,8 +38,10 @@ const OAUTH_STATE_COOKIE = "albaspace_oauth_state";
 const AUTH_TOKEN_QUERY = "access_token";
 const ORBITAL_LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=3&mode=detailed";
 const ORBITAL_ISS_URL = "https://api.wheretheiss.at/v1/satellites/25544";
+const ORBITAL_CREW_URL = "https://whoisinspace.com/";
 let orbitalLaunchesCache = null;
 let orbitalIssCache = null;
+let orbitalCrewCache = null;
 
 // =========================
 // 🚀 ENTRY POINT
@@ -476,6 +478,34 @@ function orbitalText(value, fallback) {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
 }
 
+function orbitalDecodeHtml(value) {
+  return String(value).replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&").replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").replace(/\s+/g, " ").trim();
+}
+
+function normalizeOrbitalCrew(html) {
+  const headings = [];
+  const headerPattern = /<h2[^>]*>([\s\S]*?)<\/h2>/gi;
+  let headerMatch;
+  while ((headerMatch = headerPattern.exec(html)) !== null) {
+    const strongMatch = headerMatch[1].match(/<strong>\s*([^<]+?)(?:<br\s*\/?>)?\s*<\/strong>/i);
+    if (strongMatch) headings.push({ mission: orbitalDecodeHtml(strongMatch[1]), index: headerMatch.index, end: headerPattern.lastIndex });
+  }
+  const members = [];
+  for (let index = 0; index < headings.length; index += 1) {
+    const header = headings[index];
+    if (!/^ISS\s*-/i.test(header.mission)) continue;
+    const nextHeader = headings[index + 1];
+    const segment = html.slice(header.end, nextHeader ? nextHeader.index : html.length);
+    const namePattern = /<h2[^>]*>\s*([^<][^<]*?)\s*<\/h2>/gi;
+    let nameMatch;
+    while ((nameMatch = namePattern.exec(segment)) !== null) {
+      const name = orbitalDecodeHtml(nameMatch[1]);
+      if (/^[A-Za-z][A-Za-z' .-]{1,80}$/.test(name) && !members.some(member => member.name.toLowerCase() === name.toLowerCase())) members.push({ name, mission: header.mission });
+    }
+  }
+  return members;
+}
+
 function normalizeOrbitalLaunch(raw) {
   const provider = orbitalText(raw?.launch_service_provider?.name, "Оператор уточняется");
   const video = Array.isArray(raw?.vidURLs) ? raw.vidURLs.find(item => typeof item?.url === "string") : null;
@@ -523,10 +553,24 @@ async function orbitalIss(now) {
   }
 }
 
+async function orbitalCrew(now) {
+  if (orbitalCrewCache?.expiresAt > now) return orbitalCrewCache.value;
+  try {
+    const response = await fetch(ORBITAL_CREW_URL, { headers: { "Accept": "text/html", "User-Agent": "AlbaSpace-OrbitalAtlas/1.0" } });
+    if (!response.ok) throw new Error(`Orbital crew source returned ${response.status}`);
+    const value = normalizeOrbitalCrew(await response.text());
+    if (value.length) orbitalCrewCache = { value, expiresAt: now + 30 * 60 * 1000 };
+    return value.length ? value : orbitalCrewCache?.value || [];
+  } catch (error) {
+    console.warn("Orbital Atlas crew source unavailable", error);
+    return orbitalCrewCache?.value || [];
+  }
+}
+
 async function orbitalOverview(cors) {
   const now = Date.now();
-  const [launches, iss] = await Promise.all([orbitalLaunches(now), orbitalIss(now)]);
-  return json({ launches, iss, updatedAt: new Date(now).toISOString() }, 200, { ...cors, "Cache-Control": "public, max-age=15" });
+  const [launches, iss, crew] = await Promise.all([orbitalLaunches(now), orbitalIss(now), orbitalCrew(now)]);
+  return json({ launches, iss, crew, updatedAt: new Date(now).toISOString() }, 200, { ...cors, "Cache-Control": "public, max-age=15" });
 }
 
 function redirect(location, headers = {}) {
