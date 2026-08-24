@@ -146,12 +146,17 @@
     if (window.innerWidth >= CONFIG.desktop_breakpoint) return;
     const nav = document.querySelector('.main-nav');
     if (!nav) return;
+    const navTriggers = nav.querySelectorAll(':scope > a, :scope > .dropdown > .dropdown-trigger');
     if (hidden) {
       nav.style.setProperty('visibility', 'hidden', 'important');
       nav.style.setProperty('pointer-events', 'none', 'important');
+      // Some legacy CSS rules force child visibility back to visible. Hide only
+      // the trigger row so the active fixed dropdown panel remains visible.
+      navTriggers.forEach(trigger => trigger.style.setProperty('visibility', 'hidden', 'important'));
     } else {
       nav.style.removeProperty('visibility');
       nav.style.removeProperty('pointer-events');
+      navTriggers.forEach(trigger => trigger.style.removeProperty('visibility'));
     }
   }
 
