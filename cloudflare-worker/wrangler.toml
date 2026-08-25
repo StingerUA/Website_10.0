@@ -1,0 +1,31 @@
+name = "albaspace-api"
+main = "worker-auth.index.js"
+compatibility_date = "2026-04-06"
+compatibility_flags = ["nodejs_compat", "streams_enable_constructors"]
+workers_dev = true
+
+[triggers]
+crons = ["0 */5 * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "albaspace-db"
+database_id = "679a8b38-2996-46f1-bd3c-766594839c55"
+
+[[r2_buckets]]
+binding = "MODELS"
+bucket_name = "albaspace-models"
+
+[[durable_objects.bindings]]
+name = "GAME_ROOMS"
+class_name = "GameRoomDO"
+
+[exports.GameRoomDO]
+type = "durable-object"
+
+[vars]
+PUBLIC_BASE_URL = "https://api.albaspace.com.tr"
+FRONT_ORIGIN = "https://albaspace.com.tr"
+ALLOWED_ORIGINS = "https://albaspace.com.tr,https://www.albaspace.com.tr"
+SESSION_TTL_SECONDS = "2592000"
+QUESTIONS_URL = "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.json"
