@@ -22,13 +22,13 @@
   const t = dictionary[locale] || dictionary.ru;
   const copy = {
     ru: {
-      landingTitle: "Космос в движении.", landingLead: "Orbital Atlas — пространство для наблюдения за запусками, Международной космической станцией и Солнечной системой. Каждый раздел собран как самостоятельный инструмент.", landingSection: "Выберите траекторию исследования.", landingNote: "Данные запусков и станции обновляются через проверяемые открытые источники, а официальные эфиры открываются в один клик.", routeLaunch: "Запуски", routeLaunchDesc: "Ближайшие миссии, действующие таймеры и ссылки на официальные эфиры.", routeLive: "Камеры МКС", routeLiveDesc: "Четыре предоставленных эфира, телеметрия, карта и следующий пролёт над вами.", routeCrew: "Экипаж", routeCrewDesc: "Состав станции, портреты и переходы к официальным профилям космонавтов.", routeSolar: "Солнечная система", routeSolarDesc: "Самостоятельная интерактивная 2D/3D модель планет, созданная для Alba Space.", launchesTitle: "Запуски с живым обратным отсчётом.", launchesLead: "Следите за ближайшими окнами старта: каждая карточка показывает актуальное время, оператора, площадку и секундный таймер до миссии.", camerasTitle: "Камеры МКС: орбита в прямом эфире.", camerasLead: "Выберите один из предоставленных потоков, следите за текущим положением станции и рассчитайте ближайший видимый пролёт над своим городом.", factsTitle: "Краткий технический профиль МКС.", hdevNote: "HDEV — исторический эксперимент высококачественной съёмки Земли, завершённый в 2020 году. Современные эфиры на этой странице — предоставленные пользователем внешние трансляции; доступность и вид изображения определяет их вещатель.", crewTitle: "Экипаж МКС и официальные профили.", crewLead: "Карточки объединяют предоставленные пользователем портреты с текущим открытым реестром экипажа. Внешние ссылки ведут к проверенным страницам агентств и Центра подготовки космонавтов.", rosterTitle: "Текущий открытый реестр на борту.", solarTitle: "Солнечная система: 2D и 3D.", solarLead: "Собственная интерактивная модель Alba Space помогает посмотреть взаимное расположение планет, выбрать объект и переключить проекцию. Это не встроенный код другого сайта."
+      landingTitle: "Космос в движении.", landingLead: "Orbital Atlas — пространство для наблюдения за запусками, Международной космической станцией и Солнечной системой.", landingSection: "Выберите траекторию исследования.", landingNote: "Данные запусков и станции обновляются через проверяемые открытые источники, а официальные эфиры открываются в один клик.", routeLaunch: "Запуски", routeLaunchDesc: "Ближайшие миссии, действующие таймеры и ссылки на официальные эфиры.", routeLive: "Камеры МКС", routeLiveDesc: "Четыре предоставленных эфира, телеметрия, карта и следующий пролёт над вами.", routeCrew: "Экипаж", routeCrewDesc: "Состав станции, портреты и переходы к официальным профилям космонавтов.", routeSolar: "Солнечная система", routeSolarDesc: "Самостоятельная интерактивная 2D/3D модель планет, созданная для Alba Space.", launchesTitle: "Запуски с живым обратным отсчётом.", launchesLead: "Следите за ближайшими окнами старта: каждая карточка показывает актуальное время, оператора, площадку и секундный таймер до миссии.", camerasTitle: "Камеры МКС: орбита в прямом эфире.", camerasLead: "Выберите один из предоставленных потоков, следите за текущим положением станции и рассчитайте ближайший видимый пролёт над своим городом.", factsTitle: "Краткий технический профиль МКС.", hdevNote: "HDEV — исторический эксперимент высококачественной съёмки Земли, завершённый в 2020 году. Современные эфиры на этой странице — предоставленные пользователем внешние трансляции; доступность и вид изображения определяет их вещатель.", crewTitle: "Экипаж МКС и официальные профили.", crewLead: "Карточки объединяют предоставленные пользователем портреты с текущим открытым реестром экипажа. Внешние ссылки ведут к проверенным страницам агентств и Центра подготовки космонавтов.", rosterTitle: "Текущий открытый реестр на борту.", solarTitle: "Солнечная система: 2D и 3D.", solarLead: "Собственная интерактивная модель Alba Space помогает посмотреть взаимное расположение планет, выбрать объект и переключить проекцию."
     },
     en: {
-      landingTitle: "Space in motion.", landingLead: "Orbital Atlas is a space for observing launches, the International Space Station and the Solar System. Each section is built as an independent tool.", landingSection: "Choose an observation path.", landingNote: "Launch and station data use verifiable open sources, while official streams open in one click.", routeLaunch: "Launches", routeLaunchDesc: "Upcoming missions, live countdowns and links to official coverage.", routeLive: "ISS cameras", routeLiveDesc: "Four supplied streams, telemetry, a map and the next pass above you.", routeCrew: "Crew", routeCrewDesc: "Station roster, portraits and links to official astronaut profiles.", routeSolar: "Solar system", routeSolarDesc: "An original interactive 2D/3D planetary model created for Alba Space.", launchesTitle: "Launches with live countdowns.", launchesLead: "Follow upcoming launch windows: every card shows the latest time, provider, site and a second-by-second mission timer.", camerasTitle: "ISS cameras: orbit live.", camerasLead: "Choose one of the supplied streams, track the station's current position and calculate the next visible pass above your city.", factsTitle: "ISS technical profile at a glance.", hdevNote: "HDEV was a historic high-definition Earth-imaging experiment which ended in 2020. The current video choices on this page are user-supplied external streams; their broadcaster determines the availability and image shown.", crewTitle: "ISS crew and official profiles.", crewLead: "The cards combine user-supplied portraits with the current open crew registry. External links point to verified agency and Cosmonaut Training Center pages.", rosterTitle: "Current open registry on board.", solarTitle: "Solar System: 2D and 3D.", solarLead: "An original Alba Space interactive model helps explore the relative layout of planets, choose an object and switch projection. It does not embed code from another website."
+      landingTitle: "Space in motion.", landingLead: "Orbital Atlas is a space for observing launches, the International Space Station and the Solar System.", landingSection: "Choose an observation path.", landingNote: "Launch and station data use verifiable open sources, while official streams open in one click.", routeLaunch: "Launches", routeLaunchDesc: "Upcoming missions, live countdowns and links to official coverage.", routeLive: "ISS cameras", routeLiveDesc: "Four supplied streams, telemetry, a map and the next pass above you.", routeCrew: "Crew", routeCrewDesc: "Station roster, portraits and links to official astronaut profiles.", routeSolar: "Solar system", routeSolarDesc: "An original interactive 2D/3D planetary model created for Alba Space.", launchesTitle: "Launches with live countdowns.", launchesLead: "Follow upcoming launch windows: every card shows the latest time, provider, site and a second-by-second mission timer.", camerasTitle: "ISS cameras: orbit live.", camerasLead: "Choose one of the supplied streams, track the station's current position and calculate the next visible pass above your city.", factsTitle: "ISS technical profile at a glance.", hdevNote: "HDEV was a historic high-definition Earth-imaging experiment which ended in 2020. The current video choices on this page are user-supplied external streams; their broadcaster determines the availability and image shown.", crewTitle: "ISS crew and official profiles.", crewLead: "The cards combine user-supplied portraits with the current open crew registry. External links point to verified agency and Cosmonaut Training Center pages.", rosterTitle: "Current open registry on board.", solarTitle: "Solar System: 2D and 3D.", solarLead: "An original Alba Space interactive model helps explore the relative layout of planets, choose an object and switch projection."
     },
     tr: {
-      landingTitle: "Hareket halindeki uzay.", landingLead: "Orbital Atlas; fırlatmaları, Uluslararası Uzay İstasyonu'nu ve Güneş Sistemi'ni gözlemlemek için bir alandır. Her bölüm bağımsız bir araç olarak tasarlandı.", landingSection: "Bir gözlem rotası seçin.", landingNote: "Fırlatma ve istasyon verileri doğrulanabilir açık kaynaklardan gelir; resmî yayınlar tek tıkla açılır.", routeLaunch: "Fırlatmalar", routeLaunchDesc: "Yaklaşan görevler, canlı sayaçlar ve resmî yayın bağlantıları.", routeLive: "ISS kameraları", routeLiveDesc: "Sağlanan dört yayın, telemetri, harita ve konumunuz üzerindeki sıradaki geçiş.", routeCrew: "Mürettebat", routeCrewDesc: "İstasyon kadrosu, portreler ve resmî astronot profillerine bağlantılar.", routeSolar: "Güneş sistemi", routeSolarDesc: "Alba Space için oluşturulmuş özgün etkileşimli 2D/3D gezegen modeli.", launchesTitle: "Canlı geri sayımlı fırlatmalar.", launchesLead: "Yaklaşan fırlatma pencerelerini takip edin: her kart güncel saati, operatörü, sahayı ve saniye saniye görev sayacını gösterir.", camerasTitle: "ISS kameraları: yörüngeden canlı.", camerasLead: "Sağlanan yayınlardan birini seçin, istasyonun güncel konumunu izleyin ve şehriniz üzerindeki sıradaki görünür geçişi hesaplayın.", factsTitle: "ISS için kısa teknik profil.", hdevNote: "HDEV, 2020'de sona eren tarihî yüksek çözünürlüklü Dünya görüntüleme deneyiydi. Bu sayfadaki güncel video seçenekleri kullanıcı tarafından sağlanan dış yayınlardır; görüntü ve erişilebilirliği yayıncı belirler.", crewTitle: "ISS mürettebatı ve resmî profiller.", crewLead: "Kartlar, kullanıcı tarafından sağlanan portreleri güncel açık mürettebat kaydıyla birleştirir. Dış bağlantılar doğrulanmış ajans ve Kozmonot Eğitim Merkezi sayfalarına yönlendirir.", rosterTitle: "Araçtaki güncel açık kayıt.", solarTitle: "Güneş Sistemi: 2D ve 3D.", solarLead: "Özgün Alba Space etkileşimli modeli gezegenlerin göreli düzenini incelemeye, bir nesne seçmeye ve projeksiyonu değiştirmeye yardımcı olur. Başka bir sitenin kodunu gömmez."
+      landingTitle: "Hareket halindeki uzay.", landingLead: "Orbital Atlas; fırlatmaları, Uluslararası Uzay İstasyonu'nu ve Güneş Sistemi'ni gözlemlemek için bir alandır.", landingSection: "Bir gözlem rotası seçin.", landingNote: "Fırlatma ve istasyon verileri doğrulanabilir açık kaynaklardan gelir; resmî yayınlar tek tıkla açılır.", routeLaunch: "Fırlatmalar", routeLaunchDesc: "Yaklaşan görevler, canlı sayaçlar ve resmî yayın bağlantıları.", routeLive: "ISS kameraları", routeLiveDesc: "Sağlanan dört yayın, telemetri, harita ve konumunuz üzerindeki sıradaki geçiş.", routeCrew: "Mürettebat", routeCrewDesc: "İstasyon kadrosu, portreler ve resmî astronot profillerine bağlantılar.", routeSolar: "Güneş sistemi", routeSolarDesc: "Alba Space için oluşturulmuş özgün etkileşimli 2D/3D gezegen modeli.", launchesTitle: "Canlı geri sayımlı fırlatmalar.", launchesLead: "Yaklaşan fırlatma pencerelerini takip edin: her kart güncel saati, operatörü, sahayı ve saniye saniye görev sayacını gösterir.", camerasTitle: "ISS kameraları: yörüngeden canlı.", camerasLead: "Sağlanan yayınlardan birini seçin, istasyonun güncel konumunu izleyin ve şehriniz üzerindeki sıradaki görünür geçişi hesaplayın.", factsTitle: "ISS için kısa teknik profil.", hdevNote: "HDEV, 2020'de sona eren tarihî yüksek çözünürlüklü Dünya görüntüleme deneyiydi. Bu sayfadaki güncel video seçenekleri kullanıcı tarafından sağlanan dış yayınlardır; görüntü ve erişilebilirliği yayıncı belirler.", crewTitle: "ISS mürettebatı ve resmî profiller.", crewLead: "Kartlar, kullanıcı tarafından sağlanan portreleri güncel açık mürettebat kaydıyla birleştirir. Dış bağlantılar doğrulanmış ajans ve Kozmonot Eğitim Merkezi sayfalarına yönlendirir.", rosterTitle: "Araçtaki güncel açık kayıt.", solarTitle: "Güneş Sistemi: 2D ve 3D.", solarLead: "Özgün Alba Space etkileşimli modeli gezegenlerin göreli düzenini incelemeye, bir nesne seçmeye ve projeksiyonu değiştirmeye yardımcı olur."
     }
   };
   const c = copy[locale] || copy.ru;
@@ -68,13 +68,39 @@
   const shortDate = new Intl.DateTimeFormat(dateLocale, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
   const longDate = new Intl.DateTimeFormat(dateLocale, { weekday: "short", day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit", timeZone: "UTC", timeZoneName: "short" });
 
+  const localePath = locale === "en" ? "eng" : locale;
   if (locale !== "ru") document.querySelectorAll('a[href^="/orbital-"]').forEach(link => {
     const path = link.getAttribute("href");
-    if (path && !path.startsWith(`/${locale}/`)) link.setAttribute("href", `/${locale}${path}`);
+    if (path && !path.startsWith(`/${localePath}/`)) link.setAttribute("href", `/${localePath}${path}`);
   });
   document.querySelectorAll("[data-t]").forEach(node => { const value = t[node.dataset.t]; if (value) node.textContent = value; });
   document.querySelectorAll("[data-copy]").forEach(node => { const value = c[node.dataset.copy]; if (value) node.textContent = value; });
   document.querySelectorAll("[data-t-title]").forEach(node => { const value = t[node.dataset.tTitle]; if (value) node.setAttribute("title", value); });
+  const placeLabels = { ru: "Космические места", en: "Space places", tr: "Uzay yerleri" };
+  const placeNav = document.querySelector(".oa-contextnav__links");
+  if (placeNav && !placeNav.querySelector("[data-orbital-places]")) {
+    const link = document.createElement("a");
+    link.dataset.orbitalPlaces = "true";
+    link.href = locale === "ru" ? "/orbital-places.html" : `/${localePath}/orbital-places.html`;
+    link.textContent = placeLabels[locale] || placeLabels.ru;
+    if (location.pathname.endsWith("/orbital-places.html")) link.classList.add("is-active");
+    placeNav.append(link);
+  }
+  const placeRoutes = {
+    ru: { title: "Космические места", description: "Реальные планетарии, обсерватории и научные центры рядом с вами на открытой карте." },
+    en: { title: "Space places", description: "Real planetariums, observatories and science centres near you, on an open map." },
+    tr: { title: "Uzay yerleri", description: "Açık haritada yakınınızdaki gerçek gezegenevleri, gözlemevleri ve bilim merkezleri." }
+  };
+  const routeGrid = document.querySelector(".oa-route-grid");
+  if (location.pathname.endsWith("/orbital-atlas.html") && routeGrid && !routeGrid.querySelector('a[href$="/orbital-places.html"]')) {
+    const route = placeRoutes[locale] || placeRoutes.ru;
+    const card = document.createElement("a");
+    card.className = "oa-route-card";
+    card.dataset.orbitalPlacesRoute = "true";
+    card.href = locale === "ru" ? "/orbital-places.html" : `/${localePath}/orbital-places.html`;
+    card.innerHTML = `<span class="oa-route-card__number">05</span><h3>${route.title}</h3><p>${route.description}</p><span class="oa-route-card__go">${t.browse}</span>`;
+    routeGrid.append(card);
+  }
 
   function unwrapOverview(payload) {
     const entry = Array.isArray(payload) ? payload[0] : payload;
@@ -265,13 +291,13 @@
   }
 
   const profiles = [
-    { name: "Jessica Meir", agency: "NASA", image: "/assets/images/orbital-crew/jessica-meir.webp", profile: "https://www.nasa.gov/humans-in-space/astronauts/jessica-u-meir/", mission: "Crew-12" },
-    { name: "Jack Hathaway", agency: "NASA", image: "/assets/images/orbital-crew/jack-hathaway.webp", profile: "https://www.nasa.gov/humans-in-space/astronauts/", mission: "Crew-12" },
-    { name: "Sophie Adenot", agency: "ESA", image: "/assets/images/orbital-crew/sophie-adenot.webp", profile: "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Astronauts/Sophie_Adenot", mission: "Crew-12" },
-    { name: "Andrey Fedyaev", agency: "Roscosmos", image: "/assets/images/orbital-crew/andrey-fedyaev.webp", profile: "https://www.gctc.ru/main.php?id=1716", mission: "Crew-12" },
-    { name: "Pyotr Dubrov", agency: "Roscosmos", image: "/assets/images/orbital-crew/pyotr-dubrov.jpg", profile: "https://www.gctc.ru/main.php?id=1704", mission: "Soyuz MS-29" },
-    { name: "Anna Kikina", agency: "Roscosmos", image: "/assets/images/orbital-crew/anna-kikina.webp", profile: "https://www.gctc.ru/main.php?id=1710", mission: "Soyuz MS-29" },
-    { name: "Anil Menon", agency: "NASA", image: "/assets/images/orbital-crew/anil-menon.webp", profile: "https://www.nasa.gov/people/nasa-astronaut-anil-menon/", mission: "Soyuz MS-29" }
+    { name: "Jessica Meir", agency: "NASA", image: "/manus-storage/jessica-meir_ce8dfcd0.webp", profile: "https://www.nasa.gov/humans-in-space/astronauts/jessica-u-meir/", mission: "Crew-12" },
+    { name: "Jack Hathaway", agency: "NASA", image: "/manus-storage/jack-hathaway_d77c786b.webp", profile: "https://www.nasa.gov/humans-in-space/astronauts/", mission: "Crew-12" },
+    { name: "Sophie Adenot", agency: "ESA", image: "/manus-storage/sophie-adenot_b4f68b06.webp", profile: "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Astronauts/Sophie_Adenot", mission: "Crew-12" },
+    { name: "Andrey Fedyaev", agency: "Roscosmos", image: "/manus-storage/andrey-fedyaev_ed7887bb.webp", profile: "https://www.gctc.ru/main.php?id=1716", mission: "Crew-12" },
+    { name: "Pyotr Dubrov", agency: "Roscosmos", image: "/manus-storage/pyotr-dubrov_d84ff90a.jpg", profile: "https://www.gctc.ru/main.php?id=1704", mission: "Soyuz MS-29" },
+    { name: "Anna Kikina", agency: "Roscosmos", image: "/manus-storage/anna-kikina_aa84cc6a.webp", profile: "https://www.gctc.ru/main.php?id=1710", mission: "Soyuz MS-29" },
+    { name: "Anil Menon", agency: "NASA", image: "/manus-storage/anil-menon_ae39ffb0.webp", profile: "https://www.nasa.gov/people/nasa-astronaut-anil-menon/", mission: "Soyuz MS-29" }
   ];
 
   function renderCrew(crew) {
@@ -296,10 +322,28 @@
     tr: { mercury: ["Merkür", "Güneş'e en yakın gezegen.", "88 gün", "Yörünge dönemi", "4.879 km", "Çap"], venus: ["Venüs", "Volkanik düzlüklerin üzerindeki yoğun atmosfer.", "225 gün", "Yörünge dönemi", "12.104 km", "Çap"], earth: ["Dünya", "Dinamik evimiz ve yörünge gözlemleri için referans noktası.", "365 gün", "Yörünge dönemi", "12.742 km", "Çap"], mars: ["Mars", "Kanyonlar, kutup başlıkları ve robotik kâşifler.", "687 gün", "Yörünge dönemi", "6.779 km", "Çap"], jupiter: ["Jüpiter", "Güçlü manyetosfere sahip gaz devi.", "11,9 yıl", "Yörünge dönemi", "139.820 km", "Çap"], saturn: ["Satürn", "Parlak halka sistemiyle gezegen.", "29,5 yıl", "Yörünge dönemi", "116.460 km", "Çap"], uranus: ["Uranüs", "Aşırı eksen eğimine sahip buz devi.", "84 yıl", "Yörünge dönemi", "50.724 km", "Çap"], neptune: ["Neptün", "Hızlı rüzgârlara sahip en uzak gezegen.", "164,8 yıl", "Yörünge dönemi", "49.244 km", "Çap"] }
   };
 
+  const planetIcons = isDev
+    ? { sun: "/manus-storage/sun_d727f9a3.png", venus: "/manus-storage/venus_c0383fbe.png", earth: "/manus-storage/earth_a7188212.png", mars: "/manus-storage/mars_8010c496.png", jupiter: "/manus-storage/jupiter_f35041cc.png", saturn: "/manus-storage/saturn_256fe28e.png", uranus: "/manus-storage/uranus_99b0a8c4.png", neptune: "/manus-storage/neptune_8974c7dc.png" }
+    : { sun: "/assets/images/orbital-planets/sun.png", venus: "/assets/images/orbital-planets/venus.png", earth: "/assets/images/orbital-planets/earth.png", mars: "/assets/images/orbital-planets/mars.png", jupiter: "/assets/images/orbital-planets/jupiter.png", saturn: "/assets/images/orbital-planets/saturn.png", uranus: "/assets/images/orbital-planets/uranus.png", neptune: "/assets/images/orbital-planets/neptune.png" };
+  const planetIconSizes = { venus: 42, earth: 45, mars: 40, jupiter: 79, saturn: 74, uranus: 62, neptune: 58 };
+
   function initSolar() {
     const model = byId("solarModel");
     if (!model) return;
     const data = planets[locale] || planets.ru;
+    const sun = model.querySelector(".oa-sun");
+    if (sun) {
+      sun.classList.add("oa-sun--icon");
+      sun.innerHTML = `<img src="${planetIcons.sun}" alt="" aria-hidden="true">`;
+    }
+    Object.entries(planetIcons).forEach(([key, src]) => {
+      if (key === "sun") return;
+      const button = model.querySelector(`[data-planet="${key}"]`);
+      if (!button) return;
+      button.classList.add("oa-planet--icon");
+      button.style.setProperty("--planet-icon-size", `${planetIconSizes[key]}px`);
+      button.innerHTML = `<img src="${src}" alt="${data[key]?.[0] || key}" draggable="false">`;
+    });
     const setPlanet = key => {
       const current = data[key];
       setText("solarPlanetName", current[0]); setText("solarPlanetDescription", current[1]); setText("solarOrbitValue", current[2]); setText("solarOrbitLabel", current[3]); setText("solarSizeValue", current[4]); setText("solarSizeLabel", current[5]);

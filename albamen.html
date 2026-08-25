@@ -336,9 +336,15 @@
 .alba-time-sep{color:#475569;margin:0 1px}
 .alba-status{margin-top:8px;font-size:10px;letter-spacing:.1em;color:#475569;text-transform:uppercase;padding-left:2px;transition:color .3s}
 .alba-status.active{color:#38bdf8}
-.alba-status.error{color:#f87171}
-  </style>
-  </head>
+	.alba-status.error{color:#f87171}
+	  </style>
+	  <style>
+	    .space-system-row .celestial-body.has-planet-icon{width:var(--asset-size)!important;height:var(--asset-size)!important;background:transparent!important;box-shadow:none;overflow:visible}
+	    .space-system-row .celestial-body.has-planet-icon img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 12px var(--glow-color));pointer-events:none;user-select:none}
+	    .space-system-row .celestial-body.has-planet-icon:hover img,.space-system-row .celestial-body.has-planet-icon.active img{filter:drop-shadow(0 0 19px var(--glow-color))}
+	    @media(max-width:768px){.space-system-row .celestial-body.has-planet-icon{width:calc(var(--asset-size)*.76)!important;height:calc(var(--asset-size)*.76)!important}}
+	  </style>
+	  </head>
 
   <body class="albamen-page">
     <div data-include-html="/header-tr.html"></div>
@@ -529,18 +535,18 @@
 
       <div class="space-system-row">
         <!-- Sun -->
-        <div class="celestial-body sun active" data-id="sun" style="--body-color: #ff4500; --glow-color: rgba(255, 69, 0, 0.6);" role="button">
-          <span class="label">Güneş</span>
-        </div>
+	        <div class="celestial-body sun active has-planet-icon" data-id="sun" style="--asset-size: 68px; --body-color: #ff4500; --glow-color: rgba(255, 69, 0, 0.6);" role="button"><img src="/assets/images/orbital-planets/sun.png" alt="" aria-hidden="true">
+	          <span class="label">Güneş</span>
+	        </div>
         <!-- Planets -->
         <div class="celestial-body planet" data-id="mercury" style="--body-size: 35px; --body-color: #97979f; --glow-color: rgba(151, 151, 159, 0.4);" role="button"><span class="label">Merkür</span></div>
-        <div class="celestial-body planet" data-id="venus" style="--body-size: 45px; --body-color: #e3bb76; --glow-color: rgba(227, 187, 118, 0.4);" role="button"><span class="label">Venüs</span></div>
-        <div class="celestial-body planet" data-id="earth" style="--body-size: 48px; --body-color: #2271b3; --glow-color: rgba(34, 113, 179, 0.5);" role="button"><span class="label">Dünya</span></div>
-        <div class="celestial-body planet" data-id="mars" style="--body-size: 40px; --body-color: #e27b58; --glow-color: rgba(226, 123, 88, 0.4);" role="button"><span class="label">Mars</span></div>
-        <div class="celestial-body planet" data-id="jupiter" style="--body-size: 75px; --body-color: #d39c7e; --glow-color: rgba(211, 156, 126, 0.3);" role="button"><span class="label">Jüpiter</span></div>
-        <div class="celestial-body planet" data-id="saturn" style="--body-size: 65px; --body-color: #c5ab6e; --glow-color: rgba(197, 171, 110, 0.3);" role="button"><span class="label">Satürn</span></div>
-        <div class="celestial-body planet" data-id="uranus" style="--body-size: 55px; --body-color: #b5e3e3; --glow-color: rgba(181, 227, 227, 0.4);" role="button"><span class="label">Uranüs</span></div>
-        <div class="celestial-body planet" data-id="neptune" style="--body-size: 53px; --body-color: #4b70dd; --glow-color: rgba(75, 112, 221, 0.4);" role="button"><span class="label">Neptün</span></div>
+	        <div class="celestial-body planet has-planet-icon" data-id="venus" style="--asset-size: 46px; --body-color: #e3bb76; --glow-color: rgba(227, 187, 118, 0.4);" role="button"><img src="/assets/images/orbital-planets/venus.png" alt="" aria-hidden="true"><span class="label">Venüs</span></div>
+	        <div class="celestial-body planet has-planet-icon" data-id="earth" style="--asset-size: 49px; --body-color: #2271b3; --glow-color: rgba(34, 113, 179, 0.5);" role="button"><img src="/assets/images/orbital-planets/earth.png" alt="" aria-hidden="true"><span class="label">Dünya</span></div>
+	        <div class="celestial-body planet has-planet-icon" data-id="mars" style="--asset-size: 43px; --body-color: #e27b58; --glow-color: rgba(226, 123, 88, 0.4);" role="button"><img src="/assets/images/orbital-planets/mars.png" alt="" aria-hidden="true"><span class="label">Mars</span></div>
+	        <div class="celestial-body planet has-planet-icon" data-id="jupiter" style="--asset-size: 79px; --body-color: #d39c7e; --glow-color: rgba(211, 156, 126, 0.3);" role="button"><img src="/assets/images/orbital-planets/jupiter.png" alt="" aria-hidden="true"><span class="label">Jüpiter</span></div>
+	        <div class="celestial-body planet has-planet-icon" data-id="saturn" style="--asset-size: 78px; --body-color: #c5ab6e; --glow-color: rgba(197, 171, 110, 0.3);" role="button"><img src="/assets/images/orbital-planets/saturn.png" alt="" aria-hidden="true"><span class="label">Satürn</span></div>
+	        <div class="celestial-body planet has-planet-icon" data-id="uranus" style="--asset-size: 64px; --body-color: #b5e3e3; --glow-color: rgba(181, 227, 227, 0.4);" role="button"><img src="/assets/images/orbital-planets/uranus.png" alt="" aria-hidden="true"><span class="label">Uranüs</span></div>
+	        <div class="celestial-body planet has-planet-icon" data-id="neptune" style="--asset-size: 59px; --body-color: #4b70dd; --glow-color: rgba(75, 112, 221, 0.4);" role="button"><img src="/assets/images/orbital-planets/neptune.png" alt="" aria-hidden="true"><span class="label">Neptün</span></div>
       </div>
 
       <div class="planet-content-wrapper" id="planetDetailBox">

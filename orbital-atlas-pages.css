@@ -87,7 +87,7 @@
 .oa-countdown strong { font: 500 26px/1 var(--oa-mono); letter-spacing: -.08em; }
 .oa-countdown span { color: #93aab5; font: 10px/1 var(--oa-mono); letter-spacing: .06em; text-transform: uppercase; }
 
-.oa-route-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.oa-route-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 14px; }
 .oa-route-card { display: flex; min-height: 276px; flex-direction: column; padding: 22px; border: 1px solid var(--oa-line); background: linear-gradient(140deg, rgba(20,33,44,.94), rgba(5,9,14,.92)); transition: border-color .2s ease, transform .2s cubic-bezier(.23,1,.32,1); }
 .oa-route-card:hover { border-color: rgba(66,213,232,.72); transform: translateY(-4px); }
 .oa-route-card__number { color: var(--oa-cyan); font: 500 11px/1 var(--oa-mono); letter-spacing: .1em; }
@@ -164,9 +164,12 @@
 .oa-solar-model::before { position: absolute; inset: 0; opacity: .35; background: linear-gradient(90deg, rgba(66,213,232,.08) 1px, transparent 1px), linear-gradient(0deg, rgba(66,213,232,.08) 1px, transparent 1px); background-size: 72px 72px; mask-image: radial-gradient(circle, #000 15%, transparent 75%); content: ""; }
 .oa-solar-system { position: absolute; top: 50%; left: 50%; width: min(80vw, 540px); aspect-ratio: 1; transform: translate(-50%, -50%); transition: transform .42s cubic-bezier(.23,1,.32,1); }
 .oa-orbit { position: absolute; top: 50%; left: 50%; width: var(--size); height: var(--size); border: 1px solid rgba(130,198,217,.28); border-radius: 50%; transform: translate(-50%, -50%); }
-.oa-planet { position: absolute; top: var(--top); left: var(--left); width: var(--planet-size); aspect-ratio: 1; border: 0; border-radius: 50%; background: var(--planet-color); box-shadow: 0 0 0 3px rgba(255,255,255,.08), 0 0 22px var(--planet-color); cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
+.oa-planet { position: absolute; top: var(--top); left: var(--left); width: var(--planet-icon-size, var(--planet-size)); aspect-ratio: 1; border: 0; border-radius: 50%; background: var(--planet-color); box-shadow: 0 0 0 3px rgba(255,255,255,.08), 0 0 22px var(--planet-color); cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
 .oa-planet:hover, .oa-planet.is-active { transform: scale(1.5); box-shadow: 0 0 0 4px rgba(255,255,255,.12), 0 0 28px var(--planet-color); }
 .oa-sun { position: absolute; top: 50%; left: 50%; width: 42px; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff6c5, #ffbd4d 35%, #c95416 72%); box-shadow: 0 0 50px #ff9e35, 0 0 120px rgba(255,156,48,.36); transform: translate(-50%, -50%); }
+.oa-sun--icon { width: 92px; background: transparent; }
+.oa-sun--icon img, .oa-planet--icon img { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; user-select: none; }
+.oa-planet--icon { overflow: visible; background: transparent; box-shadow: 0 0 16px var(--planet-color); }
 .oa-solar-model--3d .oa-solar-system { transform: translate(-50%, -50%) rotateX(54deg) rotateZ(-20deg); }
 .oa-solar-model--3d .oa-planet { transform: translateZ(28px); }
 .oa-solar-side { padding: 29px; border: 1px solid var(--oa-line); background: linear-gradient(145deg, rgba(19,32,43,.94), rgba(6,10,15,.94)); }
@@ -232,3 +235,19 @@
   .oa-contextnav { margin: 12px 14px 0; border: 1px solid rgba(213,248,255,.12); border-radius: 18px; }
   .oa-contextnav__inner { width: 100%; padding: 0 14px; }
 }
+.oa-place-hero { position: relative; overflow: hidden; border-bottom: 1px solid rgba(213,248,255,.08); }
+.oa-place-hero::before { position: absolute; z-index: -1; inset: 0; background: radial-gradient(circle at 83% 42%, rgba(255,193,98,.21), transparent 14rem), radial-gradient(circle at 73% 70%, rgba(66,213,232,.14), transparent 22rem), linear-gradient(110deg, #05080d 20%, rgba(5,8,13,.88) 58%, rgba(5,8,13,.4)); content: ""; }
+.oa-places-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(290px, .8fr); gap: 14px; }
+.oa-place-map { min-height: 540px; }
+.oa-place-results { display: grid; max-height: 540px; gap: 10px; align-content: start; overflow: auto; padding-right: 3px; }
+.oa-place-empty { display: grid; min-height: 220px; place-content: center; padding: 25px; border: 1px solid var(--oa-line); border-radius: var(--oa-radius-lg); background: linear-gradient(145deg, rgba(19,32,43,.94), rgba(6,10,15,.94)); }
+.oa-place-empty strong { font: 600 28px/.96 var(--oa-display); letter-spacing: -.06em; }
+.oa-place-empty p { margin: 13px 0 0; color: var(--oa-muted); font-size: 13px; line-height: 1.55; }
+.oa-place-card { display: flex; gap: 16px; align-items: end; justify-content: space-between; padding: 17px; border: 1px solid var(--oa-line); border-radius: var(--oa-radius-md); background: linear-gradient(145deg, rgba(19,32,43,.94), rgba(6,10,15,.94)); }
+.oa-place-card small { color: var(--oa-cyan); font: 500 10px/1 var(--oa-mono); letter-spacing: .08em; text-transform: uppercase; }
+.oa-place-card h3 { margin: 9px 0 5px; font: 600 23px/.98 var(--oa-display); letter-spacing: -.05em; }
+.oa-place-card p { margin: 0; color: var(--oa-muted); font-size: 12px; line-height: 1.45; }
+.oa-place-card a { flex: 0 0 auto; color: var(--oa-cyan); font: 500 10px/1.3 var(--oa-mono); letter-spacing: .05em; text-align: right; }
+.oa-place-card a:hover { color: #d8fbff; }
+@media (max-width:1080px) { .oa-places-layout { grid-template-columns:1fr; } }
+@media (max-width:720px) { .oa-place-map { min-height:380px; } .oa-place-results { max-height:none; } }
