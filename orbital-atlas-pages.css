@@ -251,3 +251,24 @@
 .oa-place-card a:hover { color: #d8fbff; }
 @media (max-width:1080px) { .oa-places-layout { grid-template-columns:1fr; } }
 @media (max-width:720px) { .oa-place-map { min-height:380px; } .oa-place-results { max-height:none; } }
+
+/* Orbital Atlas navigation refinement and high-contrast map zoom controls. */
+.oa-main { margin-top: -76px; }
+.oa-hero__grid { transform: translateY(-120px); }
+.oa-contextnav__brand { display: none; }
+.oa-contextnav__inner { gap: 0; }
+.oa-map .leaflet-control-zoom, .oa-place-map .leaflet-control-zoom { overflow: hidden; border: 1px solid rgba(66,213,232,.62); border-radius: 12px; box-shadow: 0 9px 22px rgba(0,0,0,.32); }
+.oa-map .leaflet-control-zoom a, .oa-place-map .leaflet-control-zoom a { display: grid; width: 34px; height: 34px; place-items: center; border: 0; border-bottom: 1px solid rgba(5,8,13,.22); color: transparent !important; background: #eafcff; font-size: 0 !important; text-indent: 0; text-shadow: none; }
+.oa-map .leaflet-control-zoom a::before, .oa-place-map .leaflet-control-zoom a::before { color: #031014; font: 700 23px/1 Arial, sans-serif; }
+.oa-map .leaflet-control-zoom a.leaflet-control-zoom-in::before, .oa-place-map .leaflet-control-zoom a.leaflet-control-zoom-in::before { content: "+"; }
+.oa-map .leaflet-control-zoom a.leaflet-control-zoom-out::before, .oa-place-map .leaflet-control-zoom a.leaflet-control-zoom-out::before { content: "−"; font-size: 25px; }
+.oa-map .leaflet-control-zoom a:last-child, .oa-place-map .leaflet-control-zoom a:last-child { border-bottom: 0; }
+.oa-map .leaflet-control-zoom a:hover, .oa-map .leaflet-control-zoom a:focus-visible, .oa-place-map .leaflet-control-zoom a:hover, .oa-place-map .leaflet-control-zoom a:focus-visible { background: var(--oa-cyan); }
+@media (min-width:1081px) {
+  .oa-contextnav { width: fit-content; max-width: calc(100% - var(--oa-context-start, clamp(210px, 22vw, 340px)) - 20px); margin: 98px 0 0 var(--oa-context-start, clamp(210px, 22vw, 340px)); }
+  .oa-contextnav__inner { width: fit-content; max-width: 100%; padding: 0 12px; }
+}
+@media (max-width:1080px) {
+  .oa-contextnav { margin: 88px 14px 0; }
+  .oa-hero__grid { transform: translateY(-48px); }
+}
