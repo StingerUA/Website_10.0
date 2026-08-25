@@ -22,6 +22,7 @@ class_name = "GameRoomDO"
 
 [exports.GameRoomDO]
 type = "durable-object"
+storage = "sqlite"
 
 [vars]
 PUBLIC_BASE_URL = "https://api.albaspace.com.tr"
