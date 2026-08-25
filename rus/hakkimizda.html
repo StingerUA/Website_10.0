@@ -148,25 +148,49 @@
           });
       }
   </script>
+
+  <!-- Person-specific team social links -->
   <script>
+    const teamSocialLinks = [
+      [
+        { href: 'https://www.instagram.com/idrisalbayrak_?igsi=MWM1MDR1ZHd2anZ5ZA%3D%3D&utm_source=qr', label: 'Instagram', icon: '/assets/icons/inst.png' },
+        { href: 'https://www.linkedin.com/in/idrisalbayrak?utm_source=share_via&utm_content=profile&utm_medium=member_ios', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' }
+      ],
+      [
+        { href: 'https://www.instagram.com/nick_nesterenko', label: 'Instagram', icon: '/assets/icons/inst.png' },
+        { href: 'https://www.linkedin.com/in/nickolas-nesterenko-348596255/', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' }
+      ],
+      [
+        { href: 'https://www.instagram.com/sumeyyee.aksy?igsi=MWpyb3R3a2d5NDh0cg==', label: 'Instagram', icon: '/assets/icons/inst.png' }
+      ],
+      [
+        { href: 'https://www.instagram.com/aicakarai?igsi=cjRheWpwY2I1cjFn', label: 'Instagram', icon: '/assets/icons/inst.png' },
+        { href: 'https://www.linkedin.com/in/ahmet-%C3%A7akar-9a8521223?utm_source=share_via&utm_content=profile&utm_medium=member_ios', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' }
+      ],
+      [
+        { href: 'https://www.instagram.com/doga.to?igsi=bnFtZnYxMHJ6NGpi', label: 'Instagram', icon: '/assets/icons/inst.png' },
+        { href: 'https://www.linkedin.com/in/dogatopcu10?utm_source=share_via&utm_content=profile&utm_medium=member_ios', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' }
+      ],
+      [
+        { href: 'https://www.instagram.com/thesunbeamasli?igsi=MXU0MTNsY3pobXc3Mg==', label: 'Instagram', icon: '/assets/icons/inst.png' },
+        { href: 'https://www.linkedin.com/in/asl%C4%B1-bolatt?utm_source=share_via&utm_content=profile&utm_medium=member_ios', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' }
+      ]
+    ];
+
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.team-card').forEach((card) => {
+      document.querySelectorAll('.team-card').forEach((card, index) => {
         if (card.querySelector('.team-socials')) return;
 
         const socials = document.createElement('div');
         socials.className = 'team-socials';
 
-        [
-          { href: 'https://www.instagram.com/albaspace_/', label: 'Instagram', icon: '/assets/icons/inst.png' },
-          { href: 'https://www.linkedin.com/in/idrisalbayrak/', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' },
-          { href: 'https://wa.me/905387781018', label: 'WhatsApp', icon: '/assets/icons/watsupp.png' },
-          { href: 'https://www.youtube.com/@AlbaSpaceTr', label: 'YouTube', icon: '/assets/icons/youtube.png' }
-        ].forEach(({ href, label, icon }) => {
+        (teamSocialLinks[index] || []).forEach(({ href, label, icon }) => {
           const link = document.createElement('a');
           link.href = href;
           link.target = '_blank';
           link.rel = 'noopener noreferrer';
           link.setAttribute('aria-label', label);
+          link.setAttribute('title', label);
           link.innerHTML = `<img src="${icon}" alt="${label}" width="16" height="16">`;
           socials.appendChild(link);
         });
