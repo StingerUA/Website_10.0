@@ -402,25 +402,25 @@
         "ar": "İdris Albayrak"
       },
       "authorRole": {
-        "tr": "Misafir Yazar",
-        "en": "Guest Writer",
-        "ru": "Приглашённый автор",
-        "ar": "كاتب ضيف"
-      },
+        "tr": "Uzay Girişimcisi, Fütürist ve Eğitmen",
+        "en": "Space Entrepreneur, Futurist, and Educator",
+        "ru": "Космический предприниматель, футурист и преподаватель",
+        "ar": "رائد أعمال فضائي، مستقبلي ومدرِّب"
+        },
       "locales": {
         "tr": {
-          "title": "Uzaydaki İlkeler",
-          "excerpt": "ALBA Space Blog Yazısı - İdris ALBAYRAK UZAYDAKİ İLKLER - 21.08.2026 Uzaylarca selam uzaydaşlar! İlkler, unutulmazdır. İlkler, öncülerdir. İlkler cesu",
+          "title": "Uzaydaki İlkler",
+          "excerpt": "UZAYDAKİ İLKLER - 21.08.2026 Uzaylarca selam uzaydaşlar! İlkler, unutulmazdır. İlkler, öncülerdir. İlkler cesu",
           "url": "/blog/uzaydaki-ilkeler.html"
         },
         "en": {
           "title": "Firsts in Space",
-          "excerpt": "ALBA Space Blog Post - İdris ALBAYRAK FIRSTS IN SPACE - 21.08.2026 Greetings to space, spacers! Firsts are unforgettable. Firsts are pioneers. Firsts",
+          "excerpt": "FIRST IN SPACE - 21.08.2026 Greetings to space, spacers! Firsts are unforgettable. Firsts are pioneers. Firsts",
           "url": "/eng/blog/uzaydaki-ilkeler.html"
         },
         "ru": {
           "title": "Первые достижения в космосе",
-          "excerpt": "ALBA Space Blog Post - Идрис АЛЬБАЙРАК ВПЕРВЫЕ В КОСМОСЕ - 21.08.2026 Привет космосу, космонатуры! Первые моменты незабываемы. Первые — это первопрохо",
+          "excerpt": "ПЕРВЫЕ В КОСМОСЕ - 21.08.2026 Привет космосу, космонатуры! Первые моменты незабываемы. Первые — это первопрохо",
           "url": "/rus/blog/uzaydaki-ilkeler.html"
         },
         "ar": {
