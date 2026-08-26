@@ -16,8 +16,11 @@ The planned reference visual was requested as a portrait in-browser AR screensho
 | Cadets and helmets | `station-3d.js` procedural meshes/materials | Preserve category-color contract |
 | Earth and stars | `station-3d.js` procedural meshes | No new files |
 | AR camera/anchors | `ar-mode.js` + `anchors.html` | Preserve existing fallback |
-| Steak plate | `/assets/models/restaurant/steak.glb` | New local procedural GLB, loaded by `model-viewer` |
-| Dessert plate | `/assets/models/restaurant/dessert.glb` | New local procedural GLB, loaded by `model-viewer` |
-| Citrus drink | `/assets/models/restaurant/drink.glb` | New local procedural GLB, loaded by `model-viewer` |
+| Steak plate | `/assets/models/restaurant/steak.glb` | Local procedural GLB, first meat item |
+| Lamb chops plate | `/assets/models/restaurant/lamb-chops.glb` | Local procedural GLB, second meat item |
+| Dessert plate | `/assets/models/restaurant/dessert.glb` | Local procedural GLB, first dessert item |
+| Chocolate cake | `/assets/models/restaurant/chocolate-cake.glb` | Local procedural GLB, second dessert item |
+| Citrus drink | `/assets/models/restaurant/drink.glb` | Local procedural GLB, first drink item |
+| Alba Latte | `/assets/models/restaurant/latte.glb` | Local procedural GLB, second drink item |
 | Hand landmark model | MediaPipe Tasks Vision CDN | Browser inference only; no server upload |
 | Model-viewer runtime | Google model-viewer CDN with pinned version | Existing site pattern, used by the new standalone page |

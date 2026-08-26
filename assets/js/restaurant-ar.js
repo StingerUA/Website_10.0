@@ -1,27 +1,60 @@
 const MENU = {
   meat: {
-    src: '/assets/models/restaurant/steak.glb',
-    alt: '3D-модель стейка на гриле с зеленью и лимоном',
-    category: 'МЯСНЫЕ БЛЮДА',
-    name: 'Стейк на гриле',
-    description: 'Сочный стейк, свежая зелень и цитрусовый акцент.',
-    price: '₺ 420'
+    label: 'МЯСНЫЕ БЛЮДА',
+    items: [
+      {
+        src: '/assets/models/restaurant/steak.glb',
+        alt: '3D-модель стейка на гриле с зеленью и лимоном',
+        name: 'Стейк на гриле',
+        description: 'Сочный стейк, свежая зелень и цитрусовый акцент.',
+        price: '₺ 420'
+      },
+      {
+        src: '/assets/models/restaurant/lamb-chops.glb',
+        alt: '3D-модель каре ягнёнка на тарелке',
+        name: 'Каре ягнёнка',
+        description: 'Нежное каре ягнёнка, зелень и соус с травами.',
+        price: '₺ 510'
+      }
+    ]
   },
   dessert: {
-    src: '/assets/models/restaurant/dessert.glb',
-    alt: '3D-модель десерта с кремом и ягодами',
-    category: 'ДЕСЕРТЫ',
-    name: 'Трио мини-десертов',
-    description: 'Нежный крем, шоколадная основа и свежие ягоды.',
-    price: '₺ 190'
+    label: 'ДЕСЕРТЫ',
+    items: [
+      {
+        src: '/assets/models/restaurant/dessert.glb',
+        alt: '3D-модель трио мини-десертов с кремом и ягодами',
+        name: 'Трио мини-десертов',
+        description: 'Нежный крем, шоколадная основа и свежие ягоды.',
+        price: '₺ 190'
+      },
+      {
+        src: '/assets/models/restaurant/chocolate-cake.glb',
+        alt: '3D-модель шоколадного торта с ягодами',
+        name: 'Шоколадный торт',
+        description: 'Плотный шоколадный бисквит, крем и ягоды.',
+        price: '₺ 220'
+      }
+    ]
   },
   drink: {
-    src: '/assets/models/restaurant/drink.glb',
-    alt: '3D-модель цитрусового напитка в стакане',
-    category: 'НАПИТКИ',
-    name: 'Citrus Spark',
-    description: 'Холодный цитрусовый напиток с лёгкой газированной нотой.',
-    price: '₺ 95'
+    label: 'НАПИТКИ',
+    items: [
+      {
+        src: '/assets/models/restaurant/drink.glb',
+        alt: '3D-модель цитрусового напитка в стакане',
+        name: 'Citrus Spark',
+        description: 'Холодный цитрусовый напиток с лёгкой газированной нотой.',
+        price: '₺ 95'
+      },
+      {
+        src: '/assets/models/restaurant/latte.glb',
+        alt: '3D-модель латте на блюдце',
+        name: 'Alba Latte',
+        description: 'Мягкий латте с молочной пеной и ароматом кофе.',
+        price: '₺ 120'
+      }
+    ]
   }
 };
 
@@ -35,6 +68,9 @@ const trackingLabel = document.querySelector('#tracking-label');
 const trackingDetail = document.querySelector('#tracking-detail');
 const startButton = document.querySelector('#start-camera');
 const resetButton = document.querySelector('#reset-dish');
+const prevDishButton = document.querySelector('#dish-prev');
+const nextDishButton = document.querySelector('#dish-next');
+const dishPosition = document.querySelector('#dish-position');
 const categoryButtons = [...document.querySelectorAll('.category-button')];
 const helpDialog = document.querySelector('#help-dialog');
 const helpButton = document.querySelector('#help-button');
@@ -42,6 +78,7 @@ const closeHelp = document.querySelector('#close-help');
 
 const state = {
   category: 'meat',
+  dishIndex: 0,
   cameraStream: null,
   handLandmarker: null,
   cameraRunning: false,
@@ -58,6 +95,15 @@ const state = {
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
+}
+
+function getCurrentCategory() {
+  return MENU[state.category] || MENU.meat;
+}
+
+function getCurrentDish() {
+  const category = getCurrentCategory();
+  return category.items[state.dishIndex] || category.items[0];
 }
 
 function setTrackingStatus(label, detail, mode = 'ready') {
@@ -82,21 +128,43 @@ function setTemporaryStatus(label, detail, mode, duration = 1700) {
 }
 
 function updateDishInfo(item) {
-  document.querySelector('#dish-category').textContent = item.category;
+  const category = getCurrentCategory();
+  document.querySelector('#dish-category').textContent = category.label;
   document.querySelector('#dish-name').textContent = item.name;
   document.querySelector('#dish-description').textContent = item.description;
   document.querySelector('#dish-price').textContent = item.price;
+  dishPosition.textContent = `${state.dishIndex + 1} / ${category.items.length}`;
+  prevDishButton.disabled = category.items.length <= 1;
+  nextDishButton.disabled = category.items.length <= 1;
+  prevDishButton.setAttribute('aria-label', `Предыдущее блюдо: ${item.name}`);
+  nextDishButton.setAttribute('aria-label', `Следующее блюдо: ${item.name}`);
   model.alt = item.alt;
   model.src = item.src;
 }
 
-function selectCategory(category) {
-  const item = MENU[category];
-  if (!item || state.category === category) return;
-  state.category = category;
-  categoryButtons.forEach((button) => button.classList.toggle('is-active', button.dataset.category === category));
-  updateDishInfo(item);
-  setTemporaryStatus('Блюдо меняется', `${item.name} загружается в сцену`, 'ready', 1200);
+function renderDish() {
+  updateDishInfo(getCurrentDish());
+}
+
+function selectCategory(categoryKey) {
+  if (!MENU[categoryKey] || state.category === categoryKey) return;
+  state.category = categoryKey;
+  state.dishIndex = 0;
+  categoryButtons.forEach((button) => button.classList.toggle('is-active', button.dataset.category === categoryKey));
+  resetDish({ announce: false });
+  renderDish();
+  const item = getCurrentDish();
+  setTemporaryStatus('Категория изменена', `${item.name} — блюдо 1 из ${getCurrentCategory().items.length}`, 'ready', 1200);
+}
+
+function shiftDish(direction) {
+  const category = getCurrentCategory();
+  if (category.items.length <= 1) return;
+  state.dishIndex = (state.dishIndex + direction + category.items.length) % category.items.length;
+  resetDish({ announce: false });
+  renderDish();
+  const item = getCurrentDish();
+  setTemporaryStatus('Блюдо меняется', `${item.name} — блюдо ${state.dishIndex + 1} из ${category.items.length}`, 'ready', 1200);
 }
 
 function stagePoint(clientX, clientY) {
@@ -119,16 +187,21 @@ function placeCard(clientX, clientY) {
   return { x: nextX, y: nextY };
 }
 
-function resetDish() {
+function setCardCenter() {
   const rect = stage.getBoundingClientRect();
   state.offsetX = 0;
   state.offsetY = 0;
   card.style.left = `${rect.width / 2}px`;
   card.style.top = `${rect.height / 2}px`;
+}
+
+function resetDish({ announce = true } = {}) {
+  setCardCenter();
   card.classList.remove('is-grabbed');
   card.classList.remove('is-placed');
   state.grabbed = false;
   state.grabbedBy = null;
+  if (!announce) return;
   setTemporaryStatus(
     state.cameraRunning ? 'Блюдо в центре стола' : 'Камера выключена',
     state.cameraRunning ? 'Сведите пальцы над тарелкой, чтобы взять её' : 'Нажмите «Включить AR»',
@@ -354,12 +427,15 @@ function setupHelp() {
 }
 
 categoryButtons.forEach((button) => button.addEventListener('click', () => selectCategory(button.dataset.category)));
+prevDishButton.addEventListener('click', () => shiftDish(-1));
+nextDishButton.addEventListener('click', () => shiftDish(1));
 startButton.addEventListener('click', startCamera);
-resetButton.addEventListener('click', resetDish);
-window.addEventListener('resize', resetDish);
+resetButton.addEventListener('click', () => resetDish());
+window.addEventListener('resize', () => resetDish({ announce: false }));
 window.addEventListener('pagehide', stopCamera);
 setupManualDrag();
 setupHelp();
+renderDish();
 
 // The card is placed after layout so its initial center remains exact on all screens.
-window.requestAnimationFrame(resetDish);
+window.requestAnimationFrame(() => resetDish({ announce: false }));

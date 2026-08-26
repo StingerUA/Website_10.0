@@ -32,5 +32,6 @@ The restaurant experience is isolated at `/ar-restaurant/` because the shared si
 | Entry UI | `ar-restaurant/index.html` | Camera surface, model-viewer element, dish details, category buttons and help dialog |
 | Visual system | `assets/css/restaurant-ar.css` | Dark glassmorphism layout, responsive mobile/landscape composition and AR status states |
 | Interaction controller | `assets/js/restaurant-ar.js` | Category switching, camera lifecycle, MediaPipe hand landmarks, right-hand pinch grab/release and pointer drag fallback |
-| 3D content | `assets/models/restaurant/*.glb` | Small local procedural GLB models for steak, dessert and citrus drink |
+| 3D content | `assets/models/restaurant/*.glb` | Six small local procedural GLB models, two per category |
+| Menu data | `assets/js/restaurant-ar.js` (`MENU`) | Category objects with `items[]`; arrows cycle the current item and reset to item 1 on category change |
 | Asset generator | `scripts/generate-restaurant-glb.py` | Reproducibly rebuilds the local restaurant GLBs without an external 3D app or paid service |

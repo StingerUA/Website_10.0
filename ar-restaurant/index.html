@@ -61,7 +61,14 @@
         <h2 id="dish-name">Стейк на гриле</h2>
         <p id="dish-description">Сочный стейк, свежая зелень и цитрусовый акцент.</p>
       </div>
-      <strong id="dish-price" class="dish-price">₺ 420</strong>
+      <div class="dish-meta">
+        <strong id="dish-price" class="dish-price">₺ 420</strong>
+        <div class="dish-switcher" aria-label="Переключение блюд">
+          <button id="dish-prev" class="dish-arrow" type="button" aria-label="Предыдущее блюдо">←</button>
+          <span id="dish-position" class="dish-position" aria-live="polite">1 / 2</span>
+          <button id="dish-next" class="dish-arrow" type="button" aria-label="Следующее блюдо">→</button>
+        </div>
+      </div>
     </section>
 
     <nav class="category-rail glass-panel" aria-label="Категории меню">

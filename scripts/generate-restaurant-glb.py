@@ -203,6 +203,19 @@ def make_steak():
     return meshes
 
 
+def make_lamb():
+    meshes = []
+    lathe(meshes, "plate", [(0, 0), (1.85, 0), (1.98, 0.09), (1.98, 0.18), (1.82, 0.25), (0, 0.27)], 0, 64)
+    torus(meshes, "plate-rim", (0, 0.25, 0), 1.62, 0.055, 1)
+    for x, z, angle in [(-0.72, -0.02, -0.45), (-0.23, 0.06, -0.16), (0.28, 0.07, 0.18), (0.76, -0.02, 0.45)]:
+        sphere(meshes, "lamb-chop", (x, 0.58, z), (0.3, 0.19, 0.7), 2, 22, 12)
+        cylinder(meshes, "bone", (x + 0.18 * math.sin(angle), 0.61, z + 0.44 * math.cos(angle)), 0.055, 0.72, 0, 12)
+    for x, z in [(-1.02, 0.34), (-0.96, -0.24), (0.96, 0.32), (0.98, -0.28)]:
+        sphere(meshes, "greens", (x, 0.38, z), (0.18, 0.08, 0.24), 4, 18, 10)
+    sphere(meshes, "sauce", (0, 0.43, -0.74), (0.42, 0.06, 0.18), 6, 20, 10)
+    return meshes
+
+
 def make_dessert():
     meshes = []
     lathe(meshes, "plate", [(0, 0), (1.85, 0), (1.98, 0.09), (1.98, 0.18), (1.82, 0.25), (0, 0.27)], 0, 64)
@@ -216,6 +229,18 @@ def make_dessert():
     return meshes
 
 
+def make_chocolate_cake():
+    meshes = []
+    lathe(meshes, "plate", [(0, 0), (1.85, 0), (1.98, 0.09), (1.98, 0.18), (1.82, 0.25), (0, 0.27)], 0, 64)
+    torus(meshes, "plate-rim", (0, 0.25, 0), 1.62, 0.055, 1)
+    cylinder(meshes, "chocolate-cake", (0, 0.7, 0), 0.75, 0.82, 10, 36)
+    cylinder(meshes, "chocolate-top", (0, 1.14, 0), 0.78, 0.08, 6, 36)
+    for x, z in [(-0.4, 0.18), (0.22, -0.18), (0.48, 0.3), (-0.18, -0.4)]:
+        sphere(meshes, "berry", (x, 1.24, z), (0.09, 0.09, 0.09), 6, 18, 8)
+    sphere(meshes, "cream", (0.0, 1.25, 0.02), (0.25, 0.12, 0.25), 9, 20, 10)
+    return meshes
+
+
 def make_drink():
     meshes = []
     lathe(meshes, "saucer", [(0, 0), (1.28, 0), (1.38, 0.08), (1.3, 0.14), (0, 0.17)], 0, 64)
@@ -226,8 +251,21 @@ def make_drink():
     return meshes
 
 
+def make_latte():
+    meshes = []
+    lathe(meshes, "saucer", [(0, 0), (1.28, 0), (1.38, 0.08), (1.3, 0.14), (0, 0.17)], 0, 64)
+    lathe(meshes, "cup", [(0.55, 0.24), (0.7, 0.31), (0.62, 1.1), (0.48, 1.18), (0, 1.18)], 7, 48)
+    lathe(meshes, "coffee", [(0.46, 0.39), (0.55, 0.44), (0.47, 1.12), (0, 1.12)], 10, 48)
+    torus(meshes, "foam", (0, 1.16, 0), 0.3, 0.08, 9, 24, 8)
+    torus(meshes, "handle", (0.62, 0.7, 0), 0.23, 0.07, 0, 24, 8)
+    return meshes
+
+
 if __name__ == "__main__":
     create_glb(OUT / "steak.glb", "Steak plate", make_steak())
+    create_glb(OUT / "lamb-chops.glb", "Lamb chops plate", make_lamb())
     create_glb(OUT / "dessert.glb", "Dessert plate", make_dessert())
+    create_glb(OUT / "chocolate-cake.glb", "Chocolate cake", make_chocolate_cake())
     create_glb(OUT / "drink.glb", "Citrus drink", make_drink())
+    create_glb(OUT / "latte.glb", "Latte", make_latte())
     print("Generated:", ", ".join(str(p) for p in sorted(OUT.glob("*.glb"))))
