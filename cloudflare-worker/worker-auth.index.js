@@ -965,14 +965,31 @@ function planetarySnapshotUsable(key, value) {
   return Boolean(target && value && value.target === target.target && Array.isArray(value.features) && value.features.length >= target.minFeatures && typeof value.snapshotAt === "string");
 }
 
+function planetaryManifestUsable(key, value) {
+  const target = PLANETARY_NOMENCLATURE[key];
+  return Boolean(target && value && value.target === target.target && typeof value.snapshotAt === "string" && (Array.isArray(value.features) || (Array.isArray(value.chunkKeys) && value.chunkKeys.length > 0)));
+}
+
 async function planetaryReadSnapshot(key, env) {
   const target = PLANETARY_NOMENCLATURE[key];
   if (!target || !env.DB) return null;
   try {
     const row = await env.DB.prepare("SELECT payload_json, refreshed_at FROM orbital_content_cache WHERE cache_key = ? LIMIT 1").bind(target.cacheKey).first();
-    const value = row?.payload_json ? JSON.parse(row.payload_json) : null;
+    const manifest = row?.payload_json ? JSON.parse(row.payload_json) : null;
+    if (!planetaryManifestUsable(key, manifest)) return null;
+    let value = manifest;
+    if (!Array.isArray(value.features)) {
+      const rows = await Promise.all(value.chunkKeys.map(cacheKey => env.DB.prepare("SELECT payload_json FROM orbital_content_cache WHERE cache_key = ? LIMIT 1").bind(cacheKey).first()));
+      const features = rows.flatMap(chunk => {
+        try { const parsed = chunk?.payload_json ? JSON.parse(chunk.payload_json) : null; return Array.isArray(parsed?.features) ? parsed.features : []; }
+        catch { return []; }
+      });
+      value = { ...manifest, features };
+      delete value.chunkKeys;
+      delete value.chunkCount;
+    }
     if (!planetarySnapshotUsable(key, value)) return null;
-    return { value, refreshedAt: Number(row?.refreshed_at) || Date.parse(value.snapshotAt) || 0 };
+    return { value, refreshedAt: Number(row?.refreshed_at) || Date.parse(value.snapshotAt) || 0, chunkKeys: Array.isArray(manifest.chunkKeys) ? manifest.chunkKeys : [] };
   } catch (error) {
     console.warn(`${target.target} Atlas stored snapshot unavailable`, error);
     return null;
@@ -982,8 +999,29 @@ async function planetaryReadSnapshot(key, env) {
 async function planetaryWriteSnapshot(key, env, value, refreshedAt) {
   const target = PLANETARY_NOMENCLATURE[key];
   if (!target || !env.DB) return;
+  const payload = JSON.stringify(value);
+  if (payload.length <= 900_000) {
+    await env.DB.prepare("INSERT INTO orbital_content_cache (cache_key, payload_json, refreshed_at) VALUES (?, ?, ?) ON CONFLICT(cache_key) DO UPDATE SET payload_json = excluded.payload_json, refreshed_at = excluded.refreshed_at")
+      .bind(target.cacheKey, payload, refreshedAt).run();
+    return [];
+  }
+  const chunkSize = 450;
+  const version = `${target.cacheKey}:${refreshedAt}`;
+  const chunks = [];
+  for (let offset = 0; offset < value.features.length; offset += chunkSize) {
+    const cacheKey = `${version}:${chunks.length}`;
+    chunks.push({ cacheKey, payload_json: JSON.stringify({ features: value.features.slice(offset, offset + chunkSize) }) });
+  }
+  await env.DB.batch(chunks.map(chunk => env.DB.prepare("INSERT INTO orbital_content_cache (cache_key, payload_json, refreshed_at) VALUES (?, ?, ?) ON CONFLICT(cache_key) DO UPDATE SET payload_json = excluded.payload_json, refreshed_at = excluded.refreshed_at").bind(chunk.cacheKey, chunk.payload_json, refreshedAt)));
+  const manifest = { ...value, features: undefined, chunkKeys: chunks.map(chunk => chunk.cacheKey), chunkCount: chunks.length };
   await env.DB.prepare("INSERT INTO orbital_content_cache (cache_key, payload_json, refreshed_at) VALUES (?, ?, ?) ON CONFLICT(cache_key) DO UPDATE SET payload_json = excluded.payload_json, refreshed_at = excluded.refreshed_at")
-    .bind(target.cacheKey, JSON.stringify(value), refreshedAt).run();
+    .bind(target.cacheKey, JSON.stringify(manifest), refreshedAt).run();
+  return chunks.map(chunk => chunk.cacheKey);
+}
+
+async function planetaryDeleteChunks(env, chunkKeys) {
+  if (!env.DB || !Array.isArray(chunkKeys) || !chunkKeys.length) return;
+  await env.DB.batch(chunkKeys.map(cacheKey => env.DB.prepare("DELETE FROM orbital_content_cache WHERE cache_key = ?").bind(cacheKey)));
 }
 
 async function planetaryFetchFreshSnapshot(key, now) {
@@ -1007,6 +1045,7 @@ async function planetaryRefreshSnapshot(key, env, force = false) {
   try {
     const value = await planetaryFetchFreshSnapshot(key, now);
     await planetaryWriteSnapshot(key, env, value, now);
+    await planetaryDeleteChunks(env, stored?.chunkKeys);
     planetaryNomenclatureCache.set(key, { value, expiresAt: now + 15 * 60 * 1000 });
     console.log(`${target.target} Atlas snapshot refreshed`, value.snapshotAt, value.featureCount);
     return value;
