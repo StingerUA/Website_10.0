@@ -158,7 +158,8 @@
       const image = launchImage(launch);
       const visual = image ? `<figure class="oa-launch__image"><img src="${escape(image.url)}" alt="" loading="lazy" referrerpolicy="no-referrer"><figcaption>${escape(t.imageCredit)}: ${escape(image.credit)} · ${image.licenseUrl ? `<a href="${escape(image.licenseUrl)}" target="_blank" rel="noreferrer">${escape(image.license)}</a>` : escape(image.license)}</figcaption></figure>` : "";
       const watch = stream ? `<a class="oa-launch__watch" href="${escape(stream)}" target="_blank" rel="noreferrer">${escape(t.watching)}</a>` : `<span class="oa-launch__stream-pending">${escape(t.streamPending)}</span>`;
-      return `<article class="oa-card oa-launch">${visual}<div class="oa-launch__top"><span>${when ? `${escape(shortDate.format(new Date(when)))} UTC` : "—"}</span><span class="oa-launch__status">${escape(launch.status || "—")}</span></div><h3>${escape(launch.name || t.mission)}</h3><p>${escape(launch.provider || t.provider)}</p><p class="oa-launch__place">${escape(launch.location || t.location)}</p><strong class="oa-launch__clock" data-countdown="${escape(when)}">—</strong>${watch}</article>`;
+      const source = typeof launch.source === "string" && launch.source.trim() ? `<p class="oa-launch__source">${escape(launch.source)}</p>` : "";
+      return `<article class="oa-card oa-launch">${visual}<div class="oa-launch__top"><span>${when ? `${escape(shortDate.format(new Date(when)))} UTC` : "—"}</span><span class="oa-launch__status">${escape(launch.status || "—")}</span></div><h3>${escape(launch.name || t.mission)}</h3><p>${escape(launch.provider || t.provider)}</p><p class="oa-launch__place">${escape(launch.location || t.location)}</p><strong class="oa-launch__clock" data-countdown="${escape(when)}">—</strong>${watch}${source}</article>`;
     }).join("");
   }
 

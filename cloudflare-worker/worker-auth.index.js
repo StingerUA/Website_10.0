@@ -37,6 +37,7 @@ const SESSION_COOKIE     = "albaspace_session";
 const OAUTH_STATE_COOKIE = "albaspace_oauth_state";
 const AUTH_TOKEN_QUERY = "access_token";
 const ORBITAL_LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=3&mode=detailed&ordering=net";
+const ORBITAL_LAUNCHES_FALLBACK_URL = "https://fdo.rocketlaunch.live/json/launches/next/5";
 const ORBITAL_ISS_URL = "https://api.wheretheiss.at/v1/satellites/25544";
 const ORBITAL_CREW_URL = "https://whoisinspace.com/";
 const ORBITAL_ISS_TLE_URL = "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE";
@@ -567,7 +568,28 @@ function normalizeOrbitalLaunch(raw) {
     location: orbitalText(raw?.pad?.location?.name, orbitalText(raw?.pad?.name, "Площадка уточняется")),
     status: orbitalText(raw?.status?.name, "Статус уточняется"),
     streamUrl: video?.url || (/spacex/i.test(provider) ? "https://www.youtube.com/@SpaceX/live" : null),
-    image
+    image,
+    source: "Data: Launch Library 2"
+  };
+}
+
+function normalizeRocketLaunch(raw) {
+  const provider = orbitalText(raw?.provider?.name, "Оператор уточняется");
+  const location = [raw?.pad?.name, raw?.pad?.location?.name].filter(value => typeof value === "string" && value.trim()).join(" · ");
+  const media = Array.isArray(raw?.media) ? raw.media.find(item => isOrbitalYouTubeUrl(item?.media_url) || typeof item?.youtube_vidid === "string") : null;
+  const streamUrl = isOrbitalYouTubeUrl(media?.media_url)
+    ? media.media_url
+    : typeof media?.youtube_vidid === "string" && media.youtube_vidid ? `https://www.youtube.com/watch?v=${encodeURIComponent(media.youtube_vidid)}`
+      : /spacex/i.test(provider) ? "https://www.youtube.com/@SpaceX/live" : null;
+  return {
+    name: orbitalText(raw?.name, "Миссия уточняется"),
+    net: typeof raw?.t0 === "string" ? raw.t0 : typeof raw?.win_open === "string" ? raw.win_open : null,
+    provider,
+    location: location || "Площадка уточняется",
+    status: raw?.est_date?.year ? "Запланирован" : "Окно уточняется",
+    streamUrl,
+    image: null,
+    source: "Data by RocketLaunch.Live"
   };
 }
 
@@ -600,15 +622,23 @@ async function orbitalFetch(url) {
 
 async function orbitalLaunches(now) {
   if (orbitalLaunchesCache?.expiresAt > now) return orbitalLaunchesCache.value;
+  let value = [];
   try {
     const payload = await orbitalFetch(`${ORBITAL_LAUNCHES_URL}&net__gte=${encodeURIComponent(new Date(now).toISOString())}`);
-    const value = Array.isArray(payload?.results) ? payload.results.map(normalizeOrbitalLaunch).filter(item => item.net && Date.parse(item.net) >= now - 60000).slice(0, 3) : [];
-    orbitalLaunchesCache = { value, expiresAt: now + 20 * 60 * 1000 };
-    return value;
+    value = Array.isArray(payload?.results) ? payload.results.map(normalizeOrbitalLaunch).filter(item => item.net && Date.parse(item.net) >= now - 60000).slice(0, 3) : [];
   } catch (error) {
     console.warn("Orbital Atlas launch source unavailable", error);
-    return orbitalLaunchesCache?.value || [];
   }
+  if (!value.length) {
+    try {
+      const payload = await orbitalFetch(ORBITAL_LAUNCHES_FALLBACK_URL);
+      value = Array.isArray(payload?.result) ? payload.result.map(normalizeRocketLaunch).filter(item => item.net && Date.parse(item.net) >= now - 60000).slice(0, 3) : [];
+    } catch (error) {
+      console.warn("Orbital Atlas launch fallback unavailable", error);
+    }
+  }
+  if (value.length) orbitalLaunchesCache = { value, expiresAt: now + 20 * 60 * 1000 };
+  return value.length ? value : orbitalLaunchesCache?.value || [];
 }
 
 async function orbitalIss(now) {
