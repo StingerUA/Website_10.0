@@ -22,3 +22,15 @@ The Worker owns authoritative room state. Frontends receive role-filtered snapsh
 ## Compatibility constraints
 
 Keep static hosting paths, the existing Worker endpoint, API request shapes, D1 schema, Durable Object binding, and RU/TR file parity. Procedural meshes are preferred over adding large binary assets.
+
+## Restaurant AR menu
+
+The restaurant experience is isolated at `/ar-restaurant/` because the shared site loader automatically injects model preloaders, audio player controls and fullscreen wrappers around every `model-viewer`. The page deliberately owns its own HTML/CSS/ES module lifecycle.
+
+| Layer | File | Responsibility |
+|---|---|---|
+| Entry UI | `ar-restaurant/index.html` | Camera surface, model-viewer element, dish details, category buttons and help dialog |
+| Visual system | `assets/css/restaurant-ar.css` | Dark glassmorphism layout, responsive mobile/landscape composition and AR status states |
+| Interaction controller | `assets/js/restaurant-ar.js` | Category switching, camera lifecycle, MediaPipe hand landmarks, right-hand pinch grab/release and pointer drag fallback |
+| 3D content | `assets/models/restaurant/*.glb` | Small local procedural GLB models for steak, dessert and citrus drink |
+| Asset generator | `scripts/generate-restaurant-glb.py` | Reproducibly rebuilds the local restaurant GLBs without an external 3D app or paid service |

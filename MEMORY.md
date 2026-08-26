@@ -23,3 +23,12 @@ Both localized game clients send their locale on room creation and use an eight-
 ## Verification
 
 `cloudflare-worker/tests/albaspace.audit.mjs` passes with `ALBASPACE_AUDIT_TEST_OK`; the existing backend test passes with `GAME_V02_SMOKE_OK`; all localized JavaScript and auth files pass `node --check`; `git diff --check` passes. A local browser smoke confirmed the Classroom QUESTION path, long-word wrapping and the updated answer-reveal copy. A console assertion confirmed no-op Classroom snapshots preserve `app.innerHTML` and incomplete questions show a placeholder.
+
+
+## Restaurant AR menu
+
+Added a standalone `/ar-restaurant/` browser experience that intentionally does not load the site's global `include.js` stack, avoiding model preloader, audio player and fullscreen DOM rewrites. It uses `model-viewer` 3.0.0, local procedural GLB files under `assets/models/restaurant/`, `getUserMedia`, and MediaPipe Tasks Vision HandLandmarker loaded only after the user clicks the AR button.
+
+The right-hand interaction uses the index fingertip for the pointer and a thumb/index distance threshold for pinch-to-grab. When the pinch starts over the visible dish, the model card follows the hand; releasing the pinch places the dish. Pointer drag is a no-camera fallback. The back-facing camera is not mirrored, so normalized x coordinates remain direct.
+
+The homepage now links to the new route through a small AR promotion block. The sandbox browser verified initial model rendering, all three category switches, drag/reset behavior, the help dialog, clean console output during normal loading, and the expected no-device camera fallback. A physical HTTPS-device test is still required for camera permission and actual hand tracking.
