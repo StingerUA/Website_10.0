@@ -42,11 +42,17 @@ const ORBITAL_ISS_URL = "https://api.wheretheiss.at/v1/satellites/25544";
 const ORBITAL_CREW_URL = "https://whoisinspace.com/";
 const ORBITAL_ISS_TLE_URL = "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE";
 const ORBITAL_SNAPSHOT_KEY = "overview";
+const VENUS_USGS_SEARCH_URL = "https://planetarynames.wr.usgs.gov/SearchResults?Target=15_Venus";
+const VENUS_USGS_TARGET_URL = "https://planetarynames.wr.usgs.gov/Page/VENUS/target";
+const VENUS_SNAPSHOT_KEY = "venus_nomenclature";
+const VENUS_MIN_FEATURES = 1500;
+const VENUS_REFRESH_INTERVAL_MS = 24 * 60 * 60 * 1000;
 let orbitalLaunchesCache = null;
 let orbitalIssCache = null;
 let orbitalCrewCache = null;
 let orbitalMissionCache = null;
 let orbitalIssTleCache = null;
+let venusNomenclatureCache = null;
 const orbitalCityCache = new Map();
 
 // =========================
@@ -64,6 +70,7 @@ export default {
   async scheduled(controller, env, ctx) {
     if (controller.cron !== "0 */5 * * *") return;
     ctx.waitUntil(orbitalRefreshSnapshot(env));
+    ctx.waitUntil(venusRefreshSnapshot(env));
   }
 };
 
@@ -81,6 +88,9 @@ async function handleRequest(request, env) {
   }
   if (url.pathname === "/api/orbital/iss-tle" && request.method === "GET") {
     return orbitalIssTle(url, cors);
+  }
+  if (url.pathname === "/api/orbital/venus" && request.method === "GET") {
+    return venusNomenclature(cors, env);
   }
 
   // 🎮 GAME BACKEND — uses the same AlbaSpace session as the rest of the site.
@@ -738,6 +748,171 @@ async function orbitalOverview(cors, env) {
     console.warn("Orbital Atlas stored fallback unavailable", error);
   }
   return json(value, 200, { ...cors, "Cache-Control": "public, max-age=15" });
+}
+
+// =========================
+// ♀️ VENUS NOMENCLATURE — official USGS / IAU snapshot
+// =========================
+function venusText(value) {
+  return String(value || "").replace(/\s+/g, " ").trim();
+}
+
+function venusDecodeHtml(value) {
+  return venusText(value)
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
+}
+
+function venusStripHtml(value) {
+  return venusDecodeHtml(String(value || "").replace(/<[^>]*>/g, " "));
+}
+
+function venusNumber(value) {
+  const number = Number(venusText(value).replace(/,/g, ""));
+  return Number.isFinite(number) ? number : null;
+}
+
+function venusFeatureUrl(id) {
+  return `https://planetarynames.wr.usgs.gov/Feature/${encodeURIComponent(id)}`;
+}
+
+function venusNormalizeRow(cells) {
+  const id = venusText(cells[0]);
+  const nameMatch = String(cells[1] || "").match(/href\s*=\s*["']\/Feature\/(\d+)["']/i);
+  const name = venusStripHtml(cells[1]);
+  const latitude = venusNumber(venusStripHtml(cells[5]));
+  const longitudeEast = venusNumber(venusStripHtml(cells[6]));
+  if (!/^\d+$/.test(id) || !name || latitude === null || longitudeEast === null || latitude < -90 || latitude > 90 || longitudeEast < 0 || longitudeEast > 360) return null;
+  return {
+    id,
+    name,
+    cleanName: venusStripHtml(cells[2]) || name,
+    type: venusStripHtml(cells[14]),
+    code: venusStripHtml(cells[15]),
+    diameterKm: venusNumber(venusStripHtml(cells[4])),
+    latitude,
+    longitudeEast,
+    minLatitude: venusNumber(venusStripHtml(cells[8])),
+    maxLatitude: venusNumber(venusStripHtml(cells[7])),
+    minLongitudeEast: venusNumber(venusStripHtml(cells[10])),
+    maxLongitudeEast: venusNumber(venusStripHtml(cells[9])),
+    continent: venusStripHtml(cells[12]),
+    ethnicity: venusStripHtml(cells[13]),
+    quad: venusStripHtml(cells[16]),
+    approval: venusStripHtml(cells[17]),
+    approvalDate: venusStripHtml(cells[18]),
+    origin: venusStripHtml(cells[20]),
+    sourceUrl: venusFeatureUrl(nameMatch?.[1] || id)
+  };
+}
+
+export function parseVenusUsGsHtml(html, snapshotAt = new Date().toISOString()) {
+  const section = String(html || "").match(/<tbody\b[^>]*id\s*=\s*["']results_body["'][^>]*>([\s\S]*?)<\/tbody>/i)?.[1] || "";
+  const features = [];
+  const seen = new Set();
+  const rowPattern = /<tr\b[^>]*>([\s\S]*?)<\/tr>/gi;
+  let row;
+  while ((row = rowPattern.exec(section)) !== null) {
+    const cells = [];
+    const cellPattern = /<td\b[^>]*>([\s\S]*?)<\/td>/gi;
+    let cell;
+    while ((cell = cellPattern.exec(row[1])) !== null) cells.push(cell[1]);
+    const feature = venusNormalizeRow(cells);
+    if (feature && !seen.has(feature.id)) {
+      seen.add(feature.id);
+      features.push(feature);
+    }
+  }
+  features.sort((a, b) => a.name.localeCompare(b.name, "en"));
+  return {
+    schemaVersion: 1,
+    target: "Venus",
+    coordinateSystem: "Planetocentric latitude; east longitude 0–360°",
+    source: {
+      provider: "USGS Astrogeology / IAU Gazetteer of Planetary Nomenclature",
+      targetUrl: VENUS_USGS_TARGET_URL,
+      datasetUrl: VENUS_USGS_SEARCH_URL
+    },
+    snapshotAt,
+    featureCount: features.length,
+    features
+  };
+}
+
+function venusSnapshotUsable(value) {
+  return Boolean(value && value.target === "Venus" && Array.isArray(value.features) && value.features.length >= VENUS_MIN_FEATURES && typeof value.snapshotAt === "string");
+}
+
+async function venusReadSnapshot(env) {
+  if (!env.DB) return null;
+  try {
+    const row = await env.DB.prepare("SELECT payload_json, refreshed_at FROM orbital_content_cache WHERE cache_key = ? LIMIT 1").bind(VENUS_SNAPSHOT_KEY).first();
+    const value = row?.payload_json ? JSON.parse(row.payload_json) : null;
+    if (!venusSnapshotUsable(value)) return null;
+    const refreshedAt = Number(row?.refreshed_at) || Date.parse(value.snapshotAt) || 0;
+    return { value, refreshedAt };
+  } catch (error) {
+    console.warn("Venus Atlas stored snapshot unavailable", error);
+    return null;
+  }
+}
+
+async function venusWriteSnapshot(env, value, refreshedAt) {
+  if (!env.DB) return;
+  await env.DB.prepare("INSERT INTO orbital_content_cache (cache_key, payload_json, refreshed_at) VALUES (?, ?, ?) ON CONFLICT(cache_key) DO UPDATE SET payload_json = excluded.payload_json, refreshed_at = excluded.refreshed_at")
+    .bind(VENUS_SNAPSHOT_KEY, JSON.stringify(value), refreshedAt).run();
+}
+
+async function venusFetchFreshSnapshot(now) {
+  const response = await fetch(VENUS_USGS_SEARCH_URL, {
+    headers: { "Accept": "text/html", "User-Agent": "AlbaSpace-VenusAtlas/1.0 (+https://albaspace.com.tr)" }
+  });
+  if (!response.ok) throw new Error(`USGS Venus source returned ${response.status}`);
+  const contentLength = Number(response.headers.get("content-length"));
+  if (Number.isFinite(contentLength) && contentLength > 8 * 1024 * 1024) throw new Error("USGS Venus response exceeded safe size limit");
+  const html = await response.text();
+  if (html.length > 8 * 1024 * 1024) throw new Error("USGS Venus response exceeded safe size limit");
+  const value = parseVenusUsGsHtml(html, new Date(now).toISOString());
+  if (!venusSnapshotUsable(value)) throw new Error(`USGS Venus response did not contain enough valid features (${value.featureCount})`);
+  return value;
+}
+
+async function venusRefreshSnapshot(env, force = false) {
+  const now = Date.now();
+  const stored = await venusReadSnapshot(env);
+  if (!force && stored?.refreshedAt && now - stored.refreshedAt < VENUS_REFRESH_INTERVAL_MS) return stored.value;
+  try {
+    const value = await venusFetchFreshSnapshot(now);
+    await venusWriteSnapshot(env, value, now);
+    venusNomenclatureCache = { value, expiresAt: now + 15 * 60 * 1000 };
+    console.log("Venus Atlas snapshot refreshed", value.snapshotAt, value.featureCount);
+    return value;
+  } catch (error) {
+    console.warn("Venus Atlas refresh failed; preserving prior snapshot", error);
+    if (stored?.value) return stored.value;
+    throw error;
+  }
+}
+
+async function venusNomenclature(cors, env) {
+  const now = Date.now();
+  let value = venusNomenclatureCache?.expiresAt > now ? venusNomenclatureCache.value : null;
+  if (!value) {
+    const stored = await venusReadSnapshot(env);
+    try {
+      value = !stored || now - stored.refreshedAt >= VENUS_REFRESH_INTERVAL_MS
+        ? await venusRefreshSnapshot(env)
+        : stored.value;
+    } catch (error) {
+      console.warn("Venus Atlas API could not obtain initial snapshot", error);
+      return json({ error: "Venus nomenclature is temporarily unavailable", source: { targetUrl: VENUS_USGS_TARGET_URL } }, 503, { ...cors, "Cache-Control": "public, max-age=60" });
+    }
+    venusNomenclatureCache = { value, expiresAt: now + 15 * 60 * 1000 };
+  }
+  return json(value, 200, { ...cors, "Cache-Control": "public, max-age=900, stale-while-revalidate=3600" });
 }
 
 async function orbitalCurrentTle(now) {

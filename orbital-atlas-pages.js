@@ -91,6 +91,11 @@
     en: { title: "Space places", description: "Real planetariums, observatories and science centres near you, on an open map." },
     tr: { title: "Uzay yerleri", description: "Açık haritada yakınınızdaki gerçek gezegenevleri, gözlemevleri ve bilim merkezleri." }
   };
+  const venusRoutes = {
+    ru: { title: "Атлас Венеры", description: "Интерактивная карта утверждённых объектов USGS / IAU: поиск, слои и первичные карточки." },
+    en: { title: "Venus atlas", description: "An interactive map of approved USGS / IAU features with search, layers and primary records." },
+    tr: { title: "Venüs atlası", description: "Arama, katmanlar ve birincil kartlarla onaylanmış USGS / IAU nesnelerinin etkileşimli haritası." }
+  };
   const routeGrid = document.querySelector(".oa-route-grid");
   if (location.pathname.endsWith("/orbital-atlas.html") && routeGrid && !routeGrid.querySelector('a[href$="/orbital-places.html"]')) {
     const route = placeRoutes[locale] || placeRoutes.ru;
@@ -99,6 +104,15 @@
     card.dataset.orbitalPlacesRoute = "true";
     card.href = locale === "ru" ? "/orbital-places.html" : `/${localePath}/orbital-places.html`;
     card.innerHTML = `<span class="oa-route-card__number">05</span><h3>${route.title}</h3><p>${route.description}</p><span class="oa-route-card__go">${t.browse}</span>`;
+    routeGrid.append(card);
+  }
+  if (location.pathname.endsWith("/orbital-atlas.html") && routeGrid && !routeGrid.querySelector('[data-orbital-venus-route]')) {
+    const route = venusRoutes[locale] || venusRoutes.ru;
+    const card = document.createElement("a");
+    card.className = "oa-route-card";
+    card.dataset.orbitalVenusRoute = "true";
+    card.href = locale === "ru" ? "/orbital-venus.html" : `/${localePath}/orbital-venus.html`;
+    card.innerHTML = `<span class="oa-route-card__number">06</span><h3>${route.title}</h3><p>${route.description}</p><span class="oa-route-card__go">${t.browse}</span>`;
     routeGrid.append(card);
   }
 
@@ -360,10 +374,24 @@
       button.style.setProperty("--planet-icon-size", `${planetIconSizes[key]}px`);
       button.innerHTML = `<img src="${src}" alt="${data[key]?.[0] || key}" draggable="false">`;
     });
+    const venusAtlasLabels = { ru: "ОТКРЫТЬ АТЛАС ВЕНЕРЫ ↗", en: "OPEN VENUS ATLAS ↗", tr: "VENÜS ATLASINI AÇ ↗" };
     const setPlanet = key => {
       const current = data[key];
       setText("solarPlanetName", current[0]); setText("solarPlanetDescription", current[1]); setText("solarOrbitValue", current[2]); setText("solarOrbitLabel", current[3]); setText("solarSizeValue", current[4]); setText("solarSizeLabel", current[5]);
       model.querySelectorAll("[data-planet]").forEach(button => button.classList.toggle("is-active", button.dataset.planet === key));
+      let venusLink = document.getElementById("solarVenusAtlasLink");
+      if (key === "venus") {
+        if (!venusLink) {
+          venusLink = document.createElement("a");
+          venusLink.id = "solarVenusAtlasLink";
+          venusLink.className = "oa-profile-link";
+          const description = document.querySelector('[id="solarPlanetDescription"]');
+          description?.insertAdjacentElement("afterend", venusLink);
+        }
+        const localePrefix = locale === "en" ? "/eng" : locale === "tr" ? "/tr" : "";
+        venusLink.href = `${localePrefix}/orbital-venus.html`;
+        venusLink.textContent = venusAtlasLabels[locale] || venusAtlasLabels.ru;
+      } else if (venusLink) venusLink.remove();
     };
     model.addEventListener("click", event => { const button = event.target.closest("[data-planet]"); if (button) setPlanet(button.dataset.planet); });
     document.querySelectorAll("[data-model]").forEach(button => button.addEventListener("click", () => { model.classList.toggle("oa-solar-model--3d", button.dataset.model === "3d"); document.querySelectorAll("[data-model]").forEach(item => item.classList.toggle("is-active", item === button)); }));
