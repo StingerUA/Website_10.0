@@ -110,9 +110,9 @@
     gap: 4px;
     padding: 8px;
     border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    background: #020617 !important;
-    border: 1px solid rgba(255,255,255,0.08) !important;
+    box-shadow: 0 10px 30px rgba(2, 43, 58, 0.22);
+    background: linear-gradient(180deg, #eafcff 0%, #c9f5ff 100%) !important;
+    border: 1px solid #7bdbe9 !important;
     z-index: 2147483647 !important;
   }
 
@@ -128,6 +128,13 @@
     display: inline-flex;
     padding: 10px 14px;
     pointer-events: auto !important;
+    color: #031014 !important;
+  }
+
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu a:hover,
+  .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu button:hover {
+    background: rgba(3, 16, 20, 0.08) !important;
+    color: #031014 !important;
   }
 
   .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu {
@@ -853,4 +860,14 @@ main, .page, .home-main, .shop-container, section,
     padding-bottom: 3px !important;
     padding-left: 3px !important;
   }
+}
+
+/* Orbital Atlas: the contextual strip touches the header, while the first
+   content line stays fully visible below it. This also protects pages whose
+   former shared Atlas stylesheet remains in a browser cache. */
+body.oa-body main.oa-main { margin-top: 0 !important; }
+body.oa-body .oa-hero { align-items: start; }
+body.oa-body .oa-hero__grid { transform: none !important; padding: 28px 0 68px; }
+@media (max-width: 1080px) {
+  body.oa-body .oa-hero__grid { padding: 28px 0 42px; }
 }

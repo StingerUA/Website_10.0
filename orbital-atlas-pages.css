@@ -253,8 +253,9 @@
 @media (max-width:720px) { .oa-place-map { min-height:380px; } .oa-place-results { max-height:none; } }
 
 /* Orbital Atlas navigation refinement and high-contrast map zoom controls. */
-.oa-main { margin-top: 0; }
-.oa-hero__grid { transform: translateY(-280px); }
+body.oa-body main.oa-main { margin-top: 0 !important; }
+.oa-hero { align-items: start; }
+.oa-hero__grid { transform: none; padding: 28px 0 68px; }
 .oa-contextnav { z-index: 2; }
 .oa-body [data-include*="header"] { position: relative; z-index: 2147483641; overflow: visible !important; }
 .oa-body .site-header, .oa-body .site-header .header-inner, .oa-body .site-header .main-nav, .oa-body .site-header .dropdown { overflow: visible !important; }
@@ -281,7 +282,7 @@
 }
 @media (max-width:1080px) {
   .oa-contextnav { margin: 0 14px; }
-  .oa-hero__grid { transform: translateY(-120px); }
+  .oa-hero__grid { transform: none; padding: 28px 0 42px; }
 }
 @media (max-width:720px) {
   .oa-contextnav { width: 100%; margin: 0; border: 0; border-radius: 0; background: transparent; backdrop-filter: none; }
