@@ -1,5 +1,5 @@
 (() => {
-  const API = "https://albaspace-api.nncdecdgc.workers.dev";
+  const API = "https://api.albaspace.com.tr";
   const REQUEST_PREFIX = "alba-game-request-";
   const AUTH_TOKEN_KEY = "albaspace_access_token";
   const GAME_LOCALE = "tr";
