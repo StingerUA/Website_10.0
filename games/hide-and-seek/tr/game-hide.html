@@ -225,8 +225,16 @@
 
 <script>
 const API_BASE = "https://albaspace-game-api.nncdecdgc.workers.dev";
-const MAIN_API = "https://albaspace-api.nncdecdgc.workers.dev";
+const MAIN_API = "https://api.albaspace.com.tr";
+const AUTH_TOKEN_KEY = "albaspace_access_token";
 const MODEL_BASE = "/assets/models/";
+
+function getAuthHeaders() {
+  try {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY) || "";
+    return token ? { Authorization: "Bearer " + token } : {};
+  } catch (e) { return {}; }
+}
 
 const MODEL_CATALOG = [
   { key: 'sputnik',     name: 'Sputnik',     file: 'sputnik.glb' },
@@ -244,7 +252,11 @@ let selectedModelKey = null;
 
 async function checkLogin() {
   try {
-    const res = await fetch(`${MAIN_API}/me`, { credentials: 'include' });
+    const res = await fetch(`${MAIN_API}/me`, {
+      credentials: 'include',
+      headers: getAuthHeaders(),
+      mode: 'cors'
+    });
     if (!res.ok) return null;
     return await res.json();
   } catch (e) { return null; }
