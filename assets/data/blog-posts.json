@@ -406,7 +406,7 @@
         "en": "Space Entrepreneur, Futurist, and Educator",
         "ru": "Космический предприниматель, футурист и преподаватель",
         "ar": "رائد أعمال فضائي، مستقبلي ومدرِّب"
-        },
+      },
       "locales": {
         "tr": {
           "title": "Uzaydaki İlkler",
@@ -427,6 +427,47 @@
           "title": "أولى الإنجازات في الفضاء",
           "excerpt": "منشور مدونة ألبا للفضاء - إدريس البيراك أولى الإنجازات في الفضاء - 21.08.2026 تحية للفضاء، أيها الفضاء! التجارب الأولى لا تنسى. الأوائل هم الرواد. الن",
           "url": "/ar/blog/uzaydaki-ilkeler.html"
+        }
+      }
+    },
+    {
+      "slug": "gezegen-verisi-nasil-toplanir",
+      "category": "uzay",
+      "publishAt": "2026-08-26T13:01:37+03:00",
+      "cover": "/assets/images/blog/gezegen-verisi-nasil-toplanir-cover.jpg",
+      "readingMinutes": 5,
+      "author": {
+        "tr": "Ali Batuhan Özsürmeli",
+        "en": "Ali Batuhan Özsürmeli",
+        "ru": "Ali Batuhan Özsürmeli",
+        "ar": "Ali Batuhan Özsürmeli"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Gezegen Verisi Nasıl Toplanır",
+          "excerpt": "Ö T E G E Z E G E N L E R uzaktan, dolaylı bakmak gezegen geçişi parlaklıktaki küçük düşüş G Ü N E Ş S İ S T E M İ yerinde ölçmek uzay aracı Dünya’ya ",
+          "url": "/blog/gezegen-verisi-nasil-toplanir.html"
+        },
+        "en": {
+          "title": "How to Collect Planetary Data",
+          "excerpt": "O T E G E Z E G E N L E R look at the planet, indirectly from a distance Planetary transit small drop in brightness G U N E S S I S T E M I measure in",
+          "url": "/eng/blog/gezegen-verisi-nasil-toplanir.html"
+        },
+        "ru": {
+          "title": "Как собирать планетарные данные",
+          "excerpt": "О Т Е Г Е Ж Е Г Е Н Л Е Р смотри на планету, косвенно издалека Планетарный транзит небольшое падение яркости Г У Н Е С С И С Т Е М И измеряю передачу ",
+          "url": "/rus/blog/gezegen-verisi-nasil-toplanir.html"
+        },
+        "ar": {
+          "title": "كيفية جمع بيانات الكواكب",
+          "excerpt": "انظر إلى الكوكب، بشكل غير مباشر من مسافة بعيدة، عبور كوكبي انخفاض بسيط في السطوع G U N E S I S T E M I قياس نقل بيانات المركبة الفضائية في الموقع إلى ",
+          "url": "/ar/blog/gezegen-verisi-nasil-toplanir.html"
         }
       }
     }
