@@ -302,13 +302,13 @@
   }
 
   const profiles = [
-    { name: "Jessica Meir", agency: "NASA", image: "/manus-storage/jessica-meir_ce8dfcd0.webp", profile: "https://www.nasa.gov/humans-in-space/astronauts/jessica-u-meir/", mission: "Crew-12" },
-    { name: "Jack Hathaway", agency: "NASA", image: "/manus-storage/jack-hathaway_d77c786b.webp", profile: "https://www.nasa.gov/humans-in-space/astronauts/", mission: "Crew-12" },
-    { name: "Sophie Adenot", agency: "ESA", image: "/manus-storage/sophie-adenot_b4f68b06.webp", profile: "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Astronauts/Sophie_Adenot", mission: "Crew-12" },
-    { name: "Andrey Fedyaev", agency: "Roscosmos", image: "/manus-storage/andrey-fedyaev_ed7887bb.webp", profile: "https://www.gctc.ru/main.php?id=1716", mission: "Crew-12" },
-    { name: "Pyotr Dubrov", agency: "Roscosmos", image: "/manus-storage/pyotr-dubrov_d84ff90a.jpg", profile: "https://www.gctc.ru/main.php?id=1704", mission: "Soyuz MS-29" },
-    { name: "Anna Kikina", agency: "Roscosmos", image: "/manus-storage/anna-kikina_aa84cc6a.webp", profile: "https://www.gctc.ru/main.php?id=1710", mission: "Soyuz MS-29" },
-    { name: "Anil Menon", agency: "NASA", image: "/manus-storage/anil-menon_ae39ffb0.webp", profile: "https://www.nasa.gov/people/nasa-astronaut-anil-menon/", mission: "Soyuz MS-29" }
+    { name: "Jessica Meir", agency: "NASA", image: "/assets/images/orbital-crew/jessica-meir.webp", profile: "https://www.nasa.gov/humans-in-space/astronauts/jessica-u-meir/", mission: "Crew-12" },
+    { name: "Jack Hathaway", agency: "NASA", image: "/assets/images/orbital-crew/jack-hathaway.webp", profile: "https://www.nasa.gov/humans-in-space/astronauts/", mission: "Crew-12" },
+    { name: "Sophie Adenot", agency: "ESA", image: "/assets/images/orbital-crew/sophie-adenot.webp", profile: "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/Astronauts/Sophie_Adenot", mission: "Crew-12" },
+    { name: "Andrey Fedyaev", agency: "Roscosmos", image: "/assets/images/orbital-crew/andrey-fedyaev.webp", profile: "https://www.gctc.ru/main.php?id=1716", mission: "Crew-12" },
+    { name: "Pyotr Dubrov", agency: "Roscosmos", image: "/assets/images/orbital-crew/pyotr-dubrov.jpg", profile: "https://www.gctc.ru/main.php?id=1704", mission: "Soyuz MS-29" },
+    { name: "Anna Kikina", agency: "Roscosmos", image: "/assets/images/orbital-crew/anna-kikina.webp", profile: "https://www.gctc.ru/main.php?id=1710", mission: "Soyuz MS-29" },
+    { name: "Anil Menon", agency: "NASA", image: "/assets/images/orbital-crew/anil-menon.webp", profile: "https://www.nasa.gov/people/nasa-astronaut-anil-menon/", mission: "Soyuz MS-29" }
   ];
 
   function renderCrew(crew) {
@@ -318,8 +318,13 @@
     const liveNames = new Set((crew || []).map(member => String(member.name || "").toLocaleLowerCase()));
     root.innerHTML = profiles.map(member => {
       const isLive = liveNames.has(member.name.toLocaleLowerCase());
-      return `<article class="oa-crew-card"><img src="${member.image}" alt="${escape(member.name)}" loading="lazy"><div class="oa-crew-card__body"><span class="oa-crew-card__agency">${escape(member.agency)}${isLive ? ` · ${escape(t.now)}` : ""}</span><h3>${escape(member.name)}</h3><p>${escape(member.mission)} · ${escape(isLive ? t.activeCrew : t.source)}</p><a class="oa-profile-link" href="${escape(member.profile)}" target="_blank" rel="noreferrer">${escape(t.officialProfile)}</a></div></article>`;
+      const initials = member.name.split(/\s+/).map(part => part[0] || "").join("").slice(0, 2).toUpperCase();
+      return `<article class="oa-crew-card"><div class="oa-crew-card__portrait" role="img" aria-label="${escape(member.name)}"><img src="${escape(member.image)}" alt="${escape(member.name)}" loading="lazy"><span class="oa-crew-card__fallback" aria-hidden="true">${escape(initials)}</span></div><div class="oa-crew-card__body"><span class="oa-crew-card__agency">${escape(member.agency)}${isLive ? ` · ${escape(t.now)}` : ""}</span><h3>${escape(member.name)}</h3><p>${escape(member.mission)} · ${escape(isLive ? t.activeCrew : t.source)}</p><a class="oa-profile-link" href="${escape(member.profile)}" target="_blank" rel="noreferrer">${escape(t.officialProfile)}</a></div></article>`;
     }).join("");
+    root.querySelectorAll(".oa-crew-card__portrait img").forEach(image => image.addEventListener("error", () => {
+      image.parentElement?.classList.add("is-fallback");
+      image.remove();
+    }, { once: true }));
     if (roster) {
       roster.innerHTML = Array.isArray(crew) && crew.length
         ? crew.map(member => `<span class="is-live">${escape(member.name)} · ${escape(String(member.mission || "").replace(/^ISS\s*-\s*/i, ""))}</span>`).join("")

@@ -148,7 +148,10 @@
 
 .oa-crew-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .oa-crew-card { overflow: hidden; border: 1px solid var(--oa-line); background: linear-gradient(145deg, rgba(19,32,43,.95), rgba(5,9,14,.95)); }
-.oa-crew-card img { display: block; width: 100%; aspect-ratio: .79; object-fit: cover; object-position: center top; background: #091018; filter: saturate(.9) contrast(1.04); }
+.oa-crew-card__portrait { position: relative; display: grid; width: 100%; aspect-ratio: .79; overflow: hidden; place-items: center; background: radial-gradient(circle at 50% 35%, rgba(66,213,232,.24), transparent 42%), linear-gradient(145deg, #132c39, #091018); }
+.oa-crew-card__portrait img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; background: #091018; filter: saturate(.9) contrast(1.04); }
+.oa-crew-card__fallback { display: none; width: 72px; height: 72px; place-items: center; border: 1px solid rgba(66,213,232,.62); border-radius: 50%; color: #d7fbff; font: 600 28px/1 var(--oa-display); letter-spacing: -.04em; box-shadow: 0 0 0 8px rgba(66,213,232,.08); }
+.oa-crew-card__portrait.is-fallback .oa-crew-card__fallback { display: grid; }
 .oa-crew-card__body { padding: 18px; }
 .oa-crew-card__agency { color: var(--oa-cyan); font: 500 10px/1 var(--oa-mono); letter-spacing: .09em; text-transform: uppercase; }
 .oa-crew-card h3 { margin: 11px 0 7px; font: 600 25px/.98 var(--oa-display); letter-spacing: -.055em; }
