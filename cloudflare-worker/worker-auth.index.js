@@ -36,7 +36,7 @@ export { GameRoomDO };
 const SESSION_COOKIE     = "albaspace_session";
 const OAUTH_STATE_COOKIE = "albaspace_oauth_state";
 const AUTH_TOKEN_QUERY = "access_token";
-const ORBITAL_LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=3&mode=detailed";
+const ORBITAL_LAUNCHES_URL = "https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=3&mode=detailed&ordering=net";
 const ORBITAL_ISS_URL = "https://api.wheretheiss.at/v1/satellites/25544";
 const ORBITAL_CREW_URL = "https://whoisinspace.com/";
 const ORBITAL_ISS_TLE_URL = "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE";
@@ -558,14 +558,37 @@ function normalizeOrbitalCrew(html) {
 
 function normalizeOrbitalLaunch(raw) {
   const provider = orbitalText(raw?.launch_service_provider?.name, "Оператор уточняется");
-  const video = Array.isArray(raw?.vidURLs) ? raw.vidURLs.find(item => typeof item?.url === "string") : null;
+  const video = Array.isArray(raw?.vidURLs) ? raw.vidURLs.find(item => isOrbitalYouTubeUrl(item?.url)) : null;
+  const image = orbitalSafeLaunchImage(raw?.image);
   return {
     name: orbitalText(raw?.name, "Миссия уточняется"),
     net: typeof raw?.net === "string" ? raw.net : typeof raw?.window_start === "string" ? raw.window_start : null,
     provider,
     location: orbitalText(raw?.pad?.location?.name, orbitalText(raw?.pad?.name, "Площадка уточняется")),
     status: orbitalText(raw?.status?.name, "Статус уточняется"),
-    streamUrl: video?.url || (/spacex/i.test(provider) ? "https://www.youtube.com/@SpaceX/live" : "https://www.youtube.com/@NASA/live")
+    streamUrl: video?.url || (/spacex/i.test(provider) ? "https://www.youtube.com/@SpaceX/live" : null),
+    image
+  };
+}
+
+function isOrbitalYouTubeUrl(value) {
+  if (typeof value !== "string") return false;
+  try {
+    const url = new URL(value);
+    return ["youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be"].includes(url.hostname.toLowerCase()) && url.pathname !== "/";
+  } catch { return false; }
+}
+
+function orbitalSafeLaunchImage(value) {
+  const licenseName = orbitalText(value?.license?.name, "");
+  const url = typeof value?.image_url === "string" ? value.image_url : typeof value?.thumbnail_url === "string" ? value.thumbnail_url : "";
+  const canDisplay = /^CC BY(?:\s|[-–])/i.test(licenseName) && !/\bNC\b/i.test(licenseName);
+  if (!url || !canDisplay) return null;
+  return {
+    url,
+    credit: orbitalText(value?.credit, "The Space Devs"),
+    license: licenseName,
+    licenseUrl: typeof value?.license?.link === "string" ? value.license.link : null
   };
 }
 
@@ -578,8 +601,8 @@ async function orbitalFetch(url) {
 async function orbitalLaunches(now) {
   if (orbitalLaunchesCache?.expiresAt > now) return orbitalLaunchesCache.value;
   try {
-    const payload = await orbitalFetch(ORBITAL_LAUNCHES_URL);
-    const value = Array.isArray(payload?.results) ? payload.results.slice(0, 3).map(normalizeOrbitalLaunch) : [];
+    const payload = await orbitalFetch(`${ORBITAL_LAUNCHES_URL}&net__gte=${encodeURIComponent(new Date(now).toISOString())}`);
+    const value = Array.isArray(payload?.results) ? payload.results.map(normalizeOrbitalLaunch).filter(item => item.net && Date.parse(item.net) >= now - 60000).slice(0, 3) : [];
     orbitalLaunchesCache = { value, expiresAt: now + 20 * 60 * 1000 };
     return value;
   } catch (error) {

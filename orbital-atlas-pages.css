@@ -268,6 +268,12 @@
 .oa-map .leaflet-control-zoom a.leaflet-control-zoom-out::before, .oa-place-map .leaflet-control-zoom a.leaflet-control-zoom-out::before { content: "−"; font-size: 25px; }
 .oa-map .leaflet-control-zoom a:last-child, .oa-place-map .leaflet-control-zoom a:last-child { border-bottom: 0; }
 .oa-map .leaflet-control-zoom a:hover, .oa-map .leaflet-control-zoom a:focus-visible, .oa-place-map .leaflet-control-zoom a:hover, .oa-place-map .leaflet-control-zoom a:focus-visible { background: var(--oa-cyan); }
+.oa-launch__stream-pending { display: inline-flex; width: max-content; margin-top: 18px; color: #93a8b1; font: 500 10px/1.35 var(--oa-mono); letter-spacing: .035em; }
+.oa-launch__image { position: relative; overflow: hidden; height: 156px; margin: -21px -21px 18px; border-radius: var(--oa-radius-md) var(--oa-radius-md) 0 0; background: #081018; }
+.oa-launch__image img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.oa-launch__image::after { position: absolute; right: 0; bottom: 0; left: 0; height: 50%; background: linear-gradient(transparent, rgba(2,5,9,.82)); content: ""; pointer-events: none; }
+.oa-launch__image figcaption { position: absolute; z-index: 1; right: 10px; bottom: 8px; left: 10px; overflow: hidden; color: #d8e8ed; font: 500 9px/1.2 var(--oa-mono); letter-spacing: .03em; text-overflow: ellipsis; white-space: nowrap; }
+.oa-launch__image figcaption a { color: var(--oa-cyan); }
 @media (min-width:1081px) {
   .oa-contextnav { width: fit-content; max-width: calc(100% - var(--oa-context-start, clamp(210px, 22vw, 340px)) - 20px); margin: 0 0 0 var(--oa-context-start, clamp(210px, 22vw, 340px)); }
   .oa-contextnav__inner { width: fit-content; max-width: 100%; padding: 0 12px; }
