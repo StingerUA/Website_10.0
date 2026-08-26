@@ -2,6 +2,7 @@
   const API = "https://albaspace-api.nncdecdgc.workers.dev";
   const REQUEST_PREFIX = "alba-game-request-";
   const AUTH_TOKEN_KEY = "albaspace_access_token";
+  const GAME_LOCALE = "ru";
   const makeId = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const esc = value => String(value ?? "").replace(/[&<>\"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[char]));
   const readAuthToken = () => { try { return localStorage.getItem(AUTH_TOKEN_KEY) || ""; } catch { return ""; } };
@@ -26,9 +27,17 @@
   }
   async function currentUser() {
     consumeAuthToken();
-    const response = await fetch(`${API}/me`, { credentials: "include", mode: "cors", headers: authHeaders() });
-    if (!response.ok) return null;
-    return response.json();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    try {
+      const response = await fetch(`${API}/me`, { credentials: "include", mode: "cors", headers: authHeaders(), signal: controller.signal });
+      if (!response.ok) return null;
+      return response.json();
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timeout);
+    }
   }
   function login() {
     sessionStorage.setItem("albaspace_auth_return_to", window.location.href);
@@ -39,7 +48,7 @@
     document.getElementById("login").onclick = login;
   }
   function requestId() { return `${REQUEST_PREFIX}${makeId()}`; }
-  async function createRoom(presentationMode, timingMode = "STANDARD") { return request("/api/game/rooms", { method: "POST", body: JSON.stringify({ presentationMode, mode: timingMode }) }); }
+  async function createRoom(presentationMode, timingMode = "STANDARD") { return request("/api/game/rooms", { method: "POST", body: JSON.stringify({ presentationMode, mode: timingMode, locale: GAME_LOCALE }) }); }
   async function joinRoom(code) { return request("/api/game/rooms/join", { method: "POST", body: JSON.stringify({ code }) }); }
   async function snapshot(roomId) { return request(`/api/game/rooms/${encodeURIComponent(roomId)}/snapshot`); }
   async function command(roomId, type, payload = {}) { return request(`/api/game/rooms/${encodeURIComponent(roomId)}/command`, { method: "POST", body: JSON.stringify({ type, payload, requestId: requestId() }) }); }

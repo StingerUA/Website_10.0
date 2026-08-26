@@ -59,6 +59,7 @@ function safeQuestion(question, role, phase) {
     delete output.correct;
     delete output.answers;
     delete output.tolerance;
+    delete output.acceptedAnswers;
     if (role !== "teacher") delete output.explanation;
   }
   return output;
@@ -69,9 +70,10 @@ function safeState(state, user) {
   const output = clone(state);
   output.presentationMode = PRESENTATION_MODES[state.presentationMode] ? state.presentationMode : "3D";
   output.presentation = PRESENTATION_MODES[output.presentationMode];
+  output.locale = state.locale === "tr" ? "tr" : "ru";
   output.currentQuestion = safeQuestion(state.currentQuestion, role, state.phase);
   output.players = output.players.map(player => {
-    const item = { ...player, lastAnswer: null };
+    const item = { ...player, lastAnswer: player.userId === viewerId ? player.lastAnswer : null };
     delete item.userId;
     delete item.email;
     if (role !== "teacher" && player.userId !== viewerId) item.answered = !!player.answered;
@@ -82,9 +84,9 @@ function safeState(state, user) {
   return { ...output, role };
 }
 
-function initialState(roomId, code, mode, teacher, presentationMode = "3D") {
+function initialState(roomId, code, mode, teacher, presentationMode = "3D", locale = "ru") {
   return {
-    roomId, code, status: "LOBBY", phase: "LOBBY", mode: MODES[mode] ? mode : "STANDARD", presentationMode: PRESENTATION_MODES[presentationMode] ? presentationMode : "3D", round: 0,
+    roomId, code, status: "LOBBY", phase: "LOBBY", mode: MODES[mode] ? mode : "STANDARD", presentationMode: PRESENTATION_MODES[presentationMode] ? presentationMode : "3D", locale: locale === "tr" ? "tr" : "ru", round: 0,
     teacherUserId: userId(teacher), teacher: { name: teacher.name || teacher.email || "Учитель", email: teacher.email || "" },
     players: [], usedQuestionIds: [], topicBag: [], currentQuestion: null, deadline: null, startedAt: null,
     results: null, winnerId: null, createdAt: now(), updatedAt: now(), version: 1, anchorProtocol: "TABLE_ANCHOR_V1", sessionId: id()
@@ -110,7 +112,7 @@ export class GameRoomDO {
       if (url.pathname === "/init" && request.method === "POST") {
         const body = await request.json();
         const current = await this.load();
-        if (!current) { const room = initialState(body.roomId, body.code, body.mode, user, body.presentationMode); await this.save(room); return json({ ok: true, state: safeState(room, user) }); }
+        if (!current) { const room = initialState(body.roomId, body.code, body.mode, user, body.presentationMode, body.locale); await this.save(room); return json({ ok: true, state: safeState(room, user) }); }
         return json({ ok: true, state: safeState(current, user) });
       }
       if (url.pathname === "/snapshot") {
@@ -183,14 +185,14 @@ export class GameRoomDO {
   setCompany(room, user, name) { const player = this.getPlayer(room, user); const value = String(name || "").trim(); if (value.length < 3 || value.length > 20) throw new GameError("Название: 3–20 символов"); if (room.players.some(item => item.id !== player.id && normalize(item.company) === normalize(value))) throw new GameError("Это название уже занято"); player.company = value; }
   setCadets(room, user, topics) { const player = this.getPlayer(room, user); if (!Array.isArray(topics) || topics.length !== 3 || new Set(topics).size !== 3 || topics.some(topic => !TOPICS[topic])) throw new GameError("Выбери ровно 3 направления"); player.cadets = topics.map(topic => ({ id: id(), topic, knowledge: 0, status: "ACTIVE" })); player.ready = !!player.company; }
   startGame(room, user) { this.requireTeacher(room, user); if (room.players.length < 2) throw new GameError("Нужно минимум 2 игрока"); if (room.players.some(player => !player.ready)) throw new GameError("Не все игроки готовы"); room.status = "ACTIVE"; room.phase = "STATION"; room.round = 0; room.startedAt = now(); }
-  async startQuestion(room, user) { this.requireTeacher(room, user); if (!["STATION", "RESULT"].includes(room.phase)) throw new GameError("Сейчас нельзя запускать вопрос"); const questions = await this.questions(); const availableTopics = Object.keys(TOPICS); if (!room.topicBag.length) room.topicBag = availableTopics.sort(() => Math.random() - 0.5); const topic = room.topicBag.shift(); let pool = questions.filter(q => q.topic === topic && !room.usedQuestionIds.includes(q.id)); if (!pool.length) pool = questions.filter(q => q.topic === topic); if (!pool.length) throw new GameError("Нет вопросов для этой темы", 500); const question = clone(pool[Math.floor(Math.random() * pool.length)]); room.usedQuestionIds.push(question.id); room.round += 1; room.phase = "QUESTION"; room.results = null; room.players.forEach(player => { player.answered = false; player.lastAnswer = null; }); room.currentQuestion = question; room.deadline = now() + (MODES[room.mode]?.answer?.[question.difficulty] || 20) * 1000; }
+  async startQuestion(room, user) { this.requireTeacher(room, user); if (!["STATION", "RESULT"].includes(room.phase)) throw new GameError("Сейчас нельзя запускать вопрос"); const questions = await this.questions(room.locale); const availableTopics = Object.keys(TOPICS); if (!room.topicBag.length) room.topicBag = availableTopics.sort(() => Math.random() - 0.5); const topic = room.topicBag.shift(); let pool = questions.filter(q => q.topic === topic && !room.usedQuestionIds.includes(q.id)); if (!pool.length) pool = questions.filter(q => q.topic === topic); if (!pool.length) throw new GameError("Нет вопросов для этой темы", 500); const question = clone(pool[Math.floor(Math.random() * pool.length)]); room.usedQuestionIds.push(question.id); room.round += 1; room.phase = "QUESTION"; room.results = null; room.players.forEach(player => { player.answered = false; player.lastAnswer = null; }); room.currentQuestion = question; room.deadline = now() + (MODES[room.mode]?.answer?.[question.difficulty] || 20) * 1000; }
   submit(room, user, value) { const player = this.getPlayer(room, user); if (room.phase !== "QUESTION") throw new GameError("Сейчас нельзя отвечать"); if (player.answered) throw new GameError("Вы уже отвечали на этот вопрос"); if (room.currentQuestion.type === "NUMBER") { const number = Number(String(value).replace(",", ".").replace(/\s/g, "")); if (!Number.isFinite(number)) throw new GameError("Введите число"); player.lastAnswer = number; } else { const text = String(value || "").trim(); if (!text) throw new GameError("Введите ответ"); player.lastAnswer = text; } player.answered = true; }
   reveal(room, user) { this.requireTeacher(room, user); if (room.phase !== "QUESTION") throw new GameError("Нет активного вопроса"); const q = room.currentQuestion; const scored = room.players.map(player => { const submitted = player.lastAnswer !== null && player.lastAnswer !== undefined; if (!submitted) return { player, submitted: false, valid: false, distance: null }; if (q.type === "NUMBER") { const distance = Math.abs(Number(player.lastAnswer) - Number(q.correct)); return { player, submitted: true, valid: distance <= Number(q.tolerance || 0), distance }; } return { player, submitted: true, valid: textMatches(player.lastAnswer, q.answers || q.acceptedAnswers || []) , distance: null }; }); const submitted = scored.filter(item => item.submitted); const winners = q.type === "NUMBER" && submitted.length ? submitted.filter(item => item.distance === Math.min(...submitted.map(item => item.distance))).map(item => item.player.id) : scored.filter(item => item.valid).map(item => item.player.id); const items = scored.map(item => { const player = item.player; let credits = item.submitted ? ECON.participation : 0; let knowledge = 0; const changes = []; const grads = []; if (item.submitted) player.credits += ECON.participation; const winner = winners.includes(player.id); if (winner) { player.credits += ECON.winner; player.wins += 1; credits += ECON.winner; } if (item.valid) { player.correct += 1; knowledge = winner ? 2 : 1; let left = knowledge; for (const cadet of player.cadets.filter(cadet => cadet.status === "ACTIVE" && cadet.topic === q.topic).sort((a, b) => b.knowledge - a.knowledge)) { if (!left) break; const before = cadet.knowledge; cadet.knowledge += Math.min(left, MAX.knowledge - cadet.knowledge); left -= cadet.knowledge - before; changes.push({ cadetId: cadet.id, before, after: cadet.knowledge }); if (cadet.knowledge >= MAX.knowledge) { cadet.status = "GRADUATED"; player.graduates += 1; player.credits += ECON.graduation; grads.push({ cadetId: cadet.id, reward: ECON.graduation }); } } } return { playerId: player.id, company: player.company, answer: player.lastAnswer, submitted: item.submitted, valid: item.valid, distance: item.distance, isWinner: winner, credits, knowledge, changes, grads }; }); room.results = { questionId: q.id, correct: q.type === "NUMBER" ? q.correct : (q.answers?.[0] || q.acceptedAnswers?.[0] || ""), explanation: q.explanation || "", items }; room.phase = "RESULT"; room.deadline = null; }
   startStation(room, user) { this.requireTeacher(room, user); if (room.phase !== "RESULT") throw new GameError("Сначала покажите результат"); room.phase = "STATION"; room.deadline = null; }
   recruit(room, user, topic) { const player = this.getPlayer(room, user); if (room.phase !== "STATION") throw new GameError("Сейчас нельзя принимать кадетов"); const active = player.cadets.filter(cadet => cadet.status === "ACTIVE").length; if (active >= player.seatCapacity) throw new GameError("Нет свободных мест"); if (!TOPICS[topic]) throw new GameError("Неизвестная специализация"); player.cadets.push({ id: id(), topic, knowledge: 0, status: "ACTIVE" }); }
   buyModule(room, user, type) { const player = this.getPlayer(room, user); if (room.phase !== "STATION") throw new GameError("Сейчас нельзя строить"); if (player.moduleBoughtRound === room.round && room.round > 0) throw new GameError("В этом раунде модуль уже построен"); if (type === "SMALL") { if (player.small >= MAX.small) throw new GameError("Малых модулей уже 7/7"); if (player.credits < ECON.small) throw new GameError("Недостаточно кредитов"); player.credits -= ECON.small; player.small += 1; player.seatCapacity += 2; } else if (type === "LARGE") { if (player.large >= MAX.large) throw new GameError("Больших модулей уже 3/3"); if (player.credits < ECON.large) throw new GameError("Недостаточно кредитов"); player.credits -= ECON.large; player.large += 1; player.seatCapacity += 3; } else throw new GameError("Неизвестный тип модуля"); player.moduleBoughtRound = room.round; if (player.small === MAX.small && player.large === MAX.large) { room.winnerId = player.id; room.status = "FINISHED"; room.phase = "ENDGAME"; } }
   endSession(room, user) { this.requireTeacher(room, user); room.status = "FINISHED"; room.phase = "ENDGAME"; room.deadline = null; }
-  async questions() { const url = this.env.QUESTIONS_URL || "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.json"; const response = await fetch(url, { cf: { cacheTtl: 300, cacheEverything: true } }); if (!response.ok) throw new GameError("Не удалось загрузить базу вопросов", 503); return response.json(); }
+  async questions(locale = "ru") { const fallback = "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.json"; const localized = locale === "tr" ? "https://albaspace.com.tr/game/AlbaSpace/tr/data/questions.ru.json" : fallback; const url = locale === "tr" ? (this.env.QUESTIONS_URL_TR || localized) : (this.env.QUESTIONS_URL || fallback); const response = await fetch(url, { cf: { cacheTtl: 300, cacheEverything: true } }); if (!response.ok && url !== fallback) { const fallbackResponse = await fetch(fallback, { cf: { cacheTtl: 300, cacheEverything: true } }); if (fallbackResponse.ok) return fallbackResponse.json(); } if (!response.ok) throw new GameError("Не удалось загрузить базу вопросов", 503); return response.json(); }
   async persist(room, event, user, requestId) { try { await this.env.DB.prepare("UPDATE game_rooms SET state_json = ?, phase = ?, status = ?, updated_at = ? WHERE room_id = ?").bind(JSON.stringify(room), room.phase, room.status, Math.floor(now() / 1000), room.roomId).run(); await this.env.DB.prepare("INSERT INTO game_events (room_id, event_type, actor_user_id, request_id, payload_json, created_at) VALUES (?, ?, ?, ?, ?, ?)").bind(room.roomId, event, userId(user), requestId, JSON.stringify({ phase: room.phase, round: room.round }), Math.floor(now() / 1000)).run(); } catch (error) { console.error("game persistence failed", error); } }
 }
 
@@ -203,9 +205,10 @@ export async function handleGameRequest(request, env, user, cors) {
       const body = await request.json().catch(() => ({}));
       const mode = MODES[body.mode] ? body.mode : "STANDARD";
       const presentationMode = PRESENTATION_MODES[body.presentationMode] ? body.presentationMode : "3D";
+      const locale = body.locale === "tr" ? "tr" : "ru";
       let roomId = id(), code = String(10000 + Math.floor(Math.random() * 90000));
       for (let attempt = 0; attempt < 8; attempt++) { try { await env.DB.prepare("INSERT INTO game_rooms (room_id, join_code, teacher_user_id, mode, status, phase, state_json, created_at, updated_at) VALUES (?, ?, ?, ?, 'LOBBY', 'LOBBY', ?, ?, ?)").bind(roomId, code, userId(user), mode, "{}", Math.floor(now() / 1000), Math.floor(now() / 1000)).run(); break; } catch (error) { if (attempt === 7) throw error; roomId = id(); code = String(10000 + Math.floor(Math.random() * 90000)); } }
-      const result = await roomFetch(env, roomId, "/init", "POST", user, { roomId, code, mode, presentationMode });
+      const result = await roomFetch(env, roomId, "/init", "POST", user, { roomId, code, mode, presentationMode, locale });
       return json(result, 201, headers);
     }
     if (url.pathname === "/api/game/rooms/join" && request.method === "POST") {

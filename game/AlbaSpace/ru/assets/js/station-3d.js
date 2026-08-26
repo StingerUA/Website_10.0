@@ -254,4 +254,3 @@
   window.StationAssetRegistry = StationAssetRegistry;
   window.AlbaStation3D = { Station3DRenderer, StationAssetRegistry };
 })();
-window.addEventListener("beforeunload", () => window.AlbaStationRenderer?.dispose());
