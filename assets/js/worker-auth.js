@@ -2,7 +2,7 @@
 if (typeof window.__workerAuthLoaded === 'undefined') {
   window.__workerAuthLoaded = true;
 
-const WORKER_BASE_URL = "https://albaspace-api.nncdecdgc.workers.dev";
+const WORKER_BASE_URL = "https://api.albaspace.com.tr";
 const WORKER_AUTH_URL = `${WORKER_BASE_URL}/auth/google`;
 const WORKER_ME_URL = `${WORKER_BASE_URL}/me`;
 const WORKER_PROFILE_URL = `${WORKER_BASE_URL}/profile`;
