@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "playwright": "^1.42.0",
-    "puppeteer": "^24.33.0"
+    "puppeteer": "^24.33.0",
+    "satellite.js": "5.0.0"
   }
 }

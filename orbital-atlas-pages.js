@@ -374,24 +374,28 @@
       button.style.setProperty("--planet-icon-size", `${planetIconSizes[key]}px`);
       button.innerHTML = `<img src="${src}" alt="${data[key]?.[0] || key}" draggable="false">`;
     });
-    const venusAtlasLabels = { ru: "ОТКРЫТЬ АТЛАС ВЕНЕРЫ ↗", en: "OPEN VENUS ATLAS ↗", tr: "VENÜS ATLASINI AÇ ↗" };
+    const planetaryAtlasLabels = {
+      ru: { venus: "ОТКРЫТЬ АТЛАС ВЕНЕРЫ ↗", mars: "ОТКРЫТЬ АТЛАСЫ МАРСА И ЛУНЫ ↗" },
+      en: { venus: "OPEN VENUS ATLAS ↗", mars: "OPEN MARS & MOON ATLASES ↗" },
+      tr: { venus: "VENÜS ATLASINI AÇ ↗", mars: "MARS VE AY ATLASLARINI AÇ ↗" }
+    };
     const setPlanet = key => {
       const current = data[key];
       setText("solarPlanetName", current[0]); setText("solarPlanetDescription", current[1]); setText("solarOrbitValue", current[2]); setText("solarOrbitLabel", current[3]); setText("solarSizeValue", current[4]); setText("solarSizeLabel", current[5]);
       model.querySelectorAll("[data-planet]").forEach(button => button.classList.toggle("is-active", button.dataset.planet === key));
-      let venusLink = document.getElementById("solarVenusAtlasLink");
-      if (key === "venus") {
-        if (!venusLink) {
-          venusLink = document.createElement("a");
-          venusLink.id = "solarVenusAtlasLink";
-          venusLink.className = "oa-profile-link";
+      let atlasLink = document.getElementById("solarVenusAtlasLink") || document.getElementById("solarMarsMoonAtlasLink");
+      if (key === "venus" || key === "mars") {
+        if (!atlasLink) {
+          atlasLink = document.createElement("a");
+          atlasLink.className = "oa-profile-link";
           const description = document.querySelector('[id="solarPlanetDescription"]');
-          description?.insertAdjacentElement("afterend", venusLink);
+          description?.insertAdjacentElement("afterend", atlasLink);
         }
+        atlasLink.id = key === "venus" ? "solarVenusAtlasLink" : "solarMarsMoonAtlasLink";
         const localePrefix = locale === "en" ? "/eng" : locale === "tr" ? "/tr" : "";
-        venusLink.href = `${localePrefix}/orbital-venus.html`;
-        venusLink.textContent = venusAtlasLabels[locale] || venusAtlasLabels.ru;
-      } else if (venusLink) venusLink.remove();
+        atlasLink.href = key === "venus" ? `${localePrefix}/orbital-venus.html` : `${localePrefix}/orbital-worlds.html?body=mars`;
+        atlasLink.textContent = (planetaryAtlasLabels[locale] || planetaryAtlasLabels.ru)[key];
+      } else if (atlasLink) atlasLink.remove();
     };
     model.addEventListener("click", event => { const button = event.target.closest("[data-planet]"); if (button) setPlanet(button.dataset.planet); });
     document.querySelectorAll("[data-model]").forEach(button => button.addEventListener("click", () => { model.classList.toggle("oa-solar-model--3d", button.dataset.model === "3d"); document.querySelectorAll("[data-model]").forEach(item => item.classList.toggle("is-active", item === button)); }));
@@ -458,4 +462,8 @@
   alignContextNavigation();
   hydrate();
   setInterval(updateCountdowns, 1000);
+  const expansion = document.createElement("script");
+  expansion.src = "/orbital-expansion.js?v=atlas-expansion-20260826";
+  expansion.defer = true;
+  document.head.append(expansion);
 })();
