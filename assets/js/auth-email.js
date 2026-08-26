@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  var API = 'https://albaspace-api.nncdecdgc.workers.dev';
+  var API = 'https://api.albaspace.com.tr';
 
   function getLang() {
     var p = window.location.pathname || '/';
