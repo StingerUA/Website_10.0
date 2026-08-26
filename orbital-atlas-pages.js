@@ -463,7 +463,7 @@
   hydrate();
   setInterval(updateCountdowns, 1000);
   const expansion = document.createElement("script");
-  expansion.src = "/orbital-expansion.js?v=atlas-expansion-20260826";
+  expansion.src = "/orbital-expansion.js?v=atlas-expansion-20260826b";
   expansion.defer = true;
   document.head.append(expansion);
 })();
