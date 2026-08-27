@@ -470,6 +470,47 @@
           "url": "/ar/blog/gezegen-verisi-nasil-toplanir.html"
         }
       }
+    },
+    {
+      "slug": "gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu",
+      "category": "uzay",
+      "publishAt": "2026-08-27T15:38:48+03:00",
+      "cover": "/assets/images/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Aslı Bolat",
+        "ar": "Aslı Bolat"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Görünmez Kalkanımız Düşerse:Dünya’nın Manyetik Alanı Bir Gün Yok Olsaydı Ne Olurdu?",
+          "excerpt": "Görünmez Kalkanımız Düşerse:Dünya’nın Manyetik Alanı Bir Gün Yok Olsaydı Ne Olurdu? Gezegenimiz, uzaydan bakıldığında sakin ve mavi bir küre gibi görü",
+          "url": "/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu.html"
+        },
+        "en": {
+          "title": "If our invisible shield fell:What would happen if the Earth's magnetic field disappeared one day?",
+          "excerpt": "If Our Invisible Shield Falls: What Would Happen If Earth's Magnetic Field Disappeared One Day? Our planet looks like a calm and blue sphere when view",
+          "url": "/eng/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu.html"
+        },
+        "ru": {
+          "title": "Если бы наш невидимый щит упал: что бы произошло, если бы магнитное поле Земли однажды исчезло?",
+          "excerpt": "Если наш невидимый щит упадёт: что произойдёт, если магнитное поле Земли однажды исчезнет? Наша планета выглядит спокойной и голубой сферой, если смот",
+          "url": "/rus/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu.html"
+        },
+        "ar": {
+          "title": "إذا سقط درعنا غير المرئي: ماذا سيحدث إذا اختفى المجال المغناطيسي للأرض يوما ما؟",
+          "excerpt": "إذا سقط درعنا الخفي: ماذا سيحدث إذا اختفى المجال المغناطيسي للأرض يوما ما؟ يبدو كوكبنا ككرة هادئة وزرقاء عند النظر إليها من الفضاء. ومع ذلك، أحد الأنظ",
+          "url": "/ar/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu.html"
+        }
+      }
     }
   ]
 }
