@@ -51,6 +51,18 @@ const MENU = {
       }
     ]
   },
+  soup: {
+    label: 'СУПЫ',
+    items: [
+      {
+        src: '/assets/models/restaurant/bowl-soup.glb?v=poly-pizza-1',
+        alt: '3D-модель миски с супом',
+        name: 'Домашний суп',
+        description: 'Тёплый суп в глубокой миске — уютное начало ужина.',
+        price: '₺ 160'
+      }
+    ]
+  },
   drink: {
     label: 'НАПИТКИ',
     items: [
@@ -67,6 +79,13 @@ const MENU = {
         name: 'Alba Latte',
         description: 'Мягкий латте с молочной пеной и ароматом кофе.',
         price: '₺ 120'
+      },
+      {
+        src: '/assets/models/restaurant/juice.glb?v=poly-pizza-1',
+        alt: '3D-модель стакана с соком',
+        name: 'Свежий сок',
+        description: 'Холодный фруктовый сок для лёгкого освежения.',
+        price: '₺ 110'
       }
     ]
   }

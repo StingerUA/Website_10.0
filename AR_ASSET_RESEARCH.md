@@ -23,3 +23,15 @@
 - Формат на карточке: OBJ/GLTF; на странице доступно отдельное скачивание GLB.
 - Лицензия: Creative Commons Attribution 3.0, ссылка на https://creativecommons.org/licenses/by/3.0/
 - Для публикации в репозитории добавлю атрибуцию автора и ссылку на карточку модели.
+
+## Expansion search — 2026-08-27
+
+Poly Pizza search found a concrete `Juice` model by Poly by Google at https://poly.pizza/m/f9zLzhRRkZg. Its page states OBJ/GLTF format and Creative Commons Attribution 3.0. The `Soup Bowl` search at https://poly.pizza/search/Soup%20Bowl listed `Bowl Soup` by Kenney, `Stew` by Kay Lousberg, and `Bowl Broth` by Kenney; each specific model page still needs an individual license check before download.
+
+## Проверенная модель супа
+
+`Bowl Soup` от Kenney: https://poly.pizza/m/GwyYbV6NNw. Карточка указывает категорию Food & Drink, формат OBJ/GLTF и Public Domain (CC0) с официальной ссылкой https://creativecommons.org/publicdomain/zero/1.0/.
+
+## Added models
+
+The new soup item is `Bowl Soup` by Kenney from https://poly.pizza/m/GwyYbV6NNw, published as Public Domain (CC0). The new drink item is `Juice` by Poly by Google from https://poly.pizza/m/f9zLzhRRkZg, published under Creative Commons Attribution 3.0; attribution is included in `assets/models/restaurant/THIRD_PARTY_NOTICES.md`.
