@@ -177,3 +177,29 @@ model-viewer { width: 100%; height: 100%; background: transparent; --poster-colo
 .dish-arrow:disabled { cursor: not-allowed; opacity: .35; }
 .dish-position { min-width: 38px; color: var(--muted); text-align: center; font-size: 11px; font-variant-numeric: tabular-nums; }
 @media (max-width: 760px) { .dish-meta { gap: 7px; } .dish-arrow { width: 34px; height: 34px; } .dish-position { min-width: 34px; } }
+
+
+/* Compact camera-first mobile controls: keep every action inside the viewport. */
+.intro-panel,
+.tracking-pill,
+.privacy-note,
+#help-button { display: none !important; }
+
+@media (max-width: 760px) {
+  .ar-app { height: 100svh; min-height: 100svh; display: block; overflow: hidden; padding: var(--safe-top) 15px var(--safe-bottom); }
+  .top-bar { position: fixed; top: var(--safe-top); left: 15px; right: 15px; z-index: 20; }
+  .dish-stage { position: fixed; inset: 0; z-index: 1; min-height: 0; height: 100svh; pointer-events: auto; }
+  .dish-stage::before { width: min(82vw, 420px); }
+  .dish-card { width: min(78vw, 360px); height: min(78vw, 360px); }
+  .dish-info { position: fixed; left: 15px; right: 15px; bottom: calc(var(--safe-bottom) + 158px); z-index: 12; width: auto; max-width: none; padding: 12px 14px; border-radius: 16px; }
+  .dish-info h2 { font-size: clamp(18px, 5.4vw, 24px); }
+  .dish-info p { max-width: min(57vw, 240px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dish-price { font-size: 18px; }
+  .dish-switcher { gap: 5px; }
+  .dish-arrow { width: 34px; height: 34px; }
+  .category-rail { position: fixed; left: 15px; right: 15px; bottom: calc(var(--safe-bottom) + 88px); z-index: 14; width: auto; justify-content: stretch; }
+  .category-button { min-width: 0; min-height: 46px; padding: 8px 7px; }
+  .action-row { position: fixed; left: 15px; right: 15px; bottom: calc(var(--safe-bottom) + 14px); z-index: 15; }
+  .primary-action { min-width: 0; flex: 1; max-width: 280px; padding: 13px 15px; }
+  .secondary-action { flex: 0 0 48px; }
+}
