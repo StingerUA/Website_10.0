@@ -28,7 +28,8 @@ MATERIALS = [
     {"name": "drink", "baseColorFactor": [0.92, 0.16, 0.06, 0.85], "metallicFactor": 0.0, "roughnessFactor": 0.28, "alphaMode": "BLEND"},
     {"name": "cream", "baseColorFactor": [1.0, 0.78, 0.62, 1.0], "metallicFactor": 0.0, "roughnessFactor": 0.5},
     {"name": "chocolate", "baseColorFactor": [0.22, 0.045, 0.02, 1.0], "metallicFactor": 0.0, "roughnessFactor": 0.38},
-    {"name": "blackCoffee", "baseColorFactor": [0.004, 0.006, 0.008, 1.0], "metallicFactor": 0.0, "roughnessFactor": 0.2},
+    {"name": "blackCoffee", "baseColorFactor": [0.018, 0.006, 0.002, 1.0], "metallicFactor": 0.0, "roughnessFactor": 0.2},
+    {"name": "latteGlass", "baseColorFactor": [0.08, 0.42, 0.52, 0.38], "metallicFactor": 0.0, "roughnessFactor": 0.08, "alphaMode": "BLEND"},
 ]
 
 
@@ -255,9 +256,11 @@ def make_drink():
 def make_latte():
     meshes = []
     lathe(meshes, "saucer", [(0, 0), (1.28, 0), (1.38, 0.08), (1.3, 0.14), (0, 0.17)], 0, 64)
-    lathe(meshes, "cup", [(0.55, 0.24), (0.7, 0.31), (0.62, 1.1), (0.48, 1.18), (0, 1.18)], 7, 48)
+    lathe(meshes, "cup", [(0.55, 0.24), (0.7, 0.31), (0.62, 1.1), (0.48, 1.18)], 12, 48)
+    torus(meshes, "glass-rim", (0, 1.18, 0), 0.48, 0.055, 12, 40, 10)
     lathe(meshes, "coffee", [(0.46, 0.39), (0.55, 0.44), (0.47, 1.12), (0, 1.12)], 11, 48)
-    torus(meshes, "foam", (0, 1.16, 0), 0.3, 0.08, 9, 24, 8)
+    cylinder(meshes, "black-coffee-core", (0, 0.80, 0), 0.47, 0.72, 11, 40)
+    cylinder(meshes, "black-coffee-surface", (0, 1.175, 0), 0.45, 0.035, 11, 40)
     torus(meshes, "handle", (0.62, 0.7, 0), 0.23, 0.07, 0, 24, 8)
     return meshes
 

@@ -48,7 +48,7 @@ const MENU = {
         price: '₺ 95'
       },
       {
-        src: '/assets/models/restaurant/latte.glb',
+        src: '/assets/models/restaurant/latte.glb?v=black-coffee-4',
         alt: '3D-модель латте на блюдце',
         name: 'Alba Latte',
         description: 'Мягкий латте с молочной пеной и ароматом кофе.',
