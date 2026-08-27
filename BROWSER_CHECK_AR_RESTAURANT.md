@@ -101,3 +101,9 @@ Local menu check continued: after closing the anchor panel, the meat arrows chan
 Local dessert check: category switch reset the index to `1 / 3` and loaded `Трио мини-десертов`; the next arrow loaded `Шоколадный торт` at `2 / 3`, preserving the existing category behavior before the new Banana item.
 
 Local dessert check continued: the third item loaded as `Банан с мёдом` (`3 / 3`) and the Banana GLB rendered visibly in the center of the scene. Chromium console inspection after the load reported no console output/errors.
+
+Live verification after Pages workflow success for `8432eef`: `https://albaspace.com.tr/ar-restaurant/?v=8432eef&fresh=2` returned the updated page with meat position `1 / 3`, the new `Якорь` button, and the `Камера`/reset/capture controls. The earlier pre-deployment live request still showed `1 / 2`; the second request after deployment confirmed the updated HTML.
+
+Live menu verification after `8432eef`: public arrows switched the meat category from steak `1 / 3` to lamb chops `2 / 3`, then to `Alba Cheeseburger` `3 / 3`; the burger model rendered visibly in the center of the published scene.
+
+Live dessert verification after `8432eef`: public category switch loaded `Трио мини-десертов` at `1 / 3`, the next arrow loaded `Шоколадный торт` at `2 / 3`, and the following arrow loaded `Банан с мёдом` at `3 / 3`; the Banana GLB rendered visibly in the center of the published scene.
