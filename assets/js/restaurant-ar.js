@@ -67,7 +67,12 @@ const trackingLed = document.querySelector('#tracking-led');
 const trackingLabel = document.querySelector('#tracking-label');
 const trackingDetail = document.querySelector('#tracking-detail');
 const startButton = document.querySelector('#start-camera');
+const nativeArButton = document.querySelector('#native-ar');
 const resetButton = document.querySelector('#reset-dish');
+const captureButton = document.querySelector('#capture-button');
+const captureTimer = document.querySelector('#capture-timer');
+const uiToggle = document.querySelector('#ui-toggle');
+const uiReveal = document.querySelector('#ui-reveal');
 const prevDishButton = document.querySelector('#dish-prev');
 const nextDishButton = document.querySelector('#dish-next');
 const dishPosition = document.querySelector('#dish-position');
@@ -90,7 +95,20 @@ const state = {
   offsetY: 0,
   lastHandSeenAt: 0,
   manualPointerId: null,
-  statusTimeout: null
+  statusTimeout: null,
+  uiHidden: false,
+  captureHoldTimer: null,
+  captureLongPress: false,
+  mediaRecorder: null,
+  recordedChunks: [],
+  recordingStopTimer: null,
+  captureFrameId: null,
+  captureModelImage: null,
+  captureModelBusy: false,
+  recordingStartedAt: 0,
+  recordingUiTimer: null,
+  captureCanvas: null,
+  captureContext: null
 };
 
 function clamp(value, min, max) {
@@ -331,6 +349,7 @@ async function createHandTracker() {
 }
 
 function stopCamera() {
+  if (state.mediaRecorder) stopVideoRecording();
   state.cameraRunning = false;
   state.handTrackingAvailable = false;
   state.handLandmarker?.close?.();
@@ -342,8 +361,84 @@ function stopCamera() {
   hideHandPointer();
   if (state.grabbed) releaseGrab();
   startButton.classList.remove('is-active');
-  startButton.textContent = '◉  Включить AR';
+  startButton.textContent = '◉  Камера';
   setTrackingStatus('Камера выключена', 'Нажмите «Включить AR»', 'off');
+}
+
+async function requestCameraStream() {
+  const constraints = [
+    { video: { facingMode: { exact: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
+    { video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
+    { video: true, audio: false }
+  ];
+  let lastError = null;
+  for (const constraint of constraints) {
+    try {
+      return await navigator.mediaDevices.getUserMedia(constraint);
+    } catch (error) {
+      lastError = error;
+      if (error.name === 'NotAllowedError' || error.name === 'SecurityError') break;
+    }
+  }
+  throw lastError || new Error('Camera stream unavailable');
+}
+
+function waitForVideoReady(timeout = 8000) {
+  if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && video.videoWidth > 0) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const timer = window.setTimeout(() => {
+      cleanup();
+      reject(new Error('Video startup timeout'));
+    }, timeout);
+    const cleanup = () => {
+      window.clearTimeout(timer);
+      video.removeEventListener('loadeddata', onReady);
+      video.removeEventListener('canplay', onReady);
+      video.removeEventListener('error', onError);
+    };
+    const onReady = () => { cleanup(); resolve(); };
+    const onError = () => { cleanup(); reject(new Error('Video element error')); };
+    video.addEventListener('loadeddata', onReady, { once: true });
+    video.addEventListener('canplay', onReady, { once: true });
+    video.addEventListener('error', onError, { once: true });
+  });
+}
+
+function cameraErrorMessage(error) {
+  switch (error?.name) {
+    case 'NotAllowedError':
+    case 'SecurityError':
+      return 'Разрешите камеру для этого сайта в настройках браузера';
+    case 'NotFoundError':
+      return 'Камера не найдена на устройстве';
+    case 'NotReadableError':
+      return 'Камера занята другим приложением';
+    case 'OverconstrainedError':
+      return 'Задняя камера недоступна — попробуйте ещё раз';
+    default:
+      return 'Проверьте разрешение камеры и обновите страницу';
+  }
+}
+
+function getNativeArSupport() {
+  if (typeof model.canActivateAR === 'function') return model.canActivateAR();
+  return Boolean(model.canActivateAR);
+}
+
+async function activateNativeAR() {
+  if (typeof model.activateAR !== 'function' || !getNativeArSupport()) {
+    setTemporaryStatus('AR на столе недоступен', 'Используйте кнопку «Камера» для экранного режима', 'off', 2600);
+    return false;
+  }
+  try {
+    stopCamera();
+    await model.activateAR();
+    return true;
+  } catch (error) {
+    console.warn('Native AR activation failed:', error);
+    setTemporaryStatus('Не удалось открыть AR', 'Используйте кнопку «Камера» для экранного режима', 'off', 2600);
+    return false;
+  }
 }
 
 async function startCamera() {
@@ -362,12 +457,10 @@ async function startCamera() {
   startButton.textContent = 'Подготовка AR…';
   setTrackingStatus('Запрашиваем камеру', 'Разрешите доступ в окне браузера', 'off');
   try {
-    state.cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
-      audio: false
-    });
+    state.cameraStream = await requestCameraStream();
     video.srcObject = state.cameraStream;
     await video.play();
+    await waitForVideoReady();
     video.classList.add('is-live');
     state.cameraRunning = true;
     setTrackingStatus('Загружаем hand-tracking', 'Модель работает локально на устройстве', 'ready');
@@ -386,10 +479,266 @@ async function startCamera() {
   } catch (error) {
     console.warn('Camera permission or device error:', error);
     stopCamera();
-    setTrackingStatus('Камера не запущена', 'Разрешите доступ или перетаскивайте блюдо пальцем', 'off');
+    setTrackingStatus('Камера не запущена', cameraErrorMessage(error), 'off');
   } finally {
     startButton.disabled = false;
   }
+}
+
+function timestampName(prefix, extension) {
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  return `${prefix}-${stamp}.${extension}`;
+}
+
+function saveBlob(blob, filename) {
+  if (!blob || !blob.size) return;
+  const file = new File([blob], filename, { type: blob.type });
+  if (navigator.share && navigator.canShare?.({ files: [file] })) {
+    navigator.share({ title: 'Alba Space AR', files: [file] }).catch((error) => {
+      if (error.name !== 'AbortError') downloadBlob(blob, filename);
+    });
+    return;
+  }
+  downloadBlob(blob, filename);
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.rel = 'noopener';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+function captureCanvasSize() {
+  const width = video.videoWidth || Math.max(720, window.innerWidth * 2);
+  const height = video.videoHeight || Math.max(1280, window.innerHeight * 2);
+  return { width, height };
+}
+
+function getCaptureCanvas() {
+  if (!state.captureCanvas) {
+    state.captureCanvas = document.createElement('canvas');
+    state.captureCanvas.className = 'capture-canvas';
+    state.captureContext = state.captureCanvas.getContext('2d', { alpha: false });
+  }
+  const { width, height } = captureCanvasSize();
+  if (state.captureCanvas.width !== width || state.captureCanvas.height !== height) {
+    state.captureCanvas.width = width;
+    state.captureCanvas.height = height;
+  }
+  return state.captureCanvas;
+}
+
+function mapViewportToVideo(rect) {
+  const { width, height } = getCaptureCanvas();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const scale = Math.max(viewportWidth / width, viewportHeight / height);
+  const renderedWidth = width * scale;
+  const renderedHeight = height * scale;
+  const offsetX = (viewportWidth - renderedWidth) / 2;
+  const offsetY = (viewportHeight - renderedHeight) / 2;
+  return {
+    x: (rect.left - offsetX) / scale,
+    y: (rect.top - offsetY) / scale,
+    width: rect.width / scale,
+    height: rect.height / scale
+  };
+}
+
+async function refreshCaptureModelImage() {
+  if (state.captureModelBusy || typeof model.toDataURL !== 'function') return;
+  state.captureModelBusy = true;
+  try {
+    const dataUrl = model.toDataURL('image/png');
+    const image = new Image();
+    await new Promise((resolve, reject) => {
+      image.onload = resolve;
+      image.onerror = reject;
+      image.src = dataUrl;
+    });
+    state.captureModelImage = image;
+  } catch (error) {
+    console.warn('Model capture unavailable:', error);
+    state.captureModelImage = null;
+  } finally {
+    state.captureModelBusy = false;
+  }
+}
+
+function drawCaptureFrame() {
+  const canvas = getCaptureCanvas();
+  const context = state.captureContext;
+  const { width, height } = canvas;
+  context.clearRect(0, 0, width, height);
+  if (video.videoWidth > 0 && video.videoHeight > 0) {
+    context.drawImage(video, 0, 0, width, height);
+  } else {
+    context.fillStyle = '#050b1a';
+    context.fillRect(0, 0, width, height);
+  }
+  if (state.captureModelImage) {
+    const modelRect = mapViewportToVideo(model.getBoundingClientRect());
+    context.drawImage(state.captureModelImage, modelRect.x, modelRect.y, modelRect.width, modelRect.height);
+  }
+  return canvas;
+}
+
+function canvasToBlob(canvas, type = 'image/png', quality = 0.92) {
+  return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
+}
+
+async function takePhoto() {
+  await refreshCaptureModelImage();
+  const canvas = drawCaptureFrame();
+  const blob = await canvasToBlob(canvas, 'image/png');
+  if (blob) saveBlob(blob, timestampName('alba-ar-photo', 'png'));
+}
+
+function updateRecordingTimer() {
+  if (!state.recordingStartedAt) return;
+  const elapsed = Math.min(30, (performance.now() - state.recordingStartedAt) / 1000);
+  const remaining = Math.max(0, 30 - Math.ceil(elapsed));
+  captureTimer.textContent = `00:${String(remaining).padStart(2, '0')}`;
+}
+
+function startCaptureFrameLoop() {
+  let lastModelCapture = 0;
+  const tick = (now) => {
+    if (!state.mediaRecorder) return;
+    drawCaptureFrame();
+    if (now - lastModelCapture > 250 && !state.captureModelBusy) {
+      lastModelCapture = now;
+      refreshCaptureModelImage();
+    }
+    state.captureFrameId = requestAnimationFrame(tick);
+  };
+  cancelAnimationFrame(state.captureFrameId);
+  state.captureFrameId = requestAnimationFrame(tick);
+}
+
+function stopCaptureFrameLoop() {
+  cancelAnimationFrame(state.captureFrameId);
+  state.captureFrameId = null;
+}
+
+function startVideoRecording() {
+  if (state.mediaRecorder) return;
+  if (!state.cameraRunning || !video.videoWidth) return;
+  if (!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) return;
+  const canvas = getCaptureCanvas();
+  const stream = canvas.captureStream(30);
+  const types = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+  const mimeType = types.find((type) => MediaRecorder.isTypeSupported(type));
+  let recorder;
+  try {
+    recorder = new MediaRecorder(stream, mimeType ? { mimeType, videoBitsPerSecond: 4200000 } : undefined);
+  } catch (error) {
+    console.warn('MediaRecorder unavailable:', error);
+    stream.getTracks().forEach((track) => track.stop());
+    return;
+  }
+  state.mediaRecorder = recorder;
+  state.recordedChunks = [];
+  state.recordingStartedAt = performance.now();
+  recorder.ondataavailable = (event) => { if (event.data.size) state.recordedChunks.push(event.data); };
+  recorder.onerror = (event) => console.warn('MediaRecorder error:', event.error);
+  recorder.onstop = () => {
+    const recordedType = recorder.mimeType || 'video/webm';
+    const blob = new Blob(state.recordedChunks, { type: recordedType });
+    state.recordedChunks = [];
+    stream.getTracks().forEach((track) => track.stop());
+    if (blob.size) saveBlob(blob, timestampName('alba-ar-video', 'webm'));
+  };
+  recorder.start(250);
+  captureButton.classList.add('is-recording');
+  captureTimer.hidden = false;
+  updateRecordingTimer();
+  state.recordingUiTimer = window.setInterval(updateRecordingTimer, 250);
+  state.recordingStopTimer = window.setTimeout(stopVideoRecording, 30000);
+  refreshCaptureModelImage();
+  startCaptureFrameLoop();
+}
+
+function stopVideoRecording() {
+  clearTimeout(state.recordingStopTimer);
+  state.recordingStopTimer = null;
+  clearInterval(state.recordingUiTimer);
+  state.recordingUiTimer = null;
+  captureTimer.hidden = true;
+  captureButton.classList.remove('is-recording');
+  state.recordingStartedAt = 0;
+  stopCaptureFrameLoop();
+  const recorder = state.mediaRecorder;
+  state.mediaRecorder = null;
+  if (recorder && recorder.state !== 'inactive') recorder.stop();
+}
+
+function setupCaptureControl() {
+  const begin = (event) => {
+    if (event.button !== undefined && event.button !== 0) return;
+    state.captureLongPress = false;
+    clearTimeout(state.captureHoldTimer);
+    captureButton.setPointerCapture?.(event.pointerId);
+    state.captureHoldTimer = window.setTimeout(() => {
+      state.captureLongPress = true;
+      startVideoRecording();
+    }, 450);
+    event.preventDefault();
+  };
+  const finish = (event) => {
+    clearTimeout(state.captureHoldTimer);
+    state.captureHoldTimer = null;
+    if (state.mediaRecorder) {
+      stopVideoRecording();
+    } else if (!state.captureLongPress) {
+      takePhoto();
+    }
+    event.preventDefault();
+  };
+  captureButton.addEventListener('pointerdown', begin);
+  captureButton.addEventListener('pointerup', finish);
+  captureButton.addEventListener('pointercancel', (event) => {
+    clearTimeout(state.captureHoldTimer);
+    state.captureHoldTimer = null;
+    if (state.mediaRecorder) stopVideoRecording();
+    event.preventDefault();
+  });
+  captureButton.addEventListener('contextmenu', (event) => event.preventDefault());
+}
+
+function setUIHidden(hidden) {
+  state.uiHidden = hidden;
+  document.body.classList.toggle('ui-hidden', hidden);
+  uiReveal.hidden = !hidden;
+  uiToggle.setAttribute('aria-label', hidden ? 'Показать кнопки' : 'Скрыть кнопки');
+  uiToggle.textContent = hidden ? '+' : '◌';
+}
+
+function updateNativeArButton() {
+  const supported = getNativeArSupport();
+  nativeArButton.disabled = !supported;
+  nativeArButton.title = supported ? 'Разместить блюдо на физическом столе' : 'Native AR не поддерживается этим браузером';
+}
+
+function setupNativeArLifecycle() {
+  model.addEventListener('ar-status', (event) => {
+    const status = event.detail?.status;
+    if (status === 'session-started') {
+      startButton.classList.add('is-active');
+      nativeArButton.classList.add('is-active');
+    }
+    if (status === 'not-presenting' || status === 'failed') {
+      startButton.classList.remove('is-active');
+      nativeArButton.classList.remove('is-active');
+      updateNativeArButton();
+    }
+  });
 }
 
 function setupManualDrag() {
@@ -430,12 +779,20 @@ categoryButtons.forEach((button) => button.addEventListener('click', () => selec
 prevDishButton.addEventListener('click', () => shiftDish(-1));
 nextDishButton.addEventListener('click', () => shiftDish(1));
 startButton.addEventListener('click', startCamera);
+nativeArButton.addEventListener('click', activateNativeAR);
 resetButton.addEventListener('click', () => resetDish());
+uiToggle.addEventListener('click', () => setUIHidden(true));
+uiReveal.addEventListener('click', () => setUIHidden(false));
+setupCaptureControl();
+model.addEventListener('load', updateNativeArButton);
+window.addEventListener('load', updateNativeArButton);
+setupNativeArLifecycle();
 window.addEventListener('resize', () => resetDish({ announce: false }));
 window.addEventListener('pagehide', stopCamera);
 setupManualDrag();
 setupHelp();
 renderDish();
+setUIHidden(false);
 
 // The card is placed after layout so its initial center remains exact on all screens.
 window.requestAnimationFrame(() => resetDish({ announce: false }));

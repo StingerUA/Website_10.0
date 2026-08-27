@@ -41,3 +41,19 @@ Live-проверка с `?v=2ff7b30` увидела новые стрелки �
 Проверка camera-first mobile layout: intro, tracking status, help и privacy-текст скрыты; на экране остаются категории, стрелки, счётчик, название/цена блюда, кнопка `Включить AR` и reset. Локальная стрелка переключила `Стейк на гриле` на `Каре ягнёнка` (`2 / 2`), модель и карточка обновились без прокрутки страницы.
 
 Проверка компактного live-интерфейса после `2ff6908`: публичная страница с `?v=camera-fix-1` скрывает intro/tracking/help/privacy-инструкции, оставляет категории, стрелки, счётчик, цену, `Включить AR` и reset. Live-клик по стрелке переключил стейк на каре ягнёнка (`2 / 2`) без прокрутки.
+
+Для новой итерации проверены официальные API: `MediaRecorder` записывает `MediaStream`, поддерживаемый MIME можно выбирать через `MediaRecorder.isTypeSupported()`, а финальный Blob приходит в `dataavailable` после `stop()` ([MDN MediaRecorder](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder)). Документация model-viewer подтверждает AR-режимы и параметр `ar-placement`; для настоящей фиксации в физической комнате нужен поддерживаемый WebXR/ARCore/Quick Look путь, тогда как текущий экранный camera overlay должен иметь собственный устойчивый fallback ([model-viewer docs](https://modelviewer.dev/docs/index.html#ar-placement)).
+
+Дополнительная проверка официальных материалов: на ARCore-supported Android `model-viewer` может запускать WebXR или Scene Viewer в зависимости от `ar-modes`; для WebXR DOM-элементы страницы остаются доступны внутри браузерной AR-сессии, тогда как Scene Viewer/Quick Look не получают DOM-контролы ([ARCore model-viewer guide](https://developers.google.com/ar/develop/webxr/model-viewer), [model-viewer AR example](https://modelviewer.dev/examples/augmentedreality/)). Поэтому для привязки к столу нужно включать `ar-placement="floor"` и native AR-путь, а photo/video controls сохранять в экранном camera overlay/fallback.
+
+Проверка новой сцены: локальная модель стартует в центре viewport; светящийся круг и progress-line скрыты. Кнопка UI-toggle переводит экран в чистый режим: все меню/AR-кнопки исчезают, остаются только центральная capture-кнопка и `+` для возврата интерфейса.
+
+Проверка capture/UI: `ui-toggle` скрывает весь `ui-chrome`, `ui-reveal` возвращает его, а центральная capture-кнопка остаётся видимой в чистом режиме. Короткое нажатие в sandbox не ломает DOM; реальный Blob/галерею нужно проверить на телефоне с активной камерой, поскольку sandbox не имеет webcam.
+
+Новая локальная проверка: `dish-card` стартует ровно по центру viewport; `dish-stage::before` и `.dish-grab-ring` имеют `display: none`; capture и native AR кнопки существуют. Переход `Напитки` → следующее блюдо показывает `Alba Latte` (`2 / 2`, `latte.glb`). UI-toggle прячет UI, capture остаётся видимой, ui-reveal возвращает интерфейс.
+
+Проверка новой геометрии: стартовый центр `left: 640px`, крайний drag влево даёт `rectLeft: 0`, крайний drag вправо — `rectRight: 1280`, reset возвращает центр; значит ограничение больше не привязано к правой половине. Console smoke-test не добавил runtime-ошибок.
+
+Capability smoke-test выполнен в Chromium; bridge-консоль не сериализовала объект capabilities, поэтому проверка реального MediaRecorder/мобильного native AR остаётся device-dependent. Код использует стандартные `MediaRecorder`, `canvas.captureStream()` и `model-viewer.toDataURL()`; реальную камеру, системное сохранение и AR-прикрепление требуется проверить на Android/Yandex Browser.
+
+Однозначный browser capability test: `MediaRecorder`, `canvas.captureStream()`, WebM VP9/VP8 и `model-viewer.toDataURL()` доступны; `toDataURL('image/png')` вернул валидный PNG data URL и непустой `image/png` Blob. Native AR API доступен как метод, но в sandbox `canActivateAR` равно `false`, поэтому физическую anchor-сцену нужно проверять на ARCore-телефоне.

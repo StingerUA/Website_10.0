@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#050b1a">
   <meta name="description" content="Браузерное AR-меню ресторана: разместите блюдо на столе и передвиньте его правой рукой.">
   <title>AR Menu — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=compact-1">
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=camera-2">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js"></script>
 </head>
 <body>
@@ -15,10 +15,15 @@
     <div class="camera-shade" aria-hidden="true"></div>
     <div class="ambient-grid" aria-hidden="true"></div>
 
-    <header class="top-bar">
+    <header class="top-bar ui-chrome">
+      <div class="top-brand">
       <a class="back-link" href="/" aria-label="Вернуться на главную">← <span>Alba Space</span></a>
       <div class="brand-mark" aria-label="AR Menu">AR <span>MENU</span></div>
-      <button id="help-button" class="icon-button" type="button" aria-label="Как пользоваться">?</button>
+      </div>
+      <div class="top-actions">
+        <button id="help-button" class="icon-button" type="button" aria-label="Как пользоваться">?</button>
+        <button id="ui-toggle" class="icon-button ui-chrome" type="button" aria-label="Скрыть кнопки">◌</button>
+      </div>
     </header>
 
     <section class="intro-panel glass-panel" aria-labelledby="page-title">
@@ -48,6 +53,7 @@
           environment-image="neutral"
           ar
           ar-modes="webxr scene-viewer quick-look"
+          ar-placement="floor"
           loading="eager">
         </model-viewer>
         <span class="dish-grab-ring" aria-hidden="true"></span>
@@ -55,7 +61,7 @@
       </div>
     </section>
 
-    <section class="dish-info glass-panel" aria-live="polite">
+    <section class="dish-info glass-panel ui-chrome" aria-live="polite">
       <div>
         <span id="dish-category" class="dish-category">МЯСНЫЕ БЛЮДА</span>
         <h2 id="dish-name">Стейк на гриле</h2>
@@ -71,7 +77,7 @@
       </div>
     </section>
 
-    <nav class="category-rail glass-panel" aria-label="Категории меню">
+    <nav class="category-rail glass-panel ui-chrome" aria-label="Категории меню">
       <button class="category-button is-active" type="button" data-category="meat">
         <span class="category-icon">✦</span>
         <span>Мясо</span>
@@ -86,12 +92,19 @@
       </button>
     </nav>
 
-    <div class="action-row">
-      <button id="start-camera" class="primary-action" type="button"><span class="action-icon">◉</span> Включить AR</button>
+    <div class="action-row ui-chrome">
+      <button id="start-camera" class="primary-action" type="button"><span class="action-icon">◉</span> Камера</button>
+      <button id="native-ar" class="native-ar-action" type="button"><span class="action-icon">⌖</span> На стол</button>
       <button id="reset-dish" class="secondary-action" type="button" aria-label="Вернуть блюдо в центр">↺</button>
     </div>
 
     <p class="privacy-note"><span>⌁</span> Камера и распознавание руки работают локально в браузере. Видео не отправляется на сервер.</p>
+
+    <div class="capture-dock" aria-label="Съёмка AR-сцены">
+      <button id="capture-button" class="capture-button" type="button" aria-label="Короткое нажатие — фото, долгое нажатие — видео"></button>
+      <span id="capture-timer" class="capture-timer" aria-live="polite" hidden>00:30</span>
+    </div>
+    <button id="ui-reveal" class="ui-reveal" type="button" aria-label="Показать кнопки" hidden>+</button>
 
     <div id="help-dialog" class="help-dialog" hidden>
       <div class="help-card glass-panel" role="dialog" aria-modal="true" aria-labelledby="help-title">
