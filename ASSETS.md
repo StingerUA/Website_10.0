@@ -22,5 +22,7 @@ The planned reference visual was requested as a portrait in-browser AR screensho
 | Chocolate cake | `/assets/models/restaurant/chocolate-cake.glb` | Local procedural GLB, second dessert item |
 | Citrus drink | `/assets/models/restaurant/drink.glb` | Local procedural GLB, first drink item |
 | Alba Latte | `/assets/models/restaurant/latte.glb` | Local procedural GLB, second drink item |
+| Alba Cheeseburger | `/assets/models/restaurant/cheeseburger.glb` | Poly Pizza / Poly by Google, CC BY 3.0; attribution in `THIRD_PARTY_NOTICES.md` |
+| Banana with honey | `/assets/models/restaurant/banana.glb` | Poly Pizza / Quaternius, CC0; source recorded in `THIRD_PARTY_NOTICES.md` |
 | Hand landmark model | MediaPipe Tasks Vision CDN | Browser inference only; no server upload |
 | Model-viewer runtime | Google model-viewer CDN with pinned version | Existing site pattern, used by the new standalone page |

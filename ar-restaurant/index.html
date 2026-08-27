@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#050b1a">
   <meta name="description" content="Браузерное AR-меню ресторана с интерактивными 3D-блюдами.">
   <title>AR Menu — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=controls-4">
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=anchor-1">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js"></script>
 </head>
 <body>
@@ -34,7 +34,7 @@
     <section class="tracking-pill glass-panel" aria-live="polite">
       <span id="tracking-led" class="tracking-led is-off"></span>
       <span id="tracking-label">Камера выключена</span>
-      <span id="tracking-detail">Нажмите «Включить AR»</span>
+      <span id="tracking-detail">Нажмите «Камера» или откройте «Якорь стола»</span>
     </section>
 
     <section id="dish-stage" class="dish-stage" aria-label="AR-модель выбранного блюда">
@@ -94,7 +94,31 @@
     <div class="action-row ui-chrome">
       <button id="start-camera" class="primary-action" type="button"><span class="action-icon">◉</span> Камера</button>
       <button id="reset-dish" class="secondary-action" type="button" aria-label="Вернуть блюдо в центр">↺</button>
+      <button id="anchor-button" class="secondary-action anchor-action" type="button" aria-label="Открыть якорь стола" aria-controls="anchor-panel" aria-expanded="false">⌖ <span>Якорь</span></button>
     </div>
+
+    <section id="anchor-panel" class="anchor-panel glass-panel ui-chrome" hidden aria-labelledby="anchor-title">
+      <div class="anchor-panel-head">
+        <div>
+          <span class="eyebrow">TABLE ANCHOR</span>
+          <h2 id="anchor-title">Якорь стола</h2>
+        </div>
+        <button id="anchor-close" class="dialog-close" type="button" aria-label="Закрыть якорь стола">×</button>
+      </div>
+      <div class="anchor-marker-wrap">
+        <img id="anchor-marker" src="/assets/ar/alba-table-anchor.svg" alt="Печатный QR-marker Alba Table Anchor">
+      </div>
+      <a id="anchor-download" class="anchor-download" href="/assets/ar/alba-table-anchor.svg" download="alba-table-anchor.svg">Скачать marker для печати</a>
+      <div class="anchor-photo-preview" hidden>
+        <img id="anchor-preview" alt="Предварительная фотография marker-а на столе">
+      </div>
+      <p class="anchor-copy">Распечатайте изображение и положите его на стол. На совместимом Android-браузере Alba попробует закрепить блюдо через WebXR. В обычном режиме камера будет искать этот QR-marker и держать блюдо над ним.</p>
+      <div class="anchor-panel-actions">
+        <button id="anchor-scan" class="primary-action" type="button">Сканировать якорь</button>
+        <button id="anchor-photo" class="secondary-action" type="button">Фото</button>
+      </div>
+      <p id="anchor-status" class="anchor-status" aria-live="polite">Якорь ещё не откалиброван.</p>
+    </section>
 
     <p class="privacy-note"><span>⌁</span> Камера и распознавание руки работают локально в браузере. Видео не отправляется на сервер.</p>
 
@@ -104,6 +128,6 @@
     </div>
 
   </main>
-  <script type="module" src="/assets/js/restaurant-ar.js?v=controls-4"></script>
+  <script type="module" src="/assets/js/restaurant-ar.js?v=anchor-1"></script>
 </body>
 </html>

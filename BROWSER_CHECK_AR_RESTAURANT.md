@@ -91,3 +91,13 @@ Controls-3 DOM smoke-test: при viewport 1280px карточка блюда и
 Live controls-4 проверка после Pages deployment: public HTML отдаёт controls-4, модель заметно уменьшена, в интерфейсе остались `Камера` и reset без `На стол`; верхний toggle нажатием меняет label на `Показать кнопки` и скрывает остальные UI-кнопки, сохраняя toggle и capture.
 
 Повторный live-клик по верхнему UI-toggle возвращает полный интерфейс: категории, стрелки выбора блюда, `Камера`, reset и capture снова видимы. Toggle работает как двусторонний переключатель без отдельной кнопки reveal.
+
+## Local asset/anchor check — 2026-08-27
+
+Local page `http://127.0.0.1:4173/ar-restaurant/?v=anchor-local-2` returned HTTP 200 and rendered the existing steak model. Meat position changed to `1 / 3`, confirming the new Cheeseburger item is registered in the category. `Якорь` opened the panel with the generated QR marker, the `Скачать marker для печати` link, `Сканировать якорь`, `Фото`, and close controls. Local HEAD requests returned HTTP 200 for `cheeseburger.glb` (2,870,652 bytes) and `banana.glb` (20,484 bytes); both files have GLB magic `glTF` and glTF binary version 2.
+
+Local menu check continued: after closing the anchor panel, the meat arrows changed the menu from `1 / 3` steak to `2 / 3` lamb chops and then to `3 / 3` `Alba Cheeseburger`; the browser rendered the burger model visibly at the center of the local stage.
+
+Local dessert check: category switch reset the index to `1 / 3` and loaded `Трио мини-десертов`; the next arrow loaded `Шоколадный торт` at `2 / 3`, preserving the existing category behavior before the new Banana item.
+
+Local dessert check continued: the third item loaded as `Банан с мёдом` (`3 / 3`) and the Banana GLB rendered visibly in the center of the scene. Chromium console inspection after the load reported no console output/errors.

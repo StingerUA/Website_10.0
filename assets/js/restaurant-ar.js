@@ -15,6 +15,13 @@ const MENU = {
         name: 'Каре ягнёнка',
         description: 'Нежное каре ягнёнка, зелень и соус с травами.',
         price: '₺ 510'
+      },
+      {
+        src: '/assets/models/restaurant/cheeseburger.glb?v=poly-pizza-1',
+        alt: '3D-модель чизбургера с сыром и овощами',
+        name: 'Alba Cheeseburger',
+        description: 'Сочный бургер с сыром, свежими овощами и мягкой булочкой.',
+        price: '₺ 280'
       }
     ]
   },
@@ -34,6 +41,13 @@ const MENU = {
         name: 'Шоколадный торт',
         description: 'Плотный шоколадный бисквит, крем и ягоды.',
         price: '₺ 220'
+      },
+      {
+        src: '/assets/models/restaurant/banana.glb?v=poly-pizza-1',
+        alt: '3D-модель банана',
+        name: 'Банан с мёдом',
+        description: 'Спелый банан для лёгкого десертного дополнения.',
+        price: '₺ 85'
       }
     ]
   },
@@ -75,6 +89,13 @@ const prevDishButton = document.querySelector('#dish-prev');
 const nextDishButton = document.querySelector('#dish-next');
 const dishPosition = document.querySelector('#dish-position');
 const categoryButtons = [...document.querySelectorAll('.category-button')];
+const anchorButton = document.querySelector('#anchor-button');
+const anchorPanel = document.querySelector('#anchor-panel');
+const anchorClose = document.querySelector('#anchor-close');
+const anchorScanButton = document.querySelector('#anchor-scan');
+const anchorPhotoButton = document.querySelector('#anchor-photo');
+const anchorPreview = document.querySelector('#anchor-preview');
+const anchorStatus = document.querySelector('#anchor-status');
 
 const state = {
   category: 'meat',
@@ -103,7 +124,15 @@ const state = {
   recordingStartedAt: 0,
   recordingUiTimer: null,
   captureCanvas: null,
-  captureContext: null
+  captureContext: null,
+  nativeARActive: false,
+  markerDetector: null,
+  markerScanEnabled: false,
+  markerScanFrameId: null,
+  markerLastVideoTime: -1,
+  markerLastSeenAt: 0,
+  anchorScale: 1,
+  anchorPhotoDataUrl: null
 };
 
 function clamp(value, min, max) {
@@ -204,11 +233,16 @@ function setCardCenter() {
   const rect = stage.getBoundingClientRect();
   state.offsetX = 0;
   state.offsetY = 0;
+  state.anchorScale = 1;
   card.style.left = `${rect.width / 2}px`;
   card.style.top = `${rect.height / 2}px`;
+  card.style.setProperty('--dish-anchor-scale', '1');
+  card.style.setProperty('--dish-anchor-rotation', '0deg');
+  card.classList.remove('is-anchor-tracked');
 }
 
 function resetDish({ announce = true } = {}) {
+  stopMarkerScan();
   setCardCenter();
   card.classList.remove('is-grabbed');
   card.classList.remove('is-placed');
@@ -344,6 +378,9 @@ async function createHandTracker() {
 }
 
 function stopCamera() {
+  stopMarkerScan();
+  if (state.nativeARActive) model.exitPresent?.();
+  state.nativeARActive = false;
   if (state.mediaRecorder) stopVideoRecording();
   state.cameraRunning = false;
   state.handTrackingAvailable = false;
@@ -415,11 +452,190 @@ function cameraErrorMessage(error) {
   }
 }
 
-async function startCamera() {
+function setAnchorPanelOpen(open) {
+  if (!anchorPanel || !anchorButton) return;
+  anchorPanel.hidden = !open;
+  anchorButton.setAttribute('aria-expanded', String(open));
+  if (open) anchorStatus.textContent = state.anchorPhotoDataUrl ? 'Фото-якорь сохранён на этом устройстве.' : 'Якорь ещё не откалиброван.';
+}
+
+function canUseNativeAR() {
+  return Boolean(
+    model &&
+    typeof model.activateAR === 'function' &&
+    model.canActivateAR === true
+  );
+}
+
+function tryActivateNativeAR() {
+  if (!canUseNativeAR()) return false;
+  try {
+    stopMarkerScan();
+    const activation = model.activateAR();
+    state.nativeARActive = true;
+    startButton.classList.add('is-active');
+    startButton.textContent = 'Выйти из AR';
+    setTrackingStatus('Ищем поверхность стола', 'Наведите камеру на ровный стол и подождите', 'ready');
+    Promise.resolve(activation).catch((error) => {
+      console.warn('Native AR activation failed:', error);
+      state.nativeARActive = false;
+      startButton.classList.remove('is-active');
+      startButton.textContent = '◉  Камера';
+      setTrackingStatus('Native AR недоступен', 'Переходим в режим камеры и marker-якоря', 'ready');
+      startCamera({ preferNative: false }).catch((fallbackError) => console.warn('Camera fallback after native AR failure:', fallbackError));
+    });
+    return true;
+  } catch (error) {
+    console.warn('Native AR activation unavailable:', error);
+    return false;
+  }
+}
+
+function markerBounds(result) {
+  const points = result?.cornerPoints || [];
+  if (points.length >= 4) {
+    const xs = points.map((point) => point.x);
+    const ys = points.map((point) => point.y);
+    return {
+      left: Math.min(...xs),
+      top: Math.min(...ys),
+      right: Math.max(...xs),
+      bottom: Math.max(...ys),
+      angle: Math.atan2(points[1].y - points[0].y, points[1].x - points[0].x) * 180 / Math.PI
+    };
+  }
+  const box = result?.boundingBox;
+  return box ? { left: box.x, top: box.y, right: box.x + box.width, bottom: box.y + box.height, angle: 0 } : null;
+}
+
+function applyMarkerAnchor(result) {
+  const bounds = markerBounds(result);
+  if (!bounds || !video.videoWidth || !video.videoHeight) return false;
+  const rect = stage.getBoundingClientRect();
+  const markerWidth = Math.max(1, bounds.right - bounds.left);
+  const markerHeight = Math.max(1, bounds.bottom - bounds.top);
+  const markerCenterX = (bounds.left + bounds.right) / 2;
+  const markerCenterY = (bounds.top + bounds.bottom) / 2;
+  const clientX = rect.left + (markerCenterX / video.videoWidth) * rect.width;
+  const clientY = rect.top + (markerCenterY / video.videoHeight) * rect.height;
+  const markerScreenWidth = (markerWidth / video.videoWidth) * rect.width;
+  state.anchorScale = clamp(markerScreenWidth / 160, 0.62, 1.65);
+  card.style.setProperty('--dish-anchor-scale', String(state.anchorScale));
+  card.style.setProperty('--dish-anchor-rotation', `${clamp(bounds.angle, -45, 45)}deg`);
+  card.classList.add('is-anchor-tracked');
+  placeCard(clientX, clientY);
+  state.markerLastSeenAt = performance.now();
+  return true;
+}
+
+function stopMarkerScan() {
+  state.markerScanEnabled = false;
+  if (state.markerScanFrameId) cancelAnimationFrame(state.markerScanFrameId);
+  state.markerScanFrameId = null;
+  state.markerLastVideoTime = -1;
+  card.classList.remove('is-anchor-tracked');
+  if (anchorScanButton) anchorScanButton.textContent = 'Сканировать якорь';
+}
+
+async function scanMarkerFrame() {
+  if (!state.markerScanEnabled || !state.cameraRunning || !state.markerDetector || video.readyState < 2) return;
+  if (video.currentTime !== state.markerLastVideoTime) {
+    state.markerLastVideoTime = video.currentTime;
+    try {
+      const results = await state.markerDetector.detect(video);
+      const found = results.find((result) => result.rawValue === 'ALBA-SPACE-TABLE-ANCHOR-01') || results[0];
+      if (found && applyMarkerAnchor(found)) {
+        setTrackingStatus('Якорь найден', 'Блюдо привязано к marker-у на столе', 'ready');
+      } else if (performance.now() - state.markerLastSeenAt > 1000) {
+        setTrackingStatus('Ищем marker', 'Наведите камеру на чёрно-белый якорь', 'ready');
+      }
+    } catch (error) {
+      console.warn('Marker detection failed:', error);
+    }
+  }
+  if (state.markerScanEnabled) state.markerScanFrameId = requestAnimationFrame(scanMarkerFrame);
+}
+
+async function startMarkerScan() {
+  if (!state.cameraRunning) {
+    anchorStatus.textContent = 'Сначала разрешите камеру.';
+    return false;
+  }
+  if (!('BarcodeDetector' in window)) {
+    anchorStatus.textContent = 'В этом браузере QR-tracking недоступен; используйте native AR или drag.';
+    setTrackingStatus('Marker недоступен', 'Этот браузер не поддерживает BarcodeDetector', 'ready');
+    return false;
+  }
+  try {
+    const formats = await BarcodeDetector.getSupportedFormats?.() || [];
+    if (formats.length && !formats.includes('qr_code')) throw new Error('QR format unsupported');
+    state.markerDetector = new BarcodeDetector({ formats: ['qr_code'] });
+    state.markerScanEnabled = true;
+    state.markerLastSeenAt = 0;
+    anchorScanButton.textContent = 'Остановить marker';
+    anchorStatus.textContent = 'Сканирование включено: наведите камеру на marker на столе.';
+    setTrackingStatus('Ищем marker', 'Наведите камеру на чёрно-белый якорь', 'ready');
+    scanMarkerFrame();
+    return true;
+  } catch (error) {
+    console.warn('BarcodeDetector unavailable:', error);
+    anchorStatus.textContent = 'QR-tracking недоступен; используйте native AR или drag.';
+    setTrackingStatus('Marker недоступен', 'Используйте native AR или drag fallback', 'ready');
+    return false;
+  }
+}
+
+function captureAnchorPhoto() {
+  if (!state.cameraRunning || !video.videoWidth) {
+    anchorStatus.textContent = 'Сначала включите камеру, затем сделайте фото marker-а.';
+    return;
+  }
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const context = canvas.getContext('2d');
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const guideSize = Math.round(Math.min(canvas.width, canvas.height) * .42);
+  const guideX = Math.round((canvas.width - guideSize) / 2);
+  const guideY = Math.round((canvas.height - guideSize) / 2);
+  context.strokeStyle = '#46ddff';
+  context.lineWidth = Math.max(4, Math.round(canvas.width / 260));
+  context.setLineDash([context.lineWidth * 3, context.lineWidth * 2]);
+  context.strokeRect(guideX, guideY, guideSize, guideSize);
+  context.setLineDash([]);
+  context.fillStyle = 'rgba(5, 11, 26, .78)';
+  context.fillRect(guideX, Math.max(0, guideY - 38), guideSize, 38);
+  context.fillStyle = '#f5f9ff';
+  context.font = `${Math.max(18, Math.round(canvas.width / 42))}px system-ui, sans-serif`;
+  context.textAlign = 'center';
+  context.fillText('ALBA TABLE ANCHOR', canvas.width / 2, Math.max(26, guideY - 12));
+  state.anchorPhotoDataUrl = canvas.toDataURL('image/jpeg', .88);
+  if (anchorPreview) {
+    anchorPreview.src = state.anchorPhotoDataUrl;
+    anchorPreview.closest('.anchor-photo-preview').hidden = false;
+  }
+  try { localStorage.setItem('alba-table-anchor-photo', state.anchorPhotoDataUrl); } catch (error) { console.warn('Anchor photo storage unavailable:', error); }
+  anchorStatus.textContent = 'Фото-якорь сохранено на этом устройстве. Для настоящего tracking положите распечатанный marker на стол.';
+}
+
+async function startCamera({ preferNative = true, markerMode = false } = {}) {
+  if (state.nativeARActive) {
+    model.exitPresent?.();
+    state.nativeARActive = false;
+    startButton.classList.remove('is-active');
+    startButton.textContent = '◉  Камера';
+    setTrackingStatus('AR остановлен', 'Нажмите «Камера» для запуска', 'off');
+    return;
+  }
   if (state.cameraRunning) {
+    if (markerMode) {
+      await startMarkerScan();
+      return;
+    }
     stopCamera();
     return;
   }
+  if (preferNative && tryActivateNativeAR()) return;
   if (!navigator.mediaDevices?.getUserMedia) {
     state.handTrackingAvailable = false;
     setTrackingStatus('Камера недоступна', 'Перетаскивайте блюдо пальцем или мышью', 'off');
@@ -450,10 +666,12 @@ async function startCamera() {
     }
     startButton.classList.add('is-active');
     startButton.textContent = 'Остановить AR';
+    if (markerMode) await startMarkerScan();
   } catch (error) {
     console.warn('Camera permission or device error:', error);
     stopCamera();
     setTrackingStatus('Камера не запущена', cameraErrorMessage(error), 'off');
+    anchorStatus.textContent = 'Камера не запущена; marker нельзя отсканировать.';
   } finally {
     startButton.disabled = false;
   }
@@ -694,6 +912,52 @@ function setUIHidden(hidden) {
   uiToggle.textContent = hidden ? '◉' : '◌';
 }
 
+function restoreAnchorPhoto() {
+  try {
+    const savedPhoto = localStorage.getItem('alba-table-anchor-photo');
+    if (!savedPhoto || !anchorPreview) return;
+    state.anchorPhotoDataUrl = savedPhoto;
+    anchorPreview.src = savedPhoto;
+    anchorPreview.closest('.anchor-photo-preview').hidden = false;
+  } catch (error) {
+    console.warn('Anchor photo restore unavailable:', error);
+  }
+}
+
+function setupAnchorControls() {
+  anchorButton?.addEventListener('click', () => setAnchorPanelOpen(anchorPanel.hidden));
+  anchorClose?.addEventListener('click', () => setAnchorPanelOpen(false));
+  anchorScanButton?.addEventListener('click', async () => {
+    if (state.markerScanEnabled) {
+      stopMarkerScan();
+      anchorStatus.textContent = 'Сканирование marker остановлено.';
+      return;
+    }
+    if (!state.cameraRunning) {
+      await startCamera({ preferNative: false, markerMode: true });
+    } else {
+      await startMarkerScan();
+    }
+  });
+  anchorPhotoButton?.addEventListener('click', async () => {
+    if (!state.cameraRunning) await startCamera({ preferNative: false });
+    if (state.cameraRunning) captureAnchorPhoto();
+  });
+  model.addEventListener('ar-status', (event) => {
+    const status = event.detail?.status;
+    if (status === 'session-started') {
+      state.nativeARActive = true;
+      setTrackingStatus('Ищем поверхность стола', 'Модель закрепится на найденной горизонтальной плоскости', 'ready');
+    } else if ((status === 'not-presenting' || status === 'failed') && state.nativeARActive) {
+      state.nativeARActive = false;
+      startButton.classList.remove('is-active');
+      startButton.textContent = '◉  Камера';
+      setTrackingStatus(status === 'failed' ? 'Native AR не запущен' : 'AR остановлен', 'Можно использовать marker-якорь или drag', 'ready');
+    }
+  });
+  restoreAnchorPhoto();
+}
+
 function setupManualDrag() {
   stage.addEventListener('pointerdown', (event) => {
     if (event.pointerType === 'mouse' || event.pointerType === 'touch' || !state.handTrackingAvailable) {
@@ -728,6 +992,7 @@ startButton.addEventListener('click', startCamera);
 resetButton.addEventListener('click', () => resetDish());
 uiToggle.addEventListener('click', () => setUIHidden(!state.uiHidden));
 setupCaptureControl();
+setupAnchorControls();
 window.addEventListener('resize', () => resetDish({ announce: false }));
 window.addEventListener('pagehide', stopCamera);
 setupManualDrag();
