@@ -57,4 +57,20 @@ assert.deepEqual(requested, [
   "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.json",
 ]);
 globalThis.fetch = originalFetch;
+for (const lang of ["ru", "tr"]) {
+  for (const file of ["index.html", "player.html", "teacher.html", "classroom.html", "anchors.html"]) {
+    const html = readFileSync(join(root, "game", "AlbaSpace", lang, file), "utf8");
+    assert.doesNotMatch(html, /AlbaSpace Game|ALBASPACE ·|💰/);
+    assert.match(html, /ORBI AR/);
+  }
+}
+const catalog = readFileSync(join(root, "games/index.html"), "utf8");
+assert.doesNotMatch(catalog, /AlbaSpace Game|💰/);
+assert.match(catalog, /ORBI AR/);
+for (const lang of ["ru", "tr"]) {
+  for (const file of ["classroom.js", "player.js", "teacher.js"]) {
+    const source = readFileSync(join(root, "game", "AlbaSpace", lang, "assets/js", file), "utf8");
+    assert.doesNotMatch(source, /💰|<span>кредиты<\/span>|<span>kredi<\/span>/);
+  }
+}
 console.log("ALBASPACE_AUDIT_TEST_OK");

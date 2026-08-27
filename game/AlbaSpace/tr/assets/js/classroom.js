@@ -21,7 +21,7 @@ function apply(next) { const previousKey = classroomViewKey(state); state = next
 function connect() { stopEvents?.(); stopEvents = AlbaGame.subscribe(roomId, next => apply(next), status => { if (status === "offline") phaseLabel.textContent = "Bağlantı kesildi. Yeniden bağlanılıyor…"; }); }
 function render() {
   renderHeader();
-  if (!state) { app.innerHTML = `<section class="card hero"><div class="phase">Bağlantı</div><h1 class="classroom-title">📺 AlbaSpace Game</h1><p class="muted">Öğretmenin gönderdiği bağlantıyla Classroom'u açın.</p></section>`; return; }
+  if (!state) { app.innerHTML = `<section class="card hero"><div class="phase">Bağlantı</div><h1 class="classroom-title">📺 ORBI AR</h1><p class="muted">Öğretmenin gönderdiği bağlantıyla Classroom'u açın.</p></section>`; return; }
   if (state.phase === "QUESTION" && !state.currentQuestion) { app.innerHTML = `<section class="card hero"><h2>Oda verileri bekleniyor…</h2></section>`; return; }
   if (state.phase === "RESULT" && (!state.currentQuestion || !state.results?.items)) { app.innerHTML = `<section class="card hero"><h2>Sorunun sonucu bekleniyor…</h2></section>`; return; }
   if (state.phase === "LOBBY") { app.innerHTML = `<section class="card hero"><div class="phase">${AlbaGame.esc(state.presentation?.label || AlbaSpace.PRESENTATION_MODES[state.presentationMode]?.label || state.presentationMode)}</div><h1 class="classroom-title">Oda kodu</h1><div class="code">${state.code}</div><p class="classroom-kpi">Bağlanan oyuncular: <strong>${state.players.length}/10</strong></p><div class="kpis" style="justify-content:center">${state.players.map(player => `<span class="kpi">${player.ready ? "✅" : "⏳"} ${AlbaGame.esc(player.company || "Ayarlanıyor…")}</span>`).join("")}</div></section>`; return; }
