@@ -87,3 +87,7 @@ Live smoke-test после коммита `335abf0`: HTML получил `ar-pla
 Controls-3 local smoke-test: свежая страница показывает уменьшенную примерно втрое 3D-модель; в DOM больше нет `На стол`. Нажатие верхнего `ui-toggle` меняет его label на `Показать кнопки`, скрывает все остальные UI-кнопки и оставляет центральную capture-кнопку доступной для фото/видео.
 
 Controls-3 DOM smoke-test: при viewport 1280px карточка блюда имеет ширину 130px (`10.2%` viewport), UI после повторного клика восстановлен и label равен `Скрыть кнопки`; видимые controls — toggle, arrows, 3 категории, Camera, Reset и capture. `#native-ar` отсутствует. Lighting attributes: exposure `0.58`, shadow-intensity `0.32`.
+
+Live controls-4 проверка после Pages deployment: public HTML отдаёт controls-4, модель заметно уменьшена, в интерфейсе остались `Камера` и reset без `На стол`; верхний toggle нажатием меняет label на `Показать кнопки` и скрывает остальные UI-кнопки, сохраняя toggle и capture.
+
+Повторный live-клик по верхнему UI-toggle возвращает полный интерфейс: категории, стрелки выбора блюда, `Камера`, reset и capture снова видимы. Toggle работает как двусторонний переключатель без отдельной кнопки reveal.
