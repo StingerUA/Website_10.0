@@ -511,6 +511,47 @@
           "url": "/ar/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu.html"
         }
       }
+    },
+    {
+      "slug": "kara-delikler-evrenin-en-gizemli-yapilari",
+      "category": "uzay",
+      "publishAt": "2026-08-27T18:31:54+03:00",
+      "cover": "/assets/images/blog/kara-delikler-evrenin-en-gizemli-yapilari-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Muzaffer Enes İpçi",
+        "ar": "Muzaffer Enes İpçi"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Kara Delikler: Evrenin En Gizemli Yapıları",
+          "excerpt": "Kara Delikler: Evrenin En Gizemli Yapıları Kara delikler, evrendeki en ilgi çekici ve gizemli gök cisimlerinden biridir. Kütle çekiminin olağanüstü de",
+          "url": "/blog/kara-delikler-evrenin-en-gizemli-yapilari.html"
+        },
+        "en": {
+          "title": "Black Holes: The Most Mysterious Structures of the Universe",
+          "excerpt": "Black Holes: The Most Mysterious Structures of the Universe Black holes are one of the most intriguing and mysterious celestial bodies in the universe",
+          "url": "/eng/blog/kara-delikler-evrenin-en-gizemli-yapilari.html"
+        },
+        "ru": {
+          "title": "Чёрные дыры: самые загадочные структуры Вселенной",
+          "excerpt": "Чёрные дыры: самые загадочные структуры Вселенной. Чёрные дыры — одни из самых интригующих и загадочных небесных тел во Вселенной. В таких регионах, г",
+          "url": "/rus/blog/kara-delikler-evrenin-en-gizemli-yapilari.html"
+        },
+        "ar": {
+          "title": "الثقوب السوداء: أكثر الهياكل غموضا في الكون",
+          "excerpt": "الثقوب السوداء: أكثر الهياكل غموضا في الكون الثقوب السوداء هي واحدة من أكثر الأجرام السماوية إثارة وغموضا في الكون. في هذه المناطق التي تكون فيها الجا",
+          "url": "/ar/blog/kara-delikler-evrenin-en-gizemli-yapilari.html"
+        }
+      }
     }
   ]
 }
