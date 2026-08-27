@@ -115,3 +115,9 @@ Local soup check: fresh `anchor-2` page showed four category buttons; clicking `
 Local drinks check: clicking `Напитки` switched the category to `Citrus Spark` at `1 / 3`; the next arrow retained the existing `Alba Latte` at `2 / 3`, confirming the new Juice item extends rather than replaces the current drink menu.
 
 Local drinks check continued: the third item loaded as `Свежий сок` at `3 / 3`; its Juice GLB rendered visibly as a red drink with citrus garnish, and Chromium console inspection reported no output/errors.
+
+Live soup verification after Pages deployment for `f2ec0ea`: `https://albaspace.com.tr/ar-restaurant/?v=f2ec0ea&fresh=1` showed the new `Супы` category; clicking it loaded `Домашний суп` at `1 / 1` on the public page.
+
+Live drinks verification after Pages deployment for `f2ec0ea`: public `Напитки` switched to `Citrus Spark` at `1 / 3`, and the next arrow retained `Alba Latte` at `2 / 3`, confirming the new drink extends the category.
+
+Live drinks verification continued after `f2ec0ea`: the public next arrow loaded `Свежий сок` at `3 / 3`; the Juice model rendered visibly as a red drink with citrus garnish, and Chromium console inspection reported no output/errors.
