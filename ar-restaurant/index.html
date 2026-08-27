@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="theme-color" content="#050b1a">
-  <meta name="description" content="Браузерное AR-меню ресторана: разместите блюдо на столе и передвиньте его правой рукой.">
+  <meta name="description" content="Браузерное AR-меню ресторана с интерактивными 3D-блюдами.">
   <title>AR Menu — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=camera-2">
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=controls-4">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js"></script>
 </head>
 <body>
@@ -21,8 +21,7 @@
       <div class="brand-mark" aria-label="AR Menu">AR <span>MENU</span></div>
       </div>
       <div class="top-actions">
-        <button id="help-button" class="icon-button" type="button" aria-label="Как пользоваться">?</button>
-        <button id="ui-toggle" class="icon-button ui-chrome" type="button" aria-label="Скрыть кнопки">◌</button>
+        <button id="ui-toggle" class="icon-button" type="button" aria-label="Скрыть кнопки" aria-pressed="false">◌</button>
       </div>
     </header>
 
@@ -47,9 +46,9 @@
           camera-controls
           disable-tap
           interaction-prompt="none"
-          shadow-intensity="0.65"
+          shadow-intensity="0.32"
           shadow-softness="0.9"
-          exposure="1.08"
+          exposure="0.58"
           environment-image="neutral"
           ar
           ar-modes="webxr scene-viewer quick-look"
@@ -94,7 +93,6 @@
 
     <div class="action-row ui-chrome">
       <button id="start-camera" class="primary-action" type="button"><span class="action-icon">◉</span> Камера</button>
-      <button id="native-ar" class="native-ar-action" type="button"><span class="action-icon">⌖</span> На стол</button>
       <button id="reset-dish" class="secondary-action" type="button" aria-label="Вернуть блюдо в центр">↺</button>
     </div>
 
@@ -104,23 +102,8 @@
       <button id="capture-button" class="capture-button" type="button" aria-label="Короткое нажатие — фото, долгое нажатие — видео"></button>
       <span id="capture-timer" class="capture-timer" aria-live="polite" hidden>00:30</span>
     </div>
-    <button id="ui-reveal" class="ui-reveal" type="button" aria-label="Показать кнопки" hidden>+</button>
 
-    <div id="help-dialog" class="help-dialog" hidden>
-      <div class="help-card glass-panel" role="dialog" aria-modal="true" aria-labelledby="help-title">
-        <button id="close-help" class="dialog-close" type="button" aria-label="Закрыть">×</button>
-        <span class="eyebrow">HOW IT WORKS</span>
-        <h2 id="help-title">Поставьте блюдо на стол</h2>
-        <ol>
-          <li>Нажмите «Включить AR» и разрешите доступ к камере.</li>
-          <li>Выберите категорию снизу — модель блюда сменится на лету.</li>
-          <li>Покажите <strong>правую руку</strong>, сведите большой и указательный пальцы над тарелкой.</li>
-          <li>Переместите руку и разожмите пальцы, чтобы поставить блюдо.</li>
-        </ol>
-        <p class="help-fallback">Если камера или hand-tracking недоступны, блюдо можно перетаскивать пальцем или мышью.</p>
-      </div>
-    </div>
   </main>
-  <script type="module" src="/assets/js/restaurant-ar.js?v=2ff7b30"></script>
+  <script type="module" src="/assets/js/restaurant-ar.js?v=controls-4"></script>
 </body>
 </html>

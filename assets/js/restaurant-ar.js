@@ -67,19 +67,14 @@ const trackingLed = document.querySelector('#tracking-led');
 const trackingLabel = document.querySelector('#tracking-label');
 const trackingDetail = document.querySelector('#tracking-detail');
 const startButton = document.querySelector('#start-camera');
-const nativeArButton = document.querySelector('#native-ar');
 const resetButton = document.querySelector('#reset-dish');
 const captureButton = document.querySelector('#capture-button');
 const captureTimer = document.querySelector('#capture-timer');
 const uiToggle = document.querySelector('#ui-toggle');
-const uiReveal = document.querySelector('#ui-reveal');
 const prevDishButton = document.querySelector('#dish-prev');
 const nextDishButton = document.querySelector('#dish-next');
 const dishPosition = document.querySelector('#dish-position');
 const categoryButtons = [...document.querySelectorAll('.category-button')];
-const helpDialog = document.querySelector('#help-dialog');
-const helpButton = document.querySelector('#help-button');
-const closeHelp = document.querySelector('#close-help');
 
 const state = {
   category: 'meat',
@@ -420,27 +415,6 @@ function cameraErrorMessage(error) {
   }
 }
 
-function getNativeArSupport() {
-  if (typeof model.canActivateAR === 'function') return model.canActivateAR();
-  return Boolean(model.canActivateAR);
-}
-
-async function activateNativeAR() {
-  if (typeof model.activateAR !== 'function' || !getNativeArSupport()) {
-    setTemporaryStatus('AR на столе недоступен', 'Используйте кнопку «Камера» для экранного режима', 'off', 2600);
-    return false;
-  }
-  try {
-    stopCamera();
-    await model.activateAR();
-    return true;
-  } catch (error) {
-    console.warn('Native AR activation failed:', error);
-    setTemporaryStatus('Не удалось открыть AR', 'Используйте кнопку «Камера» для экранного режима', 'off', 2600);
-    return false;
-  }
-}
-
 async function startCamera() {
   if (state.cameraRunning) {
     stopCamera();
@@ -715,30 +689,9 @@ function setupCaptureControl() {
 function setUIHidden(hidden) {
   state.uiHidden = hidden;
   document.body.classList.toggle('ui-hidden', hidden);
-  uiReveal.hidden = !hidden;
   uiToggle.setAttribute('aria-label', hidden ? 'Показать кнопки' : 'Скрыть кнопки');
-  uiToggle.textContent = hidden ? '+' : '◌';
-}
-
-function updateNativeArButton() {
-  const supported = getNativeArSupport();
-  nativeArButton.disabled = !supported;
-  nativeArButton.title = supported ? 'Разместить блюдо на физическом столе' : 'Native AR не поддерживается этим браузером';
-}
-
-function setupNativeArLifecycle() {
-  model.addEventListener('ar-status', (event) => {
-    const status = event.detail?.status;
-    if (status === 'session-started') {
-      startButton.classList.add('is-active');
-      nativeArButton.classList.add('is-active');
-    }
-    if (status === 'not-presenting' || status === 'failed') {
-      startButton.classList.remove('is-active');
-      nativeArButton.classList.remove('is-active');
-      updateNativeArButton();
-    }
-  });
+  uiToggle.setAttribute('aria-pressed', String(hidden));
+  uiToggle.textContent = hidden ? '◉' : '◌';
 }
 
 function setupManualDrag() {
@@ -768,29 +721,16 @@ function setupManualDrag() {
   stage.addEventListener('lostpointercapture', endManual);
 }
 
-function setupHelp() {
-  helpButton.addEventListener('click', () => { helpDialog.hidden = false; closeHelp.focus(); });
-  closeHelp.addEventListener('click', () => { helpDialog.hidden = true; helpButton.focus(); });
-  helpDialog.addEventListener('click', (event) => { if (event.target === helpDialog) helpDialog.hidden = true; });
-  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') helpDialog.hidden = true; });
-}
-
 categoryButtons.forEach((button) => button.addEventListener('click', () => selectCategory(button.dataset.category)));
 prevDishButton.addEventListener('click', () => shiftDish(-1));
 nextDishButton.addEventListener('click', () => shiftDish(1));
 startButton.addEventListener('click', startCamera);
-nativeArButton.addEventListener('click', activateNativeAR);
 resetButton.addEventListener('click', () => resetDish());
-uiToggle.addEventListener('click', () => setUIHidden(true));
-uiReveal.addEventListener('click', () => setUIHidden(false));
+uiToggle.addEventListener('click', () => setUIHidden(!state.uiHidden));
 setupCaptureControl();
-model.addEventListener('load', updateNativeArButton);
-window.addEventListener('load', updateNativeArButton);
-setupNativeArLifecycle();
 window.addEventListener('resize', () => resetDish({ announce: false }));
 window.addEventListener('pagehide', stopCamera);
 setupManualDrag();
-setupHelp();
 renderDish();
 setUIHidden(false);
 

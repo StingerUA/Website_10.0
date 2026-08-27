@@ -83,3 +83,7 @@ Fresh local page после `black-coffee-4` успешно загрузилас
 Итоговая local-визуальная проверка `latte.glb?v=black-coffee-4`: `Alba Latte` (`2 / 2`) загружается с открытым стеклянным ободком и заметным тёмным/чёрным кофейным объёмом внутри чашки. Все controls, центральная capture-кнопка и чистая сцена сохранены.
 
 Live smoke-test после коммита `335abf0`: HTML получил `ar-placement="floor"`, центральную capture-кнопку, `На стол`, UI-toggle и versioned AR assets. После ожидания 3D-модель стейка появилась по центру; большие инструкции и голубой декоративный круг отсутствуют.
+
+Controls-3 local smoke-test: свежая страница показывает уменьшенную примерно втрое 3D-модель; в DOM больше нет `На стол`. Нажатие верхнего `ui-toggle` меняет его label на `Показать кнопки`, скрывает все остальные UI-кнопки и оставляет центральную capture-кнопку доступной для фото/видео.
+
+Controls-3 DOM smoke-test: при viewport 1280px карточка блюда имеет ширину 130px (`10.2%` viewport), UI после повторного клика восстановлен и label равен `Скрыть кнопки`; видимые controls — toggle, arrows, 3 категории, Camera, Reset и capture. `#native-ar` отсутствует. Lighting attributes: exposure `0.58`, shadow-intensity `0.32`.
