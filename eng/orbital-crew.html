@@ -1,3 +1,39 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#05080d"><meta name="description" content="Current ISS crew, astronaut portraits and official agency profiles."><link rel="stylesheet" href="/assets/css/site.css"><link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828"><title>ISS Crew — Orbital Atlas</title></head>
-<body class="oa-body"><div data-include="/header-en.html"></div><nav class="oa-contextnav" aria-label="Orbital Atlas"><div class="oa-shell oa-contextnav__inner"><div class="oa-contextnav__links"><a href="/orbital-atlas.html" data-t="overview">Overview</a><a href="/orbital-launches.html" data-t="launch">Launches</a><a href="/orbital-iss.html" data-t="cameras">ISS cameras</a><a class="is-active" href="/orbital-crew.html" data-t="crew">Crew</a><a href="/orbital-solar-system.html" data-t="solar">Solar system</a></div></div></nav><main class="oa-main"><section class="oa-hero"><div class="oa-shell oa-hero__grid"><div><p class="oa-eyebrow">03 / Station watch</p><h1 class="oa-title" data-copy="crewTitle">ISS crew and official profiles.</h1><p class="oa-lead" data-copy="crewLead">Current station roster, portraits and links to official astronaut profiles.</p><div class="oa-actions"><a class="oa-button oa-button--primary" href="#crew" data-t="crew">Crew</a><a class="oa-button" href="/orbital-iss.html" data-t="cameras">ISS cameras</a></div></div><article class="oa-card oa-status-card"><div class="oa-status-top"><span data-t="activeCrew">current ISS crew</span><span class="oa-status-live" data-t="live">live stream</span></div><h2>ISS</h2><p data-t="awaiting">Loading current data</p><div class="oa-countdown"><strong>07</strong><span data-t="crew">Crew</span></div></article></div></section><section class="oa-section" id="crew"><div class="oa-shell"><div class="oa-section-head"><div><p class="oa-eyebrow">PORTRAITS / PROFILES</p><h2 class="oa-section-title" data-t="crew">Crew</h2></div><p class="oa-section-note" data-copy="crewLead">Current station roster, portraits and links to official astronaut profiles.</p></div><div class="oa-crew-grid" id="crewGrid"></div></div></section><section class="oa-section"><div class="oa-shell"><p class="oa-eyebrow">LIVE ROSTER</p><h2 class="oa-section-title" data-copy="rosterTitle">Current open registry on board.</h2><div class="oa-roster" id="crewRoster"><span data-t="awaiting">Loading current data</span></div></div></section></main><div data-include="/footer-en.html"></div><script defer src="/assets/js/include.js"></script><script src="/orbital-atlas-pages.js?v=unified-atlas-20260828"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#020617">
+  <meta name="description" content="See who is in space right now, their missions, portraits and live mission-duration counters.">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828">
+  <link rel="stylesheet" href="/orbital-who-in-space.css?v=20260829-1">
+  <title>Who Is In Space? — Orbital Atlas</title>
+</head>
+<body class="oa-body">
+  <div data-include="/header-en.html"></div>
+  <nav class="oa-contextnav" aria-label="Orbital Atlas">
+    <div class="oa-shell oa-contextnav__inner"><div class="oa-contextnav__links">
+      <a href="/eng/orbital-atlas.html">Overview</a>
+      <a href="/eng/orbital-launches.html">Launches</a>
+      <a href="/eng/orbital-iss.html">ISS cameras</a>
+      <a class="is-active wis-context-label" href="/eng/orbital-crew.html">Who is in space?</a>
+      <a href="/eng/orbital-solar-system.html">Solar system</a>
+    </div></div>
+  </nav>
+  <main class="oa-main wis-main">
+    <section class="wis-hero"><div class="oa-shell wis-hero__inner">
+      <div><p class="wis-kicker" data-wis-section>Who is in space?</p><h1 class="wis-title" data-wis-title>Who is in space right now?</h1><p class="wis-lead" data-wis-lead>See the humans currently in Earth orbit, their missions, and live counters for how long they have been in space.</p></div>
+      <aside class="wis-count"><strong class="wis-count__number" data-wis-count>10</strong><span class="wis-count__label" data-wis-count-label>There are currently 10 humans in space</span><span class="wis-count__updated" data-wis-updated>Counters update live</span></aside>
+    </div></section>
+    <section class="wis-section"><div class="oa-shell">
+      <div class="wis-section-head"><h2 data-wis-mission-title>Current mission crews</h2><p data-wis-mission-note>Astronauts and cosmonauts are grouped by their mission and current orbital station.</p></div>
+      <div class="wis-missions" id="wisMissions"><div class="wis-loading">Preparing current crew information…</div></div>
+      <div class="wis-footnote"><div data-wis-ever>As of April 2026, a total of <strong>781</strong> humans have flown to space.</div><div class="wis-source" data-wis-source>Sources: Who Is In Space and Launch Library 2.</div></div>
+    </div></section>
+  </main>
+  <div data-include="/footer-en.html"></div>
+  <script defer src="/assets/js/include.js"></script>
+  <script defer src="/orbital-who-in-space.js?v=20260829-1"></script>
+</body>
+</html>
