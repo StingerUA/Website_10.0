@@ -43,6 +43,7 @@ const ORBITAL_ISS_URL = "https://api.wheretheiss.at/v1/satellites/25544";
 const ORBITAL_CREW_URL = "https://whoisinspace.com/";
 const ORBITAL_ISS_TLE_URL = "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE";
 const ORBITAL_SNAPSHOT_KEY = "overview";
+const ORBITAL_ISS_TLE_SNAPSHOT_KEY = "iss_tle";
 const VENUS_USGS_SEARCH_URL = "https://planetarynames.wr.usgs.gov/SearchResults?Target=15_Venus";
 const VENUS_USGS_TARGET_URL = "https://planetarynames.wr.usgs.gov/Page/VENUS/target";
 const VENUS_SNAPSHOT_KEY = "venus_nomenclature";
@@ -80,6 +81,7 @@ export default {
   async scheduled(controller, env, ctx) {
     if (controller.cron !== "0 */5 * * *") return;
     ctx.waitUntil(orbitalRefreshSnapshot(env));
+    ctx.waitUntil(orbitalRefreshTleSnapshot(env));
     ctx.waitUntil(venusRefreshSnapshot(env));
     ctx.waitUntil(planetaryRefreshSnapshot("mars", env));
     ctx.waitUntil(planetaryRefreshSnapshot("moon", env));
@@ -99,10 +101,10 @@ async function handleRequest(request, env) {
     return orbitalOverview(cors, env);
   }
   if (url.pathname === "/api/orbital/iss-tle" && request.method === "GET") {
-    return orbitalIssTle(url, cors);
+    return orbitalIssTle(url, cors, env);
   }
   if (url.pathname === "/api/orbital/iss-track" && request.method === "GET") {
-    return orbitalIssTrack(url, cors);
+    return orbitalIssTrack(url, cors, env);
   }
   if (url.pathname === "/api/orbital/venus" && request.method === "GET") {
     return venusNomenclature(cors, env);
@@ -1091,17 +1093,53 @@ async function planetaryNomenclature(key, cors, env) {
   return json(value, 200, { ...cors, "Cache-Control": "public, max-age=900, stale-while-revalidate=3600" });
 }
 
-async function orbitalCurrentTle(now) {
+function orbitalTleSnapshotUsable(value) {
+  return typeof value?.line1 === "string" && value.line1.startsWith("1 ") && typeof value?.line2 === "string" && value.line2.startsWith("2 ");
+}
+
+async function orbitalReadTleSnapshot(env) {
+  if (!env.DB) return null;
+  try {
+    const row = await env.DB.prepare("SELECT payload_json FROM orbital_content_cache WHERE cache_key = ? LIMIT 1").bind(ORBITAL_ISS_TLE_SNAPSHOT_KEY).first();
+    const value = row?.payload_json ? JSON.parse(row.payload_json) : null;
+    return orbitalTleSnapshotUsable(value) ? { line1: value.line1, line2: value.line2 } : null;
+  } catch (error) {
+    console.warn("Orbital Atlas stored TLE unavailable", error);
+    return null;
+  }
+}
+
+async function orbitalWriteTleSnapshot(env, value) {
+  if (!env.DB || !orbitalTleSnapshotUsable(value)) return;
+  await env.DB.prepare("INSERT INTO orbital_content_cache (cache_key, payload_json, refreshed_at) VALUES (?, ?, ?) ON CONFLICT(cache_key) DO UPDATE SET payload_json = excluded.payload_json, refreshed_at = excluded.refreshed_at")
+    .bind(ORBITAL_ISS_TLE_SNAPSHOT_KEY, JSON.stringify(value), Date.now()).run();
+}
+
+async function orbitalCurrentTle(now, env) {
   if (orbitalIssTleCache?.expiresAt > now) return orbitalIssTleCache.value;
-  const response = await fetch(ORBITAL_ISS_TLE_URL, { headers: { "Accept": "text/plain", "User-Agent": "AlbaSpace-OrbitalAtlas/1.0" } });
-  if (!response.ok) throw new Error(`CelesTrak TLE source returned ${response.status}`);
-  const lines = (await response.text()).split(/\r?\n/).map(line => line.trim()).filter(Boolean);
-  const line1 = lines.find(line => line.startsWith("1 "));
-  const line2 = lines.find(line => line.startsWith("2 "));
-  if (!line1 || !line2) throw new Error("CelesTrak response did not include ISS TLE lines");
-  const value = { line1, line2 };
-  orbitalIssTleCache = { value, expiresAt: now + 30 * 60 * 1000 };
-  return value;
+  try {
+    const response = await fetch(ORBITAL_ISS_TLE_URL, { headers: { "Accept": "text/plain", "User-Agent": "AlbaSpace-OrbitalAtlas/1.0" } });
+    if (!response.ok) throw new Error(`CelesTrak TLE source returned ${response.status}`);
+    const lines = (await response.text()).split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+    const line1 = lines.find(line => line.startsWith("1 "));
+    const line2 = lines.find(line => line.startsWith("2 "));
+    const value = { line1, line2 };
+    if (!orbitalTleSnapshotUsable(value)) throw new Error("CelesTrak response did not include ISS TLE lines");
+    orbitalIssTleCache = { value, expiresAt: now + 30 * 60 * 1000 };
+    await orbitalWriteTleSnapshot(env, value);
+    return value;
+  } catch (error) {
+    const stored = await orbitalReadTleSnapshot(env);
+    if (stored) {
+      orbitalIssTleCache = { value: stored, expiresAt: now + 5 * 60 * 1000 };
+      return stored;
+    }
+    throw error;
+  }
+}
+
+async function orbitalRefreshTleSnapshot(env) {
+  return orbitalCurrentTle(Date.now(), env);
 }
 
 async function orbitalCity(latitude, longitude, now) {
@@ -1123,12 +1161,12 @@ async function orbitalCity(latitude, longitude, now) {
   }
 }
 
-async function orbitalIssTle(url, cors) {
+async function orbitalIssTle(url, cors, env) {
   const latitude = Number(url.searchParams.get("lat"));
   const longitude = Number(url.searchParams.get("lon"));
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) return json({ error: "Invalid coordinates" }, 400, cors);
   const now = Date.now();
-  const [tle, city] = await Promise.all([orbitalCurrentTle(now), orbitalCity(latitude, longitude, now)]);
+  const [tle, city] = await Promise.all([orbitalCurrentTle(now, env), orbitalCity(latitude, longitude, now)]);
   return json({ ...tle, city, updatedAt: new Date(now).toISOString() }, 200, { ...cors, "Cache-Control": "public, max-age=300" });
 }
 
@@ -1151,12 +1189,12 @@ export function buildIssGroundTrack(tle, now = Date.now(), windowMinutes = 90, s
   return points;
 }
 
-async function orbitalIssTrack(url, cors) {
+async function orbitalIssTrack(url, cors, env) {
   const windowMinutes = Math.max(30, Math.min(180, Math.round(Number(url.searchParams.get("window")) || 90)));
   const stepSeconds = Math.max(30, Math.min(120, Math.round(Number(url.searchParams.get("step")) || 60)));
   const now = Date.now();
   try {
-    const tle = await orbitalCurrentTle(now);
+    const tle = await orbitalCurrentTle(now, env);
     const points = buildIssGroundTrack(tle, now, windowMinutes, stepSeconds);
     if (points.length < 20) throw new Error("TLE propagation did not produce enough ground-track points");
     return json({ source: "CelesTrak TLE propagated with SGP4", navigationOnly: true, windowMinutes, stepSeconds, updatedAt: new Date(now).toISOString(), tleUpdatedAt: new Date(now).toISOString(), points }, 200, { ...cors, "Cache-Control": "public, max-age=300, stale-while-revalidate=900" });
