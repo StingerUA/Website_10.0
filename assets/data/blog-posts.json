@@ -451,23 +451,106 @@
       "locales": {
         "tr": {
           "title": "Gezegen Verisi Nasıl Toplanır",
-          "excerpt": "Ö T E G E Z E G E N L E R uzaktan, dolaylı bakmak gezegen geçişi parlaklıktaki küçük düşüş G Ü N E Ş S İ S T E M İ yerinde ölçmek uzay aracı Dünya’ya ",
+          "excerpt": "Bir gezegen hakkında bildiğimiz her şey — atmosferinde ne olduğu, yüzeyinin neye benzediği, altında su bulunup bulunmadığı — sonuçta bir sayı dizisinden çıkıyor.</p>
+",
           "url": "/blog/gezegen-verisi-nasil-toplanir.html"
         },
         "en": {
           "title": "How to Collect Planetary Data",
-          "excerpt": "O T E G E Z E G E N L E R look at the planet, indirectly from a distance Planetary transit small drop in brightness G U N E S S I S T E M I measure in",
+          "excerpt": "measure in",
           "url": "/eng/blog/gezegen-verisi-nasil-toplanir.html"
         },
         "ru": {
           "title": "Как собирать планетарные данные",
-          "excerpt": "О Т Е Г Е Ж Е Г Е Н Л Е Р смотри на планету, косвенно издалека Планетарный транзит небольшое падение яркости Г У Н Е С С И С Т Е М И измеряю передачу ",
+          "excerpt": "передачу ",
           "url": "/rus/blog/gezegen-verisi-nasil-toplanir.html"
         },
         "ar": {
           "title": "كيفية جمع بيانات الكواكب",
-          "excerpt": "انظر إلى الكوكب، بشكل غير مباشر من مسافة بعيدة، عبور كوكبي انخفاض بسيط في السطوع G U N E S I S T E M I قياس نقل بيانات المركبة الفضائية في الموقع إلى ",
+          "excerpt": "12312312",
           "url": "/ar/blog/gezegen-verisi-nasil-toplanir.html"
+        }
+      }
+    },
+    {
+      "slug": "gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu",
+      "category": "uzay",
+      "publishAt": "2026-08-27T15:38:48+03:00",
+      "cover": "/assets/images/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Aslı Bolat",
+        "ar": "Aslı Bolat"
+      },
+      "authorRole": {
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer and Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومدرِّبة"
+      },
+      "locales": {
+        "tr": {
+          "title": "Görünmez Kalkanımız Düşerse:Dünya’nın Manyetik Alanı Bir Gün Yok Olsaydı Ne Olurdu?",
+          "excerpt": "Görünmez Kalkanımız Düşerse:Dünya’nın Manyetik Alanı Bir Gün Yok Olsaydı Ne Olurdu? Gezegenimiz, uzaydan bakıldığında sakin ve mavi bir küre gibi görü",
+          "url": "/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu.html"
+        },
+        "en": {
+          "title": "If our invisible shield fell:What would happen if the Earth's magnetic field disappeared one day?",
+          "excerpt": "If Our Invisible Shield Falls: What Would Happen If Earth's Magnetic Field Disappeared One Day? Our planet looks like a calm and blue sphere when view",
+          "url": "/eng/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu.html"
+        },
+        "ru": {
+          "title": "Если бы наш невидимый щит упал: что бы произошло, если бы магнитное поле Земли однажды исчезло?",
+          "excerpt": "Если наш невидимый щит упадёт: что произойдёт, если магнитное поле Земли однажды исчезнет? Наша планета выглядит спокойной и голубой сферой, если смот",
+          "url": "/rus/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu.html"
+        },
+        "ar": {
+          "title": "إذا سقط درعنا غير المرئي: ماذا سيحدث إذا اختفى المجال المغناطيسي للأرض يوما ما؟",
+          "excerpt": "إذا سقط درعنا الخفي: ماذا سيحدث إذا اختفى المجال المغناطيسي للأرض يوما ما؟ يبدو كوكبنا ككرة هادئة وزرقاء عند النظر إليها من الفضاء. ومع ذلك، أحد الأنظ",
+          "url": "/ar/blog/gorunmez-kalkanimiz-duserse-dunyanin-manyetik-alani-bir-gun-yok-olsaydi-ne-olurdu.html"
+        }
+      }
+    },
+    {
+      "slug": "kara-delikler-evrenin-en-gizemli-yapilari",
+      "category": "uzay",
+      "publishAt": "2026-08-27T18:31:54+03:00",
+      "cover": "/assets/images/blog/kara-delikler-evrenin-en-gizemli-yapilari-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Muzaffer Enes İpçi",
+        "ar": "Muzaffer Enes İpçi"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Kara Delikler: Evrenin En Gizemli Yapıları",
+          "excerpt": "Kara Delikler: Evrenin En Gizemli Yapıları Kara delikler, evrendeki en ilgi çekici ve gizemli gök cisimlerinden biridir. Kütle çekiminin olağanüstü de",
+          "url": "/blog/kara-delikler-evrenin-en-gizemli-yapilari.html"
+        },
+        "en": {
+          "title": "Black Holes: The Most Mysterious Structures of the Universe",
+          "excerpt": "Black Holes: The Most Mysterious Structures of the Universe Black holes are one of the most intriguing and mysterious celestial bodies in the universe",
+          "url": "/eng/blog/kara-delikler-evrenin-en-gizemli-yapilari.html"
+        },
+        "ru": {
+          "title": "Чёрные дыры: самые загадочные структуры Вселенной",
+          "excerpt": "Чёрные дыры: самые загадочные структуры Вселенной. Чёрные дыры — одни из самых интригующих и загадочных небесных тел во Вселенной. В таких регионах, г",
+          "url": "/rus/blog/kara-delikler-evrenin-en-gizemli-yapilari.html"
+        },
+        "ar": {
+          "title": "الثقوب السوداء: أكثر الهياكل غموضا في الكون",
+          "excerpt": "الثقوب السوداء: أكثر الهياكل غموضا في الكون الثقوب السوداء هي واحدة من أكثر الأجرام السماوية إثارة وغموضا في الكون. في هذه المناطق التي تكون فيها الجا",
+          "url": "/ar/blog/kara-delikler-evrenin-en-gizemli-yapilari.html"
         }
       }
     }

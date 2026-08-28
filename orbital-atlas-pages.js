@@ -7,28 +7,30 @@
     : "/api/trpc/orbital.overview?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%7D%7D";
   const trpcPassUrl = "/api/trpc/orbital.issPass?batch=1&input=";
   const tleUrl = `${workerBase}/api/orbital/iss-tle`;
+  const issTrackUrl = `${workerBase || "https://albaspace-api.nncdecdgc.workers.dev"}/api/orbital/iss-track?window=90&step=60`;
 
   const dictionary = {
     ru: {
-      language: "ru-RU", browse: "Открыть раздел", watching: "ОТКРЫТЬ ЭФИР ↗", streamPending: "Ссылка на эфир появится после подтверждения", imageCredit: "Фото", live: "прямой эфир", fallback: "Данные временно недоступны. Попробуйте обновить страницу позже.", awaiting: "Получаем актуальные данные", next: "Следующая миссия", launchWindow: "до окна старта", provider: "Оператор уточняется", location: "Площадка уточняется", mission: "Миссия уточняется", launch: "Запуски", cameras: "Камеры МКС", station: "МКС", crew: "Экипаж", solar: "Солнечная система", activeCrew: "активный экипаж МКС", officialProfile: "ОТКРЫТЬ ОФИЦИАЛЬНЫЙ ПРОФИЛЬ ↗", loaded: "Данные обновлены", position: "Положение МКС", speed: "Скорость", altitude: "Высота", latitude: "Широта", longitude: "Долгота", visibility: "Видимость", pass: "Следующий пролёт", city: "Ваше местоположение", allowLocation: "Определить мой город", locationWaiting: "ожидание геолокации", requestLocation: "Разрешите доступ к геолокации", passDetail: "После согласия рассчитаем ближайший видимый пролёт МКС над вашим городом.", maxElevation: "Максимальная высота", duration: "Продолжительность", calculating: "считаем траекторию", locating: "получаем координаты", unavailable: "Расчёт временно недоступен. Попробуйте позже.", denied: "Геолокация недоступна. Разрешите доступ к местоположению в браузере и повторите попытку.", noPass: "Нет видимого пролёта в ближайшие 48 часов.", retry: "Повторить расчёт", mapWaiting: "Карта маршрута появится после разрешения геолокации.", technical: "Технический профиль", model2d: "2D", model3d: "3D", selectPlanet: "Выберите планету", cameraUnavailable: "Если проигрыватель недоступен, откройте эфир на YouTube.", camera1: "Камера 1", camera2: "Камера 2", camera3: "Камера 3", camera4: "Камера 4", overview: "Обзор", now: "Сейчас", route: "Маршрут", start: "Начало", end: "Окончание", linkLabel: "ОТКРЫТЬ НА YOUTUBE ↗", source: "Официальный источник", day: "д", hour: "ч", minute: "м", second: "с"
+      language: "ru-RU", browse: "Открыть раздел", watching: "ОТКРЫТЬ ЭФИР ↗", streamPending: "Ссылка на эфир появится после подтверждения", imageCredit: "Фото", vehicle: "Ракета-носитель", profileCredit: "Оригинальная схема Alba Space", live: "прямой эфир", fallback: "Данные временно недоступны. Попробуйте обновить страницу позже.", awaiting: "Получаем актуальные данные", next: "Следующая миссия", launchWindow: "до окна старта", provider: "Оператор уточняется", location: "Площадка уточняется", mission: "Миссия уточняется", launch: "Запуски", cameras: "Камеры МКС", station: "МКС", crew: "Экипаж", solar: "Солнечная система", activeCrew: "активный экипаж МКС", officialProfile: "ОТКРЫТЬ ОФИЦИАЛЬНЫЙ ПРОФИЛЬ ↗", loaded: "Данные обновлены", position: "Положение МКС", speed: "Скорость", altitude: "Высота", latitude: "Широта", longitude: "Долгота", visibility: "Видимость", trajectory: "Траектория МКС", pastTrack: "прошедшая", futureTrack: "прогноз", pass: "Следующий пролёт", city: "Ваше местоположение", allowLocation: "Определить мой город", locationWaiting: "ожидание геолокации", requestLocation: "Разрешите доступ к геолокации", passDetail: "После согласия рассчитаем ближайший видимый пролёт МКС над вашим городом.", maxElevation: "Максимальная высота", duration: "Продолжительность", calculating: "считаем траекторию", locating: "получаем координаты", unavailable: "Расчёт временно недоступен. Попробуйте позже.", denied: "Геолокация недоступна. Разрешите доступ к местоположению в браузе��е и повторите попытку.", noPass: "Нет видимого пролёта в ближайшие 48 часов.", retry: "Повторить расчёт", mapWaiting: "Карта маршрута появится после разрешения геолокации.", technical: "Технический профиль", model2d: "2D", model3d: "3D", selectPlanet: "Выберите планету", cameraUnavailable: "Если проигрыватель недоступен, откройте эфир на YouTube.", camera1: "Камера 1", camera2: "Камера 2", camera3: "Камера 3", camera4: "Камера 4", overview: "Обзор", now: "Сейчас", route: "Маршрут", start: "Начало", end: "Окончание", linkLabel: "ОТКРЫТЬ НА YOUTUBE ↗", source: "Официальный источник", day: "д", hour: "ч", minute: "м", second: "с"
     },
     en: {
-      language: "en-US", browse: "Open section", watching: "OPEN STREAM ↗", streamPending: "A stream link will appear after confirmation", imageCredit: "Photo", live: "live stream", fallback: "Data is temporarily unavailable. Please refresh the page later.", awaiting: "Loading current data", next: "Next mission", launchWindow: "to launch window", provider: "Provider pending", location: "Launch site pending", mission: "Mission pending", launch: "Launches", cameras: "ISS cameras", station: "ISS", crew: "Crew", solar: "Solar system", activeCrew: "current ISS crew", officialProfile: "OPEN OFFICIAL PROFILE ↗", loaded: "Data updated", position: "ISS position", speed: "Velocity", altitude: "Altitude", latitude: "Latitude", longitude: "Longitude", visibility: "Visibility", pass: "Next pass", city: "Your location", allowLocation: "Find my city", locationWaiting: "location needed", requestLocation: "Allow location access", passDetail: "After your consent, we will calculate the next visible ISS pass above your city.", maxElevation: "Maximum elevation", duration: "Duration", calculating: "calculating route", locating: "getting coordinates", unavailable: "The calculation is unavailable. Please try again later.", denied: "Location is unavailable. Allow location access in your browser and try again.", noPass: "No visible pass within the next 48 hours.", retry: "Calculate again", mapWaiting: "The route map will appear after location access is granted.", technical: "Technical profile", model2d: "2D", model3d: "3D", selectPlanet: "Choose a planet", cameraUnavailable: "If the embedded player is unavailable, open the stream on YouTube.", camera1: "Camera 1", camera2: "Camera 2", camera3: "Camera 3", camera4: "Camera 4", overview: "Overview", now: "Now", route: "Route", start: "Start", end: "End", linkLabel: "OPEN ON YOUTUBE ↗", source: "Official source", day: "d", hour: "h", minute: "m", second: "s"
+      language: "en-US", browse: "Open section", watching: "OPEN STREAM ↗", streamPending: "A stream link will appear after confirmation", imageCredit: "Photo", vehicle: "Launch vehicle", profileCredit: "Original Alba Space profile", live: "live stream", fallback: "Data is temporarily unavailable. Please refresh the page later.", awaiting: "Loading current data", next: "Next mission", launchWindow: "to launch window", provider: "Provider pending", location: "Launch site pending", mission: "Mission pending", launch: "Launches", cameras: "ISS cameras", station: "ISS", crew: "Crew", solar: "Solar system", activeCrew: "current ISS crew", officialProfile: "OPEN OFFICIAL PROFILE ↗", loaded: "Data updated", position: "ISS position", speed: "Velocity", altitude: "Altitude", latitude: "Latitude", longitude: "Longitude", visibility: "Visibility", trajectory: "ISS ground track", pastTrack: "past", futureTrack: "forecast", pass: "Next pass", city: "Your location", allowLocation: "Find my city", locationWaiting: "location needed", requestLocation: "Allow location access", passDetail: "After your consent, we will calculate the next visible ISS pass above your city.", maxElevation: "Maximum elevation", duration: "Duration", calculating: "calculating route", locating: "getting coordinates", unavailable: "The calculation is unavailable. Please try again later.", denied: "Location is unavailable. Allow location access in your browser and try again.", noPass: "No visible pass within the next 48 hours.", retry: "Calculate again", mapWaiting: "The route map will appear after location access is granted.", technical: "Technical profile", model2d: "2D", model3d: "3D", selectPlanet: "Choose a planet", cameraUnavailable: "If the embedded player is unavailable, open the stream on YouTube.", camera1: "Camera 1", camera2: "Camera 2", camera3: "Camera 3", camera4: "Camera 4", overview: "Overview", now: "Now", route: "Route", start: "Start", end: "End", linkLabel: "OPEN ON YOUTUBE ↗", source: "Official source", day: "d", hour: "h", minute: "m", second: "s"
     },
     tr: {
-      language: "tr-TR", browse: "Bölümü aç", watching: "YAYINI AÇ ↗", streamPending: "Yayın bağlantısı onaydan sonra görünecek", imageCredit: "Fotoğraf", live: "canlı yayın", fallback: "Veriler geçici olarak kullanılamıyor. Lütfen sayfayı daha sonra yenileyin.", awaiting: "Güncel veriler yükleniyor", next: "Sıradaki görev", launchWindow: "fırlatma penceresine", provider: "Operatör bekleniyor", location: "Fırlatma sahası bekleniyor", mission: "Görev bekleniyor", launch: "Fırlatmalar", cameras: "ISS kameraları", station: "ISS", crew: "Mürettebat", solar: "Güneş sistemi", activeCrew: "mevcut ISS mürettebatı", officialProfile: "RESMÎ PROFİLİ AÇ ↗", loaded: "Veriler güncellendi", position: "ISS konumu", speed: "Hız", altitude: "İrtifa", latitude: "Enlem", longitude: "Boylam", visibility: "Visibility", pass: "Sıradaki geçiş", city: "Konumunuz", allowLocation: "Şehrimi bul", locationWaiting: "konum bekleniyor", requestLocation: "Konum erişimine izin verin", passDetail: "İzninizden sonra ISS'in şehriniz üzerindeki sıradaki görünür geçişini hesaplayacağız.", maxElevation: "En yüksek irtifa", duration: "Süre", calculating: "rota hesaplanıyor", locating: "koordinatlar alınıyor", unavailable: "Hesaplama geçici olarak kullanılamıyor. Lütfen tekrar deneyin.", denied: "Konum kullanılamıyor. Tarayıcıda konum erişimine izin verip tekrar deneyin.", noPass: "Önümüzdeki 48 saatte görünür geçiş yok.", retry: "Tekrar hesapla", mapWaiting: "Konum izni verildiğinde rota haritası görünür.", technical: "Teknik profil", model2d: "2D", model3d: "3D", selectPlanet: "Gezegen seçin", cameraUnavailable: "Yerleşik oynatıcı çalışmazsa yayını YouTube'da açın.", camera1: "Kamera 1", camera2: "Kamera 2", camera3: "Kamera 3", camera4: "Kamera 4", overview: "Genel bakış", now: "Şimdi", route: "Rota", start: "Başlangıç", end: "Bitiş", linkLabel: "YOUTUBE'DA AÇ ↗", source: "Resmî kaynak", day: "g", hour: "s", minute: "d", second: "sn"
+      language: "tr-TR", browse: "Bölümü aç", watching: "YAYINI AÇ ↗", streamPending: "Yayın bağlantısı onaydan sonra görünecek", imageCredit: "Fotoğraf", vehicle: "Fırlatma aracı", profileCredit: "Özgün Alba Space şeması", live: "canlı yayın", fallback: "Veriler geçici olarak kullanılamıyor. Lütfen sayfayı daha sonra yenileyin.", awaiting: "Güncel veriler yükleniyor", next: "Sıradaki görev", launchWindow: "fırlatma penceresine", provider: "Operatör bekleniyor", location: "Fırlatma sahası bekleniyor", mission: "Görev bekleniyor", launch: "Fırlatmalar", cameras: "ISS kameraları", station: "ISS", crew: "Mürettebat", solar: "Güneş sistemi", activeCrew: "mevcut ISS mürettebatı", officialProfile: "RESMÎ PROFİLİ AÇ ↗", loaded: "Veriler güncellendi", position: "ISS konumu", speed: "Hız", altitude: "İrtifa", latitude: "Enlem", longitude: "Boylam", visibility: "Görünürlük", trajectory: "ISS yer izi", pastTrack: "geçmiş", futureTrack: "öngörü", pass: "Sıradaki geçiş", city: "Konumunuz", allowLocation: "Şehrimi bul", locationWaiting: "konum bekleniyor", requestLocation: "Konum erişimine izin verin", passDetail: "İzninizden sonra ISS'in şehriniz üzerindeki sıradaki görünür geçişini hesaplayacağız.", maxElevation: "En yüksek irtifa", duration: "Süre", calculating: "rota hesaplanıyor", locating: "koordinatlar alınıyor", unavailable: "Hesaplama geçici olarak kullanılamıyor. Lütfen tekrar deneyin.", denied: "Konum kullanılamıyor. Tarayıcıda konum erişimine izin verip tekrar deneyin.", noPass: "Önümüzdeki 48 saatte görünür geçiş yok.", retry: "Tekrar hesapla", mapWaiting: "Konum izni verildiğinde rota haritası görünür.", technical: "Teknik profil", model2d: "2D", model3d: "3D", selectPlanet: "Gezegen seçin", cameraUnavailable: "Yerleşik oynatıcı çalışmazsa yayını YouTube'da açın.", camera1: "Kamera 1", camera2: "Kamera 2", camera3: "Kamera 3", camera4: "Kamera 4", overview: "Genel bakış", now: "Şimdi", route: "Rota", start: "Başlangıç", end: "Bitiş", linkLabel: "YOUTUBE'DA AÇ ↗", source: "Resmî kaynak", day: "g", hour: "s", minute: "d", second: "sn"
     }
   };
   const t = dictionary[locale] || dictionary.ru;
+  if (locale === "ru") t.denied = "Геолокация недоступна. Разрешите доступ к местоположению в браузере и повторите попытку.";
   const copy = {
     ru: {
-      landingTitle: "Космос в движении.", landingLead: "Orbital Atlas — пространство для наблюдения за запусками, Международной космической станцией и Солнечной системой.", landingSection: "Выберите траекторию исследования.", landingNote: "Данные запусков и станции обновляются через проверяемые открытые источники, а официальные эфиры открываются в один клик.", routeLaunch: "Запуски", routeLaunchDesc: "Ближайшие миссии, действующие таймеры и ссылки на официальные эфиры.", routeLive: "Камеры МКС", routeLiveDesc: "Четыре предоставленных эфира, телеметрия, карта и следующий пролёт над вами.", routeCrew: "Экипаж", routeCrewDesc: "Состав станции, портреты и переходы к официальным профилям космонавтов.", routeSolar: "Солнечная система", routeSolarDesc: "Самостоятельная интерактивная 2D/3D модель планет, созданная для Alba Space.", launchesTitle: "Запуски с живым обратным отсчётом.", launchesLead: "Следите за ближайшими окнами старта: каждая карточка показывает актуальное время, оператора, площадку и секундный таймер до миссии.", camerasTitle: "Камеры МКС: орбита в прямом эфире.", camerasLead: "Выберите один из предоставленных потоков, следите за текущим положением станции и рассчитайте ближайший видимый пролёт над своим городом.", factsTitle: "Краткий технический профиль МКС.", hdevNote: "HDEV — исторический эксперимент высококачественной съёмки Земли, завершённый в 2020 году. Современные эфиры на этой странице — предоставленные пользователем внешние трансляции; доступность и вид изображения определяет их вещатель.", crewTitle: "Экипаж МКС и официальные профили.", crewLead: "Карточки объединяют предоставленные пользователем портреты с текущим открытым реестром экипажа. Внешние ссылки ведут к проверенным страницам агентств и Центра подготовки космонавтов.", rosterTitle: "Текущий открытый реестр на борту.", solarTitle: "Солнечная система: 2D и 3D.", solarLead: "Собственная интерактивная модель Alba Space помогает посмотреть взаимное расположение планет, выбрать объект и переключить проекцию."
+      landingTitle: "Космос в движении.", landingLead: "Orbital Atlas — пространство для наблюдения за запусками, Международной космической станцией и Солнечной системой.", landingSection: "Выберите траекторию исследования.", landingNote: "Данные запусков и станции обновляются через проверяемые открытые источники, а официальные эфиры открываются в один клик.", routeLaunch: "Запуски", routeLaunchDesc: "Ближайшие миссии, действующие таймеры и ссылки на официальные эфиры.", routeLive: "Камеры МКС", routeLiveDesc: "Четыре предоставленных эфира, телеметрия, карта и следующий пролёт над вами.", routeCrew: "Экипаж", routeCrewDesc: "Состав станции, портреты и переходы к официальным профилям космонавтов.", routeSolar: "Солнечная система", routeSolarDesc: "Самостоятельная интерактивная 2D/3D модель планет, созданная для Alba Space.", launchesTitle: "Запуски с живым обратным отсчётом.", launchesLead: "Следите за ближайшими окнами старта: каждая карточка показывает актуальное время, оператора, площадку и секундный таймер до миссии.", camerasTitle: "Камеры МКС: орбита в прямом эфире.", camerasLead: "Выберите один из предоставленных потоков, следите за текущим положением станции и рассчитайте ближайший видимый пролёт над своим городом.", factsTitle: "Краткий технический профиль МКС.", hdevNote: "HDEV — исторический эксперимент высококачественной съёмки Земли, завершённый в 2020 году. Современные эфиры на этой странице — предоставленные пользователем внешние трансляции; доступность и вид изображения определяет их вещатель.", crewTitle: "Экипаж МКС и официальные профили.", crewLead: "Текущий состав станции, портреты и ссылки на официальные профили космонавтов.", rosterTitle: "Текущий открытый реестр на борту.", solarTitle: "Солнечная система: 2D и 3D.", solarLead: "Собственная интерактивная модель Alba Space помогает посмотреть взаимное расположение планет, выбрать объект и переключить проекцию."
     },
     en: {
-      landingTitle: "Space in motion.", landingLead: "Orbital Atlas is a space for observing launches, the International Space Station and the Solar System.", landingSection: "Choose an observation path.", landingNote: "Launch and station data use verifiable open sources, while official streams open in one click.", routeLaunch: "Launches", routeLaunchDesc: "Upcoming missions, live countdowns and links to official coverage.", routeLive: "ISS cameras", routeLiveDesc: "Four supplied streams, telemetry, a map and the next pass above you.", routeCrew: "Crew", routeCrewDesc: "Station roster, portraits and links to official astronaut profiles.", routeSolar: "Solar system", routeSolarDesc: "An original interactive 2D/3D planetary model created for Alba Space.", launchesTitle: "Launches with live countdowns.", launchesLead: "Follow upcoming launch windows: every card shows the latest time, provider, site and a second-by-second mission timer.", camerasTitle: "ISS cameras: orbit live.", camerasLead: "Choose one of the supplied streams, track the station's current position and calculate the next visible pass above your city.", factsTitle: "ISS technical profile at a glance.", hdevNote: "HDEV was a historic high-definition Earth-imaging experiment which ended in 2020. The current video choices on this page are user-supplied external streams; their broadcaster determines the availability and image shown.", crewTitle: "ISS crew and official profiles.", crewLead: "The cards combine user-supplied portraits with the current open crew registry. External links point to verified agency and Cosmonaut Training Center pages.", rosterTitle: "Current open registry on board.", solarTitle: "Solar System: 2D and 3D.", solarLead: "An original Alba Space interactive model helps explore the relative layout of planets, choose an object and switch projection."
+      landingTitle: "Space in motion.", landingLead: "Orbital Atlas is a space for observing launches, the International Space Station and the Solar System.", landingSection: "Choose an observation path.", landingNote: "Launch and station data use verifiable open sources, while official streams open in one click.", routeLaunch: "Launches", routeLaunchDesc: "Upcoming missions, live countdowns and links to official coverage.", routeLive: "ISS cameras", routeLiveDesc: "Four supplied streams, telemetry, a map and the next pass above you.", routeCrew: "Crew", routeCrewDesc: "Station roster, portraits and links to official astronaut profiles.", routeSolar: "Solar system", routeSolarDesc: "An original interactive 2D/3D planetary model created for Alba Space.", launchesTitle: "Launches with live countdowns.", launchesLead: "Follow upcoming launch windows: every card shows the latest time, provider, site and a second-by-second mission timer.", camerasTitle: "ISS cameras: orbit live.", camerasLead: "Choose one of the supplied streams, track the station's current position and calculate the next visible pass above your city.", factsTitle: "ISS technical profile at a glance.", hdevNote: "HDEV was a historic high-definition Earth-imaging experiment which ended in 2020. The current video choices on this page are user-supplied external streams; their broadcaster determines the availability and image shown.", crewTitle: "ISS crew and official profiles.", crewLead: "Current station roster, portraits and links to official astronaut profiles.", rosterTitle: "Current open registry on board.", solarTitle: "Solar System: 2D and 3D.", solarLead: "An original Alba Space interactive model helps explore the relative layout of planets, choose an object and switch projection."
     },
     tr: {
-      landingTitle: "Hareket halindeki uzay.", landingLead: "Orbital Atlas; fırlatmaları, Uluslararası Uzay İstasyonu'nu ve Güneş Sistemi'ni gözlemlemek için bir alandır.", landingSection: "Bir gözlem rotası seçin.", landingNote: "Fırlatma ve istasyon verileri doğrulanabilir açık kaynaklardan gelir; resmî yayınlar tek tıkla açılır.", routeLaunch: "Fırlatmalar", routeLaunchDesc: "Yaklaşan görevler, canlı sayaçlar ve resmî yayın bağlantıları.", routeLive: "ISS kameraları", routeLiveDesc: "Sağlanan dört yayın, telemetri, harita ve konumunuz üzerindeki sıradaki geçiş.", routeCrew: "Mürettebat", routeCrewDesc: "İstasyon kadrosu, portreler ve resmî astronot profillerine bağlantılar.", routeSolar: "Güneş sistemi", routeSolarDesc: "Alba Space için oluşturulmuş özgün etkileşimli 2D/3D gezegen modeli.", launchesTitle: "Canlı geri sayımlı fırlatmalar.", launchesLead: "Yaklaşan fırlatma pencerelerini takip edin: her kart güncel saati, operatörü, sahayı ve saniye saniye görev sayacını gösterir.", camerasTitle: "ISS kameraları: yörüngeden canlı.", camerasLead: "Sağlanan yayınlardan birini seçin, istasyonun güncel konumunu izleyin ve şehriniz üzerindeki sıradaki görünür geçişi hesaplayın.", factsTitle: "ISS için kısa teknik profil.", hdevNote: "HDEV, 2020'de sona eren tarihî yüksek çözünürlüklü Dünya görüntüleme deneyiydi. Bu sayfadaki güncel video seçenekleri kullanıcı tarafından sağlanan dış yayınlardır; görüntü ve erişilebilirliği yayıncı belirler.", crewTitle: "ISS mürettebatı ve resmî profiller.", crewLead: "Kartlar, kullanıcı tarafından sağlanan portreleri güncel açık mürettebat kaydıyla birleştirir. Dış bağlantılar doğrulanmış ajans ve Kozmonot Eğitim Merkezi sayfalarına yönlendirir.", rosterTitle: "Araçtaki güncel açık kayıt.", solarTitle: "Güneş Sistemi: 2D ve 3D.", solarLead: "Özgün Alba Space etkileşimli modeli gezegenlerin göreli düzenini incelemeye, bir nesne seçmeye ve projeksiyonu değiştirmeye yardımcı olur."
+      landingTitle: "Hareket halindeki uzay.", landingLead: "Orbital Atlas; fırlatmaları, Uluslararası Uzay İstasyonu'nu ve Güneş Sistemi'ni gözlemlemek için bir alandır.", landingSection: "Bir gözlem rotası seçin.", landingNote: "Fırlatma ve istasyon verileri doğrulanabilir açık kaynaklardan gelir; resmî yayınlar tek tıkla açılır.", routeLaunch: "Fırlatmalar", routeLaunchDesc: "Yaklaşan görevler, canlı sayaçlar ve resmî yayın bağlantıları.", routeLive: "ISS kameraları", routeLiveDesc: "Sağlanan dört yayın, telemetri, harita ve konumunuz üzerindeki sıradaki geçiş.", routeCrew: "Mürettebat", routeCrewDesc: "İstasyon kadrosu, portreler ve resmî astronot profillerine bağlantılar.", routeSolar: "Güneş sistemi", routeSolarDesc: "Alba Space için oluşturulmuş özgün etkileşimli 2D/3D gezegen modeli.", launchesTitle: "Canlı geri sayımlı fırlatmalar.", launchesLead: "Yaklaşan fırlatma pencerelerini takip edin: her kart güncel saati, operatörü, sahayı ve saniye saniye görev sayacını gösterir.", camerasTitle: "ISS kameraları: yörüngeden canlı.", camerasLead: "Sağlanan yayınlardan birini seçin, istasyonun güncel konumunu izleyin ve şehriniz üzerindeki sıradaki görünür geçişi hesaplayın.", factsTitle: "ISS için kısa teknik profil.", hdevNote: "HDEV, 2020'de sona eren tarihî yüksek çözünürlüklü Dünya görüntüleme deneyiydi. Bu sayfadaki güncel video seçenekleri kullanıcı tarafından sağlanan dış yayınlardır; görüntü ve erişilebilirliği yayıncı belirler.", crewTitle: "ISS mürettebatı ve resmî profiller.", crewLead: "Güncel istasyon kadrosu, portreler ve resmî astronot profillerine bağlantılar.", rosterTitle: "Araçtaki güncel açık kayıt.", solarTitle: "Güneş Sistemi: 2D ve 3D.", solarLead: "Özgün Alba Space etkileşimli modeli gezegenlerin göreli düzenini incelemeye, bir nesne seçmeye ve projeksiyonu değiştirmeye yardımcı olur."
     }
   };
   const c = copy[locale] || copy.ru;
@@ -92,9 +94,9 @@
     tr: { title: "Uzay yerleri", description: "Açık haritada yakınınızdaki gerçek gezegenevleri, gözlemevleri ve bilim merkezleri." }
   };
   const venusRoutes = {
-    ru: { title: "Атлас Венеры", description: "Интерактивная карта утверждённых объектов USGS / IAU: поиск, слои и первичные карточки." },
-    en: { title: "Venus atlas", description: "An interactive map of approved USGS / IAU features with search, layers and primary records." },
-    tr: { title: "Venüs atlası", description: "Arama, katmanlar ve birincil kartlarla onaylanmış USGS / IAU nesnelerinin etkileşimli haritası." }
+    ru: { title: "Планетарные атласы", description: "Венера, Марс и Луна: поиск, слои и первичные карточки USGS / IAU." },
+    en: { title: "Planetary atlases", description: "Venus, Mars and the Moon: USGS / IAU search, layers and primary records." },
+    tr: { title: "Gezegensel atlaslar", description: "Venüs, Mars ve Ay: USGS / IAU araması, katmanlar ve birincil kayıtlar." }
   };
   const routeGrid = document.querySelector(".oa-route-grid");
   if (location.pathname.endsWith("/orbital-atlas.html") && routeGrid && !routeGrid.querySelector('a[href$="/orbital-places.html"]')) {
@@ -111,7 +113,7 @@
     const card = document.createElement("a");
     card.className = "oa-route-card";
     card.dataset.orbitalVenusRoute = "true";
-    card.href = locale === "ru" ? "/orbital-venus.html" : `/${localePath}/orbital-venus.html`;
+    card.href = locale === "ru" ? "/orbital-solar-system.html?body=venus#worldAtlas" : `/${localePath}/orbital-solar-system.html?body=venus#worldAtlas`;
     card.innerHTML = `<span class="oa-route-card__number">06</span><h3>${route.title}</h3><p>${route.description}</p><span class="oa-route-card__go">${t.browse}</span>`;
     routeGrid.append(card);
   }
@@ -153,6 +155,19 @@
     return image;
   }
 
+  function launchVehicleProfile(launch) {
+    const vehicle = String(launch?.vehicle || "").trim() || t.provider;
+    const normalized = vehicle.toLocaleLowerCase();
+    const variant = /falcon heavy|delta.*heavy|ariane 6[24]/i.test(normalized) ? "heavy" : /soyuz|long march|proton/i.test(normalized) ? "cluster" : /electron|vega|firefly/i.test(normalized) ? "slender" : "core";
+    const boosters = variant === "heavy" ? '<rect x="37" y="62" width="18" height="92" rx="8"/><rect x="125" y="62" width="18" height="92" rx="8"/>' : variant === "cluster" ? '<rect x="45" y="74" width="16" height="80" rx="8"/><rect x="119" y="74" width="16" height="80" rx="8"/>' : "";
+    const upperWidth = variant === "slender" ? 34 : 42;
+    const upperX = 90 - upperWidth / 2;
+    const photo = launchImage(launch);
+    const reference = photo ? `<span class="oa-launch__reference">${escape(t.imageCredit)}: ${escape(photo.credit)} · ${photo.licenseUrl ? `<a href="${escape(photo.licenseUrl)}" target="_blank" rel="noreferrer">${escape(photo.license)}</a>` : escape(photo.license)}</span>` : "";
+    const permittedPhoto = photo ? `<img class="oa-launch__vehicle-photo" src="${escape(photo.url)}" alt="${escape(vehicle)}" loading="lazy" referrerpolicy="no-referrer">` : "";
+    return `<figure class="oa-launch__vehicle" data-rocket-profile="${variant}"><div class="oa-launch__vehicle-stage">${permittedPhoto}<svg viewBox="0 0 180 180" aria-hidden="true" focusable="false"><g class="oa-launch__flame"><path d="M79 154h22l-11 21z"/></g><g class="oa-launch__vehicle-shape">${boosters}<path d="M${upperX} 62 L90 27 L${upperX + upperWidth} 62 V154 H${upperX}Z"/><path d="M${upperX - 5} 62 H${upperX + upperWidth + 5}"/><path d="M${upperX} 108 H${upperX + upperWidth}"/></g><g class="oa-launch__stars"><circle cx="20" cy="31" r="1"/><circle cx="154" cy="44" r="1.3"/><circle cx="140" cy="17" r=".8"/><circle cx="31" cy="124" r=".9"/></g></svg></div><figcaption><strong>${escape(t.vehicle)}:</strong> ${escape(vehicle)} <span class="oa-launch__profile-credit">· ${escape(t.profileCredit)}</span>${reference}</figcaption></figure>`;
+  }
+
   function renderLandingLaunch(launches) {
     const next = launches.find(item => item?.net && new Date(item.net) > new Date()) || launches[0];
     const name = next?.name || t.mission;
@@ -169,8 +184,7 @@
     root.innerHTML = launches.map(launch => {
       const when = launch.net || "";
       const stream = launchStream(launch);
-      const image = launchImage(launch);
-      const visual = image ? `<figure class="oa-launch__image"><img src="${escape(image.url)}" alt="" loading="lazy" referrerpolicy="no-referrer"><figcaption>${escape(t.imageCredit)}: ${escape(image.credit)} · ${image.licenseUrl ? `<a href="${escape(image.licenseUrl)}" target="_blank" rel="noreferrer">${escape(image.license)}</a>` : escape(image.license)}</figcaption></figure>` : "";
+      const visual = launchVehicleProfile(launch);
       const watch = stream ? `<a class="oa-launch__watch" href="${escape(stream)}" target="_blank" rel="noreferrer">${escape(t.watching)}</a>` : `<span class="oa-launch__stream-pending">${escape(t.streamPending)}</span>`;
       const source = typeof launch.source === "string" && launch.source.trim() ? `<p class="oa-launch__source">${escape(launch.source)}</p>` : "";
       return `<article class="oa-card oa-launch">${visual}<div class="oa-launch__top"><span>${when ? `${escape(shortDate.format(new Date(when)))} UTC` : "—"}</span><span class="oa-launch__status">${escape(launch.status || "—")}</span></div><h3>${escape(launch.name || t.mission)}</h3><p>${escape(launch.provider || t.provider)}</p><p class="oa-launch__place">${escape(launch.location || t.location)}</p><strong class="oa-launch__clock" data-countdown="${escape(when)}">—</strong>${watch}${source}</article>`;
@@ -184,6 +198,36 @@
   }
 
   let issMap;
+  function splitIssSegments(points) {
+    const segments = []; let segment = [];
+    points.forEach(point => {
+      const latitude = Number(point?.latitude), longitude = Number(point?.longitude);
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return;
+      if (segment.length && Math.abs(longitude - segment[segment.length - 1][1]) > 180) { segments.push(segment); segment = []; }
+      segment.push([latitude, longitude]);
+    });
+    if (segment.length > 1) segments.push(segment);
+    return segments;
+  }
+
+  function renderIssTrajectory(map) {
+    fetch(issTrackUrl, { headers: { Accept: "application/json" } }).then(async response => {
+      const data = await response.json();
+      if (!response.ok || !Array.isArray(data?.points) || data.points.length < 20) throw new Error("ISS track unavailable");
+      return data;
+    }).then(data => {
+      if (issMap !== map) return;
+      const now = Date.now(); const points = data.points;
+      const splitIndex = points.reduce((best, point, index) => Math.abs(Date.parse(point.time) - now) < Math.abs(Date.parse(points[best]?.time) - now) ? index : best, 0);
+      const past = points.slice(0, splitIndex + 1); const future = points.slice(splitIndex);
+      splitIssSegments(past).forEach(segment => window.L.polyline(segment, { className: "oa-iss-track-past", color: "#42d5e8", weight: 3, opacity: .92, dashArray: "8 7", lineCap: "round" }).addTo(map));
+      splitIssSegments(future).forEach(segment => window.L.polyline(segment, { className: "oa-iss-track-future", color: "#ffc162", weight: 3.5, opacity: .94, lineCap: "round" }).addTo(map));
+      const legend = window.L.control({ position: "bottomleft" });
+      legend.onAdd = () => { const node = window.L.DomUtil.create("div", "oa-iss-track-legend"); node.setAttribute("aria-label", t.trajectory); node.innerHTML = `<strong>${escape(t.trajectory)}</strong><span class="oa-iss-track-legend__past">${escape(t.pastTrack)}</span><span class="oa-iss-track-legend__future">${escape(t.futureTrack)}</span>`; return node; };
+      legend.addTo(map);
+    }).catch(error => console.warn("[Orbital Atlas] ISS map trajectory unavailable", error));
+  }
+
   function renderIssMap(iss) {
     const node = byId("issMap");
     if (!node || !window.L || !iss) return;
@@ -195,6 +239,7 @@
     window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" }).addTo(issMap);
     const icon = window.L.divIcon({ className: "oa-pin", iconSize: [14, 14], iconAnchor: [7, 7] });
     window.L.marker([lat, lon], { icon, title: t.station }).addTo(issMap);
+    renderIssTrajectory(issMap);
   }
 
   function renderTelemetry(iss) {
@@ -356,6 +401,39 @@
     ? { sun: "/manus-storage/sun_d727f9a3.png", venus: "/manus-storage/venus_c0383fbe.png", earth: "/manus-storage/earth_a7188212.png", mars: "/manus-storage/mars_8010c496.png", jupiter: "/manus-storage/jupiter_f35041cc.png", saturn: "/manus-storage/saturn_256fe28e.png", uranus: "/manus-storage/uranus_99b0a8c4.png", neptune: "/manus-storage/neptune_8974c7dc.png" }
     : { sun: "/assets/images/orbital-planets/sun.png", venus: "/assets/images/orbital-planets/venus.png", earth: "/assets/images/orbital-planets/earth.png", mars: "/assets/images/orbital-planets/mars.png", jupiter: "/assets/images/orbital-planets/jupiter.png", saturn: "/assets/images/orbital-planets/saturn.png", uranus: "/assets/images/orbital-planets/uranus.png", neptune: "/assets/images/orbital-planets/neptune.png" };
   const planetIconSizes = { venus: 42, earth: 45, mars: 40, jupiter: 79, saturn: 74, uranus: 62, neptune: 58 };
+  const planetModels = {
+    mercury: { src: "/assets/models/mercury.glb", diameter: 4879 },
+    venus: { src: "/assets/models/venus.glb", diameter: 12104 },
+    earth: { src: "/assets/models/earth.glb", diameter: 12742 },
+    mars: { src: "/assets/models/mars.glb", diameter: 6779 },
+    jupiter: { src: "/assets/models/jupiter.glb", diameter: 139820 },
+    saturn: { src: "/assets/models/saturn.glb", diameter: 116460 },
+    uranus: { src: "/assets/models/uranus.glb", diameter: 50724 },
+    neptune: { src: "/assets/models/neptune.glb", diameter: 49244 }
+  };
+  const solarScaleNotes = {
+    ru: "3D-модели показывают относительные диаметры планет; орбитальные расстояния сжаты для обзора.",
+    en: "The 3D models show relative planet diameters; orbital distances are compressed for an overview.",
+    tr: "3D modeller gezegenlerin göreli çaplarını gösterir; yörünge uzaklıkları genel görünüm için sıkıştırılmıştır."
+  };
+
+  function initSolarGlbScene(model, data) {
+    if (model.querySelector(".oa-solar-model3d")) return;
+    if (!document.querySelector('script[data-orbital-model-viewer]')) {
+      const script = document.createElement("script");
+      script.type = "module"; script.src = "https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js";
+      script.crossOrigin = "anonymous"; script.dataset.orbitalModelViewer = "true"; document.head.append(script);
+    }
+    const scene = document.createElement("div");
+    scene.className = "oa-solar-model3d"; scene.setAttribute("aria-label", solarScaleNotes[locale] || solarScaleNotes.ru);
+    const maxDiameter = planetModels.jupiter.diameter;
+    scene.innerHTML = Object.entries(planetModels).map(([key, item]) => {
+      const size = Math.max(7, (item.diameter / maxDiameter) * 232);
+      const name = data[key]?.[0] || key;
+      return `<button class="oa-solar-model3d__body" type="button" data-planet="${key}" aria-label="${escape(name)}" style="--body-size:${size.toFixed(2)}px"><model-viewer src="${item.src}" alt="" loading="lazy" camera-controls interaction-prompt="none" shadow-intensity="0" exposure="1" environment-image="neutral" disable-zoom></model-viewer><span>${escape(name)}</span></button>`;
+    }).join("") + `<p class="oa-solar-model3d__note">${escape(solarScaleNotes[locale] || solarScaleNotes.ru)}</p>`;
+    model.append(scene);
+  }
 
   function initSolar() {
     const model = byId("solarModel");
@@ -374,31 +452,31 @@
       button.style.setProperty("--planet-icon-size", `${planetIconSizes[key]}px`);
       button.innerHTML = `<img src="${src}" alt="${data[key]?.[0] || key}" draggable="false">`;
     });
+    initSolarGlbScene(model, data);
     const planetaryAtlasLabels = {
-      ru: { venus: "ОТКРЫТЬ АТЛАС ВЕНЕРЫ ↗", mars: "ОТКРЫТЬ АТЛАСЫ МАРСА И ЛУНЫ ↗" },
-      en: { venus: "OPEN VENUS ATLAS ↗", mars: "OPEN MARS & MOON ATLASES ↗" },
-      tr: { venus: "VENÜS ATLASINI AÇ ↗", mars: "MARS VE AY ATLASLARINI AÇ ↗" }
+      ru: { venus: "ОТКРЫТЬ АТЛАС ВЕНЕРЫ ↗", mars: "ОТКРЫТЬ АТЛАС МАРСА ↗", moon: "ОТКРЫТЬ АТЛАС ЛУНЫ ↗" },
+      en: { venus: "OPEN VENUS ATLAS ↗", mars: "OPEN MARS ATLAS ↗", moon: "OPEN MOON ATLAS ↗" },
+      tr: { venus: "VENÜS ATLASINI AÇ ↗", mars: "MARS ATLASINI AÇ ↗", moon: "AY ATLASINI AÇ ↗" }
     };
     const setPlanet = key => {
       const current = data[key];
       setText("solarPlanetName", current[0]); setText("solarPlanetDescription", current[1]); setText("solarOrbitValue", current[2]); setText("solarOrbitLabel", current[3]); setText("solarSizeValue", current[4]); setText("solarSizeLabel", current[5]);
       model.querySelectorAll("[data-planet]").forEach(button => button.classList.toggle("is-active", button.dataset.planet === key));
-      let atlasLink = document.getElementById("solarVenusAtlasLink") || document.getElementById("solarMarsMoonAtlasLink");
-      if (key === "venus" || key === "mars") {
+      let atlasLink = document.getElementById("solarPlanetaryAtlasLink");
+      if (["venus", "mars", "moon"].includes(key)) {
         if (!atlasLink) {
           atlasLink = document.createElement("a");
           atlasLink.className = "oa-profile-link";
           const description = document.querySelector('[id="solarPlanetDescription"]');
           description?.insertAdjacentElement("afterend", atlasLink);
         }
-        atlasLink.id = key === "venus" ? "solarVenusAtlasLink" : "solarMarsMoonAtlasLink";
-        const localePrefix = locale === "en" ? "/eng" : locale === "tr" ? "/tr" : "";
-        atlasLink.href = key === "venus" ? `${localePrefix}/orbital-venus.html` : `${localePrefix}/orbital-worlds.html?body=mars`;
+        atlasLink.id = "solarPlanetaryAtlasLink";
+        atlasLink.href = `${location.pathname}?body=${encodeURIComponent(key)}#worldAtlas`;
         atlasLink.textContent = (planetaryAtlasLabels[locale] || planetaryAtlasLabels.ru)[key];
       } else if (atlasLink) atlasLink.remove();
     };
     model.addEventListener("click", event => { const button = event.target.closest("[data-planet]"); if (button) setPlanet(button.dataset.planet); });
-    document.querySelectorAll("[data-model]").forEach(button => button.addEventListener("click", () => { model.classList.toggle("oa-solar-model--3d", button.dataset.model === "3d"); document.querySelectorAll("[data-model]").forEach(item => item.classList.toggle("is-active", item === button)); }));
+    document.querySelectorAll("[data-model]").forEach(button => button.addEventListener("click", () => { const isThreeDimensional = button.dataset.model === "3d"; model.classList.toggle("oa-solar-model--3d", isThreeDimensional); document.querySelectorAll("[data-model]").forEach(item => { item.classList.toggle("is-active", item === button); item.setAttribute("aria-pressed", String(item === button)); }); }));
     setPlanet("earth");
   }
 
@@ -463,7 +541,7 @@
   hydrate();
   setInterval(updateCountdowns, 1000);
   const expansion = document.createElement("script");
-  expansion.src = "/orbital-expansion.js?v=atlas-expansion-20260826b";
+  expansion.src = "/orbital-expansion.js?v=atlas-unified-worlds-20260828";
   expansion.defer = true;
   document.head.append(expansion);
 })();

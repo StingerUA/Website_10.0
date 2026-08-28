@@ -590,6 +590,7 @@ function normalizeOrbitalCrew(html) {
 
 function normalizeOrbitalLaunch(raw) {
   const provider = orbitalText(raw?.launch_service_provider?.name, "Оператор уточняется");
+  const vehicle = orbitalText(raw?.rocket?.configuration?.full_name, orbitalText(raw?.rocket?.configuration?.name, orbitalText(raw?.rocket?.configuration?.family, "")));
   const video = Array.isArray(raw?.vidURLs) ? raw.vidURLs.find(item => isOrbitalYouTubeUrl(item?.url)) : null;
   const image = orbitalSafeLaunchImage(raw?.image);
   return {
@@ -599,6 +600,7 @@ function normalizeOrbitalLaunch(raw) {
     location: orbitalText(raw?.pad?.location?.name, orbitalText(raw?.pad?.name, "Площадка уточняется")),
     status: orbitalText(raw?.status?.name, "Статус уточняется"),
     streamUrl: video?.url || (/spacex/i.test(provider) ? "https://www.youtube.com/@SpaceX/live" : null),
+    vehicle,
     image,
     source: "Data: Launch Library 2"
   };
@@ -606,6 +608,7 @@ function normalizeOrbitalLaunch(raw) {
 
 function normalizeRocketLaunch(raw) {
   const provider = orbitalText(raw?.provider?.name, "Оператор уточняется");
+  const vehicle = orbitalText(raw?.vehicle?.name, "");
   const location = [raw?.pad?.name, raw?.pad?.location?.name].filter(value => typeof value === "string" && value.trim()).join(" · ");
   const media = Array.isArray(raw?.media) ? raw.media.find(item => isOrbitalYouTubeUrl(item?.media_url) || typeof item?.youtube_vidid === "string") : null;
   const streamUrl = isOrbitalYouTubeUrl(media?.media_url)
@@ -619,6 +622,7 @@ function normalizeRocketLaunch(raw) {
     location: location || "Площадка уточняется",
     status: raw?.est_date?.year ? "Запланирован" : "Окно уточняется",
     streamUrl,
+    vehicle,
     image: null,
     source: "Data by RocketLaunch.Live"
   };
@@ -728,6 +732,17 @@ function orbitalOverviewUsable(value) {
   return value.launches.length > 0 || value.iss !== null || value.crew.length > 0 || value.missions.length > 0;
 }
 
+function orbitalMergeSnapshot(fresh, stored) {
+  if (!stored) return fresh;
+  return {
+    ...fresh,
+    launches: fresh.launches.length ? fresh.launches : stored.launches,
+    iss: fresh.iss || stored.iss || null,
+    crew: fresh.crew.length ? fresh.crew : stored.crew,
+    missions: fresh.missions.length ? fresh.missions : stored.missions
+  };
+}
+
 async function orbitalReadSnapshot(env) {
   if (!env.DB) return null;
   try {
@@ -754,17 +769,20 @@ async function orbitalFreshOverview() {
 }
 
 async function orbitalRefreshSnapshot(env) {
+  const stored = await orbitalReadSnapshot(env);
   const fresh = await orbitalFreshOverview();
-  if (!orbitalOverviewUsable(fresh)) throw new Error("No usable orbital data received; prior snapshot preserved");
-  await orbitalWriteSnapshot(env, fresh);
-  console.log("Orbital Atlas snapshot refreshed", fresh.updatedAt);
-  return fresh;
+  const value = orbitalMergeSnapshot(fresh, stored);
+  if (!orbitalOverviewUsable(value)) throw new Error("No usable orbital data received; prior snapshot preserved");
+  await orbitalWriteSnapshot(env, value);
+  console.log("Orbital Atlas snapshot refreshed", value.updatedAt);
+  return value;
 }
 
 async function orbitalOverview(cors, env) {
-  let value = await orbitalFreshOverview();
+  const fresh = await orbitalFreshOverview();
+  let value = fresh;
   try {
-    if (!orbitalOverviewUsable(value)) value = await orbitalReadSnapshot(env) || value;
+    if (!fresh.launches.length || !fresh.iss || !fresh.crew.length || !fresh.missions.length) value = orbitalMergeSnapshot(fresh, await orbitalReadSnapshot(env));
   } catch (error) {
     console.warn("Orbital Atlas stored fallback unavailable", error);
   }

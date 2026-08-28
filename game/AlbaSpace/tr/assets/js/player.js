@@ -53,7 +53,7 @@ function connect() {
 function me() { return state?.players.find(player => player.id === state.viewerPlayerId); }
 function modeLabel() { return state?.presentationMode === "AR" ? "AR · mobil yedek arayüz" : "3D · laptop station"; }
 function renderHud(player) {
-  hud.innerHTML = player ? `<span class="kpi">💰 ${player.credits}</span><span class="kpi">🛰️ ${player.small + player.large}/10</span><span class="kpi">🎓 ${player.graduates}</span>` : "";
+  hud.innerHTML = player ? `<span class="kpi">ALBA Coins ${player.credits}</span><span class="kpi">🛰️ ${player.small + player.large}/10</span><span class="kpi">🎓 ${player.graduates}</span>` : "";
   phaseLabel.textContent = state ? `${state.phase} · ${AlbaGame.esc(player?.company || "Oyuncu")} · ${modeLabel()}` : "Giriş";
 }
 
@@ -88,7 +88,7 @@ function renderCadetSetup() {
 }
 
 function renderWaiting(player) {
-  app.innerHTML = `<section class="card hero"><div class="phase">Hazır · ${modeLabel()}</div><h1>🚀 ${AlbaGame.esc(player.company)}</h1><p>Ekip oluşturuldu. Öğretmen bekleniyor…</p><div class="kpis" style="justify-content:center"><span class="kpi">💰 ${player.credits}</span><span class="kpi">🛰️ ${player.small + player.large}/10</span><span class="kpi">👨‍🚀 ${player.cadets.length}/${player.seatCapacity}</span></div></section>`;
+  app.innerHTML = `<section class="card hero"><div class="phase">Hazır · ${modeLabel()}</div><h1>🚀 ${AlbaGame.esc(player.company)}</h1><p>Ekip oluşturuldu. Öğretmen bekleniyor…</p><div class="kpis" style="justify-content:center"><span class="kpi">ALBA Coins ${player.credits}</span><span class="kpi">🛰️ ${player.small + player.large}/10</span><span class="kpi">👨‍🚀 ${player.cadets.length}/${player.seatCapacity}</span></div></section>`;
 }
 
 function stationLayout(player, rightPanel) {
@@ -145,7 +145,7 @@ function renderResult(player) {
   if (!item || !question || !state.results) return renderStation(player);
   const cls = item.isWinner || item.valid ? "result-good" : item.submitted ? "result-warn" : "result-bad";
   const title = item.isWinner ? "🏆 En iyi yanıt" : item.valid ? "✅ Doğru" : item.submitted ? "🌌 Tam değil" : "⌛ Yanıt gönderilmedi";
-  const resultPanel = `<aside class="question-panel result-panel card"><div class="phase">${AlbaGame.esc(question.topicLabel)}</div><h2 class="${cls}">${title}</h2><p>Yanıtın: <strong>${item.submitted ? AlbaGame.esc(item.answer) : "—"}</strong></p><p>Doğru: <strong>${AlbaGame.esc(state.results.correct)}${question.unit ? ` ${AlbaGame.esc(question.unit)}` : ""}</strong></p><div class="grid two"><div class="reward"><strong>💰 +${item.credits}</strong><span>kredi</span></div><div class="reward"><strong>🧠 +${item.knowledge}</strong><span>bilgi</span></div></div><div class="notice" style="margin-top:14px">🤖 ${AlbaGame.esc(state.results.explanation || "Her soru ekibin öğrenmesine yardımcı olur.")}</div><p class="muted small-note">Sonraki aşama bekleniyor…</p></aside>`;
+  const resultPanel = `<aside class="question-panel result-panel card"><div class="phase">${AlbaGame.esc(question.topicLabel)}</div><h2 class="${cls}">${title}</h2><p>Yanıtın: <strong>${item.submitted ? AlbaGame.esc(item.answer) : "—"}</strong></p><p>Doğru: <strong>${AlbaGame.esc(state.results.correct)}${question.unit ? ` ${AlbaGame.esc(question.unit)}` : ""}</strong></p><div class="grid two"><div class="reward"><strong>ALBA Coins +${item.credits}</strong><span>ALBA Coins</span></div><div class="reward"><strong>🧠 +${item.knowledge}</strong><span>bilgi</span></div></div><div class="notice" style="margin-top:14px">🤖 ${AlbaGame.esc(state.results.explanation || "Her soru ekibin öğrenmesine yardımcı olur.")}</div><p class="muted small-note">Sonraki aşama bekleniyor…</p></aside>`;
   app.innerHTML = stationLayout(player, resultPanel);
   mount3D(player);
 }
@@ -155,7 +155,7 @@ function renderStation(player) {
   const active = (player.cadets || []).filter(cadet => cadet.status === "ACTIVE");
   const crew = active.map(cadet => `<button class="drawer-row recruit-like" data-cadet="${AlbaGame.esc(cadet.id)}"><span>${AlbaGame.esc(cadet.name || AlbaSpace.TOPICS[cadet.topic]?.label || "Öğrenci")}</span><span>${AlbaSpace.TOPICS[cadet.topic]?.label || cadet.topic} · ${cadet.knowledge}/4</span></button>`).join("");
   const ranking = AlbaSpace.rank(state).map((item, index) => `<div class="drawer-row"><span>${index + 1}. ${AlbaGame.esc(item.company)}</span><span>${item.correct}/${state.round || 0} · 🎓 ${item.graduates}</span></div>`).join("");
-  const panel = `<aside class="station-controls card"><div class="control-tabs"><button class="btn ghost compact" data-drawer="crew">Ekip ▾</button><button class="btn ghost compact" data-drawer="ranking">Sıralama ▾</button></div><div id="drawer" class="drawer hidden"></div><div class="phase">İstasyon · ${modeLabel()}</div><div class="notice">Boş koltuk: <strong>${free}</strong></div><h2>+ Modül</h2><div class="grid two"><button id="small" class="btn" ${player.small >= AlbaSpace.MAX.small || player.credits < AlbaSpace.ECON.small ? "disabled" : ""}>SMALL<br><strong>650 💰</strong><br>+2 koltuk</button><button id="large" class="btn" ${player.large >= AlbaSpace.MAX.large || player.credits < AlbaSpace.ECON.large ? "disabled" : ""}>LARGE<br><strong>950 💰</strong><br>+3 koltuk</button></div><p class="muted small-note">Sunucu onayından sonra kullanılabilir docking portlar Build View'da vurgulanır.</p><div class="sep"></div><h2>Öğrenciyi kabul et</h2>${free > 0 ? `<div class="grid two">${Object.entries(AlbaSpace.TOPICS).map(([key, topic]) => `<button class="btn ghost recruit" data-topic="${key}">${topic.label}</button>`).join("")}</div>` : `<p class="muted">Boş koltuk yok.</p>`}</aside>`;
+  const panel = `<aside class="station-controls card"><div class="control-tabs"><button class="btn ghost compact" data-drawer="crew">Ekip ▾</button><button class="btn ghost compact" data-drawer="ranking">Sıralama ▾</button></div><div id="drawer" class="drawer hidden"></div><div class="phase">İstasyon · ${modeLabel()}</div><div class="notice">Boş koltuk: <strong>${free}</strong></div><h2>+ Modül</h2><div class="grid two"><button id="small" class="btn" ${player.small >= AlbaSpace.MAX.small || player.credits < AlbaSpace.ECON.small ? "disabled" : ""}>SMALL<br><strong>650 ALBA Coins</strong><br>+2 koltuk</button><button id="large" class="btn" ${player.large >= AlbaSpace.MAX.large || player.credits < AlbaSpace.ECON.large ? "disabled" : ""}>LARGE<br><strong>950 ALBA Coins</strong><br>+3 koltuk</button></div><p class="muted small-note">Sunucu onayından sonra kullanılabilir docking portlar Build View'da vurgulanır.</p><div class="sep"></div><h2>Öğrenciyi kabul et</h2>${free > 0 ? `<div class="grid two">${Object.entries(AlbaSpace.TOPICS).map(([key, topic]) => `<button class="btn ghost recruit" data-topic="${key}">${topic.label}</button>`).join("")}</div>` : `<p class="muted">Boş koltuk yok.</p>`}</aside>`;
   app.innerHTML = stationLayout(player, panel) + `<section class="card station-summary"><div class="phase">İstasyon durumu</div><div class="kpis"><span class="kpi">LARGE ${player.large}/3</span><span class="kpi">SMALL ${player.small}/7</span><span class="kpi">Ekip ${active.length}/${player.seatCapacity}</span></div>${player.small + player.large === 9 ? `<div class="milestone">🚨 Bir modül!</div>` : ""}</section>`;
   mount3D(player);
   document.getElementById("small")?.addEventListener("click", () => send("BUY_MODULE", { type: "SMALL" }));
@@ -166,7 +166,7 @@ function renderStation(player) {
 
 function renderEnd(player) {
   const ranked = AlbaSpace.rank(state), position = ranked.findIndex(item => item.id === player.id) + 1, winner = state.winnerId ? state.players.find(item => item.id === state.winnerId) : ranked[0];
-  const panel = `<aside class="endgame-panel card"><div class="phase">Oyun sonu kamerası · istasyon tamamlandı</div><h2>${winner?.id === player.id ? "🏆 ZAFER" : `🚀 ${AlbaGame.esc(winner?.company || "Oyun tamamlandı")}`}</h2><p>${AlbaGame.esc(player.company)} · sıra: <strong>${position}</strong></p><div class="kpis"><span class="kpi">🛰️ ${player.small + player.large}/10</span><span class="kpi">🎓 ${player.graduates}</span><span class="kpi">✅ ${player.correct}</span><span class="kpi">💰 ${player.credits}</span></div></aside>`;
+  const panel = `<aside class="endgame-panel card"><div class="phase">Oyun sonu kamerası · istasyon tamamlandı</div><h2>${winner?.id === player.id ? "🏆 ZAFER" : `🚀 ${AlbaGame.esc(winner?.company || "Oyun tamamlandı")}`}</h2><p>${AlbaGame.esc(player.company)} · sıra: <strong>${position}</strong></p><div class="kpis"><span class="kpi">🛰️ ${player.small + player.large}/10</span><span class="kpi">🎓 ${player.graduates}</span><span class="kpi">✅ ${player.correct}</span><span class="kpi">ALBA Coins ${player.credits}</span></div></aside>`;
   app.innerHTML = stationLayout(player, panel);
   mount3D(player);
 }
