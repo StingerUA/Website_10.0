@@ -124,7 +124,9 @@
   }
 
   async function getOverview() {
-    const response = await fetch(overviewUrl, { headers: { Accept: "application/json" } });
+    const requestUrl = new URL(overviewUrl, location.origin);
+    requestUrl.searchParams.set("atlas_snapshot", String(Math.floor(Date.now() / 15_000)));
+    const response = await fetch(requestUrl, { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error(`Overview request failed: ${response.status}`);
     return unwrapOverview(await response.json());
   }
