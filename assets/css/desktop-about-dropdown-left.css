@@ -1,0 +1,14 @@
+/* Desktop-only alignment fix for the ABOUT / HAKKIMIZDA dropdown.
+   Anchor the panel to the trigger's right edge so the horizontal menu expands
+   to the left and stays inside the viewport. Mobile layout is untouched. */
+
+@media (min-width: 1024px) {
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu,
+  .main-nav .dropdown.active > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu,
+  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu:hover {
+    left: auto !important;
+    right: 0 !important;
+    transform: none !important;
+    transform-origin: top right !important;
+  }
+}
