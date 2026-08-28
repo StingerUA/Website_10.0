@@ -1,235 +1,99 @@
-/* Dedicated Orbital Solar System 3D UI. The WebGL scene lives inside the
-   Solar System widget; model-viewer is intentionally restricted to the
-   selected-planet panel on the right. */
+@import url('/orbital-solar-system-3d-legacy.css?v=alba-theme-20260828');
 
-.oa-solar-model {
-  position: relative;
-  min-height: 610px;
-}
-
+/* Alba Space visual layer for the dedicated Solar System 3D experience. */
 .oa-solar-webgl {
-  position: absolute;
-  inset: 0;
-  display: none;
-  overflow: hidden;
-  border-radius: inherit;
   background:
-    radial-gradient(circle at 50% 52%, rgba(255, 187, 72, .08), transparent 20%),
-    radial-gradient(circle at 55% 42%, rgba(66, 213, 232, .045), transparent 42%);
+    radial-gradient(circle at 50% 52%, rgba(255,187,72,.08), transparent 20%),
+    radial-gradient(circle at 55% 42%, rgba(0,194,255,.08), transparent 44%),
+    rgba(5,18,43,.56) !important;
 }
-
-.oa-solar-model--3d .oa-solar-system {
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.oa-solar-model--3d .oa-solar-model3d {
-  display: none !important;
-}
-
-.oa-solar-model--3d .oa-solar-webgl {
-  display: block;
-}
-
-.oa-solar-webgl canvas {
-  position: absolute;
-  inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-  cursor: grab;
-  touch-action: pan-y;
-}
-
-.oa-solar-webgl canvas:active { cursor: grabbing; }
 
 .oa-solar-webgl__loading,
 .oa-solar-webgl__legend {
-  position: absolute;
-  z-index: 3;
-  pointer-events: none;
-  border: 1px solid rgba(148, 163, 184, .18);
-  background: rgba(3, 10, 20, .72);
-  backdrop-filter: blur(10px);
-  color: #a8b5c3;
-  font: 600 11px/1.45 "IBM Plex Mono", monospace;
-  letter-spacing: .05em;
+  border: 1px solid rgba(148,163,184,.34) !important;
+  border-radius: 14px !important;
+  color: #cbd5e1 !important;
+  background: rgba(13,42,87,.82) !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,.28) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(12px) !important;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: .02em !important;
 }
 
-.oa-solar-webgl__loading {
-  left: 18px;
-  top: 18px;
-  max-width: 270px;
-  padding: 10px 12px;
-  border-radius: 10px;
-}
-
-.oa-solar-webgl__loading.is-ready { opacity: 0; transition: opacity .45s ease; }
-.oa-solar-webgl__loading.is-error { color: #ffb4a9; }
-
-.oa-solar-webgl__legend {
-  right: 18px;
-  bottom: 18px;
-  max-width: 280px;
-  padding: 10px 12px;
-  border-radius: 10px;
-}
-
-.oa-solar-webgl__labels {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  pointer-events: none;
-}
+.oa-solar-webgl__loading.is-error { color: #fda4af !important; }
 
 .oa-solar-webgl__label {
-  position: absolute;
-  transform: translate(-50%, 12px);
-  border: 0;
-  padding: 3px 5px;
-  background: rgba(2, 8, 15, .66);
-  border-radius: 5px;
-  color: #d9e8ef;
-  font: 600 10px/1.1 "IBM Plex Mono", monospace;
-  white-space: nowrap;
-  pointer-events: auto;
-  cursor: pointer;
-  text-shadow: 0 1px 5px #000;
-  transition: color .15s ease, background .15s ease, transform .15s ease;
+  padding: 5px 8px !important;
+  border: 1px solid rgba(0,194,255,.18) !important;
+  border-radius: 999px !important;
+  color: #e5e7eb !important;
+  background: rgba(2,6,23,.72) !important;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+  box-shadow: 0 5px 16px rgba(0,0,0,.22);
 }
-
 .oa-solar-webgl__label:hover,
 .oa-solar-webgl__label.is-active {
-  color: #69e8f5;
-  background: rgba(3, 26, 36, .88);
-  transform: translate(-50%, 10px) scale(1.04);
+  color: #020617 !important;
+  border-color: #00c2ff !important;
+  background: #00c2ff !important;
+  box-shadow: 0 8px 22px rgba(56,189,248,.28) !important;
 }
 
 .oa-solar-selected-3d {
-  display: none;
-  margin: 20px 0 2px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(148, 163, 184, .18);
+  border-color: rgba(148,163,184,.28) !important;
 }
-
-.oa-solar-side.is-3d .oa-solar-selected-3d { display: block; }
-
-.oa-solar-selected-3d__heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
+.oa-solar-selected-3d__heading small,
+.oa-solar-selected-3d__heading span,
+.oa-solar-audio__title,
+.oa-solar-audio__time,
+.oa-solar-audio__status {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
-
-.oa-solar-selected-3d__heading small {
-  color: #7f95a3;
-  font: 600 10px/1.2 "IBM Plex Mono", monospace;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-
-.oa-solar-selected-3d__heading span {
-  color: #56dce9;
-  font: 600 10px/1.2 "IBM Plex Mono", monospace;
-  letter-spacing: .08em;
-}
+.oa-solar-selected-3d__heading small { color: #94a3b8 !important; }
+.oa-solar-selected-3d__heading span { color: #00c2ff !important; }
 
 #solarPlanetViewer {
-  width: 100% !important;
-  height: 245px !important;
-  min-height: 245px !important;
-  margin: 0 !important;
-  display: block !important;
-  border-radius: 14px !important;
-  border: 1px solid rgba(91, 213, 229, .18) !important;
+  border: 1px solid rgba(148,163,184,.34) !important;
+  border-radius: 18px !important;
   background:
-    radial-gradient(circle at 50% 48%, rgba(72, 196, 216, .08), transparent 45%),
-    #050b12 !important;
-  box-shadow: inset 0 0 50px rgba(0, 0, 0, .36) !important;
+    radial-gradient(circle at 50% 48%, rgba(0,194,255,.10), transparent 48%),
+    rgba(5,18,43,.86) !important;
+  box-shadow: inset 0 0 46px rgba(0,0,0,.24), 0 16px 38px rgba(0,0,0,.20) !important;
 }
 
 .oa-solar-audio {
-  margin-top: 12px;
-  padding: 12px;
-  border: 1px solid rgba(91, 213, 229, .16);
-  border-radius: 12px;
-  background: rgba(5, 13, 22, .82);
+  border: 1px solid rgba(148,163,184,.32) !important;
+  border-radius: 16px !important;
+  background: rgba(8,29,65,.72) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,.18) !important;
 }
-
-.oa-solar-audio__top {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 9px;
-}
-
-.oa-solar-audio__title {
-  min-width: 0;
-  color: #bcd0d9;
-  font: 600 10px/1.3 "IBM Plex Mono", monospace;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.oa-solar-audio__time {
-  flex: none;
-  color: #748996;
-  font: 600 10px/1 "IBM Plex Mono", monospace;
-}
-
-.oa-solar-audio__controls {
-  display: grid;
-  grid-template-columns: 36px 36px 1fr;
-  gap: 8px;
-  align-items: center;
-}
-
+.oa-solar-audio__title { color: #cbd5e1 !important; }
+.oa-solar-audio__time,
+.oa-solar-audio__status { color: #94a3b8 !important; }
+.oa-solar-audio__status.is-playing { color: #00c2ff !important; }
+.oa-solar-audio__status.is-error { color: #fb7185 !important; }
 .oa-solar-audio__button {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(86, 220, 233, .35);
-  border-radius: 50%;
-  background: rgba(29, 85, 100, .13);
-  color: #56dce9;
-  cursor: pointer;
-  font-size: 15px;
+  border-color: #00c2ff !important;
+  color: #00c2ff !important;
+  background: rgba(2,6,23,.30) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,.18);
 }
-
-.oa-solar-audio__button:hover { background: rgba(37, 143, 164, .22); }
-
-.oa-solar-audio__progress {
-  width: 100%;
-  accent-color: #56dce9;
-  cursor: pointer;
+.oa-solar-audio__button:hover {
+  color: #020617 !important;
+  background: #00c2ff !important;
+  box-shadow: 0 8px 24px rgba(56,189,248,.28) !important;
 }
+.oa-solar-audio__progress { accent-color: #00c2ff !important; }
 
-.oa-solar-audio__status {
-  margin: 7px 0 0;
-  color: #6f8491;
-  font: 500 9px/1.35 "IBM Plex Mono", monospace;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-}
-
-.oa-solar-audio__status.is-playing { color: #56dce9; }
-.oa-solar-audio__status.is-error { color: #ff9c91; }
-
-@media (max-width: 1080px) {
-  .oa-solar-model { min-height: 560px; }
-  #solarPlanetViewer { height: 220px !important; min-height: 220px !important; }
-}
-
-@media (max-width: 720px) {
-  .oa-solar-model { min-height: 470px; }
-  .oa-solar-webgl__legend { left: 12px; right: 12px; bottom: 12px; max-width: none; }
-  .oa-solar-webgl__loading { left: 12px; top: 12px; }
-  .oa-solar-webgl__label { font-size: 9px; }
-  #solarPlanetViewer { height: 210px !important; min-height: 210px !important; }
+@media (max-width: 767px) {
+  .oa-solar-webgl__loading,
+  .oa-solar-webgl__legend,
+  .oa-solar-audio { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .oa-solar-webgl__legend { border-radius: 12px !important; }
+  #solarPlanetViewer { border-radius: 14px !important; box-shadow: none !important; }
 }
