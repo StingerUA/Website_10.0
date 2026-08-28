@@ -1,0 +1,31 @@
+/* Global desktop spacing between the included site header and page content.
+   Requested visual clearance: exactly 2 cm on desktop only.
+   Mobile/tablet layouts remain untouched. */
+
+:root {
+  --alba-desktop-header-clearance: 2cm;
+}
+
+@media (min-width: 1024px) {
+  /* Every language and both regular + shop header variants use the same spacing. */
+  [data-include^="/header-"],
+  [data-include-html^="/header-"],
+  [data-include="header-tr.html"],
+  [data-include="header-en.html"],
+  [data-include="header-ru.html"],
+  [data-include="header-ar.html"],
+  [data-include="header-tr-black.html"],
+  [data-include="header-en-black.html"],
+  [data-include="header-ru-black.html"],
+  [data-include="header-ar-black.html"] {
+    display: block;
+    margin-bottom: var(--alba-desktop-header-clearance) !important;
+  }
+
+  /* The four home pages previously created their own larger top gap.
+     Remove only that desktop-only extra spacing so the global 2 cm rule is exact. */
+  body.home-page .home-main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
