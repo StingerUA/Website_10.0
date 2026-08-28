@@ -28,3 +28,6 @@ jobs:
 
       - name: Run build script
         run: npm run build:atlas-nav
+
+      - name: Validate header dropdown consistency
+        run: node check-dropdown-css.js
