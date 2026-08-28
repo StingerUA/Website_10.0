@@ -1,4 +1,48 @@
 (() => {
+  // Solar System has its own model/audio UX. Prevent the site-wide helpers
+  // from adding the generic text toggle, AR scanner button and generic player.
+  if (document.body) document.body.dataset.disableModelExtras = "true";
+
+  if (!document.getElementById("solar-model-extras-suppression")) {
+    const suppression = document.createElement("style");
+    suppression.id = "solar-model-extras-suppression";
+    suppression.textContent = 'body[data-disable-model-extras="true"] #toggleBtn,body[data-disable-model-extras="true"] #alba-scanner-btn-wrap,body[data-disable-model-extras="true"] #alba-scanner-hint,body[data-disable-model-extras="true"] #albaModelPlayer{display:none!important}';
+    document.head.append(suppression);
+  }
+
+  document.getElementById("toggleBtn")?.remove();
+  document.getElementById("alba-scanner-btn-wrap")?.remove();
+  document.getElementById("alba-scanner-hint")?.remove();
+  document.getElementById("albaModelPlayer")?.remove();
+
+  if (!document.querySelector("script[data-alba-model-player]")) {
+    const guard = document.createElement("script");
+    guard.type = "application/json";
+    guard.dataset.albaModelPlayer = "solar-disabled";
+    document.head.append(guard);
+  }
+
+  if (!document.querySelector('link[data-solar-3d-style]')) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/orbital-solar-system-3d.css?v=20260828-2";
+    link.dataset.solar3dStyle = "true";
+    document.head.append(link);
+  }
+
+  // Remove the previous 3D implementation: it placed eight model-viewer
+  // elements directly inside the system widget. The replacement below uses
+  // a single Three.js/WebGL canvas there and one model-viewer in the sidebar.
+  document.querySelector("#solarModel .oa-solar-model3d")?.remove();
+
+  if (!document.querySelector('script[data-solar-3d-module]')) {
+    const module = document.createElement("script");
+    module.type = "module";
+    module.src = "/orbital-solar-system-3d.js?v=20260828-2";
+    module.dataset.solar3dModule = "true";
+    document.head.append(module);
+  }
+
   const model = document.getElementById("solarModel");
   if (!model) return;
 
