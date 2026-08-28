@@ -126,28 +126,44 @@
   }
 }
 
-/* Extra guard: the shop/product white theme remains white even if a page mixes header classes. */
-html.product-text-black .site-header .dropdown-menu,
+/*
+ * Hard exclusion for white shop/product headers.
+ * These selectors intentionally exceed the specificity of the legacy desktop
+ * SERVICES / ALBAMEN / ABOUT rules, all of which use !important.
+ */
+html.product-text-black .site-header .main-nav .dropdown > .dropdown-trigger + .dropdown-menu,
+.site-header.site-header--black .main-nav .dropdown > .dropdown-trigger + .dropdown-menu,
 html.product-text-black .site-header .lang-dropdown-menu,
-html.product-text-black .site-header .alien-menu,
-html.product-text-black .site-header #alienMenu,
-.site-header.site-header--black .dropdown-menu,
 .site-header.site-header--black .lang-dropdown-menu,
-.site-header.site-header--black .alien-menu,
+html.product-text-black .site-header .alien-dropdown-container .alien-menu,
+.site-header.site-header--black .alien-dropdown-container .alien-menu,
+html.product-text-black .site-header #alienMenu,
 .site-header.site-header--black #alienMenu {
   background: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
   color: #111827 !important;
 }
 
-html.product-text-black .site-header .dropdown-menu a,
-html.product-text-black .site-header .dropdown-menu button,
+html.product-text-black .site-header .main-nav .dropdown > .dropdown-trigger + .dropdown-menu a,
+html.product-text-black .site-header .main-nav .dropdown > .dropdown-trigger + .dropdown-menu button,
+.site-header.site-header--black .main-nav .dropdown > .dropdown-trigger + .dropdown-menu a,
+.site-header.site-header--black .main-nav .dropdown > .dropdown-trigger + .dropdown-menu button,
 html.product-text-black .site-header .lang-dropdown-menu a,
-html.product-text-black .site-header .alien-menu .alien-menu-item,
-.site-header.site-header--black .dropdown-menu a,
-.site-header.site-header--black .dropdown-menu button,
 .site-header.site-header--black .lang-dropdown-menu a,
+html.product-text-black .site-header .alien-menu .alien-menu-item,
 .site-header.site-header--black .alien-menu .alien-menu-item {
+  color: #111827 !important;
+}
+
+html.product-text-black .site-header .main-nav .dropdown > .dropdown-trigger + .dropdown-menu a:hover,
+html.product-text-black .site-header .main-nav .dropdown > .dropdown-trigger + .dropdown-menu button:hover,
+.site-header.site-header--black .main-nav .dropdown > .dropdown-trigger + .dropdown-menu a:hover,
+.site-header.site-header--black .main-nav .dropdown > .dropdown-trigger + .dropdown-menu button:hover,
+html.product-text-black .site-header .lang-dropdown-menu a:hover,
+.site-header.site-header--black .lang-dropdown-menu a:hover,
+html.product-text-black .site-header .alien-menu .alien-menu-item:hover,
+.site-header.site-header--black .alien-menu .alien-menu-item:hover {
+  background: #f3f4f6 !important;
   color: #111827 !important;
 }
