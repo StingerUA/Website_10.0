@@ -44,6 +44,7 @@ const ORBITAL_CREW_URL = "https://whoisinspace.com/";
 const ORBITAL_ISS_TLE_URL = "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE";
 const ORBITAL_SNAPSHOT_KEY = "overview";
 const ORBITAL_ISS_TLE_SNAPSHOT_KEY = "iss_tle";
+const ORBITAL_LAUNCH_CACHE_SCHEMA = 2;
 const VENUS_USGS_SEARCH_URL = "https://planetarynames.wr.usgs.gov/SearchResults?Target=15_Venus";
 const VENUS_USGS_TARGET_URL = "https://planetarynames.wr.usgs.gov/Page/VENUS/target";
 const VENUS_SNAPSHOT_KEY = "venus_nomenclature";
@@ -658,7 +659,7 @@ async function orbitalFetch(url) {
 }
 
 async function orbitalLaunches(now) {
-  if (orbitalLaunchesCache?.expiresAt > now) return orbitalLaunchesCache.value;
+  if (orbitalLaunchesCache?.schema === ORBITAL_LAUNCH_CACHE_SCHEMA && orbitalLaunchesCache.expiresAt > now) return orbitalLaunchesCache.value;
   let value = [];
   try {
     const payload = await orbitalFetch(`${ORBITAL_LAUNCHES_URL}&net__gte=${encodeURIComponent(new Date(now).toISOString())}`);
@@ -674,7 +675,7 @@ async function orbitalLaunches(now) {
       console.warn("Orbital Atlas launch fallback unavailable", error);
     }
   }
-  if (value.length) orbitalLaunchesCache = { value, expiresAt: now + 20 * 60 * 1000 };
+  if (value.length) orbitalLaunchesCache = { schema: ORBITAL_LAUNCH_CACHE_SCHEMA, value, expiresAt: now + 20 * 60 * 1000 };
   return value.length ? value : orbitalLaunchesCache?.value || [];
 }
 
