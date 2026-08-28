@@ -10,6 +10,7 @@
   --alba-dropdown-hover-text: #00c2ff;
   --alba-dropdown-active: rgba(0, 194, 255, 0.25);
   --alba-dropdown-shadow: 0 12px 32px rgba(0, 0, 0, 0.70);
+  --alba-desktop-header-clearance: 112px;
 }
 
 /* Main navigation dropdowns — SERVICES / ALBAMEN / ABOUT and all language equivalents. */
@@ -126,6 +127,40 @@
   .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu button:hover {
     background: var(--alba-dropdown-hover) !important;
     color: var(--alba-dropdown-hover-text) !important;
+  }
+}
+
+/*
+ * Desktop content clearance.
+ * The homepage already creates the desired visual gap with .home-main:
+ * 80px top margin + 32px top padding = roughly 112px before real content.
+ * Other pages reserve the same amount after the injected header so dropdowns
+ * can open into empty space instead of covering hero images/text.
+ *
+ * This is attached to the include wrapper because every language/header variant
+ * loads this stylesheet, including pages that do not otherwise share one layout CSS.
+ * Adjacent vertical margins collapse naturally, so pages that already have a
+ * 40–80px top margin do not receive a doubled 150–190px gap.
+ */
+@media (min-width: 1024px) {
+  body:not(.home-page) [data-include^="/header-"],
+  body:not(.home-page) [data-include-html^="/header-"],
+  body:not(.home-page) [data-include="header-tr.html"],
+  body:not(.home-page) [data-include="header-en.html"],
+  body:not(.home-page) [data-include="header-ru.html"],
+  body:not(.home-page) [data-include="header-ar.html"],
+  body:not(.home-page) [data-include="header-tr-black.html"],
+  body:not(.home-page) [data-include="header-en-black.html"],
+  body:not(.home-page) [data-include="header-ru-black.html"],
+  body:not(.home-page) [data-include="header-ar-black.html"] {
+    display: block;
+    margin-bottom: var(--alba-desktop-header-clearance) !important;
+  }
+
+  /* Home pages already have the reference spacing; never double it. */
+  body.home-page [data-include^="/header-"],
+  body.home-page [data-include-html^="/header-"] {
+    margin-bottom: 0 !important;
   }
 }
 
