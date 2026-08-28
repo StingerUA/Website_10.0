@@ -552,6 +552,47 @@
           "url": "/ar/blog/kara-delikler-evrenin-en-gizemli-yapilari.html"
         }
       }
+    },
+    {
+      "slug": "uzayin-gizemli-dunyasi-evren-hakkinda-bilmemiz-gerekenler",
+      "category": "uzay",
+      "publishAt": "2026-08-28T13:24:06+03:00",
+      "cover": "/assets/images/blog/uzayin-gizemli-dunyasi-evren-hakkinda-bilmemiz-gerekenler-cover.jpg",
+      "readingMinutes": 5,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Muzaffer Enes İpçi",
+        "ar": "Muzaffer Enes İpçi"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Uzayın Gizemli Dünyası: Evren Hakkında Bilmemiz Gerekenler",
+          "excerpt": "Uzayın Gizemli Dünyası: Evren Hakkında Bilmemiz Gerekenler İnsanlık, tarih boyunca gökyüzüne bakarak evrendeki yerini anlamaya çalıştı. Çıplak gözle g",
+          "url": "/blog/uzayin-gizemli-dunyasi-evren-hakkinda-bilmemiz-gerekenler.html"
+        },
+        "en": {
+          "title": "The Mysterious World of Space: What We Need to Know About the Universe",
+          "excerpt": "The Mysterious World of Space: What We Need to Know About the Universe Throughout history, humanity has tried to understand its place in the universe ",
+          "url": "/eng/blog/uzayin-gizemli-dunyasi-evren-hakkinda-bilmemiz-gerekenler.html"
+        },
+        "ru": {
+          "title": "Таинственный мир космоса: что нам нужно знать о Вселенной",
+          "excerpt": "Загадочный мир космоса: что нам нужно знать о Вселенной На протяжении истории человечество пыталось понять своё место во Вселенной, глядя на небо. Это",
+          "url": "/rus/blog/uzayin-gizemli-dunyasi-evren-hakkinda-bilmemiz-gerekenler.html"
+        },
+        "ar": {
+          "title": "العالم الغامض للفضاء: ما نحتاج إلى معرفته عن الكون",
+          "excerpt": "العالم الغامض للفضاء: ما الذي نحتاج إلى معرفته عن الكون عبر التاريخ، حاول الإنسان فهم مكانه في الكون من خلال النظر إلى السماء. لقد غيرت هذه العملية، ا",
+          "url": "/ar/blog/uzayin-gizemli-dunyasi-evren-hakkinda-bilmemiz-gerekenler.html"
+        }
+      }
     }
   ]
 }
