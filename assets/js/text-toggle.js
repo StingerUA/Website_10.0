@@ -11,6 +11,12 @@
 (function () {
   'use strict';
 
+  function extrasDisabled() {
+    return document.body && document.body.dataset.disableModelExtras === 'true';
+  }
+
+  if (extrasDisabled()) return;
+
   // Текст кнопки на 3 языках
   const STRINGS = {
     tr: {
@@ -35,6 +41,7 @@
   }
 
   function initTextToggle() {
+    if (extrasDisabled()) return;
     // Проверяем, есть ли model-viewer на странице
     if (!document.querySelector('model-viewer')) {
       return;
@@ -125,6 +132,7 @@
   }
 
   function addEmptyToggle(strings) {
+    if (extrasDisabled()) return;
     // Добавляем кнопку даже если нет текста (для консистентности дизайна)
     if (document.getElementById('toggleBtn')) {
       return;
