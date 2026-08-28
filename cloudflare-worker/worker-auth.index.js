@@ -590,6 +590,7 @@ function normalizeOrbitalCrew(html) {
 
 function normalizeOrbitalLaunch(raw) {
   const provider = orbitalText(raw?.launch_service_provider?.name, "Оператор уточняется");
+  const vehicle = orbitalText(raw?.rocket?.configuration?.full_name, orbitalText(raw?.rocket?.configuration?.name, orbitalText(raw?.rocket?.configuration?.family, "")));
   const video = Array.isArray(raw?.vidURLs) ? raw.vidURLs.find(item => isOrbitalYouTubeUrl(item?.url)) : null;
   const image = orbitalSafeLaunchImage(raw?.image);
   return {
@@ -599,6 +600,7 @@ function normalizeOrbitalLaunch(raw) {
     location: orbitalText(raw?.pad?.location?.name, orbitalText(raw?.pad?.name, "Площадка уточняется")),
     status: orbitalText(raw?.status?.name, "Статус уточняется"),
     streamUrl: video?.url || (/spacex/i.test(provider) ? "https://www.youtube.com/@SpaceX/live" : null),
+    vehicle,
     image,
     source: "Data: Launch Library 2"
   };
@@ -606,6 +608,7 @@ function normalizeOrbitalLaunch(raw) {
 
 function normalizeRocketLaunch(raw) {
   const provider = orbitalText(raw?.provider?.name, "Оператор уточняется");
+  const vehicle = orbitalText(raw?.vehicle?.name, "");
   const location = [raw?.pad?.name, raw?.pad?.location?.name].filter(value => typeof value === "string" && value.trim()).join(" · ");
   const media = Array.isArray(raw?.media) ? raw.media.find(item => isOrbitalYouTubeUrl(item?.media_url) || typeof item?.youtube_vidid === "string") : null;
   const streamUrl = isOrbitalYouTubeUrl(media?.media_url)
@@ -619,6 +622,7 @@ function normalizeRocketLaunch(raw) {
     location: location || "Площадка уточняется",
     status: raw?.est_date?.year ? "Запланирован" : "Окно уточняется",
     streamUrl,
+    vehicle,
     image: null,
     source: "Data by RocketLaunch.Live"
   };
