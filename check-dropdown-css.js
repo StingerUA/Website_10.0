@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Validate shared header dropdown styling.
- * Regular TR/EN/RU/AR headers must share the same cyan palette on desktop/mobile.
- * White shop/product header variants must remain explicitly excluded.
+ * Regular TR/EN/RU/AR headers must match the homepage mobile dark-blue palette
+ * on both desktop and mobile. White shop/product header variants stay white.
  */
 
 const fs = require('fs');
@@ -22,7 +22,7 @@ const checks = [];
 const add = (name, pass) => checks.push({ name, pass: Boolean(pass) });
 
 add('Dropdown entry imports legacy interaction/layout rules', /dropdown-optimized-legacy\.css/.test(entryCss));
-add('Dropdown entry imports unified cyan theme', /header-dropdown-blue\.css/.test(entryCss));
+add('Dropdown entry imports unified header theme', /header-dropdown-blue\.css/.test(entryCss));
 
 add(
   'Legacy mobile inactive dropdown blocks pointer events',
@@ -34,9 +34,10 @@ add(
 );
 add('Legacy mobile breakpoint remains present', /@media\s*\(max-width:\s*1023px\)/.test(legacyCss));
 
-add('Canonical cyan top colour is #eafcff', /--alba-dropdown-bg-top:\s*#eafcff/i.test(blueCss));
-add('Canonical cyan bottom colour is #c9f5ff', /--alba-dropdown-bg-bottom:\s*#c9f5ff/i.test(blueCss));
-add('Canonical border colour is #7bdbe9', /--alba-dropdown-border:\s*#7bdbe9/i.test(blueCss));
+add('Canonical homepage-mobile background is #020617', /--alba-dropdown-bg:\s*#020617/i.test(blueCss));
+add('Canonical dropdown text is #e5e7eb', /--alba-dropdown-text:\s*#e5e7eb/i.test(blueCss));
+add('Canonical cyan hover text is #00c2ff', /--alba-dropdown-hover-text:\s*#00c2ff/i.test(blueCss));
+add('Canonical hover fill uses rgba(0, 194, 255, 0.20)', /--alba-dropdown-hover:\s*rgba\(0,\s*194,\s*255,\s*0\.20\)/i.test(blueCss));
 add(
   'Regular main navigation dropdowns use non-black header scope',
   /\.site-header:not\(\.site-header--black\)\s+\.main-nav[\s\S]*?\.dropdown-menu/.test(blueCss)
@@ -51,6 +52,10 @@ add(
 );
 add('Unified theme explicitly defines desktop rules', /@media\s*\(min-width:\s*1024px\)/.test(blueCss));
 add('Unified theme explicitly defines mobile rules', /@media\s*\(max-width:\s*1023px\)/.test(blueCss));
+add(
+  'Desktop legacy flyouts are forced to the homepage mobile background',
+  /@media\s*\(min-width:\s*1024px\)[\s\S]*?href\$="hizmetler\.html"[\s\S]*?background:\s*var\(--alba-dropdown-bg\)\s*!important/i.test(blueCss)
+);
 add(
   'White shop headers have a high-specificity exclusion',
   /\.site-header\.site-header--black\s+\.main-nav[\s\S]*?background:\s*#ffffff\s*!important/i.test(blueCss)
