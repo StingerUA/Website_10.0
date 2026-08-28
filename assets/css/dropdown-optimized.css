@@ -1,6 +1,8 @@
 /* Shared dropdown entry point.
    Keep the proven interaction/layout rules, then apply the unified Alba Space
-   homepage-mobile dark-blue palette and desktop header clearance. White shop
-   dropdown colours remain protected by .site-header--black / product-text-black. */
-@import url('/assets/css/dropdown-optimized-legacy.css?v=20260829-header-clearance');
-@import url('/assets/css/header-dropdown-blue.css?v=20260829-header-clearance');
+   homepage-mobile dark-blue palette and the global desktop header clearance.
+   White shop dropdown colours remain protected by .site-header--black /
+   product-text-black, while spacing stays identical across the whole site. */
+@import url('/assets/css/dropdown-optimized-legacy.css?v=20260829-2cm-clearance');
+@import url('/assets/css/header-dropdown-blue.css?v=20260829-2cm-clearance');
+@import url('/assets/css/desktop-header-clearance.css?v=20260829-2cm-clearance');
