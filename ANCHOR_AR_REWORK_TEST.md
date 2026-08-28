@@ -23,3 +23,15 @@
 - Zoom simulation after synthetic `targetFound`: scale changed from `0.28` to `0.3024`; no manual drag handler or movable card remains.
 - Chromium sandbox reported `getUserMedia NotFoundError: Requested device not found`; physical camera, target detection and mobile ARCore were not available for verification in this environment.
 - Browser console had the expected MindAR camera failure only; no new JavaScript syntax/runtime failure was observed before the fallback was shown.
+
+
+## Live smoke-test после публикации
+
+Commit `028a427` успешно прошёл CI и GitHub Pages deployment. GitHub предупредил об artifact size `1,410,229,571` bytes, то есть выше 1 GB; deployment всё же завершился успешно.
+
+Live URL: `https://albaspace.com.tr/ar-restaurant/?v=anchor-2-live&fresh=1`.
+
+На live-маршруте видны только верхняя кнопка `Menü`, центральная кнопка съёмки и status/fallback элементы; при начальной загрузке меню скрыто. Нажатие `Menü` показывает категории `ET YEMEKLERİ`, `TATLILAR`, `ÇORBALAR`, `İÇECEKLER` и кнопки названий блюд. В sandbox camera runtime не получает физическое устройство, поэтому появляется Turkish fallback `Kamera açılamadı`; это не является проверкой реального мобильного разрешения камеры или image tracking.
+
+
+Live menu interaction также проверена: после выбора `TATLILAR` и `Alba Kirazlı Pasta` drawer меню закрылся, `#dish-model` получил `/assets/models/restaurant/realistic-dessert-cake.glb?v=anchor-2`, его `visible` остался `true`, а `#dish-anchor` сохранил единственный `targetIndex: 0`. Во время ожидания загрузки live UI показывает `Yemek kataloğu yükleniyor`.
