@@ -732,6 +732,17 @@ function orbitalOverviewUsable(value) {
   return value.launches.length > 0 || value.iss !== null || value.crew.length > 0 || value.missions.length > 0;
 }
 
+function orbitalMergeSnapshot(fresh, stored) {
+  if (!stored) return fresh;
+  return {
+    ...fresh,
+    launches: fresh.launches.length ? fresh.launches : stored.launches,
+    iss: fresh.iss || stored.iss || null,
+    crew: fresh.crew.length ? fresh.crew : stored.crew,
+    missions: fresh.missions.length ? fresh.missions : stored.missions
+  };
+}
+
 async function orbitalReadSnapshot(env) {
   if (!env.DB) return null;
   try {
@@ -758,17 +769,20 @@ async function orbitalFreshOverview() {
 }
 
 async function orbitalRefreshSnapshot(env) {
+  const stored = await orbitalReadSnapshot(env);
   const fresh = await orbitalFreshOverview();
-  if (!orbitalOverviewUsable(fresh)) throw new Error("No usable orbital data received; prior snapshot preserved");
-  await orbitalWriteSnapshot(env, fresh);
-  console.log("Orbital Atlas snapshot refreshed", fresh.updatedAt);
-  return fresh;
+  const value = orbitalMergeSnapshot(fresh, stored);
+  if (!orbitalOverviewUsable(value)) throw new Error("No usable orbital data received; prior snapshot preserved");
+  await orbitalWriteSnapshot(env, value);
+  console.log("Orbital Atlas snapshot refreshed", value.updatedAt);
+  return value;
 }
 
 async function orbitalOverview(cors, env) {
-  let value = await orbitalFreshOverview();
+  const fresh = await orbitalFreshOverview();
+  let value = fresh;
   try {
-    if (!orbitalOverviewUsable(value)) value = await orbitalReadSnapshot(env) || value;
+    if (!fresh.launches.length || !fresh.iss || !fresh.crew.length || !fresh.missions.length) value = orbitalMergeSnapshot(fresh, await orbitalReadSnapshot(env));
   } catch (error) {
     console.warn("Orbital Atlas stored fallback unavailable", error);
   }
