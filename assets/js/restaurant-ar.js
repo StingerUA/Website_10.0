@@ -91,13 +91,66 @@ const MENU = {
   }
 };
 
+const MAIN_API = 'https://api.albaspace.com.tr';
+const AUTH_TOKEN_KEY = 'albaspace_access_token';
+const AUTH_RETURN_KEY = 'albaspace_auth_return_to';
+const MODEL_BASE_SCALE = 0.56;
+
+function consumeAuthToken() {
+  const hash = window.location.hash.replace(/^#/, '');
+  const parts = hash ? hash.split('&') : [];
+  const tokenPart = parts.find((part) => part.startsWith(`${AUTH_TOKEN_KEY}=`));
+  if (!tokenPart) return;
+  const token = decodeURIComponent(tokenPart.slice(AUTH_TOKEN_KEY.length + 1));
+  if (token) {
+    try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (error) { console.warn('Auth token could not be stored:', error); }
+  }
+  const rest = parts.filter((part) => !part.startsWith(`${AUTH_TOKEN_KEY}=`));
+  const cleanUrl = `${window.location.pathname}${window.location.search}${rest.length ? `#${rest.join('&')}` : ''}`;
+  window.history.replaceState({}, document.title, cleanUrl);
+}
+
+function authHeaders() {
+  try {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY) || '';
+    return token ? {Authorization: `Bearer ${token}`} : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+async function checkLogin() {
+  consumeAuthToken();
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 8000);
+  try {
+    const response = await fetch(`${MAIN_API}/me`, {
+      credentials: 'include',
+      headers: authHeaders(),
+      mode: 'cors',
+      signal: controller.signal
+    });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch (error) {
+    return null;
+  } finally {
+    window.clearTimeout(timeout);
+  }
+}
+
 const app = document.querySelector('#ar-app');
 const arScene = document.querySelector('#ar-scene');
 const dishAnchor = document.querySelector('#dish-anchor');
 const dishModel = document.querySelector('#dish-model');
+const dishPlate = document.querySelector('#dish-plate');
+const dishPlateRim = document.querySelector('#dish-plate-rim');
+const ambientLight = document.querySelector('#ambient-light');
+const keyLight = document.querySelector('#key-light');
 const menuButton = document.querySelector('#menu-button');
 const menuPanel = document.querySelector('#menu-panel');
 const menuClose = document.querySelector('#menu-close');
+const recalibrateButton = document.querySelector('#recalibrate-button');
 const categoryContainer = document.querySelector('#menu-category-buttons');
 const itemContainer = document.querySelector('#menu-item-buttons');
 const statusCard = document.querySelector('#status-card');
@@ -107,15 +160,34 @@ const loadingProgress = document.querySelector('#loading-progress');
 const captureButton = document.querySelector('#capture-button');
 const captureTimer = document.querySelector('#capture-timer');
 const cameraFallback = document.querySelector('#camera-start-fallback');
+const authGate = document.querySelector('#auth-gate');
+const authChecking = document.querySelector('#auth-checking');
+const authRequired = document.querySelector('#auth-required');
+const loginLink = document.querySelector('#login-link');
+const tableCalibration = document.querySelector('#table-calibration');
+const tablePreview = document.querySelector('#table-preview');
+const tableFreeze = document.querySelector('#table-freeze');
+const tableCaptureButton = document.querySelector('#table-capture-button');
+const tableCaptureLabel = document.querySelector('#table-capture-label');
+const tableRetryButton = document.querySelector('#table-retry-button');
+const tableCalibrationDetail = document.querySelector('#table-calibration-detail');
+const calibrationProgress = document.querySelector('#calibration-progress');
+const calibrationProgressBar = calibrationProgress.querySelector('span');
 
 const state = {
+  user: null,
   category: 'meat',
   dishIndex: 0,
   arSystem: null,
   arStarted: false,
+  anchorReady: false,
+  anchorTargetUrl: '',
+  calibrationStream: null,
+  calibrating: false,
   targetFound: false,
   modelReady: false,
   loadingDish: false,
+  modelMinY: 0,
   zoom: 1,
   pinchStartDistance: 0,
   pinchStartZoom: 1,
@@ -164,9 +236,32 @@ function hideStatusSoon(delay = 500) {
 }
 
 function applyZoom() {
-  const scale = 0.28 * state.zoom;
+  const scale = MODEL_BASE_SCALE * state.zoom;
+  const surfaceZ = state.category === 'meat' ? 0.04 + (0.025 * state.zoom) : 0.015;
   dishModel.setAttribute('scale', `${scale} ${scale} ${scale}`);
+  dishModel.setAttribute('position', `0 0 ${surfaceZ - (state.modelMinY * scale)}`);
+  dishPlate.setAttribute('scale', `${state.zoom} ${state.zoom} ${state.zoom}`);
+  dishPlateRim.setAttribute('scale', `${state.zoom} ${state.zoom} ${state.zoom}`);
   app.style.setProperty('--dish-zoom', state.zoom.toFixed(3));
+}
+
+function updateDishPresentation() {
+  const isMeat = state.category === 'meat';
+  dishPlate.setAttribute('visible', String(isMeat));
+  dishPlateRim.setAttribute('visible', String(isMeat));
+  ambientLight.setAttribute('light', 'intensity', isMeat ? 2.05 : 1.7);
+  keyLight.setAttribute('light', 'intensity', isMeat ? 1.45 : 1.2);
+}
+
+function measureModelBottom() {
+  const mesh = dishModel.getObject3D('mesh');
+  if (!mesh || !window.AFRAME?.THREE) return 0;
+  const root = new AFRAME.THREE.Group();
+  root.add(mesh.clone(true));
+  root.updateMatrixWorld(true);
+  const bounds = new AFRAME.THREE.Box3().setFromObject(root);
+  root.clear();
+  return Number.isFinite(bounds.min.y) ? bounds.min.y : 0;
 }
 
 function renderCategoryButtons() {
@@ -223,6 +318,8 @@ function prepareDish(item) {
   dishModel.setAttribute('gltf-model', item.src);
   dishModel.setAttribute('title', item.alt);
   state.zoom = 1;
+  state.modelMinY = 0;
+  updateDishPresentation();
   applyZoom();
 }
 
@@ -239,13 +336,15 @@ function handleModelLoaded(event) {
   if (event.target !== dishModel) return;
   state.modelReady = true;
   state.loadingDish = false;
+  state.modelMinY = measureModelBottom();
+  applyZoom();
   setProgress(100);
   dishModel.setAttribute('visible', 'true');
   if (state.targetFound) {
-    setStatus('İşaretçi bulundu', 'Yemek masadaki görsele bağlandı', 'ready', true);
+    setStatus('Masa bulundu', 'Yemek masa yüzeyine bağlandı', 'ready', true);
     hideStatusSoon(1100);
   } else {
-    setStatus('İşaretçi aranıyor', 'Görseli masanın üzerine gösterin', 'scanning', true);
+    setStatus('Masa aranıyor', 'Fotoğrafını çektiğiniz yüzeyi kamerada gösterin', 'scanning', true);
   }
 }
 
@@ -261,7 +360,7 @@ function handleModelError(event) {
 function handleTargetFound() {
   state.targetFound = true;
   if (state.modelReady && !state.loadingDish) {
-    setStatus('İşaretçi bulundu', 'Yemek masadaki görsele bağlandı', 'ready', true);
+    setStatus('Masa bulundu', 'Yemek masa yüzeyine bağlandı', 'ready', true);
     hideStatusSoon(900);
   } else {
     setStatus('Yemek kataloğu yükleniyor', 'Görsel bulundu, model hazırlanıyor', 'loading', true);
@@ -270,7 +369,7 @@ function handleTargetFound() {
 
 function handleTargetLost() {
   state.targetFound = false;
-  setStatus('İşaretçi aranıyor', 'Görseli masanın üzerine gösterin', 'scanning', true);
+  setStatus('Masa aranıyor', 'Fotoğrafını çektiğiniz yüzeyi kamerada gösterin', 'scanning', true);
 }
 
 function setArVideoStyles(video) {
@@ -284,7 +383,7 @@ function handleArReady() {
   setArVideoStyles(state.arSystem?.video);
   setProgress(58);
   if (state.modelReady) {
-    setStatus('İşaretçi aranıyor', 'Görseli masanın üzerine gösterin', 'scanning', true);
+    setStatus('Masa aranıyor', 'Fotoğrafını çektiğiniz yüzeyi kamerada gösterin', 'scanning', true);
   } else {
     setStatus('Yemek kataloğu yükleniyor', 'İlk yemek hazırlanıyor', 'loading', true);
   }
@@ -293,39 +392,203 @@ function handleArReady() {
 function handleArError(event) {
   const code = event.detail?.error || 'VIDEO_FAIL';
   console.warn('MindAR error:', code);
+  state.arStarted = false;
+  state.arSystem?.video?.srcObject?.getTracks().forEach((track) => track.stop());
+  state.arSystem?.video?.remove();
   cameraFallback.hidden = false;
   setStatus('Kamera açılamadı', 'Kamera iznini verin ve tekrar deneyin', 'error', true);
 }
 
 function startImageTracking() {
-  if (state.arStarted) return;
+  if (state.arStarted || !state.anchorReady || !state.anchorTargetUrl) return;
   const system = arScene.systems['mindar-image-system'];
   if (!system) {
     handleArError({detail: {error: 'SYSTEM_UNAVAILABLE'}});
     return;
   }
   state.arSystem = system;
+  system.imageTargetSrc = state.anchorTargetUrl;
   state.arStarted = true;
   cameraFallback.hidden = true;
-  setStatus('Yemek kataloğu yükleniyor', 'Kamera ve görsel işaretçi hazırlanıyor', 'loading', true);
+  setStatus('Masa hazırlanıyor', 'Kamera ve oturum bağlantısı başlatılıyor', 'loading', true);
   system.start();
 }
 
 function stopImageTracking() {
   if (!state.arStarted || !state.arSystem) return;
-  try { state.arSystem.stop(); } catch (error) { console.warn('MindAR stop failed:', error); }
+  try {
+    if (state.arSystem.controller && state.arSystem.video?.srcObject) {
+      state.arSystem.stop();
+    } else {
+      state.arSystem.video?.srcObject?.getTracks().forEach((track) => track.stop());
+      state.arSystem.video?.remove();
+    }
+  } catch (error) {
+    console.warn('MindAR stop failed:', error);
+  }
   state.arStarted = false;
+  state.targetFound = false;
+  dishAnchor.object3D.visible = false;
 }
 
 function cameraErrorFallback() {
   state.arStarted = false;
+  state.arSystem?.video?.srcObject?.getTracks().forEach((track) => track.stop());
+  state.arSystem?.video?.remove();
   cameraFallback.hidden = false;
   setStatus('Kamera açılamadı', 'Kamera iznini verin ve tekrar deneyin', 'error', true);
 }
 
 function stageVideo() {
+  if (!state.anchorReady) return;
   if (arScene.hasLoaded) startImageTracking();
   else arScene.addEventListener('loaded', startImageTracking, {once: true});
+}
+
+function stopCalibrationPreview() {
+  if (state.calibrationStream) {
+    state.calibrationStream.getTracks().forEach((track) => track.stop());
+    state.calibrationStream = null;
+  }
+  tablePreview.srcObject = null;
+}
+
+async function startCalibrationPreview() {
+  stopCalibrationPreview();
+  tablePreview.hidden = false;
+  tableFreeze.hidden = true;
+  tableRetryButton.hidden = true;
+  calibrationProgress.hidden = true;
+  calibrationProgressBar.style.width = '0%';
+  tableCaptureLabel.textContent = 'Kamera hazırlanıyor';
+  tableCalibrationDetail.textContent = 'Telefonu masaya doğrultun. Desenler veya küçük bir nesne görünürse sabitleme daha güçlü olur.';
+  tableCaptureButton.disabled = true;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {facingMode: {ideal: 'environment'}, width: {ideal: 1280}, height: {ideal: 960}}
+    });
+    state.calibrationStream = stream;
+    tablePreview.srcObject = stream;
+    await tablePreview.play();
+    tableCaptureButton.disabled = false;
+    tableCaptureLabel.textContent = 'Masayı sabitle';
+  } catch (error) {
+    console.warn('Table preview failed:', error);
+    tableCaptureLabel.textContent = 'Kamera açılamadı';
+    tableCalibrationDetail.textContent = 'Kamera iznini verin ve tekrar deneyin.';
+    tableRetryButton.hidden = false;
+  }
+}
+
+function drawTableFrame() {
+  const videoWidth = tablePreview.videoWidth;
+  const videoHeight = tablePreview.videoHeight;
+  if (!videoWidth || !videoHeight) throw new Error('CAMERA_NOT_READY');
+  const targetWidth = 640;
+  const targetHeight = 480;
+  const targetRatio = targetWidth / targetHeight;
+  const videoRatio = videoWidth / videoHeight;
+  let sourceWidth = videoWidth;
+  let sourceHeight = videoHeight;
+  let sourceX = 0;
+  let sourceY = 0;
+  if (videoRatio > targetRatio) {
+    sourceWidth = videoHeight * targetRatio;
+    sourceX = (videoWidth - sourceWidth) / 2;
+  } else {
+    sourceHeight = videoWidth / targetRatio;
+    sourceY = (videoHeight - sourceHeight) / 2;
+  }
+  tableFreeze.width = targetWidth;
+  tableFreeze.height = targetHeight;
+  const context = tableFreeze.getContext('2d', {alpha: false, willReadFrequently: true});
+  context.drawImage(tablePreview, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, targetWidth, targetHeight);
+  return context;
+}
+
+function countCompiledFeatures(dataList) {
+  const matchingData = dataList?.[0]?.matchingData || [];
+  return matchingData.reduce((total, frame) => {
+    return total + (frame.maximaPoints?.length || 0) + (frame.minimaPoints?.length || 0);
+  }, 0);
+}
+
+function showCalibrationError(message) {
+  state.calibrating = false;
+  calibrationProgress.hidden = true;
+  tableCaptureButton.disabled = true;
+  tableCaptureLabel.textContent = 'Masa sabitlenemedi';
+  tableCalibrationDetail.textContent = message;
+  tableRetryButton.hidden = false;
+}
+
+async function compileTableAnchor() {
+  if (state.calibrating) return;
+  state.calibrating = true;
+  tableCaptureButton.disabled = true;
+  tableRetryButton.hidden = true;
+  calibrationProgress.hidden = false;
+  calibrationProgressBar.style.width = '2%';
+  tableCaptureLabel.textContent = 'Masa görüntüsü işleniyor';
+  tableCalibrationDetail.textContent = 'Bu işlem telefonunuza göre birkaç saniye sürebilir.';
+  try {
+    drawTableFrame();
+    tableFreeze.hidden = false;
+    tablePreview.hidden = true;
+    stopCalibrationPreview();
+    const Compiler = window.MINDAR?.IMAGE?.Compiler;
+    if (!Compiler) throw new Error('COMPILER_UNAVAILABLE');
+    const compiler = new Compiler();
+    const dataList = await compiler.compileImageTargets([tableFreeze], (progress) => {
+      const rounded = Math.max(2, Math.min(96, Math.round(progress)));
+      calibrationProgressBar.style.width = `${rounded}%`;
+      tableCaptureLabel.textContent = `Masa görüntüsü işleniyor · %${rounded}`;
+    });
+    if (countCompiledFeatures(dataList) < 24) throw new Error('LOW_FEATURES');
+    const buffer = compiler.exportData();
+    if (state.anchorTargetUrl) URL.revokeObjectURL(state.anchorTargetUrl);
+    state.anchorTargetUrl = URL.createObjectURL(new Blob([buffer], {type: 'application/octet-stream'}));
+    state.anchorReady = true;
+    state.calibrating = false;
+    calibrationProgressBar.style.width = '100%';
+    tableCaptureLabel.textContent = 'Masa hazır';
+    tableCalibration.hidden = true;
+    setStatus('Masa hazır', 'Fotoğraf yalnızca bu oturum için kullanılıyor', 'ready', true);
+    window.setTimeout(stageVideo, 120);
+  } catch (error) {
+    console.warn('Table anchor compilation failed:', error);
+    const message = error.message === 'LOW_FEATURES'
+      ? 'Yüzeyde yeterli görsel ayrıntı bulunamadı. Masadaki deseni veya küçük, sabit bir nesneyi kadraja alıp tekrar deneyin.'
+      : 'Masa fotoğrafı işlenemedi. Kamerayı sabit tutup tekrar deneyin.';
+    showCalibrationError(message);
+  }
+}
+
+async function beginTableCalibration() {
+  stopImageTracking();
+  stopCalibrationPreview();
+  if (state.anchorTargetUrl) {
+    URL.revokeObjectURL(state.anchorTargetUrl);
+    state.anchorTargetUrl = '';
+  }
+  state.anchorReady = false;
+  state.targetFound = false;
+  state.calibrating = false;
+  menuPanel.hidden = true;
+  tableCalibration.hidden = false;
+  await startCalibrationPreview();
+}
+
+async function initializeSession() {
+  state.user = await checkLogin();
+  authChecking.hidden = true;
+  if (!state.user || !state.user.email) {
+    authRequired.hidden = false;
+    return;
+  }
+  authGate.hidden = true;
+  await beginTableCalibration();
 }
 
 function distanceBetweenTouches(touches) {
@@ -547,9 +810,23 @@ function setupCaptureControl() {
 
 menuButton.addEventListener('click', () => setMenuOpen(menuPanel.hidden));
 menuClose.addEventListener('click', () => setMenuOpen(false));
+recalibrateButton.addEventListener('click', () => {
+  setMenuOpen(false);
+  beginTableCalibration();
+});
+tableCaptureButton.addEventListener('click', compileTableAnchor);
+tableRetryButton.addEventListener('click', startCalibrationPreview);
+loginLink.addEventListener('click', () => {
+  try {
+    sessionStorage.setItem(AUTH_RETURN_KEY, `${window.location.pathname}${window.location.search}${window.location.hash}`);
+  } catch (error) {
+    console.warn('Return path could not be stored:', error);
+  }
+});
 cameraFallback.addEventListener('click', () => {
   cameraFallback.hidden = true;
-  startImageTracking();
+  if (state.anchorReady) startImageTracking();
+  else beginTableCalibration();
 });
 dishAnchor.addEventListener('targetFound', handleTargetFound);
 dishAnchor.addEventListener('targetLost', handleTargetLost);
@@ -562,11 +839,13 @@ window.addEventListener('error', (event) => {
 });
 window.addEventListener('pagehide', () => {
   if (state.mediaRecorder) stopVideoRecording();
+  stopCalibrationPreview();
   stopImageTracking();
+  if (state.anchorTargetUrl) URL.revokeObjectURL(state.anchorTargetUrl);
 });
 
 renderMenu();
 prepareDish(currentDish());
 setupZoomControls();
 setupCaptureControl();
-window.setTimeout(stageVideo, 0);
+initializeSession();
