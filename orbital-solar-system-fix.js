@@ -2,6 +2,14 @@
   // Solar System has its own model/audio UX. Prevent the site-wide helpers
   // from adding the generic text toggle, AR scanner button and generic player.
   if (document.body) document.body.dataset.disableModelExtras = "true";
+
+  if (!document.getElementById("solar-model-extras-suppression")) {
+    const suppression = document.createElement("style");
+    suppression.id = "solar-model-extras-suppression";
+    suppression.textContent = 'body[data-disable-model-extras="true"] #toggleBtn,body[data-disable-model-extras="true"] #alba-scanner-btn-wrap,body[data-disable-model-extras="true"] #alba-scanner-hint,body[data-disable-model-extras="true"] #albaModelPlayer{display:none!important}';
+    document.head.append(suppression);
+  }
+
   document.getElementById("toggleBtn")?.remove();
   document.getElementById("alba-scanner-btn-wrap")?.remove();
   document.getElementById("alba-scanner-hint")?.remove();
