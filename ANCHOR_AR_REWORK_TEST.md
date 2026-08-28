@@ -35,3 +35,6 @@ Live URL: `https://albaspace.com.tr/ar-restaurant/?v=anchor-2-live&fresh=1`.
 
 
 Live menu interaction также проверена: после выбора `TATLILAR` и `Alba Kirazlı Pasta` drawer меню закрылся, `#dish-model` получил `/assets/models/restaurant/realistic-dessert-cake.glb?v=anchor-2`, его `visible` остался `true`, а `#dish-anchor` сохранил единственный `targetIndex: 0`. Во время ожидания загрузки live UI показывает `Yemek kataloğu yükleniyor`.
+
+
+Финальный live query `?v=anchor-2-final&fresh=20260828` также проверен после commit `e5fabc7`: `window.AFRAME === true`, MindAR system зарегистрирован, `#dish-anchor` имеет `targetIndex: 0`, `.mind` и initial steak GLB отвечают HTTP 200. Начальное `menu-panel.hidden === true`, верхняя панель содержит только `Menü`, `model-viewer` и `#hand-pointer` отсутствуют. Sandbox по-прежнему не имеет физической камеры, поэтому настоящий targetFound/ARCore сценарий на телефоне требует отдельной пользовательской проверки.
