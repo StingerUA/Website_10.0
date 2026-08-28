@@ -1,699 +1,360 @@
 const MENU = {
   meat: {
-    label: 'МЯСНЫЕ БЛЮДА',
+    label: 'ET YEMEKLERİ',
     items: [
       {
-        src: '/assets/models/restaurant/steak.glb',
-        alt: '3D-модель стейка на гриле с зеленью и лимоном',
-        name: 'Стейк на гриле',
-        description: 'Сочный стейк, свежая зелень и цитрусовый акцент.',
-        price: '₺ 420'
+        src: '/assets/models/restaurant/realistic-steak-board.glb?v=anchor-2',
+        alt: 'Biberiye, kuşkonmaz ve sarımsaklı ahşap tahtada gerçekçi steak 3D modeli',
+        name: 'Alba Reserve Steak',
+        description: 'Biberiye, kuşkonmaz ve fırınlanmış sarımsaklı premium steak.',
+        price: '₺ 620'
       },
       {
-        src: '/assets/models/restaurant/lamb-chops.glb',
-        alt: '3D-модель каре ягнёнка на тарелке',
-        name: 'Каре ягнёнка',
-        description: 'Нежное каре ягнёнка, зелень и соус с травами.',
-        price: '₺ 510'
+        src: '/assets/models/restaurant/realistic-steak-slices.glb?v=anchor-2',
+        alt: 'Sebzeli gerçekçi kızarmış steak dilimleri 3D modeli',
+        name: 'Izgara Steak Dilimleri',
+        description: 'Sebze garnitürlü, dışı kızarmış ve içi pembe steak dilimleri.',
+        price: '₺ 590'
       },
       {
-        src: '/assets/models/restaurant/cheeseburger.glb?v=poly-pizza-1',
-        alt: '3D-модель чизбургера с сыром и овощами',
-        name: 'Alba Cheeseburger',
-        description: 'Сочный бургер с сыром, свежими овощами и мягкой булочкой.',
-        price: '₺ 280'
+        src: '/assets/models/restaurant/realistic-grilled-steak.glb?v=anchor-2',
+        alt: 'Biber, lavaş ve yeşillikli ahşap tahtada gerçekçi steak 3D modeli',
+        name: 'Izgara Steak Tahtası',
+        description: 'Biber, lavaş ve taze yeşilliklerle servis edilen steak.',
+        price: '₺ 640'
       }
     ]
   },
   dessert: {
-    label: 'ДЕСЕРТЫ',
+    label: 'TATLILAR',
     items: [
       {
-        src: '/assets/models/restaurant/dessert.glb',
-        alt: '3D-модель трио мини-десертов с кремом и ягодами',
-        name: 'Трио мини-десертов',
-        description: 'Нежный крем, шоколадная основа и свежие ягоды.',
-        price: '₺ 190'
+        src: '/assets/models/restaurant/realistic-dessert-cake.glb?v=anchor-2',
+        alt: 'Beyaz glazür ve kirazlı gerçekçi katlı pasta 3D modeli',
+        name: 'Alba Kirazlı Pasta',
+        description: 'Beyaz glazür ve kirazlarla süslenmiş katlı pandispanya.',
+        price: '₺ 260'
       },
       {
-        src: '/assets/models/restaurant/chocolate-cake.glb',
-        alt: '3D-модель шоколадного торта с ягодами',
-        name: 'Шоколадный торт',
-        description: 'Плотный шоколадный бисквит, крем и ягоды.',
-        price: '₺ 220'
+        src: '/assets/models/restaurant/realistic-fruit-dessert.glb?v=anchor-2',
+        alt: 'Kavun, dondurma, meyve, krema ve naneli gerçekçi kup tatlı 3D modeli',
+        name: 'Meyveli Kup',
+        description: 'Kavun, dondurma, meyveler, krema ve nane ile hazırlanan kup.',
+        price: '₺ 280'
       },
       {
-        src: '/assets/models/restaurant/banana.glb?v=poly-pizza-1',
-        alt: '3D-модель банана',
-        name: 'Банан с мёдом',
-        description: 'Спелый банан для лёгкого десертного дополнения.',
-        price: '₺ 85'
+        src: '/assets/models/restaurant/realistic-layered-dessert-cup.glb?v=anchor-2',
+        alt: 'Kremalı orman meyveli katlı tatlı kupu 3D modeli',
+        name: 'Orman Meyveli Kup',
+        description: 'Krema, orman meyveleri ve ahşap kaşıkla servis edilen katlı tatlı.',
+        price: '₺ 240'
       }
     ]
   },
   soup: {
-    label: 'СУПЫ',
+    label: 'ÇORBALAR',
     items: [
       {
-        src: '/assets/models/restaurant/bowl-soup.glb?v=poly-pizza-1',
-        alt: '3D-модель миски с супом',
-        name: 'Домашний суп',
-        description: 'Тёплый суп в глубокой миске — уютное начало ужина.',
-        price: '₺ 160'
+        src: '/assets/models/restaurant/realistic-soup.glb?v=anchor-2',
+        alt: 'Seramik kasede gerçekçi çorba 3D modeli',
+        name: 'Seramik Kasede Çorba',
+        description: 'Detaylı seramik kasede sıcak çorba.',
+        price: '₺ 190'
       }
     ]
   },
   drink: {
-    label: 'НАПИТКИ',
+    label: 'İÇECEKLER',
     items: [
       {
-        src: '/assets/models/restaurant/drink.glb',
-        alt: '3D-модель цитрусового напитка в стакане',
-        name: 'Citrus Spark',
-        description: 'Холодный цитрусовый напиток с лёгкой газированной нотой.',
-        price: '₺ 95'
+        src: '/assets/models/restaurant/realistic-yogurt-drink.glb?v=anchor-2',
+        alt: 'Çilekli yoğurt içeceği şişesi gerçekçi 3D modeli',
+        name: 'Çilekli Yoğurt',
+        description: 'Soğuk çilekli yoğurt içeceği.',
+        price: '₺ 145'
       },
       {
-        src: '/assets/models/restaurant/latte.glb?v=black-coffee-4',
-        alt: '3D-модель латте на блюдце',
-        name: 'Alba Latte',
-        description: 'Мягкий латте с молочной пеной и ароматом кофе.',
-        price: '₺ 120'
+        src: '/assets/models/restaurant/realistic-coffee-cup.glb?v=anchor-2',
+        alt: 'Kapaklı kahve bardağı gerçekçi 3D modeli',
+        name: 'Alba Kahve',
+        description: 'Kapaklı detaylı bardakta aromatik kahve.',
+        price: '₺ 135'
       },
       {
-        src: '/assets/models/restaurant/juice.glb?v=poly-pizza-1',
-        alt: '3D-модель стакана с соком',
-        name: 'Свежий сок',
-        description: 'Холодный фруктовый сок для лёгкого освежения.',
-        price: '₺ 110'
+        src: '/assets/models/restaurant/realistic-strawberry-lemonade.glb?v=anchor-2',
+        alt: 'Limon ve naneli çilekli limonata gerçekçi 3D modeli',
+        name: 'Çilekli Limonata',
+        description: 'Limon, nane ve çilek katmanlarıyla serinletici limonata.',
+        price: '₺ 155'
       }
     ]
   }
 };
 
-const video = document.querySelector('#camera-feed');
-const stage = document.querySelector('#dish-stage');
-const card = document.querySelector('#dish-card');
-const model = document.querySelector('#dish-model');
-const pointer = document.querySelector('#hand-pointer');
-const trackingLed = document.querySelector('#tracking-led');
-const trackingLabel = document.querySelector('#tracking-label');
-const trackingDetail = document.querySelector('#tracking-detail');
-const startButton = document.querySelector('#start-camera');
-const resetButton = document.querySelector('#reset-dish');
+const app = document.querySelector('#ar-app');
+const arScene = document.querySelector('#ar-scene');
+const dishAnchor = document.querySelector('#dish-anchor');
+const dishModel = document.querySelector('#dish-model');
+const menuButton = document.querySelector('#menu-button');
+const menuPanel = document.querySelector('#menu-panel');
+const menuClose = document.querySelector('#menu-close');
+const categoryContainer = document.querySelector('#menu-category-buttons');
+const itemContainer = document.querySelector('#menu-item-buttons');
+const statusCard = document.querySelector('#status-card');
+const statusLabel = document.querySelector('#status-label');
+const statusDetail = document.querySelector('#status-detail');
+const loadingProgress = document.querySelector('#loading-progress');
 const captureButton = document.querySelector('#capture-button');
 const captureTimer = document.querySelector('#capture-timer');
-const uiToggle = document.querySelector('#ui-toggle');
-const prevDishButton = document.querySelector('#dish-prev');
-const nextDishButton = document.querySelector('#dish-next');
-const dishPosition = document.querySelector('#dish-position');
-const categoryButtons = [...document.querySelectorAll('.category-button')];
-const anchorButton = document.querySelector('#anchor-button');
-const anchorPanel = document.querySelector('#anchor-panel');
-const anchorClose = document.querySelector('#anchor-close');
-const anchorScanButton = document.querySelector('#anchor-scan');
-const anchorPhotoButton = document.querySelector('#anchor-photo');
-const anchorPreview = document.querySelector('#anchor-preview');
-const anchorStatus = document.querySelector('#anchor-status');
+const cameraFallback = document.querySelector('#camera-start-fallback');
 
 const state = {
   category: 'meat',
   dishIndex: 0,
-  cameraStream: null,
-  handLandmarker: null,
-  cameraRunning: false,
-  handTrackingAvailable: false,
-  lastVideoTime: -1,
-  grabbed: false,
-  grabbedBy: null,
-  offsetX: 0,
-  offsetY: 0,
-  lastHandSeenAt: 0,
-  manualPointerId: null,
-  statusTimeout: null,
-  uiHidden: false,
+  arSystem: null,
+  arStarted: false,
+  targetFound: false,
+  modelReady: false,
+  loadingDish: false,
+  zoom: 1,
+  pinchStartDistance: 0,
+  pinchStartZoom: 1,
+  statusTimer: null,
   captureHoldTimer: null,
   captureLongPress: false,
   mediaRecorder: null,
   recordedChunks: [],
   recordingStopTimer: null,
-  captureFrameId: null,
-  captureModelImage: null,
-  captureModelBusy: false,
-  recordingStartedAt: 0,
   recordingUiTimer: null,
+  recordingStartedAt: 0,
   captureCanvas: null,
   captureContext: null,
-  nativeARActive: false,
-  markerDetector: null,
-  markerScanEnabled: false,
-  markerScanFrameId: null,
-  markerLastVideoTime: -1,
-  markerLastSeenAt: 0,
-  anchorScale: 1,
-  anchorPhotoDataUrl: null
+  captureFrameId: null
 };
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
-function getCurrentCategory() {
+function currentCategory() {
   return MENU[state.category] || MENU.meat;
 }
 
-function getCurrentDish() {
-  const category = getCurrentCategory();
-  return category.items[state.dishIndex] || category.items[0];
+function currentDish() {
+  return currentCategory().items[state.dishIndex] || currentCategory().items[0];
 }
 
-function setTrackingStatus(label, detail, mode = 'ready') {
-  trackingLabel.textContent = label;
-  trackingDetail.textContent = detail;
-  trackingLed.classList.toggle('is-off', mode === 'off');
-  trackingLed.classList.toggle('is-ready', mode === 'ready');
-  trackingLed.classList.toggle('is-holding', mode === 'holding');
+function setStatus(label, detail, mode = 'loading', visible = true) {
+  if (!statusCard) return;
+  statusLabel.textContent = label;
+  statusDetail.textContent = detail;
+  statusCard.dataset.mode = mode;
+  statusCard.hidden = !visible;
 }
 
-function setTemporaryStatus(label, detail, mode, duration = 1700) {
-  clearTimeout(state.statusTimeout);
-  setTrackingStatus(label, detail, mode);
-  state.statusTimeout = window.setTimeout(() => {
-    state.statusTimeout = null;
-    if (state.grabbed) {
-      setTrackingStatus('Тарелка в руке', 'Переместите руку и разожмите пальцы', 'holding');
-    } else if (state.cameraRunning && state.handTrackingAvailable) {
-      setTrackingStatus('Правая рука найдена', 'Сведите большой и указательный пальцы', 'ready');
-    }
-  }, duration);
+function setProgress(percent) {
+  if (loadingProgress) loadingProgress.style.width = `${clamp(percent, 0, 100)}%`;
 }
 
-function updateDishInfo(item) {
-  const category = getCurrentCategory();
-  document.querySelector('#dish-category').textContent = category.label;
-  document.querySelector('#dish-name').textContent = item.name;
-  document.querySelector('#dish-description').textContent = item.description;
-  document.querySelector('#dish-price').textContent = item.price;
-  dishPosition.textContent = `${state.dishIndex + 1} / ${category.items.length}`;
-  prevDishButton.disabled = category.items.length <= 1;
-  nextDishButton.disabled = category.items.length <= 1;
-  prevDishButton.setAttribute('aria-label', `Предыдущее блюдо: ${item.name}`);
-  nextDishButton.setAttribute('aria-label', `Следующее блюдо: ${item.name}`);
-  model.alt = item.alt;
-  model.src = item.src;
+function hideStatusSoon(delay = 500) {
+  clearTimeout(state.statusTimer);
+  state.statusTimer = window.setTimeout(() => {
+    if (state.targetFound && state.modelReady && !state.loadingDish) statusCard.hidden = true;
+  }, delay);
 }
 
-function renderDish() {
-  updateDishInfo(getCurrentDish());
+function applyZoom() {
+  const scale = 0.28 * state.zoom;
+  dishModel.setAttribute('scale', `${scale} ${scale} ${scale}`);
+  app.style.setProperty('--dish-zoom', state.zoom.toFixed(3));
 }
 
-function selectCategory(categoryKey) {
-  if (!MENU[categoryKey] || state.category === categoryKey) return;
-  state.category = categoryKey;
-  state.dishIndex = 0;
-  categoryButtons.forEach((button) => button.classList.toggle('is-active', button.dataset.category === categoryKey));
-  resetDish({ announce: false });
-  renderDish();
-  const item = getCurrentDish();
-  setTemporaryStatus('Категория изменена', `${item.name} — блюдо 1 из ${getCurrentCategory().items.length}`, 'ready', 1200);
-}
-
-function shiftDish(direction) {
-  const category = getCurrentCategory();
-  if (category.items.length <= 1) return;
-  state.dishIndex = (state.dishIndex + direction + category.items.length) % category.items.length;
-  resetDish({ announce: false });
-  renderDish();
-  const item = getCurrentDish();
-  setTemporaryStatus('Блюдо меняется', `${item.name} — блюдо ${state.dishIndex + 1} из ${category.items.length}`, 'ready', 1200);
-}
-
-function stagePoint(clientX, clientY) {
-  const rect = stage.getBoundingClientRect();
-  return {
-    x: clamp(clientX, rect.left, rect.right),
-    y: clamp(clientY, rect.top, rect.bottom),
-    rect
-  };
-}
-
-function placeCard(clientX, clientY) {
-  const { x, y, rect } = stagePoint(clientX, clientY);
-  const halfW = card.offsetWidth / 2;
-  const halfH = card.offsetHeight / 2;
-  const nextX = clamp(x + state.offsetX, rect.left + halfW, rect.right - halfW);
-  const nextY = clamp(y + state.offsetY, rect.top + halfH, rect.bottom - halfH);
-  card.style.left = `${nextX - rect.left}px`;
-  card.style.top = `${nextY - rect.top}px`;
-  return { x: nextX, y: nextY };
-}
-
-function setCardCenter() {
-  const rect = stage.getBoundingClientRect();
-  state.offsetX = 0;
-  state.offsetY = 0;
-  state.anchorScale = 1;
-  card.style.left = `${rect.width / 2}px`;
-  card.style.top = `${rect.height / 2}px`;
-  card.style.setProperty('--dish-anchor-scale', '1');
-  card.style.setProperty('--dish-anchor-rotation', '0deg');
-  card.classList.remove('is-anchor-tracked');
-}
-
-function resetDish({ announce = true } = {}) {
-  stopMarkerScan();
-  setCardCenter();
-  card.classList.remove('is-grabbed');
-  card.classList.remove('is-placed');
-  state.grabbed = false;
-  state.grabbedBy = null;
-  if (!announce) return;
-  setTemporaryStatus(
-    state.cameraRunning ? 'Блюдо в центре стола' : 'Камера выключена',
-    state.cameraRunning ? 'Сведите пальцы над тарелкой, чтобы взять её' : 'Нажмите «Включить AR»',
-    state.cameraRunning ? 'ready' : 'off',
-    900
-  );
-}
-
-function dishContains(clientX, clientY) {
-  const rect = card.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
-  const radius = Math.min(rect.width, rect.height) * 0.43;
-  return Math.hypot(clientX - centerX, clientY - centerY) <= radius;
-}
-
-function beginGrab(clientX, clientY, source) {
-  if (state.grabbed || !dishContains(clientX, clientY)) return false;
-  const rect = card.getBoundingClientRect();
-  state.offsetX = rect.left + rect.width / 2 - clientX;
-  state.offsetY = rect.top + rect.height / 2 - clientY;
-  state.grabbed = true;
-  state.grabbedBy = source;
-  card.classList.add('is-grabbed');
-  setTrackingStatus('Тарелка в руке', 'Переместите руку и разожмите пальцы', 'holding');
-  placeCard(clientX, clientY);
-  return true;
-}
-
-function releaseGrab() {
-  if (!state.grabbed) return;
-  state.grabbed = false;
-  state.grabbedBy = null;
-  state.offsetX = 0;
-  state.offsetY = 0;
-  card.classList.remove('is-grabbed');
-  card.classList.remove('is-placed');
-  requestAnimationFrame(() => card.classList.add('is-placed'));
-  window.setTimeout(() => card.classList.remove('is-placed'), 650);
-  setTemporaryStatus('Тарелка поставлена', 'Можно выбрать другое блюдо или переместить это', 'ready', 1800);
-}
-
-function updateHandPointer(clientX, clientY, pinching) {
-  pointer.style.position = 'fixed';
-  pointer.style.left = `${clientX}px`;
-  pointer.style.top = `${clientY}px`;
-  pointer.classList.add('is-visible');
-  pointer.classList.toggle('is-pinching', pinching);
-}
-
-function hideHandPointer() {
-  pointer.classList.remove('is-visible', 'is-pinching');
-}
-
-function getRightHand(results) {
-  const hands = results?.landmarks || [];
-  if (!hands.length) return null;
-  const labels = results.handedness || results.handednesses || [];
-  for (let index = 0; index < hands.length; index += 1) {
-    const label = labels[index]?.[0]?.categoryName || labels[index]?.[0]?.displayName || '';
-    if (String(label).toLowerCase() === 'right') return hands[index];
-  }
-  // Some older CDN builds omit handedness labels. Use the first detected hand
-  // rather than disabling the interaction completely; the UI still explains
-  // that the intended control is the user's right hand.
-  return hands[0];
-}
-
-function handleHand(hand) {
-  const indexTip = hand[8];
-  const thumbTip = hand[4];
-  if (!indexTip || !thumbTip) return;
-
-  const rect = stage.getBoundingClientRect();
-  // The rear-facing camera is not mirrored, so keep normalized x unchanged.
-  const clientX = rect.left + indexTip.x * rect.width;
-  const clientY = rect.top + indexTip.y * rect.height;
-  const pinchDistance = Math.hypot(indexTip.x - thumbTip.x, indexTip.y - thumbTip.y);
-  const pinching = pinchDistance < 0.065;
-  state.lastHandSeenAt = performance.now();
-  updateHandPointer(clientX, clientY, pinching);
-
-  if (pinching && !state.grabbed) {
-    beginGrab(clientX, clientY, 'hand');
-  } else if (!pinching && state.grabbed && state.grabbedBy === 'hand') {
-    releaseGrab();
-  }
-  if (state.grabbed && state.grabbedBy === 'hand') placeCard(clientX, clientY);
-  if (!state.grabbed && !pinching && !state.statusTimeout) {
-    setTrackingStatus('Правая рука найдена', 'Сведите большой и указательный пальцы', 'ready');
-  }
-}
-
-function readHandLandmarks(now) {
-  if (!state.cameraRunning || !state.handLandmarker || video.readyState < 2) return;
-  if (video.currentTime !== state.lastVideoTime) {
-    state.lastVideoTime = video.currentTime;
-    const results = state.handLandmarker.detectForVideo(video, now);
-    const rightHand = getRightHand(results);
-    if (rightHand) {
-      handleHand(rightHand);
-    } else {
-      hideHandPointer();
-      if (state.grabbed && state.grabbedBy === 'hand') releaseGrab();
-      if (now - state.lastHandSeenAt > 400) {
-        setTrackingStatus('Правая рука не найдена', 'Покажите правую руку в кадре', 'ready');
-      }
-    }
-  }
-  requestAnimationFrame(readHandLandmarks);
-}
-
-async function createHandTracker() {
-  const vision = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.js');
-  const resolver = await vision.FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm');
-  return vision.HandLandmarker.createFromOptions(resolver, {
-    baseOptions: {
-      modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
-      delegate: 'GPU'
-    },
-    runningMode: 'VIDEO',
-    numHands: 2,
-    minHandDetectionConfidence: 0.58,
-    minHandPresenceConfidence: 0.58,
-    minTrackingConfidence: 0.55
-  });
-}
-
-function stopCamera() {
-  stopMarkerScan();
-  if (state.nativeARActive) model.exitPresent?.();
-  state.nativeARActive = false;
-  if (state.mediaRecorder) stopVideoRecording();
-  state.cameraRunning = false;
-  state.handTrackingAvailable = false;
-  state.handLandmarker?.close?.();
-  state.handLandmarker = null;
-  state.cameraStream?.getTracks().forEach((track) => track.stop());
-  state.cameraStream = null;
-  video.srcObject = null;
-  video.classList.remove('is-live');
-  hideHandPointer();
-  if (state.grabbed) releaseGrab();
-  startButton.classList.remove('is-active');
-  startButton.textContent = '◉  Камера';
-  setTrackingStatus('Камера выключена', 'Нажмите «Включить AR»', 'off');
-}
-
-async function requestCameraStream() {
-  const constraints = [
-    { video: { facingMode: { exact: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
-    { video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
-    { video: true, audio: false }
-  ];
-  let lastError = null;
-  for (const constraint of constraints) {
-    try {
-      return await navigator.mediaDevices.getUserMedia(constraint);
-    } catch (error) {
-      lastError = error;
-      if (error.name === 'NotAllowedError' || error.name === 'SecurityError') break;
-    }
-  }
-  throw lastError || new Error('Camera stream unavailable');
-}
-
-function waitForVideoReady(timeout = 8000) {
-  if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && video.videoWidth > 0) return Promise.resolve();
-  return new Promise((resolve, reject) => {
-    const timer = window.setTimeout(() => {
-      cleanup();
-      reject(new Error('Video startup timeout'));
-    }, timeout);
-    const cleanup = () => {
-      window.clearTimeout(timer);
-      video.removeEventListener('loadeddata', onReady);
-      video.removeEventListener('canplay', onReady);
-      video.removeEventListener('error', onError);
-    };
-    const onReady = () => { cleanup(); resolve(); };
-    const onError = () => { cleanup(); reject(new Error('Video element error')); };
-    video.addEventListener('loadeddata', onReady, { once: true });
-    video.addEventListener('canplay', onReady, { once: true });
-    video.addEventListener('error', onError, { once: true });
-  });
-}
-
-function cameraErrorMessage(error) {
-  switch (error?.name) {
-    case 'NotAllowedError':
-    case 'SecurityError':
-      return 'Разрешите камеру для этого сайта в настройках браузера';
-    case 'NotFoundError':
-      return 'Камера не найдена на устройстве';
-    case 'NotReadableError':
-      return 'Камера занята другим приложением';
-    case 'OverconstrainedError':
-      return 'Задняя камера недоступна — попробуйте ещё раз';
-    default:
-      return 'Проверьте разрешение камеры и обновите страницу';
-  }
-}
-
-function setAnchorPanelOpen(open) {
-  if (!anchorPanel || !anchorButton) return;
-  anchorPanel.hidden = !open;
-  anchorButton.setAttribute('aria-expanded', String(open));
-  if (open) anchorStatus.textContent = state.anchorPhotoDataUrl ? 'Фото-якорь сохранён на этом устройстве.' : 'Якорь ещё не откалиброван.';
-}
-
-function canUseNativeAR() {
-  return Boolean(
-    model &&
-    typeof model.activateAR === 'function' &&
-    model.canActivateAR === true
-  );
-}
-
-function tryActivateNativeAR() {
-  if (!canUseNativeAR()) return false;
-  try {
-    stopMarkerScan();
-    const activation = model.activateAR();
-    state.nativeARActive = true;
-    startButton.classList.add('is-active');
-    startButton.textContent = 'Выйти из AR';
-    setTrackingStatus('Ищем поверхность стола', 'Наведите камеру на ровный стол и подождите', 'ready');
-    Promise.resolve(activation).catch((error) => {
-      console.warn('Native AR activation failed:', error);
-      state.nativeARActive = false;
-      startButton.classList.remove('is-active');
-      startButton.textContent = '◉  Камера';
-      setTrackingStatus('Native AR недоступен', 'Переходим в режим камеры и marker-якоря', 'ready');
-      startCamera({ preferNative: false }).catch((fallbackError) => console.warn('Camera fallback after native AR failure:', fallbackError));
+function renderCategoryButtons() {
+  categoryContainer.innerHTML = Object.entries(MENU).map(([key, category]) => `
+    <button class="category-button${key === state.category ? ' is-active' : ''}" type="button" role="tab" aria-selected="${key === state.category}" data-category="${key}">
+      ${category.label}
+    </button>
+  `).join('');
+  categoryContainer.querySelectorAll('.category-button').forEach((button) => {
+    button.addEventListener('click', () => {
+      state.category = button.dataset.category;
+      state.dishIndex = 0;
+      renderCategoryButtons();
+      renderItemButtons();
     });
-    return true;
-  } catch (error) {
-    console.warn('Native AR activation unavailable:', error);
-    return false;
+  });
+}
+
+function renderItemButtons() {
+  const category = currentCategory();
+  itemContainer.innerHTML = category.items.map((item, index) => `
+    <button class="menu-item-button${state.category === state.category && index === state.dishIndex ? ' is-selected' : ''}" type="button" data-index="${index}">
+      <span class="menu-item-main"><strong>${item.name}</strong><small>${item.description}</small></span>
+      <span class="menu-item-price">${item.price}</span>
+    </button>
+  `).join('');
+  itemContainer.querySelectorAll('.menu-item-button').forEach((button) => {
+    button.addEventListener('click', () => selectDish(state.category, Number(button.dataset.index)));
+  });
+}
+
+function renderMenu() {
+  renderCategoryButtons();
+  renderItemButtons();
+}
+
+function setMenuOpen(open) {
+  menuPanel.hidden = !open;
+  menuButton.setAttribute('aria-expanded', String(open));
+  if (open) {
+    renderMenu();
+    window.setTimeout(() => menuPanel.querySelector('.menu-item-button')?.focus(), 60);
+  } else {
+    menuButton.focus({preventScroll: true});
   }
 }
 
-function markerBounds(result) {
-  const points = result?.cornerPoints || [];
-  if (points.length >= 4) {
-    const xs = points.map((point) => point.x);
-    const ys = points.map((point) => point.y);
-    return {
-      left: Math.min(...xs),
-      top: Math.min(...ys),
-      right: Math.max(...xs),
-      bottom: Math.max(...ys),
-      angle: Math.atan2(points[1].y - points[0].y, points[1].x - points[0].x) * 180 / Math.PI
-    };
-  }
-  const box = result?.boundingBox;
-  return box ? { left: box.x, top: box.y, right: box.x + box.width, bottom: box.y + box.height, angle: 0 } : null;
+function prepareDish(item) {
+  state.modelReady = false;
+  state.loadingDish = true;
+  setProgress(10);
+  setStatus('Yemek kataloğu yükleniyor', 'Seçtiğiniz yemek görsel işaretçiye hazırlanıyor', 'loading', true);
+  dishModel.setAttribute('visible', 'false');
+  dishModel.setAttribute('gltf-model', item.src);
+  dishModel.setAttribute('title', item.alt);
+  state.zoom = 1;
+  applyZoom();
 }
 
-function applyMarkerAnchor(result) {
-  const bounds = markerBounds(result);
-  if (!bounds || !video.videoWidth || !video.videoHeight) return false;
-  const rect = stage.getBoundingClientRect();
-  const markerWidth = Math.max(1, bounds.right - bounds.left);
-  const markerHeight = Math.max(1, bounds.bottom - bounds.top);
-  const markerCenterX = (bounds.left + bounds.right) / 2;
-  const markerCenterY = (bounds.top + bounds.bottom) / 2;
-  const clientX = rect.left + (markerCenterX / video.videoWidth) * rect.width;
-  const clientY = rect.top + (markerCenterY / video.videoHeight) * rect.height;
-  const markerScreenWidth = (markerWidth / video.videoWidth) * rect.width;
-  state.anchorScale = clamp(markerScreenWidth / 160, 0.62, 1.65);
-  card.style.setProperty('--dish-anchor-scale', String(state.anchorScale));
-  card.style.setProperty('--dish-anchor-rotation', `${clamp(bounds.angle, -45, 45)}deg`);
-  card.classList.add('is-anchor-tracked');
-  placeCard(clientX, clientY);
-  state.markerLastSeenAt = performance.now();
-  return true;
+function selectDish(categoryKey, index) {
+  if (!MENU[categoryKey] || !MENU[categoryKey].items[index]) return;
+  state.category = categoryKey;
+  state.dishIndex = index;
+  renderMenu();
+  setMenuOpen(false);
+  prepareDish(currentDish());
 }
 
-function stopMarkerScan() {
-  state.markerScanEnabled = false;
-  if (state.markerScanFrameId) cancelAnimationFrame(state.markerScanFrameId);
-  state.markerScanFrameId = null;
-  state.markerLastVideoTime = -1;
-  card.classList.remove('is-anchor-tracked');
-  if (anchorScanButton) anchorScanButton.textContent = 'Сканировать якорь';
-}
-
-async function scanMarkerFrame() {
-  if (!state.markerScanEnabled || !state.cameraRunning || !state.markerDetector || video.readyState < 2) return;
-  if (video.currentTime !== state.markerLastVideoTime) {
-    state.markerLastVideoTime = video.currentTime;
-    try {
-      const results = await state.markerDetector.detect(video);
-      const found = results.find((result) => result.rawValue === 'ALBA-SPACE-TABLE-ANCHOR-01') || results[0];
-      if (found && applyMarkerAnchor(found)) {
-        setTrackingStatus('Якорь найден', 'Блюдо привязано к marker-у на столе', 'ready');
-      } else if (performance.now() - state.markerLastSeenAt > 1000) {
-        setTrackingStatus('Ищем marker', 'Наведите камеру на чёрно-белый якорь', 'ready');
-      }
-    } catch (error) {
-      console.warn('Marker detection failed:', error);
-    }
-  }
-  if (state.markerScanEnabled) state.markerScanFrameId = requestAnimationFrame(scanMarkerFrame);
-}
-
-async function startMarkerScan() {
-  if (!state.cameraRunning) {
-    anchorStatus.textContent = 'Сначала разрешите камеру.';
-    return false;
-  }
-  if (!('BarcodeDetector' in window)) {
-    anchorStatus.textContent = 'В этом браузере QR-tracking недоступен; используйте native AR или drag.';
-    setTrackingStatus('Marker недоступен', 'Этот браузер не поддерживает BarcodeDetector', 'ready');
-    return false;
-  }
-  try {
-    const formats = await BarcodeDetector.getSupportedFormats?.() || [];
-    if (formats.length && !formats.includes('qr_code')) throw new Error('QR format unsupported');
-    state.markerDetector = new BarcodeDetector({ formats: ['qr_code'] });
-    state.markerScanEnabled = true;
-    state.markerLastSeenAt = 0;
-    anchorScanButton.textContent = 'Остановить marker';
-    anchorStatus.textContent = 'Сканирование включено: наведите камеру на marker на столе.';
-    setTrackingStatus('Ищем marker', 'Наведите камеру на чёрно-белый якорь', 'ready');
-    scanMarkerFrame();
-    return true;
-  } catch (error) {
-    console.warn('BarcodeDetector unavailable:', error);
-    anchorStatus.textContent = 'QR-tracking недоступен; используйте native AR или drag.';
-    setTrackingStatus('Marker недоступен', 'Используйте native AR или drag fallback', 'ready');
-    return false;
+function handleModelLoaded(event) {
+  if (event.target !== dishModel) return;
+  state.modelReady = true;
+  state.loadingDish = false;
+  setProgress(100);
+  dishModel.setAttribute('visible', 'true');
+  if (state.targetFound) {
+    setStatus('İşaretçi bulundu', 'Yemek masadaki görsele bağlandı', 'ready', true);
+    hideStatusSoon(1100);
+  } else {
+    setStatus('İşaretçi aranıyor', 'Görseli masanın üzerine gösterin', 'scanning', true);
   }
 }
 
-function captureAnchorPhoto() {
-  if (!state.cameraRunning || !video.videoWidth) {
-    anchorStatus.textContent = 'Сначала включите камеру, затем сделайте фото marker-а.';
+function handleModelError(event) {
+  if (event.target !== dishModel) return;
+  state.modelReady = false;
+  state.loadingDish = false;
+  setProgress(0);
+  setStatus('Yemek yüklenemedi', 'Lütfen internet bağlantınızı kontrol edin', 'error', true);
+  console.warn('AR model load failed:', event);
+}
+
+function handleTargetFound() {
+  state.targetFound = true;
+  if (state.modelReady && !state.loadingDish) {
+    setStatus('İşaretçi bulundu', 'Yemek masadaki görsele bağlandı', 'ready', true);
+    hideStatusSoon(900);
+  } else {
+    setStatus('Yemek kataloğu yükleniyor', 'Görsel bulundu, model hazırlanıyor', 'loading', true);
+  }
+}
+
+function handleTargetLost() {
+  state.targetFound = false;
+  setStatus('İşaretçi aranıyor', 'Görseli masanın üzerine gösterin', 'scanning', true);
+}
+
+function setArVideoStyles(video) {
+  if (!video) return;
+  video.setAttribute('playsinline', '');
+  video.muted = true;
+}
+
+function handleArReady() {
+  state.arSystem = arScene.systems['mindar-image-system'];
+  setArVideoStyles(state.arSystem?.video);
+  setProgress(58);
+  if (state.modelReady) {
+    setStatus('İşaretçi aranıyor', 'Görseli masanın üzerine gösterin', 'scanning', true);
+  } else {
+    setStatus('Yemek kataloğu yükleniyor', 'İlk yemek hazırlanıyor', 'loading', true);
+  }
+}
+
+function handleArError(event) {
+  const code = event.detail?.error || 'VIDEO_FAIL';
+  console.warn('MindAR error:', code);
+  cameraFallback.hidden = false;
+  setStatus('Kamera açılamadı', 'Kamera iznini verin ve tekrar deneyin', 'error', true);
+}
+
+function startImageTracking() {
+  if (state.arStarted) return;
+  const system = arScene.systems['mindar-image-system'];
+  if (!system) {
+    handleArError({detail: {error: 'SYSTEM_UNAVAILABLE'}});
     return;
   }
-  const canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  const context = canvas.getContext('2d');
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  const guideSize = Math.round(Math.min(canvas.width, canvas.height) * .42);
-  const guideX = Math.round((canvas.width - guideSize) / 2);
-  const guideY = Math.round((canvas.height - guideSize) / 2);
-  context.strokeStyle = '#46ddff';
-  context.lineWidth = Math.max(4, Math.round(canvas.width / 260));
-  context.setLineDash([context.lineWidth * 3, context.lineWidth * 2]);
-  context.strokeRect(guideX, guideY, guideSize, guideSize);
-  context.setLineDash([]);
-  context.fillStyle = 'rgba(5, 11, 26, .78)';
-  context.fillRect(guideX, Math.max(0, guideY - 38), guideSize, 38);
-  context.fillStyle = '#f5f9ff';
-  context.font = `${Math.max(18, Math.round(canvas.width / 42))}px system-ui, sans-serif`;
-  context.textAlign = 'center';
-  context.fillText('ALBA TABLE ANCHOR', canvas.width / 2, Math.max(26, guideY - 12));
-  state.anchorPhotoDataUrl = canvas.toDataURL('image/jpeg', .88);
-  if (anchorPreview) {
-    anchorPreview.src = state.anchorPhotoDataUrl;
-    anchorPreview.closest('.anchor-photo-preview').hidden = false;
-  }
-  try { localStorage.setItem('alba-table-anchor-photo', state.anchorPhotoDataUrl); } catch (error) { console.warn('Anchor photo storage unavailable:', error); }
-  anchorStatus.textContent = 'Фото-якорь сохранено на этом устройстве. Для настоящего tracking положите распечатанный marker на стол.';
+  state.arSystem = system;
+  state.arStarted = true;
+  cameraFallback.hidden = true;
+  setStatus('Yemek kataloğu yükleniyor', 'Kamera ve görsel işaretçi hazırlanıyor', 'loading', true);
+  system.start();
 }
 
-async function startCamera({ preferNative = true, markerMode = false } = {}) {
-  if (state.nativeARActive) {
-    model.exitPresent?.();
-    state.nativeARActive = false;
-    startButton.classList.remove('is-active');
-    startButton.textContent = '◉  Камера';
-    setTrackingStatus('AR остановлен', 'Нажмите «Камера» для запуска', 'off');
-    return;
-  }
-  if (state.cameraRunning) {
-    if (markerMode) {
-      await startMarkerScan();
-      return;
-    }
-    stopCamera();
-    return;
-  }
-  if (preferNative && tryActivateNativeAR()) return;
-  if (!navigator.mediaDevices?.getUserMedia) {
-    state.handTrackingAvailable = false;
-    setTrackingStatus('Камера недоступна', 'Перетаскивайте блюдо пальцем или мышью', 'off');
-    startButton.textContent = 'Камера недоступна';
-    return;
-  }
+function stopImageTracking() {
+  if (!state.arStarted || !state.arSystem) return;
+  try { state.arSystem.stop(); } catch (error) { console.warn('MindAR stop failed:', error); }
+  state.arStarted = false;
+}
 
-  startButton.disabled = true;
-  startButton.textContent = 'Подготовка AR…';
-  setTrackingStatus('Запрашиваем камеру', 'Разрешите доступ в окне браузера', 'off');
-  try {
-    state.cameraStream = await requestCameraStream();
-    video.srcObject = state.cameraStream;
-    await video.play();
-    await waitForVideoReady();
-    video.classList.add('is-live');
-    state.cameraRunning = true;
-    setTrackingStatus('Загружаем hand-tracking', 'Модель работает локально на устройстве', 'ready');
-    try {
-      state.handLandmarker = await createHandTracker();
-      state.handTrackingAvailable = true;
-      setTrackingStatus('Покажите правую руку', 'Сведите пальцы над тарелкой, чтобы взять её', 'ready');
-      requestAnimationFrame(readHandLandmarks);
-    } catch (handError) {
-      console.warn('Hand tracking unavailable:', handError);
-      state.handTrackingAvailable = false;
-      setTrackingStatus('Камера активна', 'Hand-tracking недоступен — используйте drag fallback', 'ready');
-    }
-    startButton.classList.add('is-active');
-    startButton.textContent = 'Остановить AR';
-    if (markerMode) await startMarkerScan();
-  } catch (error) {
-    console.warn('Camera permission or device error:', error);
-    stopCamera();
-    setTrackingStatus('Камера не запущена', cameraErrorMessage(error), 'off');
-    anchorStatus.textContent = 'Камера не запущена; marker нельзя отсканировать.';
-  } finally {
-    startButton.disabled = false;
-  }
+function cameraErrorFallback() {
+  state.arStarted = false;
+  cameraFallback.hidden = false;
+  setStatus('Kamera açılamadı', 'Kamera iznini verin ve tekrar deneyin', 'error', true);
+}
+
+function stageVideo() {
+  if (arScene.hasLoaded) startImageTracking();
+  else arScene.addEventListener('loaded', startImageTracking, {once: true});
+}
+
+function distanceBetweenTouches(touches) {
+  return Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+}
+
+function setupZoomControls() {
+  app.addEventListener('touchstart', (event) => {
+    if (event.touches.length !== 2) return;
+    state.pinchStartDistance = distanceBetweenTouches(event.touches);
+    state.pinchStartZoom = state.zoom;
+    event.preventDefault();
+  }, {passive: false});
+  app.addEventListener('touchmove', (event) => {
+    if (event.touches.length !== 2 || !state.pinchStartDistance) return;
+    const distance = distanceBetweenTouches(event.touches);
+    state.zoom = clamp(state.pinchStartZoom * distance / state.pinchStartDistance, 0.48, 2.2);
+    applyZoom();
+    event.preventDefault();
+  }, {passive: false});
+  const clearPinch = () => { state.pinchStartDistance = 0; };
+  app.addEventListener('touchend', clearPinch, {passive: true});
+  app.addEventListener('touchcancel', clearPinch, {passive: true});
+  app.addEventListener('wheel', (event) => {
+    if (!state.targetFound) return;
+    state.zoom = clamp(state.zoom * (event.deltaY > 0 ? 0.92 : 1.08), 0.48, 2.2);
+    applyZoom();
+    event.preventDefault();
+  }, {passive: false});
 }
 
 function timestampName(prefix, extension) {
@@ -703,41 +364,34 @@ function timestampName(prefix, extension) {
 
 function saveBlob(blob, filename) {
   if (!blob || !blob.size) return;
-  const file = new File([blob], filename, { type: blob.type });
-  if (navigator.share && navigator.canShare?.({ files: [file] })) {
-    navigator.share({ title: 'Alba Space AR', files: [file] }).catch((error) => {
-      if (error.name !== 'AbortError') downloadBlob(blob, filename);
-    });
-    return;
-  }
-  downloadBlob(blob, filename);
-}
-
-function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
-  link.href = url;
+  link.href = URL.createObjectURL(blob);
   link.download = filename;
   link.rel = 'noopener';
   document.body.appendChild(link);
   link.click();
   link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+  window.setTimeout(() => URL.revokeObjectURL(link.href), 2000);
+}
+
+function cameraVideo() {
+  return state.arSystem?.video || document.querySelector('#ar-scene video');
 }
 
 function captureCanvasSize() {
-  const width = video.videoWidth || Math.max(720, window.innerWidth * 2);
-  const height = video.videoHeight || Math.max(1280, window.innerHeight * 2);
-  return { width, height };
+  const video = cameraVideo();
+  return {
+    width: video?.videoWidth || Math.max(720, window.innerWidth * 2),
+    height: video?.videoHeight || Math.max(1280, window.innerHeight * 2)
+  };
 }
 
 function getCaptureCanvas() {
   if (!state.captureCanvas) {
     state.captureCanvas = document.createElement('canvas');
-    state.captureCanvas.className = 'capture-canvas';
-    state.captureContext = state.captureCanvas.getContext('2d', { alpha: false });
+    state.captureContext = state.captureCanvas.getContext('2d', {alpha: false});
   }
-  const { width, height } = captureCanvasSize();
+  const {width, height} = captureCanvasSize();
   if (state.captureCanvas.width !== width || state.captureCanvas.height !== height) {
     state.captureCanvas.width = width;
     state.captureCanvas.height = height;
@@ -746,7 +400,7 @@ function getCaptureCanvas() {
 }
 
 function mapViewportToVideo(rect) {
-  const { width, height } = getCaptureCanvas();
+  const {width, height} = getCaptureCanvas();
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
   const scale = Math.max(viewportWidth / width, viewportHeight / height);
@@ -762,40 +416,21 @@ function mapViewportToVideo(rect) {
   };
 }
 
-async function refreshCaptureModelImage() {
-  if (state.captureModelBusy || typeof model.toDataURL !== 'function') return;
-  state.captureModelBusy = true;
-  try {
-    const dataUrl = model.toDataURL('image/png');
-    const image = new Image();
-    await new Promise((resolve, reject) => {
-      image.onload = resolve;
-      image.onerror = reject;
-      image.src = dataUrl;
-    });
-    state.captureModelImage = image;
-  } catch (error) {
-    console.warn('Model capture unavailable:', error);
-    state.captureModelImage = null;
-  } finally {
-    state.captureModelBusy = false;
-  }
-}
-
 function drawCaptureFrame() {
   const canvas = getCaptureCanvas();
   const context = state.captureContext;
-  const { width, height } = canvas;
+  const video = cameraVideo();
+  const {width, height} = canvas;
   context.clearRect(0, 0, width, height);
-  if (video.videoWidth > 0 && video.videoHeight > 0) {
-    context.drawImage(video, 0, 0, width, height);
-  } else {
+  if (video?.videoWidth && video?.videoHeight) context.drawImage(video, 0, 0, width, height);
+  else {
     context.fillStyle = '#050b1a';
     context.fillRect(0, 0, width, height);
   }
-  if (state.captureModelImage) {
-    const modelRect = mapViewportToVideo(model.getBoundingClientRect());
-    context.drawImage(state.captureModelImage, modelRect.x, modelRect.y, modelRect.width, modelRect.height);
+  const rendererCanvas = arScene.renderer?.domElement;
+  if (rendererCanvas?.width && rendererCanvas?.height) {
+    const target = mapViewportToVideo({left: 0, top: 0, width: window.innerWidth, height: window.innerHeight});
+    context.drawImage(rendererCanvas, 0, 0, rendererCanvas.width, rendererCanvas.height, target.x, target.y, target.width, target.height);
   }
   return canvas;
 }
@@ -805,7 +440,6 @@ function canvasToBlob(canvas, type = 'image/png', quality = 0.92) {
 }
 
 async function takePhoto() {
-  await refreshCaptureModelImage();
   const canvas = drawCaptureFrame();
   const blob = await canvasToBlob(canvas, 'image/png');
   if (blob) saveBlob(blob, timestampName('alba-ar-photo', 'png'));
@@ -819,14 +453,9 @@ function updateRecordingTimer() {
 }
 
 function startCaptureFrameLoop() {
-  let lastModelCapture = 0;
-  const tick = (now) => {
+  const tick = () => {
     if (!state.mediaRecorder) return;
     drawCaptureFrame();
-    if (now - lastModelCapture > 250 && !state.captureModelBusy) {
-      lastModelCapture = now;
-      refreshCaptureModelImage();
-    }
     state.captureFrameId = requestAnimationFrame(tick);
   };
   cancelAnimationFrame(state.captureFrameId);
@@ -839,47 +468,44 @@ function stopCaptureFrameLoop() {
 }
 
 function startVideoRecording() {
-  if (state.mediaRecorder) return;
-  if (!state.cameraRunning || !video.videoWidth) return;
-  if (!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) return;
+  if (state.mediaRecorder || !window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) return;
+  const video = cameraVideo();
+  if (!video?.videoWidth) return;
   const canvas = getCaptureCanvas();
   const stream = canvas.captureStream(30);
-  const types = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
-  const mimeType = types.find((type) => MediaRecorder.isTypeSupported(type));
-  let recorder;
+  const mimeTypes = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+  const mimeType = mimeTypes.find((type) => MediaRecorder.isTypeSupported(type));
   try {
-    recorder = new MediaRecorder(stream, mimeType ? { mimeType, videoBitsPerSecond: 4200000 } : undefined);
+    state.mediaRecorder = new MediaRecorder(stream, mimeType ? {mimeType, videoBitsPerSecond: 4200000} : undefined);
   } catch (error) {
     console.warn('MediaRecorder unavailable:', error);
     stream.getTracks().forEach((track) => track.stop());
     return;
   }
-  state.mediaRecorder = recorder;
   state.recordedChunks = [];
   state.recordingStartedAt = performance.now();
+  const recorder = state.mediaRecorder;
   recorder.ondataavailable = (event) => { if (event.data.size) state.recordedChunks.push(event.data); };
-  recorder.onerror = (event) => console.warn('MediaRecorder error:', event.error);
   recorder.onstop = () => {
-    const recordedType = recorder.mimeType || 'video/webm';
-    const blob = new Blob(state.recordedChunks, { type: recordedType });
+    const blob = new Blob(state.recordedChunks, {type: recorder.mimeType || 'video/webm'});
     state.recordedChunks = [];
     stream.getTracks().forEach((track) => track.stop());
     if (blob.size) saveBlob(blob, timestampName('alba-ar-video', 'webm'));
   };
+  recorder.onerror = (event) => console.warn('MediaRecorder error:', event.error);
   recorder.start(250);
   captureButton.classList.add('is-recording');
   captureTimer.hidden = false;
   updateRecordingTimer();
   state.recordingUiTimer = window.setInterval(updateRecordingTimer, 250);
   state.recordingStopTimer = window.setTimeout(stopVideoRecording, 30000);
-  refreshCaptureModelImage();
   startCaptureFrameLoop();
 }
 
 function stopVideoRecording() {
   clearTimeout(state.recordingStopTimer);
-  state.recordingStopTimer = null;
   clearInterval(state.recordingUiTimer);
+  state.recordingStopTimer = null;
   state.recordingUiTimer = null;
   captureTimer.hidden = true;
   captureButton.classList.remove('is-recording');
@@ -891,7 +517,7 @@ function stopVideoRecording() {
 }
 
 function setupCaptureControl() {
-  const begin = (event) => {
+  captureButton.addEventListener('pointerdown', (event) => {
     if (event.button !== undefined && event.button !== 0) return;
     state.captureLongPress = false;
     clearTimeout(state.captureHoldTimer);
@@ -901,18 +527,14 @@ function setupCaptureControl() {
       startVideoRecording();
     }, 450);
     event.preventDefault();
-  };
+  });
   const finish = (event) => {
     clearTimeout(state.captureHoldTimer);
     state.captureHoldTimer = null;
-    if (state.mediaRecorder) {
-      stopVideoRecording();
-    } else if (!state.captureLongPress) {
-      takePhoto();
-    }
+    if (state.mediaRecorder) stopVideoRecording();
+    else if (!state.captureLongPress) takePhoto();
     event.preventDefault();
   };
-  captureButton.addEventListener('pointerdown', begin);
   captureButton.addEventListener('pointerup', finish);
   captureButton.addEventListener('pointercancel', (event) => {
     clearTimeout(state.captureHoldTimer);
@@ -923,100 +545,28 @@ function setupCaptureControl() {
   captureButton.addEventListener('contextmenu', (event) => event.preventDefault());
 }
 
-function setUIHidden(hidden) {
-  state.uiHidden = hidden;
-  document.body.classList.toggle('ui-hidden', hidden);
-  uiToggle.setAttribute('aria-label', hidden ? 'Показать кнопки' : 'Скрыть кнопки');
-  uiToggle.setAttribute('aria-pressed', String(hidden));
-  uiToggle.textContent = hidden ? '◉' : '◌';
-}
+menuButton.addEventListener('click', () => setMenuOpen(menuPanel.hidden));
+menuClose.addEventListener('click', () => setMenuOpen(false));
+cameraFallback.addEventListener('click', () => {
+  cameraFallback.hidden = true;
+  startImageTracking();
+});
+dishAnchor.addEventListener('targetFound', handleTargetFound);
+dishAnchor.addEventListener('targetLost', handleTargetLost);
+dishModel.addEventListener('model-loaded', handleModelLoaded);
+dishModel.addEventListener('model-error', handleModelError);
+arScene.addEventListener('arReady', handleArReady);
+arScene.addEventListener('arError', handleArError);
+window.addEventListener('error', (event) => {
+  if (String(event.message || '').toLowerCase().includes('camera')) cameraErrorFallback();
+});
+window.addEventListener('pagehide', () => {
+  if (state.mediaRecorder) stopVideoRecording();
+  stopImageTracking();
+});
 
-function restoreAnchorPhoto() {
-  try {
-    const savedPhoto = localStorage.getItem('alba-table-anchor-photo');
-    if (!savedPhoto || !anchorPreview) return;
-    state.anchorPhotoDataUrl = savedPhoto;
-    anchorPreview.src = savedPhoto;
-    anchorPreview.closest('.anchor-photo-preview').hidden = false;
-  } catch (error) {
-    console.warn('Anchor photo restore unavailable:', error);
-  }
-}
-
-function setupAnchorControls() {
-  anchorButton?.addEventListener('click', () => setAnchorPanelOpen(anchorPanel.hidden));
-  anchorClose?.addEventListener('click', () => setAnchorPanelOpen(false));
-  anchorScanButton?.addEventListener('click', async () => {
-    if (state.markerScanEnabled) {
-      stopMarkerScan();
-      anchorStatus.textContent = 'Сканирование marker остановлено.';
-      return;
-    }
-    if (!state.cameraRunning) {
-      await startCamera({ preferNative: false, markerMode: true });
-    } else {
-      await startMarkerScan();
-    }
-  });
-  anchorPhotoButton?.addEventListener('click', async () => {
-    if (!state.cameraRunning) await startCamera({ preferNative: false });
-    if (state.cameraRunning) captureAnchorPhoto();
-  });
-  model.addEventListener('ar-status', (event) => {
-    const status = event.detail?.status;
-    if (status === 'session-started') {
-      state.nativeARActive = true;
-      setTrackingStatus('Ищем поверхность стола', 'Модель закрепится на найденной горизонтальной плоскости', 'ready');
-    } else if ((status === 'not-presenting' || status === 'failed') && state.nativeARActive) {
-      state.nativeARActive = false;
-      startButton.classList.remove('is-active');
-      startButton.textContent = '◉  Камера';
-      setTrackingStatus(status === 'failed' ? 'Native AR не запущен' : 'AR остановлен', 'Можно использовать marker-якорь или drag', 'ready');
-    }
-  });
-  restoreAnchorPhoto();
-}
-
-function setupManualDrag() {
-  stage.addEventListener('pointerdown', (event) => {
-    if (event.pointerType === 'mouse' || event.pointerType === 'touch' || !state.handTrackingAvailable) {
-      if (beginGrab(event.clientX, event.clientY, 'manual')) {
-        state.manualPointerId = event.pointerId;
-        stage.setPointerCapture?.(event.pointerId);
-        event.preventDefault();
-      }
-    }
-  });
-  stage.addEventListener('pointermove', (event) => {
-    if (state.grabbed && state.grabbedBy === 'manual' && state.manualPointerId === event.pointerId) {
-      placeCard(event.clientX, event.clientY);
-      event.preventDefault();
-    }
-  });
-  const endManual = (event) => {
-    if (state.grabbedBy === 'manual' && state.manualPointerId === event.pointerId) {
-      state.manualPointerId = null;
-      releaseGrab();
-    }
-  };
-  stage.addEventListener('pointerup', endManual);
-  stage.addEventListener('pointercancel', endManual);
-  stage.addEventListener('lostpointercapture', endManual);
-}
-
-categoryButtons.forEach((button) => button.addEventListener('click', () => selectCategory(button.dataset.category)));
-prevDishButton.addEventListener('click', () => shiftDish(-1));
-nextDishButton.addEventListener('click', () => shiftDish(1));
-startButton.addEventListener('click', startCamera);
-resetButton.addEventListener('click', () => resetDish());
-uiToggle.addEventListener('click', () => setUIHidden(!state.uiHidden));
+renderMenu();
+prepareDish(currentDish());
+setupZoomControls();
 setupCaptureControl();
-setupAnchorControls();
-window.addEventListener('resize', () => resetDish({ announce: false }));
-window.addEventListener('pagehide', stopCamera);
-setupManualDrag();
-renderDish();
-setUIHidden(false);
-
-// The card is placed after layout so its initial center remains exact on all screens.
-window.requestAnimationFrame(() => resetDish({ announce: false }));
+window.setTimeout(stageVideo, 0);

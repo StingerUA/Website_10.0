@@ -1,136 +1,72 @@
 <!doctype html>
-<html lang="ru">
+<html lang="tr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="theme-color" content="#050b1a">
-  <meta name="description" content="Браузерное AR-меню ресторана с интерактивными 3D-блюдами.">
-  <title>AR Menu — Alba Space</title>
+  <meta name="description" content="Alba Space görsel işaretçi tabanlı tarayıcı AR restoran menüsü.">
+  <title>AR Menü — Alba Space</title>
   <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=anchor-2">
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js"></script>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
 <body>
-  <main class="ar-app" aria-label="AR-меню ресторана">
-    <video id="camera-feed" class="camera-feed" autoplay playsinline muted aria-label="Изображение с камеры"></video>
-    <div class="camera-shade" aria-hidden="true"></div>
-    <div class="ambient-grid" aria-hidden="true"></div>
+  <main id="ar-app" class="ar-app" aria-label="Alba Space AR restoran menüsü">
+    <a-scene id="ar-scene"
+      mindar-image="imageTargetSrc: /assets/ar/alba-table-anchor.mind; autoStart: false; maxTrack: 1; uiLoading: no; uiScanning: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.001"
+      embedded
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+      renderer="alpha: true; colorManagement: true; physicallyCorrectLights: true; antialias: true">
+      <a-entity light="type: ambient; color: #ffffff; intensity: 1.7"></a-entity>
+      <a-entity light="type: directional; color: #fff4df; intensity: 1.2" position="0 1 1"></a-entity>
+      <a-entity id="dish-anchor" mindar-image-target="targetIndex: 0">
+        <a-entity id="dish-model"
+          gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=anchor-2"
+          position="0 0 0.03"
+          rotation="-90 0 0"
+          scale="0.28 0.28 0.28">
+        </a-entity>
+      </a-entity>
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    </a-scene>
 
-    <header class="top-bar ui-chrome">
-      <div class="top-brand">
-      <a class="back-link" href="/" aria-label="Вернуться на главную">← <span>Alba Space</span></a>
-      <div class="brand-mark" aria-label="AR Menu">AR <span>MENU</span></div>
-      </div>
-      <div class="top-actions">
-        <button id="ui-toggle" class="icon-button" type="button" aria-label="Скрыть кнопки" aria-pressed="false">◌</button>
-      </div>
+    <header class="top-bar" aria-label="Навигация">
+      <div class="top-brand" aria-label="Alba Space AR Menu">AR <span>MENU</span></div>
+      <button id="menu-button" class="menu-button" type="button" aria-expanded="false" aria-controls="menu-panel">Menü</button>
     </header>
 
-    <section class="intro-panel glass-panel" aria-labelledby="page-title">
-      <div class="eyebrow"><span class="live-dot"></span> BROWSER AR EXPERIENCE</div>
-      <h1 id="page-title">Ваш стол.<br><em>Ваш выбор.</em></h1>
-      <p>Наведите камеру на стол и выберите блюдо. Сведите большой и указательный пальцы правой руки, чтобы взять тарелку и поставить её в другом месте.</p>
-    </section>
-
-    <section class="tracking-pill glass-panel" aria-live="polite">
-      <span id="tracking-led" class="tracking-led is-off"></span>
-      <span id="tracking-label">Камера выключена</span>
-      <span id="tracking-detail">Нажмите «Камера» или откройте «Якорь стола»</span>
-    </section>
-
-    <section id="dish-stage" class="dish-stage" aria-label="AR-модель выбранного блюда">
-      <div id="dish-shadow" class="dish-shadow" aria-hidden="true"></div>
-      <div id="dish-card" class="dish-card">
-        <model-viewer id="dish-model"
-          src="/assets/models/restaurant/steak.glb"
-          alt="3D-модель мясного блюда на тарелке"
-          camera-controls
-          disable-tap
-          interaction-prompt="none"
-          shadow-intensity="0.32"
-          shadow-softness="0.9"
-          exposure="0.58"
-          environment-image="neutral"
-          ar
-          ar-modes="webxr scene-viewer quick-look"
-          ar-placement="floor"
-          loading="eager">
-        </model-viewer>
-        <span class="dish-grab-ring" aria-hidden="true"></span>
-        <span id="hand-pointer" class="hand-pointer" aria-hidden="true"></span>
+    <section id="status-card" class="status-card" aria-live="polite" hidden>
+      <div class="loading-mark" aria-hidden="true"><span></span></div>
+      <div class="status-copy">
+        <strong id="status-label">Yemek kataloğu yükleniyor</strong>
+        <span id="status-detail">Lütfen bekleyin</span>
       </div>
+      <div class="loading-bar" aria-hidden="true"><span id="loading-progress"></span></div>
     </section>
 
-    <section class="dish-info glass-panel ui-chrome" aria-live="polite">
-      <div>
-        <span id="dish-category" class="dish-category">МЯСНЫЕ БЛЮДА</span>
-        <h2 id="dish-name">Стейк на гриле</h2>
-        <p id="dish-description">Сочный стейк, свежая зелень и цитрусовый акцент.</p>
-      </div>
-      <div class="dish-meta">
-        <strong id="dish-price" class="dish-price">₺ 420</strong>
-        <div class="dish-switcher" aria-label="Переключение блюд">
-          <button id="dish-prev" class="dish-arrow" type="button" aria-label="Предыдущее блюдо">←</button>
-          <span id="dish-position" class="dish-position" aria-live="polite">1 / 2</span>
-          <button id="dish-next" class="dish-arrow" type="button" aria-label="Следующее блюдо">→</button>
-        </div>
-      </div>
-    </section>
-
-    <nav class="category-rail glass-panel ui-chrome" aria-label="Категории меню">
-      <button class="category-button is-active" type="button" data-category="meat">
-        <span class="category-icon">✦</span>
-        <span>Мясо</span>
-      </button>
-      <button class="category-button" type="button" data-category="dessert">
-        <span class="category-icon">◒</span>
-        <span>Десерты</span>
-      </button>
-      <button class="category-button" type="button" data-category="soup">
-        <span class="category-icon">◉</span>
-        <span>Супы</span>
-      </button>
-      <button class="category-button" type="button" data-category="drink">
-        <span class="category-icon">◌</span>
-        <span>Напитки</span>
-      </button>
-    </nav>
-
-    <div class="action-row ui-chrome">
-      <button id="start-camera" class="primary-action" type="button"><span class="action-icon">◉</span> Камера</button>
-      <button id="reset-dish" class="secondary-action" type="button" aria-label="Вернуть блюдо в центр">↺</button>
-      <button id="anchor-button" class="secondary-action anchor-action" type="button" aria-label="Открыть якорь стола" aria-controls="anchor-panel" aria-expanded="false">⌖ <span>Якорь</span></button>
-    </div>
-
-    <section id="anchor-panel" class="anchor-panel glass-panel ui-chrome" hidden aria-labelledby="anchor-title">
-      <div class="anchor-panel-head">
+    <section id="menu-panel" class="menu-panel" hidden aria-labelledby="menu-title">
+      <div class="menu-panel-head">
         <div>
-          <span class="eyebrow">TABLE ANCHOR</span>
-          <h2 id="anchor-title">Якорь стола</h2>
+          <span class="menu-kicker">ALBA SPACE</span>
+          <h1 id="menu-title">Menü</h1>
         </div>
-        <button id="anchor-close" class="dialog-close" type="button" aria-label="Закрыть якорь стола">×</button>
+        <button id="menu-close" class="menu-close" type="button" aria-label="Menüyü kapat">×</button>
       </div>
-      <div class="anchor-marker-wrap">
-        <img id="anchor-marker" src="/assets/ar/alba-table-anchor.svg" alt="Печатный QR-marker Alba Table Anchor">
-      </div>
-      <a id="anchor-download" class="anchor-download" href="/assets/ar/alba-table-anchor.svg" download="alba-table-anchor.svg">Скачать marker для печати</a>
-      <div class="anchor-photo-preview" hidden>
-        <img id="anchor-preview" alt="Предварительная фотография marker-а на столе">
-      </div>
-      <p class="anchor-copy">Распечатайте изображение и положите его на стол. На совместимом Android-браузере Alba попробует закрепить блюдо через WebXR. В обычном режиме камера будет искать этот QR-marker и держать блюдо над ним.</p>
-      <div class="anchor-panel-actions">
-        <button id="anchor-scan" class="primary-action" type="button">Сканировать якорь</button>
-        <button id="anchor-photo" class="secondary-action" type="button">Фото</button>
-      </div>
-      <p id="anchor-status" class="anchor-status" aria-live="polite">Якорь ещё не откалиброван.</p>
+      <p class="menu-anchor-note">Bu görseli masanın üzerine yerleştirin. Yemekler aynı görsel işaretçiye bağlanır.</p>
+      <div class="menu-anchor-preview"><img src="/assets/ar/alba-table-anchor.jpeg" alt="Masaya yerleştirilecek görsel işaretçi"></div>
+      <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Yemek kategorileri"></div>
+      <div id="menu-item-buttons" class="menu-items" aria-live="polite"></div>
     </section>
 
-    <p class="privacy-note"><span>⌁</span> Камера и распознавание руки работают локально в браузере. Видео не отправляется на сервер.</p>
+    <button id="camera-start-fallback" class="camera-start-fallback" type="button" hidden>Kamerayı başlat</button>
 
-    <div class="capture-dock" aria-label="Съёмка AR-сцены">
-      <button id="capture-button" class="capture-button" type="button" aria-label="Короткое нажатие — фото, долгое нажатие — видео"></button>
+    <div class="capture-dock" aria-label="AR sahnesi çekimi">
+      <button id="capture-button" class="capture-button" type="button" aria-label="Fotoğraf çekmek için kısa, video için uzun basın"></button>
       <span id="capture-timer" class="capture-timer" aria-live="polite" hidden>00:30</span>
     </div>
 
+    <div class="zoom-hint" aria-hidden="true">İki parmakla yakınlaştırın / uzaklaştırın</div>
   </main>
   <script type="module" src="/assets/js/restaurant-ar.js?v=anchor-2"></script>
 </body>

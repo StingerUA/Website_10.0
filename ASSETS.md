@@ -6,25 +6,27 @@ The current game uses procedural Babylon.js geometry for the station, modules, s
 
 ## Restaurant AR art direction
 
-A dark midnight-blue restaurant interface uses glassmorphism cards, cyan interaction highlights and warm amber food accents. The live camera stays visible behind a single clean 3D model, with a compact status pill at the top and a category rail at the bottom. The experience is intentionally lightweight and readable on a phone.
+The restaurant route uses a dark camera-first interface with restrained glass panels, cyan interaction highlights and warm amber food accents. The page now uses **one physical image anchor**: the model is rendered as a child of the same MindAR image target and therefore cannot be dragged across the screen. The menu is hidden at first; a Turkish `Menü` button reveals category and dish-name buttons, while the capture button remains centered at the bottom.
 
-The planned reference visual was requested as a portrait in-browser AR screenshot with a dinner plate on a softly blurred tabletop, three category pills for drinks, desserts and meat dishes, a hand-tracking status pill, and a small pinch-and-drag hint. The image-generation quota was unavailable, so the implementation uses the written art direction and deterministic local geometry instead of a generated reference image.
-
-| Resource | Runtime source | Change in this audit |
+| Resource | Runtime source | Current status |
 |---|---|---|
-| Station modules | `station-3d.js` procedural meshes | Preserve and harden lifecycle only |
-| Cadets and helmets | `station-3d.js` procedural meshes/materials | Preserve category-color contract |
-| Earth and stars | `station-3d.js` procedural meshes | No new files |
-| AR camera/anchors | `ar-mode.js` + `anchors.html` | Preserve existing fallback |
-| Steak plate | `/assets/models/restaurant/steak.glb` | Local procedural GLB, first meat item |
-| Lamb chops plate | `/assets/models/restaurant/lamb-chops.glb` | Local procedural GLB, second meat item |
-| Dessert plate | `/assets/models/restaurant/dessert.glb` | Local procedural GLB, first dessert item |
-| Chocolate cake | `/assets/models/restaurant/chocolate-cake.glb` | Local procedural GLB, second dessert item |
-| Citrus drink | `/assets/models/restaurant/drink.glb` | Local procedural GLB, first drink item |
-| Alba Latte | `/assets/models/restaurant/latte.glb` | Local procedural GLB, second drink item |
-| Alba Cheeseburger | `/assets/models/restaurant/cheeseburger.glb` | Poly Pizza / Poly by Google, CC BY 3.0; attribution in `THIRD_PARTY_NOTICES.md` |
-| Banana with honey | `/assets/models/restaurant/banana.glb` | Poly Pizza / Quaternius, CC0; source recorded in `THIRD_PARTY_NOTICES.md` |
-| Home soup | `/assets/models/restaurant/bowl-soup.glb` | Poly Pizza / Kenney, CC0; source recorded in `THIRD_PARTY_NOTICES.md` |
-| Fresh juice | `/assets/models/restaurant/juice.glb` | Poly Pizza / Poly by Google, CC BY 3.0; attribution in `THIRD_PARTY_NOTICES.md` |
-| Hand landmark model | MediaPipe Tasks Vision CDN | Browser inference only; no server upload |
-| Model-viewer runtime | Google model-viewer CDN with pinned version | Existing site pattern, used by the new standalone page |
+| User table anchor photo | `/assets/ar/alba-table-anchor.jpeg` | User-provided JPEG; used as the only visual target and shown in the menu as a placement reference |
+| Compiled image target | `/assets/ar/alba-table-anchor.mind` | Generated locally with MindAR offline compiler 1.2.5 from the user-provided JPEG |
+| Image tracking runtime | A-Frame 1.5.0 + MindAR 1.2.5 CDN bundles | Browser-only image tracking; no native app or server tracking service |
+| Initial dish | `/assets/models/restaurant/realistic-steak-board.glb` | Loaded automatically as the first child of `#dish-anchor` |
+| Meat dishes | Three local `realistic-*.glb` files | Switched by dish-name buttons and rendered on the same target |
+| Dessert dishes | Three local `realistic-*.glb` files | Switched by dish-name buttons and rendered on the same target |
+| Soup dish | `/assets/models/restaurant/realistic-soup.glb` | Switched by the `ÇORBALAR` category |
+| Drink dishes | Three local `realistic-*.glb` files | Switched by dish-name buttons and rendered on the same target |
+| Capture | Canvas composite of MindAR video + A-Frame renderer | Short press saves PNG; long press records WebM for up to 30 seconds |
+| Zoom | Pinch or wheel applied to the child glTF scale | Scale changes without changing the target entity position |
+
+### Anchor generation and placement
+
+The JPEG is the exact image supplied by the user in this task. Its local MindAR target file is derived from that image and is hosted with the site, so the browser does not need to call a target-generation service. The same photograph is included in the menu as a visual reference: the user should place that image flat on the table and point the rear camera at it. Physical image tracking and camera permissions remain device/browser dependent; the sandbox cannot emulate a mobile camera or confirm a real target-found event.
+
+### Model rights note
+
+The current realistic GLBs were downloaded from public Tripo gallery cards and remain documented in `assets/models/restaurant/THIRD_PARTY_NOTICES.md`. Public availability and a free download do not by themselves prove redistribution or commercial-use rights. The individual Tripo cards inspected did not show a standard CC0/CC-BY licence, and the Tripo pricing page distinguishes free public models from commercial-use plans. These models must not be presented as CC0/CC-BY without additional permission or replacement by assets with explicit redistribution rights.
+
+Older low-poly, Poly Pizza, and procedural files remain in the repository as legacy backups and are not referenced by the new controller unless explicitly selected in a future change.
