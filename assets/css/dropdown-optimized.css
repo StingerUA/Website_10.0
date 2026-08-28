@@ -1,6 +1,6 @@
 /* Shared dropdown entry point.
    Keep the proven interaction/layout rules, then apply the unified Alba Space
-   cyan palette to every regular dark header. White shop headers are excluded
-   by .site-header--black / product-text-black guards in the theme layer. */
-@import url('/assets/css/dropdown-optimized-legacy.css?v=20260828-unified-blue');
-@import url('/assets/css/header-dropdown-blue.css?v=20260828-unified-blue');
+   homepage-mobile dark-blue palette to every regular header. White shop headers
+   are excluded by .site-header--black / product-text-black guards in the theme layer. */
+@import url('/assets/css/dropdown-optimized-legacy.css?v=20260829-dark-blue');
+@import url('/assets/css/header-dropdown-blue.css?v=20260829-dark-blue');
