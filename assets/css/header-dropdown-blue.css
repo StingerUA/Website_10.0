@@ -1,19 +1,20 @@
 /* Alba Space unified dropdown palette for regular dark headers.
-   Intentionally excludes the white shop/product header variants (.site-header--black). */
+   Source of truth: the original mobile dropdown appearance on the homepage.
+   White shop/product header variants (.site-header--black) are intentionally excluded. */
 
 :root {
-  --alba-dropdown-bg-top: #eafcff;
-  --alba-dropdown-bg-bottom: #c9f5ff;
-  --alba-dropdown-border: #7bdbe9;
-  --alba-dropdown-text: #031014;
-  --alba-dropdown-hover: rgba(0, 194, 255, 0.16);
-  --alba-dropdown-active: rgba(0, 194, 255, 0.24);
-  --alba-dropdown-shadow: 0 14px 34px rgba(0, 194, 255, 0.18), 0 16px 38px rgba(0, 0, 0, 0.28);
+  --alba-dropdown-bg: #020617;
+  --alba-dropdown-border: rgba(255, 255, 255, 0.08);
+  --alba-dropdown-text: #e5e7eb;
+  --alba-dropdown-hover: rgba(0, 194, 255, 0.20);
+  --alba-dropdown-hover-text: #00c2ff;
+  --alba-dropdown-active: rgba(0, 194, 255, 0.25);
+  --alba-dropdown-shadow: 0 12px 32px rgba(0, 0, 0, 0.70);
 }
 
 /* Main navigation dropdowns — SERVICES / ALBAMEN / ABOUT and all language equivalents. */
 .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu {
-  background: linear-gradient(180deg, var(--alba-dropdown-bg-top) 0%, var(--alba-dropdown-bg-bottom) 100%) !important;
+  background: var(--alba-dropdown-bg) !important;
   border: 1px solid var(--alba-dropdown-border) !important;
   box-shadow: var(--alba-dropdown-shadow) !important;
   color: var(--alba-dropdown-text) !important;
@@ -30,33 +31,33 @@
 .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu a:focus-visible,
 .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu button:focus-visible {
   background: var(--alba-dropdown-hover) !important;
-  color: var(--alba-dropdown-text) !important;
+  color: var(--alba-dropdown-hover-text) !important;
 }
 
 .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu a:active,
 .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu button:active {
   background: var(--alba-dropdown-active) !important;
-  color: var(--alba-dropdown-text) !important;
+  color: var(--alba-dropdown-hover-text) !important;
 }
 
 .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu a::before,
 .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu button::before {
-  background: rgba(3, 86, 108, 0.18) !important;
+  background: rgba(0, 194, 255, 0.20) !important;
 }
 
-/* Hyper Club had an old white hover override. Keep it visually identical to every other item. */
-.site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu a.hyperclub-link,
-.site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu a.hyperclub-link:hover {
+/* Hyper Club previously had its own hover colour. Keep it identical to all other items. */
+.site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu a.hyperclub-link {
   color: var(--alba-dropdown-text) !important;
 }
 
 .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu a.hyperclub-link:hover {
   background: var(--alba-dropdown-hover) !important;
+  color: var(--alba-dropdown-hover-text) !important;
 }
 
-/* Language selector is also a header dropdown and must use the same palette. */
+/* Language selector is a header dropdown too, so it uses the same homepage-mobile palette. */
 .site-header:not(.site-header--black) .lang-dropdown-menu {
-  background: linear-gradient(180deg, var(--alba-dropdown-bg-top) 0%, var(--alba-dropdown-bg-bottom) 100%) !important;
+  background: var(--alba-dropdown-bg) !important;
   border: 1px solid var(--alba-dropdown-border) !important;
   box-shadow: var(--alba-dropdown-shadow) !important;
   color: var(--alba-dropdown-text) !important;
@@ -72,14 +73,14 @@
 .site-header:not(.site-header--black) .lang-dropdown-menu a:focus-visible,
 .site-header:not(.site-header--black) .lang-dropdown-menu button:focus-visible {
   background: var(--alba-dropdown-hover) !important;
-  color: var(--alba-dropdown-text) !important;
+  color: var(--alba-dropdown-hover-text) !important;
 }
 
-/* Account panel, if opened instead of navigating to the account page, follows the same header palette. */
+/* Account panel, if opened instead of navigating to the account page, follows the same palette. */
 .site-header:not(.site-header--black) .alien-dropdown-container .alien-menu,
 .site-header:not(.site-header--black) #alienMenu {
-  background: linear-gradient(180deg, var(--alba-dropdown-bg-top) 0%, var(--alba-dropdown-bg-bottom) 100%) !important;
-  border-color: var(--alba-dropdown-border) !important;
+  background: var(--alba-dropdown-bg) !important;
+  border: 1px solid var(--alba-dropdown-border) !important;
   box-shadow: var(--alba-dropdown-shadow) !important;
   color: var(--alba-dropdown-text) !important;
 }
@@ -94,27 +95,47 @@
 .site-header:not(.site-header--black) .alien-menu .alien-menu-item:focus-visible,
 .site-header:not(.site-header--black) #alienMenu .alien-menu-item:focus-visible {
   background: var(--alba-dropdown-hover) !important;
-  color: var(--alba-dropdown-text) !important;
+  color: var(--alba-dropdown-hover-text) !important;
 }
 
-/* Desktop-specific legacy selectors use !important backgrounds; repeat with greater specificity. */
+/* Desktop-specific legacy selectors have strong !important rules.
+   Override both their panel colours and item colours with the exact mobile palette. */
 @media (min-width: 1024px) {
   .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu,
   .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu,
   .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu {
-    background: linear-gradient(180deg, var(--alba-dropdown-bg-top) 0%, var(--alba-dropdown-bg-bottom) 100%) !important;
+    background: var(--alba-dropdown-bg) !important;
     border: 1px solid var(--alba-dropdown-border) !important;
     box-shadow: var(--alba-dropdown-shadow) !important;
   }
+
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu a,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu button,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu a,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu button,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu a,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu button {
+    color: var(--alba-dropdown-text) !important;
+  }
+
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu a:hover,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hizmetler.html"] + .dropdown-menu button:hover,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu a:hover,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="albamen.html"] + .dropdown-menu button:hover,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu a:hover,
+  .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu button:hover {
+    background: var(--alba-dropdown-hover) !important;
+    color: var(--alba-dropdown-hover-text) !important;
+  }
 }
 
-/* Mobile: same colour, not the old dark fallback. */
+/* Mobile: explicitly preserve the homepage's original dark-blue dropdown appearance. */
 @media (max-width: 1023px) {
   .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu,
   .site-header:not(.site-header--black) .lang-dropdown-menu,
   .site-header:not(.site-header--black) .alien-dropdown-container .alien-menu,
   .site-header:not(.site-header--black) #alienMenu {
-    background: linear-gradient(180deg, var(--alba-dropdown-bg-top) 0%, var(--alba-dropdown-bg-bottom) 100%) !important;
+    background: var(--alba-dropdown-bg) !important;
     border-color: var(--alba-dropdown-border) !important;
     color: var(--alba-dropdown-text) !important;
   }
@@ -122,7 +143,7 @@
   .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu a:hover,
   .site-header:not(.site-header--black) .main-nav .dropdown > .dropdown-menu button:hover {
     background: var(--alba-dropdown-hover) !important;
-    color: var(--alba-dropdown-text) !important;
+    color: var(--alba-dropdown-hover-text) !important;
   }
 }
 
