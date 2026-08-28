@@ -1,3 +1,39 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#05080d"><meta name="description" content="Актуальный экипаж МКС, портреты космонавтов и официальные профили агентств."><link rel="stylesheet" href="/assets/css/site.css"><link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828"><title>Экипаж МКС — Orbital Atlas</title></head>
-<body class="oa-body"><div data-include="/header-ru.html"></div><nav class="oa-contextnav" aria-label="Orbital Atlas"><div class="oa-shell oa-contextnav__inner"><div class="oa-contextnav__links"><a href="/orbital-atlas.html" data-t="overview">Обзор</a><a href="/orbital-launches.html" data-t="launch">Запуски</a><a href="/orbital-iss.html" data-t="cameras">Камеры МКС</a><a class="is-active" href="/orbital-crew.html" data-t="crew">Экипаж</a><a href="/orbital-solar-system.html" data-t="solar">Солнечная система</a></div></div></nav><main class="oa-main"><section class="oa-hero"><div class="oa-shell oa-hero__grid"><div><p class="oa-eyebrow">03 / Station watch</p><h1 class="oa-title" data-copy="crewTitle">Экипаж МКС и официальные профили.</h1><p class="oa-lead" data-copy="crewLead">Текущий состав станции, портреты и ссылки на официальные профили космонавтов.</p><div class="oa-actions"><a class="oa-button oa-button--primary" href="#crew" data-t="crew">Экипаж</a><a class="oa-button" href="/orbital-iss.html" data-t="cameras">Камеры МКС</a></div></div><article class="oa-card oa-status-card"><div class="oa-status-top"><span data-t="activeCrew">активный экипаж МКС</span><span class="oa-status-live" data-t="live">прямой эфир</span></div><h2>ISS</h2><p data-t="awaiting">Получаем актуальные данные</p><div class="oa-countdown"><strong>07</strong><span data-t="crew">Экипаж</span></div></article></div></section><section class="oa-section" id="crew"><div class="oa-shell"><div class="oa-section-head"><div><p class="oa-eyebrow">PORTRAITS / PROFILES</p><h2 class="oa-section-title" data-t="crew">Экипаж</h2></div><p class="oa-section-note" data-copy="crewLead">Текущий состав станции, портреты и ссылки на официальные профили космонавтов.</p></div><div class="oa-crew-grid" id="crewGrid"></div></div></section><section class="oa-section"><div class="oa-shell"><p class="oa-eyebrow">LIVE ROSTER</p><h2 class="oa-section-title" data-copy="rosterTitle">Текущий открытый реестр на борту.</h2><div class="oa-roster" id="crewRoster"><span data-t="awaiting">Получаем актуальные данные</span></div></div></section></main><div data-include="/footer-ru.html"></div><script defer src="/assets/js/include.js"></script><script src="/orbital-atlas-pages.js?v=unified-atlas-20260828"></script></body></html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#020617">
+  <meta name="description" content="Кто сейчас находится в космосе: экипажи, миссии, портреты и живые счётчики времени на орбите.">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828">
+  <link rel="stylesheet" href="/orbital-who-in-space.css?v=20260829-1">
+  <title>Кто в космосе? — Orbital Atlas</title>
+</head>
+<body class="oa-body">
+  <div data-include="/header-ru.html"></div>
+  <nav class="oa-contextnav" aria-label="Orbital Atlas">
+    <div class="oa-shell oa-contextnav__inner"><div class="oa-contextnav__links">
+      <a href="/orbital-atlas.html">Обзор</a>
+      <a href="/orbital-launches.html">Запуски</a>
+      <a href="/orbital-iss.html">Камеры МКС</a>
+      <a class="is-active wis-context-label" href="/orbital-crew.html">Кто в космосе?</a>
+      <a href="/orbital-solar-system.html">Солнечная система</a>
+    </div></div>
+  </nav>
+  <main class="oa-main wis-main">
+    <section class="wis-hero"><div class="oa-shell wis-hero__inner">
+      <div><p class="wis-kicker" data-wis-section>Кто в космосе?</p><h1 class="wis-title" data-wis-title>Кто сейчас находится в космосе?</h1><p class="wis-lead" data-wis-lead>Смотрите, какие люди сейчас находятся на орбите Земли, в каких миссиях они участвуют и сколько времени проводят в космосе.</p></div>
+      <aside class="wis-count"><strong class="wis-count__number" data-wis-count>10</strong><span class="wis-count__label" data-wis-count-label>Сейчас в космосе 10 человек</span><span class="wis-count__updated" data-wis-updated>Счётчики обновляются в реальном времени</span></aside>
+    </div></section>
+    <section class="wis-section"><div class="oa-shell">
+      <div class="wis-section-head"><h2 data-wis-mission-title>Текущие экипажи</h2><p data-wis-mission-note>Астронавты и космонавты сгруппированы по миссиям и орбитальным станциям.</p></div>
+      <div class="wis-missions" id="wisMissions"><div class="wis-loading">Подготавливаем актуальные данные об экипажах…</div></div>
+      <div class="wis-footnote"><div data-wis-ever>По состоянию на апрель 2026 года всего <strong>781</strong> человек побывали в космосе.</div><div class="wis-source" data-wis-source>Источники: Who Is In Space и Launch Library 2.</div></div>
+    </div></section>
+  </main>
+  <div data-include="/footer-ru.html"></div>
+  <script defer src="/assets/js/include.js"></script>
+  <script defer src="/orbital-who-in-space.js?v=20260829-1"></script>
+</body>
+</html>
