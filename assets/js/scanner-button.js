@@ -9,6 +9,12 @@
 (function () {
   'use strict';
 
+  function extrasDisabled() {
+    return document.body && document.body.dataset.disableModelExtras === 'true';
+  }
+
+  if (extrasDisabled()) return;
+
   function detectLang() {
     const p = window.location.pathname;
     if (p.startsWith('/eng/')) return 'en';
@@ -101,6 +107,7 @@
 `;
 
   function inject() {
+    if (extrasDisabled()) return;
     if (!document.querySelector('model-viewer')) return;
     if (document.getElementById('alba-scanner-btn-wrap')) return;
 
@@ -162,6 +169,7 @@
 
   // Wait for DOM + player to be injected (player is injected dynamically)
   function tryInject(attempts) {
+    if (extrasDisabled()) return;
     if (document.getElementById('albaModelPlayer') || document.querySelector('model-viewer')) {
       // Give player a moment to fully render, then inject
       setTimeout(inject, 400);
