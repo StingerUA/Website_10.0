@@ -22,6 +22,16 @@
     margin-bottom: var(--alba-desktop-header-clearance) !important;
   }
 
+  /* Override the older homepage exception with equal/higher specificity. */
+  body.home-page [data-include^="/header-"],
+  body.home-page [data-include-html^="/header-"],
+  body.home-page [data-include="header-tr.html"],
+  body.home-page [data-include="header-en.html"],
+  body.home-page [data-include="header-ru.html"],
+  body.home-page [data-include="header-ar.html"] {
+    margin-bottom: var(--alba-desktop-header-clearance) !important;
+  }
+
   /* The four home pages previously created their own larger top gap.
      Remove only that desktop-only extra spacing so the global 2 cm rule is exact. */
   body.home-page .home-main {
