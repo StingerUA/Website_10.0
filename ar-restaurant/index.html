@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#050b1a">
   <meta name="description" content="Alba Space görsel işaretçi tabanlı tarayıcı AR restoran menüsü.">
   <title>AR Menü — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=anchor-2">
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=table-session-1">
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
@@ -18,20 +18,38 @@
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
       renderer="alpha: true; colorManagement: true; physicallyCorrectLights: true; antialias: true">
-      <a-entity light="type: ambient; color: #ffffff; intensity: 1.7"></a-entity>
-      <a-entity light="type: directional; color: #fff4df; intensity: 1.2" position="0 1 1"></a-entity>
+      <a-entity id="ambient-light" light="type: ambient; color: #ffffff; intensity: 1.7"></a-entity>
+      <a-entity id="key-light" light="type: directional; color: #fff4df; intensity: 1.2" position="0 1 1"></a-entity>
       <a-entity id="dish-anchor" mindar-image-target="targetIndex: 0">
+        <a-cylinder id="dish-plate"
+          position="0 0 0.018"
+          rotation="90 0 0"
+          radius="0.48"
+          height="0.035"
+          segments-radial="64"
+          material="color: #f8f5ed; roughness: 0.42; metalness: 0.03"
+          visible="true">
+        </a-cylinder>
+        <a-torus id="dish-plate-rim"
+          position="0 0 0.04"
+          radius="0.43"
+          radius-tubular="0.025"
+          segments-radial="24"
+          segments-tubular="64"
+          material="color: #ffffff; roughness: 0.36; metalness: 0.02"
+          visible="true">
+        </a-torus>
         <a-entity id="dish-model"
-          gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=anchor-2"
-          position="0 0 0.03"
-          rotation="-90 0 0"
-          scale="0.28 0.28 0.28">
+          gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=table-session-1"
+          position="0 0 0.055"
+          rotation="90 0 0"
+          scale="0.56 0.56 0.56">
         </a-entity>
       </a-entity>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
     </a-scene>
 
-    <header class="top-bar" aria-label="Навигация">
+    <header class="top-bar" aria-label="Gezinme">
       <div class="top-brand" aria-label="Alba Space AR Menu">AR <span>MENU</span></div>
       <button id="menu-button" class="menu-button" type="button" aria-expanded="false" aria-controls="menu-panel">Menü</button>
     </header>
@@ -53,8 +71,8 @@
         </div>
         <button id="menu-close" class="menu-close" type="button" aria-label="Menüyü kapat">×</button>
       </div>
-      <p class="menu-anchor-note">Bu görseli masanın üzerine yerleştirin. Yemekler aynı görsel işaretçiye bağlanır.</p>
-      <div class="menu-anchor-preview"><img src="/assets/ar/alba-table-anchor.jpeg" alt="Masaya yerleştirilecek görsel işaretçi"></div>
+      <p class="menu-anchor-note">Yemekler bu oturumda çektiğiniz masa fotoğrafına bağlanır.</p>
+      <button id="recalibrate-button" class="recalibrate-button" type="button">Masayı yeniden fotoğrafla</button>
       <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Yemek kategorileri"></div>
       <div id="menu-item-buttons" class="menu-items" aria-live="polite"></div>
     </section>
@@ -68,6 +86,42 @@
 
     <div class="zoom-hint" aria-hidden="true">İki parmakla yakınlaştırın / uzaklaştırın</div>
   </main>
-  <script type="module" src="/assets/js/restaurant-ar.js?v=anchor-2"></script>
+
+  <section id="auth-gate" class="session-gate" aria-live="polite">
+    <div class="gate-card">
+      <div id="auth-checking" class="gate-state">
+        <div class="gate-spinner" aria-hidden="true"></div>
+        <h1>Giriş kontrol ediliyor</h1>
+        <p>Lütfen bekleyin.</p>
+      </div>
+      <div id="auth-required" class="gate-state" hidden>
+        <div class="gate-icon" aria-hidden="true">🔒</div>
+        <h1>Giriş yapmanız gerekiyor</h1>
+        <p>AR Menü yalnızca Alba Space hesabına giriş yapan kullanıcılar tarafından kullanılabilir.</p>
+        <a id="login-link" class="gate-action" href="/account-menu.html">Giriş yap veya hesap oluştur</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="table-calibration" class="table-calibration" hidden aria-labelledby="table-calibration-title">
+    <video id="table-preview" class="table-preview" autoplay muted playsinline></video>
+    <canvas id="table-freeze" class="table-preview" hidden></canvas>
+    <div class="table-shade" aria-hidden="true"></div>
+    <div class="table-guide" aria-hidden="true"><span></span></div>
+    <div class="calibration-copy">
+      <span class="menu-kicker">MASA YÜZEYİ</span>
+      <h1 id="table-calibration-title">Masa yüzeyinin fotoğrafını çekin</h1>
+      <p id="table-calibration-detail">Telefonu masaya doğrultun. Desenler veya küçük bir nesne görünürse sabitleme daha güçlü olur.</p>
+      <div id="calibration-progress" class="calibration-progress" hidden><span></span></div>
+    </div>
+    <div class="calibration-actions">
+      <button id="table-capture-button" class="table-capture-button" type="button" disabled aria-label="Masa yüzeyini fotoğrafla"></button>
+      <strong id="table-capture-label">Masayı sabitle</strong>
+      <button id="table-retry-button" class="table-retry-button" type="button" hidden>Tekrar dene</button>
+      <small>Fotoğraf yalnızca bu sekmedeki oturumda işlenir ve sunucuya yüklenmez.</small>
+    </div>
+  </section>
+
+  <script type="module" src="/assets/js/restaurant-ar.js?v=table-session-1"></script>
 </body>
 </html>
