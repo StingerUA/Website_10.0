@@ -34,7 +34,9 @@
 
   const applyUrlState = () => {
     const url = new URL(location.href);
-    const requested = String(url.searchParams.get("planet") || url.searchParams.get("body") || "").toLowerCase();
+    const body = String(url.searchParams.get("body") || "").toLowerCase();
+    const planet = String(url.searchParams.get("planet") || "").toLowerCase();
+    const requested = validPlanets.has(body) ? body : planet;
     if (validPlanets.has(requested)) choosePlanet(requested);
 
     const view = String(url.searchParams.get("view") || "").toLowerCase();
@@ -51,8 +53,11 @@
     syncPlanetUi();
     if (!event.isTrusted || !validPlanets.has(button.dataset.planet)) return;
     const url = new URL(location.href);
-    url.searchParams.set("planet", button.dataset.planet);
-    history.replaceState(history.state, "", url);
+    const body = String(url.searchParams.get("body") || "").toLowerCase();
+    if (!atlasBodies.has(body)) {
+      url.searchParams.set("planet", button.dataset.planet);
+      history.replaceState(history.state, "", url);
+    }
   });
 
   document.querySelectorAll("[data-model]").forEach(button => {
@@ -73,6 +78,7 @@
     if (url.hash && url.hash !== "#worldAtlas") return false;
     const atlas = document.getElementById("worldAtlas");
     if (!atlas) return false;
+    atlas.style.scrollMarginTop = "120px";
     if (window.scrollY < 120) requestAnimationFrame(() => atlas.scrollIntoView({ block: "start" }));
     return true;
   };
