@@ -1,9 +1,9 @@
 /* Global desktop spacing between the included site header and page content.
-   Requested visual clearance: exactly 2 cm on desktop only.
+   Requested visual clearance: exactly 1 cm on desktop only.
    Mobile/tablet layouts remain untouched. */
 
 :root {
-  --alba-desktop-header-clearance: 2cm;
+  --alba-desktop-header-clearance: 1cm;
 }
 
 @media (min-width: 1024px) {
@@ -22,7 +22,7 @@
     margin-bottom: var(--alba-desktop-header-clearance) !important;
   }
 
-  /* Prevent legacy page-specific top margins from making the gap larger than 2 cm. */
+  /* Prevent legacy page-specific top margins from making the gap larger than 1 cm. */
   [data-include^="/header-"] + *,
   [data-include-html^="/header-"] + *,
   [data-include="header-tr.html"] + *,
