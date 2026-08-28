@@ -44,7 +44,7 @@ const ORBITAL_CREW_URL = "https://whoisinspace.com/";
 const ORBITAL_ISS_TLE_URL = "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE";
 const ORBITAL_SNAPSHOT_KEY = "overview";
 const ORBITAL_ISS_TLE_SNAPSHOT_KEY = "iss_tle";
-const ORBITAL_LAUNCH_CACHE_SCHEMA = 2;
+const ORBITAL_LAUNCH_CACHE_SCHEMA = 3;
 const VENUS_USGS_SEARCH_URL = "https://planetarynames.wr.usgs.gov/SearchResults?Target=15_Venus";
 const VENUS_USGS_TARGET_URL = "https://planetarynames.wr.usgs.gov/Page/VENUS/target";
 const VENUS_SNAPSHOT_KEY = "venus_nomenclature";
