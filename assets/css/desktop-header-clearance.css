@@ -22,6 +22,20 @@
     margin-bottom: var(--alba-desktop-header-clearance) !important;
   }
 
+  /* Prevent legacy page-specific top margins from making the gap larger than 2 cm. */
+  [data-include^="/header-"] + *,
+  [data-include-html^="/header-"] + *,
+  [data-include="header-tr.html"] + *,
+  [data-include="header-en.html"] + *,
+  [data-include="header-ru.html"] + *,
+  [data-include="header-ar.html"] + *,
+  [data-include="header-tr-black.html"] + *,
+  [data-include="header-en-black.html"] + *,
+  [data-include="header-ru-black.html"] + *,
+  [data-include="header-ar-black.html"] + * {
+    margin-top: 0 !important;
+  }
+
   /* Override the older homepage exception with equal/higher specificity. */
   body.home-page [data-include^="/header-"],
   body.home-page [data-include-html^="/header-"],
@@ -32,8 +46,7 @@
     margin-bottom: var(--alba-desktop-header-clearance) !important;
   }
 
-  /* The four home pages previously created their own larger top gap.
-     Remove only that desktop-only extra spacing so the global 2 cm rule is exact. */
+  /* The home pages had additional inner top padding; remove it on desktop only. */
   body.home-page .home-main {
     margin-top: 0 !important;
     padding-top: 0 !important;
