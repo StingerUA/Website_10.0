@@ -1,0 +1,238 @@
+/* Alba Space Blog — author filters and author profile */
+
+.blog-author-sort{
+  max-width:1200px;
+  margin:-16px auto 34px;
+  padding:0 20px;
+}
+
+.blog-author-sort-head{
+  display:flex;
+  justify-content:center;
+  margin-bottom:12px;
+}
+
+.blog-author-sort-kicker{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:#94a3b8;
+}
+
+.blog-author-filters{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+}
+
+.blog-author-filter{
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:5px 12px 5px 6px;
+  border:1px solid rgba(148,163,184,.38);
+  border-radius:999px;
+  background:rgba(15,23,42,.72);
+  color:#e5e7eb;
+  text-decoration:none;
+  font-size:13px;
+  line-height:1;
+  transition:border-color .2s ease, background .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.blog-author-filter:hover{
+  border-color:rgba(0,194,255,.8);
+  background:rgba(0,194,255,.08);
+  color:#fff;
+  transform:translateY(-1px);
+}
+
+.blog-author-filter.is-active{
+  border-color:#00c2ff;
+  background:rgba(0,194,255,.15);
+  box-shadow:0 0 22px rgba(0,194,255,.18);
+}
+
+.blog-author-filter.is-all{
+  padding-inline:16px;
+  font-weight:600;
+}
+
+.blog-author-filter img{
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#0f172a;
+  border:1px solid rgba(125,211,252,.45);
+}
+
+.blog-author-filter-name{
+  white-space:nowrap;
+}
+
+.blog-author-filter-count{
+  min-width:22px;
+  height:22px;
+  padding:0 6px;
+  display:inline-grid;
+  place-items:center;
+  border-radius:999px;
+  background:rgba(148,163,184,.13);
+  color:#a5f3fc;
+  font-size:11px;
+}
+
+.blog-author-profile{
+  max-width:780px;
+  margin:24px auto 0;
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  border:1px solid rgba(56,189,248,.34);
+  border-radius:20px;
+  background:linear-gradient(135deg,rgba(13,42,87,.72),rgba(2,6,23,.78));
+  box-shadow:0 12px 34px rgba(0,0,0,.3),0 0 30px rgba(0,194,255,.08);
+}
+
+.blog-author-profile-avatar{
+  width:82px;
+  height:82px;
+  flex:0 0 82px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#0f172a;
+  border:2px solid rgba(0,194,255,.55);
+  box-shadow:0 0 22px rgba(0,194,255,.14);
+}
+
+.blog-author-profile-copy{
+  min-width:0;
+}
+
+.blog-author-profile-kicker{
+  display:block;
+  margin-bottom:4px;
+  color:#67e8f9;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.blog-author-profile h2{
+  margin:0 0 5px;
+  color:#fff;
+  font-size:22px;
+  line-height:1.25;
+}
+
+.blog-author-profile p{
+  margin:0;
+  color:#cbd5e1;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.blog-author-profile-count{
+  display:inline-block;
+  margin-top:8px;
+  color:#94a3b8;
+  font-size:12px;
+}
+
+.blog-card-author{
+  min-width:0;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+}
+
+.blog-card-author img{
+  width:24px;
+  height:24px;
+  flex:0 0 24px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#0f172a;
+  border:1px solid rgba(148,163,184,.35);
+}
+
+.blog-card-author .blog-author{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+html[dir="rtl"] .blog-author-profile,
+html[dir="rtl"] .blog-author-filter{
+  direction:rtl;
+}
+
+@media (max-width:768px){
+  .blog-author-sort{
+    margin-top:-18px;
+    margin-bottom:28px;
+    padding:0 16px;
+  }
+
+  .blog-author-sort-head{
+    justify-content:flex-start;
+  }
+
+  .blog-author-filters{
+    justify-content:flex-start;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:7px;
+    scrollbar-width:thin;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .blog-author-filter{
+    flex:0 0 auto;
+  }
+
+  .blog-author-profile{
+    align-items:flex-start;
+    padding:16px;
+  }
+
+  .blog-author-profile-avatar{
+    width:66px;
+    height:66px;
+    flex-basis:66px;
+  }
+
+  .blog-author-profile h2{
+    font-size:19px;
+  }
+}
+
+@media (max-width:480px){
+  .blog-author-sort{
+    padding:0 12px;
+  }
+
+  .blog-author-profile{
+    gap:13px;
+    border-radius:16px;
+  }
+
+  .blog-author-profile-avatar{
+    width:56px;
+    height:56px;
+    flex-basis:56px;
+  }
+
+  .blog-author-profile h2{
+    font-size:17px;
+  }
+
+  .blog-author-profile p{
+    font-size:13px;
+  }
+}
