@@ -593,6 +593,47 @@
           "url": "/ar/blog/uzayin-gizemli-dunyasi-evren-hakkinda-bilmemiz-gerekenler.html"
         }
       }
+    },
+    {
+      "slug": "dunyanin-iki-ayi-olsaydi-ne-olurdu",
+      "category": "uzay",
+      "publishAt": "2026-08-29T15:53:31+03:00",
+      "cover": "/assets/images/blog/dunyanin-iki-ayi-olsaydi-ne-olurdu-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Aslı Bolat",
+        "ar": "Aslı Bolat"
+      },
+      "authorRole": {
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer and Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومدرِّبة"
+      },
+      "locales": {
+        "tr": {
+          "title": "Dünya’nın İki Ayı Olsaydı Ne Olurdu?",
+          "excerpt": "Dünya’nın İki Ayı Olsaydı Ne Olurdu? İki Ay’lı Bir Dünya Nasıl Görünürdü? Gökyüzüne baktığımızda çoğu zaman tek ve tanıdık bir uydu görürüz: Ay. Gecel",
+          "url": "/blog/dunyanin-iki-ayi-olsaydi-ne-olurdu.html"
+        },
+        "en": {
+          "title": "What Would Happen If Earth Had Two Moons?",
+          "excerpt": "What Would Earth Have Two Moons? What Would a World with Two Moons Look Like? When we look at the sky, we often see a single and familiar satellite: t",
+          "url": "/eng/blog/dunyanin-iki-ayi-olsaydi-ne-olurdu.html"
+        },
+        "ru": {
+          "title": "Что бы произошло, если бы у Земли было две луны?",
+          "excerpt": "Каким было бы две луны на Земле? Как бы выглядел мир с двумя лунами? Когда мы смотрим на небо, мы часто видим один знакомый спутник — Луну. Тихое небе",
+          "url": "/rus/blog/dunyanin-iki-ayi-olsaydi-ne-olurdu.html"
+        },
+        "ar": {
+          "title": "ماذا سيحدث لو كان للأرض قمران؟",
+          "excerpt": "ماذا سيكون للأرض قمران؟ كيف سيبدو عالم به قمرين؟ عندما ننظر إلى السماء، غالبا ما نرى قمرا صناعيا واحدا ومألوف: القمر. جسم سماوي صامت يضيء ليالينا، ويؤ",
+          "url": "/ar/blog/dunyanin-iki-ayi-olsaydi-ne-olurdu.html"
+        }
+      }
     }
   ]
 }
