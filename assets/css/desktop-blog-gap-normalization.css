@@ -9,9 +9,10 @@
  */
 
 @media (min-width: 1024px) {
-  /* Services: the main wrapper adds 32px above its first visible panel. */
+  /* Services: user requested this page's content to sit 2 cm higher than the
+     previous normalized position. Keep the internal panel padding intact. */
   main.page:has(> .glass-box--fit) {
-    margin-top: 0 !important;
+    margin-top: -2cm !important;
     padding-top: 0 !important;
   }
 
