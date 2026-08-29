@@ -1,9 +1,11 @@
 /* Shared dropdown entry point.
    Keep the proven interaction/layout rules, then apply the unified Alba Space
-   homepage-mobile dark-blue palette, the global desktop header clearance and
-   the desktop ABOUT/Hakkimizda left-opening alignment. White shop dropdown
+   homepage-mobile dark-blue palette, the global desktop header clearance,
+   the desktop ABOUT/Hakkimizda left-opening alignment, and the legacy-page
+   content-start normalization that matches blog.html. White shop dropdown
    colours remain protected by .site-header--black / product-text-black. */
-@import url('/assets/css/dropdown-optimized-legacy.css?v=20260829-1cm-about-left');
-@import url('/assets/css/header-dropdown-blue.css?v=20260829-1cm-about-left');
-@import url('/assets/css/desktop-header-clearance.css?v=20260829-1cm-about-left');
-@import url('/assets/css/desktop-about-dropdown-left.css?v=20260829-1cm-about-left');
+@import url('/assets/css/dropdown-optimized-legacy.css?v=20260829-blog-gap');
+@import url('/assets/css/header-dropdown-blue.css?v=20260829-blog-gap');
+@import url('/assets/css/desktop-header-clearance.css?v=20260829-blog-gap');
+@import url('/assets/css/desktop-about-dropdown-left.css?v=20260829-blog-gap');
+@import url('/assets/css/desktop-blog-gap-normalization.css?v=20260829-blog-gap');
