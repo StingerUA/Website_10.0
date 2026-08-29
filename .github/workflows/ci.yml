@@ -31,3 +31,8 @@ jobs:
 
       - name: Validate header dropdown consistency
         run: node check-dropdown-css.js
+
+      - name: Validate launch image scripts
+        run: |
+          node --check orbital-launch-images.js
+          node --check cloudflare-worker/worker-with-rocket-images.js
