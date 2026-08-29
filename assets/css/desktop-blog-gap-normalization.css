@@ -58,7 +58,13 @@
     padding-top: 0 !important;
   }
 
-  /* All product detail pages sharing shop.css. */
+  /* Current product templates (product.css): remove the extra 10px top padding. */
+  main.product-page-wrap:has(.product-main-grid) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* Legacy product templates still using shop.css. */
   main.product-page:has(.product-detail) {
     margin-top: 0 !important;
     padding-top: 0 !important;
