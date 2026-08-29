@@ -2,7 +2,7 @@
   const grid = document.getElementById("launchGrid");
   if (!grid) return;
 
-  const workerBase = (window.ORBITAL_ATLAS_API || "https://albaspace-api.nncdecdgc.workers.dev").replace(/\/$/, "");
+  const workerBase = (window.ORBITAL_ROCKET_IMAGE_API || "https://albaspace-rocket-images.nncdecdgc.workers.dev").replace(/\/$/, "");
   const locale = (document.documentElement.lang || "ru").slice(0, 2).toLowerCase();
   const copy = {
     ru: {
@@ -119,11 +119,6 @@
       });
       const data = await response.json();
 
-      /*
-       * Reject the previously deployed Wikimedia endpoint deliberately.
-       * Until the Google-backed Worker is deployed, the page keeps the original
-       * Alba Space rocket profile instead of showing a known-wrong Commons photo.
-       */
       if (!response.ok || data?.image?.provider !== "google" || !data?.image?.url) {
         throw new Error(data?.error || "Google rocket photo unavailable");
       }
