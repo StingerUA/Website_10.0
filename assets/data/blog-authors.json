@@ -1,0 +1,84 @@
+{
+  "authors": [
+    {
+      "id": "asli-bolat",
+      "image": "/assets/images/blog/authors/team-asli.jpg",
+      "name": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Аслы Болат",
+        "ar": "أصلي بولات"
+      },
+      "role": {
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer and Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومدرِّبة"
+      }
+    },
+    {
+      "id": "muzaffer-enes-ipci",
+      "image": "/assets/images/team-muzaffer.jpg",
+      "name": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Музаффер Энес Ипчи",
+        "ar": "مظفر إنس إيبجي"
+      },
+      "role": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      }
+    },
+    {
+      "id": "ali-batuhan-ozsurmeli",
+      "image": "/assets/images/blog/authors/gokyuzu-kaybolmadi-biz-onu-sildik-author.jpg",
+      "name": {
+        "tr": "Ali Batuhan Özsürmeli",
+        "en": "Ali Batuhan Özsürmeli",
+        "ru": "Али Батухан Озсюрмели",
+        "ar": "علي باتوهان أوزسورملي"
+      },
+      "role": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      }
+    },
+    {
+      "id": "idris-albayrak",
+      "image": "/assets/images/team-idris.jpg",
+      "name": {
+        "tr": "İdris Albayrak",
+        "en": "İdris Albayrak",
+        "ru": "İdris Albayrak",
+        "ar": "İdris Albayrak"
+      },
+      "role": {
+        "tr": "Uzay Girişimcisi, Fütürist ve Eğitmen",
+        "en": "Space Entrepreneur, Futurist, and Educator",
+        "ru": "Космический предприниматель, футурист и преподаватель",
+        "ar": "رائد أعمال فضائي، مستقبلي ومدرِّب"
+      }
+    },
+    {
+      "id": "alba-space-ekibi",
+      "image": "/assets/icons/AlbaLogo.png",
+      "name": {
+        "tr": "Alba Space Ekibi",
+        "en": "Alba Space Team",
+        "ru": "Команда Alba Space",
+        "ar": "فريق ألبا للفضاء"
+      },
+      "role": {
+        "tr": "Uzay Araştırmacıları",
+        "en": "Space Researchers",
+        "ru": "Исследователи космоса",
+        "ar": "باحثو الفضاء"
+      }
+    }
+  ]
+}
