@@ -5,9 +5,34 @@
   const workerBase = (window.ORBITAL_ATLAS_API || "https://albaspace-api.nncdecdgc.workers.dev").replace(/\/$/, "");
   const locale = (document.documentElement.lang || "ru").slice(0, 2).toLowerCase();
   const copy = {
-    ru: { loading: "Ищем фото ракеты…", source: "Фото ракеты", unavailable: "Фото ракеты не найдено" },
-    en: { loading: "Finding rocket photo…", source: "Rocket photo", unavailable: "Rocket photo unavailable" },
-    tr: { loading: "Roket fotoğrafı aranıyor…", source: "Roket fotoğrafı", unavailable: "Roket fotoğrafı bulunamadı" }
+    ru: {
+      loading: "Ищем фото ракеты в Google Images…",
+      source: "Фото ракеты",
+      unavailable: "Подходящее фото ракеты не найдено",
+      reuse: "Google Images · фильтр повторного использования",
+      sourceLink: "Источник ↗"
+    },
+    en: {
+      loading: "Finding a rocket photo with Google Images…",
+      source: "Rocket photo",
+      unavailable: "Suitable rocket photo unavailable",
+      reuse: "Google Images · reuse-rights filter",
+      sourceLink: "Source ↗"
+    },
+    tr: {
+      loading: "Google Görseller'de roket fotoğrafı aranıyor…",
+      source: "Roket fotoğrafı",
+      unavailable: "Uygun roket fotoğrafı bulunamadı",
+      reuse: "Google Görseller · yeniden kullanım filtresi",
+      sourceLink: "Kaynak ↗"
+    },
+    ar: {
+      loading: "جارٍ البحث عن صورة الصاروخ عبر صور Google…",
+      source: "صورة الصاروخ",
+      unavailable: "لم يتم العثور على صورة مناسبة للصاروخ",
+      reuse: "صور Google · مرشح إعادة الاستخدام",
+      sourceLink: "المصدر ↗"
+    }
   };
   const t = copy[locale] || copy.ru;
 
@@ -93,7 +118,15 @@
         headers: { Accept: "application/json" }
       });
       const data = await response.json();
-      if (!response.ok || !data?.image?.url) throw new Error(data?.error || "No rocket photo");
+
+      /*
+       * Reject the previously deployed Wikimedia endpoint deliberately.
+       * Until the Google-backed Worker is deployed, the page keeps the original
+       * Alba Space rocket profile instead of showing a known-wrong Commons photo.
+       */
+      if (!response.ok || data?.image?.provider !== "google" || !data?.image?.url) {
+        throw new Error(data?.error || "Google rocket photo unavailable");
+      }
 
       stage.querySelectorAll("img.oa-launch__vehicle-photo,img.oa-launch__rocket-photo").forEach(node => node.remove());
       const image = document.createElement("img");
@@ -113,21 +146,21 @@
 
       const credit = document.createElement("span");
       credit.className = "oa-launch__rocket-credit";
-      credit.append(`${t.source}: ${data.image.credit || "Wikimedia Commons"} · ${data.image.license || "open licence"}`);
-      const sourceUrl = safeLink(data.image.sourceUrl || data.image.licenseUrl);
+      credit.append(`${t.source}: ${data.image.credit || "Google Images"} · ${t.reuse}`);
+      const sourceUrl = safeLink(data.image.sourceUrl);
       if (sourceUrl) {
         credit.append(" · ");
         const link = document.createElement("a");
         link.href = sourceUrl;
         link.target = "_blank";
         link.rel = "noreferrer";
-        link.textContent = "Wikimedia Commons ↗";
+        link.textContent = t.sourceLink;
         credit.append(link);
       }
       caption.append(credit);
       figure.dataset.rocketPhotoState = "ready";
     } catch (error) {
-      console.warn(`[Orbital Atlas] rocket image unavailable for ${vehicle}`, error);
+      console.warn(`[Orbital Atlas] Google rocket image unavailable for ${vehicle}`, error);
       figure.dataset.rocketPhotoState = "unavailable";
       state.textContent = t.unavailable;
     }
