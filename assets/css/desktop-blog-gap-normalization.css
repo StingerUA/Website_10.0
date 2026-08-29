@@ -1,0 +1,69 @@
+/*
+ * Desktop content-start normalization.
+ * Reference: blog.html after the shared header clearance is applied.
+ *
+ * Several legacy pages add their own top padding, vertical centering or margins
+ * after the shared header spacer. On desktop that makes the visible gap much
+ * larger than the Blog page. These narrowly-scoped overrides remove only that
+ * extra pre-content space. Mobile/tablet layouts are intentionally untouched.
+ */
+
+@media (min-width: 1024px) {
+  /* Services: the main wrapper adds 32px above its first visible panel. */
+  main.page:has(> .glass-box--fit) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* Albamen: legacy hero used 80vh centering + 160px top padding. */
+  .hero:has(.hero-inner .hero-title) {
+    min-height: 0 !important;
+    height: auto !important;
+    padding-top: 0 !important;
+    align-items: flex-start !important;
+  }
+
+  /* Games landing page. */
+  main.page-shell:has(.game-grid) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* Contact: remove both wrapper padding and the extra 40px section offset. */
+  .page-wrapper:has(> .contact-section .contact-card) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  .page-wrapper:has(> .contact-section .contact-card) > .contact-section {
+    margin-top: 0 !important;
+  }
+
+  /* Shop listing. */
+  main.shop-container:has(.product-list) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* Cart. */
+  main.cart-page:has(#cartItems) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* Account menu: stop vertically centering a 100vh wrapper below the header. */
+  .am-wrap:has(> .am-card) {
+    min-height: 0 !important;
+    height: auto !important;
+    align-items: flex-start !important;
+    padding-top: 0 !important;
+  }
+
+  /* All product detail pages sharing shop.css. */
+  main.product-page:has(.product-detail) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  main.product-page:has(.product-detail) .product-detail {
+    margin-top: 0 !important;
+  }
+}
