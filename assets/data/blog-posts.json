@@ -456,12 +456,12 @@
         },
         "en": {
           "title": "How to Collect Planetary Data",
-          "excerpt": "measure in",
+          "excerpt": "Everything we know about a planet - what it is like in its atmosphere, what its surface is like, what its moons are on it - ultimately comes from a series of numbers.",
           "url": "/eng/blog/gezegen-verisi-nasil-toplanir.html"
         },
         "ru": {
           "title": "Как собирать планетарные данные",
-          "excerpt": "передачу ",
+          "excerpt": "Всё, что мы знаем о планете — какой у неё состав атмосферы, как выглядит поверхность, какие у неё есть спутники, — в конечном счете сводится к набору чисел.",
           "url": "/rus/blog/gezegen-verisi-nasil-toplanir.html"
         },
         "ar": {
