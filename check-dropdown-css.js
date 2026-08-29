@@ -24,7 +24,7 @@ const add = (name, pass) => checks.push({ name, pass: Boolean(pass) });
 
 add('Dropdown entry imports legacy interaction/layout rules', /dropdown-optimized-legacy\.css/.test(entryCss));
 add('Dropdown entry imports unified header theme', /header-dropdown-blue\.css/.test(entryCss));
-add('Dropdown entry cache-busts desktop header clearance', /20260829-header-clearance/.test(entryCss));
+add('Dropdown entry cache-busts desktop header clearance', /desktop-header-clearance\.css\?v=[^'"\)]+/.test(entryCss));
 
 add(
   'Legacy mobile inactive dropdown blocks pointer events',
