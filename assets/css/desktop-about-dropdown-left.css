@@ -1,14 +1,22 @@
-/* Desktop-only alignment fix for the ABOUT / HAKKIMIZDA dropdown.
-   Anchor the panel to the trigger's right edge so the horizontal menu expands
-   to the left and stays inside the viewport. Mobile layout is untouched. */
+/* Desktop-only canonical layout for ABOUT / HAKKIMIZDA dropdown.
+   There must be exactly one desktop position for this panel: it is anchored to
+   the trigger's right edge and expands to the left, so it never runs off-screen.
+   The legacy generic active/hover transforms are explicitly neutralized here.
+   Mobile layout is untouched. */
 
 @media (min-width: 1024px) {
   .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu,
   .main-nav .dropdown.active > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu,
   .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu:hover {
+    position: absolute !important;
     left: auto !important;
     right: 0 !important;
+    top: calc(100% + 6px) !important;
+    margin-top: 8px !important;
     transform: none !important;
     transform-origin: top right !important;
+    /* Do not animate transform: the old stylesheet changed the X transform on
+       hover, which made the same menu jump into a second, right-opening layout. */
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
   }
 }
