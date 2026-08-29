@@ -1,14 +1,48 @@
 <!doctype html>
 <html lang="tr">
-  <head>
-    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#05080d" />
-    <meta name="description" content="Canlı geri sayımlar ve resmî yayınlarla yaklaşan uzay fırlatmaları." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/css/site.css" /><link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828" /><link rel="icon" type="image/png" href="/manus-storage/orbital-atlas-logo_f9fbd235.png" /><title>Fırlatmalar — Orbital Atlas</title>
-  </head>
-  <body class="oa-body"><div data-include="/header-tr.html"></div>
-    <nav class="oa-contextnav" aria-label="Orbital Atlas"><div class="oa-shell oa-contextnav__inner"><a class="oa-contextnav__brand" href="/tr/orbital-atlas.html">Orbital Atlas</a><div class="oa-contextnav__links"><a href="/tr/orbital-atlas.html" data-t="overview">Genel bakış</a><a class="is-active" href="/tr/orbital-launches.html" data-t="launch">Fırlatmalar</a><a href="/tr/orbital-iss.html" data-t="cameras">ISS kameraları</a><a href="/tr/orbital-crew.html" data-t="crew">Mürettebat</a><a href="/tr/orbital-solar-system.html" data-t="solar">Güneş sistemi</a></div></div></nav>
-    <main class="oa-main"><section class="oa-hero"><div class="oa-shell oa-hero__grid"><div><p class="oa-eyebrow">01 / Launch cadence</p><h1 class="oa-title" data-copy="launchesTitle">Canlı geri sayımlı fırlatmalar.</h1><p class="oa-lead" data-copy="launchesLead">Yaklaşan fırlatma pencerelerini takip edin: her kart güncel zamanı, operatörü, sahayı ve göreve kalan süreyi gösterir.</p><div class="oa-actions"><a class="oa-button oa-button--primary" href="#launches" data-t="launch">Fırlatmalar</a><a class="oa-button" href="/tr/orbital-iss.html" data-t="cameras">ISS kameraları</a></div></div><article class="oa-card oa-status-card"><div class="oa-status-top"><span data-t="next">Sıradaki görev</span><span class="oa-status-live" data-t="live">canlı yayın</span></div><h2 id="landingMission">Takvim yükleniyor</h2><p id="landingMeta" data-t="awaiting">Güncel veriler yükleniyor</p><div class="oa-countdown"><strong id="landingCountdown" data-countdown="">—</strong><span data-t="launchWindow">fırlatma penceresine</span></div></article></div></section><section class="oa-section" id="launches"><div class="oa-shell"><div class="oa-section-head"><div><p class="oa-eyebrow">LIVE CATALOGUE</p><h2 class="oa-section-title" data-t="launch">Fırlatmalar</h2></div><p class="oa-section-note">Roket fotoğrafı, taşıyıcının tam adıyla Google Görseller üzerinden ve yeniden kullanıma uygun lisans filtresiyle otomatik olarak aranır.</p></div><div class="oa-data-grid" id="launchGrid" aria-live="polite"><article class="oa-card oa-fallback" data-t="awaiting">Güncel veriler yükleniyor</article></div></div></section></main>
-    <div data-include="/footer-tr.html"></div><script defer src="/assets/js/include.js"></script><script src="/orbital-atlas-pages.js?v=unified-atlas-20260828b"></script><script defer src="/orbital-launch-images.js?v=20260829-serpapi-1"></script>
-  </body>
-</html>
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#020617">
+  <meta name="description" content="Launch Library 2 arşivi ve takvimi: görev, roket ve uzay üssü araması; şirketlere göre filtreleme ve her fırlatma için ayrı sayfa.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828">
+  <link rel="stylesheet" href="/orbital-catalog.css?v=20260830-1">
+  <link rel="icon" type="image/png" href="/manus-storage/orbital-atlas-logo_f9fbd235.png">
+  <title>Fırlatmalar — Orbital Atlas</title>
+</head>
+<body class="oa-body" data-orbital-page="launches">
+  <div data-include="/header-tr.html"></div>
+  <nav class="oa-contextnav" aria-label="Orbital Atlas"><div class="oa-shell oa-contextnav__inner"><a class="oa-contextnav__brand" href="/tr/orbital-atlas.html">Orbital Atlas</a><div class="oa-contextnav__links"><a href="/tr/orbital-atlas.html">Genel bakış</a><a class="is-active" href="/tr/orbital-launches.html" data-oc-nav="launches">Fırlatmalar</a><a class="oc-nav-new" href="/tr/orbital-locations.html" data-oc-nav="locations">Harita</a><a class="oc-nav-new" href="/tr/orbital-rockets.html" data-oc-nav="rockets">Roketler</a><a href="/tr/orbital-iss.html">ISS kameraları</a><a href="/tr/orbital-crew.html">Mürettebat</a><a href="/tr/orbital-solar-system.html">Güneş sistemi</a></div></div></nav>
+  <main class="oa-main">
+    <section class="oa-hero"><div class="oa-shell oa-hero__grid"><div>
+      <p class="oa-eyebrow">01 / LAUNCH CADENCE</p>
+      <h1 class="oa-title">Canlı geri sayımlı fırlatmalar.</h1>
+      <p class="oa-lead">Yaklaşan fırlatma pencerelerini izleyin ve operatör filtreleriyle tüm görev kütüphanesini keşfedin.</p>
+      <div class="oa-actions"><a class="oa-button oa-button--primary" href="#launches">Yaklaşan fırlatmalar</a><a class="oa-button" href="#library">Tüm fırlatmalar kütüphanesi</a></div>
+    </div><article class="oa-card oa-status-card"><div class="oa-status-top"><span>Sıradaki görev</span><span class="oa-status-live">canlı yayın</span></div><h2 id="landingMission">Takvim yükleniyor</h2><p id="landingMeta">Güncel veriler yükleniyor</p><div class="oa-countdown"><strong id="landingCountdown" data-countdown="">—</strong><span>fırlatma penceresine</span></div></article></div></section>
+
+    <section class="oa-section" id="launches"><div class="oa-shell"><div class="oa-section-head"><div><p class="oa-eyebrow">LIVE CATALOGUE</p><h2 class="oa-section-title">Yaklaşan fırlatmalar</h2></div><p class="oa-section-note">Yaklaşan kartlar Alba Space roket görsellerini kullanmaya devam eder. Aşağıda genişletilmiş fırlatma kütüphanesi yer alır.</p></div><div class="oa-data-grid" id="launchGrid" aria-live="polite"><article class="oa-card oa-fallback">Güncel veriler yükleniyor</article></div></div></section>
+
+    <section class="oc-section" id="library"><div class="oc-shell">
+      <div class="oc-library-intro">
+        <article class="oc-panel"><p class="oc-kicker">LAUNCH LIBRARY</p><h2>Tüm fırlatmalar kütüphanesi</h2><p>Launch Library 2 arşivi ve takvimi: görev, roket ve uzay üssü araması; şirketlere göre filtreleme ve her fırlatma için ayrı sayfa.</p></article>
+        <div class="oc-feature-links"><a class="oc-feature-link" href="/tr/orbital-locations.html"><strong>🗺️ Uzay üsleri haritası</strong><span>Aktif fırlatma rampaları ve yaklaşan görevlerin roketleri etkileşimli dünya haritasında.</span></a><a class="oc-feature-link" href="/tr/orbital-rockets.html"><strong>🚀 Roket kütüphanesi</strong><span>Roket konfigürasyonları, üreticiler, istatistikler ve ilgili fırlatmalar.</span></a></div>
+      </div>
+      <form class="oc-controls" id="ocLaunchFilters">
+        <input id="ocLaunchSearch" type="search" data-oc-placeholder="searchLaunches" placeholder="Ara…" autocomplete="off">
+        <select id="ocCompanyFilter" aria-label="Şirket"><option value="">—</option></select>
+        <select id="ocPeriodFilter" aria-label="Dönem"><option value="upcoming" data-oc-text="upcoming">Upcoming</option><option value="previous" data-oc-text="previous">Previous</option><option value="all" data-oc-text="all">All</option></select>
+        <select id="ocLaunchOrdering" aria-label="Sıralama"><option value="net" data-oc-text="soonest">Soonest</option><option value="-net" data-oc-text="newest">Newest</option><option value="name" data-oc-text="nameAZ">Name</option></select>
+        <button class="oc-btn oc-btn--primary" type="submit">OK</button>
+      </form>
+      <div class="oc-grid" id="ocLaunchLibrary" aria-live="polite"></div>
+      <div class="oc-pagination"><button class="oc-btn" id="ocPrevPage" type="button" data-oc-text="previousPage">←</button><div class="oc-pagination-meta" id="ocLaunchMeta"></div><button class="oc-btn" id="ocNextPage" type="button" data-oc-text="nextPage">→</button></div>
+    </div></section>
+  </main>
+  <div data-include="/footer-tr.html"></div>
+  <script defer src="/assets/js/include.js"></script>
+<script src="/orbital-atlas-pages.js?v=unified-atlas-20260828b"></script>
+<script defer src="/orbital-launch-images.js?v=20260829-serpapi-1"></script>
+<script defer src="/orbital-catalog.js?v=20260830-1"></script>
+</body></html>

@@ -37,6 +37,9 @@ jobs:
           node --check orbital-launch-images.js
           node --check cloudflare-worker/worker-with-rocket-images.js
 
+      - name: Validate orbital catalogue
+        run: node --check orbital-catalog.js
+
       - name: Validate blog enhancements
         run: |
           node --check assets/js/blog-enhancements.js

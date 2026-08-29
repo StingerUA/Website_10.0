@@ -1,14 +1,48 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#05080d" />
-    <meta name="description" content="Upcoming space launches with live countdowns and official streams." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/css/site.css" /><link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828" /><link rel="icon" type="image/png" href="/manus-storage/orbital-atlas-logo_f9fbd235.png" /><title>Launches — Orbital Atlas</title>
-  </head>
-  <body class="oa-body"><div data-include="/header-en.html"></div>
-    <nav class="oa-contextnav" aria-label="Orbital Atlas"><div class="oa-shell oa-contextnav__inner"><a class="oa-contextnav__brand" href="/eng/orbital-atlas.html">Orbital Atlas</a><div class="oa-contextnav__links"><a href="/eng/orbital-atlas.html" data-t="overview">Overview</a><a class="is-active" href="/eng/orbital-launches.html" data-t="launch">Launches</a><a href="/eng/orbital-iss.html" data-t="cameras">ISS cameras</a><a href="/eng/orbital-crew.html" data-t="crew">Crew</a><a href="/eng/orbital-solar-system.html" data-t="solar">Solar system</a></div></div></nav>
-    <main class="oa-main"><section class="oa-hero"><div class="oa-shell oa-hero__grid"><div><p class="oa-eyebrow">01 / Launch cadence</p><h1 class="oa-title" data-copy="launchesTitle">Launches with live countdowns.</h1><p class="oa-lead" data-copy="launchesLead">Follow upcoming launch windows: every card shows the latest time, provider, site and a second-by-second mission timer.</p><div class="oa-actions"><a class="oa-button oa-button--primary" href="#launches" data-t="launch">Launches</a><a class="oa-button" href="/eng/orbital-iss.html" data-t="cameras">ISS cameras</a></div></div><article class="oa-card oa-status-card"><div class="oa-status-top"><span data-t="next">Next mission</span><span class="oa-status-live" data-t="live">live stream</span></div><h2 id="landingMission">Loading schedule</h2><p id="landingMeta" data-t="awaiting">Loading current data</p><div class="oa-countdown"><strong id="landingCountdown" data-countdown="">—</strong><span data-t="launchWindow">to launch window</span></div></article></div></section><section class="oa-section" id="launches"><div class="oa-shell"><div class="oa-section-head"><div><p class="oa-eyebrow">LIVE CATALOGUE</p><h2 class="oa-section-title" data-t="launch">Launches</h2></div><p class="oa-section-note">Rocket photos are selected automatically through Google Images using the exact launch-vehicle name and a reusable-rights filter.</p></div><div class="oa-data-grid" id="launchGrid" aria-live="polite"><article class="oa-card oa-fallback" data-t="awaiting">Loading current data</article></div></div></section></main>
-    <div data-include="/footer-en.html"></div><script defer src="/assets/js/include.js"></script><script src="/orbital-atlas-pages.js?v=unified-atlas-20260828b"></script><script defer src="/orbital-launch-images.js?v=20260829-serpapi-1"></script>
-  </body>
-</html>
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#020617">
+  <meta name="description" content="Launch Library 2 archive and schedule: search missions, rockets and spaceports, filter by company, and open a dedicated page for every launch.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828">
+  <link rel="stylesheet" href="/orbital-catalog.css?v=20260830-1">
+  <link rel="icon" type="image/png" href="/manus-storage/orbital-atlas-logo_f9fbd235.png">
+  <title>Launches — Orbital Atlas</title>
+</head>
+<body class="oa-body" data-orbital-page="launches">
+  <div data-include="/header-en.html"></div>
+  <nav class="oa-contextnav" aria-label="Orbital Atlas"><div class="oa-shell oa-contextnav__inner"><a class="oa-contextnav__brand" href="/eng/orbital-atlas.html">Orbital Atlas</a><div class="oa-contextnav__links"><a href="/eng/orbital-atlas.html">Overview</a><a class="is-active" href="/eng/orbital-launches.html" data-oc-nav="launches">Launches</a><a class="oc-nav-new" href="/eng/orbital-locations.html" data-oc-nav="locations">Map</a><a class="oc-nav-new" href="/eng/orbital-rockets.html" data-oc-nav="rockets">Rockets</a><a href="/eng/orbital-iss.html">ISS cameras</a><a href="/eng/orbital-crew.html">Crew</a><a href="/eng/orbital-solar-system.html">Solar system</a></div></div></nav>
+  <main class="oa-main">
+    <section class="oa-hero"><div class="oa-shell oa-hero__grid"><div>
+      <p class="oa-eyebrow">01 / LAUNCH CADENCE</p>
+      <h1 class="oa-title">Launches with live countdowns.</h1>
+      <p class="oa-lead">Follow upcoming launch windows and explore the complete mission library with provider filters.</p>
+      <div class="oa-actions"><a class="oa-button oa-button--primary" href="#launches">Upcoming launches</a><a class="oa-button" href="#library">All launches library</a></div>
+    </div><article class="oa-card oa-status-card"><div class="oa-status-top"><span>Next mission</span><span class="oa-status-live">live stream</span></div><h2 id="landingMission">Loading schedule</h2><p id="landingMeta">Loading current data</p><div class="oa-countdown"><strong id="landingCountdown" data-countdown="">—</strong><span>to launch window</span></div></article></div></section>
+
+    <section class="oa-section" id="launches"><div class="oa-shell"><div class="oa-section-head"><div><p class="oa-eyebrow">LIVE CATALOGUE</p><h2 class="oa-section-title">Upcoming launches</h2></div><p class="oa-section-note">Upcoming cards continue to use Alba Space rocket imagery. The expanded launch library appears below.</p></div><div class="oa-data-grid" id="launchGrid" aria-live="polite"><article class="oa-card oa-fallback">Loading current data</article></div></div></section>
+
+    <section class="oc-section" id="library"><div class="oc-shell">
+      <div class="oc-library-intro">
+        <article class="oc-panel"><p class="oc-kicker">LAUNCH LIBRARY</p><h2>All launches library</h2><p>Launch Library 2 archive and schedule: search missions, rockets and spaceports, filter by company, and open a dedicated page for every launch.</p></article>
+        <div class="oc-feature-links"><a class="oc-feature-link" href="/eng/orbital-locations.html"><strong>🗺️ Spaceport map</strong><span>Active launch pads and rockets assigned to upcoming missions on an interactive world map.</span></a><a class="oc-feature-link" href="/eng/orbital-rockets.html"><strong>🚀 Rocket library</strong><span>Rocket configurations, manufacturers, statistics and related launches.</span></a></div>
+      </div>
+      <form class="oc-controls" id="ocLaunchFilters">
+        <input id="ocLaunchSearch" type="search" data-oc-placeholder="searchLaunches" placeholder="Search…" autocomplete="off">
+        <select id="ocCompanyFilter" aria-label="Company"><option value="">—</option></select>
+        <select id="ocPeriodFilter" aria-label="Period"><option value="upcoming" data-oc-text="upcoming">Upcoming</option><option value="previous" data-oc-text="previous">Previous</option><option value="all" data-oc-text="all">All</option></select>
+        <select id="ocLaunchOrdering" aria-label="Sort"><option value="net" data-oc-text="soonest">Soonest</option><option value="-net" data-oc-text="newest">Newest</option><option value="name" data-oc-text="nameAZ">Name</option></select>
+        <button class="oc-btn oc-btn--primary" type="submit">OK</button>
+      </form>
+      <div class="oc-grid" id="ocLaunchLibrary" aria-live="polite"></div>
+      <div class="oc-pagination"><button class="oc-btn" id="ocPrevPage" type="button" data-oc-text="previousPage">←</button><div class="oc-pagination-meta" id="ocLaunchMeta"></div><button class="oc-btn" id="ocNextPage" type="button" data-oc-text="nextPage">→</button></div>
+    </div></section>
+  </main>
+  <div data-include="/footer-en.html"></div>
+  <script defer src="/assets/js/include.js"></script>
+<script src="/orbital-atlas-pages.js?v=unified-atlas-20260828b"></script>
+<script defer src="/orbital-launch-images.js?v=20260829-serpapi-1"></script>
+<script defer src="/orbital-catalog.js?v=20260830-1"></script>
+</body></html>

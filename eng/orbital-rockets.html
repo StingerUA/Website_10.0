@@ -1,0 +1,21 @@
+<!doctype html><html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#020617">
+  <meta name="description" content="Launch vehicle library with manufacturers, active configurations and flight statistics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828">
+  <link rel="stylesheet" href="/orbital-catalog.css?v=20260830-1">
+  <link rel="icon" type="image/png" href="/manus-storage/orbital-atlas-logo_f9fbd235.png">
+  <title>Rockets — Orbital Atlas</title>
+</head>
+<body class="oa-body" data-orbital-page="rockets">
+<div data-include="/header-en.html"></div><nav class="oa-contextnav" aria-label="Orbital Atlas"><div class="oa-shell oa-contextnav__inner"><a class="oa-contextnav__brand" href="/eng/orbital-atlas.html">Orbital Atlas</a><div class="oa-contextnav__links"><a href="/eng/orbital-atlas.html">Overview</a><a href="/eng/orbital-launches.html" data-oc-nav="launches">Launches</a><a class="oc-nav-new" href="/eng/orbital-locations.html" data-oc-nav="locations">Map</a><a class="is-active oc-nav-new" href="/eng/orbital-rockets.html" data-oc-nav="rockets">Rockets</a><a href="/eng/orbital-iss.html">ISS cameras</a><a href="/eng/orbital-crew.html">Crew</a><a href="/eng/orbital-solar-system.html">Solar system</a></div></div></nav>
+<main class="oa-main">
+<section class="oa-hero"><div class="oa-shell oa-hero__grid"><div><p class="oa-eyebrow">LAUNCH VEHICLES</p><h1 class="oa-title">Rockets</h1><p class="oa-lead">Launch vehicle library with manufacturers, active configurations and flight statistics.</p><div class="oa-actions"><a class="oa-button oa-button--primary" href="#rocket-library">Rocket library</a><a class="oa-button" href="/eng/orbital-locations.html">Map</a></div></div><article class="oa-card oa-status-card"><div class="oa-status-top"><span>ROCKET DATABASE</span><span class="oa-status-live">LL2</span></div><h2>🚀</h2><p>Rocket configurations, manufacturers, statistics and related launches.</p></article></div></section>
+<section class="oc-section" id="rocket-library"><div class="oc-shell"><form class="oc-controls oc-controls--rockets"><input id="ocRocketSearch" type="search" data-oc-placeholder="searchRockets" placeholder="Search…"><select id="ocRocketState"><option value="active" data-oc-text="activeOnly">Active</option><option value="all" data-oc-text="allRockets">All</option></select><select id="ocRocketOrdering"><option value="name" data-oc-text="nameAZ">Name</option><option value="-total_launch_count" data-oc-text="launchCount">Launches</option><option value="-maiden_flight" data-oc-text="newest">Newest</option></select></form><div id="ocRocketGrid" class="oc-grid"></div><div class="oc-pagination"><button class="oc-btn" id="ocRocketPrev" type="button" data-oc-text="previousPage">←</button><div id="ocRocketMeta" class="oc-pagination-meta"></div><button class="oc-btn" id="ocRocketNext" type="button" data-oc-text="nextPage">→</button></div></div></section>
+</main>
+<div data-include="/footer-en.html"></div><script defer src="/assets/js/include.js"></script>
+<script defer src="/orbital-catalog.js?v=20260830-1"></script>
+</body></html>

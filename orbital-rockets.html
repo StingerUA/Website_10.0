@@ -1,0 +1,21 @@
+<!doctype html><html lang="ru">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#020617">
+  <meta name="description" content="Библиотека ракет-носителей: производители, активные конфигурации и статистика запусков.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/orbital-atlas-pages.css?v=unified-atlas-20260828">
+  <link rel="stylesheet" href="/orbital-catalog.css?v=20260830-1">
+  <link rel="icon" type="image/png" href="/manus-storage/orbital-atlas-logo_f9fbd235.png">
+  <title>Ракеты — Orbital Atlas</title>
+</head>
+<body class="oa-body" data-orbital-page="rockets">
+<div data-include="/header-ru.html"></div><nav class="oa-contextnav" aria-label="Orbital Atlas"><div class="oa-shell oa-contextnav__inner"><a class="oa-contextnav__brand" href="/orbital-atlas.html">Orbital Atlas</a><div class="oa-contextnav__links"><a href="/orbital-atlas.html">Обзор</a><a href="/orbital-launches.html" data-oc-nav="launches">Запуски</a><a class="oc-nav-new" href="/orbital-locations.html" data-oc-nav="locations">Карта</a><a class="is-active oc-nav-new" href="/orbital-rockets.html" data-oc-nav="rockets">Ракеты</a><a href="/orbital-iss.html">Камеры МКС</a><a href="/orbital-crew.html">Экипаж</a><a href="/orbital-solar-system.html">Солнечная система</a></div></div></nav>
+<main class="oa-main">
+<section class="oa-hero"><div class="oa-shell oa-hero__grid"><div><p class="oa-eyebrow">LAUNCH VEHICLES</p><h1 class="oa-title">Ракеты</h1><p class="oa-lead">Библиотека ракет-носителей: производители, активные конфигурации и статистика запусков.</p><div class="oa-actions"><a class="oa-button oa-button--primary" href="#rocket-library">Библиотека ракет</a><a class="oa-button" href="/orbital-locations.html">Карта</a></div></div><article class="oa-card oa-status-card"><div class="oa-status-top"><span>ROCKET DATABASE</span><span class="oa-status-live">LL2</span></div><h2>🚀</h2><p>Конфигурации ракет, производители, статистика и связанные запуски.</p></article></div></section>
+<section class="oc-section" id="rocket-library"><div class="oc-shell"><form class="oc-controls oc-controls--rockets"><input id="ocRocketSearch" type="search" data-oc-placeholder="searchRockets" placeholder="Поиск…"><select id="ocRocketState"><option value="active" data-oc-text="activeOnly">Active</option><option value="all" data-oc-text="allRockets">All</option></select><select id="ocRocketOrdering"><option value="name" data-oc-text="nameAZ">Name</option><option value="-total_launch_count" data-oc-text="launchCount">Launches</option><option value="-maiden_flight" data-oc-text="newest">Newest</option></select></form><div id="ocRocketGrid" class="oc-grid"></div><div class="oc-pagination"><button class="oc-btn" id="ocRocketPrev" type="button" data-oc-text="previousPage">←</button><div id="ocRocketMeta" class="oc-pagination-meta"></div><button class="oc-btn" id="ocRocketNext" type="button" data-oc-text="nextPage">→</button></div></div></section>
+</main>
+<div data-include="/footer-ru.html"></div><script defer src="/assets/js/include.js"></script>
+<script defer src="/orbital-catalog.js?v=20260830-1"></script>
+</body></html>
