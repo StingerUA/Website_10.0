@@ -1,5 +1,5 @@
 name = "albaspace-api"
-main = "worker-with-ll2-fallback.js"
+main = "worker-with-ll2-auth.js"
 compatibility_date = "2026-04-06"
 compatibility_flags = ["nodejs_compat", "streams_enable_constructors"]
 workers_dev = true
