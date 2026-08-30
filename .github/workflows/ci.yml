@@ -37,10 +37,14 @@ jobs:
           node --check orbital-launch-images.js
           node --check cloudflare-worker/worker-with-rocket-images.js
 
-      - name: Validate orbital catalogue
+      - name: Validate centralized LL2 proxy
         run: |
+          node --check cloudflare-worker/worker-with-ll2-cache.js
           node --check orbital-catalog.js
-          node --check orbital-dynamic-localization.js
+          node --check orbital-catalog-core.js
+
+      - name: Validate orbital catalogue localization
+        run: node --check orbital-dynamic-localization.js
 
       - name: Validate blog enhancements
         run: |
