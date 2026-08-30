@@ -2,26 +2,30 @@
  * Model Viewer Debug Script
  * Diagnostic tool to check what's happening with model-viewer loading.
  *
- * Turkish model pages load centralized long-form Albamen narrations:
- * - paid Atlas pages from atlas-narrations-tr.js
- * - five free demo pages from free-demo-narrations-tr.js
+ * Narration routing:
+ * - Turkish paid /atlas/atlas-* pages use atlas-narrations-tr.js.
+ * - Regular non-Atlas model pages use model-narrations-i18n.js (TR/EN/RU).
+ * - MP3-synchronised demo pages gokturk-1, rasat, opportunity, sojourner and
+ *   sputnik are deliberately left completely untouched.
  */
 
 (function() {
-  // Load the appropriate long-form Turkish Albamen narration registry.
   try {
     const path = (window.location.pathname || '').replace(/\/index\.html$/i, '/');
+    const normalized = path.toLowerCase();
     const isPaidTurkishAtlasPage = /^\/atlas\/atlas-[^/]+\/$/i.test(path);
-    const isFreeTurkishDemoPage = /^\/(gokturk-1|rasat|opportunity|sojourner|sputnik)\/$/i.test(path);
+    const isExistingModelLanguage = !/^\/ar\//i.test(path);
+    const isRegularNonAtlasPage = !/\/atlas\//i.test(path) && isExistingModelLanguage;
+    const isMp3Demo = /^\/(?:eng\/|rus\/)?(?:gokturk-1|rasat|opportunity|sojourner|sputnik)\/$/i.test(path);
 
-    const narrationSrc = isPaidTurkishAtlasPage
-      ? '/assets/js/atlas-narrations-tr.js?v=20260830-1'
-      : isFreeTurkishDemoPage
-        ? '/assets/js/free-demo-narrations-tr.js?v=20260830-1'
-        : '';
+    let narrationSrc = '';
+    if (isPaidTurkishAtlasPage) {
+      narrationSrc = '/assets/js/atlas-narrations-tr.js?v=20260830-1';
+    } else if (isRegularNonAtlasPage && !isMp3Demo) {
+      narrationSrc = '/assets/js/model-narrations-i18n.js?v=20260830-1';
+    }
 
-    if (narrationSrc &&
-        !document.querySelector(`script[src="${narrationSrc}"]`)) {
+    if (narrationSrc && !Array.from(document.scripts).some((s) => (s.src || '').includes(narrationSrc.split('?')[0]))) {
       const narrationScript = document.createElement('script');
       narrationScript.src = narrationSrc;
       narrationScript.async = false;
