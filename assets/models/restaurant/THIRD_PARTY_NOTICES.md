@@ -6,7 +6,11 @@
 
 ## Реалистичные модели меню
 
-### Фарфоровая тарелка
+### Деревянная сервировочная доска
+
+Вместо фарфоровой тарелки используется [Wooden Cutting Board](https://polyhaven.com/a/wooden_cutting_board) от Kuutti Siitonen (Poly Haven). Исходная glTF 2.0-модель с PBR-текстурами 1K загружается с официального CDN Poly Haven и распространяется по лицензии [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). В интерфейсе она применяется как ресторанная доска для подачи блюд на гриле.
+
+### Фарфоровая тарелка (legacy)
 
 `realistic-porcelain-plate.glb` — мобильная glTF 2.0-адаптация открытой модели [`bullet3/data/dinnerware/plate.obj`](https://github.com/bulletphysics/bullet3/blob/master/data/dinnerware/plate.obj). Сохранён измеренный профиль исходной посуды, радиальная сетка сглажена, а материал заменён на компактный PBR-фарфор без внешних текстур. Исходный набор `bullet3/data` распространяется с [разрешительной zlib-подобной лицензией Bullet](https://github.com/bulletphysics/bullet3/blob/master/data/LICENSE.txt); адаптация явно обозначена как изменённая версия. Модель тарелки используется только под блюдами категории мяса.
 
