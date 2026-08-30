@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#050b1a">
   <meta name="description" content="Браузерное AR-меню Alba Space с привязкой блюд к поверхности стола.">
   <title>AR-меню — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=stable-plate-rotation-ru-2">
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=plate-half-meat-double-mobile-1">
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
@@ -24,17 +24,17 @@
       <a-entity id="dish-stable-stage" visible="false">
         <a-entity id="dish-rotation" rotation="0 0 0">
           <a-entity id="dish-plate"
-            gltf-model="/assets/models/restaurant/realistic-porcelain-plate.glb?v=stable-plate-rotation-ru-2"
+            gltf-model="/assets/models/restaurant/realistic-porcelain-plate.glb?v=plate-half-meat-double-mobile-1"
             position="0 0 0.003"
             rotation="90 0 0"
-            scale="4.9 1 4.9"
+            scale="2.45 0.5 2.45"
             visible="true">
           </a-entity>
           <a-entity id="dish-model"
-            gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=stable-plate-rotation-ru-2"
-            position="0 0 0.065"
+            gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=plate-half-meat-double-mobile-1"
+            position="0 0 0.0325"
             rotation="90 0 0"
-            scale="0.28 0.28 0.28">
+            scale="0.56 0.56 0.56">
           </a-entity>
         </a-entity>
       </a-entity>
@@ -112,6 +112,6 @@
     </div>
   </section>
 
-  <script type="module" src="/assets/js/restaurant-ar.js?v=stable-plate-rotation-ru-2"></script>
+  <script type="module" src="/assets/js/restaurant-ar.js?v=plate-half-meat-double-mobile-1"></script>
 </body>
 </html>
