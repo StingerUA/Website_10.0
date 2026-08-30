@@ -1,4 +1,8 @@
-const MENU = {
+const PAGE_LANGUAGE = document.documentElement.lang.toLowerCase().startsWith('ru') ? 'ru' : 'tr';
+const AUTH_MODE = document.documentElement.dataset.authMode || 'required';
+const IS_GUEST_MODE = AUTH_MODE === 'guest';
+
+const MENU_TR = {
   meat: {
     label: 'ET YEMEKLERİ',
     items: [
@@ -91,6 +95,156 @@ const MENU = {
   }
 };
 
+const MENU_RU = {
+  meat: {
+    label: 'МЯСНЫЕ БЛЮДА',
+    items: [
+      {
+        src: '/assets/models/restaurant/realistic-steak-board.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель стейка на деревянной доске с розмарином, спаржей и чесноком',
+        name: 'Фирменный стейк Alba',
+        description: 'Премиальный стейк с розмарином, спаржей и запечённым чесноком.',
+        price: '₺ 620'
+      },
+      {
+        src: '/assets/models/restaurant/realistic-steak-slices.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель обжаренных ломтиков стейка с овощами',
+        name: 'Ломтики стейка на гриле',
+        description: 'Обжаренные ломтики стейка с розовой серединой и овощным гарниром.',
+        price: '₺ 590'
+      },
+      {
+        src: '/assets/models/restaurant/realistic-grilled-steak.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель стейка на доске с перцем, лавашом и зеленью',
+        name: 'Стейк на доске',
+        description: 'Стейк с перцем, лавашом и свежей зеленью.',
+        price: '₺ 640'
+      }
+    ]
+  },
+  dessert: {
+    label: 'ДЕСЕРТЫ',
+    items: [
+      {
+        src: '/assets/models/restaurant/realistic-dessert-cake.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель слоёного торта с белой глазурью и вишней',
+        name: 'Вишнёвый торт Alba',
+        description: 'Слоёный бисквит с белой глазурью и вишней.',
+        price: '₺ 260'
+      },
+      {
+        src: '/assets/models/restaurant/realistic-fruit-dessert.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель фруктового десерта с дыней, мороженым, сливками и мятой',
+        name: 'Фруктовый десерт',
+        description: 'Дыня, мороженое, фрукты, сливки и свежая мята.',
+        price: '₺ 280'
+      },
+      {
+        src: '/assets/models/restaurant/realistic-layered-dessert-cup.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель слоёного десерта со сливками и лесными ягодами',
+        name: 'Десерт с лесными ягодами',
+        description: 'Слоёный десерт со сливками, лесными ягодами и деревянной ложкой.',
+        price: '₺ 240'
+      }
+    ]
+  },
+  soup: {
+    label: 'СУПЫ',
+    items: [
+      {
+        src: '/assets/models/restaurant/realistic-soup.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель супа в керамической миске',
+        name: 'Суп в керамической миске',
+        description: 'Горячий суп в детализированной керамической миске.',
+        price: '₺ 190'
+      }
+    ]
+  },
+  drink: {
+    label: 'НАПИТКИ',
+    items: [
+      {
+        src: '/assets/models/restaurant/realistic-yogurt-drink.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель бутылки клубничного йогуртового напитка',
+        name: 'Клубничный йогурт',
+        description: 'Охлаждённый клубничный йогуртовый напиток.',
+        price: '₺ 145'
+      },
+      {
+        src: '/assets/models/restaurant/realistic-coffee-cup.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель стакана кофе с крышкой',
+        name: 'Кофе Alba',
+        description: 'Ароматный кофе в детализированном стакане с крышкой.',
+        price: '₺ 135'
+      },
+      {
+        src: '/assets/models/restaurant/realistic-strawberry-lemonade.glb?v=anchor-2',
+        alt: 'Реалистичная 3D-модель клубничного лимонада с лимоном и мятой',
+        name: 'Клубничный лимонад',
+        description: 'Освежающий лимонад с лимоном, мятой и клубникой.',
+        price: '₺ 155'
+      }
+    ]
+  }
+};
+
+const COPY = {
+  tr: {
+    catalogLoading: 'Yemek kataloğu yükleniyor',
+    selectedPreparing: 'Seçtiğiniz yemek görsel işaretçiye hazırlanıyor',
+    tableFound: 'Masa bulundu',
+    dishAnchored: 'Yemek masa yüzeyine bağlandı',
+    tableSearching: 'Masa aranıyor',
+    showCapturedSurface: 'Fotoğrafını çektiğiniz yüzeyi kamerada gösterin',
+    dishLoadError: 'Yemek yüklenemedi',
+    checkConnection: 'Lütfen internet bağlantınızı kontrol edin',
+    anchorFoundPreparing: 'Görsel bulundu, model hazırlanıyor',
+    firstDishPreparing: 'İlk yemek hazırlanıyor',
+    cameraError: 'Kamera açılamadı',
+    allowCameraRetry: 'Kamera iznini verin ve tekrar deneyin',
+    tablePreparing: 'Masa hazırlanıyor',
+    cameraSessionStarting: 'Kamera ve oturum bağlantısı başlatılıyor',
+    cameraPreparing: 'Kamera hazırlanıyor',
+    tableAimDetail: 'Telefonu masaya doğrultun. Desenler veya küçük bir nesne görünürse sabitleme daha güçlü olur.',
+    fixTable: 'Masayı sabitle',
+    tableNotFixed: 'Masa sabitlenemedi',
+    processingImage: 'Masa görüntüsü işleniyor',
+    processingMayTake: 'Bu işlem telefonunuza göre birkaç saniye sürebilir.',
+    tableReady: 'Masa hazır',
+    photoSessionOnly: 'Fotoğraf yalnızca bu oturum için kullanılıyor',
+    lowFeatures: 'Yüzeyde yeterli görsel ayrıntı bulunamadı. Masadaki deseni veya küçük, sabit bir nesneyi kadraja alıp tekrar deneyin.',
+    imageFailed: 'Masa fotoğrafı işlenemedi. Kamerayı sabit tutup tekrar deneyin.'
+  },
+  ru: {
+    catalogLoading: 'Каталог блюд загружается',
+    selectedPreparing: 'Выбранное блюдо готовится к привязке к визуальному якорю',
+    tableFound: 'Стол найден',
+    dishAnchored: 'Блюдо закреплено на поверхности стола',
+    tableSearching: 'Поиск стола',
+    showCapturedSurface: 'Наведите камеру на поверхность, которую вы сфотографировали',
+    dishLoadError: 'Не удалось загрузить блюдо',
+    checkConnection: 'Проверьте подключение к интернету',
+    anchorFoundPreparing: 'Якорь найден, модель подготавливается',
+    firstDishPreparing: 'Подготавливается первое блюдо',
+    cameraError: 'Не удалось открыть камеру',
+    allowCameraRetry: 'Разрешите доступ к камере и попробуйте снова',
+    tablePreparing: 'Подготовка стола',
+    cameraSessionStarting: 'Запускается камера и привязка текущей сессии',
+    cameraPreparing: 'Камера подготавливается',
+    tableAimDetail: 'Наведите телефон на стол. Узоры или небольшой неподвижный предмет сделают привязку устойчивее.',
+    fixTable: 'Закрепить стол',
+    tableNotFixed: 'Не удалось закрепить стол',
+    processingImage: 'Обработка изображения стола',
+    processingMayTake: 'Это может занять несколько секунд в зависимости от телефона.',
+    tableReady: 'Стол готов',
+    photoSessionOnly: 'Фотография используется только в этой сессии',
+    lowFeatures: 'На поверхности недостаточно визуальных деталей. Добавьте в кадр узор или небольшой неподвижный предмет и попробуйте снова.',
+    imageFailed: 'Не удалось обработать фотографию стола. Держите камеру неподвижно и попробуйте снова.'
+  }
+}[PAGE_LANGUAGE];
+
+const MENU = PAGE_LANGUAGE === 'ru' ? MENU_RU : MENU_TR;
+
 const MAIN_API = 'https://api.albaspace.com.tr';
 const AUTH_TOKEN_KEY = 'albaspace_access_token';
 const AUTH_RETURN_KEY = 'albaspace_auth_return_to';
@@ -142,9 +296,10 @@ async function checkLogin() {
 const app = document.querySelector('#ar-app');
 const arScene = document.querySelector('#ar-scene');
 const dishAnchor = document.querySelector('#dish-anchor');
+const dishStableStage = document.querySelector('#dish-stable-stage');
+const dishRotation = document.querySelector('#dish-rotation');
 const dishModel = document.querySelector('#dish-model');
 const dishPlate = document.querySelector('#dish-plate');
-const dishPlateRim = document.querySelector('#dish-plate-rim');
 const ambientLight = document.querySelector('#ambient-light');
 const keyLight = document.querySelector('#key-light');
 const menuButton = document.querySelector('#menu-button');
@@ -189,8 +344,16 @@ const state = {
   loadingDish: false,
   modelMinY: 0,
   zoom: 1,
+  rotationZ: 0,
   pinchStartDistance: 0,
   pinchStartZoom: 1,
+  twistStartAngle: 0,
+  twistStartRotation: 0,
+  poseInitialized: false,
+  poseFrameId: null,
+  poseLastFrameAt: 0,
+  targetLostAt: 0,
+  lastAnchorSeenAt: 0,
   statusTimer: null,
   captureHoldTimer: null,
   captureLongPress: false,
@@ -236,19 +399,20 @@ function hideStatusSoon(delay = 500) {
 }
 
 function applyZoom() {
-  const scale = MODEL_BASE_SCALE * state.zoom;
+  const categoryScale = state.category === 'meat' ? 0.5 : 1;
+  const scale = MODEL_BASE_SCALE * categoryScale * state.zoom;
   const surfaceZ = state.category === 'meat' ? 0.04 + (0.025 * state.zoom) : 0.015;
   dishModel.setAttribute('scale', `${scale} ${scale} ${scale}`);
   dishModel.setAttribute('position', `0 0 ${surfaceZ - (state.modelMinY * scale)}`);
-  dishPlate.setAttribute('scale', `${state.zoom} ${state.zoom} ${state.zoom}`);
-  dishPlateRim.setAttribute('scale', `${state.zoom} ${state.zoom} ${state.zoom}`);
+  dishPlate.setAttribute('scale', `${4.9 * state.zoom} ${state.zoom} ${4.9 * state.zoom}`);
+  dishRotation.setAttribute('rotation', `0 0 ${state.rotationZ}`);
   app.style.setProperty('--dish-zoom', state.zoom.toFixed(3));
+  app.style.setProperty('--dish-rotation-z', state.rotationZ.toFixed(2));
 }
 
 function updateDishPresentation() {
   const isMeat = state.category === 'meat';
   dishPlate.setAttribute('visible', String(isMeat));
-  dishPlateRim.setAttribute('visible', String(isMeat));
   ambientLight.setAttribute('light', 'intensity', isMeat ? 2.05 : 1.7);
   keyLight.setAttribute('light', 'intensity', isMeat ? 1.45 : 1.2);
 }
@@ -313,11 +477,12 @@ function prepareDish(item) {
   state.modelReady = false;
   state.loadingDish = true;
   setProgress(10);
-  setStatus('Yemek kataloğu yükleniyor', 'Seçtiğiniz yemek görsel işaretçiye hazırlanıyor', 'loading', true);
+  setStatus(COPY.catalogLoading, COPY.selectedPreparing, 'loading', true);
   dishModel.setAttribute('visible', 'false');
   dishModel.setAttribute('gltf-model', item.src);
   dishModel.setAttribute('title', item.alt);
   state.zoom = 1;
+  state.rotationZ = 0;
   state.modelMinY = 0;
   updateDishPresentation();
   applyZoom();
@@ -334,6 +499,8 @@ function selectDish(categoryKey, index) {
 
 function handleModelLoaded(event) {
   if (event.target !== dishModel) return;
+  dishModel.removeAttribute('animation');
+  dishModel.removeAttribute('animation-mixer');
   state.modelReady = true;
   state.loadingDish = false;
   state.modelMinY = measureModelBottom();
@@ -341,10 +508,10 @@ function handleModelLoaded(event) {
   setProgress(100);
   dishModel.setAttribute('visible', 'true');
   if (state.targetFound) {
-    setStatus('Masa bulundu', 'Yemek masa yüzeyine bağlandı', 'ready', true);
+    setStatus(COPY.tableFound, COPY.dishAnchored, 'ready', true);
     hideStatusSoon(1100);
   } else {
-    setStatus('Masa aranıyor', 'Fotoğrafını çektiğiniz yüzeyi kamerada gösterin', 'scanning', true);
+    setStatus(COPY.tableSearching, COPY.showCapturedSurface, 'scanning', true);
   }
 }
 
@@ -353,23 +520,77 @@ function handleModelError(event) {
   state.modelReady = false;
   state.loadingDish = false;
   setProgress(0);
-  setStatus('Yemek yüklenemedi', 'Lütfen internet bağlantınızı kontrol edin', 'error', true);
+  setStatus(COPY.dishLoadError, COPY.checkConnection, 'error', true);
   console.warn('AR model load failed:', event);
 }
 
 function handleTargetFound() {
+  const now = performance.now();
+  if (now - state.lastAnchorSeenAt > 1200) state.poseInitialized = false;
   state.targetFound = true;
+  state.targetLostAt = 0;
   if (state.modelReady && !state.loadingDish) {
-    setStatus('Masa bulundu', 'Yemek masa yüzeyine bağlandı', 'ready', true);
+    setStatus(COPY.tableFound, COPY.dishAnchored, 'ready', true);
     hideStatusSoon(900);
   } else {
-    setStatus('Yemek kataloğu yükleniyor', 'Görsel bulundu, model hazırlanıyor', 'loading', true);
+    setStatus(COPY.catalogLoading, COPY.anchorFoundPreparing, 'loading', true);
   }
 }
 
 function handleTargetLost() {
   state.targetFound = false;
-  setStatus('Masa aranıyor', 'Fotoğrafını çektiğiniz yüzeyi kamerada gösterin', 'scanning', true);
+  state.targetLostAt = performance.now();
+  setStatus(COPY.tableSearching, COPY.showCapturedSurface, 'scanning', true);
+}
+
+function startAnchorStabilization() {
+  if (!window.AFRAME?.THREE || state.poseFrameId) return;
+  const targetPosition = new AFRAME.THREE.Vector3();
+  const targetQuaternion = new AFRAME.THREE.Quaternion();
+  const targetScale = new AFRAME.THREE.Vector3();
+  const lostGraceMs = 500;
+  const smoothingMs = 145;
+
+  const updatePose = (now) => {
+    const delta = state.poseLastFrameAt ? Math.min(50, now - state.poseLastFrameAt) : 16;
+    state.poseLastFrameAt = now;
+
+    if (state.targetFound && dishAnchor.object3D.visible) {
+      dishAnchor.object3D.updateWorldMatrix(true, false);
+      dishAnchor.object3D.getWorldPosition(targetPosition);
+      dishAnchor.object3D.getWorldQuaternion(targetQuaternion);
+      dishAnchor.object3D.getWorldScale(targetScale);
+
+      const stage = dishStableStage.object3D;
+      if (!state.poseInitialized) {
+        stage.position.copy(targetPosition);
+        stage.quaternion.copy(targetQuaternion);
+        stage.scale.copy(targetScale);
+        state.poseInitialized = true;
+      } else {
+        const alpha = 1 - Math.exp(-delta / smoothingMs);
+        stage.position.lerp(targetPosition, alpha);
+        stage.quaternion.slerp(targetQuaternion, alpha);
+        stage.scale.lerp(targetScale, alpha);
+      }
+      stage.visible = state.modelReady;
+      state.lastAnchorSeenAt = now;
+    } else if (state.targetLostAt && now - state.targetLostAt > lostGraceMs) {
+      dishStableStage.object3D.visible = false;
+    }
+
+    state.poseFrameId = requestAnimationFrame(updatePose);
+  };
+
+  state.poseFrameId = requestAnimationFrame(updatePose);
+}
+
+function stopAnchorStabilization() {
+  cancelAnimationFrame(state.poseFrameId);
+  state.poseFrameId = null;
+  state.poseLastFrameAt = 0;
+  state.poseInitialized = false;
+  dishStableStage.object3D.visible = false;
 }
 
 function setArVideoStyles(video) {
@@ -383,9 +604,9 @@ function handleArReady() {
   setArVideoStyles(state.arSystem?.video);
   setProgress(58);
   if (state.modelReady) {
-    setStatus('Masa aranıyor', 'Fotoğrafını çektiğiniz yüzeyi kamerada gösterin', 'scanning', true);
+    setStatus(COPY.tableSearching, COPY.showCapturedSurface, 'scanning', true);
   } else {
-    setStatus('Yemek kataloğu yükleniyor', 'İlk yemek hazırlanıyor', 'loading', true);
+    setStatus(COPY.catalogLoading, COPY.firstDishPreparing, 'loading', true);
   }
 }
 
@@ -393,10 +614,13 @@ function handleArError(event) {
   const code = event.detail?.error || 'VIDEO_FAIL';
   console.warn('MindAR error:', code);
   state.arStarted = false;
+  state.targetFound = false;
+  state.poseInitialized = false;
+  dishStableStage.object3D.visible = false;
   state.arSystem?.video?.srcObject?.getTracks().forEach((track) => track.stop());
   state.arSystem?.video?.remove();
   cameraFallback.hidden = false;
-  setStatus('Kamera açılamadı', 'Kamera iznini verin ve tekrar deneyin', 'error', true);
+  setStatus(COPY.cameraError, COPY.allowCameraRetry, 'error', true);
 }
 
 function startImageTracking() {
@@ -410,12 +634,17 @@ function startImageTracking() {
   system.imageTargetSrc = state.anchorTargetUrl;
   state.arStarted = true;
   cameraFallback.hidden = true;
-  setStatus('Masa hazırlanıyor', 'Kamera ve oturum bağlantısı başlatılıyor', 'loading', true);
+  setStatus(COPY.tablePreparing, COPY.cameraSessionStarting, 'loading', true);
   system.start();
 }
 
 function stopImageTracking() {
-  if (!state.arStarted || !state.arSystem) return;
+  if (!state.arStarted || !state.arSystem) {
+    state.targetFound = false;
+    state.poseInitialized = false;
+    dishStableStage.object3D.visible = false;
+    return;
+  }
   try {
     if (state.arSystem.controller && state.arSystem.video?.srcObject) {
       state.arSystem.stop();
@@ -428,15 +657,20 @@ function stopImageTracking() {
   }
   state.arStarted = false;
   state.targetFound = false;
+  state.poseInitialized = false;
   dishAnchor.object3D.visible = false;
+  dishStableStage.object3D.visible = false;
 }
 
 function cameraErrorFallback() {
   state.arStarted = false;
+  state.targetFound = false;
+  state.poseInitialized = false;
+  dishStableStage.object3D.visible = false;
   state.arSystem?.video?.srcObject?.getTracks().forEach((track) => track.stop());
   state.arSystem?.video?.remove();
   cameraFallback.hidden = false;
-  setStatus('Kamera açılamadı', 'Kamera iznini verin ve tekrar deneyin', 'error', true);
+  setStatus(COPY.cameraError, COPY.allowCameraRetry, 'error', true);
 }
 
 function stageVideo() {
@@ -460,8 +694,8 @@ async function startCalibrationPreview() {
   tableRetryButton.hidden = true;
   calibrationProgress.hidden = true;
   calibrationProgressBar.style.width = '0%';
-  tableCaptureLabel.textContent = 'Kamera hazırlanıyor';
-  tableCalibrationDetail.textContent = 'Telefonu masaya doğrultun. Desenler veya küçük bir nesne görünürse sabitleme daha güçlü olur.';
+  tableCaptureLabel.textContent = COPY.cameraPreparing;
+  tableCalibrationDetail.textContent = COPY.tableAimDetail;
   tableCaptureButton.disabled = true;
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -472,11 +706,11 @@ async function startCalibrationPreview() {
     tablePreview.srcObject = stream;
     await tablePreview.play();
     tableCaptureButton.disabled = false;
-    tableCaptureLabel.textContent = 'Masayı sabitle';
+    tableCaptureLabel.textContent = COPY.fixTable;
   } catch (error) {
     console.warn('Table preview failed:', error);
-    tableCaptureLabel.textContent = 'Kamera açılamadı';
-    tableCalibrationDetail.textContent = 'Kamera iznini verin ve tekrar deneyin.';
+    tableCaptureLabel.textContent = COPY.cameraError;
+    tableCalibrationDetail.textContent = `${COPY.allowCameraRetry}.`;
     tableRetryButton.hidden = false;
   }
 }
@@ -518,7 +752,7 @@ function showCalibrationError(message) {
   state.calibrating = false;
   calibrationProgress.hidden = true;
   tableCaptureButton.disabled = true;
-  tableCaptureLabel.textContent = 'Masa sabitlenemedi';
+  tableCaptureLabel.textContent = COPY.tableNotFixed;
   tableCalibrationDetail.textContent = message;
   tableRetryButton.hidden = false;
 }
@@ -530,8 +764,8 @@ async function compileTableAnchor() {
   tableRetryButton.hidden = true;
   calibrationProgress.hidden = false;
   calibrationProgressBar.style.width = '2%';
-  tableCaptureLabel.textContent = 'Masa görüntüsü işleniyor';
-  tableCalibrationDetail.textContent = 'Bu işlem telefonunuza göre birkaç saniye sürebilir.';
+  tableCaptureLabel.textContent = COPY.processingImage;
+  tableCalibrationDetail.textContent = COPY.processingMayTake;
   try {
     drawTableFrame();
     tableFreeze.hidden = false;
@@ -543,7 +777,7 @@ async function compileTableAnchor() {
     const dataList = await compiler.compileImageTargets([tableFreeze], (progress) => {
       const rounded = Math.max(2, Math.min(96, Math.round(progress)));
       calibrationProgressBar.style.width = `${rounded}%`;
-      tableCaptureLabel.textContent = `Masa görüntüsü işleniyor · %${rounded}`;
+      tableCaptureLabel.textContent = `${COPY.processingImage} · ${rounded}%`;
     });
     if (countCompiledFeatures(dataList) < 24) throw new Error('LOW_FEATURES');
     const buffer = compiler.exportData();
@@ -552,15 +786,13 @@ async function compileTableAnchor() {
     state.anchorReady = true;
     state.calibrating = false;
     calibrationProgressBar.style.width = '100%';
-    tableCaptureLabel.textContent = 'Masa hazır';
+    tableCaptureLabel.textContent = COPY.tableReady;
     tableCalibration.hidden = true;
-    setStatus('Masa hazır', 'Fotoğraf yalnızca bu oturum için kullanılıyor', 'ready', true);
+    setStatus(COPY.tableReady, COPY.photoSessionOnly, 'ready', true);
     window.setTimeout(stageVideo, 120);
   } catch (error) {
     console.warn('Table anchor compilation failed:', error);
-    const message = error.message === 'LOW_FEATURES'
-      ? 'Yüzeyde yeterli görsel ayrıntı bulunamadı. Masadaki deseni veya küçük, sabit bir nesneyi kadraja alıp tekrar deneyin.'
-      : 'Masa fotoğrafı işlenemedi. Kamerayı sabit tutup tekrar deneyin.';
+    const message = error.message === 'LOW_FEATURES' ? COPY.lowFeatures : COPY.imageFailed;
     showCalibrationError(message);
   }
 }
@@ -581,6 +813,14 @@ async function beginTableCalibration() {
 }
 
 async function initializeSession() {
+  if (IS_GUEST_MODE) {
+    state.user = {guest: true};
+    authChecking.hidden = true;
+    authRequired.hidden = true;
+    authGate.hidden = true;
+    await beginTableCalibration();
+    return;
+  }
   state.user = await checkLogin();
   authChecking.hidden = true;
   if (!state.user || !state.user.email) {
@@ -595,26 +835,41 @@ function distanceBetweenTouches(touches) {
   return Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
 }
 
-function setupZoomControls() {
+function angleBetweenTouches(touches) {
+  return Math.atan2(
+    touches[1].clientY - touches[0].clientY,
+    touches[1].clientX - touches[0].clientX
+  ) * 180 / Math.PI;
+}
+
+function shortestAngleDelta(current, start) {
+  return ((current - start + 540) % 360) - 180;
+}
+
+function setupTransformControls() {
   app.addEventListener('touchstart', (event) => {
     if (event.touches.length !== 2) return;
     state.pinchStartDistance = distanceBetweenTouches(event.touches);
     state.pinchStartZoom = state.zoom;
+    state.twistStartAngle = angleBetweenTouches(event.touches);
+    state.twistStartRotation = state.rotationZ;
     event.preventDefault();
   }, {passive: false});
   app.addEventListener('touchmove', (event) => {
     if (event.touches.length !== 2 || !state.pinchStartDistance) return;
     const distance = distanceBetweenTouches(event.touches);
     state.zoom = clamp(state.pinchStartZoom * distance / state.pinchStartDistance, 0.48, 2.2);
+    state.rotationZ = state.twistStartRotation + shortestAngleDelta(angleBetweenTouches(event.touches), state.twistStartAngle);
     applyZoom();
     event.preventDefault();
   }, {passive: false});
-  const clearPinch = () => { state.pinchStartDistance = 0; };
-  app.addEventListener('touchend', clearPinch, {passive: true});
-  app.addEventListener('touchcancel', clearPinch, {passive: true});
+  const clearGesture = () => { state.pinchStartDistance = 0; };
+  app.addEventListener('touchend', clearGesture, {passive: true});
+  app.addEventListener('touchcancel', clearGesture, {passive: true});
   app.addEventListener('wheel', (event) => {
     if (!state.targetFound) return;
-    state.zoom = clamp(state.zoom * (event.deltaY > 0 ? 0.92 : 1.08), 0.48, 2.2);
+    if (event.shiftKey) state.rotationZ += event.deltaY > 0 ? -7.5 : 7.5;
+    else state.zoom = clamp(state.zoom * (event.deltaY > 0 ? 0.92 : 1.08), 0.48, 2.2);
     applyZoom();
     event.preventDefault();
   }, {passive: false});
@@ -839,6 +1094,7 @@ window.addEventListener('error', (event) => {
 });
 window.addEventListener('pagehide', () => {
   if (state.mediaRecorder) stopVideoRecording();
+  stopAnchorStabilization();
   stopCalibrationPreview();
   stopImageTracking();
   if (state.anchorTargetUrl) URL.revokeObjectURL(state.anchorTargetUrl);
@@ -846,6 +1102,7 @@ window.addEventListener('pagehide', () => {
 
 renderMenu();
 prepareDish(currentDish());
-setupZoomControls();
+startAnchorStabilization();
+setupTransformControls();
 setupCaptureControl();
 initializeSession();

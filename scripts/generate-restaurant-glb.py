@@ -4,6 +4,10 @@
 The geometry is intentionally simple and stylised: a plate plus a recognisable
 food arrangement in each file.  This keeps the AR demo free to host on GitHub
 Pages and quick to load on a phone.
+
+The standalone porcelain plate adapts the revolved profile from Bullet's
+``data/dinnerware/plate.obj`` model.  The redistributed source is covered by
+Bullet's permissive zlib-style data license; see THIRD_PARTY_NOTICES.md.
 """
 from __future__ import annotations
 
@@ -30,6 +34,7 @@ MATERIALS = [
     {"name": "chocolate", "baseColorFactor": [0.22, 0.045, 0.02, 1.0], "metallicFactor": 0.0, "roughnessFactor": 0.38},
     {"name": "blackCoffee", "baseColorFactor": [0.018, 0.006, 0.002, 1.0], "metallicFactor": 0.0, "roughnessFactor": 0.2},
     {"name": "latteGlass", "baseColorFactor": [0.08, 0.42, 0.52, 0.38], "metallicFactor": 0.0, "roughnessFactor": 0.08, "alphaMode": "BLEND"},
+    {"name": "restaurantPorcelain", "baseColorFactor": [0.985, 0.978, 0.955, 1.0], "metallicFactor": 0.0, "roughnessFactor": 0.16},
 ]
 
 
@@ -205,6 +210,29 @@ def make_steak():
     return meshes
 
 
+def make_porcelain_plate():
+    """Adapt Bullet's dinnerware plate profile into a smooth, mobile GLB.
+
+    Bullet's OBJ is a 30-segment lathed mesh.  Keeping its measured profile but
+    increasing the radial resolution removes the visibly faceted edge in AR.
+    The model remains in metres and is scaled to the marker inside A-Frame.
+    """
+    meshes = []
+    profile = [
+        (0.052, 0.009),
+        (0.046, 0.003),
+        (0.000, 0.003),
+        (0.000, 0.000),
+        (0.055, 0.000),
+        (0.058, 0.003),
+        (0.098, 0.060),
+        (0.095, 0.060),
+        (0.092, 0.060),
+    ]
+    lathe(meshes, "porcelain-plate", profile, 13, segments=96)
+    return meshes
+
+
 def make_lamb():
     meshes = []
     lathe(meshes, "plate", [(0, 0), (1.85, 0), (1.98, 0.09), (1.98, 0.18), (1.82, 0.25), (0, 0.27)], 0, 64)
@@ -266,6 +294,7 @@ def make_latte():
 
 
 if __name__ == "__main__":
+    create_glb(OUT / "realistic-porcelain-plate.glb", "Porcelain restaurant plate", make_porcelain_plate())
     create_glb(OUT / "steak.glb", "Steak plate", make_steak())
     create_glb(OUT / "lamb-chops.glb", "Lamb chops plate", make_lamb())
     create_glb(OUT / "dessert.glb", "Dessert plate", make_dessert())
