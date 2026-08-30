@@ -139,3 +139,20 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
+
+
+.desktop-only { display: none; }
+
+html.is-desktop-scene .ar-app { background: #07101b; }
+html.is-desktop-scene .ar-app::after { background: radial-gradient(circle at 50% 48%, transparent 0%, rgba(2, 6, 14, .38) 88%); }
+html.is-desktop-scene #ar-scene { pointer-events: auto; }
+html.is-desktop-scene #ar-scene .a-canvas { cursor: grab; touch-action: none; }
+html.is-desktop-scene #ar-scene .a-canvas:active { cursor: grabbing; }
+html.is-desktop-scene .capture-dock,
+html.is-desktop-scene .camera-start-fallback,
+html.is-desktop-scene .table-calibration,
+html.is-desktop-scene .recalibrate-button { display: none !important; }
+html.is-desktop-scene .desktop-only { display: inline; }
+html.is-desktop-scene .mobile-only { display: none; }
+html.is-desktop-scene .menu-panel { bottom: 24px; }
+html.is-desktop-scene .zoom-hint { bottom: 24px; z-index: 9; padding: 8px 13px; background: rgba(5, 11, 26, .68); }
