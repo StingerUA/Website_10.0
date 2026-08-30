@@ -42,6 +42,7 @@ jobs:
           node --check cloudflare-worker/worker-with-ll2-cache.js
           node --check cloudflare-worker/worker-with-ll2-fallback.js
           node --check cloudflare-worker/worker-with-ll2-auth.js
+          node --check cloudflare-worker/worker-with-ll2-refresh.js
           node --check orbital-catalog.js
           node --check orbital-catalog-core.js
 
