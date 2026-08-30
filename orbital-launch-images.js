@@ -56,9 +56,10 @@
     .replace(/\s+/g, " ")
     .trim();
 
+  const stopWords = new Set(["the", "and", "for", "mission", "launch", "rocket", "space"]);
   const words = value => normalize(value)
     .split(" ")
-    .filter(word => word.length >= 3 && !new Set(["the", "and", "for", "mission", "launch", "rocket", "space"]).has(word));
+    .filter(word => (/^\d+$/.test(word) || word.length >= 3) && !stopWords.has(word));
 
   function extractVehicle(figure) {
     const caption = figure?.querySelector("figcaption");
@@ -120,7 +121,7 @@
     if (mission && title) {
       if (title.includes(mission)) score += 75;
       const missionTokens = words(mission);
-      const hits = missionTokens.filter(token => title.includes(token)).length;
+      const hits = missionTokens.filter(token => title.split(" ").includes(token)).length;
       score += hits * 12;
       if (missionTokens.length && hits === missionTokens.length) score += 35;
     }
