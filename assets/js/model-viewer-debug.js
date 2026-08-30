@@ -2,21 +2,28 @@
  * Model Viewer Debug Script
  * Diagnostic tool to check what's happening with model-viewer loading.
  *
- * Paid Turkish Atlas pages also load the centralized long-form Albamen
- * narration registry. Free demo pages live outside /atlas/atlas-* and are
- * intentionally not affected.
+ * Turkish model pages load centralized long-form Albamen narrations:
+ * - paid Atlas pages from atlas-narrations-tr.js
+ * - five free demo pages from free-demo-narrations-tr.js
  */
 
 (function() {
-  // Load long Albamen narration only for paid Turkish Atlas model pages.
+  // Load the appropriate long-form Turkish Albamen narration registry.
   try {
     const path = (window.location.pathname || '').replace(/\/index\.html$/i, '/');
     const isPaidTurkishAtlasPage = /^\/atlas\/atlas-[^/]+\/$/i.test(path);
+    const isFreeTurkishDemoPage = /^\/(gokturk-1|rasat|opportunity|sojourner|sputnik)\/$/i.test(path);
 
-    if (isPaidTurkishAtlasPage &&
-        !document.querySelector('script[src*="atlas-narrations-tr.js"]')) {
+    const narrationSrc = isPaidTurkishAtlasPage
+      ? '/assets/js/atlas-narrations-tr.js?v=20260830-1'
+      : isFreeTurkishDemoPage
+        ? '/assets/js/free-demo-narrations-tr.js?v=20260830-1'
+        : '';
+
+    if (narrationSrc &&
+        !document.querySelector(`script[src="${narrationSrc}"]`)) {
       const narrationScript = document.createElement('script');
-      narrationScript.src = '/assets/js/atlas-narrations-tr.js?v=20260830-1';
+      narrationScript.src = narrationSrc;
       narrationScript.async = false;
       narrationScript.dataset.albamenNarrationLoader = 'true';
       document.head.appendChild(narrationScript);
