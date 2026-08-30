@@ -1,9 +1,30 @@
 /**
  * Model Viewer Debug Script
- * Diagnostic tool to check what's happening with model-viewer loading
+ * Diagnostic tool to check what's happening with model-viewer loading.
+ *
+ * Paid Turkish Atlas pages also load the centralized long-form Albamen
+ * narration registry. Free demo pages live outside /atlas/atlas-* and are
+ * intentionally not affected.
  */
 
 (function() {
+  // Load long Albamen narration only for paid Turkish Atlas model pages.
+  try {
+    const path = (window.location.pathname || '').replace(/\/index\.html$/i, '/');
+    const isPaidTurkishAtlasPage = /^\/atlas\/atlas-[^/]+\/$/i.test(path);
+
+    if (isPaidTurkishAtlasPage &&
+        !document.querySelector('script[src*="atlas-narrations-tr.js"]')) {
+      const narrationScript = document.createElement('script');
+      narrationScript.src = '/assets/js/atlas-narrations-tr.js?v=20260830-1';
+      narrationScript.async = false;
+      narrationScript.dataset.albamenNarrationLoader = 'true';
+      document.head.appendChild(narrationScript);
+    }
+  } catch (error) {
+    console.warn('[Albamen Narration] Failed to initialize narration loader:', error);
+  }
+
   console.log('[Model-Viewer Debug] Starting diagnostic...');
   
   // 1. Check if model-viewer element exists
