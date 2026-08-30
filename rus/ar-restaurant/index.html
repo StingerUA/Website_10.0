@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#050b1a">
   <meta name="description" content="Браузерное AR-меню Alba Space с привязкой блюд к поверхности стола.">
   <title>AR-меню — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=desktop-table-board-1">
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=daylight-restaurant-table-1">
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
@@ -21,20 +21,33 @@
       <a-entity id="ambient-light" light="type: ambient; color: #ffffff; intensity: 1.7"></a-entity>
       <a-entity id="key-light" light="type: directional; color: #fff4df; intensity: 1.2" position="0 1 1"></a-entity>
       <a-entity id="desktop-environment" visible="false">
-        <a-sky color="#07101b"></a-sky>
-        <a-plane position="0 0 0" rotation="-90 0 0" width="16" height="16" material="color: #17202a; roughness: 0.92; metalness: 0.04"></a-plane>
-        <a-plane position="0 3 -4" width="16" height="6" material="color: #111a24; roughness: 0.88"></a-plane>
-        <a-plane position="-5 3 0" rotation="0 90 0" width="8" height="6" material="color: #0d1722; roughness: 0.9"></a-plane>
-        <a-box position="0 0.91 0" width="2.8" height="0.14" depth="1.7" material="color: #5c321d; roughness: 0.72; metalness: 0.02"></a-box>
-        <a-box position="-1.14 0.43 -0.61" width="0.13" height="0.86" depth="0.13" material="color: #241711; roughness: 0.8"></a-box>
-        <a-box position="1.14 0.43 -0.61" width="0.13" height="0.86" depth="0.13" material="color: #241711; roughness: 0.8"></a-box>
-        <a-box position="-1.14 0.43 0.61" width="0.13" height="0.86" depth="0.13" material="color: #241711; roughness: 0.8"></a-box>
-        <a-box position="1.14 0.43 0.61" width="0.13" height="0.86" depth="0.13" material="color: #241711; roughness: 0.8"></a-box>
-        <a-plane position="-2.8 2.5 -3.95" width="2.2" height="2.1" material="color: #173c55; emissive: #0b2a40; emissiveIntensity: 0.45"></a-plane>
-        <a-plane position="0 2.5 -3.95" width="2.2" height="2.1" material="color: #18334c; emissive: #091f35; emissiveIntensity: 0.4"></a-plane>
-        <a-plane position="2.8 2.5 -3.95" width="2.2" height="2.1" material="color: #173c55; emissive: #0b2a40; emissiveIntensity: 0.45"></a-plane>
-        <a-entity light="type: point; color: #ffd39a; intensity: 1.8; distance: 7; decay: 2" position="-1.5 3.2 1.1"></a-entity>
-        <a-entity light="type: point; color: #9bdcff; intensity: 1.15; distance: 8; decay: 2" position="2.5 2.4 -1.6"></a-entity>
+        <a-sky
+          src="/assets/images/restaurant/warm-restaurant-day-2k.jpg?v=daylight-restaurant-table-1"
+          rotation="0 -92 0"
+          radius="38"
+          material="shader: flat; side: back">
+        </a-sky>
+        <a-circle position="0 0.012 0" rotation="-90 0 0" radius="2.25"
+          material="color: #7a6048; opacity: 0.24; transparent: true; roughness: 1">
+        </a-circle>
+        <a-cylinder id="desktop-table-top" position="0 0.79 0" radius="1.04" height="0.12"
+          material="color: #8a4f28; roughness: 0.62; metalness: 0.02">
+        </a-cylinder>
+        <a-cylinder position="0 0.715 0" radius="0.96" height="0.035"
+          material="color: #d9a35f; roughness: 0.48; metalness: 0.08">
+        </a-cylinder>
+        <a-cylinder position="0 0.39 0" radius="0.13" height="0.67"
+          material="color: #332016; roughness: 0.72; metalness: 0.04">
+        </a-cylinder>
+        <a-cylinder position="0 0.055 0" radius="0.56" height="0.09"
+          material="color: #332016; roughness: 0.74; metalness: 0.03">
+        </a-cylinder>
+        <a-torus position="0 0.075 0" rotation="90 0 0" radius="0.47" radius-tubular="0.025"
+          material="color: #c79555; roughness: 0.45; metalness: 0.22">
+        </a-torus>
+        <a-entity light="type: directional; color: #fff7e8; intensity: 2.2" position="-3 5 3"></a-entity>
+        <a-entity light="type: directional; color: #d7efff; intensity: 0.85" position="3 2 -2"></a-entity>
+        <a-entity light="type: point; color: #ffd89d; intensity: 0.7; distance: 5; decay: 2" position="0 2.8 1.2"></a-entity>
       </a-entity>
       <a-entity id="dish-anchor" mindar-image-target="targetIndex: 0"></a-entity>
       <a-entity id="dish-stable-stage" visible="false">
@@ -47,14 +60,14 @@
             visible="true">
           </a-entity>
           <a-entity id="dish-model"
-            gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=desktop-table-board-1"
+            gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=daylight-restaurant-table-1"
             position="0 0 0.028"
             rotation="90 0 0"
             scale="0.28 0.28 0.28">
           </a-entity>
         </a-entity>
       </a-entity>
-      <a-camera id="scene-camera" position="0 0 0" look-controls="enabled: false"></a-camera>
+      <a-camera id="scene-camera" position="0 1.6 3.15" rotation="-12 0 0" fov="50" look-controls="enabled: false"></a-camera>
     </a-scene>
 
     <header class="top-bar" aria-label="Навигация">
@@ -128,6 +141,6 @@
     </div>
   </section>
 
-  <script type="module" src="/assets/js/restaurant-ar.js?v=desktop-table-board-1"></script>
+  <script type="module" src="/assets/js/restaurant-ar.js?v=daylight-restaurant-table-1"></script>
 </body>
 </html>

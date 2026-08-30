@@ -31,6 +31,10 @@
 | `realistic-coffee-cup.glb` | Alba Kahve | `MadlockThell248` | [Coffee cup](https://studio.tripo3d.ai/3d-model/brown-and-white-disposable-coffee-cup-with-brown-lid-and-abstract-wrap-c7cfcf01-c2d6-4910-9558-1288b4970c23) | Decoded glTF 2.0; source page reported 1,947,786 faces |
 | `realistic-strawberry-lemonade.glb` | Çilekli Limonata | `alicanking111` | [Strawberry lemonade](https://studio.tripo3d.ai/3d-model/pink-and-yellow-layered-strawberry-lemonade-drink-in-a-clear-plastic-c-0fb6e6c1-4f69-4428-b4f1-cc0d8230e97b) | Decoded glTF 2.0; PBR Color/ORM/Normal textures |
 
+## Дневная панорама ресторана
+
+`assets/images/restaurant/warm-restaurant-day-2k.jpg` — оптимизированная до 2048×1024 локальная копия HDRI-панорамы [Warm Restaurant](https://polyhaven.com/a/warm_restaurant) от Poly Haven. Исходник распространяется по [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Панорама используется только как дневное окружение ПК-версии; стол и освещение создаются локальными примитивами A-Frame.
+
 ## Runtime dependencies
 
 The route loads [A-Frame 1.5.0](https://aframe.io/) and [MindAR 1.2.5](https://github.com/hiukim/mind-ar-js) from public CDNs. MindAR is used as a browser runtime, while the target file itself is hosted locally. The capture implementation uses browser Canvas and MediaRecorder APIs; no native application, Unity project, paid API, or server-side image tracking is required.

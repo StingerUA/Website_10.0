@@ -374,8 +374,8 @@ const state = {
   captureContext: null,
   captureFrameId: null,
   desktopYaw: 0,
-  desktopPitch: 0.28,
-  desktopDistance: 3.25,
+  desktopPitch: 0.21,
+  desktopDistance: 3.15,
   desktopDragging: false,
   desktopPointerX: 0,
   desktopPointerY: 0
@@ -833,7 +833,7 @@ async function beginTableCalibration() {
 
 function updateDesktopCamera() {
   if (!IS_DESKTOP_SCENE || !sceneCamera?.object3D || !window.AFRAME?.THREE) return;
-  const target = new AFRAME.THREE.Vector3(0, 1.02, 0);
+  const target = new AFRAME.THREE.Vector3(0, 0.93, 0);
   const horizontal = Math.cos(state.desktopPitch) * state.desktopDistance;
   sceneCamera.object3D.position.set(
     Math.sin(state.desktopYaw) * horizontal,
@@ -878,9 +878,12 @@ function initializeDesktopScene() {
   tableCalibration.hidden = true;
   cameraFallback.hidden = true;
   desktopEnvironment?.setAttribute('visible', 'true');
+  ambientLight.setAttribute('light', 'intensity', 1.25);
+  keyLight.setAttribute('light', 'intensity', 1.9);
+  sceneCamera?.setAttribute('fov', '50');
   dishAnchor.setAttribute('visible', 'false');
   dishStableStage.setAttribute('visible', 'true');
-  dishStableStage.setAttribute('position', '0 1.04 0');
+  dishStableStage.setAttribute('position', '0 0.855 0');
   dishStableStage.setAttribute('rotation', '-90 0 0');
   state.anchorReady = true;
   state.targetFound = true;
