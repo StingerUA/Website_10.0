@@ -1,6 +1,8 @@
 const PAGE_LANGUAGE = document.documentElement.lang.toLowerCase().startsWith('ru') ? 'ru' : 'tr';
 const AUTH_MODE = document.documentElement.dataset.authMode || 'required';
 const IS_GUEST_MODE = AUTH_MODE === 'guest';
+const IS_DESKTOP_SCENE = window.matchMedia('(min-width: 900px) and (pointer: fine)').matches;
+document.documentElement.classList.toggle('is-desktop-scene', IS_DESKTOP_SCENE);
 
 const MENU_TR = {
   meat: {
@@ -213,7 +215,9 @@ const COPY = {
     tableReady: 'Masa hazır',
     photoSessionOnly: 'Fotoğraf yalnızca bu oturum için kullanılıyor',
     lowFeatures: 'Yüzeyde yeterli görsel ayrıntı bulunamadı. Masadaki deseni veya küçük, sabit bir nesneyi kadraja alıp tekrar deneyin.',
-    imageFailed: 'Masa fotoğrafı işlenemedi. Kamerayı sabit tutup tekrar deneyin.'
+    imageFailed: 'Masa fotoğrafı işlenemedi. Kamerayı sabit tutup tekrar deneyin.',
+    desktopReady: 'Sanal masa hazır',
+    desktopControls: 'Sahneyi sürükleyerek gezin, tekerlekle yaklaşın; Shift + tekerlek ile yemeği döndürün'
   },
   ru: {
     catalogLoading: 'Каталог блюд загружается',
@@ -239,7 +243,9 @@ const COPY = {
     tableReady: 'Стол готов',
     photoSessionOnly: 'Фотография используется только в этой сессии',
     lowFeatures: 'На поверхности недостаточно визуальных деталей. Добавьте в кадр узор или небольшой неподвижный предмет и попробуйте снова.',
-    imageFailed: 'Не удалось обработать фотографию стола. Держите камеру неподвижно и попробуйте снова.'
+    imageFailed: 'Не удалось обработать фотографию стола. Держите камеру неподвижно и попробуйте снова.',
+    desktopReady: 'Виртуальный стол готов',
+    desktopControls: 'Перетаскивайте сцену мышью, колесом приближайте; Shift + колесо вращает блюдо'
   }
 }[PAGE_LANGUAGE];
 
@@ -300,6 +306,8 @@ const dishStableStage = document.querySelector('#dish-stable-stage');
 const dishRotation = document.querySelector('#dish-rotation');
 const dishModel = document.querySelector('#dish-model');
 const dishPlate = document.querySelector('#dish-plate');
+const desktopEnvironment = document.querySelector('#desktop-environment');
+const sceneCamera = document.querySelector('#scene-camera');
 const ambientLight = document.querySelector('#ambient-light');
 const keyLight = document.querySelector('#key-light');
 const menuButton = document.querySelector('#menu-button');
@@ -364,7 +372,13 @@ const state = {
   recordingStartedAt: 0,
   captureCanvas: null,
   captureContext: null,
-  captureFrameId: null
+  captureFrameId: null,
+  desktopYaw: 0,
+  desktopPitch: 0.28,
+  desktopDistance: 3.25,
+  desktopDragging: false,
+  desktopPointerX: 0,
+  desktopPointerY: 0
 };
 
 function clamp(value, min, max) {
@@ -399,11 +413,13 @@ function hideStatusSoon(delay = 500) {
 }
 
 function applyZoom() {
-  const scale = MODEL_BASE_SCALE * state.zoom;
-  const surfaceZ = state.category === 'meat' ? 0.02 + (0.0125 * state.zoom) : 0.015;
+  const categoryScale = state.category === 'meat' ? 0.5 : 1;
+  const scale = MODEL_BASE_SCALE * categoryScale * state.zoom;
+  const surfaceZ = state.category === 'meat' ? 0.028 : 0.015;
   dishModel.setAttribute('scale', `${scale} ${scale} ${scale}`);
   dishModel.setAttribute('position', `0 0 ${surfaceZ - (state.modelMinY * scale)}`);
-  dishPlate.setAttribute('scale', `${2.45 * state.zoom} ${0.5 * state.zoom} ${2.45 * state.zoom}`);
+  const boardScale = 1.35 * state.zoom;
+  dishPlate.setAttribute('scale', `${boardScale} ${boardScale} ${boardScale}`);
   dishRotation.setAttribute('rotation', `0 0 ${state.rotationZ}`);
   app.style.setProperty('--dish-zoom', state.zoom.toFixed(3));
   app.style.setProperty('--dish-rotation-z', state.rotationZ.toFixed(2));
@@ -506,7 +522,10 @@ function handleModelLoaded(event) {
   applyZoom();
   setProgress(100);
   dishModel.setAttribute('visible', 'true');
-  if (state.targetFound) {
+  if (IS_DESKTOP_SCENE) {
+    setStatus(COPY.desktopReady, COPY.desktopControls, 'ready', true);
+    hideStatusSoon(1400);
+  } else if (state.targetFound) {
     setStatus(COPY.tableFound, COPY.dishAnchored, 'ready', true);
     hideStatusSoon(1100);
   } else {
@@ -811,13 +830,72 @@ async function beginTableCalibration() {
   await startCalibrationPreview();
 }
 
+
+function updateDesktopCamera() {
+  if (!IS_DESKTOP_SCENE || !sceneCamera?.object3D || !window.AFRAME?.THREE) return;
+  const target = new AFRAME.THREE.Vector3(0, 1.02, 0);
+  const horizontal = Math.cos(state.desktopPitch) * state.desktopDistance;
+  sceneCamera.object3D.position.set(
+    Math.sin(state.desktopYaw) * horizontal,
+    target.y + Math.sin(state.desktopPitch) * state.desktopDistance,
+    Math.cos(state.desktopYaw) * horizontal
+  );
+  sceneCamera.object3D.lookAt(target);
+}
+
+function setupDesktopOrbit() {
+  if (!IS_DESKTOP_SCENE) return;
+  const bind = () => {
+    const canvas = arScene.canvas || arScene.renderer?.domElement;
+    if (!canvas || canvas.dataset.desktopOrbit === 'ready') return;
+    canvas.dataset.desktopOrbit = 'ready';
+    canvas.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      state.desktopDragging = true;
+      state.desktopPointerX = event.clientX;
+      state.desktopPointerY = event.clientY;
+      canvas.setPointerCapture?.(event.pointerId);
+    });
+    canvas.addEventListener('pointermove', (event) => {
+      if (!state.desktopDragging) return;
+      state.desktopYaw -= (event.clientX - state.desktopPointerX) * 0.006;
+      state.desktopPitch = clamp(state.desktopPitch + (event.clientY - state.desktopPointerY) * 0.004, 0.08, 0.78);
+      state.desktopPointerX = event.clientX;
+      state.desktopPointerY = event.clientY;
+      updateDesktopCamera();
+    });
+    const stopDrag = () => { state.desktopDragging = false; };
+    canvas.addEventListener('pointerup', stopDrag);
+    canvas.addEventListener('pointercancel', stopDrag);
+    updateDesktopCamera();
+  };
+  if (arScene.hasLoaded) bind();
+  else arScene.addEventListener('loaded', bind, {once: true});
+}
+
+function initializeDesktopScene() {
+  stopCalibrationPreview();
+  tableCalibration.hidden = true;
+  cameraFallback.hidden = true;
+  desktopEnvironment?.setAttribute('visible', 'true');
+  dishAnchor.setAttribute('visible', 'false');
+  dishStableStage.setAttribute('visible', 'true');
+  dishStableStage.setAttribute('position', '0 1.04 0');
+  dishStableStage.setAttribute('rotation', '-90 0 0');
+  state.anchorReady = true;
+  state.targetFound = true;
+  setupDesktopOrbit();
+  setStatus(COPY.desktopReady, COPY.desktopControls, 'ready', true);
+}
+
 async function initializeSession() {
   if (IS_GUEST_MODE) {
     state.user = {guest: true};
     authChecking.hidden = true;
     authRequired.hidden = true;
     authGate.hidden = true;
-    await beginTableCalibration();
+    if (IS_DESKTOP_SCENE) initializeDesktopScene();
+    else await beginTableCalibration();
     return;
   }
   state.user = await checkLogin();
@@ -827,7 +905,8 @@ async function initializeSession() {
     return;
   }
   authGate.hidden = true;
-  await beginTableCalibration();
+  if (IS_DESKTOP_SCENE) initializeDesktopScene();
+  else await beginTableCalibration();
 }
 
 function distanceBetweenTouches(touches) {
@@ -847,7 +926,7 @@ function shortestAngleDelta(current, start) {
 
 function setupTransformControls() {
   app.addEventListener('touchstart', (event) => {
-    if (event.touches.length !== 2) return;
+    if (IS_DESKTOP_SCENE || event.touches.length !== 2) return;
     state.pinchStartDistance = distanceBetweenTouches(event.touches);
     state.pinchStartZoom = state.zoom;
     state.twistStartAngle = angleBetweenTouches(event.touches);
@@ -867,9 +946,16 @@ function setupTransformControls() {
   app.addEventListener('touchcancel', clearGesture, {passive: true});
   app.addEventListener('wheel', (event) => {
     if (!state.targetFound) return;
-    if (event.shiftKey) state.rotationZ += event.deltaY > 0 ? -7.5 : 7.5;
-    else state.zoom = clamp(state.zoom * (event.deltaY > 0 ? 0.92 : 1.08), 0.48, 2.2);
-    applyZoom();
+    if (IS_DESKTOP_SCENE && !event.shiftKey) {
+      state.desktopDistance = clamp(state.desktopDistance * (event.deltaY > 0 ? 1.08 : 0.92), 1.8, 5.2);
+      updateDesktopCamera();
+    } else if (event.shiftKey) {
+      state.rotationZ += event.deltaY > 0 ? -7.5 : 7.5;
+      applyZoom();
+    } else {
+      state.zoom = clamp(state.zoom * (event.deltaY > 0 ? 0.92 : 1.08), 0.48, 2.2);
+      applyZoom();
+    }
     event.preventDefault();
   }, {passive: false});
 }
@@ -1101,7 +1187,9 @@ window.addEventListener('pagehide', () => {
 
 renderMenu();
 prepareDish(currentDish());
-startAnchorStabilization();
+if (!IS_DESKTOP_SCENE) {
+  startAnchorStabilization();
+  setupCaptureControl();
+}
 setupTransformControls();
-setupCaptureControl();
 initializeSession();
