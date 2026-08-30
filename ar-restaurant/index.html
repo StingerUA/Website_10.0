@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#050b1a">
   <meta name="description" content="Alba Space görsel işaretçi tabanlı tarayıcı AR restoran menüsü.">
   <title>AR Menü — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=plate-half-meat-double-mobile-1">
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=desktop-table-board-1">
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
@@ -20,25 +20,41 @@
       renderer="alpha: true; colorManagement: true; physicallyCorrectLights: true; antialias: true">
       <a-entity id="ambient-light" light="type: ambient; color: #ffffff; intensity: 1.7"></a-entity>
       <a-entity id="key-light" light="type: directional; color: #fff4df; intensity: 1.2" position="0 1 1"></a-entity>
+      <a-entity id="desktop-environment" visible="false">
+        <a-sky color="#07101b"></a-sky>
+        <a-plane position="0 0 0" rotation="-90 0 0" width="16" height="16" material="color: #17202a; roughness: 0.92; metalness: 0.04"></a-plane>
+        <a-plane position="0 3 -4" width="16" height="6" material="color: #111a24; roughness: 0.88"></a-plane>
+        <a-plane position="-5 3 0" rotation="0 90 0" width="8" height="6" material="color: #0d1722; roughness: 0.9"></a-plane>
+        <a-box position="0 0.91 0" width="2.8" height="0.14" depth="1.7" material="color: #5c321d; roughness: 0.72; metalness: 0.02"></a-box>
+        <a-box position="-1.14 0.43 -0.61" width="0.13" height="0.86" depth="0.13" material="color: #241711; roughness: 0.8"></a-box>
+        <a-box position="1.14 0.43 -0.61" width="0.13" height="0.86" depth="0.13" material="color: #241711; roughness: 0.8"></a-box>
+        <a-box position="-1.14 0.43 0.61" width="0.13" height="0.86" depth="0.13" material="color: #241711; roughness: 0.8"></a-box>
+        <a-box position="1.14 0.43 0.61" width="0.13" height="0.86" depth="0.13" material="color: #241711; roughness: 0.8"></a-box>
+        <a-plane position="-2.8 2.5 -3.95" width="2.2" height="2.1" material="color: #173c55; emissive: #0b2a40; emissiveIntensity: 0.45"></a-plane>
+        <a-plane position="0 2.5 -3.95" width="2.2" height="2.1" material="color: #18334c; emissive: #091f35; emissiveIntensity: 0.4"></a-plane>
+        <a-plane position="2.8 2.5 -3.95" width="2.2" height="2.1" material="color: #173c55; emissive: #0b2a40; emissiveIntensity: 0.45"></a-plane>
+        <a-entity light="type: point; color: #ffd39a; intensity: 1.8; distance: 7; decay: 2" position="-1.5 3.2 1.1"></a-entity>
+        <a-entity light="type: point; color: #9bdcff; intensity: 1.15; distance: 8; decay: 2" position="2.5 2.4 -1.6"></a-entity>
+      </a-entity>
       <a-entity id="dish-anchor" mindar-image-target="targetIndex: 0"></a-entity>
       <a-entity id="dish-stable-stage" visible="false">
         <a-entity id="dish-rotation" rotation="0 0 0">
           <a-entity id="dish-plate"
-            gltf-model="/assets/models/restaurant/realistic-porcelain-plate.glb?v=plate-half-meat-double-mobile-1"
+            gltf-model="https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/wooden_cutting_board/wooden_cutting_board_1k.gltf"
             position="0 0 0.003"
             rotation="90 0 0"
-            scale="2.45 0.5 2.45"
+            scale="1.35 1.35 1.35"
             visible="true">
           </a-entity>
           <a-entity id="dish-model"
-            gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=plate-half-meat-double-mobile-1"
-            position="0 0 0.0325"
+            gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=desktop-table-board-1"
+            position="0 0 0.028"
             rotation="90 0 0"
-            scale="0.56 0.56 0.56">
+            scale="0.28 0.28 0.28">
           </a-entity>
         </a-entity>
       </a-entity>
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <a-camera id="scene-camera" position="0 0 0" look-controls="enabled: false"></a-camera>
     </a-scene>
 
     <header class="top-bar" aria-label="Gezinme">
@@ -63,7 +79,7 @@
         </div>
         <button id="menu-close" class="menu-close" type="button" aria-label="Menüyü kapat">×</button>
       </div>
-      <p class="menu-anchor-note">Yemekler bu oturumda çektiğiniz masa fotoğrafına bağlanır. İki parmakla yakınlaştırın ve Z ekseninde döndürün.</p>
+      <p class="menu-anchor-note"><span class="mobile-only">Yemekler bu oturumda çektiğiniz masa fotoğrafına bağlanır. İki parmakla yakınlaştırın ve Z ekseninde döndürün.</span><span class="desktop-only">Bilgisayarda kamera ve AR kullanılmaz. Sanal restoran masasını fareyle sürükleyin, tekerlekle yaklaşın.</span></p>
       <button id="recalibrate-button" class="recalibrate-button" type="button">Masayı yeniden fotoğrafla</button>
       <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Yemek kategorileri"></div>
       <div id="menu-item-buttons" class="menu-items" aria-live="polite"></div>
@@ -76,7 +92,7 @@
       <span id="capture-timer" class="capture-timer" aria-live="polite" hidden>00:30</span>
     </div>
 
-    <div class="zoom-hint" aria-hidden="true">İki parmakla yakınlaştırın ve döndürün</div>
+    <div class="zoom-hint" aria-hidden="true"><span class="mobile-only">İki parmakla yakınlaştırın ve döndürün</span><span class="desktop-only">Sürükle: sahne · Tekerlek: yaklaş · Shift + tekerlek: yemek</span></div>
   </main>
 
   <section id="auth-gate" class="session-gate" aria-live="polite">
@@ -114,6 +130,6 @@
     </div>
   </section>
 
-  <script type="module" src="/assets/js/restaurant-ar.js?v=plate-half-meat-double-mobile-1"></script>
+  <script type="module" src="/assets/js/restaurant-ar.js?v=desktop-table-board-1"></script>
 </body>
 </html>
