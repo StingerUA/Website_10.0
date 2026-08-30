@@ -40,6 +40,7 @@ jobs:
       - name: Validate centralized LL2 proxy
         run: |
           node --check cloudflare-worker/worker-with-ll2-cache.js
+          node --check cloudflare-worker/worker-with-ll2-fallback.js
           node --check orbital-catalog.js
           node --check orbital-catalog-core.js
 
