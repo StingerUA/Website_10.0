@@ -399,12 +399,11 @@ function hideStatusSoon(delay = 500) {
 }
 
 function applyZoom() {
-  const categoryScale = state.category === 'meat' ? 0.5 : 1;
-  const scale = MODEL_BASE_SCALE * categoryScale * state.zoom;
-  const surfaceZ = state.category === 'meat' ? 0.04 + (0.025 * state.zoom) : 0.015;
+  const scale = MODEL_BASE_SCALE * state.zoom;
+  const surfaceZ = state.category === 'meat' ? 0.02 + (0.0125 * state.zoom) : 0.015;
   dishModel.setAttribute('scale', `${scale} ${scale} ${scale}`);
   dishModel.setAttribute('position', `0 0 ${surfaceZ - (state.modelMinY * scale)}`);
-  dishPlate.setAttribute('scale', `${4.9 * state.zoom} ${state.zoom} ${4.9 * state.zoom}`);
+  dishPlate.setAttribute('scale', `${2.45 * state.zoom} ${0.5 * state.zoom} ${2.45 * state.zoom}`);
   dishRotation.setAttribute('rotation', `0 0 ${state.rotationZ}`);
   app.style.setProperty('--dish-zoom', state.zoom.toFixed(3));
   app.style.setProperty('--dish-rotation-z', state.rotationZ.toFixed(2));
