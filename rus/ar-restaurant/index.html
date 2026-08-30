@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="tr" data-auth-mode="required">
+<html lang="ru" data-auth-mode="guest">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="theme-color" content="#050b1a">
-  <meta name="description" content="Alba Space görsel işaretçi tabanlı tarayıcı AR restoran menüsü.">
-  <title>AR Menü — Alba Space</title>
+  <meta name="description" content="Браузерное AR-меню Alba Space с привязкой блюд к поверхности стола.">
+  <title>AR-меню — Alba Space</title>
   <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=stable-plate-rotation-ru-2">
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
 <body>
-  <main id="ar-app" class="ar-app" aria-label="Alba Space AR restoran menüsü">
+  <main id="ar-app" class="ar-app" aria-label="AR-меню ресторана Alba Space">
     <a-scene id="ar-scene"
       mindar-image="imageTargetSrc: /assets/ar/alba-table-anchor.mind; autoStart: false; maxTrack: 1; uiLoading: no; uiScanning: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 7; missTolerance: 25"
       embedded
@@ -41,16 +41,16 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
     </a-scene>
 
-    <header class="top-bar" aria-label="Gezinme">
-      <div class="top-brand" aria-label="Alba Space AR Menu">AR <span>MENU</span></div>
-      <button id="menu-button" class="menu-button" type="button" aria-expanded="false" aria-controls="menu-panel">Menü</button>
+    <header class="top-bar" aria-label="Навигация">
+      <div class="top-brand" aria-label="AR-меню Alba Space">AR <span>МЕНЮ</span></div>
+      <button id="menu-button" class="menu-button" type="button" aria-expanded="false" aria-controls="menu-panel">Меню</button>
     </header>
 
     <section id="status-card" class="status-card" aria-live="polite" hidden>
       <div class="loading-mark" aria-hidden="true"><span></span></div>
       <div class="status-copy">
-        <strong id="status-label">Yemek kataloğu yükleniyor</strong>
-        <span id="status-detail">Lütfen bekleyin</span>
+        <strong id="status-label">Каталог блюд загружается</strong>
+        <span id="status-detail">Пожалуйста, подождите</span>
       </div>
       <div class="loading-bar" aria-hidden="true"><span id="loading-progress"></span></div>
     </section>
@@ -59,38 +59,36 @@
       <div class="menu-panel-head">
         <div>
           <span class="menu-kicker">ALBA SPACE</span>
-          <h1 id="menu-title">Menü</h1>
+          <h1 id="menu-title">Меню</h1>
         </div>
-        <button id="menu-close" class="menu-close" type="button" aria-label="Menüyü kapat">×</button>
+        <button id="menu-close" class="menu-close" type="button" aria-label="Закрыть меню">×</button>
       </div>
-      <p class="menu-anchor-note">Yemekler bu oturumda çektiğiniz masa fotoğrafına bağlanır. İki parmakla yakınlaştırın ve Z ekseninde döndürün.</p>
-      <button id="recalibrate-button" class="recalibrate-button" type="button">Masayı yeniden fotoğrafla</button>
-      <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Yemek kategorileri"></div>
+      <p class="menu-anchor-note">Блюда привязываются к фотографии стола, сделанной в этой сессии. Масштабируйте и поворачивайте модель вокруг оси Z двумя пальцами.</p>
+      <button id="recalibrate-button" class="recalibrate-button" type="button">Сфотографировать стол заново</button>
+      <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Категории блюд"></div>
       <div id="menu-item-buttons" class="menu-items" aria-live="polite"></div>
     </section>
 
-    <button id="camera-start-fallback" class="camera-start-fallback" type="button" hidden>Kamerayı başlat</button>
+    <button id="camera-start-fallback" class="camera-start-fallback" type="button" hidden>Запустить камеру</button>
 
-    <div class="capture-dock" aria-label="AR sahnesi çekimi">
-      <button id="capture-button" class="capture-button" type="button" aria-label="Fotoğraf çekmek için kısa, video için uzun basın"></button>
+    <div class="capture-dock" aria-label="Съёмка AR-сцены">
+      <button id="capture-button" class="capture-button" type="button" aria-label="Короткое нажатие — фото, длительное — видео"></button>
       <span id="capture-timer" class="capture-timer" aria-live="polite" hidden>00:30</span>
     </div>
 
-    <div class="zoom-hint" aria-hidden="true">İki parmakla yakınlaştırın ve döndürün</div>
+    <div class="zoom-hint" aria-hidden="true">Двумя пальцами масштабируйте и поворачивайте</div>
   </main>
 
-  <section id="auth-gate" class="session-gate" aria-live="polite">
+  <section id="auth-gate" class="session-gate" aria-live="polite" hidden>
     <div class="gate-card">
       <div id="auth-checking" class="gate-state">
         <div class="gate-spinner" aria-hidden="true"></div>
-        <h1>Giriş kontrol ediliyor</h1>
-        <p>Lütfen bekleyin.</p>
+        <h1>Подготовка гостевой сессии</h1>
+        <p>Пожалуйста, подождите.</p>
       </div>
       <div id="auth-required" class="gate-state" hidden>
-        <div class="gate-icon" aria-hidden="true">🔒</div>
-        <h1>Giriş yapmanız gerekiyor</h1>
-        <p>AR Menü yalnızca Alba Space hesabına giriş yapan kullanıcılar tarafından kullanılabilir.</p>
-        <a id="login-link" class="gate-action" href="/account-menu.html">Giriş yap veya hesap oluştur</a>
+        <h1>Для русской версии вход не требуется</h1>
+        <a id="login-link" class="gate-action" href="/rus/account-menu.html" hidden>Войти</a>
       </div>
     </div>
   </section>
@@ -101,16 +99,16 @@
     <div class="table-shade" aria-hidden="true"></div>
     <div class="table-guide" aria-hidden="true"><span></span></div>
     <div class="calibration-copy">
-      <span class="menu-kicker">MASA YÜZEYİ</span>
-      <h1 id="table-calibration-title">Masa yüzeyinin fotoğrafını çekin</h1>
-      <p id="table-calibration-detail">Telefonu masaya doğrultun. Desenler veya küçük bir nesne görünürse sabitleme daha güçlü olur.</p>
+      <span class="menu-kicker">ПОВЕРХНОСТЬ СТОЛА</span>
+      <h1 id="table-calibration-title">Сфотографируйте поверхность стола</h1>
+      <p id="table-calibration-detail">Наведите телефон на стол. Узоры или небольшой неподвижный предмет сделают привязку устойчивее.</p>
       <div id="calibration-progress" class="calibration-progress" hidden><span></span></div>
     </div>
     <div class="calibration-actions">
-      <button id="table-capture-button" class="table-capture-button" type="button" disabled aria-label="Masa yüzeyini fotoğrafla"></button>
-      <strong id="table-capture-label">Masayı sabitle</strong>
-      <button id="table-retry-button" class="table-retry-button" type="button" hidden>Tekrar dene</button>
-      <small>Fotoğraf yalnızca bu sekmedeki oturumda işlenir ve sunucuya yüklenmez.</small>
+      <button id="table-capture-button" class="table-capture-button" type="button" disabled aria-label="Сфотографировать поверхность стола"></button>
+      <strong id="table-capture-label">Закрепить стол</strong>
+      <button id="table-retry-button" class="table-retry-button" type="button" hidden>Попробовать снова</button>
+      <small>Фотография обрабатывается только в этой вкладке, в рамках текущей сессии, и не загружается на сервер.</small>
     </div>
   </section>
 
