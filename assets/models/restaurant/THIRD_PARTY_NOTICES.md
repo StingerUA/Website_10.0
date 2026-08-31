@@ -1,8 +1,8 @@
-# Third-party restaurant models and AR anchor
+# Third-party restaurant models and AR runtime
 
-## Пользовательский визуальный якорь
+## Прежний визуальный якорь (legacy)
 
-`assets/ar/alba-table-anchor.jpeg` — фотография, предоставленная владельцем сайта в рамках текущей задачи. Она используется как единственный физический image target для AR-меню. `assets/ar/alba-table-anchor.mind` — локально скомпилированный MindAR target-файл, производный от этого JPEG. Для этих двух файлов не добавляется сторонняя лицензия: права на исходное изображение должны оставаться у владельца сайта или быть им разрешены для публикации.
+`assets/ar/alba-table-anchor.jpeg` — фотография, предоставленная владельцем сайта, а `assets/ar/alba-table-anchor.mind` — производный от неё target-файл прежней реализации MindAR. Текущий маршрут AR-меню эти файлы не загружает: поверхность стола определяется стандартным WebXR hit-test либо нативным просмотрщиком телефона. Файлы оставлены только как архив предыдущей реализации.
 
 ## Реалистичные модели меню
 
@@ -14,7 +14,7 @@
 
 `realistic-porcelain-plate.glb` — мобильная glTF 2.0-адаптация открытой модели [`bullet3/data/dinnerware/plate.obj`](https://github.com/bulletphysics/bullet3/blob/master/data/dinnerware/plate.obj). Сохранён измеренный профиль исходной посуды, радиальная сетка сглажена, а материал заменён на компактный PBR-фарфор без внешних текстур. Исходный набор `bullet3/data` распространяется с [разрешительной zlib-подобной лицензией Bullet](https://github.com/bulletphysics/bullet3/blob/master/data/LICENSE.txt); адаптация явно обозначена как изменённая версия. Модель тарелки используется только под блюдами категории мяса.
 
-В текущем наборе используются десять локальных GLB-моделей, ранее скачанных из public gallery Tripo. Страницы Tripo показывали бесплатную загрузку и GLB/GLTF-экспорт; файлы декодированы из `EXT_meshopt_compression` в обычные glTF 2.0 GLB для совместимости с браузерным runtime. Локальное хранение означает, что во время показа блюда страница не зависит от CDN Tripo.
+В текущем наборе используются десять локальных GLB-моделей, ранее скачанных из public gallery Tripo. Страницы Tripo показывали бесплатную загрузку и GLB/GLTF-экспорт; исходные локальные файлы декодированы из `EXT_meshopt_compression` для ПК-сцены. В каталоге `assets/models/restaurant/ar/` находятся производные мобильные копии с Draco-сжатием и физическим масштабом в метрах: 0,28 для мясных блюд и 0,56 для остальных. Локальное хранение означает, что во время показа блюда страница не зависит от CDN Tripo.
 
 > **Важно о правах.** На проверенных индивидуальных карточках Tripo не была показана стандартная CC0, CC BY или другая явная лицензия, разрешающая перераспределение файлов. Поэтому ниже сохранены источники и имена создателей, но модели не объявляются CC0/CC BY и не должны считаться юридически очищенными для коммерческой републикации без дополнительного разрешения. Ссылка на официальный Tripo pricing также различает бесплатные public models и коммерческое использование платных планов. Это предупреждение намеренно не скрывается.
 
@@ -37,6 +37,6 @@
 
 ## Runtime dependencies
 
-The route loads [A-Frame 1.5.0](https://aframe.io/) and [MindAR 1.2.5](https://github.com/hiukim/mind-ar-js) from public CDNs. MindAR is used as a browser runtime, while the target file itself is hosted locally. The capture implementation uses browser Canvas and MediaRecorder APIs; no native application, Unity project, paid API, or server-side image tracking is required.
+На мобильных устройствах маршрут использует локальную копию [Google `<model-viewer>`](https://modelviewer.dev/) 3.0.0 (Apache-2.0) с приоритетом WebXR и резервными режимами Android Scene Viewer / Apple Quick Look. WebXR использует стандартный hit-test поверхности и оценку освещения; фотография стола и серверное распознавание не применяются. A-Frame 1.5.0 загружается с официального CDN только для отдельной ПК-сцены виртуального ресторана.
 
-The former `alba-table-anchor.svg` QR marker and older low-poly restaurant files remain in the repository as legacy assets, but the new AR route does not use them.
+Прежние `alba-table-anchor.svg`, JPEG/Mind target и старые low-poly restaurant files остаются в репозитории как legacy-ресурсы, но новый AR-маршрут их не использует.

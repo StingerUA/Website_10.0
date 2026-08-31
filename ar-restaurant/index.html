@@ -4,16 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="theme-color" content="#050b1a">
-  <meta name="description" content="Alba Space görsel işaretçi tabanlı tarayıcı AR restoran menüsü.">
+  <meta name="description" content="Google WebXR, Scene Viewer ve Apple Quick Look destekli Alba Space AR restoran menüsü.">
   <title>AR Menü — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=daylight-restaurant-table-1">
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=model-viewer-ar-1">
+  <script type="module" src="/assets/js/model-viewer.min.js"></script>
 </head>
 <body>
-  <main id="ar-app" class="ar-app" aria-label="Alba Space AR restoran menüsü">
+  <main id="ar-app" class="ar-app" aria-label="Alba Space AR restoran menüsü" data-ar-status="not-presenting">
+    <model-viewer id="mobile-model-viewer"
+      class="mobile-model-viewer"
+      alt="Alba Space restoran menüsünden üç boyutlu yemek"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      ar-placement="floor"
+      ar-scale="auto"
+      camera-controls
+      touch-action="none"
+      interaction-prompt="auto"
+      interaction-prompt-threshold="1800"
+      camera-orbit="25deg 68deg auto"
+      min-camera-orbit="auto 20deg auto"
+      max-camera-orbit="auto 88deg auto"
+      shadow-intensity="1.15"
+      shadow-softness="0.85"
+      exposure="1.15"
+      environment-image="neutral"
+      xr-environment
+      loading="eager"
+      reveal="auto">
+    </model-viewer>
+
     <a-scene id="ar-scene"
-      mindar-image="imageTargetSrc: /assets/ar/alba-table-anchor.mind; autoStart: false; maxTrack: 1; uiLoading: no; uiScanning: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 7; missTolerance: 25"
       embedded
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
@@ -49,7 +70,6 @@
         <a-entity light="type: directional; color: #d7efff; intensity: 0.85" position="3 2 -2"></a-entity>
         <a-entity light="type: point; color: #ffd89d; intensity: 0.7; distance: 5; decay: 2" position="0 2.8 1.2"></a-entity>
       </a-entity>
-      <a-entity id="dish-anchor" mindar-image-target="targetIndex: 0"></a-entity>
       <a-entity id="dish-stable-stage" visible="false">
         <a-entity id="dish-rotation" rotation="0 0 0">
           <a-entity id="dish-plate"
@@ -59,53 +79,61 @@
             scale="1.35 1.35 1.35"
             visible="true">
           </a-entity>
-          <a-entity id="dish-model"
-            gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=daylight-restaurant-table-1"
-            position="0 0 0.028"
-            rotation="90 0 0"
-            scale="0.28 0.28 0.28">
-          </a-entity>
+          <a-entity id="dish-model" position="0 0 0.028" rotation="90 0 0" scale="0.28 0.28 0.28"></a-entity>
         </a-entity>
       </a-entity>
       <a-camera id="scene-camera" position="0 1.6 3.15" rotation="-12 0 0" fov="50" look-controls="enabled: false"></a-camera>
     </a-scene>
 
-    <header class="top-bar" aria-label="Gezinme">
-      <div class="top-brand" aria-label="Alba Space AR Menu">AR <span>MENU</span></div>
-      <button id="menu-button" class="menu-button" type="button" aria-expanded="false" aria-controls="menu-panel">Menü</button>
-    </header>
+    <button id="ar-launch-button" class="ar-launch-button" slot="ar-button" type="button">
+      <span class="ar-launch-icon" aria-hidden="true">⌗</span>
+      <span>Masaya yerleştir</span>
+    </button>
+    <button id="ar-exit-button" class="ar-exit-button" slot="exit-webxr-ar-button" type="button" aria-label="AR görünümünden çık">×</button>
 
-    <section id="status-card" class="status-card" aria-live="polite" hidden>
-      <div class="loading-mark" aria-hidden="true"><span></span></div>
-      <div class="status-copy">
-        <strong id="status-label">Yemek kataloğu yükleniyor</strong>
-        <span id="status-detail">Lütfen bekleyin</span>
-      </div>
-      <div class="loading-bar" aria-hidden="true"><span id="loading-progress"></span></div>
-    </section>
+    <div id="experience-ui" class="experience-ui">
+      <header class="top-bar" aria-label="Gezinme">
+        <div class="top-brand" aria-label="Alba Space AR Menu">AR <span>MENU</span></div>
+        <button id="menu-button" class="menu-button" type="button" aria-expanded="false" aria-controls="menu-panel">Menü</button>
+      </header>
 
-    <section id="menu-panel" class="menu-panel" hidden aria-labelledby="menu-title">
-      <div class="menu-panel-head">
-        <div>
-          <span class="menu-kicker">ALBA SPACE</span>
-          <h1 id="menu-title">Menü</h1>
+      <section id="status-card" class="status-card" aria-live="polite" hidden>
+        <div class="loading-mark" aria-hidden="true"><span></span></div>
+        <div class="status-copy">
+          <strong id="status-label">Yemek kataloğu yükleniyor</strong>
+          <span id="status-detail">Lütfen bekleyin</span>
         </div>
-        <button id="menu-close" class="menu-close" type="button" aria-label="Menüyü kapat">×</button>
-      </div>
-      <p class="menu-anchor-note"><span class="mobile-only">Yemekler bu oturumda çektiğiniz masa fotoğrafına bağlanır. İki parmakla yakınlaştırın ve Z ekseninde döndürün.</span><span class="desktop-only">Bilgisayarda kamera ve AR kullanılmaz. Sanal restoran masasını fareyle sürükleyin, tekerlekle yaklaşın.</span></p>
-      <button id="recalibrate-button" class="recalibrate-button" type="button">Masayı yeniden fotoğrafla</button>
-      <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Yemek kategorileri"></div>
-      <div id="menu-item-buttons" class="menu-items" aria-live="polite"></div>
-    </section>
+        <div class="loading-bar" aria-hidden="true"><span id="loading-progress"></span></div>
+      </section>
 
-    <button id="camera-start-fallback" class="camera-start-fallback" type="button" hidden>Kamerayı başlat</button>
+      <section id="surface-prompt" class="surface-prompt" aria-live="polite" hidden>
+        <span class="surface-scan-icon" aria-hidden="true"></span>
+        <strong>Kamerayı masanın üzerinde yavaşça gezdirin</strong>
+        <small>Telefon yüzeyi algıladığında yemek otomatik olarak yerleştirilir.</small>
+      </section>
 
-    <div class="capture-dock" aria-label="AR sahnesi çekimi">
-      <button id="capture-button" class="capture-button" type="button" aria-label="Fotoğraf çekmek için kısa, video için uzun basın"></button>
-      <span id="capture-timer" class="capture-timer" aria-live="polite" hidden>00:30</span>
+      <section id="viewer-intro" class="viewer-intro" aria-live="polite">
+        <span class="menu-kicker">ALBA SPACE · WEBXR</span>
+        <strong id="viewer-dish-name">Alba Reserve Steak</strong>
+        <small>Yemeği inceleyin veya AR ile gerçek masanıza yerleştirin.</small>
+      </section>
+
+      <section id="menu-panel" class="menu-panel" hidden aria-labelledby="menu-title">
+        <div class="menu-panel-head">
+          <div>
+            <span class="menu-kicker">ALBA SPACE</span>
+            <h1 id="menu-title">Menü</h1>
+          </div>
+          <button id="menu-close" class="menu-close" type="button" aria-label="Menüyü kapat">×</button>
+        </div>
+        <p class="menu-anchor-note"><span class="mobile-only">“Masaya yerleştir”e dokunun ve yüzey bulunana kadar kamerayı yavaşça gezdirin. Yemeği iki parmakla ölçeklendirebilir ve dikey eksende döndürebilirsiniz. WebXR yoksa telefonun standart AR görüntüleyicisi açılır.</span><span class="desktop-only">Bilgisayarda kamera ve AR kullanılmaz. Sanal restoran masasını fareyle sürükleyin, tekerlekle yaklaşın.</span></p>
+        <button id="recalibrate-button" class="recalibrate-button" type="button">AR görünümünü aç</button>
+        <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Yemek kategorileri"></div>
+        <div id="menu-item-buttons" class="menu-items" aria-live="polite"></div>
+      </section>
+
+      <div class="zoom-hint" aria-hidden="true"><span class="mobile-only">AR: sürükle · iki parmakla ölçeklendir ve döndür</span><span class="desktop-only">Sürükle: sahne · Tekerlek: yaklaş · Shift + tekerlek: yemek</span></div>
     </div>
-
-    <div class="zoom-hint" aria-hidden="true"><span class="mobile-only">İki parmakla yakınlaştırın ve döndürün</span><span class="desktop-only">Sürükle: sahne · Tekerlek: yaklaş · Shift + tekerlek: yemek</span></div>
   </main>
 
   <section id="auth-gate" class="session-gate" aria-live="polite">
@@ -124,25 +152,6 @@
     </div>
   </section>
 
-  <section id="table-calibration" class="table-calibration" hidden aria-labelledby="table-calibration-title">
-    <video id="table-preview" class="table-preview" autoplay muted playsinline></video>
-    <canvas id="table-freeze" class="table-preview" hidden></canvas>
-    <div class="table-shade" aria-hidden="true"></div>
-    <div class="table-guide" aria-hidden="true"><span></span></div>
-    <div class="calibration-copy">
-      <span class="menu-kicker">MASA YÜZEYİ</span>
-      <h1 id="table-calibration-title">Masa yüzeyinin fotoğrafını çekin</h1>
-      <p id="table-calibration-detail">Telefonu masaya doğrultun. Desenler veya küçük bir nesne görünürse sabitleme daha güçlü olur.</p>
-      <div id="calibration-progress" class="calibration-progress" hidden><span></span></div>
-    </div>
-    <div class="calibration-actions">
-      <button id="table-capture-button" class="table-capture-button" type="button" disabled aria-label="Masa yüzeyini fotoğrafla"></button>
-      <strong id="table-capture-label">Masayı sabitle</strong>
-      <button id="table-retry-button" class="table-retry-button" type="button" hidden>Tekrar dene</button>
-      <small>Fotoğraf yalnızca bu sekmedeki oturumda işlenir ve sunucuya yüklenmez.</small>
-    </div>
-  </section>
-
-  <script type="module" src="/assets/js/restaurant-ar.js?v=daylight-restaurant-table-1"></script>
+  <script type="module" src="/assets/js/restaurant-model-viewer.js?v=model-viewer-ar-1"></script>
 </body>
 </html>
