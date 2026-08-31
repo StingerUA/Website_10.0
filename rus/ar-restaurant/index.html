@@ -4,16 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="theme-color" content="#050b1a">
-  <meta name="description" content="Браузерное AR-меню Alba Space с привязкой блюд к поверхности стола.">
+  <meta name="description" content="AR-меню ресторана Alba Space на Google WebXR, Scene Viewer и Apple Quick Look.">
   <title>AR-меню — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=daylight-restaurant-table-1">
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=model-viewer-ar-1">
+  <script type="module" src="/assets/js/model-viewer.min.js"></script>
 </head>
 <body>
-  <main id="ar-app" class="ar-app" aria-label="AR-меню ресторана Alba Space">
+  <main id="ar-app" class="ar-app" aria-label="AR-меню ресторана Alba Space" data-ar-status="not-presenting">
+    <model-viewer id="mobile-model-viewer"
+      class="mobile-model-viewer"
+      alt="Трёхмерная модель блюда из меню ресторана Alba Space"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      ar-placement="floor"
+      ar-scale="auto"
+      camera-controls
+      touch-action="none"
+      interaction-prompt="auto"
+      interaction-prompt-threshold="1800"
+      camera-orbit="25deg 68deg auto"
+      min-camera-orbit="auto 20deg auto"
+      max-camera-orbit="auto 88deg auto"
+      shadow-intensity="1.15"
+      shadow-softness="0.85"
+      exposure="1.15"
+      environment-image="neutral"
+      xr-environment
+      loading="eager"
+      reveal="auto">
+    </model-viewer>
+
     <a-scene id="ar-scene"
-      mindar-image="imageTargetSrc: /assets/ar/alba-table-anchor.mind; autoStart: false; maxTrack: 1; uiLoading: no; uiScanning: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 7; missTolerance: 25"
       embedded
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
@@ -49,7 +70,6 @@
         <a-entity light="type: directional; color: #d7efff; intensity: 0.85" position="3 2 -2"></a-entity>
         <a-entity light="type: point; color: #ffd89d; intensity: 0.7; distance: 5; decay: 2" position="0 2.8 1.2"></a-entity>
       </a-entity>
-      <a-entity id="dish-anchor" mindar-image-target="targetIndex: 0"></a-entity>
       <a-entity id="dish-stable-stage" visible="false">
         <a-entity id="dish-rotation" rotation="0 0 0">
           <a-entity id="dish-plate"
@@ -59,53 +79,61 @@
             scale="1.35 1.35 1.35"
             visible="true">
           </a-entity>
-          <a-entity id="dish-model"
-            gltf-model="/assets/models/restaurant/realistic-steak-board.glb?v=daylight-restaurant-table-1"
-            position="0 0 0.028"
-            rotation="90 0 0"
-            scale="0.28 0.28 0.28">
-          </a-entity>
+          <a-entity id="dish-model" position="0 0 0.028" rotation="90 0 0" scale="0.28 0.28 0.28"></a-entity>
         </a-entity>
       </a-entity>
       <a-camera id="scene-camera" position="0 1.6 3.15" rotation="-12 0 0" fov="50" look-controls="enabled: false"></a-camera>
     </a-scene>
 
-    <header class="top-bar" aria-label="Навигация">
-      <div class="top-brand" aria-label="AR-меню Alba Space">AR <span>МЕНЮ</span></div>
-      <button id="menu-button" class="menu-button" type="button" aria-expanded="false" aria-controls="menu-panel">Меню</button>
-    </header>
+    <button id="ar-launch-button" class="ar-launch-button" slot="ar-button" type="button">
+      <span class="ar-launch-icon" aria-hidden="true">⌗</span>
+      <span>Разместить на столе</span>
+    </button>
+    <button id="ar-exit-button" class="ar-exit-button" slot="exit-webxr-ar-button" type="button" aria-label="Выйти из AR">×</button>
 
-    <section id="status-card" class="status-card" aria-live="polite" hidden>
-      <div class="loading-mark" aria-hidden="true"><span></span></div>
-      <div class="status-copy">
-        <strong id="status-label">Каталог блюд загружается</strong>
-        <span id="status-detail">Пожалуйста, подождите</span>
-      </div>
-      <div class="loading-bar" aria-hidden="true"><span id="loading-progress"></span></div>
-    </section>
+    <div id="experience-ui" class="experience-ui">
+      <header class="top-bar" aria-label="Навигация">
+        <div class="top-brand" aria-label="AR-меню Alba Space">AR <span>МЕНЮ</span></div>
+        <button id="menu-button" class="menu-button" type="button" aria-expanded="false" aria-controls="menu-panel">Меню</button>
+      </header>
 
-    <section id="menu-panel" class="menu-panel" hidden aria-labelledby="menu-title">
-      <div class="menu-panel-head">
-        <div>
-          <span class="menu-kicker">ALBA SPACE</span>
-          <h1 id="menu-title">Меню</h1>
+      <section id="status-card" class="status-card" aria-live="polite" hidden>
+        <div class="loading-mark" aria-hidden="true"><span></span></div>
+        <div class="status-copy">
+          <strong id="status-label">Каталог блюд загружается</strong>
+          <span id="status-detail">Пожалуйста, подождите</span>
         </div>
-        <button id="menu-close" class="menu-close" type="button" aria-label="Закрыть меню">×</button>
-      </div>
-      <p class="menu-anchor-note"><span class="mobile-only">Блюда привязываются к фотографии стола, сделанной в этой сессии. Масштабируйте и поворачивайте модель вокруг оси Z двумя пальцами.</span><span class="desktop-only">На компьютере камера и AR отключены. Перетаскивайте виртуальную ресторанную сцену мышью, колесом приближайте.</span></p>
-      <button id="recalibrate-button" class="recalibrate-button" type="button">Сфотографировать стол заново</button>
-      <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Категории блюд"></div>
-      <div id="menu-item-buttons" class="menu-items" aria-live="polite"></div>
-    </section>
+        <div class="loading-bar" aria-hidden="true"><span id="loading-progress"></span></div>
+      </section>
 
-    <button id="camera-start-fallback" class="camera-start-fallback" type="button" hidden>Запустить камеру</button>
+      <section id="surface-prompt" class="surface-prompt" aria-live="polite" hidden>
+        <span class="surface-scan-icon" aria-hidden="true"></span>
+        <strong>Медленно поводите камерой над столом</strong>
+        <small>Когда телефон распознает поверхность, блюдо разместится автоматически.</small>
+      </section>
 
-    <div class="capture-dock" aria-label="Съёмка AR-сцены">
-      <button id="capture-button" class="capture-button" type="button" aria-label="Короткое нажатие — фото, длительное — видео"></button>
-      <span id="capture-timer" class="capture-timer" aria-live="polite" hidden>00:30</span>
+      <section id="viewer-intro" class="viewer-intro" aria-live="polite">
+        <span class="menu-kicker">ALBA SPACE · WEBXR</span>
+        <strong id="viewer-dish-name">Фирменный стейк Alba</strong>
+        <small>Рассмотрите блюдо или разместите его на настоящем столе в AR.</small>
+      </section>
+
+      <section id="menu-panel" class="menu-panel" hidden aria-labelledby="menu-title">
+        <div class="menu-panel-head">
+          <div>
+            <span class="menu-kicker">ALBA SPACE</span>
+            <h1 id="menu-title">Меню</h1>
+          </div>
+          <button id="menu-close" class="menu-close" type="button" aria-label="Закрыть меню">×</button>
+        </div>
+        <p class="menu-anchor-note"><span class="mobile-only">Нажмите «Разместить на столе» и медленно поводите камерой, пока телефон не найдёт поверхность. Двумя пальцами можно менять размер и поворачивать блюдо вокруг вертикальной оси. Если WebXR недоступен, откроется стандартный AR‑просмотрщик телефона.</span><span class="desktop-only">На компьютере камера и AR отключены. Перетаскивайте виртуальную ресторанную сцену мышью, колесом приближайте.</span></p>
+        <button id="recalibrate-button" class="recalibrate-button" type="button">Открыть AR-просмотр</button>
+        <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Категории блюд"></div>
+        <div id="menu-item-buttons" class="menu-items" aria-live="polite"></div>
+      </section>
+
+      <div class="zoom-hint" aria-hidden="true"><span class="mobile-only">AR: перемещение · двумя пальцами масштаб и поворот</span><span class="desktop-only">Перетаскивание: сцена · Колесо: масштаб · Shift + колесо: блюдо</span></div>
     </div>
-
-    <div class="zoom-hint" aria-hidden="true"><span class="mobile-only">Двумя пальцами масштабируйте и поворачивайте</span><span class="desktop-only">Перетаскивание: сцена · Колесо: масштаб · Shift + колесо: блюдо</span></div>
   </main>
 
   <section id="auth-gate" class="session-gate" aria-live="polite" hidden>
@@ -122,25 +150,6 @@
     </div>
   </section>
 
-  <section id="table-calibration" class="table-calibration" hidden aria-labelledby="table-calibration-title">
-    <video id="table-preview" class="table-preview" autoplay muted playsinline></video>
-    <canvas id="table-freeze" class="table-preview" hidden></canvas>
-    <div class="table-shade" aria-hidden="true"></div>
-    <div class="table-guide" aria-hidden="true"><span></span></div>
-    <div class="calibration-copy">
-      <span class="menu-kicker">ПОВЕРХНОСТЬ СТОЛА</span>
-      <h1 id="table-calibration-title">Сфотографируйте поверхность стола</h1>
-      <p id="table-calibration-detail">Наведите телефон на стол. Узоры или небольшой неподвижный предмет сделают привязку устойчивее.</p>
-      <div id="calibration-progress" class="calibration-progress" hidden><span></span></div>
-    </div>
-    <div class="calibration-actions">
-      <button id="table-capture-button" class="table-capture-button" type="button" disabled aria-label="Сфотографировать поверхность стола"></button>
-      <strong id="table-capture-label">Закрепить стол</strong>
-      <button id="table-retry-button" class="table-retry-button" type="button" hidden>Попробовать снова</button>
-      <small>Фотография обрабатывается только в этой вкладке, в рамках текущей сессии, и не загружается на сервер.</small>
-    </div>
-  </section>
-
-  <script type="module" src="/assets/js/restaurant-ar.js?v=daylight-restaurant-table-1"></script>
+  <script type="module" src="/assets/js/restaurant-model-viewer.js?v=model-viewer-ar-1"></script>
 </body>
 </html>

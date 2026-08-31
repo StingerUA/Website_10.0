@@ -53,3 +53,9 @@ jobs:
         run: |
           node --check assets/js/blog-enhancements.js
           node -e "JSON.parse(require('fs').readFileSync('assets/data/blog-authors.json','utf8'))"
+
+      - name: Validate restaurant AR engine and mobile models
+        run: |
+          node --check assets/js/restaurant-model-viewer.js
+          node --check scripts/bake-restaurant-ar-scale.mjs
+          python scripts/check-glb-extensions.py assets/models/restaurant/ar/*.glb
