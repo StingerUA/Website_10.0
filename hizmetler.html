@@ -59,9 +59,23 @@
     .btn-settings { background-color: transparent !important; color: #000000 !important; border-color: rgba(0,0,0,0.2) !important; }
     .btn-accept { background-color: #000 !important; color: #fff !important; }
   </style>
+
+  <style>
+    /* Desktop only: exactly 1.5 cm between the header and the first content block. */
+    @media (min-width: 1024px) {
+      body.services-page.services-page [data-include="/header-tr.html"] {
+        margin-bottom: 0 !important;
+      }
+
+      body.services-page main.page {
+        margin-top: 0 !important;
+        padding-top: 1.5cm !important;
+      }
+    }
+  </style>
 </head>
 
-<body>
+<body class="services-page">
   <div data-include="/header-tr.html"></div>
 
   <main class="page">
@@ -160,7 +174,7 @@
       const acceptBtn = document.getElementById("btnAccept");
       const settingsBtn = document.getElementById("btnSettings");
 
-      // Üst buton: Animasyon ve Kapatma
+      // Üст buton: Animasyon ve Kapatma
       if(acceptBtn) {
           acceptBtn.addEventListener("click", function() {
               // Butona basıldığını hissettirmek için ufak bir bekleme (opsiyonel)
