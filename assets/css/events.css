@@ -201,3 +201,21 @@
     font-size: 24px;
   }
 }
+
+/* Keep portrait/square event posters fully visible when requested in events.json. */
+.events-card-cover--contain{
+  padding: 8px;
+  box-sizing: border-box;
+  background: #020617;
+}
+
+.events-card-cover--contain img{
+  object-fit: contain;
+}
+
+.events-article-cover--contain{
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  background: #020617;
+}

@@ -53,8 +53,9 @@
 
       grid.innerHTML = events.map(function (event) {
         var loc = event.locales[LOCALE] || event.locales.tr;
+        var coverClass = event.coverFit === 'contain' ? ' events-card-cover--contain' : '';
         return '<a class="events-card" href="' + loc.url + '">' +
-          '<div class="events-card-cover"><img src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '" loading="lazy"></div>' +
+          '<div class="events-card-cover' + coverClass + '"><img src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '" loading="lazy"></div>' +
           '<div class="events-card-body">' +
             '<span class="events-card-tag">' + escapeHtml(categoryLabel(data, event.category)) + '</span>' +
             '<h3 class="events-card-title">' + escapeHtml(loc.title) + '</h3>' +
@@ -96,7 +97,7 @@
           '<span>•</span>' +
           '<span>' + escapeHtml(event.contact) + '</span>' +
         '</div>' +
-        '<img class="events-article-cover" src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '">' +
+        '<img class="events-article-cover' + (event.coverFit === 'contain' ? ' events-article-cover--contain' : '') + '" src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '">' +
         '<div class="events-article-body">' +
           '<p><strong>' + escapeHtml(loc.hero) + '</strong></p>' +
           body +

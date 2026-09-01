@@ -1,7 +1,17 @@
 {
   "categories": {
-    "astronomi": { "tr": "Astronomi", "en": "Astronomy", "ru": "Астрономия", "ar": "علم الفلك" },
-    "egitim": { "tr": "Eğitim", "en": "Education", "ru": "Образование", "ar": "التعليم" }
+    "astronomi": {
+      "tr": "Astronomi",
+      "en": "Astronomy",
+      "ru": "Астрономия",
+      "ar": "علم الفلك"
+    },
+    "egitim": {
+      "tr": "Eğitim",
+      "en": "Education",
+      "ru": "Образование",
+      "ar": "التعليم"
+    }
   },
   "events": [
     {
@@ -12,8 +22,20 @@
       "cover": "/assets/pictures/meteor-event.jpeg",
       "location": "Pozantı / Belemedik",
       "contact": "0544 258 45 85",
-      "organizers": ["Yeşilay Adana", "AlbaSpace"],
-      "hashtags": ["#YeşilayAdana", "#AlbaSpace", "#Perseid", "#MeteorYağmuru", "#GökyüzüGözlemi", "#Belemedik", "#Pozantı", "#Adana"],
+      "organizers": [
+        "Yeşilay Adana",
+        "AlbaSpace"
+      ],
+      "hashtags": [
+        "#YeşilayAdana",
+        "#AlbaSpace",
+        "#Perseid",
+        "#MeteorYağmuru",
+        "#GökyüzüGözlemi",
+        "#Belemedik",
+        "#Pozantı",
+        "#Adana"
+      ],
       "locales": {
         "tr": {
           "title": "Perseid Meteor Yağmuru Gözlem Kampı",
@@ -57,8 +79,16 @@
       "cover": "/assets/images/ivent.jpeg",
       "location": "Adana / TÜRKİYE",
       "contact": "AlbaSpace",
-      "organizers": ["AlbaSpace"],
-      "hashtags": ["#AlbaSpace", "#HyperKids", "#SummerCamp", "#Adana", "#UzayEğitimi"],
+      "organizers": [
+        "AlbaSpace"
+      ],
+      "hashtags": [
+        "#AlbaSpace",
+        "#HyperKids",
+        "#SummerCamp",
+        "#Adana",
+        "#UzayEğitimi"
+      ],
       "locales": {
         "tr": {
           "title": "ALBA Hyper Kids Summer Camp",
@@ -102,8 +132,17 @@
       "cover": "/assets/images/ivent1.jpeg",
       "location": "Ankara / TÜRKİYE",
       "contact": "AlbaSpace",
-      "organizers": ["AlbaSpace", "TUA"],
-      "hashtags": ["#TUA", "#AstroHackathon", "#AlbaSpace", "#Ankara", "#UzayTeknolojisi"],
+      "organizers": [
+        "AlbaSpace",
+        "TUA"
+      ],
+      "hashtags": [
+        "#TUA",
+        "#AstroHackathon",
+        "#AlbaSpace",
+        "#Ankara",
+        "#UzayTeknolojisi"
+      ],
       "locales": {
         "tr": {
           "title": "TUA Astro Hackathon Finali",
@@ -147,8 +186,17 @@
       "cover": "/assets/images/ivent2.jpeg",
       "location": "Aydın / TÜRKİYE",
       "contact": "AlbaSpace",
-      "organizers": ["TEDxAydın", "AlbaSpace"],
-      "hashtags": ["#TEDx", "#Aydın", "#AlbaSpace", "#İnovasyon", "#Yaratıcılık"],
+      "organizers": [
+        "TEDxAydın",
+        "AlbaSpace"
+      ],
+      "hashtags": [
+        "#TEDx",
+        "#Aydın",
+        "#AlbaSpace",
+        "#İnovasyon",
+        "#Yaratıcılık"
+      ],
       "locales": {
         "tr": {
           "title": "Aydın TEDx",
@@ -192,8 +240,17 @@
       "cover": "/assets/images/ivent3.jpeg",
       "location": "Antalya / TÜRKİYE",
       "contact": "AlbaSpace",
-      "organizers": ["IAC", "AlbaSpace"],
-      "hashtags": ["#IAC", "#Antalya", "#Uzay", "#UluslararasıEtkinlik", "#AlbaSpace"],
+      "organizers": [
+        "IAC",
+        "AlbaSpace"
+      ],
+      "hashtags": [
+        "#IAC",
+        "#Antalya",
+        "#Uzay",
+        "#UluslararasıEtkinlik",
+        "#AlbaSpace"
+      ],
       "locales": {
         "tr": {
           "title": "International Astronautical Congress (IAC)",
@@ -237,8 +294,16 @@
       "cover": "/assets/images/ivent4.jpeg",
       "location": "TÜRKİYE",
       "contact": "AlbaSpace",
-      "organizers": ["AlbaSpace"],
-      "hashtags": ["#DünyaUzayHaftası", "#Uzay", "#Bilim", "#AlbaSpace", "#Eğitim"],
+      "organizers": [
+        "AlbaSpace"
+      ],
+      "hashtags": [
+        "#DünyaUzayHaftası",
+        "#Uzay",
+        "#Bilim",
+        "#AlbaSpace",
+        "#Eğitim"
+      ],
       "locales": {
         "tr": {
           "title": "Dünya Uzay Haftası",
@@ -282,8 +347,17 @@
       "cover": "/assets/images/ivent5.jpeg",
       "location": "Adana / TÜRKİYE",
       "contact": "AlbaSpace",
-      "organizers": ["Yeşilay Adana", "AlbaSpace"],
-      "hashtags": ["#Yeşilay", "#AileFestivali", "#Adana", "#AlbaSpace", "#Toplum"],
+      "organizers": [
+        "Yeşilay Adana",
+        "AlbaSpace"
+      ],
+      "hashtags": [
+        "#Yeşilay",
+        "#AileFestivali",
+        "#Adana",
+        "#AlbaSpace",
+        "#Toplum"
+      ],
       "locales": {
         "tr": {
           "title": "Yeşilay Aile Festivali",
@@ -327,8 +401,17 @@
       "cover": "/assets/images/ivent6.jpeg",
       "location": "Adana / TÜRKİYE",
       "contact": "AlbaSpace",
-      "organizers": ["NASA Space Apps Challenge", "AlbaSpace"],
-      "hashtags": ["#NASA", "#SpaceApps", "#Adana", "#Uzay", "#AlbaSpace"],
+      "organizers": [
+        "NASA Space Apps Challenge",
+        "AlbaSpace"
+      ],
+      "hashtags": [
+        "#NASA",
+        "#SpaceApps",
+        "#Adana",
+        "#Uzay",
+        "#AlbaSpace"
+      ],
       "locales": {
         "tr": {
           "title": "NASA Space Apps Challenge",
@@ -446,6 +529,102 @@
             "اكتشاف فوهات القمر",
             "تجربة لمشاهدة السماء ليلًا في منتزه مركز",
             "التسجيل: رابط الاستمارة في الملف التعريفي"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "ham5a-sehirden-kacis-2026",
+      "category": "astronomi",
+      "startAt": "2026-09-05T00:00:00+03:00",
+      "endAt": "2026-09-06T23:59:59+03:00",
+      "cover": "/assets/images/ham5a-sehirden-kacis-2026.webp",
+      "coverFit": "contain",
+      "location": "Saklı Cennet Karataş / Adana",
+      "contact": "+90 532 377 28 01",
+      "organizers": [
+        "HAM5A",
+        "AlbaSpace"
+      ],
+      "hashtags": [
+        "#HAM5A",
+        "#AlbaSpace",
+        "#Karataş",
+        "#UzayDeneyimi",
+        "#TeleskopGözlemi",
+        "#Adana"
+      ],
+      "locales": {
+        "tr": {
+          "title": "HAM5A – İki Günlük Şehirden Kaçış",
+          "excerpt": "VR ile uzay deneyimi ve teleskop gözlemleriyle bilime, keşfe ve ilhama ayrılmış iki gün.",
+          "url": "/etkinlikler/ham5a-sehirden-kacis-2026.html",
+          "hero": "5–6 Eylül 2026 tarihlerinde Saklı Cennet Karataş’ta, şehrin gürültüsünden uzaklaşıp uzayı birlikte keşfediyoruz.",
+          "body": [
+            "HAM5A ve AlbaSpace iş birliğiyle düzenlenen bu iki günlük buluşmada katılımcılar, VR teknolojisi sayesinde kendilerini uzayın sınırlarında hissedecek ve büyüleyici bir keşif yolculuğuna çıkacak.",
+            "Teleskoplarla Güneş’i, Ay’ı ve gözlem koşullarına göre gezegenleri yakından inceleyeceğiz. Bilimle dolu ve ilham veren bu deneyime tüm meraklılar davetlidir.",
+            "Biletler sınırlı sayıdadır. Bilgi ve rezervasyon için +90 532 377 28 01 numaralı telefonu arayabilirsiniz."
+          ],
+          "highlights": [
+            "VR ile uzay deneyimi",
+            "Teleskopla Güneş gözlemi",
+            "Ay ve gezegen gözlemleri",
+            "Saklı Cennet Karataş’ta iki günlük etkinlik",
+            "Sınırlı sayıda bilet"
+          ]
+        },
+        "en": {
+          "title": "HAM5A – A Two-Day Escape from the City",
+          "excerpt": "Two inspiring days of space exploration in VR and telescope observations.",
+          "url": "/etkinlikler/ham5a-sehirden-kacis-2026.html",
+          "hero": "On September 5–6, 2026, we are leaving the city behind and exploring space together at Saklı Cennet Karataş.",
+          "body": [
+            "At this two-day gathering organized by HAM5A and AlbaSpace, guests will travel to the edge of space through immersive VR experiences.",
+            "Through telescopes, we will observe the Sun, the Moon and, depending on viewing conditions, visible planets. Everyone curious about science and space is welcome.",
+            "Tickets are limited. For information and reservations, call +90 532 377 28 01."
+          ],
+          "highlights": [
+            "Space experience in VR",
+            "Solar observation through telescopes",
+            "Moon and planet observations",
+            "Two-day event at Saklı Cennet Karataş",
+            "Limited tickets"
+          ]
+        },
+        "ru": {
+          "title": "HAM5A — Два дня вдали от города",
+          "excerpt": "Два вдохновляющих дня с космическим VR-путешествием и наблюдениями в телескоп.",
+          "url": "/etkinlikler/ham5a-sehirden-kacis-2026.html",
+          "hero": "5–6 сентября 2026 года мы уедем от городского шума и вместе отправимся исследовать космос в Saklı Cennet Karataş.",
+          "body": [
+            "На этой двухдневной встрече, организованной HAM5A и AlbaSpace, участники смогут приблизиться к границам космоса с помощью захватывающего VR-путешествия.",
+            "В телескопы мы будем наблюдать Солнце, Луну и, если позволят условия, видимые планеты. Приглашаются все, кто интересуется наукой и космосом.",
+            "Количество билетов ограничено. Информация и бронирование: +90 532 377 28 01."
+          ],
+          "highlights": [
+            "Космическое путешествие в VR",
+            "Наблюдение Солнца в телескоп",
+            "Наблюдения Луны и планет",
+            "Двухдневное событие в Saklı Cennet Karataş",
+            "Ограниченное количество билетов"
+          ]
+        },
+        "ar": {
+          "title": "HAM5A – يومان بعيدًا عن المدينة",
+          "excerpt": "يومان ملهمان مع تجربة فضائية بالواقع الافتراضي ورصد السماء بالتلسكوبات.",
+          "url": "/etkinlikler/ham5a-sehirden-kacis-2026.html",
+          "hero": "في 5 و6 سبتمبر 2026، نبتعد عن ضوضاء المدينة ونستكشف الفضاء معًا في Saklı Cennet Karataş.",
+          "body": [
+            "في هذا اللقاء الذي تنظمه HAM5A وAlbaSpace على مدار يومين، سيخوض المشاركون رحلة غامرة إلى حدود الفضاء باستخدام تقنية الواقع الافتراضي.",
+            "سنرصد الشمس والقمر، وحسب ظروف الرصد، الكواكب المرئية من خلال التلسكوبات. الدعوة مفتوحة لكل المهتمين بالعلم والفضاء.",
+            "عدد التذاكر محدود. للمعلومات والحجز: +90 532 377 28 01."
+          ],
+          "highlights": [
+            "تجربة فضائية بالواقع الافتراضي",
+            "رصد الشمس بالتلسكوب",
+            "رصد القمر والكواكب",
+            "فعالية لمدة يومين في Saklı Cennet Karataş",
+            "تذاكر محدودة"
           ]
         }
       }
