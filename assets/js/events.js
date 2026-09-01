@@ -6,11 +6,37 @@
   if (['tr', 'en', 'ru', 'ar'].indexOf(LOCALE) === -1) LOCALE = 'tr';
 
   var UI = {
-    tr: { empty: 'Henüz bir etkinlik eklenmemiş.', upcoming: 'Yaklaşan Etkinlikler' },
-    en: { empty: 'No events have been added yet.', upcoming: 'Upcoming Events' },
-    ru: { empty: 'Пока нет предстоящих мероприятий.', upcoming: 'Предстоящие мероприятия' },
-    ar: { empty: 'لم تتم إضافة أي فعالية بعد.', upcoming: 'الفعاليات القادمة' }
+    tr: {
+      empty: 'Henüz bir etkinlik eklenmemiş.',
+      emptyUpcoming: 'Şu anda yaklaşan bir etkinlik bulunmuyor.',
+      emptyPast: 'Henüz geçmiş bir etkinlik bulunmuyor.',
+      upcoming: 'Yaklaşan Etkinlikler',
+      past: 'Geçmiş Etkinlikler'
+    },
+    en: {
+      empty: 'No events have been added yet.',
+      emptyUpcoming: 'There are no upcoming events right now.',
+      emptyPast: 'There are no past events yet.',
+      upcoming: 'Upcoming Events',
+      past: 'Past Events'
+    },
+    ru: {
+      empty: 'Мероприятий пока нет.',
+      emptyUpcoming: 'Сейчас нет предстоящих мероприятий.',
+      emptyPast: 'Прошедших мероприятий пока нет.',
+      upcoming: 'Предстоящие мероприятия',
+      past: 'Прошедшие мероприятия'
+    },
+    ar: {
+      empty: 'لم تتم إضافة أي فعالية بعد.',
+      emptyUpcoming: 'لا توجد فعاليات قادمة حاليًا.',
+      emptyPast: 'لا توجد فعاليات سابقة حتى الآن.',
+      upcoming: 'الفعاليات القادمة',
+      past: 'الفعاليات السابقة'
+    }
   }[LOCALE];
+
+  var activeFilter = 'upcoming';
 
   function fmtDateRange(startAt, endAt) {
     try {
@@ -40,14 +66,21 @@
     return c ? (c[LOCALE] || c.tr) : key;
   }
 
-  function renderGrid() {
+  function renderGrid(filter) {
     var grid = document.getElementById('events-grid');
     if (!grid) return;
 
     fetch(DATA_URL).then(function (res) { return res.json(); }).then(function (data) {
-      var events = data.events.slice().sort(function (a, b) { return new Date(a.startAt) - new Date(b.startAt); });
+      var now = new Date();
+      var events = data.events.filter(function (event) {
+        var hasEnded = new Date(event.endAt) < now;
+        return filter === 'past' ? hasEnded : !hasEnded;
+      }).sort(function (a, b) {
+        if (filter === 'past') return new Date(b.endAt) - new Date(a.endAt);
+        return new Date(a.startAt) - new Date(b.startAt);
+      });
       if (!events.length) {
-        grid.innerHTML = '<p class="events-empty">' + UI.empty + '</p>';
+        grid.innerHTML = '<p class="events-empty">' + (filter === 'past' ? UI.emptyPast : UI.emptyUpcoming) + '</p>';
         return;
       }
 
@@ -66,6 +99,36 @@
       }).join('');
     }).catch(function () {
       grid.innerHTML = '<p class="events-empty">' + UI.empty + '</p>';
+    });
+  }
+
+  function setActiveFilter(filter) {
+    activeFilter = filter === 'past' ? 'past' : 'upcoming';
+
+    document.querySelectorAll('[data-events-filter]').forEach(function (tab) {
+      var isActive = tab.getAttribute('data-events-filter') === activeFilter;
+      tab.classList.toggle('is-active', isActive);
+      tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+
+    var grid = document.getElementById('events-grid');
+    if (grid) {
+      grid.setAttribute('aria-labelledby', activeFilter === 'past' ? 'events-tab-past' : 'events-tab-upcoming');
+    }
+
+    renderGrid(activeFilter);
+  }
+
+  function initTabs() {
+    var tabs = document.querySelectorAll('[data-events-filter]');
+    if (!tabs.length) return;
+
+    tabs.forEach(function (tab) {
+      var filter = tab.getAttribute('data-events-filter');
+      tab.textContent = filter === 'past' ? UI.past : UI.upcoming;
+      tab.addEventListener('click', function () {
+        setActiveFilter(filter);
+      });
     });
   }
 
@@ -120,7 +183,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    renderGrid();
+    initTabs();
+    renderGrid(activeFilter);
     renderArticle();
   });
 })();

@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#020617">
   <meta name="msapplication-TileColor" content="#020617">
   <meta charset="UTF-8">
-  <title>Yaklaşan Etkinlikler – Alba Space</title>
-  <meta name="description" content="AlbaSpace tarafından düzenlenen yaklaşan etkinlikler ve gözlem kampı programları.">
+  <title>Etkinlikler – Alba Space</title>
+  <meta name="description" content="AlbaSpace tarafından düzenlenen yaklaşan ve geçmiş etkinlikler, gözlem kampları ve bilim programları.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/assets/css/site.css" />
   <link rel="stylesheet" href="/assets/css/fix-layout.css">
@@ -20,12 +20,16 @@
   <div data-include="/header-tr.html"></div>
 
   <section class="events-hero">
-    <h1 class="page-title">Yaklaşan Etkinlikler</h1>
+    <h1 class="page-title">Etkinlikler</h1>
     <p class="page-sub">AlbaSpace olarak gökyüzünü keşfetmek, öğrenmek ve birlikte deneyimlemek için hazırladığımız etkinlikleri takip edin.</p>
   </section>
 
   <div class="events-page-wrapper">
-    <div class="events-grid" id="events-grid"></div>
+    <div class="events-tabs" role="tablist" aria-label="Etkinlikler">
+      <button class="events-tab is-active" id="events-tab-upcoming" type="button" role="tab" aria-selected="true" aria-controls="events-grid" data-events-filter="upcoming">Yaklaşan Etkinlikler</button>
+      <button class="events-tab" id="events-tab-past" type="button" role="tab" aria-selected="false" aria-controls="events-grid" data-events-filter="past">Geçmiş Etkinlikler</button>
+    </div>
+    <div class="events-grid" id="events-grid" role="tabpanel" aria-live="polite" aria-labelledby="events-tab-upcoming"></div>
   </div>
 
   <div data-include="/footer-tr.html"></div>
