@@ -5,22 +5,30 @@ const IS_DESKTOP_SCENE = window.matchMedia('(min-width: 900px) and (pointer: fin
 
 document.documentElement.classList.toggle('is-desktop-scene', IS_DESKTOP_SCENE);
 
-const MODEL_VERSION = 'model-viewer-ar-1';
+const MODEL_VERSION = 'model-viewer-ar-2';
 const modelSource = (filename) => `/assets/models/restaurant/ar/${filename}?v=${MODEL_VERSION}`;
+const desktopModelSource = (filename) => `/assets/models/restaurant/${filename}?v=${MODEL_VERSION}`;
 
 const MENU_TR = {
   meat: {
     label: 'ET YEMEKLERİ',
     items: [
       {
-        src: modelSource('realistic-steak-board.glb'),
+        src: modelSource('realistic-steak-board-plated.glb'),
+        desktopSrc: desktopModelSource('realistic-steak-board.glb'),
+        desktopRotationY: 90,
+        desktopSupport: 'plate',
+        desktopSupportScale: 1.85,
         alt: 'Biberiye, kuşkonmaz ve sarımsaklı ahşap tahtada gerçekçi steak 3D modeli',
         name: 'Alba Reserve Steak',
         description: 'Biberiye, kuşkonmaz ve fırınlanmış sarımsaklı premium steak.',
         price: '₺ 620'
       },
       {
-        src: modelSource('realistic-steak-slices.glb'),
+        src: modelSource('realistic-steak-slices-plated.glb'),
+        desktopSrc: desktopModelSource('realistic-steak-slices.glb'),
+        desktopSupport: 'plate',
+        desktopSupportScale: 1.85,
         alt: 'Sebzeli gerçekçi kızarmış steak dilimleri 3D modeli',
         name: 'Izgara Steak Dilimleri',
         description: 'Sebze garnitürlü, dışı kızarmış ve içi pembe steak dilimleri.',
@@ -28,6 +36,7 @@ const MENU_TR = {
       },
       {
         src: modelSource('realistic-grilled-steak.glb'),
+        desktopSupport: 'board',
         alt: 'Biber, lavaş ve yeşillikli ahşap tahtada gerçekçi steak 3D modeli',
         name: 'Izgara Steak Tahtası',
         description: 'Biber, lavaş ve taze yeşilliklerle servis edilen steak.',
@@ -46,14 +55,19 @@ const MENU_TR = {
         price: '₺ 260'
       },
       {
-        src: modelSource('realistic-fruit-dessert.glb'),
-        alt: 'Kavun, dondurma, meyve, krema ve naneli gerçekçi kup tatlı 3D modeli',
-        name: 'Meyveli Kup',
-        description: 'Kavun, dondurma, meyveler, krema ve nane ile hazırlanan kup.',
+        src: modelSource('strawberry-chocolate-cake.glb'),
+        desktopSrc: modelSource('strawberry-chocolate-cake.glb'),
+        desktopScale: 1,
+        alt: 'Çilek ve çikolata kaplamalı gerçekçi pasta 3D modeli',
+        name: 'Çilekli Çikolatalı Pasta',
+        description: 'Çilek, çikolata kaplama ve yumuşak kek katmanlarıyla hazırlanan pasta.',
         price: '₺ 280'
       },
       {
-        src: modelSource('realistic-layered-dessert-cup.glb'),
+        src: modelSource('realistic-layered-dessert-cup-plated.glb'),
+        desktopSrc: desktopModelSource('realistic-layered-dessert-cup.glb'),
+        desktopSupport: 'plate',
+        desktopSupportScale: 2.05,
         alt: 'Kremalı orman meyveli katlı tatlı kupu 3D modeli',
         name: 'Orman Meyveli Kup',
         description: 'Krema, orman meyveleri ve ahşap kaşıkla servis edilen katlı tatlı.',
@@ -106,14 +120,21 @@ const MENU_RU = {
     label: 'МЯСНЫЕ БЛЮДА',
     items: [
       {
-        src: modelSource('realistic-steak-board.glb'),
+        src: modelSource('realistic-steak-board-plated.glb'),
+        desktopSrc: desktopModelSource('realistic-steak-board.glb'),
+        desktopRotationY: 90,
+        desktopSupport: 'plate',
+        desktopSupportScale: 1.85,
         alt: 'Реалистичная 3D-модель стейка на деревянной доске с розмарином, спаржей и чесноком',
         name: 'Фирменный стейк Alba',
         description: 'Премиальный стейк с розмарином, спаржей и запечённым чесноком.',
         price: '₺ 620'
       },
       {
-        src: modelSource('realistic-steak-slices.glb'),
+        src: modelSource('realistic-steak-slices-plated.glb'),
+        desktopSrc: desktopModelSource('realistic-steak-slices.glb'),
+        desktopSupport: 'plate',
+        desktopSupportScale: 1.85,
         alt: 'Реалистичная 3D-модель обжаренных ломтиков стейка с овощами',
         name: 'Ломтики стейка на гриле',
         description: 'Обжаренные ломтики стейка с розовой серединой и овощным гарниром.',
@@ -121,6 +142,7 @@ const MENU_RU = {
       },
       {
         src: modelSource('realistic-grilled-steak.glb'),
+        desktopSupport: 'board',
         alt: 'Реалистичная 3D-модель стейка на доске с перцем, лавашом и зеленью',
         name: 'Стейк на доске',
         description: 'Стейк с перцем, лавашом и свежей зеленью.',
@@ -139,14 +161,19 @@ const MENU_RU = {
         price: '₺ 260'
       },
       {
-        src: modelSource('realistic-fruit-dessert.glb'),
-        alt: 'Реалистичная 3D-модель фруктового десерта с дыней, мороженым, сливками и мятой',
-        name: 'Фруктовый десерт',
-        description: 'Дыня, мороженое, фрукты, сливки и свежая мята.',
+        src: modelSource('strawberry-chocolate-cake.glb'),
+        desktopSrc: modelSource('strawberry-chocolate-cake.glb'),
+        desktopScale: 1,
+        alt: 'Реалистичная 3D-модель шоколадного торта с клубникой',
+        name: 'Клубнично-шоколадный торт',
+        description: 'Шоколадный торт с клубникой, глазурью и мягкими бисквитными слоями.',
         price: '₺ 280'
       },
       {
-        src: modelSource('realistic-layered-dessert-cup.glb'),
+        src: modelSource('realistic-layered-dessert-cup-plated.glb'),
+        desktopSrc: desktopModelSource('realistic-layered-dessert-cup.glb'),
+        desktopSupport: 'plate',
+        desktopSupportScale: 2.05,
         alt: 'Реалистичная 3D-модель слоёного десерта со сливками и лесными ягодами',
         name: 'Десерт с лесными ягодами',
         description: 'Слоёный десерт со сливками, лесными ягодами и деревянной ложкой.',
@@ -309,7 +336,7 @@ function currentDish() {
 }
 
 function desktopSource(item) {
-  return item.src.replace('/restaurant/ar/', '/restaurant/');
+  return item.desktopSrc || item.src.replace('/restaurant/ar/', '/restaurant/');
 }
 
 function setStatus(label, detail, mode = 'loading', visible = true) {
@@ -377,26 +404,35 @@ function setMenuOpen(open) {
 function updateMobilePresentation(item) {
   mobileModelViewer.alt = item.alt;
   mobileModelViewer.exposure = state.category === 'meat' ? 1.27 : 1.15;
-  mobileModelViewer.orientation = '0deg 0deg 0deg';
+  mobileModelViewer.orientation = item.orientation || '0deg 0deg 0deg';
   mobileModelViewer.scale = '1 1 1';
   viewerDishName.textContent = item.name;
 }
 
 function applyDesktopTransform() {
   if (!IS_DESKTOP_SCENE || !window.AFRAME?.THREE) return;
+  const item = currentDish();
   const categoryScale = state.category === 'meat' ? 0.5 : 1;
-  const scale = DESKTOP_MODEL_BASE_SCALE * categoryScale * state.zoom;
-  const surfaceZ = state.category === 'meat' ? 0.028 : 0.015;
+  const baseScale = item.desktopScale ?? (DESKTOP_MODEL_BASE_SCALE * categoryScale);
+  const scale = baseScale * state.zoom;
+  const support = item.desktopSupport || (state.category === 'meat' ? 'board' : null);
+  const surfaceZ = support === 'plate' ? 0.035 : (support === 'board' ? 0.028 : 0.015);
   dishModel.setAttribute('scale', `${scale} ${scale} ${scale}`);
   dishModel.setAttribute('position', `0 0 ${surfaceZ - (state.modelMinY * scale)}`);
-  const boardScale = 1.35 * state.zoom;
-  dishPlate.setAttribute('scale', `${boardScale} ${boardScale} ${boardScale}`);
+  const supportScale = (item.desktopSupportScale || 1.35) * state.zoom;
+  const supportHeightScale = support === 'plate' ? 0.5 * state.zoom : supportScale;
+  dishPlate.setAttribute('scale', `${supportScale} ${supportHeightScale} ${supportScale}`);
   dishRotation.setAttribute('rotation', `0 0 ${state.rotationZ}`);
 }
 
-function updateDesktopPresentation() {
+function updateDesktopPresentation(item = currentDish()) {
   const isMeat = state.category === 'meat';
-  dishPlate.setAttribute('visible', String(isMeat));
+  const support = item.desktopSupport || (isMeat ? 'board' : null);
+  const supportSource = support === 'plate'
+    ? desktopModelSource('realistic-porcelain-plate.glb')
+    : desktopModelSource('wooden-cutting-board.glb');
+  dishPlate.setAttribute('visible', String(Boolean(support)));
+  if (support) dishPlate.setAttribute('gltf-model', supportSource);
   ambientLight.setAttribute('light', 'intensity', isMeat ? 2.05 : 1.7);
   keyLight.setAttribute('light', 'intensity', isMeat ? 1.45 : 1.2);
 }
@@ -425,8 +461,9 @@ function prepareDish(item) {
     state.requestedSource = desktopSource(item);
     dishModel.setAttribute('visible', 'false');
     dishModel.setAttribute('title', item.alt);
+    dishModel.setAttribute('rotation', `90 ${item.desktopRotationY || 0} 0`);
     dishModel.setAttribute('gltf-model', state.requestedSource);
-    updateDesktopPresentation();
+    updateDesktopPresentation(item);
     applyDesktopTransform();
     return;
   }
