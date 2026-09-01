@@ -93,7 +93,8 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .menu-item-main small { margin-top: 3px; color: var(--muted); font-size: 10px; line-height: 1.35; overflow-wrap: anywhere; }
 .menu-item-price { min-width: max-content; color: var(--amber); white-space: nowrap; font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; }
 
-.zoom-hint { position: fixed; left: 50%; bottom: calc(var(--safe-bottom) + 76px); z-index: 8; padding: 6px 10px; border-radius: 999px; color: rgba(245,249,255,.74); background: rgba(5,11,26,.5); font-size: 10px; opacity: .78; transform: translateX(-50%); pointer-events: none; }
+.zoom-hint { display: none; position: fixed; left: 50%; bottom: calc(var(--safe-bottom) + 76px); z-index: 8; padding: 6px 10px; border-radius: 999px; color: rgba(245,249,255,.74); background: rgba(5,11,26,.5); font-size: 10px; opacity: .78; transform: translateX(-50%); pointer-events: none; }
+.viewer-intro small { line-height: 1.35; }
 .ar-app[data-ar-status="session-started"] .viewer-intro,
 .ar-app[data-ar-status="object-placed"] .viewer-intro { display: none; }
 .ar-app[data-ar-status="session-started"] .zoom-hint { display: none; }
@@ -138,7 +139,7 @@ html.is-desktop-scene .experience-ui { z-index: 5; }
 html.is-desktop-scene .desktop-only { display: inline; }
 html.is-desktop-scene .mobile-only { display: none; }
 html.is-desktop-scene .menu-panel { bottom: 24px; }
-html.is-desktop-scene .zoom-hint { bottom: 24px; z-index: 9; padding: 8px 13px; background: rgba(5, 11, 26, .68); }
+html.is-desktop-scene .zoom-hint { display: block; bottom: 24px; z-index: 9; padding: 8px 13px; background: rgba(5, 11, 26, .68); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
