@@ -58,4 +58,4 @@ jobs:
         run: |
           node --check assets/js/restaurant-model-viewer.js
           node --check scripts/bake-restaurant-ar-scale.mjs
-          python scripts/check-glb-extensions.py assets/models/restaurant/ar/*.glb
+          python scripts/check-glb-extensions.py assets/models/restaurant/wooden-cutting-board.glb assets/models/restaurant/ar/*.glb
