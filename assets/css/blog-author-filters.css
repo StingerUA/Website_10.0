@@ -63,7 +63,13 @@
 .blog-author-filter img{
   width:30px;
   height:30px;
+  min-width:30px;
+  min-height:30px;
+  max-width:30px;
+  max-height:30px;
   flex:0 0 30px;
+  aspect-ratio:1 / 1;
+  display:block;
   border-radius:50%;
   object-fit:cover;
   background:#0f172a;
@@ -102,7 +108,13 @@
 .blog-author-profile-avatar{
   width:82px;
   height:82px;
+  min-width:82px;
+  min-height:82px;
+  max-width:82px;
+  max-height:82px;
   flex:0 0 82px;
+  aspect-ratio:1 / 1;
+  display:block;
   border-radius:50%;
   object-fit:cover;
   background:#0f172a;
@@ -145,7 +157,7 @@
 }
 
 .blog-card-meta .blog-author.has-avatar{
-  min-width:0;
+  min-width:24px;
   display:inline-flex;
   align-items:center;
   gap:7px;
@@ -157,7 +169,13 @@
 .blog-card-meta .blog-author.has-avatar .blog-card-author-avatar{
   width:24px;
   height:24px;
+  min-width:24px;
+  min-height:24px;
+  max-width:24px;
+  max-height:24px;
   flex:0 0 24px;
+  aspect-ratio:1 / 1;
+  display:block;
   border-radius:50%;
   object-fit:cover;
   background:#0f172a;
@@ -205,11 +223,24 @@ html[dir="rtl"] .blog-author-filter{
   .blog-author-profile-avatar{
     width:66px;
     height:66px;
-    flex-basis:66px;
+    min-width:66px;
+    min-height:66px;
+    max-width:66px;
+    max-height:66px;
+    flex:0 0 66px;
   }
 
   .blog-author-profile h2{
     font-size:19px;
+  }
+
+  .blog-card-meta .blog-author.has-avatar{
+    min-width:24px;
+    flex-shrink:1;
+  }
+
+  .blog-card-meta .blog-author.has-avatar .blog-card-author-avatar{
+    flex-shrink:0;
   }
 }
 
@@ -226,7 +257,11 @@ html[dir="rtl"] .blog-author-filter{
   .blog-author-profile-avatar{
     width:56px;
     height:56px;
-    flex-basis:56px;
+    min-width:56px;
+    min-height:56px;
+    max-width:56px;
+    max-height:56px;
+    flex:0 0 56px;
   }
 
   .blog-author-profile h2{
