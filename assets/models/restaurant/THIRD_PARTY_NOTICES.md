@@ -8,7 +8,7 @@
 
 ### Деревянная сервировочная доска
 
-Вместо фарфоровой тарелки используется [Wooden Cutting Board](https://polyhaven.com/a/wooden_cutting_board) от Kuutti Siitonen (Poly Haven). Исходная glTF 2.0-модель с PBR-текстурами 1K загружается с официального CDN Poly Haven и распространяется по лицензии [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). В интерфейсе она применяется как ресторанная доска для подачи блюд на гриле.
+Вместо фарфоровой тарелки используется [Wooden Cutting Board](https://polyhaven.com/a/wooden_cutting_board) от Kuutti Siitonen (Poly Haven), распространяемая по лицензии [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). `wooden-cutting-board.glb` — локальная самодостаточная GLB-копия официальной glTF 2.0-модели с PBR-текстурами 1K. Геометрия, `.bin` и три текстуры скачаны по адресам из официального Poly Haven API, проверены по опубликованным MD5 и упакованы без изменения содержимого. В интерфейсе модель применяется как ресторанная доска для подачи блюд на гриле и во время работы страницы не зависит от внешнего CDN.
 
 ### Фарфоровая тарелка (legacy)
 
