@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#050b1a">
   <meta name="description" content="AR-меню ресторана Alba Space на Google WebXR, Scene Viewer и Apple Quick Look.">
   <title>AR-меню — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=model-viewer-ar-3">
+  <link rel="stylesheet" href="/assets/css/restaurant-ar.css?v=dish-posters-highpoly-1">
   <script type="module" src="/assets/js/model-viewer.min.js"></script>
 </head>
 <body>
@@ -30,6 +30,7 @@
       exposure="1.15"
       environment-image="neutral"
       xr-environment
+      poster="/assets/images/restaurant/menu/turkish-shish-kebab.webp"
       loading="eager"
       reveal="auto">
     </model-viewer>
@@ -85,6 +86,16 @@
       <a-camera id="scene-camera" position="0 1.6 3.15" rotation="-12 0 0" fov="50" look-controls="enabled: false"></a-camera>
     </a-scene>
 
+    <div id="dish-loading-poster" class="dish-loading-poster" aria-hidden="true">
+      <img id="dish-loading-poster-image"
+        src="/assets/images/restaurant/menu/turkish-shish-kebab.webp"
+        alt=""
+        width="720"
+        height="720"
+        decoding="async">
+      <span class="dish-loading-poster-shimmer" aria-hidden="true"></span>
+    </div>
+
     <button id="ar-launch-button" class="ar-launch-button" slot="ar-button" type="button">
       <span class="ar-launch-icon" aria-hidden="true">⌗</span>
       <span>Разместить на столе</span>
@@ -114,7 +125,7 @@
 
       <section id="viewer-intro" class="viewer-intro" aria-live="polite">
         <span class="menu-kicker">ALBA SPACE · WEBXR</span>
-        <strong id="viewer-dish-name">Фирменный стейк Alba</strong>
+        <strong id="viewer-dish-name">Турецкий шиш-кебаб</strong>
         <small>Рассмотрите блюдо или разместите его на настоящем столе в AR.</small>
       </section>
 
@@ -150,6 +161,6 @@
     </div>
   </section>
 
-  <script type="module" src="/assets/js/restaurant-model-viewer.js?v=model-viewer-ar-3"></script>
+  <script type="module" src="/assets/js/restaurant-model-viewer.js?v=dish-posters-highpoly-1"></script>
 </body>
 </html>
