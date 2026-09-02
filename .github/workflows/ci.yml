@@ -46,6 +46,15 @@ jobs:
           node --check orbital-catalog.js
           node --check orbital-catalog-core.js
 
+      - name: Validate ALBA Space Pass
+        run: |
+          node --check cloudflare-worker/pass-backend.js
+          node --check cloudflare-worker/pass-entry.js
+          node --check assets/js/pass-api.js
+          node --check assets/js/pass-customer.js
+          node --check assets/js/pass-staff.js
+          node --check assets/js/pass-admin.js
+
       - name: Validate orbital catalogue localization
         run: node --check orbital-dynamic-localization.js
 
