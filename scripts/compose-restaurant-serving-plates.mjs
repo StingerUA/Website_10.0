@@ -15,23 +15,28 @@ const platePath = path.join(modelRoot, 'realistic-porcelain-plate.glb');
 
 const compositions = [
   {
-    dish: 'ar/realistic-steak-board.glb',
-    output: 'ar/realistic-steak-board-plated.glb',
-    dishLift: 0.14644,
-    dishRotation: [0, Math.SQRT1_2, 0, Math.SQRT1_2],
-    plateScale: 1.85
+    dish: 'ar/turkish-shish-kebab.glb',
+    output: 'ar/turkish-shish-kebab-plated.glb',
+    dishLift: 0.035,
+    plateScale: 1.7
   },
   {
-    dish: 'ar/realistic-steak-slices.glb',
-    output: 'ar/realistic-steak-slices-plated.glb',
-    dishLift: 0.06002,
-    plateScale: 1.85
+    dish: 'ar/turkish-adana-kebab.glb',
+    output: 'ar/turkish-adana-kebab-plated.glb',
+    dishLift: 0.035,
+    plateScale: 1.7
   },
   {
-    dish: 'ar/realistic-layered-dessert-cup.glb',
-    output: 'ar/realistic-layered-dessert-cup-plated.glb',
-    dishLift: 0.27366,
-    plateScale: 2.05
+    dish: 'ar/realistic-dessert-cake.glb',
+    output: 'ar/realistic-dessert-cake-plated.glb',
+    dishLift: 0.30407,
+    plateScale: 2.45
+  },
+  {
+    dish: 'ar/strawberry-chocolate-cake.glb',
+    output: 'ar/strawberry-chocolate-cake-plated.glb',
+    dishLift: 0.03,
+    plateScale: 1.55
   }
 ];
 
