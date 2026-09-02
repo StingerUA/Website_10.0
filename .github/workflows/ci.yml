@@ -54,6 +54,7 @@ jobs:
           node --check assets/js/pass-customer.js
           node --check assets/js/pass-staff.js
           node --check assets/js/pass-admin.js
+          python scripts/check-pass-migrations.py
 
       - name: Validate orbital catalogue localization
         run: node --check orbital-dynamic-localization.js
