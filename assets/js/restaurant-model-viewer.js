@@ -5,15 +5,17 @@ const IS_DESKTOP_SCENE = window.matchMedia('(min-width: 900px) and (pointer: fin
 
 document.documentElement.classList.toggle('is-desktop-scene', IS_DESKTOP_SCENE);
 
-const MODEL_VERSION = 'model-viewer-ar-3';
+const MODEL_VERSION = 'dish-posters-highpoly-1';
 const modelSource = (filename) => `/assets/models/restaurant/ar/${filename}?v=${MODEL_VERSION}`;
 const desktopModelSource = (filename) => `/assets/models/restaurant/${filename}?v=${MODEL_VERSION}`;
+const posterSource = (filename) => `/assets/images/restaurant/menu/${filename}?v=${MODEL_VERSION}`;
 
 const MENU_TR = {
   meat: {
     label: 'ET YEMEKLERİ',
     items: [
       {
+        poster: posterSource('turkish-shish-kebab.webp'),
         src: modelSource('turkish-shish-kebab-plated.glb'),
         desktopSrc: modelSource('turkish-shish-kebab.glb'),
         desktopScale: 1,
@@ -25,6 +27,7 @@ const MENU_TR = {
         price: '₺ 620'
       },
       {
+        poster: posterSource('adana-kebab.webp'),
         src: modelSource('turkish-adana-kebab-plated.glb'),
         desktopSrc: modelSource('turkish-adana-kebab.glb'),
         desktopScale: 1,
@@ -36,6 +39,7 @@ const MENU_TR = {
         price: '₺ 590'
       },
       {
+        poster: posterSource('grilled-steak-board.webp'),
         src: modelSource('realistic-grilled-steak.glb'),
         desktopSupport: 'board',
         alt: 'Biber, lavaş ve yeşillikli ahşap tahtada gerçekçi steak 3D modeli',
@@ -49,6 +53,7 @@ const MENU_TR = {
     label: 'TATLILAR',
     items: [
       {
+        poster: posterSource('alba-cherry-cake.webp'),
         src: modelSource('realistic-dessert-cake-plated.glb'),
         desktopSrc: desktopModelSource('realistic-dessert-cake.glb'),
         desktopSupport: 'plate',
@@ -59,6 +64,7 @@ const MENU_TR = {
         price: '₺ 260'
       },
       {
+        poster: posterSource('strawberry-chocolate-cake.webp'),
         src: modelSource('strawberry-chocolate-cake-plated.glb'),
         desktopSrc: modelSource('strawberry-chocolate-cake.glb'),
         desktopScale: 1,
@@ -70,6 +76,7 @@ const MENU_TR = {
         price: '₺ 280'
       },
       {
+        poster: posterSource('forest-berry-cup.webp'),
         src: modelSource('realistic-layered-dessert-cup.glb'),
         desktopSrc: desktopModelSource('realistic-layered-dessert-cup.glb'),
         alt: 'Kremalı orman meyveli katlı tatlı kupu 3D modeli',
@@ -83,6 +90,7 @@ const MENU_TR = {
     label: 'ÇORBALAR',
     items: [
       {
+        poster: posterSource('turkish-lentil-soup.webp'),
         src: modelSource('turkish-lentil-soup.glb'),
         desktopSrc: modelSource('turkish-lentil-soup.glb'),
         desktopScale: 1,
@@ -97,6 +105,7 @@ const MENU_TR = {
     label: 'İÇECEKLER',
     items: [
       {
+        poster: posterSource('strawberry-yogurt.webp'),
         src: modelSource('realistic-yogurt-drink.glb'),
         alt: 'Çilekli yoğurt içeceği şişesi gerçekçi 3D modeli',
         name: 'Çilekli Yoğurt',
@@ -104,6 +113,7 @@ const MENU_TR = {
         price: '₺ 145'
       },
       {
+        poster: posterSource('alba-coffee.webp'),
         src: modelSource('realistic-coffee-cup.glb'),
         alt: 'Kapaklı kahve bardağı gerçekçi 3D modeli',
         name: 'Alba Kahve',
@@ -111,6 +121,7 @@ const MENU_TR = {
         price: '₺ 135'
       },
       {
+        poster: posterSource('strawberry-lemonade.webp'),
         src: modelSource('realistic-strawberry-lemonade.glb'),
         alt: 'Limon ve naneli çilekli limonata gerçekçi 3D modeli',
         name: 'Çilekli Limonata',
@@ -126,6 +137,7 @@ const MENU_RU = {
     label: 'МЯСНЫЕ БЛЮДА',
     items: [
       {
+        poster: posterSource('turkish-shish-kebab.webp'),
         src: modelSource('turkish-shish-kebab-plated.glb'),
         desktopSrc: modelSource('turkish-shish-kebab.glb'),
         desktopScale: 1,
@@ -137,6 +149,7 @@ const MENU_RU = {
         price: '₺ 620'
       },
       {
+        poster: posterSource('adana-kebab.webp'),
         src: modelSource('turkish-adana-kebab-plated.glb'),
         desktopSrc: modelSource('turkish-adana-kebab.glb'),
         desktopScale: 1,
@@ -148,6 +161,7 @@ const MENU_RU = {
         price: '₺ 590'
       },
       {
+        poster: posterSource('grilled-steak-board.webp'),
         src: modelSource('realistic-grilled-steak.glb'),
         desktopSupport: 'board',
         alt: 'Реалистичная 3D-модель стейка на доске с перцем, лавашом и зеленью',
@@ -161,6 +175,7 @@ const MENU_RU = {
     label: 'ДЕСЕРТЫ',
     items: [
       {
+        poster: posterSource('alba-cherry-cake.webp'),
         src: modelSource('realistic-dessert-cake-plated.glb'),
         desktopSrc: desktopModelSource('realistic-dessert-cake.glb'),
         desktopSupport: 'plate',
@@ -171,6 +186,7 @@ const MENU_RU = {
         price: '₺ 260'
       },
       {
+        poster: posterSource('strawberry-chocolate-cake.webp'),
         src: modelSource('strawberry-chocolate-cake-plated.glb'),
         desktopSrc: modelSource('strawberry-chocolate-cake.glb'),
         desktopScale: 1,
@@ -182,6 +198,7 @@ const MENU_RU = {
         price: '₺ 280'
       },
       {
+        poster: posterSource('forest-berry-cup.webp'),
         src: modelSource('realistic-layered-dessert-cup.glb'),
         desktopSrc: desktopModelSource('realistic-layered-dessert-cup.glb'),
         alt: 'Реалистичная 3D-модель слоёного десерта со сливками и лесными ягодами',
@@ -195,6 +212,7 @@ const MENU_RU = {
     label: 'СУПЫ',
     items: [
       {
+        poster: posterSource('turkish-lentil-soup.webp'),
         src: modelSource('turkish-lentil-soup.glb'),
         desktopSrc: modelSource('turkish-lentil-soup.glb'),
         desktopScale: 1,
@@ -209,6 +227,7 @@ const MENU_RU = {
     label: 'НАПИТКИ',
     items: [
       {
+        poster: posterSource('strawberry-yogurt.webp'),
         src: modelSource('realistic-yogurt-drink.glb'),
         alt: 'Реалистичная 3D-модель бутылки клубничного йогуртового напитка',
         name: 'Клубничный йогурт',
@@ -216,6 +235,7 @@ const MENU_RU = {
         price: '₺ 145'
       },
       {
+        poster: posterSource('alba-coffee.webp'),
         src: modelSource('realistic-coffee-cup.glb'),
         alt: 'Реалистичная 3D-модель стакана кофе с крышкой',
         name: 'Кофе Alba',
@@ -223,6 +243,7 @@ const MENU_RU = {
         price: '₺ 135'
       },
       {
+        poster: posterSource('strawberry-lemonade.webp'),
         src: modelSource('realistic-strawberry-lemonade.glb'),
         alt: 'Реалистичная 3D-модель клубничного лимонада с лимоном и мятой',
         name: 'Клубничный лимонад',
@@ -310,6 +331,8 @@ const statusDetail = document.querySelector('#status-detail');
 const loadingProgress = document.querySelector('#loading-progress');
 const surfacePrompt = document.querySelector('#surface-prompt');
 const viewerDishName = document.querySelector('#viewer-dish-name');
+const dishLoadingPoster = document.querySelector('#dish-loading-poster');
+const dishLoadingPosterImage = document.querySelector('#dish-loading-poster-image');
 const authGate = document.querySelector('#auth-gate');
 const authChecking = document.querySelector('#auth-checking');
 const authRequired = document.querySelector('#auth-required');
@@ -327,6 +350,7 @@ const state = {
   rotationZ: 0,
   arStatus: 'not-presenting',
   statusTimer: null,
+  posterTimer: null,
   desktopYaw: 0,
   desktopPitch: 0.21,
   desktopDistance: 3.15,
@@ -388,6 +412,7 @@ function renderItemButtons() {
   const category = currentCategory();
   itemContainer.innerHTML = category.items.map((item, index) => `
     <button class="menu-item-button${index === state.dishIndex ? ' is-selected' : ''}" type="button" data-index="${index}">
+      <img class="menu-item-thumb" src="${item.poster}" alt="" width="72" height="64" loading="lazy" decoding="async">
       <span class="menu-item-main"><strong>${item.name}</strong><small>${item.description}</small></span>
       <span class="menu-item-price">${item.price}</span>
     </button>
@@ -415,10 +440,27 @@ function setMenuOpen(open) {
 
 function updateMobilePresentation(item) {
   mobileModelViewer.alt = item.alt;
+  mobileModelViewer.poster = item.poster;
   mobileModelViewer.exposure = state.category === 'meat' ? 1.27 : 1.15;
   mobileModelViewer.orientation = item.orientation || '0deg 0deg 0deg';
   mobileModelViewer.scale = '1 1 1';
   viewerDishName.textContent = item.name;
+}
+
+function showDishPoster(item) {
+  window.clearTimeout(state.posterTimer);
+  dishLoadingPosterImage.src = item.poster;
+  dishLoadingPosterImage.alt = item.alt;
+  dishLoadingPoster.classList.remove('is-hiding', 'is-error');
+  dishLoadingPoster.hidden = false;
+}
+
+function hideDishPoster() {
+  dishLoadingPoster.classList.add('is-hiding');
+  state.posterTimer = window.setTimeout(() => {
+    dishLoadingPoster.hidden = true;
+    dishLoadingPoster.classList.remove('is-hiding');
+  }, 280);
 }
 
 function applyDesktopTransform() {
@@ -466,6 +508,7 @@ function prepareDish(item) {
   state.zoom = 1;
   state.rotationZ = 0;
   state.modelMinY = 0;
+  showDishPoster(item);
   setProgress(4);
   setStatus(COPY.catalogLoading, COPY.selectedPreparing, 'loading', true);
 
@@ -504,6 +547,7 @@ function handleMobileLoad() {
   mobileModelViewer.pause?.();
   state.modelReady = true;
   state.loadingDish = false;
+  hideDishPoster();
   setProgress(100);
   if (state.arStatus === 'object-placed') {
     setStatus(COPY.dishPlaced, COPY.arGestures, 'ready', true);
@@ -519,6 +563,7 @@ function handleMobileError(event) {
   if (IS_DESKTOP_SCENE) return;
   state.modelReady = false;
   state.loadingDish = false;
+  dishLoadingPoster.classList.add('is-error');
   setProgress(0);
   setStatus(COPY.dishLoadError, COPY.checkConnection, 'error', true);
   console.warn('model-viewer failed to load a restaurant model:', event);
@@ -563,6 +608,7 @@ function handleDesktopModelLoaded(event) {
   dishModel.removeAttribute('animation-mixer');
   state.modelReady = true;
   state.loadingDish = false;
+  hideDishPoster();
   state.modelMinY = measureDesktopModelBottom();
   applyDesktopTransform();
   dishModel.setAttribute('visible', 'true');
@@ -575,6 +621,7 @@ function handleDesktopModelError(event) {
   if (!IS_DESKTOP_SCENE || event.target !== dishModel) return;
   state.modelReady = false;
   state.loadingDish = false;
+  dishLoadingPoster.classList.add('is-error');
   setProgress(0);
   setStatus(COPY.dishLoadError, COPY.checkConnection, 'error', true);
   console.warn('A-Frame failed to load a restaurant model:', event);
@@ -800,6 +847,9 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && !menuPanel.hidden) setMenuOpen(false);
 });
 
-window.addEventListener('pagehide', () => window.clearTimeout(state.statusTimer));
+window.addEventListener('pagehide', () => {
+  window.clearTimeout(state.statusTimer);
+  window.clearTimeout(state.posterTimer);
+});
 
 initializeSession();
