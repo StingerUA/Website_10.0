@@ -5,7 +5,7 @@ const IS_DESKTOP_SCENE = window.matchMedia('(min-width: 900px) and (pointer: fin
 
 document.documentElement.classList.toggle('is-desktop-scene', IS_DESKTOP_SCENE);
 
-const MODEL_VERSION = 'model-viewer-ar-2';
+const MODEL_VERSION = 'model-viewer-ar-3';
 const modelSource = (filename) => `/assets/models/restaurant/ar/${filename}?v=${MODEL_VERSION}`;
 const desktopModelSource = (filename) => `/assets/models/restaurant/${filename}?v=${MODEL_VERSION}`;
 
@@ -14,24 +14,25 @@ const MENU_TR = {
     label: 'ET YEMEKLERİ',
     items: [
       {
-        src: modelSource('realistic-steak-board-plated.glb'),
-        desktopSrc: desktopModelSource('realistic-steak-board.glb'),
-        desktopRotationY: 90,
+        src: modelSource('turkish-shish-kebab-plated.glb'),
+        desktopSrc: modelSource('turkish-shish-kebab.glb'),
+        desktopScale: 1,
         desktopSupport: 'plate',
-        desktopSupportScale: 1.85,
-        alt: 'Biberiye, kuşkonmaz ve sarımsaklı ahşap tahtada gerçekçi steak 3D modeli',
-        name: 'Alba Reserve Steak',
-        description: 'Biberiye, kuşkonmaz ve fırınlanmış sarımsaklı premium steak.',
+        desktopSupportScale: 1.7,
+        alt: 'Közlenmiş sebzelerle servis edilen üç şişli Türk şiş kebabı 3D modeli',
+        name: 'Türk Şiş Kebabı',
+        description: 'Şişte ızgara et; közlenmiş biber, domates, soğan ve limonla servis edilir.',
         price: '₺ 620'
       },
       {
-        src: modelSource('realistic-steak-slices-plated.glb'),
-        desktopSrc: desktopModelSource('realistic-steak-slices.glb'),
+        src: modelSource('turkish-adana-kebab-plated.glb'),
+        desktopSrc: modelSource('turkish-adana-kebab.glb'),
+        desktopScale: 1,
         desktopSupport: 'plate',
-        desktopSupportScale: 1.85,
-        alt: 'Sebzeli gerçekçi kızarmış steak dilimleri 3D modeli',
-        name: 'Izgara Steak Dilimleri',
-        description: 'Sebze garnitürlü, dışı kızarmış ve içi pembe steak dilimleri.',
+        desktopSupportScale: 1.7,
+        alt: 'Pide, közlenmiş domates ve biberli Adana kebabı 3D modeli',
+        name: 'Adana Kebabı',
+        description: 'Baharatlı kıyma kebabı; pide, közlenmiş domates, biber ve sumaklı soğanla.',
         price: '₺ 590'
       },
       {
@@ -48,26 +49,29 @@ const MENU_TR = {
     label: 'TATLILAR',
     items: [
       {
-        src: modelSource('realistic-dessert-cake.glb'),
+        src: modelSource('realistic-dessert-cake-plated.glb'),
+        desktopSrc: desktopModelSource('realistic-dessert-cake.glb'),
+        desktopSupport: 'plate',
+        desktopSupportScale: 2.45,
         alt: 'Beyaz glazür ve kirazlı gerçekçi katlı pasta 3D modeli',
         name: 'Alba Kirazlı Pasta',
         description: 'Beyaz glazür ve kirazlarla süslenmiş katlı pandispanya.',
         price: '₺ 260'
       },
       {
-        src: modelSource('strawberry-chocolate-cake.glb'),
+        src: modelSource('strawberry-chocolate-cake-plated.glb'),
         desktopSrc: modelSource('strawberry-chocolate-cake.glb'),
         desktopScale: 1,
+        desktopSupport: 'plate',
+        desktopSupportScale: 1.55,
         alt: 'Çilek ve çikolata kaplamalı gerçekçi pasta 3D modeli',
         name: 'Çilekli Çikolatalı Pasta',
         description: 'Çilek, çikolata kaplama ve yumuşak kek katmanlarıyla hazırlanan pasta.',
         price: '₺ 280'
       },
       {
-        src: modelSource('realistic-layered-dessert-cup-plated.glb'),
+        src: modelSource('realistic-layered-dessert-cup.glb'),
         desktopSrc: desktopModelSource('realistic-layered-dessert-cup.glb'),
-        desktopSupport: 'plate',
-        desktopSupportScale: 2.05,
         alt: 'Kremalı orman meyveli katlı tatlı kupu 3D modeli',
         name: 'Orman Meyveli Kup',
         description: 'Krema, orman meyveleri ve ahşap kaşıkla servis edilen katlı tatlı.',
@@ -79,10 +83,12 @@ const MENU_TR = {
     label: 'ÇORBALAR',
     items: [
       {
-        src: modelSource('realistic-soup.glb'),
-        alt: 'Seramik kasede gerçekçi çorba 3D modeli',
-        name: 'Seramik Kasede Çorba',
-        description: 'Detaylı seramik kasede sıcak çorba.',
+        src: modelSource('turkish-lentil-soup.glb'),
+        desktopSrc: modelSource('turkish-lentil-soup.glb'),
+        desktopScale: 1,
+        alt: 'Limon, maydanoz ve zeytinyağlı Türk mercimek çorbası 3D modeli',
+        name: 'Mercimek Çorbası',
+        description: 'Limon, maydanoz, kırmızı biber ve zeytinyağıyla servis edilen sıcak mercimek çorbası.',
         price: '₺ 190'
       }
     ]
@@ -120,24 +126,25 @@ const MENU_RU = {
     label: 'МЯСНЫЕ БЛЮДА',
     items: [
       {
-        src: modelSource('realistic-steak-board-plated.glb'),
-        desktopSrc: desktopModelSource('realistic-steak-board.glb'),
-        desktopRotationY: 90,
+        src: modelSource('turkish-shish-kebab-plated.glb'),
+        desktopSrc: modelSource('turkish-shish-kebab.glb'),
+        desktopScale: 1,
         desktopSupport: 'plate',
-        desktopSupportScale: 1.85,
-        alt: 'Реалистичная 3D-модель стейка на деревянной доске с розмарином, спаржей и чесноком',
-        name: 'Фирменный стейк Alba',
-        description: 'Премиальный стейк с розмарином, спаржей и запечённым чесноком.',
+        desktopSupportScale: 1.7,
+        alt: '3D-модель турецкого шиш-кебаба на трёх шампурах с запечёнными овощами',
+        name: 'Турецкий шиш-кебаб',
+        description: 'Мясо на шампурах с запечённым перцем, помидором, луком и лимоном.',
         price: '₺ 620'
       },
       {
-        src: modelSource('realistic-steak-slices-plated.glb'),
-        desktopSrc: desktopModelSource('realistic-steak-slices.glb'),
+        src: modelSource('turkish-adana-kebab-plated.glb'),
+        desktopSrc: modelSource('turkish-adana-kebab.glb'),
+        desktopScale: 1,
         desktopSupport: 'plate',
-        desktopSupportScale: 1.85,
-        alt: 'Реалистичная 3D-модель обжаренных ломтиков стейка с овощами',
-        name: 'Ломтики стейка на гриле',
-        description: 'Обжаренные ломтики стейка с розовой серединой и овощным гарниром.',
+        desktopSupportScale: 1.7,
+        alt: '3D-модель турецкого адана-кебаба с питой, запечённым помидором и перцем',
+        name: 'Адана-кебаб',
+        description: 'Пряный кебаб из рубленого мяса с питой, запечёнными овощами и луком с сумахом.',
         price: '₺ 590'
       },
       {
@@ -154,26 +161,29 @@ const MENU_RU = {
     label: 'ДЕСЕРТЫ',
     items: [
       {
-        src: modelSource('realistic-dessert-cake.glb'),
+        src: modelSource('realistic-dessert-cake-plated.glb'),
+        desktopSrc: desktopModelSource('realistic-dessert-cake.glb'),
+        desktopSupport: 'plate',
+        desktopSupportScale: 2.45,
         alt: 'Реалистичная 3D-модель слоёного торта с белой глазурью и вишней',
         name: 'Вишнёвый торт Alba',
         description: 'Слоёный бисквит с белой глазурью и вишней.',
         price: '₺ 260'
       },
       {
-        src: modelSource('strawberry-chocolate-cake.glb'),
+        src: modelSource('strawberry-chocolate-cake-plated.glb'),
         desktopSrc: modelSource('strawberry-chocolate-cake.glb'),
         desktopScale: 1,
+        desktopSupport: 'plate',
+        desktopSupportScale: 1.55,
         alt: 'Реалистичная 3D-модель шоколадного торта с клубникой',
         name: 'Клубнично-шоколадный торт',
         description: 'Шоколадный торт с клубникой, глазурью и мягкими бисквитными слоями.',
         price: '₺ 280'
       },
       {
-        src: modelSource('realistic-layered-dessert-cup-plated.glb'),
+        src: modelSource('realistic-layered-dessert-cup.glb'),
         desktopSrc: desktopModelSource('realistic-layered-dessert-cup.glb'),
-        desktopSupport: 'plate',
-        desktopSupportScale: 2.05,
         alt: 'Реалистичная 3D-модель слоёного десерта со сливками и лесными ягодами',
         name: 'Десерт с лесными ягодами',
         description: 'Слоёный десерт со сливками, лесными ягодами и деревянной ложкой.',
@@ -185,10 +195,12 @@ const MENU_RU = {
     label: 'СУПЫ',
     items: [
       {
-        src: modelSource('realistic-soup.glb'),
-        alt: 'Реалистичная 3D-модель супа в керамической миске',
-        name: 'Суп в керамической миске',
-        description: 'Горячий суп в детализированной керамической миске.',
+        src: modelSource('turkish-lentil-soup.glb'),
+        desktopSrc: modelSource('turkish-lentil-soup.glb'),
+        desktopScale: 1,
+        alt: '3D-модель турецкого чечевичного супа с лимоном, петрушкой и оливковым маслом',
+        name: 'Турецкий чечевичный суп',
+        description: 'Горячий суп из красной чечевицы с лимоном, петрушкой, паприкой и оливковым маслом.',
         price: '₺ 190'
       }
     ]

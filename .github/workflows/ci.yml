@@ -57,6 +57,7 @@ jobs:
       - name: Validate restaurant AR engine and mobile models
         run: |
           node --check assets/js/restaurant-model-viewer.js
+          node --check scripts/create-restaurant-turkish-dishes.mjs
           node --check scripts/bake-restaurant-ar-scale.mjs
           node --check scripts/compose-restaurant-serving-plates.mjs
           python scripts/check-glb-extensions.py assets/models/restaurant/wooden-cutting-board.glb assets/models/restaurant/ar/*.glb
