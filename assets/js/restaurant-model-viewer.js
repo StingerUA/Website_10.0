@@ -1,11 +1,12 @@
 const PAGE_LANGUAGE = document.documentElement.lang.toLowerCase().startsWith('ru') ? 'ru' : 'tr';
 const AUTH_MODE = document.documentElement.dataset.authMode || 'required';
 const IS_GUEST_MODE = AUTH_MODE === 'guest';
-const IS_DESKTOP_SCENE = window.matchMedia('(min-width: 900px) and (pointer: fine)').matches;
+// Use the same clean model-viewer presentation on phones and computers.
+const IS_DESKTOP_SCENE = false;
 
 document.documentElement.classList.toggle('is-desktop-scene', IS_DESKTOP_SCENE);
 
-const MODEL_VERSION = 'dish-posters-highpoly-1';
+const MODEL_VERSION = 'desktop-viewer-photo-posters-2';
 const modelSource = (filename) => `/assets/models/restaurant/ar/${filename}?v=${MODEL_VERSION}`;
 const desktopModelSource = (filename) => `/assets/models/restaurant/${filename}?v=${MODEL_VERSION}`;
 const posterSource = (filename) => `/assets/images/restaurant/menu/${filename}?v=${MODEL_VERSION}`;
@@ -15,27 +16,19 @@ const MENU_TR = {
     label: 'ET YEMEKLERİ',
     items: [
       {
-        poster: posterSource('turkish-shish-kebab.webp'),
-        src: modelSource('turkish-shish-kebab-plated.glb'),
-        desktopSrc: modelSource('turkish-shish-kebab.glb'),
-        desktopScale: 1,
-        desktopSupport: 'plate',
-        desktopSupportScale: 1.7,
-        alt: 'Közlenmiş sebzelerle servis edilen üç şişli Türk şiş kebabı 3D modeli',
-        name: 'Türk Şiş Kebabı',
-        description: 'Şişte ızgara et; közlenmiş biber, domates, soğan ve limonla servis edilir.',
+        poster: posterSource('alba-reserve-steak.webp'),
+        src: modelSource('realistic-steak-board.glb'),
+        alt: 'Biberiye, kuşkonmaz, sarımsak ve çeri domatesli ahşap tahtada gerçekçi ribeye steak 3D modeli',
+        name: 'Alba Reserve Steak',
+        description: 'Biberiye, kuşkonmaz, sarımsak ve çeri domatesle ahşap tahtada servis edilir.',
         price: '₺ 620'
       },
       {
-        poster: posterSource('adana-kebab.webp'),
-        src: modelSource('turkish-adana-kebab-plated.glb'),
-        desktopSrc: modelSource('turkish-adana-kebab.glb'),
-        desktopScale: 1,
-        desktopSupport: 'plate',
-        desktopSupportScale: 1.7,
-        alt: 'Pide, közlenmiş domates ve biberli Adana kebabı 3D modeli',
-        name: 'Adana Kebabı',
-        description: 'Baharatlı kıyma kebabı; pide, közlenmiş domates, biber ve sumaklı soğanla.',
+        poster: posterSource('grilled-steak-slices.webp'),
+        src: modelSource('realistic-steak-slices.glb'),
+        alt: 'Izgara sebzelerle tabakta servis edilen gerçekçi dilimlenmiş steak 3D modeli',
+        name: 'Izgara Steak Dilimleri',
+        description: 'Sulu steak dilimleri; ızgara sebzeler ve taze otlarla servis edilir.',
         price: '₺ 590'
       },
       {
@@ -137,27 +130,19 @@ const MENU_RU = {
     label: 'МЯСНЫЕ БЛЮДА',
     items: [
       {
-        poster: posterSource('turkish-shish-kebab.webp'),
-        src: modelSource('turkish-shish-kebab-plated.glb'),
-        desktopSrc: modelSource('turkish-shish-kebab.glb'),
-        desktopScale: 1,
-        desktopSupport: 'plate',
-        desktopSupportScale: 1.7,
-        alt: '3D-модель турецкого шиш-кебаба на трёх шампурах с запечёнными овощами',
-        name: 'Турецкий шиш-кебаб',
-        description: 'Мясо на шампурах с запечённым перцем, помидором, луком и лимоном.',
+        poster: posterSource('alba-reserve-steak.webp'),
+        src: modelSource('realistic-steak-board.glb'),
+        alt: 'Реалистичная 3D-модель стейка рибай на деревянной доске с розмарином, спаржей, чесноком и томатами',
+        name: 'Стейк Alba Reserve',
+        description: 'Рибай на деревянной доске с розмарином, спаржей, чесноком и томатами черри.',
         price: '₺ 620'
       },
       {
-        poster: posterSource('adana-kebab.webp'),
-        src: modelSource('turkish-adana-kebab-plated.glb'),
-        desktopSrc: modelSource('turkish-adana-kebab.glb'),
-        desktopScale: 1,
-        desktopSupport: 'plate',
-        desktopSupportScale: 1.7,
-        alt: '3D-модель турецкого адана-кебаба с питой, запечённым помидором и перцем',
-        name: 'Адана-кебаб',
-        description: 'Пряный кебаб из рубленого мяса с питой, запечёнными овощами и луком с сумахом.',
+        poster: posterSource('grilled-steak-slices.webp'),
+        src: modelSource('realistic-steak-slices.glb'),
+        alt: 'Реалистичная 3D-модель нарезанного стейка на тарелке с овощами гриль',
+        name: 'Ломтики стейка гриль',
+        description: 'Сочные ломтики стейка с овощами гриль и свежей зеленью.',
         price: '₺ 590'
       },
       {
@@ -812,7 +797,7 @@ function activateMobileAr() {
 }
 
 if (!IS_DESKTOP_SCENE) {
-  mobileModelViewer.append(arLaunchButton, arExitButton, experienceUi);
+  mobileModelViewer.append(arExitButton, experienceUi);
 } else {
   mobileModelViewer.remove();
   arLaunchButton.remove();
@@ -824,9 +809,7 @@ renderMenu();
 menuButton.addEventListener('click', () => setMenuOpen(menuPanel.hidden));
 menuClose.addEventListener('click', () => setMenuOpen(false));
 recalibrateButton.addEventListener('click', activateMobileAr);
-arLaunchButton?.addEventListener('click', () => {
-  if (!state.modelReady) setStatus(COPY.catalogLoading, COPY.selectedPreparing, 'loading', true);
-});
+arLaunchButton?.addEventListener('click', activateMobileAr);
 loginLink.addEventListener('click', () => {
   try {
     sessionStorage.setItem(AUTH_RETURN_KEY, `${window.location.pathname}${window.location.search}${window.location.hash}`);
