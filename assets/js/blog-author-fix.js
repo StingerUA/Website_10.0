@@ -104,11 +104,13 @@
   }
 
   function setAuthorText(el, value) {
-    if (!el) return;
+    if (!el || (el.textContent || '').trim() === value) return;
     var avatar = el.querySelector('img.blog-card-author-avatar');
     el.textContent = '';
-    if (avatar) el.appendChild(avatar);
-    if (avatar) el.appendChild(document.createTextNode(' '));
+    if (avatar) {
+      el.appendChild(avatar);
+      el.appendChild(document.createTextNode(' '));
+    }
     el.appendChild(document.createTextNode(value));
   }
 
@@ -121,16 +123,19 @@
 
     var avatar = meta.querySelector('.blog-author-avatar');
     if (avatar) {
-      avatar.src = AUTHOR_IMAGE;
-      avatar.alt = name;
-      avatar.onerror = function () { this.onerror = null; this.src = '/assets/icons/alien.png'; };
+      if (avatar.getAttribute('src') !== AUTHOR_IMAGE) avatar.setAttribute('src', AUTHOR_IMAGE);
+      if (avatar.getAttribute('alt') !== name) avatar.setAttribute('alt', name);
+      if (!avatar.dataset.asliFallback) {
+        avatar.dataset.asliFallback = '1';
+        avatar.onerror = function () { this.onerror = null; this.src = '/assets/icons/alien.png'; };
+      }
     }
 
     var author = meta.querySelector('.blog-author');
-    if (author) author.textContent = name;
+    if (author && author.textContent.trim() !== name) author.textContent = name;
 
     var roleNode = meta.querySelector('.blog-author-details > span:not(.blog-author):not(.dot)');
-    if (roleNode) roleNode.textContent = role;
+    if (roleNode && roleNode.textContent.trim() !== role) roleNode.textContent = role;
   }
 
   function fixTargetCards() {
