@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ALBA Space Staff</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/pass.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
+  <script src="/assets/js/pass-api.js" defer></script>
+  <script src="/assets/js/pass-staff.js" defer></script>
+</head>
+<body class="pass-page">
+  <div data-include="/header-tr.html"></div>
+  <main class="pass-main">
+    <section class="pass-hero">
+      <span class="pass-badge">ALBA SPACE STAFF</span>
+      <h1>Festival Operasyon Paneli</h1>
+      <p id="staffIdentity">Personel hesabı doğrulanıyor…</p>
+    </section>
+    <div id="staffGate"></div>
+    <section id="staffWorkspace">
+      <nav class="staff-toolbar" aria-label="Staff actions">
+        <button class="pass-btn" data-staff-tab="scannerPanel">📷 QR Tara</button>
+        <button class="pass-btn secondary" data-staff-tab="paymentsPanel">💵 Ödemeler</button>
+        <button class="pass-btn secondary" data-staff-tab="customersPanel">🔎 Müşteri</button>
+        <button class="pass-btn secondary" data-staff-tab="recentPanel">🕒 Aktivite</button>
+      </nav>
+
+      <section id="scannerPanel" class="staff-panel active">
+        <div class="staff-scanner-wrap">
+          <div class="pass-card">
+            <h2>QR Pass Tara</h2>
+            <video id="staffVideo" class="staff-camera" playsinline muted></video>
+            <p id="scannerStatus" class="pass-muted">Kamerayı başlatın veya Pass kodunu manuel girin.</p>
+            <div class="pass-actions">
+              <button id="startCamera" class="pass-btn">Kamerayı başlat</button>
+              <button id="stopCamera" class="pass-btn secondary">Durdur</button>
+            </div>
+            <form id="manualLookup" class="pass-form pass-section">
+              <label>Pass kodu
+                <input id="manualToken" autocomplete="off" placeholder="ALBAPASS:v1.pass_…">
+              </label>
+              <button class="pass-btn" type="submit">Pass'i doğrula</button>
+            </form>
+          </div>
+          <div id="scanResult"><div class="pass-card pass-empty">Taranan Pass burada görünecek.</div></div>
+        </div>
+      </section>
+
+      <section id="paymentsPanel" class="staff-panel">
+        <div class="pass-hero"><h2>Bekleyen Ödemeler</h2><p>Nakit veya IBAN ödemesini yalnızca parayı gerçekten gördükten/alındıktan sonra onaylayın.</p></div>
+        <div id="pendingPayments"></div>
+      </section>
+
+      <section id="customersPanel" class="staff-panel">
+        <div class="pass-card">
+          <h2>Müşteri Bul</h2>
+          <form id="customerSearchForm" class="pass-form">
+            <label>E-posta veya isim
+              <input id="customerQuery" autocomplete="off" placeholder="ornek@gmail.com">
+            </label>
+            <button class="pass-btn" type="submit">Ara</button>
+          </form>
+        </div>
+        <div id="customerResults" class="staff-search-results"></div>
+      </section>
+
+      <section id="recentPanel" class="staff-panel">
+        <div class="pass-hero"><h2>Son İşlemler</h2><p>Ödeme onayları ve kullanılan Pass hakları.</p></div>
+        <div id="recentActivity" class="staff-search-results"></div>
+      </section>
+    </section>
+  </main>
+  <div data-include="/footer-tr.html"></div>
+</body>
+</html>

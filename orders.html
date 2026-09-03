@@ -1,32 +1,46 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <!-- Универсальный favicon-блок -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Satın Aldıklarım | ALBA Space</title>
   <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
-  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#020617">
-  <meta name="msapplication-TileColor" content="#020617">
-  <meta name="msapplication-TileImage" content="/favicon.png">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-  <!-- Site genel stilleri -->
   <link rel="stylesheet" href="/assets/css/site.css">
   <link rel="stylesheet" href="/assets/css/fix-layout.css">
-  <link rel="stylesheet" href="/assets/css/shop.css">
-
-
-<body>
-
-  <!-- Türkçe Header -->
+  <link rel="stylesheet" href="/assets/css/pass.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
+</head>
+<body class="pass-page">
   <div data-include="/header-tr.html"></div>
-
- 
-  <!-- Türkçe Footer -->
+  <main class="pass-main">
+    <section class="pass-hero">
+      <span class="pass-badge">MY ALBA SPACE</span>
+      <h1>Satın Aldıklarım</h1>
+      <p>ALBA Space Experience Pass siparişlerinize ve diğer satın alma alanlarına buradan ulaşabilirsiniz.</p>
+    </section>
+    <section class="pass-grid">
+      <article class="pass-card">
+        <span class="pass-badge ok">EXPERIENCE PASS</span>
+        <h2>ALBA Space Pass'lerim</h2>
+        <p class="pass-muted">Nakit/IBAN ödeme durumları, aktif QR Pass ve kalan VR/teleskop hakları.</p>
+        <div class="pass-actions">
+          <a class="pass-btn" href="/passes.html">Pass'lerimi aç</a>
+          <a class="pass-btn secondary" href="/experience-pass.html">Yeni deneyim seç</a>
+        </div>
+      </article>
+      <article class="pass-card">
+        <span class="pass-badge">MAĞAZA</span>
+        <h2>Mağaza siparişleri</h2>
+        <p class="pass-muted">Mevcut mağaza/purchase sistemi ayrı kalır. ALBA Space Pass Cash/IBAN finansal kayıtları bu alanla karıştırılmaz.</p>
+        <div class="pass-actions"><a class="pass-btn secondary" href="/shop.html">Mağazaya git</a></div>
+      </article>
+    </section>
+  </main>
   <div data-include="/footer-tr.html"></div>
-
-  
 </body>
 </html>

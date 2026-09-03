@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ALBA Space Pass Admin</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/pass.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
+  <script src="/assets/js/pass-api.js" defer></script>
+  <script src="/assets/js/pass-admin.js" defer></script>
+</head>
+<body class="pass-page">
+  <div data-include="/header-tr.html"></div>
+  <main class="pass-main">
+    <section class="pass-hero">
+      <span class="pass-badge">ALBA SPACE ADMIN</span>
+      <h1>Pass Yönetimi</h1>
+      <p id="adminIdentity">Admin hesabı doğrulanıyor…</p>
+    </section>
+    <div id="adminGate"></div>
+    <section id="adminWorkspace">
+      <div class="admin-two">
+        <article class="pass-card">
+          <h2>1. Etkinlik oluştur</h2>
+          <form id="eventForm" class="pass-form">
+            <label>Kod<input name="code" placeholder="festival-2026" required></label>
+            <label>Ad<input name="name" placeholder="ALBA Space Festival" required></label>
+            <label>Mekan<input name="venue" placeholder="Etkinlik alanı"></label>
+            <label>Saat dilimi<input name="timezone" value="Europe/Istanbul"></label>
+            <label>Başlangıç<input name="starts_at" type="datetime-local"></label>
+            <label>Bitiş<input name="ends_at" type="datetime-local"></label>
+            <label>Durum<select name="status"><option value="draft">Draft</option><option value="active">Active</option><option value="closed">Closed</option></select></label>
+            <button class="pass-btn" type="submit">Etkinlik oluştur</button>
+          </form>
+          <p id="eventResult" class="pass-muted" aria-live="polite"></p>
+        </article>
+
+        <article class="pass-card">
+          <h2>2. Experience paketi oluştur</h2>
+          <p class="pass-muted">Mevcut <code>products</code> tablosundaki product slug kullanılır. Fiyat ve festival hakları burada ayrı config olarak tutulur.</p>
+          <form id="offerForm" class="pass-form">
+            <label>Event ID<input id="offerEventId" name="event_id" type="number" min="1" required></label>
+            <label>Product slug<input name="product_slug" placeholder="vr-mission-iss" required></label>
+            <label>Başlık<input name="title" placeholder="1 Gün Telescope + VR" required></label>
+            <label>Açıklama<textarea name="description" placeholder="Paket açıklaması"></textarea></label>
+            <label>Fiyat (TL)<input name="price_amount" type="number" min="0" step="1" required></label>
+            <label>Entitlements<textarea name="entitlements" rows="8" placeholder="SUN|Güneş Gözlemi|use|1|1&#10;MOON|Ay Gözlemi|use|1|1&#10;VR|Mission: ISS|minute|5|"></textarea></label>
+            <small class="pass-muted">Format: CODE | Label | use/minute | quantity | day(optional)</small>
+            <label><span><input name="active" type="checkbox" checked> Satışta aktif</span></label>
+            <button class="pass-btn" type="submit">Paketi oluştur</button>
+          </form>
+          <p id="offerResult" class="pass-muted" aria-live="polite"></p>
+        </article>
+      </div>
+
+      <article class="pass-card pass-section">
+        <h2>Personel rolü</h2>
+        <p class="pass-muted">Yetki frontend'de değil D1 içindeki RBAC tablolarında tutulur.</p>
+        <form id="roleForm" class="pass-form" style="max-width:620px">
+          <label>Kullanıcı e-postası<input name="email" type="email" required></label>
+          <label>Rol<select name="role"><option value="employee">Employee</option><option value="admin">Admin</option><option value="superadmin">Superadmin</option></select></label>
+          <label>İşlem<select name="enabled"><option value="true">Rolü ver / etkinleştir</option><option value="false">Rolü kaldır</option></select></label>
+          <button class="pass-btn" type="submit">Rolü güncelle</button>
+        </form>
+        <p id="roleResult" class="pass-muted" aria-live="polite"></p>
+      </article>
+    </section>
+  </main>
+  <div data-include="/footer-tr.html"></div>
+</body>
+</html>
