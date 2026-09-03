@@ -63,22 +63,6 @@
         "ru": "Космический предприниматель, футурист и преподаватель",
         "ar": "رائد أعمال فضائي، مستقبلي ومدرِّب"
       }
-    },
-    {
-      "id": "alba-space-ekibi",
-      "image": "/assets/icons/AlbaLogo.png",
-      "name": {
-        "tr": "Alba Space Ekibi",
-        "en": "Alba Space Team",
-        "ru": "Команда Alba Space",
-        "ar": "فريق ألبا للفضاء"
-      },
-      "role": {
-        "tr": "Uzay Araştırmacıları",
-        "en": "Space Researchers",
-        "ru": "Исследователи космоса",
-        "ar": "باحثو الفضاء"
-      }
     }
   ]
 }
