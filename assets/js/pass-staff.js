@@ -1,5 +1,7 @@
 (function(){
   const api=()=>window.AlbaPassApi;
+  const locale=()=>window.AlbaPassLocale||{lang:'tr',t:key=>key,productTitle:(slug,fallback)=>fallback||slug,entitlementLabel:(ent,fallback)=>fallback||ent?.label||ent?.entitlement_code};
+  const t=(key,vars)=>locale().t(key,vars);
   let currentToken='';
   let cameraStream=null;
   let scanTimer=null;
@@ -12,16 +14,13 @@
   document.addEventListener('DOMContentLoaded',init);
 
   async function init(){
-    bindTabs();
-    bindScanner();
-    bindSearch();
-    bindPaymentModal();
+    bindTabs();bindScanner();bindSearch();bindPaymentModal();
     try{
       const me=await api().request('/api/staff/me');
       document.getElementById('staffIdentity').textContent=`${me.user.name||me.user.email} · ${me.roles.join(', ')}`;
       await Promise.all([loadPending(),loadRecent()]);
     }catch(error){
-      document.getElementById('staffGate').innerHTML=`<div class="pass-notice pass-error">Bu hesap ALBA Space personel paneline erişemiyor. ${api().escapeHtml(error.data?.error||error.message)}</div>`;
+      document.getElementById('staffGate').innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('staffDenied',{error:error.data?.error||error.message}))}</div>`;
       document.getElementById('staffWorkspace').hidden=true;
     }
   }
@@ -39,11 +38,7 @@
   function bindScanner(){
     document.getElementById('startCamera')?.addEventListener('click',startCamera);
     document.getElementById('stopCamera')?.addEventListener('click',stopCamera);
-    document.getElementById('manualLookup')?.addEventListener('submit',event=>{
-      event.preventDefault();
-      const token=document.getElementById('manualToken').value.trim();
-      if(token)lookupToken(token);
-    });
+    document.getElementById('manualLookup')?.addEventListener('submit',event=>{event.preventDefault();const token=document.getElementById('manualToken').value.trim();if(token)lookupToken(token);});
   }
 
   function bindPaymentModal(){
@@ -52,251 +47,111 @@
     const received=document.getElementById('paymentReceivedCheck');
     const confirmButton=document.getElementById('paymentModalConfirm');
     if(!modal||!form||!received||!confirmButton)return;
-
-    received.addEventListener('change',()=>{
-      confirmButton.disabled=!received.checked||modalSubmitting;
-    });
+    received.addEventListener('change',()=>{confirmButton.disabled=!received.checked||modalSubmitting;});
     form.addEventListener('submit',submitPaymentConfirmation);
     modal.querySelectorAll('[data-payment-modal-close]').forEach(button=>button.addEventListener('click',()=>closePaymentModal()));
-    document.addEventListener('keydown',event=>{
-      if(event.key==='Escape'&&!modal.hidden&&!modalSubmitting)closePaymentModal();
-    });
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!modal.hidden&&!modalSubmitting)closePaymentModal();});
   }
 
   async function startCamera(){
-    const status=document.getElementById('scannerStatus');
-    stopCamera();
-    if(!navigator.mediaDevices?.getUserMedia){status.textContent='Bu tarayıcı kamera erişimini desteklemiyor.';return;}
-    if(!('BarcodeDetector' in window)){
-      status.textContent='Bu tarayıcı yerleşik QR taramayı desteklemiyor. Aşağıdaki manuel Pass kodu alanını kullanın.';
-      return;
-    }
+    const status=document.getElementById('scannerStatus');stopCamera();
+    if(!navigator.mediaDevices?.getUserMedia){status.textContent=t('cameraUnsupported');return;}
+    if(!('BarcodeDetector' in window)){status.textContent=t('qrUnsupported');return;}
     try{
       detector=new BarcodeDetector({formats:['qr_code']});
       cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
-      const video=document.getElementById('staffVideo');
-      video.srcObject=cameraStream;
-      await video.play();
-      status.textContent='QR kameraya gösterin…';
-      scanTimer=setInterval(scanFrame,450);
-    }catch(error){status.textContent='Kamera açılamadı: '+error.message;stopCamera();}
+      const video=document.getElementById('staffVideo');video.srcObject=cameraStream;await video.play();status.textContent=t('showQr');scanTimer=setInterval(scanFrame,450);
+    }catch(error){status.textContent=t('cameraError',{error:error.message});stopCamera();}
   }
 
   async function scanFrame(){
-    const video=document.getElementById('staffVideo');
-    if(!detector||!video||video.readyState<2)return;
-    try{
-      const codes=await detector.detect(video);
-      const value=codes?.[0]?.rawValue;
-      if(value){
-        stopCamera();
-        document.getElementById('scannerStatus').textContent='QR bulundu. Pass doğrulanıyor…';
-        await lookupToken(value);
-      }
-    }catch{}
+    const video=document.getElementById('staffVideo');if(!detector||!video||video.readyState<2)return;
+    try{const codes=await detector.detect(video);const value=codes?.[0]?.rawValue;if(value){stopCamera();document.getElementById('scannerStatus').textContent=t('qrFound');await lookupToken(value);}}catch{}
   }
 
   function stopCamera(){
     if(scanTimer){clearInterval(scanTimer);scanTimer=null;}
     if(cameraStream){cameraStream.getTracks().forEach(track=>track.stop());cameraStream=null;}
-    const video=document.getElementById('staffVideo');
-    if(video)video.srcObject=null;
+    const video=document.getElementById('staffVideo');if(video)video.srcObject=null;
   }
 
   async function lookupToken(token){
-    const root=document.getElementById('scanResult');
-    currentToken=token;
-    root.innerHTML='<div class="pass-empty">Pass doğrulanıyor…</div>';
-    try{
-      const data=await api().request('/api/staff/pass/lookup',{method:'POST',body:{token}});
-      renderPass(root,data.pass);
-      const manual=document.getElementById('manualToken');if(manual)manual.value='';
-    }catch(error){
-      currentToken='';
-      root.innerHTML=`<div class="pass-notice pass-error">Geçersiz veya bulunamayan Pass: ${api().escapeHtml(error.data?.error||error.message)}</div>`;
-    }
+    const root=document.getElementById('scanResult');currentToken=token;root.innerHTML=`<div class="pass-empty">${api().escapeHtml(t('passChecking'))}</div>`;
+    try{const data=await api().request('/api/staff/pass/lookup',{method:'POST',body:{token}});renderPass(root,data.pass);const manual=document.getElementById('manualToken');if(manual)manual.value='';}
+    catch(error){currentToken='';root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('passInvalid',{error:error.data?.error||error.message}))}</div>`;}
   }
 
   function renderPass(root,pass){
     const active=pass.status==='active'&&pass.payment_status==='confirmed';
     const rights=(pass.entitlements||[]).map(ent=>{
       const available=active&&ent.status==='available'&&Number(ent.remaining_quantity)>0;
-      const qty=ent.unit==='minute'?`${ent.remaining_quantity} dk`:`${ent.remaining_quantity}/${ent.total_quantity}`;
-      const amountInput=ent.unit==='minute'&&available?`<label style="max-width:110px">Dakika<input class="redeemAmount" type="number" min="1" max="${Number(ent.remaining_quantity)}" value="${Math.min(5,Number(ent.remaining_quantity))}"></label>`:'';
-      return `<div class="pass-card staff-entitlement">
-        <div><strong>${api().escapeHtml(ent.label)}</strong>${ent.day_no?`<div class="pass-muted">Gün ${ent.day_no}</div>`:''}<div class="pass-muted">Kalan: ${qty}</div></div>
-        <div class="pass-actions">${amountInput}<button class="pass-btn" data-redeem="${api().escapeHtml(ent.id)}" ${available?'':'disabled'}>${available?'KULLAN':'KULLANILDI'}</button></div>
-      </div>`;
+      const qty=ent.unit==='minute'?`${ent.remaining_quantity} ${t('minuteShort')}`:`${ent.remaining_quantity}/${ent.total_quantity}`;
+      const amountInput=ent.unit==='minute'&&available?`<label style="max-width:110px">${api().escapeHtml(t('minutes'))}<input class="redeemAmount" type="number" min="1" max="${Number(ent.remaining_quantity)}" value="${Math.min(5,Number(ent.remaining_quantity))}"></label>`:'';
+      return `<div class="pass-card staff-entitlement"><div><strong>${api().escapeHtml(locale().entitlementLabel(ent,ent.label))}</strong><div class="pass-muted">${api().escapeHtml(t('remaining'))}: ${qty}</div></div><div class="pass-actions">${amountInput}<button class="pass-btn" data-redeem="${api().escapeHtml(ent.id)}" ${available?'':'disabled'}>${api().escapeHtml(available?t('use'):t('used'))}</button></div></div>`;
     }).join('');
-    root.innerHTML=`
-      <article class="pass-card">
-        <span class="pass-badge ${active?'ok':'bad'}">${active?'GEÇERLİ':'GEÇERSİZ / PASİF'}</span>
-        <h2>${api().escapeHtml(pass.title||pass.event_name||'ALBA Space Pass')}</h2>
-        <p><strong>${api().escapeHtml(pass.name||'')}</strong><br>${api().escapeHtml(pass.email||'')}</p>
-        <p class="pass-muted">Pass: ${api().escapeHtml(pass.id)}<br>Sipariş: ${api().escapeHtml(pass.order_id)}</p>
-        <p>Ödeme: <strong>${api().escapeHtml(pass.payment_method||'')} · ${api().escapeHtml(pass.payment_status||'')}</strong></p>
-      </article>
-      <div class="pass-section"><h3>Kullanılabilir haklar</h3>${rights||'<div class="pass-empty">Bu Pass için entitlement bulunamadı.</div>'}</div>`;
+    root.innerHTML=`<article class="pass-card"><span class="pass-badge ${active?'ok':'bad'}">${api().escapeHtml(active?t('valid'):t('inactive'))}</span><h2>${api().escapeHtml(locale().productTitle(pass.product_slug,pass.title||pass.event_name||'ALBA Space Pass'))}</h2><p><strong>${api().escapeHtml(pass.name||'')}</strong><br>${api().escapeHtml(pass.email||'')}</p><p class="pass-muted">Pass: ${api().escapeHtml(pass.id)}<br>${api().escapeHtml(t('order'))}: ${api().escapeHtml(pass.order_id)}</p><p>${api().escapeHtml(t('payment'))}: <strong>${api().escapeHtml(pass.payment_method||'')} · ${api().escapeHtml(pass.payment_status||'')}</strong></p></article><div class="pass-section"><h3>${api().escapeHtml(t('availableRights'))}</h3>${rights||`<div class="pass-empty">${api().escapeHtml(t('noEntitlements'))}</div>`}</div>`;
     root.querySelectorAll('[data-redeem]').forEach(button=>button.addEventListener('click',()=>redeem(button)));
   }
 
   async function redeem(button){
     if(!currentToken)return;
-    const entitlementId=button.dataset.redeem;
-    const parent=button.closest('.staff-entitlement');
-    const input=parent?.querySelector('.redeemAmount');
-    const amount=input?Math.max(1,Number.parseInt(input.value||'1',10)||1):1;
-    if(!confirm(`Bu hakkı şimdi kullanmak istediğinizi onaylıyor musunuz? Miktar: ${amount}`))return;
-    button.disabled=true;
-    const old=button.textContent;button.textContent='İŞLENİYOR…';
-    try{
-      await api().request('/api/staff/pass/redeem',{method:'POST',body:{token:currentToken,entitlement_id:entitlementId,amount,request_id:api().requestId('redeem')}});
-      await lookupToken(currentToken);
-      await loadRecent();
-    }catch(error){
-      alert('Kullanım kaydedilemedi: '+(error.data?.error||error.message));
-      button.disabled=false;button.textContent=old;
-    }
+    const entitlementId=button.dataset.redeem;const parent=button.closest('.staff-entitlement');const input=parent?.querySelector('.redeemAmount');const amount=input?Math.max(1,Number.parseInt(input.value||'1',10)||1):1;
+    if(!confirm(t('redeemConfirm',{amount})))return;
+    button.disabled=true;const old=button.textContent;button.textContent=t('processing');
+    try{await api().request('/api/staff/pass/redeem',{method:'POST',body:{token:currentToken,entitlement_id:entitlementId,amount,request_id:api().requestId('redeem')}});await lookupToken(currentToken);await loadRecent();}
+    catch(error){alert(t('redeemError',{error:error.data?.error||error.message}));button.disabled=false;button.textContent=old;}
   }
 
   async function loadPending(){
-    const root=document.getElementById('pendingPayments');
-    if(!root)return;
-    root.innerHTML='<div class="pass-empty">Bekleyen ödemeler yükleniyor…</div>';
+    const root=document.getElementById('pendingPayments');if(!root)return;root.innerHTML=`<div class="pass-empty">${api().escapeHtml(t('pendingLoading'))}</div>`;
     try{
-      const data=await api().request('/api/staff/payments/pending');
-      if(!data.payments?.length){root.innerHTML='<div class="pass-card pass-empty">Bekleyen ödeme yok.</div>';return;}
-      root.innerHTML='';
+      const data=await api().request('/api/staff/payments/pending');if(!data.payments?.length){root.innerHTML=`<div class="pass-card pass-empty">${api().escapeHtml(t('noPending'))}</div>`;return;}root.innerHTML='';
       for(const payment of data.payments){
         const row=document.createElement('article');row.className='pass-card staff-payment';
-        row.innerHTML=`<div><span class="pass-badge warn">${payment.method==='cash'?'NAKİT':'IBAN'} BEKLİYOR</span><h3>${api().escapeHtml(payment.title||payment.product_slug||'Experience')}</h3><p>${api().escapeHtml(payment.name||'')} · ${api().escapeHtml(payment.email)}</p><p><strong>${api().money(payment.amount,payment.currency)}</strong> · <span class="payment-ref">${api().escapeHtml(payment.reference_code)}</span></p></div><button class="pass-btn" data-confirm-payment="${api().escapeHtml(payment.id)}">ÖDEMEYİ ONAYLA</button>`;
-        row.querySelector('[data-confirm-payment]').addEventListener('click',event=>openPaymentModal(payment,event.currentTarget));
-        root.appendChild(row);
+        row.innerHTML=`<div><span class="pass-badge warn">${api().escapeHtml(payment.method==='cash'?t('cashWaiting'):t('ibanWaiting'))}</span><h3>${api().escapeHtml(locale().productTitle(payment.product_slug,payment.title||payment.product_slug||'Experience'))}</h3><p>${api().escapeHtml(payment.name||'')} · ${api().escapeHtml(payment.email)}</p><p><strong>${api().money(payment.amount,payment.currency)}</strong> · <span class="payment-ref">${api().escapeHtml(payment.reference_code)}</span></p></div><button class="pass-btn" data-confirm-payment="${api().escapeHtml(payment.id)}">${api().escapeHtml(t('confirmPayment'))}</button>`;
+        row.querySelector('[data-confirm-payment]').addEventListener('click',event=>openPaymentModal(payment,event.currentTarget));root.appendChild(row);
       }
-    }catch(error){root.innerHTML=`<div class="pass-notice pass-error">Ödemeler yüklenemedi: ${api().escapeHtml(error.message)}</div>`;}
+    }catch(error){root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('paymentsError',{error:error.message}))}</div>`;}
   }
 
   function openPaymentModal(payment,button){
-    const modal=document.getElementById('paymentConfirmModal');
-    if(!modal)return;
-    modalPayment=payment;
-    modalSourceButton=button;
-    modalPreviousFocus=document.activeElement;
-    modalSubmitting=false;
-
+    const modal=document.getElementById('paymentConfirmModal');if(!modal)return;modalPayment=payment;modalSourceButton=button;modalPreviousFocus=document.activeElement;modalSubmitting=false;
     document.getElementById('paymentModalCustomer').textContent=`${payment.name||'—'} · ${payment.email||'—'}`;
-    document.getElementById('paymentModalTitleValue').textContent=payment.title||payment.product_slug||'Experience';
+    document.getElementById('paymentModalTitleValue').textContent=locale().productTitle(payment.product_slug,payment.title||payment.product_slug||'Experience');
     document.getElementById('paymentModalAmount').textContent=api().money(payment.amount,payment.currency);
     document.getElementById('paymentModalReference').textContent=payment.reference_code||'—';
-    document.getElementById('paymentModalMethod').textContent=payment.method==='cash'?'Nakit':'IBAN / Banka transferi';
-
-    const received=document.getElementById('paymentReceivedCheck');
-    const receivedLabel=document.getElementById('paymentReceivedLabel');
-    const bankRow=document.getElementById('paymentBankReferenceRow');
-    const bankReference=document.getElementById('paymentBankReference');
-    const note=document.getElementById('paymentNote');
-    const error=document.getElementById('paymentModalError');
-    const confirmButton=document.getElementById('paymentModalConfirm');
-
-    received.checked=false;
-    receivedLabel.textContent=payment.method==='cash'
-      ?'Nakit ödemeyi fiziksel olarak teslim aldım ve tutarı doğruladım.'
-      :'Banka transferini ALBA Space hesabında gördüm ve tutarı doğruladım.';
-    bankRow.hidden=payment.method!=='iban';
-    bankReference.value='';
-    note.value='';
-    error.hidden=true;
-    error.textContent='';
-    confirmButton.disabled=true;
-    confirmButton.textContent='ÖDEMEYİ ONAYLA';
-
-    modal.hidden=false;
-    modal.setAttribute('aria-hidden','false');
-    document.body.classList.add('pass-modal-open');
-    requestAnimationFrame(()=>received.focus());
+    document.getElementById('paymentModalMethod').textContent=payment.method==='cash'?t('cashTransferLabel'):t('ibanTransferLabel');
+    const received=document.getElementById('paymentReceivedCheck');const receivedLabel=document.getElementById('paymentReceivedLabel');const bankRow=document.getElementById('paymentBankReferenceRow');const bankReference=document.getElementById('paymentBankReference');const note=document.getElementById('paymentNote');const error=document.getElementById('paymentModalError');const confirmButton=document.getElementById('paymentModalConfirm');
+    received.checked=false;receivedLabel.textContent=payment.method==='cash'?t('cashReceived'):t('ibanReceived');bankRow.hidden=payment.method!=='iban';bankReference.value='';note.value='';error.hidden=true;error.textContent='';confirmButton.disabled=true;confirmButton.textContent=t('confirmPayment');
+    modal.hidden=false;modal.setAttribute('aria-hidden','false');document.body.classList.add('pass-modal-open');requestAnimationFrame(()=>received.focus());
   }
 
   function closePaymentModal(){
-    if(modalSubmitting)return;
-    const modal=document.getElementById('paymentConfirmModal');
-    if(!modal||modal.hidden)return;
-    modal.hidden=true;
-    modal.setAttribute('aria-hidden','true');
-    document.body.classList.remove('pass-modal-open');
-    modalPayment=null;
-    modalSourceButton=null;
-    if(modalPreviousFocus&&typeof modalPreviousFocus.focus==='function')modalPreviousFocus.focus();
-    modalPreviousFocus=null;
+    if(modalSubmitting)return;const modal=document.getElementById('paymentConfirmModal');if(!modal||modal.hidden)return;modal.hidden=true;modal.setAttribute('aria-hidden','true');document.body.classList.remove('pass-modal-open');modalPayment=null;modalSourceButton=null;if(modalPreviousFocus&&typeof modalPreviousFocus.focus==='function')modalPreviousFocus.focus();modalPreviousFocus=null;
   }
 
   async function submitPaymentConfirmation(event){
-    event.preventDefault();
-    if(!modalPayment||modalSubmitting)return;
-    const received=document.getElementById('paymentReceivedCheck');
-    const bankReference=document.getElementById('paymentBankReference').value.trim();
-    const note=document.getElementById('paymentNote').value.trim();
-    const error=document.getElementById('paymentModalError');
-    const confirmButton=document.getElementById('paymentModalConfirm');
-
-    if(!received.checked){
-      error.textContent='Devam etmek için ödemenin gerçekten alındığını doğrulayın.';
-      error.hidden=false;
-      received.focus();
-      return;
-    }
-
-    modalSubmitting=true;
-    error.hidden=true;
-    confirmButton.disabled=true;
-    confirmButton.textContent='ONAYLANIYOR…';
-    if(modalSourceButton){modalSourceButton.disabled=true;modalSourceButton.textContent='ONAYLANIYOR…';}
-
+    event.preventDefault();if(!modalPayment||modalSubmitting)return;
+    const received=document.getElementById('paymentReceivedCheck');const bankReference=document.getElementById('paymentBankReference').value.trim();const note=document.getElementById('paymentNote').value.trim();const error=document.getElementById('paymentModalError');const confirmButton=document.getElementById('paymentModalConfirm');
+    if(!received.checked){error.textContent=t('mustConfirmPayment');error.hidden=false;received.focus();return;}
+    modalSubmitting=true;error.hidden=true;confirmButton.disabled=true;confirmButton.textContent=t('confirming');if(modalSourceButton){modalSourceButton.disabled=true;modalSourceButton.textContent=t('confirming');}
     try{
-      await api().request(`/api/staff/payments/${encodeURIComponent(modalPayment.id)}/confirm`,{
-        method:'POST',
-        body:{request_id:api().requestId('payment'),bank_reference:bankReference,note}
-      });
-      const modal=document.getElementById('paymentConfirmModal');
-      modal.hidden=true;
-      modal.setAttribute('aria-hidden','true');
-      document.body.classList.remove('pass-modal-open');
-      modalPayment=null;
-      modalSourceButton=null;
-      modalSubmitting=false;
-      modalPreviousFocus=null;
-      await Promise.all([loadPending(),loadRecent()]);
-    }catch(requestError){
-      modalSubmitting=false;
-      error.textContent='Ödeme onaylanamadı: '+(requestError.data?.error||requestError.message);
-      error.hidden=false;
-      confirmButton.disabled=!received.checked;
-      confirmButton.textContent='TEKRAR DENE';
-      if(modalSourceButton){modalSourceButton.disabled=false;modalSourceButton.textContent='ÖDEMEYİ ONAYLA';}
-    }
+      await api().request(`/api/staff/payments/${encodeURIComponent(modalPayment.id)}/confirm`,{method:'POST',body:{request_id:api().requestId('payment'),bank_reference:bankReference,note}});
+      const modal=document.getElementById('paymentConfirmModal');modal.hidden=true;modal.setAttribute('aria-hidden','true');document.body.classList.remove('pass-modal-open');modalPayment=null;modalSourceButton=null;modalSubmitting=false;modalPreviousFocus=null;await Promise.all([loadPending(),loadRecent()]);
+    }catch(requestError){modalSubmitting=false;error.textContent=t('paymentConfirmError',{error:requestError.data?.error||requestError.message});error.hidden=false;confirmButton.disabled=!received.checked;confirmButton.textContent=t('retry');if(modalSourceButton){modalSourceButton.disabled=false;modalSourceButton.textContent=t('confirmPayment');}}
   }
 
   function bindSearch(){
     document.getElementById('customerSearchForm')?.addEventListener('submit',async event=>{
-      event.preventDefault();
-      const q=document.getElementById('customerQuery').value.trim();
-      const root=document.getElementById('customerResults');
-      if(q.length<2){root.innerHTML='<div class="pass-muted">En az 2 karakter yazın.</div>';return;}
-      root.innerHTML='<div class="pass-empty">Aranıyor…</div>';
-      try{
-        const data=await api().request('/api/staff/customers/search?q='+encodeURIComponent(q));
-        if(!data.customers?.length){root.innerHTML='<div class="pass-card pass-empty">Müşteri bulunamadı.</div>';return;}
-        root.innerHTML=data.customers.map(customer=>`<article class="pass-card"><h3>${api().escapeHtml(customer.name||customer.email)}</h3><p>${api().escapeHtml(customer.email)}</p><ul class="pass-list">${(customer.orders||[]).map(order=>`<li><span>${api().escapeHtml(order.title||order.product_slug||order.id)}<br><small>${api().escapeHtml(order.id)}</small></span><strong>${api().escapeHtml(order.payment_status)} · ${api().money(order.total_amount,order.currency)}</strong></li>`).join('')||'<li>Sipariş yok</li>'}</ul></article>`).join('');
-      }catch(error){root.innerHTML=`<div class="pass-notice pass-error">Arama başarısız: ${api().escapeHtml(error.message)}</div>`;}
+      event.preventDefault();const q=document.getElementById('customerQuery').value.trim();const root=document.getElementById('customerResults');if(q.length<2){root.innerHTML=`<div class="pass-muted">${api().escapeHtml(t('min2'))}</div>`;return;}root.innerHTML=`<div class="pass-empty">${api().escapeHtml(t('searching'))}</div>`;
+      try{const data=await api().request('/api/staff/customers/search?q='+encodeURIComponent(q));if(!data.customers?.length){root.innerHTML=`<div class="pass-card pass-empty">${api().escapeHtml(t('customerNotFound'))}</div>`;return;}root.innerHTML=data.customers.map(customer=>`<article class="pass-card"><h3>${api().escapeHtml(customer.name||customer.email)}</h3><p>${api().escapeHtml(customer.email)}</p><ul class="pass-list">${(customer.orders||[]).map(order=>`<li><span>${api().escapeHtml(locale().productTitle(order.product_slug,order.title||order.product_slug||order.id))}<br><small>${api().escapeHtml(order.id)}</small></span><strong>${api().escapeHtml(order.payment_status)} · ${api().money(order.total_amount,order.currency)}</strong></li>`).join('')||`<li>${api().escapeHtml(t('noOrdersShort'))}</li>`}</ul></article>`).join('');}
+      catch(error){root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('searchError',{error:error.message}))}</div>`;}
     });
   }
 
   async function loadRecent(){
-    const root=document.getElementById('recentActivity');
-    if(!root)return;
-    try{
-      const data=await api().request('/api/staff/recent');
-      if(!data.events?.length){root.innerHTML='<div class="pass-card pass-empty">Henüz işlem yok.</div>';return;}
-      root.innerHTML=data.events.map(event=>`<div class="pass-card staff-log"><strong>${api().escapeHtml(event.event_type)}</strong> · ${api().escapeHtml(event.actor_name||event.actor_email||'system')}<br><span class="pass-muted">${api().escapeHtml(event.target_type)} ${api().escapeHtml(event.target_id)}</span><br><time>${api().dateTime(event.created_at)}</time></div>`).join('');
-    }catch(error){root.innerHTML=`<div class="pass-notice pass-error">Aktivite yüklenemedi: ${api().escapeHtml(error.message)}</div>`;}
+    const root=document.getElementById('recentActivity');if(!root)return;
+    try{const data=await api().request('/api/staff/recent');if(!data.events?.length){root.innerHTML=`<div class="pass-card pass-empty">${api().escapeHtml(t('noActivity'))}</div>`;return;}root.innerHTML=data.events.map(event=>`<div class="pass-card staff-log"><strong>${api().escapeHtml(event.event_type)}</strong> · ${api().escapeHtml(event.actor_name||event.actor_email||'system')}<br><span class="pass-muted">${api().escapeHtml(event.target_type)} ${api().escapeHtml(event.target_id)}</span><br><time>${api().dateTime(event.created_at)}</time></div>`).join('');}
+    catch(error){root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('activityError',{error:error.message}))}</div>`;}
   }
 })();

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ALBA Space Pass Admin</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/pass.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
+  <script src="/assets/js/pass-api.js" defer></script>
+  <script src="/assets/js/pass-locale.js" defer></script>
+  <script src="/assets/js/pass-admin.js?v=20260904-i18n" defer></script>
+</head>
+<body class="pass-page">
+  <div data-include="/header-en.html"></div>
+  <main class="pass-main">
+    <section class="pass-hero"><span class="pass-badge">ALBA SPACE ADMIN</span><h1>Pass Management</h1><p id="adminIdentity">Verifying admin account…</p></section>
+    <div id="adminGate"></div>
+    <section id="adminWorkspace">
+      <div class="admin-two">
+        <article class="pass-card">
+          <h2>1. Create event</h2>
+          <form id="eventForm" class="pass-form">
+            <label>Code<input name="code" placeholder="festival-2026" required></label>
+            <label>Name<input name="name" placeholder="ALBA Space Festival" required></label>
+            <label>Venue<input name="venue" placeholder="Event venue"></label>
+            <label>Timezone<input name="timezone" value="Europe/Istanbul"></label>
+            <label>Starts<input name="starts_at" type="datetime-local"></label>
+            <label>Ends<input name="ends_at" type="datetime-local"></label>
+            <label>Status<select name="status"><option value="draft">Draft</option><option value="active">Active</option><option value="closed">Closed</option></select></label>
+            <button class="pass-btn" type="submit">Create event</button>
+          </form>
+          <p id="eventResult" class="pass-muted" aria-live="polite"></p>
+        </article>
+
+        <article class="pass-card">
+          <h2>2. Create Experience package</h2>
+          <p class="pass-muted">Uses an existing product slug from the <code>products</code> table. Festival pricing and entitlements are configured separately here.</p>
+          <form id="offerForm" class="pass-form">
+            <label>Event ID<input id="offerEventId" name="event_id" type="number" min="1" required></label>
+            <label>Product slug<input name="product_slug" placeholder="vr-mission-iss" required></label>
+            <label>Title<input name="title" placeholder="1 Day Telescope + VR" required></label>
+            <label>Description<textarea name="description" placeholder="Package description"></textarea></label>
+            <label>Price (TL)<input name="price_amount" type="number" min="0" step="1" required></label>
+            <label>Entitlements<textarea name="entitlements" rows="8" placeholder="SUN|Sun Observation|use|1|1&#10;MOON|Moon Observation|use|1|1&#10;VR|Mission: ISS|minute|5|"></textarea></label>
+            <small class="pass-muted">Format: CODE | Label | use/minute | quantity | day(optional)</small>
+            <label><span><input name="active" type="checkbox" checked> Active for sale</span></label>
+            <button class="pass-btn" type="submit">Create package</button>
+          </form>
+          <p id="offerResult" class="pass-muted" aria-live="polite"></p>
+        </article>
+      </div>
+
+      <article class="pass-card pass-section">
+        <h2>Staff role</h2>
+        <p class="pass-muted">Authorization is stored server-side in D1 RBAC tables, not in the frontend.</p>
+        <form id="roleForm" class="pass-form" style="max-width:620px">
+          <label>User email<input name="email" type="email" required></label>
+          <label>Role<select name="role"><option value="employee">Employee</option><option value="admin">Admin</option><option value="superadmin">Superadmin</option></select></label>
+          <label>Action<select name="enabled"><option value="true">Grant / enable role</option><option value="false">Remove role</option></select></label>
+          <button class="pass-btn" type="submit">Update role</button>
+        </form>
+        <p id="roleResult" class="pass-muted" aria-live="polite"></p>
+      </article>
+    </section>
+  </main>
+  <div data-include="/footer-en.html"></div>
+</body>
+</html>
