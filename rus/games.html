@@ -5,153 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alba Space — Игры</title>
   <link rel="stylesheet" href="/assets/css/site.css" />
-<link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
   <script src="/assets/js/include.js" defer></script>
   <script src="/assets/js/menu-toggle.js" defer></script>
   <script src="/assets/js/mobile-header-cart.js" defer></script>
   <style>
-    :root {
-      --bg: #020617;
-      --panel: rgba(15, 23, 42, 0.78);
-      --panel-border: rgba(148, 163, 184, 0.18);
-      --accent: #00c2ff;
-      --accent-2: #38bdf8;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --shadow: rgba(14, 165, 233, 0.18);
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      min-height: 100vh;
-    }
-
-    .page-shell {
-      max-width: 1100px;
-      margin: 40px auto 90px;
-      padding: 0 20px;
-    }
-
-    .eyebrow {
-      color: var(--accent-2);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    h1 {
-      font-size: clamp(28px, 5vw, 44px);
-      margin: 0 0 12px;
-      color: #f8fafc;
-    }
-
-    .lead {
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.7;
-      margin: 0 0 28px;
-    }
-
-    .game-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 22px;
-    }
-
-    .game-card {
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .game-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(0, 194, 255, 0.4);
-    }
-
-    .game-art {
-      min-height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at center, rgba(0, 194, 255, 0.18), rgba(15, 23, 42, 0.9) 50%);
-      font-size: 56px;
-    }
-
-    .game-body {
-      padding: 20px 20px 22px;
-    }
-
-    .game-name {
-      margin: 0 0 8px;
-      font-size: 22px;
-      color: #f8fafc;
-    }
-
-    .game-description {
-      margin: 0 0 18px;
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 14px;
-    }
-
-    .cta {
-      display: inline-block;
-      padding: 11px 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--accent), #0077b6);
-      color: white;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      box-shadow: 0 14px 24px var(--shadow);
-    }
+    :root{--bg:#020617;--panel:rgba(15,23,42,.78);--panel-border:rgba(148,163,184,.18);--accent:#00c2ff;--accent-2:#38bdf8;--text:#e2e8f0;--muted:#94a3b8;--shadow:rgba(14,165,233,.18)}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}.page-shell{max-width:1100px;margin:40px auto 90px;padding:0 20px}.eyebrow{color:var(--accent-2);text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:700;margin-bottom:12px}h1{font-size:clamp(28px,5vw,44px);margin:0 0 12px;color:#f8fafc}.lead{max-width:760px;color:var(--muted);font-size:16px;line-height:1.7;margin:0 0 28px}.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}.game-card{background:var(--panel);border:1px solid var(--panel-border);border-radius:20px;overflow:hidden;box-shadow:0 18px 40px rgba(2,6,23,.45);transition:transform .2s ease,border-color .2s ease}.game-card:hover{transform:translateY(-2px);border-color:rgba(0,194,255,.4)}.game-art{min-height:180px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,rgba(0,194,255,.18),rgba(15,23,42,.9) 50%);font-size:56px}.game-body{padding:20px 20px 22px}.game-name{margin:0 0 8px;font-size:22px;color:#f8fafc}.game-description{margin:0 0 18px;color:var(--muted);line-height:1.7;font-size:14px}.cta{display:inline-block;padding:11px 18px;border-radius:999px;background:linear-gradient(135deg,var(--accent),#0077b6);color:#fff;text-decoration:none;font-weight:700;font-size:14px;box-shadow:0 14px 24px var(--shadow)}
   </style>
 </head>
 <body>
   <div data-include="/header-ru.html"></div>
-
   <main class="page-shell">
-    <div class="eyebrow">Alba Space</div>
-    <h1>Игры</h1>
-    <p class="lead">
-      Исследуйте наши интерактивные впечатления. Ниже представлен список доступных игр.
-    </p>
-
+    <div class="eyebrow">Alba Space</div><h1>Игры</h1>
+    <p class="lead">Исследуйте наши интерактивные проекты. Ниже представлен список доступных игр.</p>
     <div class="game-grid">
-      <article class="game-card">
-        <div class="game-art" aria-hidden="true">🍽️</div>
-        <div class="game-body">
-          <h2 class="game-name">AR-меню ресторана</h2>
-          <p class="game-description">
-            Сфотографируйте поверхность стола и разместите выбранные блюда на ней в дополненной реальности. Русская версия доступна без регистрации и входа.
-          </p>
-          <a class="cta" href="/rus/ar-restaurant/">Запустить AR-меню</a>
-        </div>
-      </article>
-      <article class="game-card">
-        <div class="game-art" aria-hidden="true">🕵️</div>
-        <div class="game-body">
-          <h2 class="game-name">ORBI AR</h2>
-          <p class="game-description">
-            Интерактивная игра на основе геолокации, где игроки прячут и находят 3D-модели через камеру и карту.
-          </p>
-          <a class="cta" href="/rus/games/hide-and-seek/ru/">Играть</a>
-        </div>
-      </article>
+      <article class="game-card"><div class="game-art" aria-hidden="true">🍽️</div><div class="game-body"><h2 class="game-name">AR-меню ресторана</h2><p class="game-description">Сфотографируйте поверхность стола и разместите выбранные блюда на ней в дополненной реальности. Русская версия доступна без регистрации и входа.</p><a class="cta" href="/rus/ar-restaurant/">Запустить AR-меню</a></div></article>
+      <article class="game-card"><div class="game-art" aria-hidden="true">🕵️</div><div class="game-body"><h2 class="game-name">ORBI AR</h2><p class="game-description">Интерактивная игра на основе геолокации, где игроки прячут и находят 3D-модели через камеру и карту.</p><a class="cta" href="/rus/games/hide-and-seek/ru/">Играть</a></div></article>
+      <article class="game-card"><div class="game-art" aria-hidden="true">🛰️</div><div class="game-body"><h2 class="game-name">Космическая академия Alba Space</h2><p class="game-description">Образовательная многопользовательская игра для учителей и учеников. Построй космическую станцию, развивай экипаж и отвечай на вопросы в 3D Laptop Mode.</p><a class="cta" href="/game/AlbaSpace/ru/index.html">Открыть академию</a></div></article>
+      <article class="game-card"><div class="game-art" aria-hidden="true">🧩</div><div class="game-body"><h2 class="game-name">AR-лабиринт</h2><p class="game-description">Покажите карточку лабиринта камере, откройте 3D-лабиринт в дополненной реальности и проведите шар к цели.</p><a class="cta" href="/games/labirint/ru/game.html">Открыть лабиринт</a></div></article>
+      <article class="game-card"><div class="game-art" aria-hidden="true">🧢</div><div class="game-body"><h2 class="game-name">AR-примерка</h2><p class="game-description">Включите камеру, примеряйте кепки и очки Alba Space на лице в реальном времени и сохраняйте фотографии.</p><a class="cta" href="/rus/games/ar-try-on/">Открыть AR-примерку</a></div></article>
     </div>
   </main>
-
   <div data-include="/footer-ru.html"></div>
 </body>
 </html>
