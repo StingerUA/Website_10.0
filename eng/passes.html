@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>My Passes | ALBA Space</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/pass.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer referrerpolicy="no-referrer"></script>
+  <script src="/assets/js/pass-api.js" defer></script>
+  <script src="/assets/js/pass-locale.js" defer></script>
+  <script src="/assets/js/pass-customer.js?v=20260904-i18n" defer></script>
+</head>
+<body class="pass-page" data-pass-page="my-passes">
+  <div data-include="/header-en.html"></div>
+  <main class="pass-main">
+    <section class="pass-hero">
+      <span class="pass-badge">MY ALBA SPACE</span>
+      <h1>My Passes</h1>
+      <p>Track your orders, payment status, active QR Passes and remaining experience entitlements.</p>
+      <div class="pass-actions"><a class="pass-btn" href="/eng/experience-pass.html">Choose another experience</a></div>
+    </section>
+    <div id="passStatus" class="pass-muted" aria-live="polite"></div>
+    <section class="pass-section">
+      <h2>My orders</h2>
+      <div id="myOrders" class="pass-grid"></div>
+    </section>
+    <section class="pass-section">
+      <h2>My active Passes</h2>
+      <div id="myPasses" class="pass-grid"></div>
+    </section>
+  </main>
+  <div data-include="/footer-en.html"></div>
+</body>
+</html>
