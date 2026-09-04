@@ -1,10 +1,18 @@
-// Atlas model pages: turn Albaman's long narrative into readable translucent story cards.
+// Educational model pages: turn Albaman's long narrative into readable translucent story cards.
 // The source text is preserved; only presentation/paragraph grouping is changed.
 (function () {
   'use strict';
 
   var path = String((window.location && window.location.pathname) || '').toLowerCase();
-  if (path.indexOf('/atlas/') === -1) return;
+
+  function isExcludedModelPage(value) {
+    return /\/(?:ar-restaurant|game|games|scanner)(?:\/|$)/.test(value) ||
+      /\/(?:shop|cart|account|favorites|orders)(?:\.html|\/|$)/.test(value) ||
+      /\/product-[^/]+(?:\.html|\/|$)/.test(value) ||
+      /\/found-models\.html$/.test(value);
+  }
+
+  if (isExcludedModelPage(path)) return;
 
   var GROUP_PATTERN = [3, 2, 3, 3, 2];
   var STYLE_ID = 'atlas-story-cards-styles';
@@ -199,7 +207,7 @@
     var sourceNodes = [];
     var parts = [];
 
-    // Most Atlas pages keep the whole Albaman story in one <p> separated by <br><br>.
+    // Most educational model pages keep the whole Albaman story in one <p> separated by <br><br>.
     candidateParagraphs.some(function (p) {
       var split = splitByDoubleBreak(p);
       if (split.length >= 4) {
@@ -210,7 +218,7 @@
       return false;
     });
 
-    // Also support Atlas pages where the story is already split into separate <p> elements.
+    // Also support pages where the story is already split into separate <p> elements.
     if (!parts.length && candidateParagraphs.length >= 4) {
       sourceNodes = candidateParagraphs;
       parts = candidateParagraphs
@@ -218,7 +226,8 @@
         .filter(Boolean);
     }
 
-    if (parts.length < 2 || !sourceNodes.length) return;
+    // Content-based safety: ordinary model-viewer/product pages with short descriptions are untouched.
+    if (parts.length < 4 || !sourceNodes.length) return;
 
     var first = sourceNodes[0];
     var wrapper = buildCards(parts);
@@ -232,7 +241,6 @@
 
   function enhanceAtlasStories() {
     if (!document.querySelector('model-viewer')) return;
-    injectStyles();
 
     var roots = [];
     document.querySelectorAll('model-viewer').forEach(function (viewer) {
@@ -241,6 +249,10 @@
     });
 
     roots.forEach(enhanceRoot);
+
+    if (document.querySelector('[data-atlas-story-enhanced="true"]')) {
+      injectStyles();
+    }
   }
 
   if (document.readyState === 'loading') {
