@@ -6,7 +6,7 @@ const IS_DESKTOP_SCENE = false;
 
 document.documentElement.classList.toggle('is-desktop-scene', IS_DESKTOP_SCENE);
 
-const MODEL_VERSION = 'desktop-viewer-photo-posters-2';
+const MODEL_VERSION = 'turkish-meat-scale-light-3';
 const modelSource = (filename) => `/assets/models/restaurant/ar/${filename}?v=${MODEL_VERSION}`;
 const desktopModelSource = (filename) => `/assets/models/restaurant/${filename}?v=${MODEL_VERSION}`;
 const posterSource = (filename) => `/assets/images/restaurant/menu/${filename}?v=${MODEL_VERSION}`;
@@ -16,19 +16,21 @@ const MENU_TR = {
     label: 'ET YEMEKLERİ',
     items: [
       {
-        poster: posterSource('alba-reserve-steak.webp'),
-        src: modelSource('realistic-steak-board.glb'),
-        alt: 'Biberiye, kuşkonmaz, sarımsak ve çeri domatesli ahşap tahtada gerçekçi ribeye steak 3D modeli',
-        name: 'Alba Reserve Steak',
-        description: 'Biberiye, kuşkonmaz, sarımsak ve çeri domatesle ahşap tahtada servis edilir.',
+        poster: posterSource('turkish-shish-kebab.webp'),
+        src: modelSource('turkish-shish-kebab-plated.glb'),
+        exposure: 1.05,
+        alt: 'Közlenmiş sebzelerle servis edilen yüksek detaylı Türk şiş kebabı 3D modeli',
+        name: 'Türk Şiş Kebabı',
+        description: 'Şişte ızgara et; közlenmiş biber, domates, soğan ve limonla servis edilir.',
         price: '₺ 620'
       },
       {
-        poster: posterSource('grilled-steak-slices.webp'),
-        src: modelSource('realistic-steak-slices.glb'),
-        alt: 'Izgara sebzelerle tabakta servis edilen gerçekçi dilimlenmiş steak 3D modeli',
-        name: 'Izgara Steak Dilimleri',
-        description: 'Sulu steak dilimleri; ızgara sebzeler ve taze otlarla servis edilir.',
+        poster: posterSource('adana-kebab.webp'),
+        src: modelSource('turkish-adana-kebab-plated.glb'),
+        exposure: 1.05,
+        alt: 'Pide, közlenmiş sebzeler ve sumaklı soğanla servis edilen yüksek detaylı Adana kebabı 3D modeli',
+        name: 'Adana Kebabı',
+        description: 'Baharatlı kıyma kebabı; pide, közlenmiş domates, biber ve sumaklı soğanla.',
         price: '₺ 590'
       },
       {
@@ -87,6 +89,8 @@ const MENU_TR = {
         src: modelSource('turkish-lentil-soup.glb'),
         desktopSrc: modelSource('turkish-lentil-soup.glb'),
         desktopScale: 1,
+        modelScale: 5,
+        exposure: 0.68,
         alt: 'Limon, maydanoz ve zeytinyağlı Türk mercimek çorbası 3D modeli',
         name: 'Mercimek Çorbası',
         description: 'Limon, maydanoz, kırmızı biber ve zeytinyağıyla servis edilen sıcak mercimek çorbası.',
@@ -100,6 +104,7 @@ const MENU_TR = {
       {
         poster: posterSource('strawberry-yogurt.webp'),
         src: modelSource('realistic-yogurt-drink.glb'),
+        modelScale: 0.5,
         alt: 'Çilekli yoğurt içeceği şişesi gerçekçi 3D modeli',
         name: 'Çilekli Yoğurt',
         description: 'Soğuk çilekli yoğurt içeceği.',
@@ -108,6 +113,7 @@ const MENU_TR = {
       {
         poster: posterSource('alba-coffee.webp'),
         src: modelSource('realistic-coffee-cup.glb'),
+        modelScale: 0.5,
         alt: 'Kapaklı kahve bardağı gerçekçi 3D modeli',
         name: 'Alba Kahve',
         description: 'Kapaklı detaylı bardakta aromatik kahve.',
@@ -116,6 +122,7 @@ const MENU_TR = {
       {
         poster: posterSource('strawberry-lemonade.webp'),
         src: modelSource('realistic-strawberry-lemonade.glb'),
+        modelScale: 0.5,
         alt: 'Limon ve naneli çilekli limonata gerçekçi 3D modeli',
         name: 'Çilekli Limonata',
         description: 'Limon, nane ve çilek katmanlarıyla serinletici limonata.',
@@ -130,19 +137,21 @@ const MENU_RU = {
     label: 'МЯСНЫЕ БЛЮДА',
     items: [
       {
-        poster: posterSource('alba-reserve-steak.webp'),
-        src: modelSource('realistic-steak-board.glb'),
-        alt: 'Реалистичная 3D-модель стейка рибай на деревянной доске с розмарином, спаржей, чесноком и томатами',
-        name: 'Стейк Alba Reserve',
-        description: 'Рибай на деревянной доске с розмарином, спаржей, чесноком и томатами черри.',
+        poster: posterSource('turkish-shish-kebab.webp'),
+        src: modelSource('turkish-shish-kebab-plated.glb'),
+        exposure: 1.05,
+        alt: 'Высокодетализированная 3D-модель турецкого шиш-кебаба с запечёнными овощами',
+        name: 'Турецкий шиш-кебаб',
+        description: 'Мясо на шампурах с запечённым перцем, помидором, луком и лимоном.',
         price: '₺ 620'
       },
       {
-        poster: posterSource('grilled-steak-slices.webp'),
-        src: modelSource('realistic-steak-slices.glb'),
-        alt: 'Реалистичная 3D-модель нарезанного стейка на тарелке с овощами гриль',
-        name: 'Ломтики стейка гриль',
-        description: 'Сочные ломтики стейка с овощами гриль и свежей зеленью.',
+        poster: posterSource('adana-kebab.webp'),
+        src: modelSource('turkish-adana-kebab-plated.glb'),
+        exposure: 1.05,
+        alt: 'Высокодетализированная 3D-модель адана-кебаба с питой, овощами и луком с сумахом',
+        name: 'Адана-кебаб',
+        description: 'Пряный кебаб из рубленого мяса с питой, запечёнными овощами и луком с сумахом.',
         price: '₺ 590'
       },
       {
@@ -201,6 +210,8 @@ const MENU_RU = {
         src: modelSource('turkish-lentil-soup.glb'),
         desktopSrc: modelSource('turkish-lentil-soup.glb'),
         desktopScale: 1,
+        modelScale: 5,
+        exposure: 0.68,
         alt: '3D-модель турецкого чечевичного супа с лимоном, петрушкой и оливковым маслом',
         name: 'Турецкий чечевичный суп',
         description: 'Горячий суп из красной чечевицы с лимоном, петрушкой, паприкой и оливковым маслом.',
@@ -214,6 +225,7 @@ const MENU_RU = {
       {
         poster: posterSource('strawberry-yogurt.webp'),
         src: modelSource('realistic-yogurt-drink.glb'),
+        modelScale: 0.5,
         alt: 'Реалистичная 3D-модель бутылки клубничного йогуртового напитка',
         name: 'Клубничный йогурт',
         description: 'Охлаждённый клубничный йогуртовый напиток.',
@@ -222,6 +234,7 @@ const MENU_RU = {
       {
         poster: posterSource('alba-coffee.webp'),
         src: modelSource('realistic-coffee-cup.glb'),
+        modelScale: 0.5,
         alt: 'Реалистичная 3D-модель стакана кофе с крышкой',
         name: 'Кофе Alba',
         description: 'Ароматный кофе в детализированном стакане с крышкой.',
@@ -230,6 +243,7 @@ const MENU_RU = {
       {
         poster: posterSource('strawberry-lemonade.webp'),
         src: modelSource('realistic-strawberry-lemonade.glb'),
+        modelScale: 0.5,
         alt: 'Реалистичная 3D-модель клубничного лимонада с лимоном и мятой',
         name: 'Клубничный лимонад',
         description: 'Освежающий лимонад с лимоном, мятой и клубникой.',
@@ -426,9 +440,10 @@ function setMenuOpen(open) {
 function updateMobilePresentation(item) {
   mobileModelViewer.alt = item.alt;
   mobileModelViewer.poster = item.poster;
-  mobileModelViewer.exposure = state.category === 'meat' ? 1.27 : 1.15;
+  mobileModelViewer.exposure = item.exposure ?? (state.category === 'meat' ? 1.27 : 1.15);
   mobileModelViewer.orientation = item.orientation || '0deg 0deg 0deg';
-  mobileModelViewer.scale = '1 1 1';
+  const modelScale = item.modelScale ?? 1;
+  mobileModelViewer.scale = `${modelScale} ${modelScale} ${modelScale}`;
   viewerDishName.textContent = item.name;
 }
 
@@ -451,7 +466,7 @@ function hideDishPoster() {
 function applyDesktopTransform() {
   if (!IS_DESKTOP_SCENE || !window.AFRAME?.THREE) return;
   const item = currentDish();
-  const categoryScale = state.category === 'meat' ? 0.5 : 1;
+  const categoryScale = item.modelScale ?? (state.category === 'meat' ? 0.5 : 1);
   const baseScale = item.desktopScale ?? (DESKTOP_MODEL_BASE_SCALE * categoryScale);
   const scale = baseScale * state.zoom;
   const support = item.desktopSupport || (state.category === 'meat' ? 'board' : null);
