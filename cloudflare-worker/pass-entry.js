@@ -7,10 +7,26 @@ export { GameRoomDO };
 const SESSION_COOKIE = 'albaspace_session';
 const OAUTH_STATE_COOKIE = 'albaspace_oauth_state';
 const AUTH_TOKEN_QUERY = 'access_token';
+const AVATAR_ROUTE_PREFIX = '/avatar/';
+const AVATAR_STORAGE_PREFIX = 'avatars/';
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
+const AVATAR_TYPES = new Map([
+  ['image/jpeg', 'jpg'],
+  ['image/png', 'png'],
+  ['image/webp', 'webp']
+]);
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    if (isAvatarRoute(url.pathname)) {
+      const cors = buildPassCors(request, env);
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { status: 204, headers: cors });
+      }
+      return handleAvatarRequest(request, env, cors);
+    }
 
     // Preserve the existing auth/session UX, but avoid SQLite INSERT OR REPLACE
     // for returning Google users. REPLACE may delete/reinsert a row and therefore
@@ -44,6 +60,128 @@ function isPassRoute(pathname) {
   return pathname.startsWith('/api/pass/')
     || pathname.startsWith('/api/staff/')
     || pathname.startsWith('/api/admin/pass/');
+}
+
+function isAvatarRoute(pathname) {
+  return pathname === '/profile/avatar' || pathname.startsWith(AVATAR_ROUTE_PREFIX);
+}
+
+function avatarFilenameFromUrl(value) {
+  try {
+    const url = new URL(String(value || ''));
+    if (!url.pathname.startsWith(AVATAR_ROUTE_PREFIX)) return '';
+    const filename = decodeURIComponent(url.pathname.slice(AVATAR_ROUTE_PREFIX.length));
+    return /^[a-f0-9-]{36}\.(?:jpg|png|webp)$/i.test(filename) ? filename : '';
+  } catch {
+    return '';
+  }
+}
+
+function avatarStorageKeyFromUrl(value) {
+  const filename = avatarFilenameFromUrl(value);
+  return filename ? AVATAR_STORAGE_PREFIX + filename : '';
+}
+
+function managedAvatarUrl(value) {
+  return !!avatarFilenameFromUrl(value);
+}
+
+async function handleAvatarRequest(request, env, cors) {
+  const url = new URL(request.url);
+
+  if (url.pathname.startsWith(AVATAR_ROUTE_PREFIX) && request.method === 'GET') {
+    if (!env.MODELS) return jsonResponse({ error: 'Avatar storage unavailable' }, 503, cors);
+    const filename = decodeURIComponent(url.pathname.slice(AVATAR_ROUTE_PREFIX.length));
+    if (!/^[a-f0-9-]{36}\.(?:jpg|png|webp)$/i.test(filename)) {
+      return jsonResponse({ error: 'Avatar not found' }, 404, cors);
+    }
+    const object = await env.MODELS.get(AVATAR_STORAGE_PREFIX + filename);
+    if (!object) return jsonResponse({ error: 'Avatar not found' }, 404, cors);
+
+    const headers = new Headers(cors);
+    object.writeHttpMetadata(headers);
+    headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+    headers.set('X-Content-Type-Options', 'nosniff');
+    if (object.httpEtag) headers.set('ETag', object.httpEtag);
+    return new Response(object.body, { status: 200, headers });
+  }
+
+  if (url.pathname !== '/profile/avatar') {
+    return jsonResponse({ error: 'Not found' }, 404, cors);
+  }
+
+  const user = await getSessionUser(request, env);
+  if (!user) return jsonResponse({ error: 'Not logged in' }, 401, cors);
+  if (!env.MODELS) return jsonResponse({ error: 'Avatar storage unavailable' }, 503, cors);
+
+  if (request.method === 'POST') {
+    let form;
+    try {
+      form = await request.formData();
+    } catch {
+      return jsonResponse({ error: 'Invalid form data' }, 400, cors);
+    }
+
+    const file = form.get('avatar');
+    if (!file || typeof file.arrayBuffer !== 'function') {
+      return jsonResponse({ error: 'Avatar file is required' }, 400, cors);
+    }
+
+    const type = String(file.type || '').toLowerCase();
+    const extension = AVATAR_TYPES.get(type);
+    if (!extension) {
+      return jsonResponse({ error: 'Only JPG, PNG and WebP images are allowed' }, 415, cors);
+    }
+    if (!Number.isFinite(file.size) || file.size <= 0 || file.size > MAX_AVATAR_BYTES) {
+      return jsonResponse({ error: 'Avatar must be between 1 byte and 5 MB' }, 413, cors);
+    }
+
+    const filename = `${crypto.randomUUID()}.${extension}`;
+    const storageKey = AVATAR_STORAGE_PREFIX + filename;
+    const publicBase = String(env.PUBLIC_BASE_URL || new URL(request.url).origin).replace(/\/$/, '');
+    const avatarUrl = `${publicBase}${AVATAR_ROUTE_PREFIX}${filename}`;
+
+    await env.MODELS.put(storageKey, file.stream(), {
+      httpMetadata: {
+        contentType: type,
+        cacheControl: 'public, max-age=31536000, immutable'
+      },
+      customMetadata: { kind: 'account-avatar' }
+    });
+
+    try {
+      await env.DB.prepare(
+        'UPDATE users SET avatar = ? WHERE google_id = ?'
+      ).bind(avatarUrl, user.google_id).run();
+    } catch (error) {
+      await env.MODELS.delete(storageKey).catch(() => {});
+      throw error;
+    }
+
+    const oldKey = avatarStorageKeyFromUrl(user.avatar);
+    if (oldKey && oldKey !== storageKey) {
+      await env.MODELS.delete(oldKey).catch((error) => {
+        console.warn('Unable to delete previous account avatar', error);
+      });
+    }
+
+    return jsonResponse({ ok: true, avatar: avatarUrl }, 200, cors);
+  }
+
+  if (request.method === 'DELETE') {
+    const oldKey = avatarStorageKeyFromUrl(user.avatar);
+    await env.DB.prepare(
+      'UPDATE users SET avatar = ? WHERE google_id = ?'
+    ).bind('', user.google_id).run();
+    if (oldKey) {
+      await env.MODELS.delete(oldKey).catch((error) => {
+        console.warn('Unable to delete account avatar', error);
+      });
+    }
+    return jsonResponse({ ok: true, avatar: '' }, 200, cors);
+  }
+
+  return jsonResponse({ error: 'Method not allowed' }, 405, cors);
 }
 
 async function stableGoogleCallback(request, env) {
@@ -105,7 +243,7 @@ async function stableGoogleCallback(request, env) {
   const googleId = String(googleUser.sub || '').trim();
   const email = String(googleUser.email || '').trim().toLowerCase();
   const name = String(googleUser.name || '').trim();
-  const avatar = String(googleUser.picture || '').trim();
+  const googleAvatar = String(googleUser.picture || '').trim();
   if (!googleId || !email) {
     return redirect(withLoginError(returnUrl, 'invalid_google_profile'), {
       'Set-Cookie': clearStateCookie
@@ -113,10 +251,14 @@ async function stableGoogleCallback(request, env) {
   }
 
   const existingByGoogle = await env.DB.prepare(
-    'SELECT id, google_id, email FROM users WHERE google_id = ? LIMIT 1'
+    'SELECT id, google_id, email, avatar FROM users WHERE google_id = ? LIMIT 1'
   ).bind(googleId).first();
 
   if (existingByGoogle) {
+    // Keep a user-uploaded AlbaSpace avatar across future Google logins.
+    const avatar = managedAvatarUrl(existingByGoogle.avatar)
+      ? existingByGoogle.avatar
+      : googleAvatar;
     // Critical for Pass/orders/payments: UPDATE preserves the existing users.id.
     await env.DB.prepare(
       'UPDATE users SET email = ?, name = ?, avatar = ? WHERE google_id = ?'
@@ -138,7 +280,7 @@ async function stableGoogleCallback(request, env) {
     // Match the current production insert shape for genuinely new Google users.
     await env.DB.prepare(
       'INSERT INTO users (google_id, email, name, avatar) VALUES (?, ?, ?, ?)'
-    ).bind(googleId, email, name, avatar).run();
+    ).bind(googleId, email, name, googleAvatar).run();
   }
 
   const sessionId = randomToken();
@@ -228,6 +370,17 @@ function redirect(location, extraHeaders = {}) {
   return new Response(null, { status: 302, headers });
 }
 
+function jsonResponse(payload, status, extraHeaders = {}) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+      ...extraHeaders
+    }
+  });
+}
+
 function safeReturnUrl(value, env) {
   const fallback = env.FRONT_ORIGIN || 'https://albaspace.com.tr';
   try {
@@ -263,7 +416,7 @@ function randomToken() {
 
 function buildPassCors(request, env) {
   const headers = {
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
     'Vary': 'Origin'
