@@ -126,7 +126,7 @@
       if (document.querySelector('script[data-atlas-story-cards-direct]')) return;
 
       const story = document.createElement('script');
-      story.src = '/assets/js/atlas-story-cards.js?v=20260904-3';
+      story.src = '/assets/js/atlas-story-cards.js?v=20260904-4';
       story.defer = true;
       story.setAttribute('data-atlas-story-cards-direct', 'true');
       (document.head || document.documentElement).appendChild(story);
