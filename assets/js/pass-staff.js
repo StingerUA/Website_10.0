@@ -4,6 +4,10 @@
   let cameraStream=null;
   let scanTimer=null;
   let detector=null;
+  let modalPayment=null;
+  let modalSourceButton=null;
+  let modalPreviousFocus=null;
+  let modalSubmitting=false;
 
   document.addEventListener('DOMContentLoaded',init);
 
@@ -11,6 +15,7 @@
     bindTabs();
     bindScanner();
     bindSearch();
+    bindPaymentModal();
     try{
       const me=await api().request('/api/staff/me');
       document.getElementById('staffIdentity').textContent=`${me.user.name||me.user.email} · ${me.roles.join(', ')}`;
@@ -38,6 +43,23 @@
       event.preventDefault();
       const token=document.getElementById('manualToken').value.trim();
       if(token)lookupToken(token);
+    });
+  }
+
+  function bindPaymentModal(){
+    const modal=document.getElementById('paymentConfirmModal');
+    const form=document.getElementById('paymentConfirmForm');
+    const received=document.getElementById('paymentReceivedCheck');
+    const confirmButton=document.getElementById('paymentModalConfirm');
+    if(!modal||!form||!received||!confirmButton)return;
+
+    received.addEventListener('change',()=>{
+      confirmButton.disabled=!received.checked||modalSubmitting;
+    });
+    form.addEventListener('submit',submitPaymentConfirmation);
+    modal.querySelectorAll('[data-payment-modal-close]').forEach(button=>button.addEventListener('click',()=>closePaymentModal()));
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&!modal.hidden&&!modalSubmitting)closePaymentModal();
     });
   }
 
@@ -148,22 +170,109 @@
       for(const payment of data.payments){
         const row=document.createElement('article');row.className='pass-card staff-payment';
         row.innerHTML=`<div><span class="pass-badge warn">${payment.method==='cash'?'NAKİT':'IBAN'} BEKLİYOR</span><h3>${api().escapeHtml(payment.title||payment.product_slug||'Experience')}</h3><p>${api().escapeHtml(payment.name||'')} · ${api().escapeHtml(payment.email)}</p><p><strong>${api().money(payment.amount,payment.currency)}</strong> · <span class="payment-ref">${api().escapeHtml(payment.reference_code)}</span></p></div><button class="pass-btn" data-confirm-payment="${api().escapeHtml(payment.id)}">ÖDEMEYİ ONAYLA</button>`;
-        row.querySelector('[data-confirm-payment]').addEventListener('click',event=>confirmPayment(payment,event.currentTarget));
+        row.querySelector('[data-confirm-payment]').addEventListener('click',event=>openPaymentModal(payment,event.currentTarget));
         root.appendChild(row);
       }
     }catch(error){root.innerHTML=`<div class="pass-notice pass-error">Ödemeler yüklenemedi: ${api().escapeHtml(error.message)}</div>`;}
   }
 
-  async function confirmPayment(payment,button){
-    if(!confirm(`${payment.email}\n${payment.title}\n${api().money(payment.amount,payment.currency)}\n\nÖdemeyi aldığınızı onaylıyor musunuz?`))return;
-    let bankReference='';
-    if(payment.method==='iban')bankReference=prompt('Banka işlem referansı (varsa):','')||'';
-    const note=prompt('Not (isteğe bağlı):','')||'';
-    button.disabled=true;button.textContent='ONAYLANIYOR…';
+  function openPaymentModal(payment,button){
+    const modal=document.getElementById('paymentConfirmModal');
+    if(!modal)return;
+    modalPayment=payment;
+    modalSourceButton=button;
+    modalPreviousFocus=document.activeElement;
+    modalSubmitting=false;
+
+    document.getElementById('paymentModalCustomer').textContent=`${payment.name||'—'} · ${payment.email||'—'}`;
+    document.getElementById('paymentModalTitleValue').textContent=payment.title||payment.product_slug||'Experience';
+    document.getElementById('paymentModalAmount').textContent=api().money(payment.amount,payment.currency);
+    document.getElementById('paymentModalReference').textContent=payment.reference_code||'—';
+    document.getElementById('paymentModalMethod').textContent=payment.method==='cash'?'Nakit':'IBAN / Banka transferi';
+
+    const received=document.getElementById('paymentReceivedCheck');
+    const receivedLabel=document.getElementById('paymentReceivedLabel');
+    const bankRow=document.getElementById('paymentBankReferenceRow');
+    const bankReference=document.getElementById('paymentBankReference');
+    const note=document.getElementById('paymentNote');
+    const error=document.getElementById('paymentModalError');
+    const confirmButton=document.getElementById('paymentModalConfirm');
+
+    received.checked=false;
+    receivedLabel.textContent=payment.method==='cash'
+      ?'Nakit ödemeyi fiziksel olarak teslim aldım ve tutarı doğruladım.'
+      :'Banka transferini ALBA Space hesabında gördüm ve tutarı doğruladım.';
+    bankRow.hidden=payment.method!=='iban';
+    bankReference.value='';
+    note.value='';
+    error.hidden=true;
+    error.textContent='';
+    confirmButton.disabled=true;
+    confirmButton.textContent='ÖDEMEYİ ONAYLA';
+
+    modal.hidden=false;
+    modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('pass-modal-open');
+    requestAnimationFrame(()=>received.focus());
+  }
+
+  function closePaymentModal(){
+    if(modalSubmitting)return;
+    const modal=document.getElementById('paymentConfirmModal');
+    if(!modal||modal.hidden)return;
+    modal.hidden=true;
+    modal.setAttribute('aria-hidden','true');
+    document.body.classList.remove('pass-modal-open');
+    modalPayment=null;
+    modalSourceButton=null;
+    if(modalPreviousFocus&&typeof modalPreviousFocus.focus==='function')modalPreviousFocus.focus();
+    modalPreviousFocus=null;
+  }
+
+  async function submitPaymentConfirmation(event){
+    event.preventDefault();
+    if(!modalPayment||modalSubmitting)return;
+    const received=document.getElementById('paymentReceivedCheck');
+    const bankReference=document.getElementById('paymentBankReference').value.trim();
+    const note=document.getElementById('paymentNote').value.trim();
+    const error=document.getElementById('paymentModalError');
+    const confirmButton=document.getElementById('paymentModalConfirm');
+
+    if(!received.checked){
+      error.textContent='Devam etmek için ödemenin gerçekten alındığını doğrulayın.';
+      error.hidden=false;
+      received.focus();
+      return;
+    }
+
+    modalSubmitting=true;
+    error.hidden=true;
+    confirmButton.disabled=true;
+    confirmButton.textContent='ONAYLANIYOR…';
+    if(modalSourceButton){modalSourceButton.disabled=true;modalSourceButton.textContent='ONAYLANIYOR…';}
+
     try{
-      await api().request(`/api/staff/payments/${encodeURIComponent(payment.id)}/confirm`,{method:'POST',body:{request_id:api().requestId('payment'),bank_reference:bankReference,note}});
+      await api().request(`/api/staff/payments/${encodeURIComponent(modalPayment.id)}/confirm`,{
+        method:'POST',
+        body:{request_id:api().requestId('payment'),bank_reference:bankReference,note}
+      });
+      const modal=document.getElementById('paymentConfirmModal');
+      modal.hidden=true;
+      modal.setAttribute('aria-hidden','true');
+      document.body.classList.remove('pass-modal-open');
+      modalPayment=null;
+      modalSourceButton=null;
+      modalSubmitting=false;
+      modalPreviousFocus=null;
       await Promise.all([loadPending(),loadRecent()]);
-    }catch(error){alert('Ödeme onaylanamadı: '+(error.data?.error||error.message));button.disabled=false;button.textContent='ÖDEMEYİ ONAYLA';}
+    }catch(requestError){
+      modalSubmitting=false;
+      error.textContent='Ödeme onaylanamadı: '+(requestError.data?.error||requestError.message);
+      error.hidden=false;
+      confirmButton.disabled=!received.checked;
+      confirmButton.textContent='TEKRAR DENE';
+      if(modalSourceButton){modalSourceButton.disabled=false;modalSourceButton.textContent='ÖDEMEYİ ONAYLA';}
+    }
   }
 
   function bindSearch(){

@@ -7,13 +7,13 @@
   <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
   <link rel="stylesheet" href="/assets/css/site.css">
   <link rel="stylesheet" href="/assets/css/fix-layout.css">
-  <link rel="stylesheet" href="/assets/css/pass.css">
+  <link rel="stylesheet" href="/assets/css/pass.css?v=20260904-payment-modal">
   <script src="/assets/js/include.js" defer></script>
   <script src="/assets/js/menu-toggle.js" defer></script>
   <script src="/assets/js/mobile-header-cart.js" defer></script>
   <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
   <script src="/assets/js/pass-api.js" defer></script>
-  <script src="/assets/js/pass-staff.js" defer></script>
+  <script src="/assets/js/pass-staff.js?v=20260904-payment-modal" defer></script>
 </head>
 <body class="pass-page">
   <div data-include="/header-tr.html"></div>
@@ -77,6 +77,47 @@
       </section>
     </section>
   </main>
+
+  <div id="paymentConfirmModal" class="pass-modal" hidden aria-hidden="true">
+    <div class="pass-modal-backdrop" data-payment-modal-close></div>
+    <section class="pass-modal-panel" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+      <button class="pass-modal-close" type="button" aria-label="Kapat" data-payment-modal-close>×</button>
+      <span class="pass-badge warn">ÖDEME KONTROLÜ</span>
+      <h2 id="paymentModalTitle">Ödemeyi Onayla</h2>
+      <p class="pass-muted">Ödemeyi yalnızca gerçekten teslim aldıysanız veya banka hesabında doğruladıysanız onaylayın.</p>
+
+      <div class="payment-modal-summary">
+        <div><span>Müşteri</span><strong id="paymentModalCustomer">—</strong></div>
+        <div><span>Experience</span><strong id="paymentModalTitleValue">—</strong></div>
+        <div><span>Tutar</span><strong id="paymentModalAmount">—</strong></div>
+        <div><span>Referans</span><strong id="paymentModalReference">—</strong></div>
+        <div><span>Ödeme yöntemi</span><strong id="paymentModalMethod">—</strong></div>
+      </div>
+
+      <form id="paymentConfirmForm" class="pass-form">
+        <label class="payment-received-check">
+          <input id="paymentReceivedCheck" type="checkbox" required>
+          <span id="paymentReceivedLabel">Ödemeyi teslim aldım ve tutarı doğruladım.</span>
+        </label>
+
+        <label id="paymentBankReferenceRow" hidden>Banka işlem referansı
+          <input id="paymentBankReference" autocomplete="off" maxlength="120" placeholder="Varsa banka işlem / dekont referansı">
+        </label>
+
+        <label>Not <span class="pass-muted">(isteğe bağlı)</span>
+          <textarea id="paymentNote" rows="3" maxlength="500" placeholder="Örn. Festival standında nakit teslim alındı"></textarea>
+        </label>
+
+        <div id="paymentModalError" class="pass-notice pass-error" hidden></div>
+
+        <div class="pass-actions payment-modal-actions">
+          <button class="pass-btn secondary" type="button" data-payment-modal-close>Vazgeç</button>
+          <button id="paymentModalConfirm" class="pass-btn" type="submit" disabled>ÖDEMEYİ ONAYLA</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
   <div data-include="/footer-tr.html"></div>
 </body>
 </html>
