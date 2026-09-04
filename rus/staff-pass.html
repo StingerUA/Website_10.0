@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ALBA Space Staff</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/pass.css?v=20260904-payment-modal">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
+  <script src="/assets/js/pass-api.js" defer></script>
+  <script src="/assets/js/pass-locale.js" defer></script>
+  <script src="/assets/js/pass-staff.js?v=20260904-i18n" defer></script>
+</head>
+<body class="pass-page">
+  <div data-include="/header-ru.html"></div>
+  <main class="pass-main">
+    <section class="pass-hero">
+      <span class="pass-badge">ALBA SPACE STAFF</span>
+      <h1>Панель управления мероприятием</h1>
+      <p id="staffIdentity">Проверяем аккаунт сотрудника…</p>
+    </section>
+    <div id="staffGate"></div>
+    <section id="staffWorkspace">
+      <nav class="staff-toolbar" aria-label="Действия сотрудника">
+        <button class="pass-btn" data-staff-tab="scannerPanel">📷 Сканировать QR</button>
+        <button class="pass-btn secondary" data-staff-tab="paymentsPanel">💵 Платежи</button>
+        <button class="pass-btn secondary" data-staff-tab="customersPanel">🔎 Клиент</button>
+        <button class="pass-btn secondary" data-staff-tab="recentPanel">🕒 Активность</button>
+      </nav>
+
+      <section id="scannerPanel" class="staff-panel active">
+        <div class="staff-scanner-wrap">
+          <div class="pass-card">
+            <h2>Сканирование QR Pass</h2>
+            <video id="staffVideo" class="staff-camera" playsinline muted></video>
+            <p id="scannerStatus" class="pass-muted">Запустите камеру или введите код Pass вручную.</p>
+            <div class="pass-actions"><button id="startCamera" class="pass-btn">Запустить камеру</button><button id="stopCamera" class="pass-btn secondary">Остановить</button></div>
+            <form id="manualLookup" class="pass-form pass-section"><label>Код Pass<input id="manualToken" autocomplete="off" placeholder="ALBAPASS:v1.pass_…"></label><button class="pass-btn" type="submit">Проверить Pass</button></form>
+          </div>
+          <div id="scanResult"><div class="pass-card pass-empty">Отсканированный Pass появится здесь.</div></div>
+        </div>
+      </section>
+
+      <section id="paymentsPanel" class="staff-panel"><div class="pass-hero"><h2>Ожидающие платежи</h2><p>Подтверждайте наличные или перевод только после фактического получения или проверки денег.</p></div><div id="pendingPayments"></div></section>
+
+      <section id="customersPanel" class="staff-panel"><div class="pass-card"><h2>Найти клиента</h2><form id="customerSearchForm" class="pass-form"><label>Email или имя<input id="customerQuery" autocomplete="off" placeholder="example@gmail.com"></label><button class="pass-btn" type="submit">Найти</button></form></div><div id="customerResults" class="staff-search-results"></div></section>
+
+      <section id="recentPanel" class="staff-panel"><div class="pass-hero"><h2>Последние операции</h2><p>Подтверждения оплат и использование прав Pass.</p></div><div id="recentActivity" class="staff-search-results"></div></section>
+    </section>
+  </main>
+
+  <div id="paymentConfirmModal" class="pass-modal" hidden aria-hidden="true">
+    <div class="pass-modal-backdrop" data-payment-modal-close></div>
+    <section class="pass-modal-panel" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+      <button class="pass-modal-close" type="button" aria-label="Закрыть" data-payment-modal-close>×</button>
+      <span class="pass-badge warn">ПРОВЕРКА ОПЛАТЫ</span>
+      <h2 id="paymentModalTitle">Подтвердить оплату</h2>
+      <p class="pass-muted">Подтверждайте оплату только после того, как деньги действительно получены или видны на банковском счёте.</p>
+      <div class="payment-modal-summary">
+        <div><span>Клиент</span><strong id="paymentModalCustomer">—</strong></div>
+        <div><span>Experience</span><strong id="paymentModalTitleValue">—</strong></div>
+        <div><span>Сумма</span><strong id="paymentModalAmount">—</strong></div>
+        <div><span>Референс</span><strong id="paymentModalReference">—</strong></div>
+        <div><span>Способ оплаты</span><strong id="paymentModalMethod">—</strong></div>
+      </div>
+      <form id="paymentConfirmForm" class="pass-form">
+        <label class="payment-received-check"><input id="paymentReceivedCheck" type="checkbox" required><span id="paymentReceivedLabel">Я получил и проверил оплату.</span></label>
+        <label id="paymentBankReferenceRow" hidden>Банковский референс<input id="paymentBankReference" autocomplete="off" maxlength="120" placeholder="Референс операции / квитанции, если есть"></label>
+        <label>Примечание <span class="pass-muted">(необязательно)</span><textarea id="paymentNote" rows="3" maxlength="500" placeholder="Например: наличные получены на стойке фестиваля"></textarea></label>
+        <div id="paymentModalError" class="pass-notice pass-error" hidden></div>
+        <div class="pass-actions payment-modal-actions"><button class="pass-btn secondary" type="button" data-payment-modal-close>Отмена</button><button id="paymentModalConfirm" class="pass-btn" type="submit" disabled>ПОДТВЕРДИТЬ ОПЛАТУ</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div data-include="/footer-ru.html"></div>
+</body>
+</html>
