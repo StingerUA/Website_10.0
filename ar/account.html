@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>الحساب | Alba Space</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/fix-layout.css" />
+  <link rel="stylesheet" href="/assets/css/account-pass.css" />
+  <link rel="stylesheet" href="/assets/css/rtl.css" />
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260904-avatar1" defer></script>
+  <script src="/assets/js/pass-api.js" defer></script>
+  <script src="/assets/js/account-pass-links.js?v=20260904-avatar1" defer></script>
+  <style>
+    body.account-page{background:#020617;color:#e5e7eb}
+    .account-main{max-width:760px;margin:80px auto 60px;padding:0 20px;min-height:calc(100vh - 500px)}
+    .account-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:24px;padding:30px 28px;box-shadow:0 20px 80px rgba(0,0,0,.25)}
+    .account-card h1{margin-bottom:14px;font-size:32px}.account-card p{margin-bottom:24px;color:#9ca3af}
+    .account-field{margin-bottom:16px;display:grid;gap:8px}.account-field label{display:block;font-size:14px;color:#cbd5e1}
+    .account-field input,.account-field textarea{width:100%;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#f8fafc;text-align:right}
+    .account-field textarea{min-height:120px;resize:vertical}.account-actions{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap}
+    .account-message{margin-top:16px;color:#7dd3fc}.btn-primary{background:#00c2ff;color:#020617;border:none;padding:12px 24px;border-radius:12px;font-weight:600;cursor:pointer}
+    .account-section{margin-top:32px}.account-section h2{margin-bottom:12px;font-size:24px}.account-section p{margin-bottom:16px;color:#9ca3af}
+    .account-section-content{padding:20px;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#d1d5db}
+  </style>
+</head>
+<body class="account-page">
+  <div data-include="/header-ar.html"></div>
+  <main class="account-main">
+    <section class="account-card">
+      <h1>الحساب</h1>
+      <p>أكمل بيانات حسابك لتخصيص تجربتك في Alba Space.</p>
+      <form id="accountForm">
+        <div class="account-field"><label for="name">الاسم</label><input id="name" name="name" type="text" placeholder="اسمك" required></div>
+        <div class="account-field"><label for="email">البريد الإلكتروني</label><input id="email" name="email" type="email" placeholder="بريدك الإلكتروني" required></div>
+        <div class="account-field"><label for="favorite">تجربتك الفضائية المفضلة</label><input id="favorite" name="favorite" type="text" placeholder="مثال: رحلة إلى المريخ أو تجربة VR"></div>
+        <div class="account-field"><label for="notes">ملاحظات</label><textarea id="notes" name="notes" placeholder="أي ملاحظات عنك..."></textarea></div>
+        <div class="account-actions"><button type="submit" class="btn-primary">حفظ</button></div>
+        <div id="accountMessage" class="account-message" aria-live="polite"></div>
+      </form>
+    </section>
+    <section id="favorites" class="account-card account-section"><h2>المفضلة</h2><p>يمكنك مشاهدة العناصر والتجارب المفضلة لديك هنا.</p><div class="account-section-content">لا توجد عناصر مفضلة بعد.</div></section>
+    <section id="purchased" class="account-card account-section"><h2>المشتريات</h2><p>ستظهر هنا المنتجات والخدمات التي اشتريتها.</p><div class="account-section-content">لا يوجد سجل مشتريات حتى الآن.</div></section>
+  </main>
+  <div data-include="/footer-ar.html"></div>
+  <script>
+    const API_BASE='https://api.albaspace.com.tr';
+    const form=document.getElementById('accountForm');
+    const message=document.getElementById('accountMessage');
+    function authHeaders(){try{const token=localStorage.getItem('albaspace_access_token')||'';return token?{Authorization:'Bearer '+token}:{}}catch(_){return {}}}
+    async function loadProfileData(){const saved=localStorage.getItem('albaspace_account_profile');let profile={name:'',email:'',favorite_experience:'',notes:''};if(saved){try{profile={...profile,...JSON.parse(saved)}}catch(error){console.debug('Unable to parse stored profile',error)}}try{const response=await fetch(`${API_BASE}/me`,{credentials:'include',headers:authHeaders()});if(response.ok){const data=await response.json();profile.name=data.name||profile.name;profile.email=data.email||profile.email;if(data.profile){profile.favorite_experience=data.profile.favorite_experience||profile.favorite_experience;profile.notes=data.profile.notes||profile.notes}}}catch(error){console.debug('Unable to load remote profile',error)}document.getElementById('name').value=profile.name;document.getElementById('email').value=profile.email;document.getElementById('favorite').value=profile.favorite_experience;document.getElementById('notes').value=profile.notes}
+    loadProfileData();
+    form.addEventListener('submit',async function(event){event.preventDefault();const data={name:document.getElementById('name').value.trim(),email:document.getElementById('email').value.trim(),favorite_experience:document.getElementById('favorite').value.trim(),notes:document.getElementById('notes').value.trim()};try{localStorage.setItem('albaspace_account_profile',JSON.stringify(data))}catch(err){}if(typeof window.saveAccountProfile==='function'){const result=await window.saveAccountProfile(data);message.textContent=result.ok?'تم حفظ بيانات الحساب.':'تعذر الحفظ على الخادم، لكن تم حفظ البيانات محليًا.'}else message.textContent='تم حفظ بيانات الحساب محليًا.'});
+  </script>
+</body>
+</html>
