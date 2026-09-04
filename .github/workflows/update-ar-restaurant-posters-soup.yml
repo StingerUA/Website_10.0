@@ -2,10 +2,8 @@ name: Refresh AR restaurant posters and soup
 
 on:
   push:
-    branches:
-      - fix/ar-restaurant-posters-soup
-    paths:
-      - .github/workflows/update-ar-restaurant-posters-soup.yml
+    branches: [fix/ar-restaurant-posters-soup]
+    paths: [.github/workflows/update-ar-restaurant-posters-soup.yml]
   workflow_dispatch:
 
 permissions:
@@ -36,33 +34,16 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: '1'
         run: |
           cat > restaurant-poster-render.html <<'HTML'
-          <!doctype html>
-          <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <script type="module" src="/node_modules/@google/model-viewer/dist/model-viewer.min.js"></script>
-            <style>
-              html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#06101f}
-              body{display:grid;place-items:center;background:radial-gradient(circle at 50% 34%,#244c67 0%,#102a40 38%,#071625 67%,#020914 100%)}
-              model-viewer{width:720px;height:720px;background:transparent;--poster-color:transparent}
-            </style>
-          </head>
-          <body>
-            <model-viewer id="viewer"
-              camera-controls
-              camera-orbit="25deg 68deg auto"
-              min-camera-orbit="auto 20deg auto"
-              max-camera-orbit="auto 88deg auto"
-              shadow-intensity="1.2"
-              shadow-softness="0.9"
-              exposure="1.05"
-              environment-image="neutral"
-              interaction-prompt="none"
-              reveal="auto">
-            </model-viewer>
-          </body>
-          </html>
+          <!doctype html><html><head>
+          <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+          <script type="module" src="/node_modules/@google/model-viewer/dist/model-viewer.min.js"></script>
+          <style>
+          html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#06101f}
+          body{display:grid;place-items:center;background:radial-gradient(circle at 50% 34%,#244c67 0%,#102a40 38%,#071625 67%,#020914 100%)}
+          model-viewer{width:720px;height:720px;background:transparent;--poster-color:transparent}
+          </style></head><body>
+          <model-viewer id="viewer" camera-controls camera-orbit="25deg 68deg auto" min-camera-orbit="auto 20deg auto" max-camera-orbit="auto 88deg auto" shadow-intensity="1.2" shadow-softness="0.9" exposure="1.05" environment-image="neutral" interaction-prompt="none" reveal="auto"></model-viewer>
+          </body></html>
           HTML
 
           python3 -m http.server 8000 >/tmp/ar-poster-server.log 2>&1 &
@@ -74,78 +55,37 @@ jobs:
           import fs from 'node:fs/promises';
 
           const items = [
-            {
-              src: '/assets/models/restaurant/ar/realistic-turkish-shawarma.glb',
-              out: 'assets/images/restaurant/menu/tavuk-doner-durum.webp',
-              orbit: '25deg 67deg auto',
-              exposure: 1.05
-            },
-            {
-              src: '/assets/models/restaurant/ar/realistic-turkish-doner-kebab/scene.gltf',
-              out: 'assets/images/restaurant/menu/doner-kebab.webp',
-              orbit: '25deg 66deg auto',
-              exposure: 1.05
-            },
-            {
-              src: '/assets/models/restaurant/ar/realistic-soup.glb',
-              out: 'assets/images/restaurant/menu/realistic-soup.webp',
-              orbit: '25deg 66deg auto',
-              exposure: 0.78
-            }
+            ['/assets/models/restaurant/ar/realistic-turkish-shawarma.glb','assets/images/restaurant/menu/tavuk-doner-durum.webp','25deg 67deg auto',1.05],
+            ['/assets/models/restaurant/ar/realistic-turkish-doner-kebab/scene.gltf','assets/images/restaurant/menu/doner-kebab.webp','25deg 66deg auto',1.05],
+            ['/assets/models/restaurant/ar/realistic-soup.glb','assets/images/restaurant/menu/realistic-soup.webp','25deg 66deg auto',0.78]
           ];
-
-          const browser = await puppeteer.launch({
-            headless: false,
-            args: [
-              '--no-sandbox',
-              '--disable-setuid-sandbox',
-              '--enable-webgl',
-              '--ignore-gpu-blocklist',
-              '--use-gl=angle',
-              '--use-angle=swiftshader',
-              '--enable-unsafe-swiftshader'
-            ]
-          });
+          const browser = await puppeteer.launch({headless:false,args:['--no-sandbox','--disable-setuid-sandbox','--enable-webgl','--ignore-gpu-blocklist','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
           const page = await browser.newPage();
           page.on('console', msg => console.log('[browser]', msg.type(), msg.text()));
           page.on('pageerror', error => console.error('[pageerror]', error.message));
-          await page.setViewport({width: 720, height: 720, deviceScaleFactor: 1});
-          await page.goto('http://127.0.0.1:8000/restaurant-poster-render.html', {waitUntil: 'networkidle0', timeout: 60000});
-          await page.waitForFunction(() => Boolean(customElements.get('model-viewer')), {timeout: 60000});
-          const webgl = await page.evaluate(() => {
-            const canvas = document.createElement('canvas');
-            return Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl'));
-          });
+          await page.setViewport({width:720,height:720,deviceScaleFactor:1});
+          await page.goto('http://127.0.0.1:8000/restaurant-poster-render.html',{waitUntil:'networkidle0',timeout:60000});
+          await page.waitForFunction(() => Boolean(customElements.get('model-viewer')),{timeout:60000});
+          const webgl = await page.evaluate(() => { const c=document.createElement('canvas'); return Boolean(c.getContext('webgl2')||c.getContext('webgl')); });
           if (!webgl) throw new Error('WebGL is unavailable in poster renderer');
 
-          for (const item of items) {
-            await page.evaluate((cfg) => new Promise((resolve, reject) => {
-              const viewer = document.querySelector('#viewer');
-              const timer = setTimeout(() => reject(new Error(`Timed out loading ${cfg.src}`)), 60000);
-              const done = () => {
-                clearTimeout(timer);
-                requestAnimationFrame(() => requestAnimationFrame(resolve));
-              };
-              const failed = (event) => {
-                clearTimeout(timer);
-                reject(new Error(`model-viewer error for ${cfg.src}: ${event?.detail?.type || 'unknown'}`));
-              };
-              viewer.setAttribute('camera-orbit', cfg.orbit);
-              viewer.setAttribute('exposure', String(cfg.exposure));
-              viewer.addEventListener('load', done, {once: true});
-              viewer.addEventListener('error', failed, {once: true});
-              viewer.setAttribute('src', cfg.src);
-            }), item);
-
-            await new Promise(resolve => setTimeout(resolve, 1200));
-            const viewer = await page.$('#viewer');
-            if (!viewer) throw new Error('model-viewer element missing');
-            await viewer.screenshot({path: item.out, type: 'webp', quality: 91});
-            const stat = await fs.stat(item.out);
-            if (stat.size < 12000) throw new Error(`Poster looks unexpectedly small: ${item.out} (${stat.size} bytes)`);
-            console.log(`Rendered ${item.out}: ${stat.size} bytes`);
+          for (const [src,out,orbit,exposure] of items) {
+            await page.evaluate(({src,orbit,exposure}) => new Promise((resolve,reject) => {
+              const viewer=document.querySelector('#viewer');
+              const timer=setTimeout(() => reject(new Error(`Timed out loading ${src}`)),60000);
+              viewer.setAttribute('camera-orbit',orbit);
+              viewer.setAttribute('exposure',String(exposure));
+              viewer.addEventListener('load',() => {clearTimeout(timer);requestAnimationFrame(() => requestAnimationFrame(resolve));},{once:true});
+              viewer.addEventListener('error',(event) => {clearTimeout(timer);reject(new Error(`model-viewer error for ${src}: ${event?.detail?.type||'unknown'}`));},{once:true});
+              viewer.setAttribute('src',src);
+            }),{src,orbit,exposure});
+            await new Promise(r => setTimeout(r,1200));
+            const viewer=await page.$('#viewer');
+            await viewer.screenshot({path:out,type:'webp',quality:91});
+            const stat=await fs.stat(out);
+            if(stat.size<12000) throw new Error(`Poster unexpectedly small: ${out} (${stat.size})`);
+            console.log(`Rendered ${out}: ${stat.size} bytes`);
           }
-
           await browser.close();
           NODE
 
@@ -159,53 +99,53 @@ jobs:
           core = Path('assets/js/restaurant-model-viewer-core.js')
           text = core.read_text(encoding='utf-8')
 
-          replacements = {
-              "const MODEL_VERSION = 'real-meat-scale-4';": "const MODEL_VERSION = 'restaurant-posters-soup-5';",
-              "posterSource('turkish-shish-kebab.webp')": "posterSource('tavuk-doner-durum.webp')",
-              "posterSource('adana-kebab.webp')": "posterSource('doner-kebab.webp')",
-              "posterSource('turkish-lentil-soup.webp')": "posterSource('realistic-soup.webp')",
-              "modelSource('turkish-lentil-soup.glb')": "modelSource('realistic-soup.glb')",
-              "desktopScale: 1,\n        modelScale: 5,\n        exposure: 0.68,": "desktopScale: 1,\n        modelScale: 1,\n        exposure: 0.78,",
-              "alt: 'Limon, maydanoz ve zeytinyağlı Türk mercimek çorbası 3D modeli',\n        name: 'Mercimek Çorbası',\n        description: 'Limon, maydanoz, kırmızı biber ve zeytinyağıyla servis edilen sıcak mercimek çorbası.',": "alt: 'Seramik kasede servis edilen gerçekçi sıcak restoran çorbası 3D modeli',\n        name: 'Seramik Kasede Çorba',\n        description: 'Seramik kasede servis edilen sıcak ve yoğun kıvamlı restoran çorbası.',",
-              "alt: '3D-модель турецкого чечевичного супа с лимоном, зеленью и оливковым маслом',\n        name: 'Чечевичный суп',\n        description: 'Горячий чечевичный суп с лимоном, петрушкой, красным перцем и оливковым маслом.',": "alt: 'Реалистичная 3D-модель горячего ресторанного супа в керамической миске',\n        name: 'Суп в керамической миске',\n        description: 'Горячий густой ресторанный суп, поданный в керамической миске.',",
-          }
+          replacements = [
+            ("const MODEL_VERSION = 'real-meat-scale-4';", "const MODEL_VERSION = 'restaurant-posters-soup-5';", 1),
+            ("posterSource('turkish-shish-kebab.webp')", "posterSource('tavuk-doner-durum.webp')", 2),
+            ("posterSource('adana-kebab.webp')", "posterSource('doner-kebab.webp')", 2),
+            ("posterSource('turkish-lentil-soup.webp')", "posterSource('realistic-soup.webp')", 2),
+            ("modelSource('turkish-lentil-soup.glb')", "modelSource('realistic-soup.glb')", 4),
+            ("modelScale: 5,", "modelScale: 1,", 2),
+            ("exposure: 0.68,", "exposure: 0.78,", 2),
+            ("alt: 'Limon, maydanoz ve zeytinyağlı Türk mercimek çorbası 3D modeli',", "alt: 'Seramik kasede servis edilen gerçekçi sıcak restoran çorbası 3D modeli',", 1),
+            ("name: 'Mercimek Çorbası',", "name: 'Seramik Kasede Çorba',", 1),
+            ("description: 'Limon, maydanoz, kırmızı biber ve zeytinyağıyla servis edilen sıcak mercimek çorbası.',", "description: 'Seramik kasede servis edilen sıcak ve yoğun kıvamlı restoran çorbası.',", 1),
+            ("alt: '3D-модель турецкого чечевичного супа с лимоном, петрушкой и оливковым маслом',", "alt: 'Реалистичная 3D-модель горячего ресторанного супа в керамической миске',", 1),
+            ("name: 'Турецкий чечевичный суп',", "name: 'Суп в керамической миске',", 1),
+            ("description: 'Горячий суп из красной чечевицы с лимоном, петрушкой, паприкой и оливковым маслом.',", "description: 'Горячий густой ресторанный суп, поданный в керамической миске.',", 1),
+          ]
+          for old,new,expected in replacements:
+            count=text.count(old)
+            if count != expected:
+              raise SystemExit(f'Expected {expected} occurrence(s), found {count}: {old}')
+            text=text.replace(old,new)
+          core.write_text(text,encoding='utf-8')
 
-          for old, new in replacements.items():
-              if old not in text:
-                  raise SystemExit(f'Missing expected core text: {old}')
-              text = text.replace(old, new)
-          core.write_text(text, encoding='utf-8')
+          wrapper=Path('assets/js/restaurant-model-viewer.js')
+          w=wrapper.read_text(encoding='utf-8')
+          if w.count("['turkish-lentil-soup.glb', 5]") != 1:
+            raise SystemExit('Unexpected old soup scale rule count')
+          w=w.replace("['turkish-lentil-soup.glb', 5]","['realistic-soup.glb', 1]")
+          w=w.replace('restaurant-scale-fix-2','restaurant-posters-soup-5')
+          wrapper.write_text(w,encoding='utf-8')
 
-          wrapper = Path('assets/js/restaurant-model-viewer.js')
-          w = wrapper.read_text(encoding='utf-8')
-          if "['turkish-lentil-soup.glb', 5]" not in w:
-              raise SystemExit('Missing old soup scale rule')
-          w = w.replace("['turkish-lentil-soup.glb', 5]", "['realistic-soup.glb', 1]")
-          w = w.replace('restaurant-scale-fix-2', 'restaurant-posters-soup-5')
-          wrapper.write_text(w, encoding='utf-8')
+          for html_path in (Path('ar-restaurant/index.html'),Path('rus/ar-restaurant/index.html')):
+            html=html_path.read_text(encoding='utf-8')
+            html=html.replace('turkish-shish-kebab.webp','tavuk-doner-durum.webp')
+            html=html.replace('/assets/js/restaurant-model-viewer.js?v=real-meat-scale-4','/assets/js/restaurant-model-viewer.js?v=restaurant-posters-soup-5')
+            html_path.write_text(html,encoding='utf-8')
 
-          for html_path in (Path('ar-restaurant/index.html'), Path('rus/ar-restaurant/index.html')):
-              html = html_path.read_text(encoding='utf-8')
-              html = html.replace('turkish-shish-kebab.webp', 'tavuk-doner-durum.webp')
-              html = html.replace('/assets/js/restaurant-model-viewer.js?v=real-meat-scale-4', '/assets/js/restaurant-model-viewer.js?v=restaurant-posters-soup-5')
-              html_path.write_text(html, encoding='utf-8')
+          tr=Path('ar-restaurant/index.html')
+          tr.write_text(tr.read_text(encoding='utf-8').replace('>Türk Şiş Kebabı</strong>','>Tavuk Döner Dürüm</strong>'),encoding='utf-8')
+          ru=Path('rus/ar-restaurant/index.html')
+          ru.write_text(ru.read_text(encoding='utf-8').replace('>Турецкий шиш-кебаб</strong>','>Куриный донер-дюрюм</strong>'),encoding='utf-8')
 
-          tr = Path('ar-restaurant/index.html')
-          html = tr.read_text(encoding='utf-8').replace('>Türk Şiş Kebabı</strong>', '>Tavuk Döner Dürüm</strong>')
-          tr.write_text(html, encoding='utf-8')
-
-          ru = Path('rus/ar-restaurant/index.html')
-          html = ru.read_text(encoding='utf-8').replace('>Турецкий шиш-кебаб</strong>', '>Куриный донер-дюрюм</strong>')
-          ru.write_text(html, encoding='utf-8')
-
-          notices = Path('assets/models/restaurant/THIRD_PARTY_NOTICES.md')
-          n = notices.read_text(encoding='utf-8')
-          marker = '### Реактивация реалистичного супа и новые постеры'
+          notices=Path('assets/models/restaurant/THIRD_PARTY_NOTICES.md')
+          n=notices.read_text(encoding='utf-8')
+          marker='### Реактивация реалистичного супа и новые постеры'
           if marker not in n:
-              block = '''\n\n### Реактивация реалистичного супа и новые постеры\n\n`ar/realistic-soup.glb` снова используется как единственная позиция категории супов вместо процедурного `ar/turkish-lentil-soup.glb`. Это ранее сохранённая локальная модель **Soup in bowl** автора `vanurakash` из Tripo; исходная карточка сообщала 598 562 faces. Лицензионное предупреждение для Tripo-моделей ниже остаётся в силе.\n\n`assets/images/restaurant/menu/tavuk-doner-durum.webp`, `doner-kebab.webp` и `realistic-soup.webp` генерируются непосредственно из реально используемых 3D-моделей через `<model-viewer>` в GitHub Actions. Поэтому загрузочный постер и миниатюра теперь визуально соответствуют конкретному GLB/glTF, который откроется после загрузки.\n'''
-              anchor = '\n### Клубнично-шоколадный торт\n'
-              n = n.replace(anchor, block + anchor, 1) if anchor in n else n + block
-              notices.write_text(n, encoding='utf-8')
+            n += '''\n\n### Реактивация реалистичного супа и новые постеры\n\n`ar/realistic-soup.glb` снова используется как единственная позиция категории супов вместо процедурного `ar/turkish-lentil-soup.glb`. Это ранее сохранённая локальная модель **Soup in bowl** автора `vanurakash` из Tripo; исходная карточка сообщала 598 562 faces. Существующее ниже предупреждение о необходимости отдельно подтвердить права на коммерческое использование Tripo-моделей остаётся в силе.\n\n`assets/images/restaurant/menu/tavuk-doner-durum.webp`, `doner-kebab.webp` и `realistic-soup.webp` отрендерены непосредственно из реально используемых 3D-моделей через `<model-viewer>`, поэтому постеры соответствуют моделям в viewer.\n'''
+            notices.write_text(n,encoding='utf-8')
           PY
 
       - name: Validate changes
@@ -223,21 +163,10 @@ jobs:
 
       - name: Commit generated posters and soup switch
         run: |
+          rm -f restaurant-poster-render.html scripts/render-restaurant-posters-temp.mjs
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add \
-            assets/images/restaurant/menu/tavuk-doner-durum.webp \
-            assets/images/restaurant/menu/doner-kebab.webp \
-            assets/images/restaurant/menu/realistic-soup.webp \
-            assets/js/restaurant-model-viewer-core.js \
-            assets/js/restaurant-model-viewer.js \
-            assets/models/restaurant/THIRD_PARTY_NOTICES.md \
-            ar-restaurant/index.html \
-            rus/ar-restaurant/index.html
-          if git diff --cached --quiet; then
-            echo 'Nothing to commit.'
-            exit 0
-          fi
+          git add assets/images/restaurant/menu/tavuk-doner-durum.webp assets/images/restaurant/menu/doner-kebab.webp assets/images/restaurant/menu/realistic-soup.webp assets/js/restaurant-model-viewer-core.js assets/js/restaurant-model-viewer.js assets/models/restaurant/THIRD_PARTY_NOTICES.md ar-restaurant/index.html rus/ar-restaurant/index.html
           git commit -m 'Refresh AR restaurant posters and soup model'
           git pull --rebase origin fix/ar-restaurant-posters-soup
           git push origin HEAD:fix/ar-restaurant-posters-soup
