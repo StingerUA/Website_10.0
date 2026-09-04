@@ -51,9 +51,12 @@ jobs:
           node --check cloudflare-worker/pass-backend.js
           node --check cloudflare-worker/pass-entry.js
           node --check assets/js/pass-api.js
+          node --check assets/js/pass-locale.js
           node --check assets/js/pass-customer.js
           node --check assets/js/pass-staff.js
           node --check assets/js/pass-admin.js
+          node --check assets/js/account-pass-links.js
+          node --check assets/js/events.js
           python scripts/check-pass-migrations.py
 
       - name: Validate orbital catalogue localization
