@@ -26,8 +26,10 @@ jobs:
           node-version: '20'
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install renderer dependencies
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false @google/model-viewer@3.0.0
 
       - name: Render posters from the actual 3D models
         run: |
@@ -36,7 +38,7 @@ jobs:
           <html>
           <head>
             <meta charset="utf-8">
-            <script type="module" src="/assets/js/model-viewer.min.js"></script>
+            <script type="module" src="/node_modules/@google/model-viewer/dist/model-viewer.min.js"></script>
             <style>
               html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#06101f}
               body{display:grid;place-items:center;background:radial-gradient(circle at 50% 34%,#244c67 0%,#102a40 38%,#071625 67%,#020914 100%)}
@@ -94,9 +96,11 @@ jobs:
             args: ['--no-sandbox','--disable-setuid-sandbox','--use-gl=swiftshader']
           });
           const page = await browser.newPage();
+          page.on('console', msg => console.log('[browser]', msg.type(), msg.text()));
+          page.on('pageerror', error => console.error('[pageerror]', error.message));
           await page.setViewport({width: 720, height: 720, deviceScaleFactor: 1});
           await page.goto('http://127.0.0.1:8000/restaurant-poster-render.html', {waitUntil: 'networkidle0', timeout: 60000});
-          await page.waitForFunction(() => customElements.get('model-viewer'));
+          await page.waitForFunction(() => Boolean(customElements.get('model-viewer')), {timeout: 60000});
 
           for (const item of items) {
             await page.evaluate((cfg) => new Promise((resolve, reject) => {
@@ -106,13 +110,18 @@ jobs:
                 clearTimeout(timer);
                 requestAnimationFrame(() => requestAnimationFrame(resolve));
               };
+              const failed = (event) => {
+                clearTimeout(timer);
+                reject(new Error(`model-viewer error for ${cfg.src}: ${event?.detail?.type || 'unknown'}`));
+              };
               viewer.setAttribute('camera-orbit', cfg.orbit);
               viewer.setAttribute('exposure', String(cfg.exposure));
               viewer.addEventListener('load', done, {once: true});
+              viewer.addEventListener('error', failed, {once: true});
               viewer.setAttribute('src', cfg.src);
             }), item);
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1200));
             const viewer = await page.$('#viewer');
             if (!viewer) throw new Error('model-viewer element missing');
             await viewer.screenshot({path: item.out, type: 'webp', quality: 91});
