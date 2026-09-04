@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ALBA Space Pass Admin</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/pass.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
+  <script src="/assets/js/pass-api.js" defer></script>
+  <script src="/assets/js/pass-locale.js" defer></script>
+  <script src="/assets/js/pass-admin.js?v=20260904-i18n" defer></script>
+</head>
+<body class="pass-page">
+  <div data-include="/header-ru.html"></div>
+  <main class="pass-main">
+    <section class="pass-hero"><span class="pass-badge">ALBA SPACE ADMIN</span><h1>Управление Pass</h1><p id="adminIdentity">Проверяем аккаунт администратора…</p></section>
+    <div id="adminGate"></div>
+    <section id="adminWorkspace">
+      <div class="admin-two">
+        <article class="pass-card">
+          <h2>1. Создать мероприятие</h2>
+          <form id="eventForm" class="pass-form">
+            <label>Код<input name="code" placeholder="festival-2026" required></label>
+            <label>Название<input name="name" placeholder="ALBA Space Festival" required></label>
+            <label>Место<input name="venue" placeholder="Место проведения"></label>
+            <label>Часовой пояс<input name="timezone" value="Europe/Istanbul"></label>
+            <label>Начало<input name="starts_at" type="datetime-local"></label>
+            <label>Окончание<input name="ends_at" type="datetime-local"></label>
+            <label>Статус<select name="status"><option value="draft">Draft</option><option value="active">Active</option><option value="closed">Closed</option></select></label>
+            <button class="pass-btn" type="submit">Создать мероприятие</button>
+          </form>
+          <p id="eventResult" class="pass-muted" aria-live="polite"></p>
+        </article>
+
+        <article class="pass-card">
+          <h2>2. Создать пакет Experience</h2>
+          <p class="pass-muted">Используется существующий product slug из таблицы <code>products</code>. Цена и права фестиваля настраиваются отдельно здесь.</p>
+          <form id="offerForm" class="pass-form">
+            <label>Event ID<input id="offerEventId" name="event_id" type="number" min="1" required></label>
+            <label>Product slug<input name="product_slug" placeholder="vr-mission-iss" required></label>
+            <label>Название<input name="title" placeholder="1 день: телескоп + VR" required></label>
+            <label>Описание<textarea name="description" placeholder="Описание пакета"></textarea></label>
+            <label>Цена (TL)<input name="price_amount" type="number" min="0" step="1" required></label>
+            <label>Entitlements<textarea name="entitlements" rows="8" placeholder="SUN|Наблюдение Солнца|use|1|1&#10;MOON|Наблюдение Луны|use|1|1&#10;VR|Mission: ISS|minute|5|"></textarea></label>
+            <small class="pass-muted">Формат: CODE | Label | use/minute | quantity | day(optional)</small>
+            <label><span><input name="active" type="checkbox" checked> Активен для продажи</span></label>
+            <button class="pass-btn" type="submit">Создать пакет</button>
+          </form>
+          <p id="offerResult" class="pass-muted" aria-live="polite"></p>
+        </article>
+      </div>
+
+      <article class="pass-card pass-section">
+        <h2>Роль сотрудника</h2>
+        <p class="pass-muted">Права хранятся на сервере в RBAC-таблицах D1, а не во frontend.</p>
+        <form id="roleForm" class="pass-form" style="max-width:620px">
+          <label>Email пользователя<input name="email" type="email" required></label>
+          <label>Роль<select name="role"><option value="employee">Employee</option><option value="admin">Admin</option><option value="superadmin">Superadmin</option></select></label>
+          <label>Действие<select name="enabled"><option value="true">Выдать / включить роль</option><option value="false">Удалить роль</option></select></label>
+          <button class="pass-btn" type="submit">Обновить роль</button>
+        </form>
+        <p id="roleResult" class="pass-muted" aria-live="polite"></p>
+      </article>
+    </section>
+  </main>
+  <div data-include="/footer-ru.html"></div>
+</body>
+</html>
