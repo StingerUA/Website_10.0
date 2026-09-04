@@ -7,7 +7,8 @@
     ru:{title:'ALBA Space Experience Pass',desc:'Бронируйте впечатления на мероприятиях, следите за оплатой и открывайте активные QR Pass.',buy:'Приобрести Experience Pass',mine:'Мои QR Pass',staffTitle:'Инструменты сотрудника',staffDesc:'Подтверждение оплаты, поиск клиентов и списание прав по QR.',staff:'Панель сотрудника',admin:'Управление Pass'},
     ar:{title:'ALBA Space Experience Pass',desc:'احجز تجارب الفعاليات وتابع حالة الدفع وافتح تصاريح QR النشطة الخاصة بك.',buy:'احصل على Experience Pass',mine:'تصاريح QR الخاصة بي',staffTitle:'أدوات الموظفين',staffDesc:'تأكيد المدفوعات والبحث عن العملاء واستخدام صلاحيات QR.',staff:'لوحة الموظف',admin:'إدارة Pass'}
   }[lang];
-  const prefix=lang==='en'?'/eng':lang==='ru'?'/rus':lang==='ar'?'/ar':'';
+  // Arabic Pass pages are not localized yet, so keep those links on the existing English UI rather than creating 404 routes.
+  const prefix=lang==='en'?'/eng':lang==='ru'?'/rus':lang==='ar'?'/eng':'';
 
   ensureAvatarEditorAssets();
   document.addEventListener('DOMContentLoaded',init);
