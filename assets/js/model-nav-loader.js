@@ -15,10 +15,10 @@
     var path = String((window.location && window.location.pathname) || '').toLowerCase();
     if (isExcludedModelPage(path)) return;
     if (!document.querySelector('model-viewer')) return;
-    if (document.querySelector('script[data-atlas-story-cards]')) return;
+    if (document.querySelector('script[src*="atlas-story-cards.js"]')) return;
 
     var script = document.createElement('script');
-    script.src = '/assets/js/atlas-story-cards.js?v=20260904-2';
+    script.src = '/assets/js/atlas-story-cards.js?v=20260904-4';
     script.defer = true;
     script.setAttribute('data-atlas-story-cards', 'true');
     (document.head || document.documentElement).appendChild(script);
