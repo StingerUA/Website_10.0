@@ -67,10 +67,17 @@ jobs:
           node --check assets/js/pass-customer.js
           node --check assets/js/pass-staff.js
           node --check assets/js/pass-offline.js
+          node --check assets/js/barcode-detector-qr-polyfill.js
           node --check assets/js/pass-admin.js
           node --check assets/js/account-pass-links.js
           node --check assets/js/events.js
           node --check sw-pass-staff.js
+          grep -q 'jsqr@1.4.0/dist/jsQR.js' staff-pass.html
+          grep -q 'barcode-detector-qr-polyfill.js' staff-pass.html
+          grep -q 'jsqr@1.4.0/dist/jsQR.js' eng/staff-pass.html
+          grep -q 'barcode-detector-qr-polyfill.js' eng/staff-pass.html
+          grep -q 'jsqr@1.4.0/dist/jsQR.js' rus/staff-pass.html
+          grep -q 'barcode-detector-qr-polyfill.js' rus/staff-pass.html
           python scripts/check-pass-migrations.py
 
       - name: Validate orbital catalogue localization
