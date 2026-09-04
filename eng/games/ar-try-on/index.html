@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Alba Space — AR Face Try-On</title>
+  <style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}iframe{display:block;width:100%;height:100%;border:0;background:#000}</style>
+</head>
+<body>
+  <iframe id="game" src="/ar-shop-demo/" title="Alba Space AR Face Try-On" allow="camera; fullscreen" allowfullscreen></iframe>
+  <script>
+    (function(){
+      const frame=document.getElementById('game');
+      const statusMap={
+        'Sistem başlatılıyor...':'Starting system...',
+        'İzleme Modu':'Tracking mode',
+        'Yükleniyor...':'Loading...',
+        'Hazır':'Ready',
+        'Hata!':'Error!',
+        'AR yüklenemedi!':'AR could not be loaded!',
+        'Kamera bulunamadı!':'Camera not found!'
+      };
+      function setText(el,value){if(el&&el.textContent.trim()!==value)el.textContent=value}
+      function setAttr(el,name,value){if(el&&el.getAttribute(name)!==value)el.setAttribute(name,value)}
+      function translate(doc){
+        if(!doc)return;
+        const status=doc.getElementById('status');
+        if(status){const key=status.textContent.trim();if(statusMap[key])setText(status,statusMap[key])}
+        const preview=doc.getElementById('preview-image');setAttr(preview,'alt','Preview');
+        const controls=doc.querySelectorAll('#photo-preview .preview-controls button');
+        if(controls[0])setText(controls[0],'Cancel');if(controls[1])setText(controls[1],'Save');
+        const buttons=doc.querySelectorAll('.bottom-row button');
+        const labels=['Make accessory smaller','Previous accessory','Take photo','Next accessory','Make accessory larger'];
+        buttons.forEach((button,i)=>{if(labels[i]){setAttr(button,'aria-label',labels[i]);setAttr(button,'title',labels[i])}});
+        setAttr(doc.documentElement,'lang','en');
+      }
+      frame.addEventListener('load',function(){
+        try{
+          const doc=frame.contentDocument;translate(doc);
+          const observer=new MutationObserver(()=>translate(doc));
+          observer.observe(doc.documentElement,{subtree:true,childList:true,characterData:true});
+        }catch(err){console.warn('[AR Try-On EN] localization failed',err)}
+      });
+    })();
+  </script>
+</body>
+</html>
