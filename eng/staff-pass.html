@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ALBA Space Staff</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/pass.css?v=20260904-payment-modal">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/mobile-header-cart.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
+  <script src="/assets/js/pass-api.js" defer></script>
+  <script src="/assets/js/pass-locale.js" defer></script>
+  <script src="/assets/js/pass-staff.js?v=20260904-i18n" defer></script>
+</head>
+<body class="pass-page">
+  <div data-include="/header-en.html"></div>
+  <main class="pass-main">
+    <section class="pass-hero">
+      <span class="pass-badge">ALBA SPACE STAFF</span>
+      <h1>Festival Operations Panel</h1>
+      <p id="staffIdentity">Verifying staff account…</p>
+    </section>
+    <div id="staffGate"></div>
+    <section id="staffWorkspace">
+      <nav class="staff-toolbar" aria-label="Staff actions">
+        <button class="pass-btn" data-staff-tab="scannerPanel">📷 Scan QR</button>
+        <button class="pass-btn secondary" data-staff-tab="paymentsPanel">💵 Payments</button>
+        <button class="pass-btn secondary" data-staff-tab="customersPanel">🔎 Customer</button>
+        <button class="pass-btn secondary" data-staff-tab="recentPanel">🕒 Activity</button>
+      </nav>
+
+      <section id="scannerPanel" class="staff-panel active">
+        <div class="staff-scanner-wrap">
+          <div class="pass-card">
+            <h2>Scan QR Pass</h2>
+            <video id="staffVideo" class="staff-camera" playsinline muted></video>
+            <p id="scannerStatus" class="pass-muted">Start the camera or enter the Pass code manually.</p>
+            <div class="pass-actions">
+              <button id="startCamera" class="pass-btn">Start camera</button>
+              <button id="stopCamera" class="pass-btn secondary">Stop</button>
+            </div>
+            <form id="manualLookup" class="pass-form pass-section">
+              <label>Pass code<input id="manualToken" autocomplete="off" placeholder="ALBAPASS:v1.pass_…"></label>
+              <button class="pass-btn" type="submit">Verify Pass</button>
+            </form>
+          </div>
+          <div id="scanResult"><div class="pass-card pass-empty">The scanned Pass will appear here.</div></div>
+        </div>
+      </section>
+
+      <section id="paymentsPanel" class="staff-panel">
+        <div class="pass-hero"><h2>Pending Payments</h2><p>Confirm cash or bank transfer only after the money has actually been received or verified.</p></div>
+        <div id="pendingPayments"></div>
+      </section>
+
+      <section id="customersPanel" class="staff-panel">
+        <div class="pass-card"><h2>Find Customer</h2><form id="customerSearchForm" class="pass-form"><label>Email or name<input id="customerQuery" autocomplete="off" placeholder="example@gmail.com"></label><button class="pass-btn" type="submit">Search</button></form></div>
+        <div id="customerResults" class="staff-search-results"></div>
+      </section>
+
+      <section id="recentPanel" class="staff-panel">
+        <div class="pass-hero"><h2>Recent Activity</h2><p>Payment confirmations and redeemed Pass entitlements.</p></div>
+        <div id="recentActivity" class="staff-search-results"></div>
+      </section>
+    </section>
+  </main>
+
+  <div id="paymentConfirmModal" class="pass-modal" hidden aria-hidden="true">
+    <div class="pass-modal-backdrop" data-payment-modal-close></div>
+    <section class="pass-modal-panel" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+      <button class="pass-modal-close" type="button" aria-label="Close" data-payment-modal-close>×</button>
+      <span class="pass-badge warn">PAYMENT CHECK</span>
+      <h2 id="paymentModalTitle">Confirm Payment</h2>
+      <p class="pass-muted">Confirm only after the payment has actually been received or verified in the bank account.</p>
+      <div class="payment-modal-summary">
+        <div><span>Customer</span><strong id="paymentModalCustomer">—</strong></div>
+        <div><span>Experience</span><strong id="paymentModalTitleValue">—</strong></div>
+        <div><span>Amount</span><strong id="paymentModalAmount">—</strong></div>
+        <div><span>Reference</span><strong id="paymentModalReference">—</strong></div>
+        <div><span>Payment method</span><strong id="paymentModalMethod">—</strong></div>
+      </div>
+      <form id="paymentConfirmForm" class="pass-form">
+        <label class="payment-received-check"><input id="paymentReceivedCheck" type="checkbox" required><span id="paymentReceivedLabel">I received and verified the payment.</span></label>
+        <label id="paymentBankReferenceRow" hidden>Bank transaction reference<input id="paymentBankReference" autocomplete="off" maxlength="120" placeholder="Bank transaction / receipt reference if available"></label>
+        <label>Note <span class="pass-muted">(optional)</span><textarea id="paymentNote" rows="3" maxlength="500" placeholder="e.g. Cash received at festival stand"></textarea></label>
+        <div id="paymentModalError" class="pass-notice pass-error" hidden></div>
+        <div class="pass-actions payment-modal-actions"><button class="pass-btn secondary" type="button" data-payment-modal-close>Cancel</button><button id="paymentModalConfirm" class="pass-btn" type="submit" disabled>CONFIRM PAYMENT</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div data-include="/footer-en.html"></div>
+</body>
+</html>
