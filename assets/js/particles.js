@@ -97,4 +97,41 @@
   window.addEventListener('resize', init);
   init();
   draw();
+
+  // Educational model pages already load particles.js after their content.
+  // Use that reliable execution point to start the Albaman story-card enhancer.
+  (function loadStoryCardsFromParticles() {
+    try {
+      const path = String(window.location.pathname || '').toLowerCase();
+      const excluded = /\/(?:ar-restaurant|game|games|scanner)(?:\/|$)/.test(path) ||
+        /\/(?:shop|cart|account|favorites|orders)(?:\.html|\/|$)/.test(path) ||
+        /\/product-[^/]+(?:\.html|\/|$)/.test(path) ||
+        /\/found-models\.html$/.test(path);
+      if (excluded) return;
+
+      const viewer = document.querySelector('model-viewer');
+      if (!viewer) return;
+
+      const root = viewer.closest('.container') || viewer.parentElement;
+      if (!root) return;
+
+      const paragraphs = Array.from(root.querySelectorAll('p'));
+      const hasLongAlbamanStory = paragraphs.some((p) => {
+        const html = String(p.innerHTML || '');
+        const breaks = html.match(/<br\s*\/?\s*>/gi) || [];
+        return breaks.length >= 6;
+      }) || paragraphs.length >= 4;
+
+      if (!hasLongAlbamanStory) return;
+      if (document.querySelector('script[data-atlas-story-cards-direct]')) return;
+
+      const story = document.createElement('script');
+      story.src = '/assets/js/atlas-story-cards.js?v=20260904-3';
+      story.defer = true;
+      story.setAttribute('data-atlas-story-cards-direct', 'true');
+      (document.head || document.documentElement).appendChild(story);
+    } catch (err) {
+      console.warn('[particles] story cards bootstrap failed', err);
+    }
+  })();
 })();
