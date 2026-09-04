@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Alba Space — AR Ring Try-On</title>
+  <style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}iframe{display:block;width:100%;height:100%;border:0;background:#000}</style>
+</head>
+<body>
+  <iframe id="game" src="/rings.html" title="Alba Space AR Ring Try-On" allow="camera; fullscreen" allowfullscreen></iframe>
+  <script>
+    (function(){
+      const frame=document.getElementById('game');
+      function setText(el,value){if(el&&el.textContent.trim()!==value)el.textContent=value}
+      function setAttr(el,name,value){if(el&&el.getAttribute(name)!==value)el.setAttribute(name,value)}
+      function localize(doc){
+        if(!doc)return;
+        setText(doc.getElementById('loading-text'),'Starting camera... Show your hand to the camera');
+        const labels={
+          'scale-down':'Make ring smaller',
+          'prev-btn':'Previous ring',
+          'camera-btn':'Take photo',
+          'next-btn':'Next ring',
+          'scale-up':'Make ring larger'
+        };
+        Object.entries(labels).forEach(([id,label])=>{const el=doc.getElementById(id);setAttr(el,'aria-label',label);setAttr(el,'title',label)});
+        setAttr(doc.documentElement,'lang','en');
+      }
+      frame.addEventListener('load',function(){
+        try{const doc=frame.contentDocument;localize(doc);const observer=new MutationObserver(()=>localize(doc));observer.observe(doc.documentElement,{subtree:true,childList:true,characterData:true})}
+        catch(err){console.warn('[AR Ring EN] localization failed',err)}
+      });
+    })();
+  </script>
+</body>
+</html>
