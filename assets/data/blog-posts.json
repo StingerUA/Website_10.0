@@ -675,6 +675,47 @@
           "url": "/ar/blog/evrenin-en-buyuk-sirri-kara-delik-tekilligi-singularity-nedir.html"
         }
       }
+    },
+    {
+      "slug": "evreni-genis-aciyla-kesfetmek-nancy-grace-roman-uzay-teleskobu",
+      "category": "uzay",
+      "publishAt": "2026-09-04T19:43:43+03:00",
+      "cover": "/assets/images/blog/evreni-genis-aciyla-kesfetmek-nancy-grace-roman-uzay-teleskobu-cover.jpg",
+      "readingMinutes": 4,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Muzaffer Enes İpçi",
+        "ar": "Muzaffer Enes İpçi"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Evreni Geniş Açıyla Keşfetmek: Nancy Grace Roman Uzay Teleskobu",
+          "excerpt": "Grace Roman Uzay Teleskobu",
+          "url": "/blog/evreni-genis-aciyla-kesfetmek-nancy-grace-roman-uzay-teleskobu.html"
+        },
+        "en": {
+          "title": "Exploring the Universe with a Wide Angle: Nancy Grace Roman Space Telescope",
+          "excerpt": "Grace Roman Space Telescope",
+          "url": "/eng/blog/evreni-genis-aciyla-kesfetmek-nancy-grace-roman-uzay-teleskobu.html"
+        },
+        "ru": {
+          "title": "Исследование Вселенной под широким углом: космический телескоп Нэнси Грейс Роман",
+          "excerpt": "Космический телескоп Грейс Роман",
+          "url": "/rus/blog/evreni-genis-aciyla-kesfetmek-nancy-grace-roman-uzay-teleskobu.html"
+        },
+        "ar": {
+          "title": "استكشاف الكون بزاوية واسعة: تلسكوب نانسي غريس الروماني الفضائي",
+          "excerpt": "تلسكوب غريس الروماني الفضائي",
+          "url": "/ar/blog/evreni-genis-aciyla-kesfetmek-nancy-grace-roman-uzay-teleskobu.html"
+        }
+      }
     }
   ]
 }
