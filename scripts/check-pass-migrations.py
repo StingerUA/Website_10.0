@@ -18,7 +18,6 @@ REQUIRED_TABLES = {
     "entitlement_usage",
     "pass_idempotency",
     "audit_log",
-    "staff_offline_leases",
 }
 EXPECTED_EMPLOYEES = (
     "nncdecdgc@gmail.com",
@@ -32,7 +31,6 @@ def apply_pass_migrations(conn: sqlite3.Connection) -> None:
         "0003_albaspace_pass_mvp.sql",
         "0004_albaspace_pass_atomic_guards.sql",
         "0007_add_staff_employees.sql",
-        "0008_staff_offline_mode.sql",
     ):
         sql = (MIGRATIONS / filename).read_text(encoding="utf-8")
         conn.executescript(sql)
