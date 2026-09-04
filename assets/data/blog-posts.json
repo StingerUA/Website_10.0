@@ -634,6 +634,47 @@
           "url": "/ar/blog/dunyanin-iki-ayi-olsaydi-ne-olurdu.html"
         }
       }
+    },
+    {
+      "slug": "evrenin-en-buyuk-sirri-kara-delik-tekilligi-singularity-nedir",
+      "category": "uzay",
+      "publishAt": "2026-09-04T19:10:29+03:00",
+      "cover": "/assets/images/blog/evrenin-en-buyuk-sirri-kara-delik-tekilligi-singularity-nedir-cover.jpg",
+      "readingMinutes": 4,
+      "author": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Aslı Bolat",
+        "ar": "Aslı Bolat"
+      },
+      "authorRole": {
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer and Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومدرِّبة"
+      },
+      "locales": {
+        "tr": {
+          "title": "Evrenin En Büyük Sırrı: Kara Delik\nTekilliği (Singularity) Nedir?",
+          "excerpt": "Tekilliği (Singularity) Nedir?",
+          "url": "/blog/evrenin-en-buyuk-sirri-kara-delik-tekilligi-singularity-nedir.html"
+        },
+        "en": {
+          "title": "The Biggest Secret of the Universe: Black Hole\nWhat is Singularity?",
+          "excerpt": "What is Singularity?",
+          "url": "/eng/blog/evrenin-en-buyuk-sirri-kara-delik-tekilligi-singularity-nedir.html"
+        },
+        "ru": {
+          "title": "Самый большой секрет Вселенной: Чёрная дыра\nЧто такое сингулярность?",
+          "excerpt": "Что такое сингулярность?",
+          "url": "/rus/blog/evrenin-en-buyuk-sirri-kara-delik-tekilligi-singularity-nedir.html"
+        },
+        "ar": {
+          "title": "أكبر سر في الكون: الثقب الأسود\nما هي التفرد؟",
+          "excerpt": "ما هي التفرد؟",
+          "url": "/ar/blog/evrenin-en-buyuk-sirri-kara-delik-tekilligi-singularity-nedir.html"
+        }
+      }
     }
   ]
 }
