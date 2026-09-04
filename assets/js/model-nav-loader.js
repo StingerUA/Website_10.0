@@ -1,17 +1,24 @@
 // model-nav-loader.js
 // Model navigation buttons remain disabled per user request.
-// This loader now also starts the shared Atlas story-card presentation on Atlas model pages.
+// This loader starts the shared Albaman story-card presentation on educational model pages.
 (function () {
   'use strict';
 
+  function isExcludedModelPage(path) {
+    return /\/(?:ar-restaurant|game|games|scanner)(?:\/|$)/.test(path) ||
+      /\/(?:shop|cart|account|favorites|orders)(?:\.html|\/|$)/.test(path) ||
+      /\/product-[^/]+(?:\.html|\/|$)/.test(path) ||
+      /\/found-models\.html$/.test(path);
+  }
+
   function loadAtlasStoryCards() {
     var path = String((window.location && window.location.pathname) || '').toLowerCase();
-    if (path.indexOf('/atlas/') === -1) return;
+    if (isExcludedModelPage(path)) return;
     if (!document.querySelector('model-viewer')) return;
     if (document.querySelector('script[data-atlas-story-cards]')) return;
 
     var script = document.createElement('script');
-    script.src = '/assets/js/atlas-story-cards.js?v=20260904-1';
+    script.src = '/assets/js/atlas-story-cards.js?v=20260904-2';
     script.defer = true;
     script.setAttribute('data-atlas-story-cards', 'true');
     (document.head || document.documentElement).appendChild(script);
