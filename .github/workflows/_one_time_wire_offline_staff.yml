@@ -16,8 +16,10 @@ jobs:
         with:
           ref: feature/offline-staff-mode-v1
           fetch-depth: 0
-      - name: Wire backend, frontend and CI
-        run: python scripts/_wire_offline_staff.py
+      - name: Wire backend and frontend
+        run: |
+          python scripts/_wire_offline_staff.py
+          git checkout -- .github/workflows/ci.yml
       - name: Validate syntax before commit
         run: |
           node --check cloudflare-worker/pass-offline-backend.js
@@ -26,9 +28,8 @@ jobs:
           node --check assets/js/pass-staff.js
           node --check sw-pass-staff.js
           python scripts/check-pass-migrations.py
-      - name: Remove one-time helpers and commit
+      - name: Commit verified Offline Staff Mode
         run: |
-          rm .github/workflows/_one_time_wire_offline_staff.yml
           rm scripts/_wire_offline_staff.py
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
