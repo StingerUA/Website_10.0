@@ -1,4 +1,4 @@
-const CACHE='alba-staff-offline-v1';
+const CACHE='alba-staff-offline-v2';
 const PRECACHE=[
   '/staff-pass.html','/eng/staff-pass.html','/rus/staff-pass.html',
   '/header-tr.html','/header-en.html','/header-ru.html',
