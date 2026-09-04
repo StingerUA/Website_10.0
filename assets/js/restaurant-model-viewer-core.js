@@ -6,7 +6,7 @@ const IS_DESKTOP_SCENE = false;
 
 document.documentElement.classList.toggle('is-desktop-scene', IS_DESKTOP_SCENE);
 
-const MODEL_VERSION = 'real-meat-scale-4';
+const MODEL_VERSION = 'restaurant-posters-soup-5';
 const modelSource = (filename) => `/assets/models/restaurant/ar/${filename}?v=${MODEL_VERSION}`;
 const desktopModelSource = (filename) => `/assets/models/restaurant/${filename}?v=${MODEL_VERSION}`;
 const posterSource = (filename) => `/assets/images/restaurant/menu/${filename}?v=${MODEL_VERSION}`;
@@ -16,7 +16,7 @@ const MENU_TR = {
     label: 'ET YEMEKLERİ',
     items: [
       {
-        poster: posterSource('turkish-shish-kebab.webp'),
+        poster: posterSource('tavuk-doner-durum.webp'),
         src: modelSource('realistic-turkish-shawarma.glb'),
         exposure: 1.05,
         alt: 'Lavaş, et ve taze sebzelerle hazırlanmış gerçekçi tavuk döner dürüm 3D modeli',
@@ -25,7 +25,7 @@ const MENU_TR = {
         price: '₺ 620'
       },
       {
-        poster: posterSource('adana-kebab.webp'),
+        poster: posterSource('doner-kebab.webp'),
         src: modelSource('realistic-turkish-doner-kebab/scene.gltf'),
         exposure: 1.05,
         alt: 'Et, soğan ve taze yeşilliklerle hazırlanmış PBR döner kebap 3D modeli',
@@ -85,15 +85,15 @@ const MENU_TR = {
     label: 'ÇORBALAR',
     items: [
       {
-        poster: posterSource('turkish-lentil-soup.webp'),
-        src: modelSource('turkish-lentil-soup.glb'),
-        desktopSrc: modelSource('turkish-lentil-soup.glb'),
+        poster: posterSource('realistic-soup.webp'),
+        src: modelSource('realistic-soup.glb'),
+        desktopSrc: modelSource('realistic-soup.glb'),
         desktopScale: 1,
-        modelScale: 5,
-        exposure: 0.68,
-        alt: 'Limon, maydanoz ve zeytinyağlı Türk mercimek çorbası 3D modeli',
-        name: 'Mercimek Çorbası',
-        description: 'Limon, maydanoz, kırmızı biber ve zeytinyağıyla servis edilen sıcak mercimek çorbası.',
+        modelScale: 1,
+        exposure: 0.78,
+        alt: 'Seramik kasede servis edilen gerçekçi sıcak restoran çorbası 3D modeli',
+        name: 'Seramik Kasede Çorba',
+        description: 'Seramik kasede servis edilen sıcak ve yoğun kıvamlı restoran çorbası.',
         price: '₺ 190'
       }
     ]
@@ -137,7 +137,7 @@ const MENU_RU = {
     label: 'МЯСНЫЕ БЛЮДА',
     items: [
       {
-        poster: posterSource('turkish-shish-kebab.webp'),
+        poster: posterSource('tavuk-doner-durum.webp'),
         src: modelSource('realistic-turkish-shawarma.glb'),
         exposure: 1.05,
         alt: 'Реалистичная 3D-модель куриного донер-дюрюма с лавашом и свежими овощами',
@@ -146,7 +146,7 @@ const MENU_RU = {
         price: '₺ 620'
       },
       {
-        poster: posterSource('adana-kebab.webp'),
+        poster: posterSource('doner-kebab.webp'),
         src: modelSource('realistic-turkish-doner-kebab/scene.gltf'),
         exposure: 1.05,
         alt: 'Реалистичная PBR 3D-модель донер-кебаба с мясом, луком и зеленью',
@@ -206,15 +206,15 @@ const MENU_RU = {
     label: 'СУПЫ',
     items: [
       {
-        poster: posterSource('turkish-lentil-soup.webp'),
-        src: modelSource('turkish-lentil-soup.glb'),
-        desktopSrc: modelSource('turkish-lentil-soup.glb'),
+        poster: posterSource('realistic-soup.webp'),
+        src: modelSource('realistic-soup.glb'),
+        desktopSrc: modelSource('realistic-soup.glb'),
         desktopScale: 1,
-        modelScale: 5,
-        exposure: 0.68,
-        alt: '3D-модель турецкого чечевичного супа с лимоном, петрушкой и оливковым маслом',
-        name: 'Турецкий чечевичный суп',
-        description: 'Горячий суп из красной чечевицы с лимоном, петрушкой, паприкой и оливковым маслом.',
+        modelScale: 1,
+        exposure: 0.78,
+        alt: 'Реалистичная 3D-модель горячего ресторанного супа в керамической миске',
+        name: 'Суп в керамической миске',
+        description: 'Горячий густой ресторанный суп, поданный в керамической миске.',
         price: '₺ 190'
       }
     ]

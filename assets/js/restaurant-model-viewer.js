@@ -1,13 +1,13 @@
 // Load the full restaurant menu engine in the browser without making this
 // adapter an ES-module-only file. The repository CI validates this file with
 // `node --check`, while the page itself still loads it with type="module".
-void import('./restaurant-model-viewer-core.js?v=restaurant-scale-fix-2');
+void import('./restaurant-model-viewer-core.js?v=restaurant-posters-soup-5');
 
 const viewer = document.querySelector('#mobile-model-viewer');
 const DEFAULT_CAMERA_ORBIT = '25deg 68deg auto';
 
 const MODEL_SCALE_RULES = [
-  ['turkish-lentil-soup.glb', 5],
+  ['realistic-soup.glb', 1],
   ['realistic-yogurt-drink.glb', 0.5],
   ['realistic-coffee-cup.glb', 0.5],
   ['realistic-strawberry-lemonade.glb', 0.5]
