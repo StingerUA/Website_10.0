@@ -98,7 +98,7 @@
       if(pending&&order.payment_method==='cash'){
         paymentHelp='<div class="pass-notice">Nakit ödemeniz ALBA Space çalışanı tarafından onaylandıktan sonra QR Pass aktif olur.</div>';
       }else if(pending&&order.payment_method==='iban'){
-        paymentHelp=`<div class="pass-notice"><strong>IBAN transferi bekleniyor.</strong><br>Referans: <span class="payment-ref">${api().escapeHtml(order.reference_code)}</span>${iban.iban?`<br>IBAN: <strong>${api().escapeHtml(iban.iban)}</strong>`:''}${iban.account_name?`<br>Alıcı: ${api().escapeHtml(iban.account_name)}`:''}</div>`;
+        paymentHelp=`<div class="pass-notice"><strong>IBAN transferi bekleniyor.</strong><br>Referans: <span class="payment-ref">${api().escapeHtml(order.reference_code)}</span>${iban.bank_name?`<br>Banka: ${api().escapeHtml(iban.bank_name)}`:''}${iban.iban?`<br>IBAN: <strong>${api().escapeHtml(iban.iban)}</strong>`:''}${iban.account_name?`<br>Alıcı: ${api().escapeHtml(iban.account_name)}`:''}</div>`;
       }
       card.innerHTML=`
         <span class="pass-badge ${pending?'warn':'ok'}">${pending?'Ödeme bekleniyor':'Ödeme onaylandı'}</span>
