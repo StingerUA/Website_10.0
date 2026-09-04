@@ -1,0 +1,67 @@
+name: Import AR restaurant models
+
+on:
+  push:
+    branches:
+      - fix/ar-restaurant-realistic-kebabs-scale
+    paths:
+      - .github/workflows/import-ar-restaurant-models.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-models:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download licensed realistic shawarma model
+        run: |
+          set -euo pipefail
+          mkdir -p assets/models/restaurant/ar
+          curl -L --fail --retry 3 \
+            https://raw.githubusercontent.com/andouu/dinner-menu/main/public/delicious_shawarma.glb \
+            -o assets/models/restaurant/ar/realistic-turkish-shawarma.glb
+
+      - name: Download and convert licensed doner kebab model
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/maffittaaa/Yell-Point-Pray.git /tmp/ypp
+          git -C /tmp/ypp sparse-checkout set \
+            'Content/3DModels/Kebab/30days3d_-_day_1_-_doner_kebab'
+          SOURCE='/tmp/ypp/Content/3DModels/Kebab/30days3d_-_day_1_-_doner_kebab/scene.gltf'
+          npx --yes @gltf-transform/cli@4.2.1 copy \
+            "$SOURCE" \
+            assets/models/restaurant/ar/realistic-turkish-doner-kebab.glb
+
+      - name: Validate GLB headers
+        run: |
+          set -euo pipefail
+          for model in \
+            assets/models/restaurant/ar/realistic-turkish-shawarma.glb \
+            assets/models/restaurant/ar/realistic-turkish-doner-kebab.glb; do
+            test -s "$model"
+            test "$(head -c 4 "$model")" = 'glTF'
+            echo "$(basename "$model"): $(stat -c%s "$model") bytes"
+          done
+
+      - name: Commit imported model assets
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            assets/models/restaurant/ar/realistic-turkish-shawarma.glb \
+            assets/models/restaurant/ar/realistic-turkish-doner-kebab.glb
+          if git diff --cached --quiet; then
+            echo 'Model assets already up to date.'
+            exit 0
+          fi
+          git commit -m 'Import realistic licensed Turkish meat models'
+          git push origin HEAD:fix/ar-restaurant-realistic-kebabs-scale
