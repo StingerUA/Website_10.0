@@ -7,10 +7,13 @@
   <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
   <link rel="stylesheet" href="/assets/css/site.css" />
   <link rel="stylesheet" href="/assets/css/fix-layout.css" />
+  <link rel="stylesheet" href="/assets/css/account-pass.css" />
   <script src="/assets/js/include.js" defer></script>
   <script src="/assets/js/menu-toggle.js" defer></script>
   <script src="/assets/js/mobile-header-cart.js" defer></script>
   <script src="/assets/js/worker-auth.js?v=20260826-google-auth-fix" defer></script>
+  <script src="/assets/js/pass-api.js" defer></script>
+  <script src="/assets/js/account-pass-links.js?v=20260904" defer></script>
   <style>
     body.account-page { background: #020617; color: #e5e7eb; }
     .account-main { max-width: 760px; margin: 80px auto 60px; padding: 0 20px; min-height: calc(100vh - 500px); }
@@ -23,7 +26,7 @@
     .account-field textarea { min-height: 120px; resize: vertical; }
     .account-actions { margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap; }
     .account-message { margin-top: 16px; color: #7dd3fc; }
-    .btn-primary { background: #00c2ff; color: #020617; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: #00c2ff; color: #020617; border: none; padding:12px 24px; border-radius:12px; font-weight:600; cursor:pointer; }
     .account-section { margin-top: 32px; }
     .account-section h2 { margin-bottom: 12px; font-size: 24px; }
     .account-section p { margin-bottom: 16px; color: #9ca3af; }
@@ -37,116 +40,24 @@
       <h1>Анкета аккаунта</h1>
       <p>Заполните данные аккаунта, чтобы получить персонализированный опыт.</p>
       <form id="accountForm">
-        <div class="account-field">
-          <label for="name">Имя</label>
-          <input id="name" name="name" type="text" placeholder="Ваше имя" required>
-        </div>
-        <div class="account-field">
-          <label for="email">Почта</label>
-          <input id="email" name="email" type="email" placeholder="Ваш email" required>
-        </div>
-        <div class="account-field">
-          <label for="favorite">Любимый космический опыт</label>
-          <input id="favorite" name="favorite" type="text" placeholder="Например: путешествие на Марс, VR-тур...">
-        </div>
-        <div class="account-field">
-          <label for="notes">Примечания</label>
-          <textarea id="notes" name="notes" placeholder="Любые заметки о себе..."></textarea>
-        </div>
-        <div class="account-actions">
-          <button type="submit" class="btn-primary">Сохранить</button>
-        </div>
+        <div class="account-field"><label for="name">Имя</label><input id="name" name="name" type="text" placeholder="Ваше имя" required></div>
+        <div class="account-field"><label for="email">Почта</label><input id="email" name="email" type="email" placeholder="Ваш email" required></div>
+        <div class="account-field"><label for="favorite">Любимый космический опыт</label><input id="favorite" name="favorite" type="text" placeholder="Например: путешествие на Марс, VR-тур..."></div>
+        <div class="account-field"><label for="notes">Примечания</label><textarea id="notes" name="notes" placeholder="Любые заметки о себе..."></textarea></div>
+        <div class="account-actions"><button type="submit" class="btn-primary">Сохранить</button></div>
         <div id="accountMessage" class="account-message" aria-live="polite"></div>
       </form>
     </section>
-
-    <section id="favorites" class="account-card account-section">
-      <h2>Избранное</h2>
-      <p>Здесь вы можете посмотреть ваши любимые товары и впечатления.</p>
-      <div class="account-section-content">Пока нет избранных.</div>
-    </section>
-
-    <section id="purchased" class="account-card account-section">
-      <h2>Купленное</h2>
-      <p>Здесь отображается список приобретённых вами товаров или услуг.</p>
-      <div class="account-section-content">История покупок пока пуста.</div>
-    </section>
+    <section id="favorites" class="account-card account-section"><h2>Избранное</h2><p>Здесь вы можете посмотреть ваши любимые товары и впечатления.</p><div class="account-section-content">Пока нет избранных.</div></section>
+    <section id="purchased" class="account-card account-section"><h2>Купленное</h2><p>Здесь отображается список приобретённых вами товаров или услуг.</p><div class="account-section-content">История покупок пока пуста.</div></section>
   </main>
-
   <div data-include="/footer-ru.html"></div>
-
   <script>
     const API_BASE = "https://albaspace-api.nncdecdgc.workers.dev";
-    const form = document.getElementById('accountForm');
-    const message = document.getElementById('accountMessage');
-
-    async function loadProfileData() {
-      const saved = localStorage.getItem('albaspace_account_profile');
-      let profile = {
-        name: '',
-        email: '',
-        favorite_experience: '',
-        notes: ''
-      };
-
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          profile = { ...profile, ...parsed };
-        } catch (error) {
-          console.debug('Unable to parse stored profile', error);
-        }
-      }
-
-      try {
-        const response = await fetch(`${API_BASE}/me`, {
-          credentials: 'include'
-        });
-        if (response.ok) {
-          const data = await response.json();
-          profile.name = data.name || profile.name;
-          profile.email = data.email || profile.email;
-          if (data.profile) {
-            profile.favorite_experience = data.profile.favorite_experience || profile.favorite_experience;
-            profile.notes = data.profile.notes || profile.notes;
-          }
-        }
-      } catch (error) {
-        console.debug('Unable to load remote profile', error);
-      }
-
-      document.getElementById('name').value = profile.name;
-      document.getElementById('email').value = profile.email;
-      document.getElementById('favorite').value = profile.favorite_experience;
-      document.getElementById('notes').value = profile.notes;
-    }
-
+    const form=document.getElementById('accountForm');const message=document.getElementById('accountMessage');
+    async function loadProfileData(){const saved=localStorage.getItem('albaspace_account_profile');let profile={name:'',email:'',favorite_experience:'',notes:''};if(saved){try{profile={...profile,...JSON.parse(saved)}}catch(error){console.debug('Unable to parse stored profile',error)}}try{const response=await fetch(`${API_BASE}/me`,{credentials:'include'});if(response.ok){const data=await response.json();profile.name=data.name||profile.name;profile.email=data.email||profile.email;if(data.profile){profile.favorite_experience=data.profile.favorite_experience||profile.favorite_experience;profile.notes=data.profile.notes||profile.notes}}}catch(error){console.debug('Unable to load remote profile',error)}document.getElementById('name').value=profile.name;document.getElementById('email').value=profile.email;document.getElementById('favorite').value=profile.favorite_experience;document.getElementById('notes').value=profile.notes}
     loadProfileData();
-
-    form.addEventListener('submit', async function (event) {
-      event.preventDefault();
-      const data = {
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        favorite_experience: document.getElementById('favorite').value.trim(),
-        notes: document.getElementById('notes').value.trim()
-      };
-      try {
-        localStorage.setItem('albaspace_account_profile', JSON.stringify(data));
-      } catch (err) {
-        // ignore local save errors
-      }
-
-      if (typeof window.saveAccountProfile === 'function') {
-        const result = await window.saveAccountProfile(data);
-        message.textContent = result.message;
-        if (!result.ok && !result.serverSaved) {
-          message.textContent = 'Не удалось сохранить на сервере, но данные сохранены локально.';
-        }
-      } else {
-        message.textContent = 'Данные аккаунта сохранены локально.';
-      }
-    });
+    form.addEventListener('submit',async function(event){event.preventDefault();const data={name:document.getElementById('name').value.trim(),email:document.getElementById('email').value.trim(),favorite_experience:document.getElementById('favorite').value.trim(),notes:document.getElementById('notes').value.trim()};try{localStorage.setItem('albaspace_account_profile',JSON.stringify(data))}catch(err){}if(typeof window.saveAccountProfile==='function'){const result=await window.saveAccountProfile(data);message.textContent=result.message;if(!result.ok&&!result.serverSaved)message.textContent='Не удалось сохранить на сервере, но данные сохранены локально.'}else message.textContent='Данные аккаунта сохранены локально.'});
   </script>
 </body>
 </html>
