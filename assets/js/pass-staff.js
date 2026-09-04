@@ -2,6 +2,7 @@
   const api=()=>window.AlbaPassApi;
   const locale=()=>window.AlbaPassLocale||{lang:'tr',t:key=>key,productTitle:(slug,fallback)=>fallback||slug,entitlementLabel:(ent,fallback)=>fallback||ent?.label||ent?.entitlement_code};
   const t=(key,vars)=>locale().t(key,vars);
+  const offline=()=>window.AlbaPassOffline||null;
   let currentToken='';
   let cameraStream=null;
   let scanTimer=null;
@@ -15,11 +16,30 @@
 
   async function init(){
     bindTabs();bindScanner();bindSearch();bindPaymentModal();
+    window.addEventListener('alba-pass-offline-synced',()=>{
+      loadPending().catch(()=>{});loadRecent().catch(()=>{});if(currentToken)lookupToken(currentToken).catch(()=>{});
+    });
+    const off=offline();
     try{
       const me=await api().request('/api/staff/me');
       document.getElementById('staffIdentity').textContent=`${me.user.name||me.user.email} · ${me.roles.join(', ')}`;
+      if(off)await off.init().catch(()=>{});
+      document.getElementById('staffWorkspace').hidden=false;
       await Promise.all([loadPending(),loadRecent()]);
     }catch(error){
+      if(off){
+        try{
+          await off.init();
+          const cached=off.staffIdentity?.();
+          if(cached&&off.canUseOffline()){
+            const u=cached.user||{};
+            document.getElementById('staffIdentity').textContent=`${u.name||u.email||'ALBA Staff'} · ${(cached.roles||[]).join(', ')} · OFFLINE`;
+            document.getElementById('staffWorkspace').hidden=false;
+            await Promise.all([loadPending(),loadRecent()]);
+            return;
+          }
+        }catch{}
+      }
       document.getElementById('staffGate').innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('staffDenied',{error:error.data?.error||error.message}))}</div>`;
       document.getElementById('staffWorkspace').hidden=true;
     }
@@ -77,8 +97,17 @@
 
   async function lookupToken(token){
     const root=document.getElementById('scanResult');currentToken=token;root.innerHTML=`<div class="pass-empty">${api().escapeHtml(t('passChecking'))}</div>`;
-    try{const data=await api().request('/api/staff/pass/lookup',{method:'POST',body:{token}});renderPass(root,data.pass);const manual=document.getElementById('manualToken');if(manual)manual.value='';}
-    catch(error){currentToken='';root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('passInvalid',{error:error.data?.error||error.message}))}</div>`;}
+    try{
+      const data=await api().request('/api/staff/pass/lookup',{method:'POST',body:{token}});
+      renderPass(root,data.pass);const manual=document.getElementById('manualToken');if(manual)manual.value='';
+    }catch(error){
+      const off=offline();
+      if(off&&off.isNetworkError(error)&&off.canUseOffline()){
+        try{const data=await off.lookupToken(token);renderPass(root,data.pass);const manual=document.getElementById('manualToken');if(manual)manual.value='';return;}
+        catch(offlineError){error=offlineError;}
+      }
+      currentToken='';root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('passInvalid',{error:error.data?.error||error.message}))}</div>`;
+    }
   }
 
   function renderPass(root,pass){
@@ -97,21 +126,27 @@
     if(!currentToken)return;
     const entitlementId=button.dataset.redeem;const parent=button.closest('.staff-entitlement');const input=parent?.querySelector('.redeemAmount');const amount=input?Math.max(1,Number.parseInt(input.value||'1',10)||1):1;
     if(!confirm(t('redeemConfirm',{amount})))return;
-    button.disabled=true;const old=button.textContent;button.textContent=t('processing');
-    try{await api().request('/api/staff/pass/redeem',{method:'POST',body:{token:currentToken,entitlement_id:entitlementId,amount,request_id:api().requestId('redeem')}});await lookupToken(currentToken);await loadRecent();}
-    catch(error){alert(t('redeemError',{error:error.data?.error||error.message}));button.disabled=false;button.textContent=old;}
+    button.disabled=true;const old=button.textContent;button.textContent=t('processing');const requestId=api().requestId('redeem');
+    try{
+      try{await api().request('/api/staff/pass/redeem',{method:'POST',body:{token:currentToken,entitlement_id:entitlementId,amount,request_id:requestId}});}
+      catch(error){const off=offline();if(!(off&&off.isNetworkError(error)&&off.canUseOffline()))throw error;await off.redeem({token:currentToken,entitlement_id:entitlementId,amount,request_id:requestId});}
+      await lookupToken(currentToken);await loadRecent();
+    }catch(error){alert(t('redeemError',{error:error.data?.error||error.message}));button.disabled=false;button.textContent=old;}
   }
 
   async function loadPending(){
     const root=document.getElementById('pendingPayments');if(!root)return;root.innerHTML=`<div class="pass-empty">${api().escapeHtml(t('pendingLoading'))}</div>`;
-    try{
-      const data=await api().request('/api/staff/payments/pending');if(!data.payments?.length){root.innerHTML=`<div class="pass-card pass-empty">${api().escapeHtml(t('noPending'))}</div>`;return;}root.innerHTML='';
-      for(const payment of data.payments){
-        const row=document.createElement('article');row.className='pass-card staff-payment';
-        row.innerHTML=`<div><span class="pass-badge warn">${api().escapeHtml(payment.method==='cash'?t('cashWaiting'):t('ibanWaiting'))}</span><h3>${api().escapeHtml(locale().productTitle(payment.product_slug,payment.title||payment.product_slug||'Experience'))}</h3><p>${api().escapeHtml(payment.name||'')} · ${api().escapeHtml(payment.email)}</p><p><strong>${api().money(payment.amount,payment.currency)}</strong> · <span class="payment-ref">${api().escapeHtml(payment.reference_code)}</span></p></div><button class="pass-btn" data-confirm-payment="${api().escapeHtml(payment.id)}">${api().escapeHtml(t('confirmPayment'))}</button>`;
-        row.querySelector('[data-confirm-payment]').addEventListener('click',event=>openPaymentModal(payment,event.currentTarget));root.appendChild(row);
-      }
-    }catch(error){root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('paymentsError',{error:error.message}))}</div>`;}
+    try{let data;try{data=await api().request('/api/staff/payments/pending');}catch(error){const off=offline();if(!(off&&off.isNetworkError(error)&&off.canUseOffline()))throw error;data=await off.pendingPayments();}renderPendingPayments(root,data);}
+    catch(error){root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('paymentsError',{error:error.data?.error||error.message}))}</div>`;}
+  }
+
+  function renderPendingPayments(root,data){
+    if(!data.payments?.length){root.innerHTML=`<div class="pass-card pass-empty">${api().escapeHtml(t('noPending'))}</div>`;return;}root.innerHTML='';
+    for(const payment of data.payments){
+      const row=document.createElement('article');row.className='pass-card staff-payment';
+      row.innerHTML=`<div><span class="pass-badge warn">${api().escapeHtml(payment.method==='cash'?t('cashWaiting'):t('ibanWaiting'))}</span><h3>${api().escapeHtml(locale().productTitle(payment.product_slug,payment.title||payment.product_slug||'Experience'))}</h3><p>${api().escapeHtml(payment.name||'')} · ${api().escapeHtml(payment.email)}</p><p><strong>${api().money(payment.amount,payment.currency)}</strong> · <span class="payment-ref">${api().escapeHtml(payment.reference_code)}</span></p></div><button class="pass-btn" data-confirm-payment="${api().escapeHtml(payment.id)}">${api().escapeHtml(t('confirmPayment'))}</button>`;
+      row.querySelector('[data-confirm-payment]').addEventListener('click',event=>openPaymentModal(payment,event.currentTarget));root.appendChild(row);
+    }
   }
 
   function openPaymentModal(payment,button){
@@ -135,8 +170,10 @@
     const received=document.getElementById('paymentReceivedCheck');const bankReference=document.getElementById('paymentBankReference').value.trim();const note=document.getElementById('paymentNote').value.trim();const error=document.getElementById('paymentModalError');const confirmButton=document.getElementById('paymentModalConfirm');
     if(!received.checked){error.textContent=t('mustConfirmPayment');error.hidden=false;received.focus();return;}
     modalSubmitting=true;error.hidden=true;confirmButton.disabled=true;confirmButton.textContent=t('confirming');if(modalSourceButton){modalSourceButton.disabled=true;modalSourceButton.textContent=t('confirming');}
+    const requestId=api().requestId('payment');
     try{
-      await api().request(`/api/staff/payments/${encodeURIComponent(modalPayment.id)}/confirm`,{method:'POST',body:{request_id:api().requestId('payment'),bank_reference:bankReference,note}});
+      try{await api().request(`/api/staff/payments/${encodeURIComponent(modalPayment.id)}/confirm`,{method:'POST',body:{request_id:requestId,bank_reference:bankReference,note}});}
+      catch(requestError){const off=offline();if(!(off&&off.isNetworkError(requestError)&&off.canUseOffline()))throw requestError;await off.confirmPayment({payment_id:modalPayment.id,request_id:requestId,bank_reference:bankReference,note});}
       const modal=document.getElementById('paymentConfirmModal');modal.hidden=true;modal.setAttribute('aria-hidden','true');document.body.classList.remove('pass-modal-open');modalPayment=null;modalSourceButton=null;modalSubmitting=false;modalPreviousFocus=null;await Promise.all([loadPending(),loadRecent()]);
     }catch(requestError){modalSubmitting=false;error.textContent=t('paymentConfirmError',{error:requestError.data?.error||requestError.message});error.hidden=false;confirmButton.disabled=!received.checked;confirmButton.textContent=t('retry');if(modalSourceButton){modalSourceButton.disabled=false;modalSourceButton.textContent=t('confirmPayment');}}
   }
@@ -144,14 +181,14 @@
   function bindSearch(){
     document.getElementById('customerSearchForm')?.addEventListener('submit',async event=>{
       event.preventDefault();const q=document.getElementById('customerQuery').value.trim();const root=document.getElementById('customerResults');if(q.length<2){root.innerHTML=`<div class="pass-muted">${api().escapeHtml(t('min2'))}</div>`;return;}root.innerHTML=`<div class="pass-empty">${api().escapeHtml(t('searching'))}</div>`;
-      try{const data=await api().request('/api/staff/customers/search?q='+encodeURIComponent(q));if(!data.customers?.length){root.innerHTML=`<div class="pass-card pass-empty">${api().escapeHtml(t('customerNotFound'))}</div>`;return;}root.innerHTML=data.customers.map(customer=>`<article class="pass-card"><h3>${api().escapeHtml(customer.name||customer.email)}</h3><p>${api().escapeHtml(customer.email)}</p><ul class="pass-list">${(customer.orders||[]).map(order=>`<li><span>${api().escapeHtml(locale().productTitle(order.product_slug,order.title||order.product_slug||order.id))}<br><small>${api().escapeHtml(order.id)}</small></span><strong>${api().escapeHtml(order.payment_status)} · ${api().money(order.total_amount,order.currency)}</strong></li>`).join('')||`<li>${api().escapeHtml(t('noOrdersShort'))}</li>`}</ul></article>`).join('');}
-      catch(error){root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('searchError',{error:error.message}))}</div>`;}
+      try{let data;try{data=await api().request('/api/staff/customers/search?q='+encodeURIComponent(q));}catch(error){const off=offline();if(!(off&&off.isNetworkError(error)&&off.canUseOffline()))throw error;data=await off.searchCustomers(q);}if(!data.customers?.length){root.innerHTML=`<div class="pass-card pass-empty">${api().escapeHtml(t('customerNotFound'))}</div>`;return;}root.innerHTML=data.customers.map(customer=>`<article class="pass-card"><h3>${api().escapeHtml(customer.name||customer.email)}</h3><p>${api().escapeHtml(customer.email)}</p><ul class="pass-list">${(customer.orders||[]).map(order=>`<li><span>${api().escapeHtml(locale().productTitle(order.product_slug,order.title||order.product_slug||order.id))}<br><small>${api().escapeHtml(order.id)}</small></span><strong>${api().escapeHtml(order.payment_status)} · ${api().money(order.total_amount,order.currency)}</strong></li>`).join('')||`<li>${api().escapeHtml(t('noOrdersShort'))}</li>`}</ul></article>`).join('');}
+      catch(error){root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('searchError',{error:error.data?.error||error.message}))}</div>`;}
     });
   }
 
   async function loadRecent(){
     const root=document.getElementById('recentActivity');if(!root)return;
-    try{const data=await api().request('/api/staff/recent');if(!data.events?.length){root.innerHTML=`<div class="pass-card pass-empty">${api().escapeHtml(t('noActivity'))}</div>`;return;}root.innerHTML=data.events.map(event=>`<div class="pass-card staff-log"><strong>${api().escapeHtml(event.event_type)}</strong> · ${api().escapeHtml(event.actor_name||event.actor_email||'system')}<br><span class="pass-muted">${api().escapeHtml(event.target_type)} ${api().escapeHtml(event.target_id)}</span><br><time>${api().dateTime(event.created_at)}</time></div>`).join('');}
-    catch(error){root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('activityError',{error:error.message}))}</div>`;}
+    try{let data;try{data=await api().request('/api/staff/recent');}catch(error){const off=offline();if(!(off&&off.isNetworkError(error)&&off.canUseOffline()))throw error;data=await off.recentActivity();}if(!data.events?.length){root.innerHTML=`<div class="pass-card pass-empty">${api().escapeHtml(t('noActivity'))}</div>`;return;}root.innerHTML=data.events.map(event=>`<div class="pass-card staff-log"><strong>${api().escapeHtml(event.event_type)}</strong> · ${api().escapeHtml(event.actor_name||event.actor_email||'system')}<br><span class="pass-muted">${api().escapeHtml(event.target_type)} ${api().escapeHtml(event.target_id)}</span><br><time>${api().dateTime(event.created_at)}</time></div>`).join('');}
+    catch(error){root.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('activityError',{error:error.data?.error||error.message}))}</div>`;}
   }
 })();

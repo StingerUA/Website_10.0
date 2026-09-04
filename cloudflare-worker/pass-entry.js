@@ -1,5 +1,6 @@
 import appWorker, { GameRoomDO } from './worker-with-ll2-refresh.js';
 import { handlePassRequest } from './pass-backend.js';
+import { handleOfflinePassRequest } from './pass-offline-backend.js';
 
 export { GameRoomDO };
 
@@ -24,6 +25,9 @@ export default {
         return new Response(null, { status: 204, headers: cors });
       }
       const user = await getSessionUser(request, env);
+      if (url.pathname.startsWith('/api/staff/offline/')) {
+        return handleOfflinePassRequest(request, env, user, cors, handlePassRequest);
+      }
       return handlePassRequest(request, env, user, cors);
     }
     return appWorker.fetch(request, env, ctx);
