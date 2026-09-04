@@ -64,7 +64,7 @@ jobs:
           SERVER_PID=$!
           trap 'kill "$SERVER_PID" || true' EXIT
 
-          cat > /tmp/render-posters.mjs <<'NODE'
+          cat > scripts/render-restaurant-posters-temp.mjs <<'NODE'
           import puppeteer from 'puppeteer';
           import fs from 'node:fs/promises';
 
@@ -124,7 +124,7 @@ jobs:
           await browser.close();
           NODE
 
-          node /tmp/render-posters.mjs
+          node scripts/render-restaurant-posters-temp.mjs
 
       - name: Switch menu posters and soup model
         run: |
