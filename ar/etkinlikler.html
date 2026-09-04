@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#020617">
+  <title>الفعاليات – Alba Space</title>
+  <meta name="description" content="الفعاليات القادمة والسابقة لـ Alba Space، ومخيمات الرصد والبرامج العلمية.">
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/events.css?v=20260904-i18n">
+  <link rel="stylesheet" href="/assets/css/rtl.css">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+</head>
+<body>
+  <div data-include="/header-ar.html"></div>
+  <section class="events-hero">
+    <h1 class="page-title">الفعاليات</h1>
+    <p class="page-sub">تابع فعاليات Alba Space المصممة لاستكشاف السماء والتعلّم معًا وخوض تجارب علمية مباشرة.</p>
+  </section>
+  <div class="events-page-wrapper">
+    <div class="events-tabs" role="tablist" aria-label="الفعاليات">
+      <button class="events-tab is-active" id="events-tab-upcoming" type="button" role="tab" aria-selected="true" aria-controls="events-grid" data-events-filter="upcoming">الفعاليات القادمة</button>
+      <button class="events-tab" id="events-tab-past" type="button" role="tab" aria-selected="false" aria-controls="events-grid" data-events-filter="past">الفعاليات السابقة</button>
+    </div>
+    <div class="events-grid" id="events-grid" role="tabpanel" aria-live="polite" aria-labelledby="events-tab-upcoming"></div>
+  </div>
+  <div data-include="/footer-ar.html"></div>
+  <script src="/assets/js/events.js?v=20260904-i18n" defer></script>
+</body>
+</html>
