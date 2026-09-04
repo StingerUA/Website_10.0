@@ -1,4 +1,4 @@
-import './restaurant-model-viewer-core.js?v=restaurant-scale-fix-1';
+import './restaurant-model-viewer-core.js?v=restaurant-scale-fix-2';
 
 const viewer = document.querySelector('#mobile-model-viewer');
 const DEFAULT_CAMERA_ORBIT = '25deg 68deg auto';

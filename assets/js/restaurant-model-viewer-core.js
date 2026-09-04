@@ -6,7 +6,7 @@ const IS_DESKTOP_SCENE = false;
 
 document.documentElement.classList.toggle('is-desktop-scene', IS_DESKTOP_SCENE);
 
-const MODEL_VERSION = 'turkish-meat-scale-light-3';
+const MODEL_VERSION = 'real-meat-scale-4';
 const modelSource = (filename) => `/assets/models/restaurant/ar/${filename}?v=${MODEL_VERSION}`;
 const desktopModelSource = (filename) => `/assets/models/restaurant/${filename}?v=${MODEL_VERSION}`;
 const posterSource = (filename) => `/assets/images/restaurant/menu/${filename}?v=${MODEL_VERSION}`;
@@ -17,20 +17,20 @@ const MENU_TR = {
     items: [
       {
         poster: posterSource('turkish-shish-kebab.webp'),
-        src: modelSource('turkish-shish-kebab-plated.glb'),
+        src: modelSource('realistic-turkish-shawarma.glb'),
         exposure: 1.05,
-        alt: 'Közlenmiş sebzelerle servis edilen yüksek detaylı Türk şiş kebabı 3D modeli',
-        name: 'Türk Şiş Kebabı',
-        description: 'Şişte ızgara et; közlenmiş biber, domates, soğan ve limonla servis edilir.',
+        alt: 'Lavaş, et ve taze sebzelerle hazırlanmış gerçekçi tavuk döner dürüm 3D modeli',
+        name: 'Tavuk Döner Dürüm',
+        description: 'Lavaş içinde döner et, domates ve taze sebzelerle servis edilir.',
         price: '₺ 620'
       },
       {
         poster: posterSource('adana-kebab.webp'),
-        src: modelSource('turkish-adana-kebab-plated.glb'),
+        src: modelSource('realistic-turkish-doner-kebab/scene.gltf'),
         exposure: 1.05,
-        alt: 'Pide, közlenmiş sebzeler ve sumaklı soğanla servis edilen yüksek detaylı Adana kebabı 3D modeli',
-        name: 'Adana Kebabı',
-        description: 'Baharatlı kıyma kebabı; pide, közlenmiş domates, biber ve sumaklı soğanla.',
+        alt: 'Et, soğan ve taze yeşilliklerle hazırlanmış PBR döner kebap 3D modeli',
+        name: 'Döner Kebab',
+        description: 'Et, soğan ve taze yeşilliklerle servis edilen döner kebap.',
         price: '₺ 590'
       },
       {
@@ -138,20 +138,20 @@ const MENU_RU = {
     items: [
       {
         poster: posterSource('turkish-shish-kebab.webp'),
-        src: modelSource('turkish-shish-kebab-plated.glb'),
+        src: modelSource('realistic-turkish-shawarma.glb'),
         exposure: 1.05,
-        alt: 'Высокодетализированная 3D-модель турецкого шиш-кебаба с запечёнными овощами',
-        name: 'Турецкий шиш-кебаб',
-        description: 'Мясо на шампурах с запечённым перцем, помидором, луком и лимоном.',
+        alt: 'Реалистичная 3D-модель куриного донер-дюрюма с лавашом и свежими овощами',
+        name: 'Куриный донер-дюрюм',
+        description: 'Донер в лаваше с помидором и свежими овощами.',
         price: '₺ 620'
       },
       {
         poster: posterSource('adana-kebab.webp'),
-        src: modelSource('turkish-adana-kebab-plated.glb'),
+        src: modelSource('realistic-turkish-doner-kebab/scene.gltf'),
         exposure: 1.05,
-        alt: 'Высокодетализированная 3D-модель адана-кебаба с питой, овощами и луком с сумахом',
-        name: 'Адана-кебаб',
-        description: 'Пряный кебаб из рубленого мяса с питой, запечёнными овощами и луком с сумахом.',
+        alt: 'Реалистичная PBR 3D-модель донер-кебаба с мясом, луком и зеленью',
+        name: 'Донер-кебаб',
+        description: 'Донер-кебаб с мясом, луком и свежей зеленью.',
         price: '₺ 590'
       },
       {

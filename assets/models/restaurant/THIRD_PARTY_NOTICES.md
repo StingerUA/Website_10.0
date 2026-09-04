@@ -22,6 +22,13 @@
 
 Картинки `assets/images/restaurant/menu/*.webp` используются одновременно как миниатюры карточек и загрузочные постеры. Все десять действующих изображений созданы специально для интерфейса как фотореалистичные изображения соответствующих блюд без текста и логотипов; это иллюстративные постеры, а не снимки UV-текстур GLB. Такой подход устраняет визуальные артефакты старого технического рендера на напитках и десертах.
 
+
+### Новые модели донера (CC BY)
+
+`ar/realistic-turkish-shawarma.glb` заменяет прежний процедурный шиш-кебаб. Модель основана на [Delicious shawarma](https://sketchfab.com/3d-models/delicious-shawarma-97d635dcc3814366a41d811852db9818) автора **mrs_pancake (yura080297)**, опубликованной под лицензией **CC Attribution**. Локальная GLB-копия взята из публичного проекта `andouu/dinner-menu`; исходная карточка Sketchfab указывает 44.8k треугольников.
+
+`ar/realistic-turkish-doner-kebab/scene.gltf` и связанные `scene.bin`/PBR-текстуры заменяют прежний процедурный Adana kebab. Это [30Days3D - Day 1 - Doner Kebab](https://sketchfab.com/3d-models/30days3d-day-1-doner-kebab-ff4869fdc1014a87bd1401d1c4ad9460) автора **smokefumus**, лицензия **CC BY 4.0**. Исходный пакет и файл лицензии взяты из `maffittaaa/Yell-Point-Pray`; коммерческое использование разрешено при сохранении атрибуции.
+
 ### Клубнично-шоколадный торт
 
 `ar/strawberry-chocolate-cake.glb` — локальная оптимизированная копия модели [Strawberry Chocolate Cake](https://polyhaven.com/a/strawberry_chocolate_cake) от Kuutti Siitonen (Poly Haven), распространяемой по лицензии [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Официальные геометрия и PBR-текстуры разрешения 1K скачаны по адресам из Poly Haven API, проверены по опубликованным MD5, упакованы в самодостаточный GLB и сжаты Draco без внешних сетевых зависимостей. Эта текстурированная модель заменила прежний фруктовый десерт в турецком и русском меню.
