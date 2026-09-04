@@ -20,7 +20,7 @@
 
   const canvas = document.createElement('canvas');
   canvas.id = 'star-bg';
-  document.body.appendChild(canvas); // appendChild в конец, не prepend
+  document.body.appendChild(canvas);
 
   const ctx = canvas.getContext('2d');
   let W, H, stars;
@@ -99,7 +99,7 @@
   draw();
 
   // Educational model pages already load particles.js after their content.
-  // Use that reliable execution point to start the Albaman story-card enhancer.
+  // Use that reliable execution point to start/refresh the shared story-card enhancer.
   (function loadStoryCardsFromParticles() {
     try {
       const path = String(window.location.pathname || '').toLowerCase();
@@ -119,14 +119,23 @@
       const hasLongAlbamanStory = paragraphs.some((p) => {
         const html = String(p.innerHTML || '');
         const breaks = html.match(/<br\s*\/?\s*>/gi) || [];
-        return breaks.length >= 6;
-      }) || paragraphs.length >= 4;
+        return breaks.length >= 3;
+      }) || paragraphs.length >= 4 || !!root.querySelector('.atlas-story-cards');
 
       if (!hasLongAlbamanStory) return;
-      if (document.querySelector('script[data-atlas-story-cards-direct]')) return;
+
+      if (window.AlbaStoryCards && typeof window.AlbaStoryCards.refresh === 'function') {
+        window.AlbaStoryCards.refresh();
+        return;
+      }
+
+      const existing = Array.from(document.scripts).some((script) =>
+        String(script.src || '').includes('/assets/js/atlas-story-cards.js')
+      );
+      if (existing) return;
 
       const story = document.createElement('script');
-      story.src = '/assets/js/atlas-story-cards.js?v=20260904-4';
+      story.src = '/assets/js/atlas-story-cards.js?v=20260904-5';
       story.defer = true;
       story.setAttribute('data-atlas-story-cards-direct', 'true');
       (document.head || document.documentElement).appendChild(story);
