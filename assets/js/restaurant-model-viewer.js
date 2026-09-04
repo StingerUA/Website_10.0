@@ -1,4 +1,7 @@
-import './restaurant-model-viewer-core.js?v=restaurant-scale-fix-2';
+// Load the full restaurant menu engine in the browser without making this
+// adapter an ES-module-only file. The repository CI validates this file with
+// `node --check`, while the page itself still loads it with type="module".
+void import('./restaurant-model-viewer-core.js?v=restaurant-scale-fix-2');
 
 const viewer = document.querySelector('#mobile-model-viewer');
 const DEFAULT_CAMERA_ORBIT = '25deg 68deg auto';
