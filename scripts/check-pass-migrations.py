@@ -19,10 +19,19 @@ REQUIRED_TABLES = {
     "pass_idempotency",
     "audit_log",
 }
+EXPECTED_EMPLOYEES = (
+    "nncdecdgc@gmail.com",
+    "idrisalbayrak10@gmail.com",
+    "rikir8284@gmail.com",
+)
 
 
 def apply_pass_migrations(conn: sqlite3.Connection) -> None:
-    for filename in ("0003_albaspace_pass_mvp.sql", "0004_albaspace_pass_atomic_guards.sql"):
+    for filename in (
+        "0003_albaspace_pass_mvp.sql",
+        "0004_albaspace_pass_atomic_guards.sql",
+        "0007_add_staff_employees.sql",
+    ):
         sql = (MIGRATIONS / filename).read_text(encoding="utf-8")
         conn.executescript(sql)
 
@@ -36,18 +45,19 @@ def validate(conn: sqlite3.Connection, label: str) -> None:
     if missing:
         raise SystemExit(f"[{label}] Missing Pass tables after migration: {sorted(missing)}")
 
-    employee_role = conn.execute(
-        """
-        SELECT r.code
-        FROM user_roles ur
-        JOIN users u ON u.id = ur.user_id
-        JOIN roles r ON r.id = ur.role_id
-        WHERE lower(u.email) = lower(?) AND ur.revoked_at IS NULL
-        """,
-        ("nncdecdgc@gmail.com",),
-    ).fetchone()
-    if not employee_role or employee_role[0] != "employee":
-        raise SystemExit(f"[{label}] Initial employee RBAC seed was not applied")
+    for email in EXPECTED_EMPLOYEES:
+        employee_role = conn.execute(
+            """
+            SELECT r.code
+            FROM user_roles ur
+            JOIN users u ON u.id = ur.user_id
+            JOIN roles r ON r.id = ur.role_id
+            WHERE lower(u.email) = lower(?) AND ur.revoked_at IS NULL
+            """,
+            (email,),
+        ).fetchone()
+        if not employee_role or employee_role[0] != "employee":
+            raise SystemExit(f"[{label}] Employee RBAC seed missing for {email}")
 
     entitlement_columns = {
         row[1] for row in conn.execute("PRAGMA table_info(pass_entitlements)")
@@ -81,8 +91,10 @@ def integer_id_case() -> None:
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           slug TEXT NOT NULL UNIQUE
         );
-        INSERT INTO users (google_id, email, name, avatar)
-        VALUES ('google:test-employee', 'nncdecdgc@gmail.com', 'ALBA Employee', '');
+        INSERT INTO users (google_id, email, name, avatar) VALUES
+          ('google:test-employee', 'nncdecdgc@gmail.com', 'ALBA Employee', ''),
+          ('google:test-idris', 'idrisalbayrak10@gmail.com', 'Idris', ''),
+          ('google:test-rikir', 'rikir8284@gmail.com', 'Rikir', '');
         INSERT INTO products (slug) VALUES ('vr-mission-iss');
         """
     )
@@ -109,8 +121,10 @@ def text_id_case() -> None:
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           slug TEXT NOT NULL UNIQUE
         );
-        INSERT INTO users (id, google_id, email, name, avatar)
-        VALUES ('usr_employee_1', 'google:test-employee', 'nncdecdgc@gmail.com', 'ALBA Employee', '');
+        INSERT INTO users (id, google_id, email, name, avatar) VALUES
+          ('usr_employee_1', 'google:test-employee', 'nncdecdgc@gmail.com', 'ALBA Employee', ''),
+          ('usr_employee_2', 'google:test-idris', 'idrisalbayrak10@gmail.com', 'Idris', ''),
+          ('usr_employee_3', 'google:test-rikir', 'rikir8284@gmail.com', 'Rikir', '');
         INSERT INTO products (slug) VALUES ('vr-mission-iss');
         """
     )
@@ -121,4 +135,4 @@ def text_id_case() -> None:
 
 integer_id_case()
 text_id_case()
-print("ALBA Space Pass migrations: OK (INTEGER and TEXT legacy user ids)")
+print("ALBA Space Pass migrations: OK (INTEGER/TEXT ids + staff RBAC seeds)")
