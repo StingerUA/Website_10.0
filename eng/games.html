@@ -5,143 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alba Space — Games</title>
   <link rel="stylesheet" href="/assets/css/site.css" />
-<link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
   <script src="/assets/js/include.js" defer></script>
   <script src="/assets/js/menu-toggle.js" defer></script>
   <script src="/assets/js/mobile-header-cart.js" defer></script>
   <style>
-    :root {
-      --bg: #020617;
-      --panel: rgba(15, 23, 42, 0.78);
-      --panel-border: rgba(148, 163, 184, 0.18);
-      --accent: #00c2ff;
-      --accent-2: #38bdf8;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --shadow: rgba(14, 165, 233, 0.18);
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      min-height: 100vh;
-    }
-
-    .page-shell {
-      max-width: 1100px;
-      margin: 40px auto 90px;
-      padding: 0 20px;
-    }
-
-    .eyebrow {
-      color: var(--accent-2);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    h1 {
-      font-size: clamp(28px, 5vw, 44px);
-      margin: 0 0 12px;
-      color: #f8fafc;
-    }
-
-    .lead {
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.7;
-      margin: 0 0 28px;
-    }
-
-    .game-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 22px;
-    }
-
-    .game-card {
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 18px 40px rgba(2, 6, 23, 0.45);
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .game-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(0, 194, 255, 0.4);
-    }
-
-    .game-art {
-      min-height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at center, rgba(0, 194, 255, 0.18), rgba(15, 23, 42, 0.9) 50%);
-      font-size: 56px;
-    }
-
-    .game-body {
-      padding: 20px 20px 22px;
-    }
-
-    .game-name {
-      margin: 0 0 8px;
-      font-size: 22px;
-      color: #f8fafc;
-    }
-
-    .game-description {
-      margin: 0 0 18px;
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 14px;
-    }
-
-    .cta {
-      display: inline-block;
-      padding: 11px 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--accent), #0077b6);
-      color: white;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      box-shadow: 0 14px 24px var(--shadow);
-    }
+    :root{--bg:#020617;--panel:rgba(15,23,42,.78);--panel-border:rgba(148,163,184,.18);--accent:#00c2ff;--accent-2:#38bdf8;--text:#e2e8f0;--muted:#94a3b8;--shadow:rgba(14,165,233,.18)}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}.page-shell{max-width:1100px;margin:40px auto 90px;padding:0 20px}.eyebrow{color:var(--accent-2);text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:700;margin-bottom:12px}h1{font-size:clamp(28px,5vw,44px);margin:0 0 12px;color:#f8fafc}.lead{max-width:760px;color:var(--muted);font-size:16px;line-height:1.7;margin:0 0 28px}.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}.game-card{background:var(--panel);border:1px solid var(--panel-border);border-radius:20px;overflow:hidden;box-shadow:0 18px 40px rgba(2,6,23,.45);transition:transform .2s ease,border-color .2s ease}.game-card:hover{transform:translateY(-2px);border-color:rgba(0,194,255,.4)}.game-art{min-height:180px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,rgba(0,194,255,.18),rgba(15,23,42,.9) 50%);font-size:56px}.game-body{padding:20px 20px 22px}.game-name{margin:0 0 8px;font-size:22px;color:#f8fafc}.game-description{margin:0 0 18px;color:var(--muted);line-height:1.7;font-size:14px}.cta{display:inline-block;padding:11px 18px;border-radius:999px;background:linear-gradient(135deg,var(--accent),#0077b6);color:#fff;text-decoration:none;font-weight:700;font-size:14px;box-shadow:0 14px 24px var(--shadow)}
   </style>
 </head>
 <body>
   <div data-include="/header-en.html"></div>
-
   <main class="page-shell">
-    <div class="eyebrow">Alba Space</div>
-    <h1>Games</h1>
-    <p class="lead">
-      Explore our interactive experiences. The active game list is shown below.
-    </p>
-
+    <div class="eyebrow">Alba Space</div><h1>Games</h1>
+    <p class="lead">Explore our interactive experiences. The active game list is shown below.</p>
     <div class="game-grid">
-      <article class="game-card">
-        <div class="game-art" aria-hidden="true">🕵️</div>
-        <div class="game-body">
-          <h2 class="game-name">ORBI AR</h2>
-          <p class="game-description">
-            A geolocation-based interactive game where players hide and discover 3D models using the camera and map.
-          </p>
-          <a class="cta" href="/eng/games/hide-and-seek/en/">Play Now</a>
-        </div>
-      </article>
+      <article class="game-card"><div class="game-art" aria-hidden="true">🕵️</div><div class="game-body"><h2 class="game-name">ORBI AR</h2><p class="game-description">A geolocation-based interactive game where players hide and discover 3D models using the camera and map.</p><a class="cta" href="/eng/games/hide-and-seek/en/">Play Now</a></div></article>
+      <article class="game-card"><div class="game-art" aria-hidden="true">🧩</div><div class="game-body"><h2 class="game-name">AR Maze</h2><p class="game-description">Show the maze card to your camera, open the 3D maze in augmented reality, and guide the ball through it.</p><a class="cta" href="/games/labirint/en/game.html">Open Maze</a></div></article>
+      <article class="game-card"><div class="game-art" aria-hidden="true">🧢</div><div class="game-body"><h2 class="game-name">AR Face Try-On</h2><p class="game-description">Use your camera to try Alba Space caps and glasses on your face in real time and capture a photo.</p><a class="cta" href="/eng/games/ar-try-on/">Open AR Try-On</a></div></article>
     </div>
   </main>
-
   <div data-include="/footer-en.html"></div>
 </body>
 </html>
