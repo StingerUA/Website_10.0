@@ -14,12 +14,14 @@ Existing `products` remains the product catalogue. Cash/IBAN financial state liv
 
 - `pass-entry.js` — wraps the existing Worker stack and only intercepts `/api/pass/*`, `/api/staff/*`, `/api/admin/pass/*`.
 - `pass-backend.js` — Pass API, staff workflow and admin configuration.
+- `pass-offline-backend.js` — 20-minute signed Offline Staff session bootstrap + queued-action sync.
 - `migrations/0003_albaspace_pass_mvp.sql` — add-only Pass schema.
 - `migrations/0004_albaspace_pass_atomic_guards.sql` — atomic redemption markers + idempotent audit request IDs.
 - `/experience-pass.html` — customer Experience selection.
 - `/passes.html` — customer orders and QR Passes.
-- `/staff-pass.html` — tablet-first staff payment/QR scanner UI.
+- `/staff-pass.html` — tablet-first staff payment/QR scanner UI with Offline Staff Mode.
 - `/admin-pass.html` — event/offer/RBAC configuration.
+- `/sw-pass-staff.js` — caches the staff UI so it can reopen during a temporary connection loss.
 
 ## Required Cloudflare configuration before deploy
 
@@ -126,11 +128,33 @@ The customer has no endpoint that can confirm their own payment.
 7. QR scan resolves a server-signed token to a Pass ID.
 8. Staff redeems only the selected entitlement.
 
+## Offline Staff Mode v1
+
+The staff UI can be prepared while online for a signed **20-minute offline transaction window**. The browser stores a compact event snapshot in IndexedDB and the service worker caches the staff UI assets.
+
+During the 20-minute window, **any authorized staff tablet can perform any staff operation** supported by the offline snapshot. There are no Sun/Moon/VR/payment device assignments or zone leases. This is intentional for the current small-event operating model.
+
+Offline-capable operations:
+
+- scan/lookup an already-issued QR Pass from the cached snapshot;
+- redeem Sun, Moon or VR entitlements;
+- search cached customers/orders;
+- view cached activity;
+- queue confirmation of an already-existing pending Cash/IBAN payment.
+
+Each offline write is stored locally with a unique `request_id`, device ID and timestamp. When connectivity returns, `/api/staff/offline/sync` replays the queued actions through the normal server-side Pass handlers, so D1 remains the final source of truth and the existing idempotency/atomic guards still apply.
+
+If two offline tablets happen to act on the same final entitlement before either can see the other device's change, the first valid sync can succeed and the stale one is returned as a conflict instead of driving `remaining_quantity` below zero. For the current event profile this is treated as an operational edge case rather than a reason to restrict staff devices by zone.
+
+After 20 minutes, the cached snapshot remains available for read-only lookup, but new offline redemptions and payment confirmations are rejected until the device reconnects and prepares a fresh 20-minute session.
+
+Offline v1 deliberately does **not** create brand-new orders/Passes while disconnected. New Pass issuance still requires the backend.
+
 ## Double-spend protection
 
 Entitlement redemption uses a conditional D1 update that requires the exact previously-read `remaining_quantity`, active Pass state, validity window and a new request ID. The same batch writes usage, audit and idempotency records only when the entitlement row was marked with that request ID.
 
-Two tablets cannot both consume the same final unit successfully: after one update changes the remaining quantity, the stale competing update fails with `ENTITLEMENT_REDEEM_CONFLICT` and the client must reload/retry.
+Two tablets cannot both consume the same final unit successfully on the server: after one update changes the remaining quantity, the stale competing update fails with `ENTITLEMENT_REDEEM_CONFLICT` and the client must reload/retry.
 
 ## QR scanning support
 
@@ -144,15 +168,14 @@ The existing `localStorage` Bearer/session compatibility path is intentionally l
 
 1. Review and merge code.
 2. Back up / export the auth D1 database.
-3. Apply `0003` and `0004` to `albaspace-db`.
-4. Add `PASS_SIGNING_SECRET`.
+3. Confirm existing Pass migrations are already applied to `albaspace-db`.
+4. Confirm `PASS_SIGNING_SECRET` is configured.
 5. Configure real IBAN variables if IBAN payment is enabled.
 6. Deploy Worker from `cloudflare-worker/wrangler.toml` (`main = "pass-entry.js"`).
-7. Ensure required legacy `products` rows exist.
-8. Assign initial admin role through controlled D1 SQL, then use `/admin-pass.html` for later RBAC management.
-9. Create/activate the festival event and event offers.
-10. Test with a non-production order: customer → pending payment → staff confirm → QR → entitlement redeem.
+7. GitHub Pages deploys the staff PWA/service-worker assets.
+8. Open the staff page online and use **Prepare 20 min** before relying on temporary offline operation.
+9. Test: prepare → disconnect network → QR lookup/redeem → reconnect → sync → verify D1 state.
 
 ## Not deployed by this branch
 
-This branch contains code and migrations only. Creating the branch/PR does not apply remote D1 migrations, set Cloudflare secrets, or deploy the Worker.
+This branch contains code only. Creating the branch/PR does not modify production D1 or deploy the Worker.
