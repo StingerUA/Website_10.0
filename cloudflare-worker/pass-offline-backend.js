@@ -1,9 +1,6 @@
 const STAFF_ROLES = new Set(['employee', 'admin', 'superadmin']);
-const OFFLINE_ZONES = new Set(['readonly', 'sun', 'moon', 'vr', 'payments']);
-const WRITE_ZONES = new Set(['sun', 'moon', 'vr', 'payments']);
 const OFFLINE_TTL_SECONDS = 20 * 60;
 const OFFLINE_SYNC_GRACE_SECONDS = 24 * 60 * 60;
-const LEASE_SCOPE = 'active-events';
 
 export async function handleOfflinePassRequest(request, env, user, cors = {}, passHandler) {
   const url = new URL(request.url);
@@ -30,36 +27,17 @@ async function bootstrapOffline(request, env, user, cors) {
   if (!body) return json({ error: 'INVALID_JSON' }, 400, cors);
 
   const deviceId = cleanDeviceId(body.device_id);
-  const zone = cleanZone(body.zone);
   if (!deviceId) return json({ error: 'OFFLINE_DEVICE_ID_REQUIRED' }, 400, cors);
-  if (!zone) return json({ error: 'OFFLINE_ZONE_INVALID' }, 400, cors);
   if (!String(env.PASS_SIGNING_SECRET || '')) return json({ error: 'OFFLINE_SIGNING_UNAVAILABLE' }, 503, cors);
 
   const now = nowSec();
   const expiresAt = now + OFFLINE_TTL_SECONDS;
-  let lease = null;
-
-  if (WRITE_ZONES.has(zone)) {
-    lease = await acquireZoneLease(env, zone, deviceId, user.id, now, expiresAt);
-    if (!lease.ok) {
-      return json({
-        error: 'OFFLINE_ZONE_IN_USE',
-        zone,
-        expires_at: lease.current?.expires_at || null,
-        current_user_id: lease.current?.user_id || null
-      }, 409, cors);
-    }
-  }
-
   const snapshot = await buildSnapshot(env);
   const roles = await getStaffRoles(env, user.id);
   const payload = {
     v: 1,
     uid: String(user.id),
     device: deviceId,
-    zone,
-    scope: LEASE_SCOPE,
-    lease: lease?.lease_id || null,
     iat: now,
     exp: expiresAt
   };
@@ -71,11 +49,13 @@ async function bootstrapOffline(request, env, user, cors) {
       ttl_seconds: OFFLINE_TTL_SECONDS,
       issued_at: now,
       expires_at: expiresAt,
-      zone,
       device_id: deviceId,
       ticket
     },
-    staff: { user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar }, roles },
+    staff: {
+      user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar },
+      roles
+    },
     snapshot
   }, 200, cors);
 }
@@ -94,7 +74,6 @@ async function syncOffline(request, env, user, cors, passHandler) {
   if (!session || String(session.uid) !== String(user.id) || session.device !== deviceId) {
     return json({ error: 'OFFLINE_SESSION_INVALID' }, 401, cors);
   }
-  if (!OFFLINE_ZONES.has(session.zone)) return json({ error: 'OFFLINE_SESSION_INVALID_ZONE' }, 401, cors);
 
   const now = nowSec();
   if (now > Number(session.exp || 0) + OFFLINE_SYNC_GRACE_SECONDS) {
@@ -118,7 +97,7 @@ async function syncOffline(request, env, user, cors, passHandler) {
     }
 
     try {
-      const prepared = await prepareSyncedAction(env, session, raw, requestId, deviceId);
+      const prepared = prepareSyncedAction(raw, requestId, deviceId);
       if (!prepared.ok) {
         results.push({ request_id: requestId, ok: false, status: prepared.status || 400, error: prepared.error });
         continue;
@@ -141,7 +120,7 @@ async function syncOffline(request, env, user, cors, passHandler) {
         `).bind(
           user.id,
           requestId,
-          JSON.stringify({ device_id: deviceId, zone: session.zone, type: raw.type, occurred_at: occurredAt }),
+          JSON.stringify({ device_id: deviceId, type: raw.type, occurred_at: occurredAt }),
           now,
           requestId
         ).run();
@@ -162,24 +141,14 @@ async function syncOffline(request, env, user, cors, passHandler) {
   return json({ ok: true, results, server_time: now }, 200, cors);
 }
 
-async function prepareSyncedAction(env, session, raw, requestId, deviceId) {
+function prepareSyncedAction(raw, requestId, deviceId) {
   const type = cleanText(raw?.type, 40);
+
   if (type === 'redeem') {
-    if (!['sun', 'moon', 'vr'].includes(session.zone)) {
-      return { ok: false, status: 403, error: 'OFFLINE_ZONE_REDEEM_NOT_ALLOWED' };
-    }
     const entitlementId = cleanText(raw?.entitlement_id, 180);
     const token = cleanText(raw?.token, 800);
     const amount = Math.max(1, Math.min(120, Number.parseInt(raw?.amount || '1', 10) || 1));
     if (!entitlementId || !token) return { ok: false, status: 400, error: 'OFFLINE_REDEEM_DATA_REQUIRED' };
-
-    const entitlement = await env.DB.prepare(
-      'SELECT entitlement_code FROM pass_entitlements WHERE id = ? LIMIT 1'
-    ).bind(entitlementId).first();
-    if (!entitlement) return { ok: false, status: 404, error: 'ENTITLEMENT_NOT_FOUND' };
-    if (zoneForEntitlement(entitlement.entitlement_code) !== session.zone) {
-      return { ok: false, status: 403, error: 'OFFLINE_ZONE_MISMATCH' };
-    }
 
     return {
       ok: true,
@@ -189,15 +158,12 @@ async function prepareSyncedAction(env, session, raw, requestId, deviceId) {
         entitlement_id: entitlementId,
         amount,
         request_id: requestId,
-        note: appendOfflineNote(raw?.note, deviceId, session.zone)
+        note: appendOfflineNote(raw?.note, deviceId)
       }
     };
   }
 
   if (type === 'payment_confirm') {
-    if (session.zone !== 'payments') {
-      return { ok: false, status: 403, error: 'OFFLINE_ZONE_PAYMENT_NOT_ALLOWED' };
-    }
     const paymentId = cleanText(raw?.payment_id, 180);
     if (!paymentId) return { ok: false, status: 400, error: 'PAYMENT_NOT_FOUND' };
     return {
@@ -206,44 +172,12 @@ async function prepareSyncedAction(env, session, raw, requestId, deviceId) {
       body: {
         request_id: requestId,
         bank_reference: cleanText(raw?.bank_reference, 120),
-        note: appendOfflineNote(raw?.note, deviceId, session.zone)
+        note: appendOfflineNote(raw?.note, deviceId)
       }
     };
   }
 
   return { ok: false, status: 400, error: 'OFFLINE_ACTION_TYPE_UNSUPPORTED' };
-}
-
-async function acquireZoneLease(env, zone, deviceId, userId, now, expiresAt) {
-  const leaseId = `ofl_${crypto.randomUUID().replace(/-/g, '')}`;
-  const result = await env.DB.prepare(`
-    INSERT INTO staff_offline_leases
-      (id, scope, zone, device_id, user_id, issued_at, expires_at, last_seen_at, revoked_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)
-    ON CONFLICT(scope, zone) DO UPDATE SET
-      id = excluded.id,
-      device_id = excluded.device_id,
-      user_id = excluded.user_id,
-      issued_at = excluded.issued_at,
-      expires_at = excluded.expires_at,
-      last_seen_at = excluded.last_seen_at,
-      revoked_at = NULL
-    WHERE staff_offline_leases.device_id = excluded.device_id
-       OR staff_offline_leases.expires_at <= ?
-       OR staff_offline_leases.revoked_at IS NOT NULL
-  `).bind(leaseId, LEASE_SCOPE, zone, deviceId, String(userId), now, expiresAt, now, now).run();
-
-  if (Number(result?.meta?.changes || 0) === 1) {
-    return { ok: true, lease_id: leaseId };
-  }
-
-  const current = await env.DB.prepare(`
-    SELECT device_id, user_id, issued_at, expires_at
-    FROM staff_offline_leases
-    WHERE scope = ? AND zone = ? AND revoked_at IS NULL
-    LIMIT 1
-  `).bind(LEASE_SCOPE, zone).first();
-  return { ok: false, current };
 }
 
 async function buildSnapshot(env) {
@@ -330,7 +264,13 @@ async function buildSnapshot(env) {
   for (const row of customerOrderRows.results || []) {
     const key = String(row.user_id);
     if (!customerMap.has(key)) {
-      customerMap.set(key, { id: row.user_id, email: row.email, name: row.name, avatar: row.avatar, orders: [] });
+      customerMap.set(key, {
+        id: row.user_id,
+        email: row.email,
+        name: row.name,
+        avatar: row.avatar,
+        orders: []
+      });
     }
     customerMap.get(key).orders.push({
       id: row.id,
@@ -412,7 +352,13 @@ async function createPassToken(env, passId) {
 
 async function hmac(secret, value) {
   const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const key = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
   const signature = await crypto.subtle.sign('HMAC', key, enc.encode(value));
   return base64UrlBytes(new Uint8Array(signature));
 }
@@ -445,23 +391,10 @@ function constantTimeEqual(a, b) {
   return diff === 0;
 }
 
-function zoneForEntitlement(code) {
-  const value = String(code || '').toLowerCase();
-  if (value.includes('sun')) return 'sun';
-  if (value.includes('moon')) return 'moon';
-  if (value.includes('vr')) return 'vr';
-  return 'unknown';
-}
-
-function appendOfflineNote(note, deviceId, zone) {
-  const base = cleanText(note, 380);
-  const suffix = `[offline ${zone} device:${deviceId}]`;
+function appendOfflineNote(note, deviceId) {
+  const base = cleanText(note, 400);
+  const suffix = `[offline device:${deviceId}]`;
   return cleanText(base ? `${base} ${suffix}` : suffix, 500);
-}
-
-function cleanZone(value) {
-  const zone = cleanText(value, 40).toLowerCase();
-  return OFFLINE_ZONES.has(zone) ? zone : '';
 }
 
 function cleanDeviceId(value) {
@@ -475,7 +408,11 @@ function cleanRequestId(value) {
 }
 
 function cleanText(value, max = 500) {
-  return String(value == null ? '' : value).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+  return String(value == null ? '' : value)
+    .replace(/[\u0000-\u001f\u007f]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, max);
 }
 
 function nowSec() {
