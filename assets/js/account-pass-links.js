@@ -1,14 +1,31 @@
 (function(){
   const raw=(document.documentElement.lang||'tr').toLowerCase();
-  const lang=raw.startsWith('ru')?'ru':raw.startsWith('en')?'en':'tr';
+  const lang=raw.startsWith('ru')?'ru':raw.startsWith('en')?'en':raw.startsWith('ar')?'ar':'tr';
   const copy={
     tr:{title:'ALBA Space Experience Pass',desc:'Etkinlik deneyimlerini ayır, ödeme durumunu takip et ve aktif QR Pass’lerini görüntüle.',buy:'Experience Pass al',mine:'QR Pass’lerim',staffTitle:'Personel araçları',staffDesc:'Ödeme onayı, müşteri arama ve QR entitlement kullanımı.',staff:'Personel paneli',admin:'Pass yönetimi'},
     en:{title:'ALBA Space Experience Pass',desc:'Reserve event experiences, track payment status and open your active QR Passes.',buy:'Get Experience Pass',mine:'My QR Passes',staffTitle:'Staff tools',staffDesc:'Confirm payments, search customers and redeem QR entitlements.',staff:'Staff panel',admin:'Pass administration'},
-    ru:{title:'ALBA Space Experience Pass',desc:'Бронируйте впечатления на мероприятиях, следите за оплатой и открывайте активные QR Pass.',buy:'Приобрести Experience Pass',mine:'Мои QR Pass',staffTitle:'Инструменты сотрудника',staffDesc:'Подтверждение оплаты, поиск клиентов и списание прав по QR.',staff:'Панель сотрудника',admin:'Управление Pass'}
+    ru:{title:'ALBA Space Experience Pass',desc:'Бронируйте впечатления на мероприятиях, следите за оплатой и открывайте активные QR Pass.',buy:'Приобрести Experience Pass',mine:'Мои QR Pass',staffTitle:'Инструменты сотрудника',staffDesc:'Подтверждение оплаты, поиск клиентов и списание прав по QR.',staff:'Панель сотрудника',admin:'Управление Pass'},
+    ar:{title:'ALBA Space Experience Pass',desc:'احجز تجارب الفعاليات وتابع حالة الدفع وافتح تصاريح QR النشطة الخاصة بك.',buy:'احصل على Experience Pass',mine:'تصاريح QR الخاصة بي',staffTitle:'أدوات الموظفين',staffDesc:'تأكيد المدفوعات والبحث عن العملاء واستخدام صلاحيات QR.',staff:'لوحة الموظف',admin:'إدارة Pass'}
   }[lang];
-  const prefix=lang==='en'?'/eng':lang==='ru'?'/rus':'';
+  const prefix=lang==='en'?'/eng':lang==='ru'?'/rus':lang==='ar'?'/ar':'';
 
+  ensureAvatarEditorAssets();
   document.addEventListener('DOMContentLoaded',init);
+
+  function ensureAvatarEditorAssets(){
+    if(!document.querySelector('link[href*="account-avatar.css"]')){
+      const link=document.createElement('link');
+      link.rel='stylesheet';
+      link.href='/assets/css/account-avatar.css?v=20260904-1';
+      document.head.appendChild(link);
+    }
+    if(!document.querySelector('script[src*="account-avatar.js"]')){
+      const script=document.createElement('script');
+      script.src='/assets/js/account-avatar.js?v=20260904-1';
+      script.defer=true;
+      document.head.appendChild(script);
+    }
+  }
 
   async function init(){
     const main=document.querySelector('.account-main');
