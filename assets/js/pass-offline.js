@@ -84,7 +84,7 @@
     const api=window.AlbaPassApi;if(!api)throw new Error('PASS_API_MISSING');
     try{
       const data=await api.request('/api/staff/offline/bootstrap',{method:'POST',body:{device_id:deviceId(),zone}});
-      current={offline:data.offline,snapshot:data.snapshot,prepared_at:nowSec()};
+      current={offline:data.offline,snapshot:data.snapshot,staff:data.staff||current?.staff||null,prepared_at:nowSec()};
       saveZone(zone);await setState('offline',current);forceOffline=false;updateUi(options.quiet?null:tr('prepared'));
       return current;
     }catch(error){
@@ -163,6 +163,8 @@
     current.snapshot.recent=current.snapshot.recent.slice(0,100);
   }
 
+  function staffIdentity(){return current?.staff||null;}
+
   function normalizeToken(raw){
     let value=String(raw||'').trim();if(value.startsWith('ALBAPASS:'))value=value.slice(9);
     if(/^https?:\/\//i.test(value)){try{const url=new URL(value);value=url.searchParams.get('pass')||url.hash.match(/(?:^#|[&#])pass=([^&]+)/)?.[1]||value;value=decodeURIComponent(value);}catch{}}
@@ -197,5 +199,5 @@
   function formatRemaining(seconds){const m=Math.floor(seconds/60);const s=seconds%60;return `${m}:${String(s).padStart(2,'0')}`;}
   function registerServiceWorker(){if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw-pass-staff.js',{scope:'/'}).catch(error=>console.warn('Staff offline service worker registration failed',error));}
 
-  window.AlbaPassOffline={init,prepare,sync,lookupToken,redeem,pendingPayments,confirmPayment,searchCustomers,recentActivity,canUseOffline,isNetworkError,mode,deviceId,storedZone,tr};
+  window.AlbaPassOffline={init,prepare,sync,lookupToken,redeem,pendingPayments,confirmPayment,searchCustomers,recentActivity,canUseOffline,isNetworkError,mode,deviceId,storedZone,staffIdentity,tr};
 })();

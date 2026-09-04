@@ -52,6 +52,7 @@ async function bootstrapOffline(request, env, user, cors) {
   }
 
   const snapshot = await buildSnapshot(env);
+  const roles = await getStaffRoles(env, user.id);
   const payload = {
     v: 1,
     uid: String(user.id),
@@ -74,6 +75,7 @@ async function bootstrapOffline(request, env, user, cors) {
       device_id: deviceId,
       ticket
     },
+    staff: { user: { id: user.id, email: user.email, name: user.name, avatar: user.avatar }, roles },
     snapshot
   }, 200, cors);
 }
@@ -364,14 +366,19 @@ async function buildSnapshot(env) {
   };
 }
 
-async function isStaff(env, userId) {
+async function getStaffRoles(env, userId) {
   const rows = await env.DB.prepare(`
     SELECT r.code
     FROM user_roles ur
     JOIN roles r ON r.id = ur.role_id
     WHERE ur.user_id = ? AND ur.revoked_at IS NULL
   `).bind(userId).all();
-  return (rows.results || []).some(row => STAFF_ROLES.has(row.code));
+  return (rows.results || []).map(row => row.code);
+}
+
+async function isStaff(env, userId) {
+  const roles = await getStaffRoles(env, userId);
+  return roles.some(role => STAFF_ROLES.has(role));
 }
 
 async function createOfflineTicket(env, payload) {
