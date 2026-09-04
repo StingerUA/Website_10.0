@@ -1,6 +1,6 @@
 (function(){
   const api=()=>window.AlbaPassApi;
-  const locale=()=>window.AlbaPassLocale||{lang:'tr',t:key=>key,productTitle:(slug,fallback)=>fallback||slug,entitlementLabel:(ent,fallback)=>fallback||ent?.label||ent?.code};
+  const locale=()=>window.AlbaPassLocale||{lang:'tr',t:key=>key,productTitle:(slug,fallback)=>fallback||slug,productDescription:(slug,fallback)=>fallback||'',passStatus:status=>String(status||'').toUpperCase(),entitlementLabel:(ent,fallback)=>fallback||ent?.label||ent?.code};
   const t=(key,vars)=>locale().t(key,vars);
   const passesPath=()=>locale().lang==='en'?'/eng/passes.html':locale().lang==='ru'?'/rus/passes.html':'/passes.html';
 
@@ -30,7 +30,7 @@
         card.innerHTML=`
           <span class="pass-badge">${api().escapeHtml(offer.event_name||'ALBA Space')}</span>
           <h2>${api().escapeHtml(locale().productTitle(offer.product_slug,offer.title))}</h2>
-          <p class="pass-muted">${api().escapeHtml(offer.description||'')}</p>
+          <p class="pass-muted">${api().escapeHtml(locale().productDescription(offer.product_slug,offer.description||''))}</p>
           <div class="pass-price">${api().money(offer.price_amount,offer.currency)}</div>
           <ul class="pass-list">${rights}</ul>
           <div class="pass-actions">
@@ -131,7 +131,7 @@
       }).join('');
       const qrId='qr-'+pass.id;
       card.innerHTML=`
-        <span class="pass-badge ${active?'ok':'bad'}">${api().escapeHtml(pass.status.toUpperCase())}</span>
+        <span class="pass-badge ${active?'ok':'bad'}">${api().escapeHtml(locale().passStatus(pass.status))}</span>
         <h3>${api().escapeHtml(locale().productTitle(pass.product_slug,pass.title||pass.event_name||'ALBA Space Pass'))}</h3>
         <p class="pass-muted">Pass: ${api().escapeHtml(pass.id)}</p>
         ${active&&pass.qr_ready?`<div id="${qrId}" class="pass-qr" aria-label="ALBA Space QR Pass"></div><div class="pass-token">${api().escapeHtml(pass.qr_payload)}</div>`:''}
