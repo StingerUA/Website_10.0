@@ -32,6 +32,17 @@ jobs:
       - name: Validate header dropdown consistency
         run: node check-dropdown-css.js
 
+      - name: Validate localized account routing
+        run: |
+          node --check assets/js/worker-auth.js
+          grep -q 'data-account-page="/eng/account.html"' header-en.html
+          grep -q 'data-account-page="/eng/account.html"' header-en-black.html
+          grep -q 'data-account-page="/rus/account.html"' header-ru.html
+          grep -q 'data-account-page="/rus/account.html"' header-ru-black.html
+          grep -q 'data-account-page="/ar/account.html"' header-ar.html
+          grep -q 'data-account-page="/ar/account.html"' header-ar-black.html
+          grep -q "localizedAccountPage" assets/js/worker-auth.js
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
