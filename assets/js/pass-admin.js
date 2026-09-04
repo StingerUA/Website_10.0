@@ -1,5 +1,7 @@
 (function(){
   const api=()=>window.AlbaPassApi;
+  const locale=()=>window.AlbaPassLocale||{t:key=>key};
+  const t=(key,vars)=>locale().t(key,vars);
   document.addEventListener('DOMContentLoaded',init);
 
   async function init(){
@@ -11,7 +13,7 @@
       document.getElementById('adminIdentity').textContent=`${me.user.name||me.user.email} · ${me.roles.join(', ')}`;
       bindForms();
     }catch(error){
-      gate.innerHTML='<div class="pass-notice pass-error">Bu hesap Pass yönetimi için admin yetkisine sahip değil.</div>';
+      gate.innerHTML=`<div class="pass-notice pass-error">${api().escapeHtml(t('adminDenied'))}</div>`;
       workspace.hidden=true;
     }
   }
@@ -27,21 +29,13 @@
     const form=event.currentTarget;
     const out=document.getElementById('eventResult');
     const data=Object.fromEntries(new FormData(form).entries());
-    const body={
-      code:data.code,
-      name:data.name,
-      venue:data.venue,
-      timezone:data.timezone||'Europe/Istanbul',
-      status:data.status||'draft',
-      starts_at:toUnix(data.starts_at),
-      ends_at:toUnix(data.ends_at)
-    };
-    out.textContent='Etkinlik oluşturuluyor…';
+    const body={code:data.code,name:data.name,venue:data.venue,timezone:data.timezone||'Europe/Istanbul',status:data.status||'draft',starts_at:toUnix(data.starts_at),ends_at:toUnix(data.ends_at)};
+    out.textContent=t('eventCreating');
     try{
       const result=await api().request('/api/admin/pass/events',{method:'POST',body});
-      out.innerHTML=`Etkinlik oluşturuldu. ID: <strong>${result.event_id}</strong> · Kod: <strong>${api().escapeHtml(result.code)}</strong>`;
+      out.innerHTML=t('eventCreated',{id:`<strong>${result.event_id}</strong>`,code:`<strong>${api().escapeHtml(result.code)}</strong>`});
       document.getElementById('offerEventId').value=result.event_id;
-    }catch(error){out.textContent='Hata: '+(error.data?.error||error.message);}
+    }catch(error){out.textContent=t('error',{error:error.data?.error||error.message});}
   }
 
   async function createOffer(event){
@@ -51,32 +45,23 @@
     const data=Object.fromEntries(new FormData(form).entries());
     let entitlements;
     try{entitlements=parseEntitlements(data.entitlements);}catch(error){out.textContent=error.message;return;}
-    const body={
-      event_id:Number(data.event_id),
-      product_slug:data.product_slug,
-      title:data.title,
-      description:data.description,
-      price_amount:Number(data.price_amount),
-      currency:'TRY',
-      active:data.active==='on',
-      entitlements
-    };
-    out.textContent='Paket oluşturuluyor…';
+    const body={event_id:Number(data.event_id),product_slug:data.product_slug,title:data.title,description:data.description,price_amount:Number(data.price_amount),currency:'TRY',active:data.active==='on',entitlements};
+    out.textContent=t('offerCreating');
     try{
       const result=await api().request('/api/admin/pass/offers',{method:'POST',body});
-      out.innerHTML=`Paket oluşturuldu. Offer ID: <strong>${result.offer_id}</strong>`;
-    }catch(error){out.textContent='Hata: '+(error.data?.error||error.message);}
+      out.innerHTML=t('offerCreated',{id:`<strong>${result.offer_id}</strong>`});
+    }catch(error){out.textContent=t('error',{error:error.data?.error||error.message});}
   }
 
   function parseEntitlements(text){
     const lines=String(text||'').split('\n').map(line=>line.trim()).filter(Boolean);
-    if(!lines.length)throw new Error('En az bir entitlement satırı gerekli.');
+    if(!lines.length)throw new Error(t('entitlementRequired'));
     return lines.map((line,index)=>{
       const [code,label,unit='use',quantity='1',day='']=line.split('|').map(value=>value.trim());
-      if(!code||!label)throw new Error(`Entitlement satırı ${index+1} geçersiz.`);
-      if(!['use','minute'].includes(unit))throw new Error(`Satır ${index+1}: unit use veya minute olmalı.`);
+      if(!code||!label)throw new Error(t('entitlementInvalid',{line:index+1}));
+      if(!['use','minute'].includes(unit))throw new Error(t('unitInvalid',{line:index+1}));
       const qty=Number.parseInt(quantity,10);
-      if(!Number.isInteger(qty)||qty<=0)throw new Error(`Satır ${index+1}: quantity geçersiz.`);
+      if(!Number.isInteger(qty)||qty<=0)throw new Error(t('quantityInvalid',{line:index+1}));
       return {code,label,unit,quantity:qty,day_no:day?Number.parseInt(day,10):null};
     });
   }
@@ -86,11 +71,11 @@
     const form=event.currentTarget;
     const out=document.getElementById('roleResult');
     const data=Object.fromEntries(new FormData(form).entries());
-    out.textContent='Rol güncelleniyor…';
+    out.textContent=t('roleUpdating');
     try{
       const result=await api().request('/api/admin/pass/roles',{method:'POST',body:{email:data.email,role:data.role,enabled:data.enabled==='true'}});
-      out.textContent=`${result.email}: ${result.role} → ${result.enabled?'aktif':'iptal'}`;
-    }catch(error){out.textContent='Hata: '+(error.data?.error||error.message);}
+      out.textContent=t('roleResult',{email:result.email,role:result.role,state:result.enabled?t('enabled'):t('disabled')});
+    }catch(error){out.textContent=t('error',{error:error.data?.error||error.message});}
   }
 
   function toUnix(value){
