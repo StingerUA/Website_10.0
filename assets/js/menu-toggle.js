@@ -16,6 +16,133 @@
   let resizeListenerInitialized = false;
   let lastWindowWidth = window.innerWidth;
 
+  const HEADER_MENU_SPEC = {
+    tr: {
+      services: [
+        { href: '/hizmetler.html', label: 'HİZMETLER' },
+        { href: '/etkinlikler.html', label: 'Yaklaşan Etkinlikler' },
+        { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true },
+        { href: '/kubesat.html', label: 'KubeSat' }
+      ],
+      albamen: [
+        { href: '/albamen.html', label: 'ALBAMEN' },
+        { href: '/tr/orbital-atlas.html', label: 'YÖRÜNGE ATLASI' },
+        { href: '/atlas.html', label: 'ATLAS' },
+        { href: '/games/index.html', label: 'OYUNLAR' }
+      ],
+      about: [
+        { href: '/hakkimizda.html', label: 'HAKKIMIZDA' },
+        { href: '/basindabiz.html', label: 'BASINDA BİZ' },
+        { href: '/galeri.html', label: 'GALERİ' },
+        { href: '/iletisim.html', label: 'İLETİŞİM' }
+      ]
+    },
+    en: {
+      services: [
+        { href: '/eng/hizmetler.html', label: 'SERVICES' },
+        { href: '/eng/etkinlikler.html', label: 'Upcoming Events' },
+        { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true },
+        { href: '/eng/kupsat.html', label: 'KubeSat' }
+      ],
+      albamen: [
+        { href: '/eng/albamen.html', label: 'ALBAMAN' },
+        { href: '/eng/orbital-atlas.html', label: 'ORBITAL ATLAS' },
+        { href: '/eng/atlas.html', label: 'ATLAS' },
+        { href: '/eng/games.html', label: 'GAMES' }
+      ],
+      about: [
+        { href: '/eng/hakkimizda.html', label: 'ABOUT US' },
+        { href: '/eng/basindabiz.html', label: 'PRESS' },
+        { href: '/eng/galeri.html', label: 'GALLERY' },
+        { href: '/eng/iletisim.html', label: 'CONTACT' }
+      ]
+    },
+    ru: {
+      services: [
+        { href: '/rus/hizmetler.html', label: 'УСЛУГИ' },
+        { href: '/rus/etkinlikler.html', label: 'Предстоящие мероприятия' },
+        { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true },
+        { href: '/rus/kupsat.html', label: 'КубСат' }
+      ],
+      albamen: [
+        { href: '/rus/albamen.html', label: 'АЛЬБАМЕН' },
+        { href: '/orbital-atlas.html', label: 'ОРБИТАЛЬНЫЙ АТЛАС' },
+        { href: '/rus/atlas.html', label: 'АТЛАС' },
+        { href: '/rus/games.html', label: 'ИГРЫ' }
+      ],
+      about: [
+        { href: '/rus/hakkimizda.html', label: 'О НАС' },
+        { href: '/rus/basindabiz.html', label: 'ПРЕССА' },
+        { href: '/rus/galeri.html', label: 'ГАЛЕРЕЯ' },
+        { href: '/rus/iletisim.html', label: 'КОНТАКТЫ' }
+      ]
+    },
+    ar: {
+      services: [
+        { href: '/ar/hizmetler.html', label: 'الخدمات' },
+        { href: '/ar/etkinlikler.html', label: 'الفعاليات القادمة' },
+        { href: 'https://albaspace.com.tr/ar/hyperclub', label: 'Hyper Club', external: true },
+        { href: '/ar/kubesat.html', label: 'KubeSat' }
+      ],
+      albamen: [
+        { href: '/ar/albamen.html', label: 'ALBAMEN' },
+        { href: '/ar/orbital-atlas.html', label: 'ORBITAL ATLAS' },
+        { href: '/ar/atlas.html', label: 'ATLAS' },
+        { href: '/ar/games.html', label: 'الألعاب' }
+      ],
+      about: [
+        { href: '/ar/hakkimizda.html', label: 'من نحن' },
+        { href: '/ar/basindabiz.html', label: 'الصحافة' },
+        { href: '/ar/galeri.html', label: 'المعرض' },
+        { href: '/ar/iletisim.html', label: 'اتصل بنا' }
+      ]
+    }
+  };
+
+  function detectHeaderLocale() {
+    const path = String(window.location.pathname || '').toLowerCase();
+    if (path.startsWith('/eng/')) return 'en';
+    if (path.startsWith('/rus/')) return 'ru';
+    if (path.startsWith('/ar/')) return 'ar';
+    return 'tr';
+  }
+
+  function renderMenuItems(menu, items) {
+    if (!menu || !Array.isArray(items)) return;
+    menu.replaceChildren(...items.map(item => {
+      const link = document.createElement('a');
+      link.href = item.href;
+      link.textContent = item.label;
+      if (item.external) {
+        link.target = '_blank';
+        link.rel = 'noopener';
+      }
+      return link;
+    }));
+  }
+
+  /**
+   * Keep all localized header fragments structurally identical to the
+   * Turkish navigation. This runs for both normal and white/shop headers,
+   * including dynamically included legacy fragments.
+   */
+  function syncHeaderMenus() {
+    const nav = document.querySelector('.main-nav');
+    if (!nav) return;
+
+    const spec = HEADER_MENU_SPEC[detectHeaderLocale()] || HEADER_MENU_SPEC.tr;
+    nav.querySelectorAll(':scope > .dropdown').forEach(dropdown => {
+      const trigger = dropdown.querySelector(':scope > .dropdown-trigger');
+      const menu = dropdown.querySelector(':scope > .dropdown-menu');
+      if (!trigger || !menu) return;
+
+      const href = String(trigger.getAttribute('href') || '').toLowerCase();
+      if (href.includes('hizmetler.html')) renderMenuItems(menu, spec.services);
+      else if (href.includes('albamen.html')) renderMenuItems(menu, spec.albamen);
+      else if (href.includes('hakkimizda.html')) renderMenuItems(menu, spec.about);
+    });
+  }
+
   /**
    * Initialize dropdown menu handlers
    */
@@ -28,6 +155,8 @@
       return;
     }
 
+    // Normalize the dropdown contents before listeners and mobile sizing are applied.
+    syncHeaderMenus();
     initialized = true;
 
     const dropdowns = nav.querySelectorAll('.dropdown');
