@@ -15,10 +15,20 @@
     var path = String((window.location && window.location.pathname) || '').toLowerCase();
     if (isExcludedModelPage(path)) return;
     if (!document.querySelector('model-viewer')) return;
-    if (document.querySelector('script[src*="atlas-story-cards.js"]')) return;
+
+    var existing = Array.prototype.slice.call(document.scripts).find(function (script) {
+      return String(script.src || '').indexOf('/assets/js/atlas-story-cards.js') !== -1;
+    });
+
+    if (existing) {
+      if (window.AlbaStoryCards && typeof window.AlbaStoryCards.refresh === 'function') {
+        window.AlbaStoryCards.refresh();
+      }
+      return;
+    }
 
     var script = document.createElement('script');
-    script.src = '/assets/js/atlas-story-cards.js?v=20260904-4';
+    script.src = '/assets/js/atlas-story-cards.js?v=20260904-5';
     script.defer = true;
     script.setAttribute('data-atlas-story-cards', 'true');
     (document.head || document.documentElement).appendChild(script);
