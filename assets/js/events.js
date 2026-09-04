@@ -11,28 +11,40 @@
       emptyUpcoming: 'Şu anda yaklaşan bir etkinlik bulunmuyor.',
       emptyPast: 'Henüz geçmiş bir etkinlik bulunmuyor.',
       upcoming: 'Yaklaşan Etkinlikler',
-      past: 'Geçmiş Etkinlikler'
+      past: 'Geçmiş Etkinlikler',
+      organizers: 'Organizasyon',
+      tags: 'Etiketler',
+      buyPass: 'Etkinlik için QR Pass satın al'
     },
     en: {
       empty: 'No events have been added yet.',
       emptyUpcoming: 'There are no upcoming events right now.',
       emptyPast: 'There are no past events yet.',
       upcoming: 'Upcoming Events',
-      past: 'Past Events'
+      past: 'Past Events',
+      organizers: 'Organizers',
+      tags: 'Tags',
+      buyPass: 'Get a QR Pass for this event'
     },
     ru: {
       empty: 'Мероприятий пока нет.',
       emptyUpcoming: 'Сейчас нет предстоящих мероприятий.',
       emptyPast: 'Прошедших мероприятий пока нет.',
       upcoming: 'Предстоящие мероприятия',
-      past: 'Прошедшие мероприятия'
+      past: 'Прошедшие мероприятия',
+      organizers: 'Организаторы',
+      tags: 'Теги',
+      buyPass: 'Приобрести QR-пропуск на мероприятие'
     },
     ar: {
       empty: 'لم تتم إضافة أي فعالية بعد.',
       emptyUpcoming: 'لا توجد فعاليات قادمة حاليًا.',
       emptyPast: 'لا توجد فعاليات سابقة حتى الآن.',
       upcoming: 'الفعاليات القادمة',
-      past: 'الفعاليات السابقة'
+      past: 'الفعاليات السابقة',
+      organizers: 'المنظمون',
+      tags: 'الوسوم',
+      buyPass: 'احصل على تصريح QR للفعالية'
     }
   }[LOCALE];
 
@@ -64,6 +76,20 @@
   function categoryLabel(data, key) {
     var c = data.categories[key];
     return c ? (c[LOCALE] || c.tr) : key;
+  }
+
+  function passHref() {
+    if (LOCALE === 'en') return '/eng/experience-pass.html';
+    if (LOCALE === 'ru') return '/rus/experience-pass.html';
+    return '/experience-pass.html';
+  }
+
+  function ensurePassCtaStyles() {
+    if (document.getElementById('events-pass-cta-style')) return;
+    var style = document.createElement('style');
+    style.id = 'events-pass-cta-style';
+    style.textContent = '.events-pass-cta-wrap{margin:4px 0 30px;display:flex;justify-content:center}.events-pass-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:12px 20px;border-radius:14px;background:#0ea5e9;color:#001018;text-decoration:none;font-weight:800;box-shadow:0 12px 34px rgba(14,165,233,.22);transition:transform .18s ease,box-shadow .18s ease}.events-pass-cta:hover{transform:translateY(-2px);box-shadow:0 16px 42px rgba(14,165,233,.34)}.events-pass-cta:focus-visible{outline:2px solid #e0f2fe;outline-offset:3px}@media(max-width:560px){.events-pass-cta{width:100%;box-sizing:border-box;text-align:center}}';
+    document.head.appendChild(style);
   }
 
   function renderGrid(filter) {
@@ -161,6 +187,7 @@
           '<span>' + escapeHtml(event.contact) + '</span>' +
         '</div>' +
         '<img class="events-article-cover' + (event.coverFit === 'contain' ? ' events-article-cover--contain' : '') + '" src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '">' +
+        '<div class="events-pass-cta-wrap"><a class="events-pass-cta" href="' + passHref() + '?event=festival-2026">🎟️ ' + escapeHtml(UI.buyPass) + '</a></div>' +
         '<div class="events-article-body">' +
           '<p><strong>' + escapeHtml(loc.hero) + '</strong></p>' +
           body +
@@ -169,11 +196,11 @@
             '<ul>' + highlights + '</ul>' +
           '</div>' +
           '<div class="events-highlights">' +
-            '<h3>Organizasyon</h3>' +
+            '<h3>' + escapeHtml(UI.organizers) + '</h3>' +
             '<ul>' + organizerHtml + '</ul>' +
           '</div>' +
           '<div class="events-highlights">' +
-            '<h3>Etiketler</h3>' +
+            '<h3>' + escapeHtml(UI.tags) + '</h3>' +
             '<ul>' + hashHtml + '</ul>' +
           '</div>' +
         '</div>';
@@ -183,6 +210,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    ensurePassCtaStyles();
     initTabs();
     renderGrid(activeFilter);
     renderArticle();
