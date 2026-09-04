@@ -96,6 +96,32 @@ function setUserText(text) {
   });
 }
 
+function localizedAccountPage() {
+  const accountLink = document.getElementById('accountMenuLink');
+  const configured = accountLink?.dataset?.accountPage || accountLink?.getAttribute('href');
+  if (configured && configured.startsWith('/')) return configured;
+
+  const lang = String(document.documentElement.lang || '').toLowerCase();
+  if (lang.startsWith('ru')) return '/rus/account.html';
+  if (lang.startsWith('en')) return '/eng/account.html';
+  if (lang.startsWith('ar')) return '/ar/account.html';
+  return '/account.html';
+}
+
+// Header files historically hard-coded the top avatar to /account-menu.html.
+// For an authenticated user, intercept that click before the inline header handler
+// and always open the account page for the language currently being viewed.
+document.addEventListener('click', (event) => {
+  const trigger = event.target?.closest?.('.alien-ghost');
+  if (!trigger) return;
+  const loggedInPanel = document.querySelector('.alien-auth-logged-in');
+  if (!loggedInPanel || loggedInPanel.hidden) return;
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  window.location.href = localizedAccountPage();
+}, true);
+
 function updateAuthMenu(user) {
   const loggedOutPanel = document.querySelector('.alien-auth-logged-out');
   const loggedInPanel  = document.querySelector('.alien-auth-logged-in');
@@ -139,6 +165,7 @@ function updateAuthMenu(user) {
       trigger.setAttribute('title', isLoggedIn
         ? (user.name || user.email || 'Hesap')
         : 'Hesap');
+      if (isLoggedIn) trigger.dataset.accountPage = localizedAccountPage();
     }
   }
 }
