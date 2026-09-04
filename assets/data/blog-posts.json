@@ -716,6 +716,47 @@
           "url": "/ar/blog/evreni-genis-aciyla-kesfetmek-nancy-grace-roman-uzay-teleskobu.html"
         }
       }
+    },
+    {
+      "slug": "uzay-arastirmalari-artik-sadece-gezegenleri-incelemiyor",
+      "category": "uzay",
+      "publishAt": "2026-09-04T22:26:10+03:00",
+      "cover": "/assets/images/blog/uzay-arastirmalari-artik-sadece-gezegenleri-incelemiyor-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Muzaffer Enes İpçi",
+        "ar": "Muzaffer Enes İpçi"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Uzay Araştırmaları Artık Sadece Gezegenleri İncelemiyor",
+          "excerpt": "Gezegenleri İncelemiyor",
+          "url": "/blog/uzay-arastirmalari-artik-sadece-gezegenleri-incelemiyor.html"
+        },
+        "en": {
+          "title": "Space Research Is No Longer Just Studying Planets",
+          "excerpt": "Doesn't Study Planets",
+          "url": "/eng/blog/uzay-arastirmalari-artik-sadece-gezegenleri-incelemiyor.html"
+        },
+        "ru": {
+          "title": "Космические исследования — это уже не просто изучение планет",
+          "excerpt": "Не изучает планеты",
+          "url": "/rus/blog/uzay-arastirmalari-artik-sadece-gezegenleri-incelemiyor.html"
+        },
+        "ar": {
+          "title": "لم يعد البحث الفضائي مجرد دراسة الكواكب",
+          "excerpt": "لا يدرس الكواكب",
+          "url": "/ar/blog/uzay-arastirmalari-artik-sadece-gezegenleri-incelemiyor.html"
+        }
+      }
     }
   ]
 }
