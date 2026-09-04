@@ -4,6 +4,7 @@
   const STORE_STATE='state';
   const STORE_ACTIONS='actions';
   const DEVICE_KEY='albaspace_staff_device_id';
+  const MAX_SYNC_BATCHES=20;
 
   let dbPromise=null;
   let current=null;
@@ -48,6 +49,7 @@
   }
   function tr(key){return L[lang()][key]||L.en[key]||key;}
   function nowSec(){return Math.floor(Date.now()/1000);}
+  function serverNowSec(){return nowSec()+Number(current?.clock_offset||0);}
 
   function deviceId(){
     let value='';
@@ -127,7 +129,7 @@
   function isNetworkError(error){
     return !error?.status&&(error instanceof TypeError||/fetch|network|offline/i.test(String(error?.message||'')));
   }
-  function sessionValid(){return !!(current?.offline?.ticket&&Number(current.offline.expires_at||0)>nowSec());}
+  function sessionValid(){return !!(current?.offline?.ticket&&Number(current.offline.expires_at||0)>serverNowSec());}
   function canUseOffline(){return !!current?.snapshot;}
   function canWriteOffline(){return !!(current?.snapshot&&sessionValid());}
   function mode(){
@@ -161,12 +163,12 @@
       forceOffline=false;
       updateUi();
       await sync().catch(()=>{});
-      await prepare({quiet:true}).catch(()=>{});
+      await prepare({quiet:true,skipSync:true}).catch(()=>{});
     });
     timer=setInterval(updateUi,1000);
     if(navigator.onLine!==false){
       await sync().catch(()=>{});
-      await prepare({quiet:true}).catch(()=>{});
+      await prepare({quiet:true,skipSync:true}).catch(()=>{});
     }
     updateUi();
     return current;
@@ -177,8 +179,21 @@
     const api=window.AlbaPassApi;
     if(!api)throw new Error('PASS_API_MISSING');
     try{
+      if(!options.skipSync&&navigator.onLine!==false&&current?.offline?.ticket){
+        const pending=(await allActions()).some(item=>item.state!=='failed');
+        if(pending)await sync();
+      }
+
+      const localBefore=nowSec();
       const data=await api.request('/api/staff/offline/bootstrap',{method:'POST',body:{device_id:deviceId()}});
-      current={offline:data.offline,snapshot:data.snapshot,staff:data.staff||current?.staff||null,prepared_at:nowSec()};
+      const offset=Number(data?.offline?.issued_at||localBefore)-nowSec();
+      current={
+        offline:data.offline,
+        snapshot:data.snapshot,
+        staff:data.staff||current?.staff||null,
+        prepared_at:nowSec(),
+        clock_offset:offset
+      };
       await setState('offline',current);
       forceOffline=false;
       updateUi(options.quiet?null:tr('prepared'));
@@ -195,28 +210,45 @@
   }
 
   async function sync(){
-    if(syncing||navigator.onLine===false||!current?.offline?.ticket)return {ok:false,skipped:true};
-    const actions=(await allActions()).filter(item=>item.state!=='failed').slice(0,100);
-    if(!actions.length){updateUi();return {ok:true,results:[]};}
+    if(syncing||navigator.onLine===false||!current?.offline?.ticket)return {ok:false,skipped:true,results:[]};
     syncing=true;
     updateUi();
+    const combined=[];
+    let serverTime=null;
     try{
       const api=window.AlbaPassApi;
-      const data=await api.request('/api/staff/offline/sync',{
-        method:'POST',
-        body:{device_id:deviceId(),ticket:current.offline.ticket,actions}
-      });
-      for(const result of data.results||[]){
-        if(result.ok){
-          await deleteAction(result.request_id);
-        }else{
-          const existing=actions.find(item=>item.request_id===result.request_id);
-          if(existing){
-            await putAction({...existing,state:'failed',sync_error:result.error||result.data?.error||'SYNC_CONFLICT',sync_status:result.status||0});
+      for(let batchNo=0;batchNo<MAX_SYNC_BATCHES;batchNo+=1){
+        const actions=(await allActions()).filter(item=>item.state!=='failed').slice(0,100);
+        if(!actions.length)break;
+
+        const data=await api.request('/api/staff/offline/sync',{
+          method:'POST',
+          body:{device_id:deviceId(),ticket:current.offline.ticket,actions}
+        });
+        if(data?.server_time)serverTime=Number(data.server_time);
+
+        for(const result of data.results||[]){
+          combined.push(result);
+          if(result.ok){
+            await deleteAction(result.request_id);
+          }else{
+            const existing=actions.find(item=>item.request_id===result.request_id);
+            if(existing){
+              await putAction({...existing,state:'failed',sync_error:result.error||result.data?.error||'SYNC_CONFLICT',sync_status:result.status||0});
+            }
           }
         }
+
+        if((data.results||[]).length===0)break;
       }
+
+      if(serverTime!==null&&current){
+        current.clock_offset=serverTime-nowSec();
+        await setState('offline',current).catch(()=>{});
+      }
+
       syncing=false;
+      const data={ok:true,results:combined,server_time:serverTime};
       updateUi(tr('syncDone'));
       window.dispatchEvent(new CustomEvent('alba-pass-offline-synced',{detail:data}));
       return data;
@@ -252,7 +284,7 @@
     if(pass.status!=='active'||pass.payment_status!=='confirmed')throw localError('PASS_NOT_ACTIVE','PASS_NOT_ACTIVE');
     if(ent.status!=='available'||Number(ent.remaining_quantity)<qty)throw localError('INSUFFICIENT_ENTITLEMENT','INSUFFICIENT_ENTITLEMENT');
 
-    const now=nowSec();
+    const now=serverNowSec();
     if(ent.valid_from&&now<Number(ent.valid_from))throw localError('ENTITLEMENT_NOT_YET_VALID','ENTITLEMENT_NOT_YET_VALID');
     if(ent.valid_until&&now>Number(ent.valid_until))throw localError('ENTITLEMENT_EXPIRED','ENTITLEMENT_EXPIRED');
 
@@ -283,7 +315,7 @@
     forceOffline=true;
     const payment=(current.snapshot.pending_payments||[]).find(item=>item.id===payment_id);
     if(!payment)throw localError('PAYMENT_NOT_FOUND','PAYMENT_NOT_FOUND');
-    const now=nowSec();
+    const now=serverNowSec();
     await putAction({request_id,type:'payment_confirm',occurred_at:now,payment_id,bank_reference,note,state:'pending'});
     payment._offline_queued=true;
     pushLocalRecent('payment_confirmed_queued',payment_id,request_id,now);
@@ -355,7 +387,10 @@
     document.head.appendChild(style);
     document.getElementById('staffOfflinePrepare')?.addEventListener('click',()=>prepare().catch(()=>{}));
     document.getElementById('staffOfflineSync')?.addEventListener('click',async()=>{
-      try{await sync();if(navigator.onLine!==false)await prepare({quiet:true});}catch{}
+      try{
+        await sync();
+        if(navigator.onLine!==false)await prepare({quiet:true,skipSync:true});
+      }catch{}
     });
   }
 
@@ -378,7 +413,7 @@
 
     let text=current?.snapshot?tr('ready'):tr('notReady');
     if(current?.offline?.expires_at){
-      const remain=Math.max(0,Number(current.offline.expires_at)-nowSec());
+      const remain=Math.max(0,Number(current.offline.expires_at)-serverNowSec());
       text+=` · ${formatRemaining(remain)} ${tr('remaining')}`;
     }
     text+=` · ${pending} ${tr('queued')}`;
@@ -390,6 +425,7 @@
       msg.textContent=message;
       msg.className=kind==='error'?'pass-notice pass-error':'pass-muted';
     }
+    document.getElementById('staffOfflinePrepare')?.toggleAttribute('disabled',syncing||navigator.onLine===false);
     document.getElementById('staffOfflineSync')?.toggleAttribute('disabled',syncing||navigator.onLine===false||pending===0);
   }
 
