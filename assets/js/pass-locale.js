@@ -23,14 +23,26 @@
     en:{'vr-mission-iss':'VR Space Experience — Mission: ISS','sun-observation':'Sun Observation','moon-observation':'Moon Observation','telescope-vr-1day':'1 Day Telescope + VR','telescope-vr-2day':'2 Day Telescope + VR','combined-experience-pass':'Combined Experience Pass'},
     ru:{'vr-mission-iss':'VR Space Experience — Mission: ISS','sun-observation':'Наблюдение Солнца','moon-observation':'Наблюдение Луны','telescope-vr-1day':'1 день: телескоп + VR','telescope-vr-2day':'2 дня: телескоп + VR','combined-experience-pass':'Комбинированный Experience Pass'}
   };
+  const PD={
+    tr:{'vr-mission-iss':'Mission: ISS VR deneyimi, 5 dakika.','sun-observation':'Teleskopla Güneş gözlemi.','moon-observation':'Teleskopla Ay gözlemi.','telescope-vr-1day':'1 günlük teleskop ve VR paketi.','telescope-vr-2day':'2 günlük teleskop ve VR paketi.','combined-experience-pass':'Birden fazla ALBA Space deneyimini tek Pass altında birleştirir.'},
+    en:{'vr-mission-iss':'Mission: ISS VR experience, 5 minutes.','sun-observation':'Observe the Sun through a telescope.','moon-observation':'Observe the Moon through a telescope.','telescope-vr-1day':'One-day telescope and VR package.','telescope-vr-2day':'Two-day telescope and VR package.','combined-experience-pass':'Combines multiple ALBA Space experiences in one Pass.'},
+    ru:{'vr-mission-iss':'VR-миссия ISS продолжительностью 5 минут.','sun-observation':'Наблюдение Солнца в телескоп.','moon-observation':'Наблюдение Луны в телескоп.','telescope-vr-1day':'Однодневный пакет: телескоп и VR.','telescope-vr-2day':'Двухдневный пакет: телескоп и VR.','combined-experience-pass':'Объединяет несколько впечатлений ALBA Space в одном Pass.'}
+  };
+  const PS={
+    tr:{active:'AKTİF',inactive:'PASİF',revoked:'İPTAL EDİLDİ',expired:'SÜRESİ DOLDU'},
+    en:{active:'ACTIVE',inactive:'INACTIVE',revoked:'REVOKED',expired:'EXPIRED'},
+    ru:{active:'АКТИВЕН',inactive:'НЕАКТИВЕН',revoked:'ОТОЗВАН',expired:'ИСТЁК'}
+  };
   function t(key,vars){let s=(D[lang]&&D[lang][key])||(D.tr&&D.tr[key])||key;Object.entries(vars||{}).forEach(([k,v])=>{s=s.replaceAll('{'+k+'}',String(v));});return s;}
   function productTitle(slug,fallback){return (P[lang]&&P[lang][slug])||fallback||slug||'Experience';}
+  function productDescription(slug,fallback){return (PD[lang]&&PD[lang][slug])||fallback||'';}
+  function passStatus(status){return (PS[lang]&&PS[lang][status])||String(status||'').toUpperCase();}
   function entitlementLabel(ent,fallback){
     const code=ent?.code||ent?.entitlement_code||'';const day=Number(ent?.day_no||0);
     const base=code==='sun_observation'?(lang==='ru'?'Наблюдение Солнца':lang==='en'?'Sun Observation':'Güneş Gözlemi'):
       code==='moon_observation'?(lang==='ru'?'Наблюдение Луны':lang==='en'?'Moon Observation':'Ay Gözlemi'):
-      code==='vr_minutes'?(lang==='ru'?'VR — Mission: ISS':lang==='en'?'VR — Mission: ISS':'VR — Mission: ISS'):(fallback||ent?.label||code);
+      code==='vr_minutes'?'VR — Mission: ISS':(fallback||ent?.label||code);
     return day?`${base} · ${t('day')} ${day}`:base;
   }
-  window.AlbaPassLocale={lang,t,productTitle,entitlementLabel};
+  window.AlbaPassLocale={lang,t,productTitle,productDescription,passStatus,entitlementLabel};
 })();
