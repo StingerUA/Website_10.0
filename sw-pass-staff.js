@@ -1,4 +1,4 @@
-const CACHE='alba-staff-offline-v2';
+const CACHE='alba-staff-offline-v3';
 const PRECACHE=[
   '/staff-pass.html','/eng/staff-pass.html','/rus/staff-pass.html',
   '/header-tr.html','/header-en.html','/header-ru.html',
@@ -37,7 +37,10 @@ self.addEventListener('fetch',event=>{
   if(url.pathname.startsWith('/api/'))return;
 
   const isStaffPage=['/staff-pass.html','/eng/staff-pass.html','/rus/staff-pass.html'].includes(url.pathname);
-  const isStaffAsset=PRECACHE.includes(url.pathname)||url.pathname.startsWith('/assets/');
+  // The worker has root scope so it can reopen each localized staff page offline,
+  // but it must never take over unrelated site assets. Only the explicit staff
+  // precache is handled cache-first here.
+  const isStaffAsset=PRECACHE.includes(url.pathname);
   if(!isStaffPage&&!isStaffAsset)return;
 
   if(isStaffPage){
