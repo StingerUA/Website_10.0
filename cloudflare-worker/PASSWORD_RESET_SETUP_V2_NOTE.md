@@ -1,0 +1,1 @@
+Current production `wrangler.toml` uses `pass-entry.js` as the Worker entrypoint. The password-reset wrapper must delegate to `pass-entry.js` so AlbaSpace Pass, avatar routes, LL2 refresh logic, auth, game routes, and scheduled tasks remain intact.
