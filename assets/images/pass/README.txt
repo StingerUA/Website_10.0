@@ -1,0 +1,1 @@
+High-quality Pass artwork assets are stored as separate files per product. Generated from the approved source artwork; do not recombine into a low-resolution sprite.
