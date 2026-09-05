@@ -757,6 +757,47 @@
           "url": "/ar/blog/uzay-arastirmalari-artik-sadece-gezegenleri-incelemiyor.html"
         }
       }
+    },
+    {
+      "slug": "yildizlarin-yasi-nasil-hesaplaniyor",
+      "category": "uzay",
+      "publishAt": "2026-09-05T13:13:56+03:00",
+      "cover": "/assets/images/blog/yildizlarin-yasi-nasil-hesaplaniyor-cover.jpg",
+      "readingMinutes": 4,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Muzaffer Enes İpçi",
+        "ar": "Muzaffer Enes İpçi"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Yıldızların Yaşı Nasıl Hesaplanıyor?",
+          "excerpt": "Bir Yıldızın Geçmişini Işığından Öğrenmek",
+          "url": "/blog/yildizlarin-yasi-nasil-hesaplaniyor.html"
+        },
+        "en": {
+          "title": "How is the age of stars calculated?",
+          "excerpt": "Learning About a Star's History by Light",
+          "url": "/eng/blog/yildizlarin-yasi-nasil-hesaplaniyor.html"
+        },
+        "ru": {
+          "title": "Как рассчитывается возраст звёзд?",
+          "excerpt": "Узнавая историю звезды с помощью света",
+          "url": "/rus/blog/yildizlarin-yasi-nasil-hesaplaniyor.html"
+        },
+        "ar": {
+          "title": "كيف يتم حساب عمر النجوم؟",
+          "excerpt": "تعلم تاريخ النجم من خلال الضوء",
+          "url": "/ar/blog/yildizlarin-yasi-nasil-hesaplaniyor.html"
+        }
+      }
     }
   ]
 }
