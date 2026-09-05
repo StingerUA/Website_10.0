@@ -1,0 +1,46 @@
+.pass-card--visual{
+  padding:0;
+  overflow:hidden;
+  border-color:rgba(245,158,11,.34);
+  background:linear-gradient(180deg,rgba(5,12,24,.98),rgba(8,17,32,.94));
+  box-shadow:0 22px 54px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.04);
+}
+.pass-card--visual:hover{border-color:rgba(245,158,11,.55);transform:translateY(-2px)}
+.pass-card-body{padding:18px 20px 22px}
+.pass-product-art{
+  width:calc(100% - 24px);
+  max-width:340px;
+  margin:12px auto 0;
+  aspect-ratio:4/5;
+  border-radius:18px;
+  background-repeat:no-repeat;
+  background-size:100% 500%;
+  background-color:#030914;
+  box-shadow:0 18px 42px rgba(0,0,0,.42),0 0 0 1px rgba(245,158,11,.16);
+}
+html[lang^="ru"] .pass-product-art{background-image:url('/assets/images/pass-cards/ru-sprite.webp')}
+html[lang^="tr"] .pass-product-art{background-image:url('/assets/images/pass-cards/tr-sprite.webp')}
+.pass-product-art--0{background-position:0 0}
+.pass-product-art--1{background-position:0 25%}
+.pass-product-art--2{background-position:0 50%}
+.pass-product-art--3{background-position:0 75%}
+.pass-product-art--4{background-position:0 100%}
+.pass-card--visual .pass-price{font-size:1.45rem;color:#fbbf24}
+.pass-card--visual .pass-right{background:rgba(15,23,42,.72);border-color:rgba(245,158,11,.16)}
+.pass-card--ticket .pass-card-body{padding-top:16px}
+.pass-ticket-qr-block{
+  margin:16px 0 18px;
+  padding:15px;
+  border-radius:18px;
+  border:1px solid rgba(245,158,11,.25);
+  background:linear-gradient(180deg,rgba(15,23,42,.9),rgba(2,6,23,.72));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+.pass-ticket-qr-block .pass-qr{margin:0 auto 12px}
+.pass-ticket-qr-block .pass-token{margin:0;text-align:center}
+#myPasses .pass-card--ticket h3,#myPasses .pass-card--ticket h2{margin-bottom:4px}
+@media(max-width:640px){
+  .pass-product-art{width:calc(100% - 18px);margin-top:9px;border-radius:16px}
+  .pass-card-body{padding:16px 16px 19px}
+  .pass-ticket-qr-block{padding:12px}
+}
