@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Telescope and VR two-day experience">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#020817"/><stop offset=".5" stop-color="#102951"/><stop offset=".77" stop-color="#624044"/><stop offset="1" stop-color="#d47739"/></linearGradient>
+  <radialGradient id="moon" cx="36%" cy="33%"><stop stop-color="#fff"/><stop offset=".35" stop-color="#d9e3ed"/><stop offset=".78" stop-color="#83909d"/><stop offset="1" stop-color="#364451"/></radialGradient>
+  <radialGradient id="neb"><stop stop-color="#77d4ff" stop-opacity=".65"/><stop offset=".3" stop-color="#385cff" stop-opacity=".25"/><stop offset="1" stop-color="#381673" stop-opacity="0"/></radialGradient>
+  <linearGradient id="visor"><stop stop-color="#07131e"/><stop offset=".48" stop-color="#173c55"/><stop offset="1" stop-color="#050d17"/></linearGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="24"/></filter>
+  <pattern id="stars" width="145" height="112" patternUnits="userSpaceOnUse"><circle cx="16" cy="18" r="1.6" fill="#fff"/><circle cx="68" cy="30" r=".8" fill="#99d4ff"/><circle cx="122" cy="13" r="1.3" fill="#fff"/><circle cx="41" cy="89" r="1" fill="#b9dfff"/><circle cx="108" cy="92" r=".9" fill="#fff"/></pattern>
+  <clipPath id="mclip"><circle cx="1260" cy="260" r="190"/></clipPath>
+</defs>
+<rect width="1600" height="900" fill="url(#sky)"/><rect width="1600" height="700" fill="url(#stars)" opacity=".83"/>
+<ellipse cx="820" cy="310" rx="630" ry="355" fill="url(#neb)" filter="url(#glow)" opacity=".5"/>
+<circle cx="1260" cy="260" r="218" fill="#bfe1ff" opacity=".2" filter="url(#glow)"/><circle cx="1260" cy="260" r="190" fill="url(#moon)"/>
+<g clip-path="url(#mclip)" fill="#64717e" opacity=".42"><ellipse cx="1178" cy="198" rx="47" ry="35"/><ellipse cx="1332" cy="226" rx="56" ry="42"/><ellipse cx="1240" cy="320" rx="66" ry="47"/><ellipse cx="1370" cy="338" rx="35" ry="27"/></g>
+<g clip-path="url(#mclip)" fill="none" stroke="#f3f8ff" opacity=".42"><ellipse cx="1176" cy="199" rx="31" ry="22" stroke-width="6"/><ellipse cx="1287" cy="309" rx="38" ry="29" stroke-width="5"/><ellipse cx="1356" cy="205" rx="22" ry="17" stroke-width="4"/></g>
+<path d="M0 688 C190 606 330 652 485 624 C643 596 774 677 929 627 C1084 577 1246 644 1406 600 C1487 578 1541 564 1600 552 L1600 900 L0 900Z" fill="#03070c"/>
+<path d="M0 728 C210 667 385 708 548 683 C723 656 840 718 1020 674 C1221 624 1390 682 1600 620" fill="none" stroke="#1b2632" stroke-width="7" opacity=".68"/>
+<!-- large telescope -->
+<g fill="#03070b" stroke="#16222d" stroke-width="5" transform="translate(95 425) rotate(-13 300 100)"><rect x="90" y="58" width="470" height="98" rx="38"/><rect x="55" y="76" width="82" height="62" rx="16"/><rect x="525" y="78" width="112" height="54" rx="14"/><rect x="320" y="145" width="60" height="105" rx="15"/><circle cx="350" cy="251" r="36"/><path d="M350 267 L185 505 L230 515 L356 297Z"/><path d="M350 267 L448 515 L493 498 L365 294Z"/><path d="M350 267 L330 520 L376 520 L362 294Z"/></g>
+<!-- second telescope -->
+<g fill="#05090d" opacity=".93" transform="translate(430 560) scale(.62)"><rect x="90" y="50" width="370" height="78" rx="30" transform="rotate(-8 275 89)"/><rect x="280" y="116" width="48" height="80"/><circle cx="304" cy="198" r="28"/><path d="M304 215 L190 405 L224 412 L311 238Z"/><path d="M304 215 L372 408 L408 397 L316 236Z"/></g>
+<!-- VR person -->
+<path d="M790 900 C780 792 818 694 900 638 C948 605 971 559 969 506 C966 412 1040 338 1140 342 C1227 345 1293 413 1295 499 C1296 565 1262 616 1213 648 C1294 697 1337 785 1345 900Z" fill="#02060b"/>
+<path d="M969 504 C967 413 1035 343 1133 342 C1200 342 1255 379 1284 436 L1253 570 C1221 619 1168 642 1104 636 C1018 628 971 585 969 504Z" fill="#08111a"/>
+<g transform="translate(973 406) rotate(4 170 80)"><rect x="0" y="18" width="330" height="144" rx="58" fill="url(#visor)" stroke="#286784" stroke-width="7"/><path d="M300 48 C379 53 399 78 389 116 C379 150 349 163 302 154" fill="none" stroke="#111d27" stroke-width="29" stroke-linecap="round"/><path d="M43 49 C-28 51 -49 78 -38 112 C-28 145 0 156 48 150" fill="none" stroke="#111b24" stroke-width="27" stroke-linecap="round"/><path d="M66 54 C130 29 218 30 278 55" fill="none" stroke="#71d9ff" stroke-width="4" opacity=".68"/></g>
+<path d="M686 130 L691 154 L716 159 L691 164 L686 188 L681 164 L656 159 L681 154Z" fill="#fff" opacity=".82"/><path d="M1013 175 L1017 194 L1036 198 L1017 202 L1013 221 L1009 202 L990 198 L1009 194Z" fill="#9fe1ff" opacity=".82"/>
+<rect x="18" y="18" width="1564" height="864" rx="46" fill="none" stroke="#f5b732" stroke-width="4" opacity=".9"/>
+</svg>
