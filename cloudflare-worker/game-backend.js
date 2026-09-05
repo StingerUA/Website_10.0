@@ -1,15 +1,27 @@
+const SUPPORTED_LOCALES = ["ru", "tr", "en"];
+const localeOf = value => SUPPORTED_LOCALES.includes(String(value || "").toLowerCase()) ? String(value).toLowerCase() : "ru";
+
 const TOPICS = {
-  PLANETS: { label: "🟣 Планеты" },
-  SATELLITES: { label: "🔵 Спутники" },
-  TELESCOPES: { label: "🟢 Телескопы" },
-  ROVERS: { label: "🟠 Марсоходы" },
-  TURKISH_SATELLITES: { label: "🟡 Турецкие спутники" }
+  PLANETS: true,
+  SATELLITES: true,
+  TELESCOPES: true,
+  ROVERS: true,
+  TURKISH_SATELLITES: true
 };
 
 const PRESENTATION_MODES = {
-  "3D": { label: "3D · ноутбуки на столах", description: "Полный интерфейс станции на ноутбуке каждого игрока." },
-  "AR": { label: "AR · телефоны и якоря", description: "Интерфейс станции поверх камеры телефона с якорем на столе." }
+  "3D": {
+    ru: { label: "3D · ноутбуки на столах", description: "Полный интерфейс станции на ноутбуке каждого игрока." },
+    tr: { label: "3D · masadaki dizüstü bilgisayarlar", description: "Her oyuncunun dizüstü bilgisayarında tam istasyon arayüzü." },
+    en: { label: "3D · laptops on the tables", description: "Full station interface on each player's laptop." }
+  },
+  "AR": {
+    ru: { label: "AR · телефоны и якоря", description: "Интерфейс станции поверх камеры телефона с якорем на столе." },
+    tr: { label: "AR · telefonlar ve masa işaretçileri", description: "İstasyon arayüzü, masadaki işaretçi üzerinden telefon kamerasına yerleştirilir." },
+    en: { label: "AR · phones and table anchors", description: "The station interface is placed in the phone camera view using a table anchor." }
+  }
 };
+
 const MODES = {
   SPRINT: { label: "⚡ Спринт", answer: { EASY: 12, NORMAL: 17, HARD: 22, EXPERT: 27 } },
   STANDARD: { label: "⚖️ Стандарт", answer: { EASY: 15, NORMAL: 24, HARD: 30, EXPERT: 36 } },
@@ -17,6 +29,7 @@ const MODES = {
 };
 const ECON = { start: 300, participation: 10, winner: 30, graduation: 350, small: 650, large: 950 };
 const MAX = { small: 7, large: 3, knowledge: 4 };
+const CADET_NAMES = ["Deniz", "Ece", "Emir", "Lina", "Mert", "Ada", "Arda", "Selin", "Kerem", "Defne", "Elif", "Can", "Maya", "Leo", "Nora", "Eren"];
 const now = () => Date.now();
 const clone = value => JSON.parse(JSON.stringify(value));
 const id = () => crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -49,9 +62,18 @@ function textMatches(value, accepted = []) {
     return given === expected || damerau(given, expected) <= allowed;
   });
 }
-function userId(user) { return String(user.id || user.google_id || user.email || ""); }
+function userId(user) { return String(user?.id || user?.google_id || user?.email || ""); }
 function playerFor(state, uid) { return state.players.find(player => player.userId === uid); }
 function isTeacher(state, uid) { return state.teacherUserId === uid; }
+function presentationFor(mode, locale) {
+  const config = PRESENTATION_MODES[mode] || PRESENTATION_MODES["3D"];
+  return config[localeOf(locale)] || config.ru;
+}
+function localizedQuestion(state, locale) {
+  const lang = localeOf(locale);
+  const byLocale = state.currentQuestionI18n || null;
+  return clone(byLocale?.[lang] || byLocale?.ru || byLocale?.tr || byLocale?.en || state.currentQuestion || null);
+}
 function safeQuestion(question, role, phase) {
   if (!question) return null;
   const output = clone(question);
@@ -64,14 +86,26 @@ function safeQuestion(question, role, phase) {
   }
   return output;
 }
-function safeState(state, user) {
+function localizeResults(results, locale) {
+  if (!results) return null;
+  const lang = localeOf(locale);
+  const output = clone(results);
+  if (output.correctByLocale) output.correct = output.correctByLocale[lang] ?? output.correctByLocale.ru ?? output.correct;
+  if (output.explanationByLocale) output.explanation = output.explanationByLocale[lang] ?? output.explanationByLocale.ru ?? output.explanation;
+  delete output.correctByLocale;
+  delete output.explanationByLocale;
+  return output;
+}
+function safeState(state, user, locale = "ru") {
+  const lang = localeOf(locale);
   const viewerId = userId(user);
   const role = isTeacher(state, viewerId) ? "teacher" : "player";
   const output = clone(state);
   output.presentationMode = PRESENTATION_MODES[state.presentationMode] ? state.presentationMode : "3D";
-  output.presentation = PRESENTATION_MODES[output.presentationMode];
-  output.locale = state.locale === "tr" ? "tr" : "ru";
-  output.currentQuestion = safeQuestion(state.currentQuestion, role, state.phase);
+  output.presentation = presentationFor(output.presentationMode, lang);
+  output.locale = lang;
+  output.currentQuestion = safeQuestion(localizedQuestion(state, lang), role, state.phase);
+  delete output.currentQuestionI18n;
   output.players = output.players.map(player => {
     const item = { ...player, lastAnswer: player.userId === viewerId ? player.lastAnswer : null };
     delete item.userId;
@@ -80,16 +114,21 @@ function safeState(state, user) {
     return item;
   });
   output.viewerPlayerId = playerFor(state, viewerId)?.id || null;
-  if (role !== "teacher") output.results = state.phase === "RESULT" || state.phase === "ENDGAME" ? clone(state.results) : null;
+  if (state.phase === "RESULT" || state.phase === "ENDGAME") output.results = localizeResults(state.results, lang);
+  else if (role !== "teacher") output.results = null;
   return { ...output, role };
 }
 
 function initialState(roomId, code, mode, teacher, presentationMode = "3D", locale = "ru") {
+  const creatorLocale = localeOf(locale);
   return {
-    roomId, code, status: "LOBBY", phase: "LOBBY", mode: MODES[mode] ? mode : "STANDARD", presentationMode: PRESENTATION_MODES[presentationMode] ? presentationMode : "3D", locale: locale === "tr" ? "tr" : "ru", round: 0,
+    roomId, code, status: "LOBBY", phase: "LOBBY", mode: MODES[mode] ? mode : "STANDARD",
+    presentationMode: PRESENTATION_MODES[presentationMode] ? presentationMode : "3D",
+    locale: creatorLocale, creatorLocale, round: 0,
     teacherUserId: userId(teacher), teacher: { name: teacher.name || teacher.email || "Учитель", email: teacher.email || "" },
-    players: [], usedQuestionIds: [], topicBag: [], currentQuestion: null, deadline: null, startedAt: null,
-    results: null, winnerId: null, createdAt: now(), updatedAt: now(), version: 1, anchorProtocol: "TABLE_ANCHOR_V1", sessionId: id()
+    players: [], usedQuestionIds: [], topicBag: [], currentQuestion: null, currentQuestionI18n: null,
+    deadline: null, startedAt: null, results: null, winnerId: null, createdAt: now(), updatedAt: now(), version: 1,
+    anchorProtocol: "TABLE_ANCHOR_V1", sessionId: id()
   };
 }
 
@@ -100,7 +139,7 @@ export class GameRoomDO {
   async emit(room, type, payload = {}) {
     for (const [controller, subscriber] of this.subscribers) {
       try {
-        const message = JSON.stringify({ type, payload, state: safeState(room, subscriber.user) });
+        const message = JSON.stringify({ type, payload, state: safeState(room, subscriber.user, subscriber.locale) });
         controller.enqueue(`event: ${type}\ndata: ${message}\n\n`);
       } catch { this.subscribers.delete(controller); }
     }
@@ -109,24 +148,29 @@ export class GameRoomDO {
     try {
       const url = new URL(request.url);
       const user = JSON.parse(request.headers.get("X-Game-User") || "null");
+      const locale = localeOf(request.headers.get("X-Game-Locale") || url.searchParams.get("locale") || "ru");
       if (url.pathname === "/init" && request.method === "POST") {
         const body = await request.json();
         const current = await this.load();
-        if (!current) { const room = initialState(body.roomId, body.code, body.mode, user, body.presentationMode, body.locale); await this.save(room); return json({ ok: true, state: safeState(room, user) }); }
-        return json({ ok: true, state: safeState(current, user) });
+        if (!current) {
+          const room = initialState(body.roomId, body.code, body.mode, user, body.presentationMode, body.locale || locale);
+          await this.save(room);
+          return json({ ok: true, state: safeState(room, user, locale) });
+        }
+        return json({ ok: true, state: safeState(current, user, locale) });
       }
       if (url.pathname === "/snapshot") {
         const room = await this.load();
         if (!room) throw new GameError("Комната не найдена", 404);
         if (!isTeacher(room, userId(user)) && !playerFor(room, userId(user))) throw new GameError("Нет доступа к комнате", 403);
-        return json({ ok: true, state: safeState(room, user) });
+        return json({ ok: true, state: safeState(room, user, locale) });
       }
-      if (url.pathname === "/events") return this.events(user);
-      if (url.pathname === "/command" && request.method === "POST") return this.command(request, user);
+      if (url.pathname === "/events") return this.events(user, locale);
+      if (url.pathname === "/command" && request.method === "POST") return this.command(request, user, locale);
       return json({ error: "Not found" }, 404);
     } catch (error) { return json({ error: error.message || "Internal game error" }, error.status || 500); }
   }
-  async events(user) {
+  async events(user, locale) {
     const room = await this.load();
     if (!room) throw new GameError("Комната не найдена", 404);
     if (!isTeacher(room, userId(user)) && !playerFor(room, userId(user))) throw new GameError("Нет доступа к комнате", 403);
@@ -134,12 +178,20 @@ export class GameRoomDO {
     let controllerRef;
     let heartbeat;
     const stream = new ReadableStream({
-      start: controller => { controllerRef = controller; this.subscribers.set(controller, { user }); controller.enqueue(encoder.encode(`event: ROOM_SNAPSHOT\ndata: ${JSON.stringify({ type: "ROOM_SNAPSHOT", state: safeState(room, user) })}\n\n`)); heartbeat = setInterval(() => { try { controller.enqueue(encoder.encode(`: heartbeat ${Date.now()}\n\n`)); } catch { clearInterval(heartbeat); this.subscribers.delete(controller); } }, 15000); },
+      start: controller => {
+        controllerRef = controller;
+        this.subscribers.set(controller, { user, locale: localeOf(locale) });
+        controller.enqueue(encoder.encode(`event: ROOM_SNAPSHOT\ndata: ${JSON.stringify({ type: "ROOM_SNAPSHOT", state: safeState(room, user, locale) })}\n\n`));
+        heartbeat = setInterval(() => {
+          try { controller.enqueue(encoder.encode(`: heartbeat ${Date.now()}\n\n`)); }
+          catch { clearInterval(heartbeat); this.subscribers.delete(controller); }
+        }, 15000);
+      },
       cancel: () => { clearInterval(heartbeat); if (controllerRef) this.subscribers.delete(controllerRef); }
     });
     return new Response(stream, { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", Connection: "keep-alive" } });
   }
-  async command(request, user) {
+  async command(request, user, locale) {
     const body = await request.json();
     const requestId = String(body.requestId || "");
     if (!requestId) throw new GameError("requestId обязателен");
@@ -165,7 +217,7 @@ export class GameRoomDO {
     else if (type === "REQUEST_ROOM_SNAPSHOT") { /* no mutation */ }
     else throw new GameError("Неизвестная команда");
     room = await this.save(room);
-    const response = { ok: true, state: safeState(room, user), event };
+    const response = { ok: true, state: safeState(room, user, locale), event };
     await this.state.storage.put(key, response, { expirationTtl: 86400 });
     await this.emit(room, event, { roomId: room.roomId });
     await this.persist(room, type, user, requestId);
@@ -182,59 +234,241 @@ export class GameRoomDO {
   }
   requireTeacher(room, user) { if (!isTeacher(room, userId(user))) throw new GameError("Только учитель может выполнить это действие", 403); }
   getPlayer(room, user) { const player = playerFor(room, userId(user)); if (!player) throw new GameError("Игрок не найден", 403); return player; }
-  setCompany(room, user, name) { const player = this.getPlayer(room, user); const value = String(name || "").trim(); if (value.length < 3 || value.length > 20) throw new GameError("Название: 3–20 символов"); if (room.players.some(item => item.id !== player.id && normalize(item.company) === normalize(value))) throw new GameError("Это название уже занято"); player.company = value; }
-  setCadets(room, user, topics) { const player = this.getPlayer(room, user); if (!Array.isArray(topics) || topics.length !== 3 || new Set(topics).size !== 3 || topics.some(topic => !TOPICS[topic])) throw new GameError("Выбери ровно 3 направления"); player.cadets = topics.map(topic => ({ id: id(), topic, knowledge: 0, status: "ACTIVE" })); player.ready = !!player.company; }
-  startGame(room, user) { this.requireTeacher(room, user); if (room.players.length < 2) throw new GameError("Нужно минимум 2 игрока"); if (room.players.some(player => !player.ready)) throw new GameError("Не все игроки готовы"); room.status = "ACTIVE"; room.phase = "STATION"; room.round = 0; room.startedAt = now(); }
-  async startQuestion(room, user) { this.requireTeacher(room, user); if (!["STATION", "RESULT"].includes(room.phase)) throw new GameError("Сейчас нельзя запускать вопрос"); const questions = await this.questions(room.locale); const availableTopics = Object.keys(TOPICS); if (!room.topicBag.length) room.topicBag = availableTopics.sort(() => Math.random() - 0.5); const topic = room.topicBag.shift(); let pool = questions.filter(q => q.topic === topic && !room.usedQuestionIds.includes(q.id)); if (!pool.length) pool = questions.filter(q => q.topic === topic); if (!pool.length) throw new GameError("Нет вопросов для этой темы", 500); const question = clone(pool[Math.floor(Math.random() * pool.length)]); room.usedQuestionIds.push(question.id); room.round += 1; room.phase = "QUESTION"; room.results = null; room.players.forEach(player => { player.answered = false; player.lastAnswer = null; }); room.currentQuestion = question; room.deadline = now() + (MODES[room.mode]?.answer?.[question.difficulty] || 20) * 1000; }
-  submit(room, user, value) { const player = this.getPlayer(room, user); if (room.phase !== "QUESTION") throw new GameError("Сейчас нельзя отвечать"); if (player.answered) throw new GameError("Вы уже отвечали на этот вопрос"); if (room.currentQuestion.type === "NUMBER") { const number = Number(String(value).replace(",", ".").replace(/\s/g, "")); if (!Number.isFinite(number)) throw new GameError("Введите число"); player.lastAnswer = number; } else { const text = String(value || "").trim(); if (!text) throw new GameError("Введите ответ"); player.lastAnswer = text; } player.answered = true; }
-  reveal(room, user) { this.requireTeacher(room, user); if (room.phase !== "QUESTION") throw new GameError("Нет активного вопроса"); const q = room.currentQuestion; const scored = room.players.map(player => { const submitted = player.lastAnswer !== null && player.lastAnswer !== undefined; if (!submitted) return { player, submitted: false, valid: false, distance: null }; if (q.type === "NUMBER") { const distance = Math.abs(Number(player.lastAnswer) - Number(q.correct)); return { player, submitted: true, valid: distance <= Number(q.tolerance || 0), distance }; } return { player, submitted: true, valid: textMatches(player.lastAnswer, q.answers || q.acceptedAnswers || []) , distance: null }; }); const submitted = scored.filter(item => item.submitted); const winners = q.type === "NUMBER" && submitted.length ? submitted.filter(item => item.distance === Math.min(...submitted.map(item => item.distance))).map(item => item.player.id) : scored.filter(item => item.valid).map(item => item.player.id); const items = scored.map(item => { const player = item.player; let credits = item.submitted ? ECON.participation : 0; let knowledge = 0; const changes = []; const grads = []; if (item.submitted) player.credits += ECON.participation; const winner = winners.includes(player.id); if (winner) { player.credits += ECON.winner; player.wins += 1; credits += ECON.winner; } if (item.valid) { player.correct += 1; knowledge = winner ? 2 : 1; let left = knowledge; for (const cadet of player.cadets.filter(cadet => cadet.status === "ACTIVE" && cadet.topic === q.topic).sort((a, b) => b.knowledge - a.knowledge)) { if (!left) break; const before = cadet.knowledge; cadet.knowledge += Math.min(left, MAX.knowledge - cadet.knowledge); left -= cadet.knowledge - before; changes.push({ cadetId: cadet.id, before, after: cadet.knowledge }); if (cadet.knowledge >= MAX.knowledge) { cadet.status = "GRADUATED"; player.graduates += 1; player.credits += ECON.graduation; grads.push({ cadetId: cadet.id, reward: ECON.graduation }); } } } return { playerId: player.id, company: player.company, answer: player.lastAnswer, submitted: item.submitted, valid: item.valid, distance: item.distance, isWinner: winner, credits, knowledge, changes, grads }; }); room.results = { questionId: q.id, correct: q.type === "NUMBER" ? q.correct : (q.answers?.[0] || q.acceptedAnswers?.[0] || ""), explanation: q.explanation || "", items }; room.phase = "RESULT"; room.deadline = null; }
+  setCompany(room, user, name) {
+    const player = this.getPlayer(room, user);
+    const value = String(name || "").trim();
+    if (value.length < 3 || value.length > 20) throw new GameError("Название: 3–20 символов");
+    if (room.players.some(item => item.id !== player.id && normalize(item.company) === normalize(value))) throw new GameError("Это название уже занято");
+    player.company = value;
+  }
+  setCadets(room, user, topics) {
+    const player = this.getPlayer(room, user);
+    if (!Array.isArray(topics) || topics.length !== 3 || new Set(topics).size !== 3 || topics.some(topic => !TOPICS[topic])) throw new GameError("Выбери ровно 3 направления");
+    player.cadets = topics.map((topic, index) => ({ id: id(), topic, knowledge: 0, status: "ACTIVE", name: CADET_NAMES[(player.stationNumber * 3 + index) % CADET_NAMES.length] }));
+    player.ready = !!player.company;
+  }
+  startGame(room, user) {
+    this.requireTeacher(room, user);
+    if (room.players.length < 2) throw new GameError("Нужно минимум 2 игрока");
+    if (room.players.some(player => !player.ready)) throw new GameError("Не все игроки готовы");
+    room.status = "ACTIVE"; room.phase = "STATION"; room.round = 0; room.startedAt = now();
+  }
+  async startQuestion(room, user) {
+    this.requireTeacher(room, user);
+    if (!["STATION", "RESULT"].includes(room.phase)) throw new GameError("Сейчас нельзя запускать вопрос");
+    const localizedSets = await this.allQuestions();
+    const canonical = localizedSets.ru?.length ? localizedSets.ru : (localizedSets.en?.length ? localizedSets.en : localizedSets.tr);
+    const availableTopics = Object.keys(TOPICS);
+    if (!room.topicBag.length) room.topicBag = availableTopics.sort(() => Math.random() - 0.5);
+    const topic = room.topicBag.shift();
+    let pool = canonical.filter(q => q.topic === topic && !room.usedQuestionIds.includes(q.id));
+    if (!pool.length) pool = canonical.filter(q => q.topic === topic);
+    if (!pool.length) throw new GameError("Нет вопросов для этой темы", 500);
+    const question = clone(pool[Math.floor(Math.random() * pool.length)]);
+    const byLocale = {};
+    for (const locale of SUPPORTED_LOCALES) byLocale[locale] = clone(localizedSets[locale]?.find(item => item.id === question.id) || question);
+    room.usedQuestionIds.push(question.id);
+    room.round += 1;
+    room.phase = "QUESTION";
+    room.results = null;
+    room.players.forEach(player => { player.answered = false; player.lastAnswer = null; });
+    room.currentQuestion = question;
+    room.currentQuestionI18n = byLocale;
+    room.deadline = now() + (MODES[room.mode]?.answer?.[question.difficulty] || 20) * 1000;
+  }
+  submit(room, user, value) {
+    const player = this.getPlayer(room, user);
+    if (room.phase !== "QUESTION") throw new GameError("Сейчас нельзя отвечать");
+    if (player.answered) throw new GameError("Вы уже отвечали на этот вопрос");
+    if (room.currentQuestion.type === "NUMBER") {
+      const number = Number(String(value).replace(",", ".").replace(/\s/g, ""));
+      if (!Number.isFinite(number)) throw new GameError("Введите число");
+      player.lastAnswer = number;
+    } else {
+      const text = String(value || "").trim();
+      if (!text) throw new GameError("Введите ответ");
+      player.lastAnswer = text;
+    }
+    player.answered = true;
+  }
+  reveal(room, user) {
+    this.requireTeacher(room, user);
+    if (room.phase !== "QUESTION") throw new GameError("Нет активного вопроса");
+    const q = room.currentQuestion;
+    const localized = room.currentQuestionI18n || {};
+    const multilingualAccepted = [...new Set(Object.values(localized).flatMap(item => item?.answers || item?.acceptedAnswers || []))];
+    const accepted = multilingualAccepted.length ? multilingualAccepted : (q.answers || q.acceptedAnswers || []);
+    const scored = room.players.map(player => {
+      const submitted = player.lastAnswer !== null && player.lastAnswer !== undefined;
+      if (!submitted) return { player, submitted: false, valid: false, distance: null };
+      if (q.type === "NUMBER") {
+        const distance = Math.abs(Number(player.lastAnswer) - Number(q.correct));
+        return { player, submitted: true, valid: distance <= Number(q.tolerance || 0), distance };
+      }
+      return { player, submitted: true, valid: textMatches(player.lastAnswer, accepted), distance: null };
+    });
+    const submitted = scored.filter(item => item.submitted);
+    const winners = q.type === "NUMBER" && submitted.length
+      ? submitted.filter(item => item.distance === Math.min(...submitted.map(item => item.distance))).map(item => item.player.id)
+      : scored.filter(item => item.valid).map(item => item.player.id);
+    const items = scored.map(item => {
+      const player = item.player;
+      let credits = item.submitted ? ECON.participation : 0;
+      let knowledge = 0;
+      const changes = [];
+      const grads = [];
+      if (item.submitted) player.credits += ECON.participation;
+      const winner = winners.includes(player.id);
+      if (winner) { player.credits += ECON.winner; player.wins += 1; credits += ECON.winner; }
+      if (item.valid) {
+        player.correct += 1;
+        knowledge = winner ? 2 : 1;
+        let left = knowledge;
+        for (const cadet of player.cadets.filter(cadet => cadet.status === "ACTIVE" && cadet.topic === q.topic).sort((a, b) => b.knowledge - a.knowledge)) {
+          if (!left) break;
+          const before = cadet.knowledge;
+          cadet.knowledge += Math.min(left, MAX.knowledge - cadet.knowledge);
+          left -= cadet.knowledge - before;
+          changes.push({ cadetId: cadet.id, before, after: cadet.knowledge });
+          if (cadet.knowledge >= MAX.knowledge) {
+            cadet.status = "GRADUATED";
+            player.graduates += 1;
+            player.credits += ECON.graduation;
+            grads.push({ cadetId: cadet.id, reward: ECON.graduation });
+          }
+        }
+      }
+      return { playerId: player.id, company: player.company, answer: player.lastAnswer, submitted: item.submitted, valid: item.valid, distance: item.distance, isWinner: winner, credits, knowledge, changes, grads };
+    });
+    const correctByLocale = {};
+    const explanationByLocale = {};
+    for (const locale of SUPPORTED_LOCALES) {
+      const item = localized[locale] || q;
+      correctByLocale[locale] = q.type === "NUMBER" ? q.correct : (item.answers?.[0] || item.acceptedAnswers?.[0] || q.answers?.[0] || q.acceptedAnswers?.[0] || "");
+      explanationByLocale[locale] = item.explanation || q.explanation || "";
+    }
+    room.results = {
+      questionId: q.id,
+      correct: correctByLocale.ru,
+      explanation: explanationByLocale.ru,
+      correctByLocale,
+      explanationByLocale,
+      items
+    };
+    room.phase = "RESULT";
+    room.deadline = null;
+  }
   startStation(room, user) { this.requireTeacher(room, user); if (room.phase !== "RESULT") throw new GameError("Сначала покажите результат"); room.phase = "STATION"; room.deadline = null; }
-  recruit(room, user, topic) { const player = this.getPlayer(room, user); if (room.phase !== "STATION") throw new GameError("Сейчас нельзя принимать кадетов"); const active = player.cadets.filter(cadet => cadet.status === "ACTIVE").length; if (active >= player.seatCapacity) throw new GameError("Нет свободных мест"); if (!TOPICS[topic]) throw new GameError("Неизвестная специализация"); player.cadets.push({ id: id(), topic, knowledge: 0, status: "ACTIVE" }); }
-  buyModule(room, user, type) { const player = this.getPlayer(room, user); if (room.phase !== "STATION") throw new GameError("Сейчас нельзя строить"); if (player.moduleBoughtRound === room.round && room.round > 0) throw new GameError("В этом раунде модуль уже построен"); if (type === "SMALL") { if (player.small >= MAX.small) throw new GameError("Малых модулей уже 7/7"); if (player.credits < ECON.small) throw new GameError("Недостаточно кредитов"); player.credits -= ECON.small; player.small += 1; player.seatCapacity += 2; } else if (type === "LARGE") { if (player.large >= MAX.large) throw new GameError("Больших модулей уже 3/3"); if (player.credits < ECON.large) throw new GameError("Недостаточно кредитов"); player.credits -= ECON.large; player.large += 1; player.seatCapacity += 3; } else throw new GameError("Неизвестный тип модуля"); player.moduleBoughtRound = room.round; if (player.small === MAX.small && player.large === MAX.large) { room.winnerId = player.id; room.status = "FINISHED"; room.phase = "ENDGAME"; } }
+  recruit(room, user, topic) {
+    const player = this.getPlayer(room, user);
+    if (room.phase !== "STATION") throw new GameError("Сейчас нельзя принимать кадетов");
+    const active = player.cadets.filter(cadet => cadet.status === "ACTIVE").length;
+    if (active >= player.seatCapacity) throw new GameError("Нет свободных мест");
+    if (!TOPICS[topic]) throw new GameError("Неизвестная специализация");
+    player.cadets.push({ id: id(), topic, knowledge: 0, status: "ACTIVE", name: CADET_NAMES[(player.stationNumber * 5 + player.cadets.length) % CADET_NAMES.length] });
+  }
+  buyModule(room, user, type) {
+    const player = this.getPlayer(room, user);
+    if (room.phase !== "STATION") throw new GameError("Сейчас нельзя строить");
+    if (player.moduleBoughtRound === room.round && room.round > 0) throw new GameError("В этом раунде модуль уже построен");
+    if (type === "SMALL") {
+      if (player.small >= MAX.small) throw new GameError("Малых модулей уже 7/7");
+      if (player.credits < ECON.small) throw new GameError("Недостаточно кредитов");
+      player.credits -= ECON.small; player.small += 1; player.seatCapacity += 2;
+    } else if (type === "LARGE") {
+      if (player.large >= MAX.large) throw new GameError("Больших модулей уже 3/3");
+      if (player.credits < ECON.large) throw new GameError("Недостаточно кредитов");
+      player.credits -= ECON.large; player.large += 1; player.seatCapacity += 3;
+    } else throw new GameError("Неизвестный тип модуля");
+    player.moduleBoughtRound = room.round;
+    if (player.small === MAX.small && player.large === MAX.large) { room.winnerId = player.id; room.status = "FINISHED"; room.phase = "ENDGAME"; }
+  }
   endSession(room, user) { this.requireTeacher(room, user); room.status = "FINISHED"; room.phase = "ENDGAME"; room.deadline = null; }
-  async questions(locale = "ru") { const fallback = "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.json"; const localized = locale === "tr" ? "https://albaspace.com.tr/game/AlbaSpace/tr/data/questions.ru.json" : fallback; const url = locale === "tr" ? (this.env.QUESTIONS_URL_TR || localized) : (this.env.QUESTIONS_URL || fallback); const response = await fetch(url, { cf: { cacheTtl: 300, cacheEverything: true } }); if (!response.ok && url !== fallback) { const fallbackResponse = await fetch(fallback, { cf: { cacheTtl: 300, cacheEverything: true } }); if (fallbackResponse.ok) return fallbackResponse.json(); } if (!response.ok) throw new GameError("Не удалось загрузить базу вопросов", 503); return response.json(); }
-  async persist(room, event, user, requestId) { try { await this.env.DB.prepare("UPDATE game_rooms SET state_json = ?, phase = ?, status = ?, updated_at = ? WHERE room_id = ?").bind(JSON.stringify(room), room.phase, room.status, Math.floor(now() / 1000), room.roomId).run(); await this.env.DB.prepare("INSERT INTO game_events (room_id, event_type, actor_user_id, request_id, payload_json, created_at) VALUES (?, ?, ?, ?, ?, ?)").bind(room.roomId, event, userId(user), requestId, JSON.stringify({ phase: room.phase, round: room.round }), Math.floor(now() / 1000)).run(); } catch (error) { console.error("game persistence failed", error); } }
+  async questions(locale = "ru") {
+    const lang = localeOf(locale);
+    const paths = {
+      ru: "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.json",
+      tr: "https://albaspace.com.tr/game/AlbaSpace/tr/data/questions.ru.json",
+      en: "https://albaspace.com.tr/game/AlbaSpace/en/data/questions.en.json"
+    };
+    const envUrls = { ru: this.env.QUESTIONS_URL, tr: this.env.QUESTIONS_URL_TR, en: this.env.QUESTIONS_URL_EN };
+    const url = envUrls[lang] || paths[lang];
+    const response = await fetch(url, { cf: { cacheTtl: 300, cacheEverything: true } });
+    if (response.ok) return response.json();
+    if (lang !== "ru") {
+      const fallbackResponse = await fetch(paths.ru, { cf: { cacheTtl: 300, cacheEverything: true } });
+      if (fallbackResponse.ok) return fallbackResponse.json();
+    }
+    throw new GameError("Не удалось загрузить базу вопросов", 503);
+  }
+  async allQuestions() {
+    const [ru, tr, en] = await Promise.all(SUPPORTED_LOCALES.map(locale => this.questions(locale)));
+    return { ru, tr, en };
+  }
+  async persist(room, event, user, requestId) {
+    try {
+      await this.env.DB.prepare("UPDATE game_rooms SET state_json = ?, phase = ?, status = ?, updated_at = ? WHERE room_id = ?").bind(JSON.stringify(room), room.phase, room.status, Math.floor(now() / 1000), room.roomId).run();
+      await this.env.DB.prepare("INSERT INTO game_events (room_id, event_type, actor_user_id, request_id, payload_json, created_at) VALUES (?, ?, ?, ?, ?, ?)").bind(room.roomId, event, userId(user), requestId, JSON.stringify({ phase: room.phase, round: room.round }), Math.floor(now() / 1000)).run();
+    } catch (error) { console.error("game persistence failed", error); }
+  }
 }
 
 export async function handleGameRequest(request, env, user, cors) {
   const url = new URL(request.url);
   const headers = { ...cors, "Cache-Control": "no-store" };
   const roomMatch = url.pathname.match(/^\/api\/game\/rooms\/([^/]+)(?:\/(snapshot|events|command))?$/);
+  const headerLocale = request.headers.get("X-Game-Locale") || url.searchParams.get("locale") || "ru";
   try {
     if (url.pathname === "/api/game/rooms" && request.method === "POST") {
       const body = await request.json().catch(() => ({}));
       const mode = MODES[body.mode] ? body.mode : "STANDARD";
       const presentationMode = PRESENTATION_MODES[body.presentationMode] ? body.presentationMode : "3D";
-      const locale = body.locale === "tr" ? "tr" : "ru";
+      const locale = localeOf(body.locale || headerLocale);
       let roomId = id(), code = String(10000 + Math.floor(Math.random() * 90000));
-      for (let attempt = 0; attempt < 8; attempt++) { try { await env.DB.prepare("INSERT INTO game_rooms (room_id, join_code, teacher_user_id, mode, status, phase, state_json, created_at, updated_at) VALUES (?, ?, ?, ?, 'LOBBY', 'LOBBY', ?, ?, ?)").bind(roomId, code, userId(user), mode, "{}", Math.floor(now() / 1000), Math.floor(now() / 1000)).run(); break; } catch (error) { if (attempt === 7) throw error; roomId = id(); code = String(10000 + Math.floor(Math.random() * 90000)); } }
-      const result = await roomFetch(env, roomId, "/init", "POST", user, { roomId, code, mode, presentationMode, locale });
+      for (let attempt = 0; attempt < 8; attempt++) {
+        try {
+          await env.DB.prepare("INSERT INTO game_rooms (room_id, join_code, teacher_user_id, mode, status, phase, state_json, created_at, updated_at) VALUES (?, ?, ?, ?, 'LOBBY', 'LOBBY', ?, ?, ?)").bind(roomId, code, userId(user), mode, "{}", Math.floor(now() / 1000), Math.floor(now() / 1000)).run();
+          break;
+        } catch (error) {
+          if (attempt === 7) throw error;
+          roomId = id(); code = String(10000 + Math.floor(Math.random() * 90000));
+        }
+      }
+      const result = await roomFetch(env, roomId, "/init", "POST", user, { roomId, code, mode, presentationMode, locale }, locale);
       return json(result, 201, headers);
     }
     if (url.pathname === "/api/game/rooms/join" && request.method === "POST") {
       const { code } = await request.json().catch(() => ({}));
+      const locale = localeOf(headerLocale);
       const row = await env.DB.prepare("SELECT room_id FROM game_rooms WHERE join_code = ? LIMIT 1").bind(String(code || "").trim()).first();
       if (!row) throw new GameError("Комната не найдена", 404);
-      return new Response(JSON.stringify(await roomFetch(env, row.room_id, "/command", "POST", user, { type: "JOIN_GAME_ROOM", requestId: id(), payload: {} })), { status: 200, headers: { ...headers, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify(await roomFetch(env, row.room_id, "/command", "POST", user, { type: "JOIN_GAME_ROOM", requestId: id(), payload: {} }, locale)), { status: 200, headers: { ...headers, "Content-Type": "application/json" } });
     }
     if (!roomMatch) return json({ error: "Not found" }, 404, headers);
-    const roomId = roomMatch[1], action = roomMatch[2] || "snapshot";
-    if (action === "snapshot" && request.method === "GET") return new Response(JSON.stringify(await roomFetch(env, roomId, "/snapshot", "GET", user)), { headers: { ...headers, "Content-Type": "application/json" } });
+    const roomId = roomMatch[1], action = roomMatch[2] || "snapshot", locale = localeOf(headerLocale);
+    if (action === "snapshot" && request.method === "GET") return new Response(JSON.stringify(await roomFetch(env, roomId, "/snapshot", "GET", user, undefined, locale)), { headers: { ...headers, "Content-Type": "application/json" } });
     if (action === "events" && request.method === "GET") {
-      const response = await roomFetch(env, roomId, "/events", "GET", user);
+      const response = await roomFetch(env, roomId, `/events?locale=${encodeURIComponent(locale)}`, "GET", user, undefined, locale);
       const eventHeaders = new Headers(response.headers);
       Object.entries(headers).forEach(([key, value]) => eventHeaders.set(key, value));
       return new Response(response.body, { status: response.status, headers: eventHeaders });
     }
-    if (action === "command" && request.method === "POST") return new Response(JSON.stringify(await roomFetch(env, roomId, "/command", "POST", user, await request.json())), { headers: { ...headers, "Content-Type": "application/json" } });
+    if (action === "command" && request.method === "POST") return new Response(JSON.stringify(await roomFetch(env, roomId, "/command", "POST", user, await request.json(), locale)), { headers: { ...headers, "Content-Type": "application/json" } });
     return json({ error: "Method not allowed" }, 405, headers);
   } catch (error) { return json({ error: error.message || "Game backend error" }, error.status || 500, headers); }
 }
 
-async function roomFetch(env, roomId, path, method, user, body) {
+async function roomFetch(env, roomId, path, method, user, body, locale = "ru") {
   if (!env.GAME_ROOMS) throw new GameError("GAME_ROOMS Durable Object binding не настроен", 503);
   const stub = env.GAME_ROOMS.get(env.GAME_ROOMS.idFromName(roomId));
-  const response = await stub.fetch(`https://game-room.internal${path}`, { method, headers: { "Content-Type": "application/json", "X-Game-User": JSON.stringify(user) }, body: body === undefined ? undefined : JSON.stringify(body) });
-  if (!response.ok) { const data = await response.json().catch(() => ({ error: "Game backend error" })); throw new GameError(data.error || "Game backend error", response.status); }
+  const response = await stub.fetch(`https://game-room.internal${path}`, {
+    method,
+    headers: { "Content-Type": "application/json", "X-Game-User": JSON.stringify(user), "X-Game-Locale": localeOf(locale) },
+    body: body === undefined ? undefined : JSON.stringify(body)
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({ error: "Game backend error" }));
+    throw new GameError(data.error || "Game backend error", response.status);
+  }
   return response.json();
 }
