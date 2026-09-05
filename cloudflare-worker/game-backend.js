@@ -29,6 +29,9 @@ const MODES = {
 };
 const ECON = { start: 300, participation: 10, winner: 30, graduation: 350, small: 650, large: 950 };
 const MAX = { small: 7, large: 3, knowledge: 4 };
+const LARGE_ROLES = ["COMMAND", "SCIENCE", "OPERATIONS"];
+const SMALL_VARIANTS = ["GENERAL", "NAVIGATION", "OBSERVATION", "COMMUNICATIONS"];
+const LARGE_RADIAL_PORTS = ["RadialPort_01", "RadialPort_02", "RadialPort_03", "RadialPort_04"];
 const CADET_NAMES = ["Deniz", "Ece", "Emir", "Lina", "Mert", "Ada", "Arda", "Selin", "Kerem", "Defne", "Elif", "Can", "Maya", "Leo", "Nora", "Eren"];
 const now = () => Date.now();
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -69,6 +72,269 @@ function presentationFor(mode, locale) {
   const config = PRESENTATION_MODES[mode] || PRESENTATION_MODES["3D"];
   return config[localeOf(locale)] || config.ru;
 }
+
+/* =========================
+ * Persistent station layout
+ * ========================= */
+
+function stationModuleId(player, type, ordinal) {
+  return `module:${player.id}:${String(type).toLowerCase()}:${ordinal}`;
+}
+function crewSlotNames(module) {
+  const count = module?.type === "LARGE" ? 3 : 2;
+  return Array.from({ length: count }, (_, index) => `CrewSlot_0${index + 1}`);
+}
+function moduleCounts(player) {
+  const modules = Array.isArray(player?.modules) ? player.modules : [];
+  return {
+    large: modules.filter(module => module.type === "LARGE").length,
+    small: modules.filter(module => module.type === "SMALL").length
+  };
+}
+function moduleCapacity(player) {
+  const counts = moduleCounts(player);
+  return counts.large * 3 + counts.small * 2;
+}
+function moduleById(player, moduleId) {
+  return (player.modules || []).find(module => module.id === moduleId) || null;
+}
+function portOccupied(player, parentModuleId, parentPort) {
+  return (player.modules || []).some(module => module.parentModuleId === parentModuleId && module.parentPort === parentPort);
+}
+function makeLargeModule(player, ordinal, parent = null, round = 0) {
+  const index = ordinal - 1;
+  return {
+    id: stationModuleId(player, "LARGE", ordinal),
+    type: "LARGE",
+    role: LARGE_ROLES[index] || "OPERATIONS",
+    visualVariant: LARGE_ROLES[index] || "OPERATIONS",
+    parentModuleId: parent?.id || null,
+    parentPort: parent ? "AxialPort_B" : null,
+    ownPort: parent ? "AxialPort_A" : null,
+    branchDepth: 0,
+    spineIndex: index,
+    createdRound: Number(round || 0)
+  };
+}
+function makeSmallModule(player, ordinal, parent, parentPort, round = 0) {
+  const depth = parent?.type === "SMALL" ? Number(parent.branchDepth || 1) + 1 : 1;
+  return {
+    id: stationModuleId(player, "SMALL", ordinal),
+    type: "SMALL",
+    role: "SMALL",
+    visualVariant: SMALL_VARIANTS[(ordinal - 1) % SMALL_VARIANTS.length],
+    parentModuleId: parent?.id || null,
+    parentPort: parentPort || null,
+    ownPort: parent ? "PrimaryPort" : null,
+    branchDepth: depth,
+    spineIndex: null,
+    createdRound: Number(round || 0)
+  };
+}
+function createStartingModules(player) {
+  const command = makeLargeModule(player, 1, null, 0);
+  const small = makeSmallModule(player, 1, command, "RadialPort_01", 0);
+  return [command, small];
+}
+function autoPlacement(player, type, round = 0) {
+  const counts = moduleCounts(player);
+  if (type === "LARGE") {
+    if (counts.large >= MAX.large) throw new GameError("Больших модулей уже 3/3");
+    const largeModules = player.modules.filter(module => module.type === "LARGE").sort((a, b) => Number(a.spineIndex || 0) - Number(b.spineIndex || 0));
+    const parent = largeModules[largeModules.length - 1];
+    if (!parent) throw new GameError("У станции нет центрального модуля");
+    if (portOccupied(player, parent.id, "AxialPort_B")) throw new GameError("Центральная ось станции занята");
+    return makeLargeModule(player, counts.large + 1, parent, round);
+  }
+
+  if (type !== "SMALL") throw new GameError("Неизвестный тип модуля");
+  if (counts.small >= MAX.small) throw new GameError("Малых модулей уже 7/7");
+
+  const largeModules = player.modules.filter(module => module.type === "LARGE").sort((a, b) => Number(a.spineIndex || 0) - Number(b.spineIndex || 0));
+  for (const parent of largeModules) {
+    for (const port of LARGE_RADIAL_PORTS) {
+      if (!portOccupied(player, parent.id, port)) return makeSmallModule(player, counts.small + 1, parent, port, round);
+    }
+  }
+
+  const depthOneSmalls = player.modules.filter(module => module.type === "SMALL" && Number(module.branchDepth) === 1);
+  for (const parent of depthOneSmalls) {
+    if (!portOccupied(player, parent.id, "ExtensionPort")) return makeSmallModule(player, counts.small + 1, parent, "ExtensionPort", round);
+  }
+  throw new GameError("Нет свободной точки стыковки для малого модуля");
+}
+function selectedPlacement(player, type, parentModuleId, parentPort, round = 0) {
+  if (!parentModuleId && !parentPort) return autoPlacement(player, type, round);
+  const counts = moduleCounts(player);
+  const parent = moduleById(player, parentModuleId);
+  if (!parent) throw new GameError("Точка стыковки больше не существует");
+  if (portOccupied(player, parent.id, parentPort)) throw new GameError("Эта точка стыковки уже занята");
+
+  if (type === "LARGE") {
+    if (counts.large >= MAX.large) throw new GameError("Больших модулей уже 3/3");
+    const largeModules = player.modules.filter(module => module.type === "LARGE").sort((a, b) => Number(a.spineIndex || 0) - Number(b.spineIndex || 0));
+    const lastLarge = largeModules[largeModules.length - 1];
+    if (parent.type !== "LARGE" || parent.id !== lastLarge?.id || parentPort !== "AxialPort_B") {
+      throw new GameError("Большой модуль можно добавить только в конец центральной оси");
+    }
+    return makeLargeModule(player, counts.large + 1, parent, round);
+  }
+
+  if (type === "SMALL") {
+    if (counts.small >= MAX.small) throw new GameError("Малых модулей уже 7/7");
+    if (parent.type === "LARGE") {
+      if (!LARGE_RADIAL_PORTS.includes(parentPort)) throw new GameError("Малый модуль можно стыковать только к боковому порту большого модуля");
+      return makeSmallModule(player, counts.small + 1, parent, parentPort, round);
+    }
+    if (parent.type === "SMALL") {
+      if (Number(parent.branchDepth) !== 1 || parentPort !== "ExtensionPort") {
+        throw new GameError("Ветка может содержать максимум два малых модуля подряд");
+      }
+      return makeSmallModule(player, counts.small + 1, parent, parentPort, round);
+    }
+  }
+
+  throw new GameError("Недопустимая точка стыковки");
+}
+function validateStationGraph(player) {
+  const modules = Array.isArray(player.modules) ? player.modules : [];
+  if (!modules.length) throw new GameError("У игрока отсутствует станция", 500);
+  const ids = new Set();
+  const occupied = new Set();
+  const counts = moduleCounts(player);
+  if (counts.large < 1 || counts.large > MAX.large || counts.small < 1 || counts.small > MAX.small) throw new GameError("Некорректный состав станции", 500);
+
+  for (const module of modules) {
+    if (!module.id || ids.has(module.id)) throw new GameError("Дублирующийся модуль станции", 500);
+    ids.add(module.id);
+  }
+
+  const largeModules = modules.filter(module => module.type === "LARGE").sort((a, b) => Number(a.spineIndex || 0) - Number(b.spineIndex || 0));
+  largeModules.forEach((module, index) => {
+    if (Number(module.spineIndex) !== index || Number(module.branchDepth) !== 0) throw new GameError("Нарушена центральная ось станции", 500);
+    if (index === 0) {
+      if (module.parentModuleId !== null || module.parentPort !== null) throw new GameError("Командный модуль должен быть корнем станции", 500);
+    } else {
+      const parent = moduleById(player, module.parentModuleId);
+      if (!parent || parent.type !== "LARGE" || Number(parent.spineIndex) !== index - 1 || module.parentPort !== "AxialPort_B" || module.ownPort !== "AxialPort_A") {
+        throw new GameError("Большие модули должны образовывать непрерывную ось L-L-L", 500);
+      }
+    }
+  });
+
+  for (const module of modules.filter(item => item.type === "SMALL")) {
+    const parent = moduleById(player, module.parentModuleId);
+    if (!parent) throw new GameError("У малого модуля нет родительского модуля", 500);
+    if (parent.type === "LARGE") {
+      if (Number(module.branchDepth) !== 1 || !LARGE_RADIAL_PORTS.includes(module.parentPort)) throw new GameError("Некорректная ветка малого модуля", 500);
+    } else if (parent.type === "SMALL") {
+      if (Number(parent.branchDepth) !== 1 || Number(module.branchDepth) !== 2 || module.parentPort !== "ExtensionPort") {
+        throw new GameError("Ветка S-S-S запрещена", 500);
+      }
+    } else throw new GameError("Некорректный родитель малого модуля", 500);
+
+    if (module.ownPort !== "PrimaryPort") throw new GameError("Некорректный порт малого модуля", 500);
+  }
+
+  for (const module of modules) {
+    if (!module.parentModuleId || !module.parentPort) continue;
+    const key = `${module.parentModuleId}:${module.parentPort}`;
+    if (occupied.has(key)) throw new GameError("Один docking port занят двумя модулями", 500);
+    occupied.add(key);
+  }
+  return true;
+}
+function syncPlayerCounts(player) {
+  const counts = moduleCounts(player);
+  player.large = counts.large;
+  player.small = counts.small;
+  player.seatCapacity = moduleCapacity(player);
+}
+function findFreeCrewSlot(player, preferredModuleId = null, preferredSlotId = null) {
+  const active = (player.cadets || []).filter(cadet => cadet.status === "ACTIVE");
+  const occupied = new Set(active.filter(cadet => cadet.moduleId && cadet.slotId).map(cadet => `${cadet.moduleId}:${cadet.slotId}`));
+  const moduleOrder = [...(player.modules || [])].sort((a, b) => {
+    if (a.type !== b.type) return a.type === "LARGE" ? -1 : 1;
+    if (a.type === "LARGE") return Number(a.spineIndex || 0) - Number(b.spineIndex || 0);
+    return String(a.id).localeCompare(String(b.id));
+  });
+
+  if (preferredModuleId && preferredSlotId) {
+    const module = moduleById(player, preferredModuleId);
+    if (!module || !crewSlotNames(module).includes(preferredSlotId)) throw new GameError("Такого места экипажа нет");
+    const key = `${module.id}:${preferredSlotId}`;
+    if (occupied.has(key)) throw new GameError("Это место уже занято");
+    return { moduleId: module.id, slotId: preferredSlotId };
+  }
+
+  for (const module of moduleOrder) {
+    for (const slotId of crewSlotNames(module)) {
+      if (!occupied.has(`${module.id}:${slotId}`)) return { moduleId: module.id, slotId };
+    }
+  }
+  return null;
+}
+function ensureCadetAssignments(player) {
+  let changed = false;
+  const used = new Set();
+  for (const cadet of (player.cadets || []).filter(item => item.status === "ACTIVE")) {
+    const module = moduleById(player, cadet.moduleId);
+    const valid = module && crewSlotNames(module).includes(cadet.slotId) && !used.has(`${cadet.moduleId}:${cadet.slotId}`);
+    if (valid) {
+      used.add(`${cadet.moduleId}:${cadet.slotId}`);
+      continue;
+    }
+    cadet.moduleId = null;
+    cadet.slotId = null;
+    changed = true;
+  }
+
+  for (const cadet of (player.cadets || []).filter(item => item.status === "ACTIVE" && (!item.moduleId || !item.slotId))) {
+    const free = findFreeCrewSlot(player);
+    if (!free) break;
+    cadet.moduleId = free.moduleId;
+    cadet.slotId = free.slotId;
+    used.add(`${free.moduleId}:${free.slotId}`);
+    changed = true;
+  }
+  return changed;
+}
+function ensurePlayerStationLayout(player) {
+  let changed = false;
+  if (!Array.isArray(player.modules) || !player.modules.length) {
+    const legacyLarge = Math.max(1, Math.min(MAX.large, Number(player.large || 1)));
+    const legacySmall = Math.max(1, Math.min(MAX.small, Number(player.small || 1)));
+    player.modules = createStartingModules(player);
+    changed = true;
+    while (moduleCounts(player).large < legacyLarge) player.modules.push(autoPlacement(player, "LARGE", 0));
+    while (moduleCounts(player).small < legacySmall) player.modules.push(autoPlacement(player, "SMALL", 0));
+  }
+
+  for (const module of player.modules) {
+    if (module.type === "LARGE") {
+      const index = Number.isFinite(Number(module.spineIndex)) ? Number(module.spineIndex) : player.modules.filter(item => item.type === "LARGE").indexOf(module);
+      if (module.branchDepth !== 0) { module.branchDepth = 0; changed = true; }
+      if (!module.role) { module.role = LARGE_ROLES[index] || "OPERATIONS"; changed = true; }
+      if (!module.visualVariant) { module.visualVariant = module.role; changed = true; }
+      if (module.spineIndex !== index) { module.spineIndex = index; changed = true; }
+    } else if (module.type === "SMALL") {
+      if (!module.role) { module.role = "SMALL"; changed = true; }
+      if (!module.visualVariant) { module.visualVariant = "GENERAL"; changed = true; }
+    }
+    if (module.createdRound === undefined) { module.createdRound = 0; changed = true; }
+  }
+
+  syncPlayerCounts(player);
+  if (ensureCadetAssignments(player)) changed = true;
+  validateStationGraph(player);
+  return changed;
+}
+function ensureRoomStationLayouts(room) {
+  let changed = false;
+  for (const player of room?.players || []) if (ensurePlayerStationLayout(player)) changed = true;
+  return changed;
+}
+
 function localizedQuestion(state, locale) {
   const lang = localeOf(locale);
   const byLocale = state.currentQuestionI18n || null;
@@ -134,8 +400,21 @@ function initialState(roomId, code, mode, teacher, presentationMode = "3D", loca
 
 export class GameRoomDO {
   constructor(state, env) { this.state = state; this.env = env; this.subscribers = new Map(); }
-  async load() { return (await this.state.storage.get("room")) || null; }
-  async save(room) { room.updatedAt = now(); room.version = Number(room.version || 0) + 1; await this.state.storage.put("room", room); return room; }
+  async load() {
+    const room = (await this.state.storage.get("room")) || null;
+    if (room && ensureRoomStationLayouts(room)) {
+      room.updatedAt = now();
+      await this.state.storage.put("room", room);
+    }
+    return room;
+  }
+  async save(room) {
+    ensureRoomStationLayouts(room);
+    room.updatedAt = now();
+    room.version = Number(room.version || 0) + 1;
+    await this.state.storage.put("room", room);
+    return room;
+  }
   async emit(room, type, payload = {}) {
     for (const [controller, subscriber] of this.subscribers) {
       try {
@@ -211,8 +490,8 @@ export class GameRoomDO {
     else if (type === "CLOSE_ANSWERS") { this.reveal(room, user); event = "ROUND_RESULT"; }
     else if (type === "START_NEXT_ROUND") { await this.startQuestion(room, user); event = "QUESTION_STARTED"; }
     else if (type === "START_STATION_PHASE") { this.startStation(room, user); event = "STATION_PHASE_STARTED"; }
-    else if (type === "RECRUIT_CADET") { this.recruit(room, user, payload.topic); event = "CADET_UPDATED"; }
-    else if (type === "BUY_MODULE") { this.buyModule(room, user, payload.type); event = "MODULE_BUILT"; }
+    else if (type === "RECRUIT_CADET") { this.recruit(room, user, payload.topic, payload.moduleId, payload.slotId); event = "CADET_UPDATED"; }
+    else if (type === "BUY_MODULE") { this.buyModule(room, user, payload.type, payload.parentModuleId, payload.parentPort); event = "MODULE_BUILT"; }
     else if (type === "END_SESSION") { this.endSession(room, user); event = "GAME_FINISHED"; }
     else if (type === "REQUEST_ROOM_SNAPSHOT") { /* no mutation */ }
     else throw new GameError("Неизвестная команда");
@@ -230,7 +509,16 @@ export class GameRoomDO {
     if (room.status !== "LOBBY") throw new GameError("Игра уже началась");
     if (room.players.length >= 10) throw new GameError("В комнате уже 10 игроков");
     const stationNumber = room.players.length + 1;
-    room.players.push({ id: id(), userId: uid, name: user.name || user.email || "Игрок", email: user.email || "", company: "", ready: false, credits: ECON.start, small: 1, large: 1, seatCapacity: 5, cadets: [], graduates: 0, correct: 0, wins: 0, answered: false, lastAnswer: null, moduleBoughtRound: 0, online: true, stationNumber, anchor: { id: `TABLE-${String(stationNumber).padStart(2, "0")}`, label: `Якорь стола ${stationNumber}`, protocol: "TABLE_ANCHOR_V1" } });
+    const player = {
+      id: id(), userId: uid, name: user.name || user.email || "Игрок", email: user.email || "", company: "", ready: false,
+      credits: ECON.start, small: 1, large: 1, seatCapacity: 5, modules: [], cadets: [], graduates: 0, correct: 0, wins: 0,
+      answered: false, lastAnswer: null, moduleBoughtRound: 0, online: true, stationNumber,
+      anchor: { id: `TABLE-${String(stationNumber).padStart(2, "0")}`, label: `Якорь стола ${stationNumber}`, protocol: "TABLE_ANCHOR_V1" }
+    };
+    player.modules = createStartingModules(player);
+    syncPlayerCounts(player);
+    validateStationGraph(player);
+    room.players.push(player);
   }
   requireTeacher(room, user) { if (!isTeacher(room, userId(user))) throw new GameError("Только учитель может выполнить это действие", 403); }
   getPlayer(room, user) { const player = playerFor(room, userId(user)); if (!player) throw new GameError("Игрок не найден", 403); return player; }
@@ -244,7 +532,12 @@ export class GameRoomDO {
   setCadets(room, user, topics) {
     const player = this.getPlayer(room, user);
     if (!Array.isArray(topics) || topics.length !== 3 || new Set(topics).size !== 3 || topics.some(topic => !TOPICS[topic])) throw new GameError("Выбери ровно 3 направления");
-    player.cadets = topics.map((topic, index) => ({ id: id(), topic, knowledge: 0, status: "ACTIVE", name: CADET_NAMES[(player.stationNumber * 3 + index) % CADET_NAMES.length] }));
+    player.cadets = topics.map((topic, index) => ({
+      id: id(), topic, knowledge: 0, status: "ACTIVE",
+      name: CADET_NAMES[(player.stationNumber * 3 + index) % CADET_NAMES.length],
+      moduleId: null, slotId: null, poseId: `Pose_0${(index % 6) + 1}`, visualSeed: `${player.id}:${index}`
+    }));
+    ensureCadetAssignments(player);
     player.ready = !!player.company;
   }
   startGame(room, user) {
@@ -329,12 +622,12 @@ export class GameRoomDO {
           const before = cadet.knowledge;
           cadet.knowledge += Math.min(left, MAX.knowledge - cadet.knowledge);
           left -= cadet.knowledge - before;
-          changes.push({ cadetId: cadet.id, before, after: cadet.knowledge });
+          changes.push({ cadetId: cadet.id, before, after: cadet.knowledge, moduleId: cadet.moduleId, slotId: cadet.slotId });
           if (cadet.knowledge >= MAX.knowledge) {
             cadet.status = "GRADUATED";
             player.graduates += 1;
             player.credits += ECON.graduation;
-            grads.push({ cadetId: cadet.id, reward: ECON.graduation });
+            grads.push({ cadetId: cadet.id, reward: ECON.graduation, moduleId: cadet.moduleId, slotId: cadet.slotId });
           }
         }
       }
@@ -358,30 +651,55 @@ export class GameRoomDO {
     room.phase = "RESULT";
     room.deadline = null;
   }
-  startStation(room, user) { this.requireTeacher(room, user); if (room.phase !== "RESULT") throw new GameError("Сначала покажите результат"); room.phase = "STATION"; room.deadline = null; }
-  recruit(room, user, topic) {
+  startStation(room, user) {
+    this.requireTeacher(room, user);
+    if (room.phase !== "RESULT") throw new GameError("Сначала покажите результат");
+    room.phase = "STATION";
+    room.deadline = null;
+  }
+  recruit(room, user, topic, moduleId = null, slotId = null) {
     const player = this.getPlayer(room, user);
     if (room.phase !== "STATION") throw new GameError("Сейчас нельзя принимать кадетов");
     const active = player.cadets.filter(cadet => cadet.status === "ACTIVE").length;
     if (active >= player.seatCapacity) throw new GameError("Нет свободных мест");
     if (!TOPICS[topic]) throw new GameError("Неизвестная специализация");
-    player.cadets.push({ id: id(), topic, knowledge: 0, status: "ACTIVE", name: CADET_NAMES[(player.stationNumber * 5 + player.cadets.length) % CADET_NAMES.length] });
+    const free = findFreeCrewSlot(player, moduleId || null, slotId || null);
+    if (!free) throw new GameError("Нет свободных мест");
+    const cadetIndex = player.cadets.length;
+    player.cadets.push({
+      id: id(), topic, knowledge: 0, status: "ACTIVE",
+      name: CADET_NAMES[(player.stationNumber * 5 + cadetIndex) % CADET_NAMES.length],
+      moduleId: free.moduleId, slotId: free.slotId,
+      poseId: `Pose_0${(cadetIndex % 6) + 1}`, visualSeed: `${player.id}:${cadetIndex}`
+    });
   }
-  buyModule(room, user, type) {
+  buyModule(room, user, type, parentModuleId = null, parentPort = null) {
     const player = this.getPlayer(room, user);
     if (room.phase !== "STATION") throw new GameError("Сейчас нельзя строить");
     if (player.moduleBoughtRound === room.round && room.round > 0) throw new GameError("В этом раунде модуль уже построен");
-    if (type === "SMALL") {
-      if (player.small >= MAX.small) throw new GameError("Малых модулей уже 7/7");
+    const normalizedType = String(type || "").toUpperCase();
+    const counts = moduleCounts(player);
+
+    if (normalizedType === "SMALL") {
+      if (counts.small >= MAX.small) throw new GameError("Малых модулей уже 7/7");
       if (player.credits < ECON.small) throw new GameError("Недостаточно кредитов");
-      player.credits -= ECON.small; player.small += 1; player.seatCapacity += 2;
-    } else if (type === "LARGE") {
-      if (player.large >= MAX.large) throw new GameError("Больших модулей уже 3/3");
+    } else if (normalizedType === "LARGE") {
+      if (counts.large >= MAX.large) throw new GameError("Больших модулей уже 3/3");
       if (player.credits < ECON.large) throw new GameError("Недостаточно кредитов");
-      player.credits -= ECON.large; player.large += 1; player.seatCapacity += 3;
     } else throw new GameError("Неизвестный тип модуля");
+
+    const module = selectedPlacement(player, normalizedType, parentModuleId || null, parentPort || null, room.round);
+    player.modules.push(module);
+    validateStationGraph(player);
+    player.credits -= normalizedType === "SMALL" ? ECON.small : ECON.large;
+    syncPlayerCounts(player);
     player.moduleBoughtRound = room.round;
-    if (player.small === MAX.small && player.large === MAX.large) { room.winnerId = player.id; room.status = "FINISHED"; room.phase = "ENDGAME"; }
+
+    if (player.small === MAX.small && player.large === MAX.large) {
+      room.winnerId = player.id;
+      room.status = "FINISHED";
+      room.phase = "ENDGAME";
+    }
   }
   endSession(room, user) { this.requireTeacher(room, user); room.status = "FINISHED"; room.phase = "ENDGAME"; room.deadline = null; }
   async questions(locale = "ru") {
