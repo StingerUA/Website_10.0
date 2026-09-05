@@ -1,0 +1,1 @@
+Separate per-product artwork generated from the original conversation images. Render with <img>, not a low-resolution background sprite.
