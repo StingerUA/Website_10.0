@@ -31,6 +31,8 @@ FRONT_ORIGIN = "https://albaspace.com.tr"
 ALLOWED_ORIGINS = "https://albaspace.com.tr,https://www.albaspace.com.tr"
 SESSION_TTL_SECONDS = "2592000"
 QUESTIONS_URL = "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.json"
+QUESTIONS_URL_TR = "https://albaspace.com.tr/game/AlbaSpace/tr/data/questions.ru.json"
+QUESTIONS_URL_EN = "https://albaspace.com.tr/game/AlbaSpace/en/data/questions.en.json"
 
 # Secrets are inherited from the current Worker and must not be committed:
 # wrangler secret put GOOGLE_CLIENT_ID
