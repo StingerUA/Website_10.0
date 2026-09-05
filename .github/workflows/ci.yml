@@ -48,6 +48,9 @@ jobs:
       - name: Validate multilingual AlbaSpace game
         run: node cloudflare-worker/tests/albaspace.audit.mjs
 
+      - name: Validate persistent AlbaSpace station layout
+        run: node cloudflare-worker/tests/station-layout.audit.mjs
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
