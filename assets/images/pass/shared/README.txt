@@ -1,0 +1,1 @@
+The 1-day and 2-day package hero images are language-neutral crops from the original generated package artwork, so localized HTML text can sit below them cleanly.
