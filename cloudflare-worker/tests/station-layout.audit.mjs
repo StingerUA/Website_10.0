@@ -10,12 +10,14 @@ const root = join(here, "../..");
 
 for (const file of [
   join(root, "cloudflare-worker/game-backend.js"),
-  join(root, "game/AlbaSpace/shared/station-3d.js")
+  join(root, "game/AlbaSpace/shared/station-3d.js"),
+  join(root, "game/AlbaSpace/shared/station-build-mode.js")
 ]) execFileSync(process.execPath, ["--check", file]);
 
 for (const lang of ["ru", "tr", "en"]) {
   const html = readFileSync(join(root, `game/AlbaSpace/${lang}/player.html`), "utf8");
   assert.match(html, /\.\.\/shared\/station-3d\.js\?v=20260905-layout1/);
+  assert.match(html, /\.\.\/shared\/station-build-mode\.js\?v=20260905-build1/);
 }
 
 const renderer = readFileSync(join(root, "game/AlbaSpace/shared/station-3d.js"), "utf8");
@@ -24,6 +26,16 @@ assert.match(renderer, /cadet\.moduleId/);
 assert.match(renderer, /cadet\.slotId/);
 assert.match(renderer, /branchDepth/);
 assert.match(renderer, /RadialPort_04/);
+
+const buildMode = readFileSync(join(root, "game/AlbaSpace/shared/station-build-mode.js"), "utf8");
+assert.match(buildMode, /validPlacements/);
+assert.match(buildMode, /AxialPort_B/);
+assert.match(buildMode, /ExtensionPort/);
+assert.match(buildMode, /parentModuleId/);
+assert.match(buildMode, /parentPort/);
+assert.match(buildMode, /BUILD MODE/);
+assert.match(buildMode, /animateDock/);
+assert.match(buildMode, /stationRenderer/);
 
 class MemoryStorage {
   constructor() { this.map = new Map(); }
@@ -112,7 +124,7 @@ let maxSmallRejected = false;
 try { roomDO.buyModule(room, user, "SMALL"); } catch { maxSmallRejected = true; }
 assert.equal(maxSmallRejected, true);
 
-// Explicit future Build Mode placement: L-S-S is valid, but L-S-S-S and L-S-L are not.
+// Explicit Build Mode placement: L-S-S is valid, but L-S-S-S and L-S-L are not.
 const second = await freshRoom();
 const user2 = { id: "player-2", name: "Player 2", email: "player2@example.com" };
 second.roomDO.join(second.room, user2);
@@ -179,4 +191,4 @@ const snapshotIds = legacyPlayer.modules.map(module => module.id);
 const migratedB = await legacyDO.load();
 assert.deepEqual(migratedB.players[0].modules.map(module => module.id), snapshotIds);
 
-console.log("AlbaSpace persistent station layout audit passed");
+console.log("AlbaSpace persistent station layout + Build Mode audit passed");
