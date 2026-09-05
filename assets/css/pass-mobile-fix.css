@@ -1,17 +1,28 @@
 /* Mobile reliability fixes for Pass product artwork and QR alignment. */
+/*
+ * Use the original compact sprites here. They were already used by the
+ * earlier Pass-card implementation and are more reliable on mobile than
+ * the newer large sprite files.
+ */
 html[lang^="ru"] .pass-product-art{
-  background-image:url('/assets/images/pass/ru/pass-cards.webp');
+  background-image:url('/assets/images/pass-cards/ru-sprite.webp?v=20260905-0825')!important;
 }
 html[lang^="tr"] .pass-product-art{
-  background-image:url('/assets/images/pass/tr/pass-cards.webp');
+  background-image:url('/assets/images/pass-cards/tr-sprite.webp?v=20260905-0825')!important;
+}
+
+.pass-product-art{
+  background-repeat:no-repeat!important;
+  background-size:100% 500%!important;
+  background-color:#020617;
 }
 
 /* Keep the sprite usable even when a mobile browser/CSP ignores inline CSS custom properties. */
-.pass-product-art[style*="--pass-art-y:0%"]{background-position:50% 0}
-.pass-product-art[style*="--pass-art-y:25%"]{background-position:50% 25%}
-.pass-product-art[style*="--pass-art-y:50%"]{background-position:50% 50%}
-.pass-product-art[style*="--pass-art-y:75%"]{background-position:50% 75%}
-.pass-product-art[style*="--pass-art-y:100%"]{background-position:50% 100%}
+.pass-product-art[style*="--pass-art-y:0%"]{background-position:50% 0!important}
+.pass-product-art[style*="--pass-art-y:25%"]{background-position:50% 25%!important}
+.pass-product-art[style*="--pass-art-y:50%"]{background-position:50% 50%!important}
+.pass-product-art[style*="--pass-art-y:75%"]{background-position:50% 75%!important}
+.pass-product-art[style*="--pass-art-y:100%"]{background-position:50% 100%!important}
 
 .pass-qr{
   box-sizing:border-box;
@@ -29,7 +40,10 @@ html[lang^="tr"] .pass-product-art{
 }
 
 @media(max-width:760px){
-  .pass-product-art{background-size:100% 500%}
+  .pass-product-art{
+    background-size:100% 500%!important;
+    min-height:0;
+  }
   .pass-ticket-qr{padding:14px}
   .pass-qr{width:min(260px,100%)}
 }
