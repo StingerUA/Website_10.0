@@ -1,15 +1,14 @@
 (function(){
   'use strict';
 
-  const VERSION='20260905-0855';
-  const LANGS=new Set(['tr','ru']);
-
-  function currentLang(){
-    const raw=(document.documentElement.lang||'').toLowerCase();
-    if(raw.startsWith('ru'))return 'ru';
-    if(raw.startsWith('tr'))return 'tr';
-    return '';
-  }
+  const VERSION='20260905-textless-hero-v1';
+  const HERO_FILES=[
+    'sun-observation.svg',
+    'moon-observation.svg',
+    'vr-mission-iss.svg',
+    'telescope-vr-1day.svg',
+    'telescope-vr-2day.svg'
+  ];
 
   function artIndex(el){
     const inline=el.style.getPropertyValue('--pass-art-y');
@@ -19,49 +18,30 @@
     return Math.max(0,Math.min(4,Math.round(value/25)));
   }
 
-  function sourcesFor(lang){
-    return [
-      `/assets/images/pass-cards/${lang}-sprite.webp?v=${VERSION}`,
-      `/assets/images/pass/${lang}/pass-cards.webp?v=${VERSION}`,
-      `https://raw.githubusercontent.com/StingerUA/Website_10.0/main/assets/images/pass-cards/${lang}-sprite.webp?v=${VERSION}`
-    ];
-  }
-
   function mount(el){
     if(!el||el.dataset.passImgFix==='1')return;
-    const lang=currentLang();
-    if(!LANGS.has(lang))return;
+    const file=HERO_FILES[artIndex(el)];
+    if(!file)return;
 
-    const index=artIndex(el);
-    const sources=sourcesFor(lang);
     const img=document.createElement('img');
-    let sourceIndex=0;
-
     img.className='pass-product-art-img';
-    img.alt='';
-    img.setAttribute('aria-hidden','true');
+    img.alt=el.getAttribute('aria-label')||'ALBA Space experience';
     img.decoding='async';
-    img.loading='eager';
+    img.loading='lazy';
     img.draggable=false;
 
     img.addEventListener('load',()=>{
       el.classList.add('pass-product-art-img-loaded');
       el.classList.remove('pass-product-art-img-error');
     });
-
     img.addEventListener('error',()=>{
-      sourceIndex+=1;
-      if(sourceIndex<sources.length){
-        img.src=sources[sourceIndex];
-        return;
-      }
       el.classList.add('pass-product-art-img-error');
     });
 
     el.dataset.passImgFix='1';
-    el.classList.add('pass-product-art-img-ready',`pass-product-art-img-${index}`);
+    el.classList.add('pass-product-art-img-ready');
     el.replaceChildren(img);
-    img.src=sources[0];
+    img.src=`/assets/images/pass/hero/${file}?v=${VERSION}`;
   }
 
   function scan(root){

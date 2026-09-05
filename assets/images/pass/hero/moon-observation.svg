@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Moon observation">
+<defs>
+  <radialGradient id="bg"><stop stop-color="#183052"/><stop offset=".5" stop-color="#07111f"/><stop offset="1" stop-color="#02060c"/></radialGradient>
+  <radialGradient id="moon" cx="38%" cy="34%"><stop stop-color="#fff"/><stop offset=".32" stop-color="#dce4ed"/><stop offset=".72" stop-color="#8f9ba8"/><stop offset="1" stop-color="#46515e"/></radialGradient>
+  <linearGradient id="shade"><stop stop-color="#06101b" stop-opacity="0"/><stop offset=".7" stop-color="#06101b" stop-opacity=".15"/><stop offset="1" stop-color="#02060c" stop-opacity=".88"/></linearGradient>
+  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="25"/></filter>
+  <pattern id="stars" width="170" height="125" patternUnits="userSpaceOnUse"><circle cx="16" cy="20" r="1.5" fill="#fff"/><circle cx="82" cy="37" r="1" fill="#91cfff"/><circle cx="148" cy="15" r="1.8" fill="#d6efff"/><circle cx="49" cy="101" r="1.1" fill="#fff"/><circle cx="126" cy="91" r=".8" fill="#8fc6ff"/></pattern>
+  <clipPath id="disc"><circle cx="915" cy="398" r="312"/></clipPath>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/><rect width="1600" height="900" fill="url(#stars)" opacity=".82"/>
+<path d="M0 681 C210 610 370 654 530 628 C690 603 868 687 1038 640 C1250 582 1412 632 1600 560 L1600 900 L0 900Z" fill="#03070c"/>
+<circle cx="915" cy="398" r="340" fill="#bcd8f1" opacity=".25" filter="url(#glow)"/>
+<circle cx="915" cy="398" r="312" fill="url(#moon)"/>
+<g clip-path="url(#disc)" fill="#5e6b78" opacity=".42">
+  <ellipse cx="762" cy="282" rx="72" ry="55"/><ellipse cx="1048" cy="310" rx="94" ry="63"/><ellipse cx="880" cy="465" rx="115" ry="77"/><ellipse cx="1060" cy="536" rx="65" ry="51"/><ellipse cx="734" cy="506" rx="48" ry="38"/><ellipse cx="936" cy="196" rx="42" ry="31"/>
+</g>
+<g clip-path="url(#disc)" fill="none" stroke="#f8fbff" opacity=".48">
+  <ellipse cx="760" cy="288" rx="50" ry="36" stroke-width="10"/><ellipse cx="1000" cy="465" rx="58" ry="43" stroke-width="8"/><ellipse cx="844" cy="544" rx="34" ry="28" stroke-width="7"/><ellipse cx="1082" cy="265" rx="28" ry="23" stroke-width="6"/><ellipse cx="802" cy="392" rx="22" ry="17" stroke-width="5"/>
+</g>
+<circle cx="915" cy="398" r="312" fill="url(#shade)"/>
+<g opacity=".75"><path d="M240 240 L245 263 L268 268 L245 273 L240 296 L235 273 L212 268 L235 263Z" fill="#dff5ff"/><path d="M1320 180 L1324 198 L1342 202 L1324 206 L1320 224 L1316 206 L1298 202 L1316 198Z" fill="#fff"/><path d="M1220 650 L1224 668 L1242 672 L1224 676 L1220 694 L1216 676 L1198 672 L1216 668Z" fill="#9ad8ff"/></g>
+<!-- telescope silhouette -->
+<g fill="#04080d" stroke="#111d29" stroke-width="5" transform="translate(90 500) rotate(-10 280 80)">
+  <rect x="92" y="42" width="448" height="94" rx="36"/><rect x="65" y="58" width="72" height="60" rx="15"/><rect x="510" y="60" width="106" height="52" rx="14"/>
+  <rect x="305" y="126" width="58" height="100" rx="15"/><circle cx="334" cy="228" r="34"/><path d="M334 243 L170 470 L216 478 L338 278Z"/><path d="M334 243 L425 478 L470 464 L350 269Z"/><path d="M334 243 L315 480 L360 480 L345 270Z"/>
+</g>
+<path d="M121 695 C345 641 486 686 638 650" fill="none" stroke="#1a2b3b" stroke-width="3"/>
+<rect x="18" y="18" width="1564" height="864" rx="46" fill="none" stroke="#f5b732" stroke-width="4" opacity=".85"/>
+</svg>

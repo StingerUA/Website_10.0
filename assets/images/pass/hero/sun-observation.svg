@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Sun observation">
+<defs>
+  <radialGradient id="bg"><stop stop-color="#12304d"/><stop offset=".48" stop-color="#061321"/><stop offset="1" stop-color="#02060c"/></radialGradient>
+  <radialGradient id="sun"><stop offset="0" stop-color="#fff6a0"/><stop offset=".24" stop-color="#ffd22e"/><stop offset=".62" stop-color="#ff7a00"/><stop offset=".88" stop-color="#d93700"/><stop offset="1" stop-color="#701000"/></radialGradient>
+  <radialGradient id="flare"><stop stop-color="#fff8bf" stop-opacity=".95"/><stop offset=".18" stop-color="#ffb318" stop-opacity=".75"/><stop offset="1" stop-color="#ff5b00" stop-opacity="0"/></radialGradient>
+  <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdf65"/><stop offset=".5" stop-color="#ff9d18"/><stop offset="1" stop-color="#7a2f04"/></linearGradient>
+  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="26"/></filter>
+  <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="10"/></filter>
+  <pattern id="stars" width="150" height="110" patternUnits="userSpaceOnUse"><circle cx="18" cy="22" r="1.7" fill="#dff4ff"/><circle cx="77" cy="16" r="1" fill="#7fc8ff"/><circle cx="126" cy="47" r="1.4" fill="#fff"/><circle cx="43" cy="86" r=".9" fill="#b3dcff"/><circle cx="108" cy="92" r="1.2" fill="#fff"/></pattern>
+  <clipPath id="disc"><circle cx="820" cy="425" r="318"/></clipPath>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/><rect width="1600" height="900" fill="url(#stars)" opacity=".72"/>
+<path d="M0 670 C250 590 390 690 600 633 C810 575 965 658 1160 610 C1340 566 1470 600 1600 550 L1600 900 L0 900Z" fill="#03070b" opacity=".92"/>
+<ellipse cx="822" cy="429" rx="380" ry="380" fill="#ff6b00" opacity=".35" filter="url(#glow)"/>
+<circle cx="820" cy="425" r="325" fill="#ff8b00" opacity=".46" filter="url(#soft)"/>
+<circle cx="820" cy="425" r="318" fill="url(#sun)" stroke="#ffd34d" stroke-width="6"/>
+<g clip-path="url(#disc)" opacity=".65" fill="none" stroke-linecap="round">
+  <path d="M520 368 C620 298 675 470 778 346 S964 360 1090 282" stroke="#fff39a" stroke-width="17" opacity=".35"/>
+  <path d="M525 513 C630 432 702 584 802 493 S959 466 1108 525" stroke="#ffb20d" stroke-width="24" opacity=".36"/>
+  <path d="M620 218 C700 284 730 193 808 246 S951 267 1005 203" stroke="#fff0a0" stroke-width="12" opacity=".32"/>
+  <path d="M566 602 C665 554 757 685 841 589 S1005 598 1070 631" stroke="#ffce32" stroke-width="18" opacity=".29"/>
+  <g fill="#671400" opacity=".72" stroke="none"><ellipse cx="670" cy="382" rx="36" ry="22"/><ellipse cx="973" cy="510" rx="44" ry="26"/><ellipse cx="855" cy="267" rx="21" ry="13"/><ellipse cx="756" cy="568" rx="28" ry="16"/></g>
+</g>
+<g fill="none" stroke="url(#rim)" stroke-width="14" opacity=".95" filter="url(#soft)"><path d="M565 170 C465 62 390 196 483 261"/><path d="M1076 250 C1254 188 1262 361 1140 377"/><path d="M581 663 C452 771 557 842 665 738"/><path d="M1028 676 C1161 785 1276 690 1135 604"/></g>
+<g opacity=".9"><circle cx="1110" cy="256" r="98" fill="url(#flare)"/><circle cx="612" cy="327" r="76" fill="url(#flare)"/></g>
+<!-- telescope silhouette -->
+<g fill="#05090e" stroke="#111b25" stroke-width="5" transform="translate(98 508) rotate(-11 270 75)">
+  <rect x="100" y="42" width="420" height="92" rx="36"/><rect x="70" y="57" width="76" height="60" rx="15"/><rect x="491" y="60" width="95" height="52" rx="14"/>
+  <rect x="295" y="124" width="56" height="96" rx="15"/><circle cx="323" cy="221" r="33"/><path d="M323 236 L170 460 L215 470 L327 270Z"/><path d="M323 236 L410 470 L456 458 L339 258Z"/><path d="M323 236 L302 475 L348 475 L333 258Z"/>
+</g>
+<rect x="18" y="18" width="1564" height="864" rx="46" fill="none" stroke="#f5b732" stroke-width="4" opacity=".85"/>
+</svg>
