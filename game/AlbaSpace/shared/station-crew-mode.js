@@ -224,7 +224,7 @@
       notify(COPY.occupied);
       return;
     }
-    if (window.AlbaBuildMode?.isActive?.()) window.AlbaBuildMode.cancel?.();
+    if (window.AlbaStationBuildMode?.activeType) window.AlbaStationBuildMode.cancel?.(true);
     renderer = targetRenderer || renderer;
     activeSlot = selection;
     busy = false;
