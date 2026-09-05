@@ -1,0 +1,270 @@
+[
+  {
+    "id": "p1",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Planets",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "Which planet is known as the Red Planet?",
+    "answers": ["mars"],
+    "explanation": "Mars looks reddish because iron oxides are present in its soil."
+  },
+  {
+    "id": "p2",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Planets",
+    "difficulty": "EASY",
+    "type": "NUMBER",
+    "text": "How many natural moons does Mars have?",
+    "correct": 2,
+    "tolerance": 0,
+    "unit": "moons",
+    "explanation": "Mars has two small moons: Phobos and Deimos."
+  },
+  {
+    "id": "p3",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Planets",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "How many planets are in the Solar System?",
+    "correct": 8,
+    "tolerance": 0,
+    "unit": "planets",
+    "explanation": "The Solar System has eight planets, from Mercury to Neptune."
+  },
+  {
+    "id": "p4",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Planets",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "Which planet is closest to the Sun?",
+    "answers": ["mercury"],
+    "explanation": "Mercury is the closest planet to the Sun."
+  },
+  {
+    "id": "p5",
+    "topic": "PLANETS",
+    "topicLabel": "🟣 Planets",
+    "difficulty": "HARD",
+    "type": "NUMBER",
+    "text": "About how many Earth days does one year on Mars last?",
+    "correct": 687,
+    "tolerance": 70,
+    "unit": "days",
+    "explanation": "A Martian year lasts about 687 Earth days."
+  },
+  {
+    "id": "s1",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Satellites",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "What is Earth's natural satellite called?",
+    "answers": ["moon", "the moon"],
+    "explanation": "The Moon is Earth's only natural satellite."
+  },
+  {
+    "id": "s2",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Satellites",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "What was the first artificial satellite of Earth called?",
+    "answers": ["sputnik 1", "sputnik-1", "sputnik"],
+    "explanation": "Sputnik 1 was launched on October 4, 1957."
+  },
+  {
+    "id": "s3",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Satellites",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "In what year was Sputnik 1 launched?",
+    "correct": 1957,
+    "tolerance": 0,
+    "unit": "year",
+    "explanation": "The first artificial Earth satellite was launched in 1957."
+  },
+  {
+    "id": "s4",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Satellites",
+    "difficulty": "HARD",
+    "type": "NUMBER",
+    "text": "About how many minutes does the International Space Station take to orbit Earth once?",
+    "correct": 90,
+    "tolerance": 12,
+    "unit": "minutes",
+    "explanation": "The ISS completes one orbit of Earth in about 90 minutes."
+  },
+  {
+    "id": "s5",
+    "topic": "SATELLITES",
+    "topicLabel": "🔵 Satellites",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "What is Earth's largest natural satellite called?",
+    "answers": ["moon", "the moon"],
+    "explanation": "The Moon is Earth's natural satellite and is very large relative to its planet."
+  },
+  {
+    "id": "t1",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Telescopes",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "What is the famous space telescope launched in 1990 called?",
+    "answers": ["hubble", "hubble space telescope"],
+    "explanation": "The Hubble Space Telescope has been operating in Earth orbit since 1990."
+  },
+  {
+    "id": "t2",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Telescopes",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "What space telescope is often abbreviated as JWST?",
+    "answers": ["james webb", "james webb space telescope", "jwst", "webb"],
+    "explanation": "JWST is the James Webb Space Telescope."
+  },
+  {
+    "id": "t3",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Telescopes",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "In what year was the Hubble Space Telescope launched?",
+    "correct": 1990,
+    "tolerance": 0,
+    "unit": "year",
+    "explanation": "Hubble was placed into orbit in April 1990."
+  },
+  {
+    "id": "t4",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Telescopes",
+    "difficulty": "HARD",
+    "type": "NUMBER",
+    "text": "Approximately what is the diameter of the James Webb Space Telescope's primary mirror?",
+    "correct": 6.5,
+    "tolerance": 1,
+    "unit": "meters",
+    "explanation": "JWST's primary mirror is about 6.5 meters in diameter."
+  },
+  {
+    "id": "t5",
+    "topic": "TELESCOPES",
+    "topicLabel": "🟢 Telescopes",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "What do astronomers use to observe very distant objects in space?",
+    "answers": ["telescope", "telescopes"],
+    "explanation": "Telescopes collect light and other radiation from distant objects in space."
+  },
+  {
+    "id": "r1",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars rovers",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "What is the name of the NASA rover that landed on Mars in 2021?",
+    "answers": ["perseverance"],
+    "explanation": "Perseverance landed in Jezero Crater in February 2021."
+  },
+  {
+    "id": "r2",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars rovers",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "What is the name of the NASA rover that has been working on Mars since 2012?",
+    "answers": ["curiosity"],
+    "explanation": "Curiosity has been exploring Gale Crater since 2012."
+  },
+  {
+    "id": "r3",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars rovers",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "What was the name of the twin NASA rover that arrived on Mars in 2004 together with Spirit?",
+    "answers": ["opportunity"],
+    "explanation": "Spirit and Opportunity arrived on Mars in 2004."
+  },
+  {
+    "id": "r4",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars rovers",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "In what year did the Curiosity rover land on Mars?",
+    "correct": 2012,
+    "tolerance": 0,
+    "unit": "year",
+    "explanation": "Curiosity landed on Mars on August 6, 2012."
+  },
+  {
+    "id": "r5",
+    "topic": "ROVERS",
+    "topicLabel": "🟠 Mars rovers",
+    "difficulty": "HARD",
+    "type": "TEXT",
+    "text": "What is the name of the small helicopter delivered to Mars with Perseverance?",
+    "answers": ["ingenuity"],
+    "explanation": "Ingenuity became the first aircraft to make a powered, controlled flight on another planet."
+  },
+  {
+    "id": "tr1",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Turkish satellites",
+    "difficulty": "EASY",
+    "type": "TEXT",
+    "text": "What is the name of the Turkish Earth-observation satellite launched in 2023?",
+    "answers": ["imece", "i̇mece", "İMECE"],
+    "explanation": "İMECE is a Turkish Earth-observation satellite launched in 2023."
+  },
+  {
+    "id": "tr2",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Turkish satellites",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "What is the Turkish telecommunications satellite series called?",
+    "answers": ["türksat", "turksat"],
+    "explanation": "TÜRKSAT is a series of Turkish communications satellites."
+  },
+  {
+    "id": "tr3",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Turkish satellites",
+    "difficulty": "NORMAL",
+    "type": "TEXT",
+    "text": "What is the name of the Turkish Earth-observation satellite launched in 2011 before Göktürk-2?",
+    "answers": ["rasat"],
+    "explanation": "RASAT was the first Earth-observation satellite designed and manufactured in Türkiye."
+  },
+  {
+    "id": "tr4",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Turkish satellites",
+    "difficulty": "NORMAL",
+    "type": "NUMBER",
+    "text": "In what year was Göktürk-2 launched?",
+    "correct": 2012,
+    "tolerance": 0,
+    "unit": "year",
+    "explanation": "Göktürk-2 was launched on December 18, 2012."
+  },
+  {
+    "id": "tr5",
+    "topic": "TURKISH_SATELLITES",
+    "topicLabel": "🟡 Turkish satellites",
+    "difficulty": "HARD",
+    "type": "TEXT",
+    "text": "What is the name of Türkiye's first domestically developed communications satellite, launched in 2024?",
+    "answers": ["türksat 6a", "turksat 6a", "türksat6a", "turksat6a"],
+    "explanation": "TÜRKSAT 6A is Türkiye's first domestically developed communications satellite."
+  }
+]
