@@ -13,7 +13,7 @@
   const esc = value => String(value ?? "").replace(/[&<>\"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[char]));
   const readAuthToken = () => { try { return localStorage.getItem(AUTH_TOKEN_KEY) || ""; } catch { return ""; } };
   const authHeaders = () => { const token = readAuthToken(); return token ? { Authorization:`Bearer ${token}` } : {}; };
-  const gameHeaders = () => ({ "X-Game-Locale": GAME_LOCALE, ...authHeaders() });
+  const localizedPath = path => `${path}${path.includes("?") ? "&" : "?"}locale=${encodeURIComponent(GAME_LOCALE)}`;
   const consumeAuthToken = () => {
     const hash = window.location.hash.replace(/^#/, "");
     const parts = hash ? hash.split("&") : [];
@@ -26,7 +26,7 @@
     window.history.replaceState({}, document.title, clean);
   };
   async function request(path, options = {}) {
-    const response = await fetch(API + path, { credentials:"include", mode:"cors", headers:{ "Content-Type":"application/json", ...gameHeaders(), ...(options.headers || {}) }, ...options });
+    const response = await fetch(API + localizedPath(path), { credentials:"include", mode:"cors", headers:{ "Content-Type":"application/json", ...authHeaders(), ...(options.headers || {}) }, ...options });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || `${COPY.server} (${response.status})`);
     return data;
