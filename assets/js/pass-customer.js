@@ -3,12 +3,44 @@
   const locale=()=>window.AlbaPassLocale||{lang:'tr',t:key=>key,productTitle:(slug,fallback)=>fallback||slug,productDescription:(slug,fallback)=>fallback||'',passStatus:status=>String(status||'').toUpperCase(),entitlementLabel:(ent,fallback)=>fallback||ent?.label||ent?.code};
   const t=(key,vars)=>locale().t(key,vars);
   const passesPath=()=>locale().lang==='en'?'/eng/passes.html':locale().lang==='ru'?'/rus/passes.html':'/passes.html';
+  const ART_INDEX=new Map([['sun-observation',0],['moon-observation',1],['vr-mission-iss',2],['telescope-vr-1day',3],['telescope-vr-2day',4]]);
 
   document.addEventListener('DOMContentLoaded',()=>{
     const page=document.body.dataset.passPage;
-    if(page==='offers') loadOffers();
-    if(page==='my-passes') loadMyPasses();
+    if(page==='offers')loadOffers();
+    if(page==='my-passes')loadMyPasses();
   });
+
+  function productArt(slug){
+    const lang=locale().lang;
+    const key=String(slug||'');
+    const index=ART_INDEX.get(key);
+    if((lang!=='ru'&&lang!=='tr')||index===undefined)return null;
+    return {src:`/assets/images/pass/${lang}/pass-cards.webp`,position:index*25};
+  }
+
+  function productArtMarkup(slug,title){
+    const art=productArt(slug);
+    if(!art)return '';
+    const label=api().escapeHtml(title||'ALBA Space');
+    return `<div class="pass-product-art" role="img" aria-label="${label}" style="--pass-art:url('${art.src}');--pass-art-y:${art.position}%"></div>`;
+  }
+
+  function setProductCard(card,slug,title,content,extraClass=''){
+    const art=productArtMarkup(slug,title);
+    if(!art){
+      card.className=`pass-card${extraClass?` ${extraClass}`:''}`;
+      card.innerHTML=content;
+      return false;
+    }
+    card.className=`pass-card pass-product-card${extraClass?` ${extraClass}`:''}`;
+    card.innerHTML=`${art}<div class="pass-card-body">${content}</div>`;
+    return true;
+  }
+
+  function qrTokenLabel(){
+    return locale().lang==='ru'?'Технический QR-токен':locale().lang==='tr'?'Teknik QR tokeni':'QR token';
+  }
 
   async function loadOffers(){
     const root=document.getElementById('passOffers');
@@ -25,11 +57,11 @@
       root.innerHTML='';
       for(const offer of data.offers){
         const card=document.createElement('article');
-        card.className='pass-card';
+        const title=locale().productTitle(offer.product_slug,offer.title);
         const rights=(offer.entitlements||[]).map(ent=>`<li><span>${api().escapeHtml(locale().entitlementLabel(ent,ent.label))}</span><strong>${ent.quantity} ${ent.unit==='minute'?t('minuteShort'):'×'}</strong></li>`).join('');
-        card.innerHTML=`
+        const content=`
           <span class="pass-badge">${api().escapeHtml(offer.event_name||'ALBA Space')}</span>
-          <h2>${api().escapeHtml(locale().productTitle(offer.product_slug,offer.title))}</h2>
+          <h2>${api().escapeHtml(title)}</h2>
           <p class="pass-muted">${api().escapeHtml(locale().productDescription(offer.product_slug,offer.description||''))}</p>
           <div class="pass-price">${api().money(offer.price_amount,offer.currency)}</div>
           <ul class="pass-list">${rights}</ul>
@@ -37,6 +69,7 @@
             <button class="pass-btn" data-method="cash">${api().escapeHtml(t('cashReserve'))}</button>
             <button class="pass-btn secondary" data-method="iban">${api().escapeHtml(t('ibanReserve'))}</button>
           </div>`;
+        setProductCard(card,offer.product_slug,title,content,'pass-offer-card');
         card.querySelectorAll('[data-method]').forEach(button=>{
           button.addEventListener('click',()=>createOrder(offer,button.dataset.method,card,status));
         });
@@ -96,21 +129,22 @@
     for(const order of orders){
       const pending=order.payment_status==='pending';
       const card=document.createElement('article');
-      card.className='pass-card';
+      const title=locale().productTitle(order.product_slug,order.title||order.product_slug||'ALBA Space Experience');
       let paymentHelp='';
       if(pending&&order.payment_method==='cash'){
         paymentHelp=`<div class="pass-notice">${api().escapeHtml(t('cashPendingHelp'))}</div>`;
       }else if(pending&&order.payment_method==='iban'){
         paymentHelp=`<div class="pass-notice"><strong>${api().escapeHtml(t('ibanPending'))}</strong><br>${api().escapeHtml(t('reference'))}: <span class="payment-ref">${api().escapeHtml(order.reference_code)}</span>${iban.bank_name?`<br>${api().escapeHtml(t('bank'))}: ${api().escapeHtml(iban.bank_name)}`:''}${iban.iban?`<br>${api().escapeHtml(t('iban'))}: <strong>${api().escapeHtml(iban.iban)}</strong>`:''}${iban.account_name?`<br>${api().escapeHtml(t('recipient'))}: ${api().escapeHtml(iban.account_name)}`:''}</div>`;
       }
-      card.innerHTML=`
+      const content=`
         <span class="pass-badge ${pending?'warn':'ok'}">${api().escapeHtml(pending?t('paymentPending'):t('paymentConfirmed'))}</span>
-        <h3>${api().escapeHtml(locale().productTitle(order.product_slug,order.title||order.product_slug||'ALBA Space Experience'))}</h3>
+        <h3>${api().escapeHtml(title)}</h3>
         <p class="pass-muted">${api().escapeHtml(t('order'))}: ${api().escapeHtml(order.id)}</p>
         <div class="pass-price">${api().money(order.total_amount,order.currency)}</div>
         <p>${api().escapeHtml(t('payment'))}: <strong>${api().escapeHtml(order.payment_method==='cash'?t('cash'):t('bankTransfer'))}</strong></p>
         <p>${api().escapeHtml(t('reference'))}: <span class="payment-ref">${api().escapeHtml(order.reference_code)}</span></p>
         ${paymentHelp}`;
+      setProductCard(card,order.product_slug,title,content,'pass-order-card');
       root.appendChild(card);
     }
   }
@@ -122,21 +156,31 @@
     root.innerHTML='';
     for(const pass of visible){
       const card=document.createElement('article');
-      card.className='pass-card';
       const active=pass.status==='active';
+      const title=locale().productTitle(pass.product_slug,pass.title||pass.event_name||'ALBA Space Pass');
       const rights=(pass.entitlements||[]).map(ent=>{
         const available=ent.status==='available'&&Number(ent.remaining_quantity)>0;
         const qty=ent.unit==='minute'?`${ent.remaining_quantity} ${t('minuteShort')}`:`${ent.remaining_quantity}/${ent.total_quantity}`;
         return `<li><span>${api().escapeHtml(locale().entitlementLabel(ent,ent.label))}</span><strong>${available?'✓ ':'✕ '}${qty}</strong></li>`;
       }).join('');
       const qrId='qr-'+pass.id;
-      card.innerHTML=`
+      const qrBlock=active&&pass.qr_ready?`
+        <section class="pass-ticket-qr" aria-label="ALBA Space QR Pass">
+          <div class="pass-ticket-qr-title">QR PASS</div>
+          <div id="${qrId}" class="pass-qr"></div>
+          <details class="pass-token-details">
+            <summary>${api().escapeHtml(qrTokenLabel())}</summary>
+            <div class="pass-token">${api().escapeHtml(pass.qr_payload)}</div>
+          </details>
+        </section>`:'';
+      const content=`
         <span class="pass-badge ${active?'ok':'bad'}">${api().escapeHtml(locale().passStatus(pass.status))}</span>
-        <h3>${api().escapeHtml(locale().productTitle(pass.product_slug,pass.title||pass.event_name||'ALBA Space Pass'))}</h3>
+        <h3>${api().escapeHtml(title)}</h3>
         <p class="pass-muted">Pass: ${api().escapeHtml(pass.id)}</p>
-        ${active&&pass.qr_ready?`<div id="${qrId}" class="pass-qr" aria-label="ALBA Space QR Pass"></div><div class="pass-token">${api().escapeHtml(pass.qr_payload)}</div>`:''}
+        ${qrBlock}
         ${active&&!pass.qr_ready?`<div class="pass-notice pass-error">${api().escapeHtml(t('qrMissing'))}</div>`:''}
         <ul class="pass-list">${rights}</ul>`;
+      setProductCard(card,pass.product_slug,title,content,'pass-owned-card');
       root.appendChild(card);
       if(active&&pass.qr_ready)renderQr(qrId,pass.qr_payload);
     }
