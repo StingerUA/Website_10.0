@@ -22,8 +22,9 @@ const sharedEngine = readFileSync(join(root, "game/AlbaSpace/shared/engine.js"),
 const sharedClient = readFileSync(join(root, "game/AlbaSpace/shared/game-client.js"), "utf8");
 assert.match(sharedEngine, /raw\.startsWith\("tr"\).*raw\.startsWith\("en"\)/s);
 assert.match(sharedEngine, /window\.AlbaSpace = \{ LOCALE/);
-assert.match(sharedClient, /"X-Game-Locale": GAME_LOCALE/);
+assert.match(sharedClient, /const localizedPath = path =>/);
 assert.match(sharedClient, /locale=\$\{encodeURIComponent\(GAME_LOCALE\)\}/);
+assert.doesNotMatch(sharedClient, /"X-Game-Locale"/);
 assert.match(sharedClient, /new AbortController\(\)/);
 
 for (const lang of ["ru", "tr", "en"]) {
@@ -66,6 +67,7 @@ const workerSource = readFileSync(join(root, "cloudflare-worker/game-backend.js"
 assert.match(workerSource, /SUPPORTED_LOCALES = \["ru", "tr", "en"\]/);
 assert.match(workerSource, /currentQuestionI18n/);
 assert.match(workerSource, /X-Game-Locale/);
+assert.match(workerSource, /url\.searchParams\.get\("locale"\)/);
 assert.match(workerSource, /QUESTIONS_URL_EN/);
 assert.match(workerSource, /multilingualAccepted/);
 assert.match(workerSource, /correctByLocale/);
