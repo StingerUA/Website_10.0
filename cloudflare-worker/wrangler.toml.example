@@ -1,5 +1,5 @@
 name = "albaspace-api"
-main = "worker-auth.index.js"
+main = "worker-auth.reset.index.js"
 compatibility_date = "2026-04-06"
 compatibility_flags = ["nodejs_compat", "streams_enable_constructors"]
 workers_dev = true
@@ -30,10 +30,11 @@ PUBLIC_BASE_URL = "https://api.albaspace.com.tr"
 FRONT_ORIGIN = "https://albaspace.com.tr"
 ALLOWED_ORIGINS = "https://albaspace.com.tr,https://www.albaspace.com.tr"
 SESSION_TTL_SECONDS = "2592000"
+PASSWORD_RESET_TTL_SECONDS = "1800"
+PASSWORD_RESET_FROM = "AlbaSpace <no-reply@albaspace.com.tr>"
 QUESTIONS_URL = "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.json"
 QUESTIONS_URL_TR = "https://albaspace.com.tr/game/AlbaSpace/tr/data/questions.ru.json"
 QUESTIONS_URL_EN = "https://albaspace.com.tr/game/AlbaSpace/en/data/questions.en.json"
 
-# Secrets are inherited from the current Worker and must not be committed:
-# wrangler secret put GOOGLE_CLIENT_ID
-# wrangler secret put GOOGLE_CLIENT_SECRET
+# Keep credential values outside this file in Cloudflare Worker environment settings.
+# Required names: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, RESEND_API_KEY.
