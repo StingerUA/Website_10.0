@@ -6,6 +6,13 @@ html[lang^="tr"] .pass-product-art{
   background-image:url('/assets/images/pass/tr/pass-cards.webp');
 }
 
+/* Keep the sprite usable even when a mobile browser/CSP ignores inline CSS custom properties. */
+.pass-product-art[style*="--pass-art-y:0%"]{background-position:50% 0}
+.pass-product-art[style*="--pass-art-y:25%"]{background-position:50% 25%}
+.pass-product-art[style*="--pass-art-y:50%"]{background-position:50% 50%}
+.pass-product-art[style*="--pass-art-y:75%"]{background-position:50% 75%}
+.pass-product-art[style*="--pass-art-y:100%"]{background-position:50% 100%}
+
 .pass-qr{
   box-sizing:border-box;
   width:min(260px,100%);
@@ -22,10 +29,7 @@ html[lang^="tr"] .pass-product-art{
 }
 
 @media(max-width:760px){
-  .pass-product-art{
-    background-size:100% 500%;
-    background-position:50% var(--pass-art-y);
-  }
+  .pass-product-art{background-size:100% 500%}
   .pass-ticket-qr{padding:14px}
   .pass-qr{width:min(260px,100%)}
 }
