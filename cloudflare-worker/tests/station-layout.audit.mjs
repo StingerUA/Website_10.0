@@ -11,13 +11,15 @@ const root = join(here, "../..");
 for (const file of [
   join(root, "cloudflare-worker/game-backend.js"),
   join(root, "game/AlbaSpace/shared/station-3d.js"),
-  join(root, "game/AlbaSpace/shared/station-build-mode.js")
+  join(root, "game/AlbaSpace/shared/station-build-mode.js"),
+  join(root, "game/AlbaSpace/shared/station-crew-mode.js")
 ]) execFileSync(process.execPath, ["--check", file]);
 
 for (const lang of ["ru", "tr", "en"]) {
   const html = readFileSync(join(root, `game/AlbaSpace/${lang}/player.html`), "utf8");
   assert.match(html, /\.\.\/shared\/station-3d\.js\?v=20260905-layout1/);
   assert.match(html, /\.\.\/shared\/station-build-mode\.js\?v=20260905-build1/);
+  assert.match(html, /\.\.\/shared\/station-crew-mode\.js\?v=20260905-crew1/);
 }
 
 const renderer = readFileSync(join(root, "game/AlbaSpace/shared/station-3d.js"), "utf8");
@@ -36,6 +38,16 @@ assert.match(buildMode, /parentPort/);
 assert.match(buildMode, /BUILD MODE/);
 assert.match(buildMode, /animateDock/);
 assert.match(buildMode, /stationRenderer/);
+
+const crewMode = readFileSync(join(root, "game/AlbaSpace/shared/station-crew-mode.js"), "utf8");
+assert.match(crewMode, /buildHologram/);
+assert.match(crewMode, /RECRUIT_CADET/);
+assert.match(crewMode, /moduleId/);
+assert.match(crewMode, /slotId/);
+assert.match(crewMode, /data-crew-topic/);
+assert.match(crewMode, /animateArrival/);
+assert.match(crewMode, /CrewSlot_/);
+assert.match(crewMode, /focusSlot/);
 
 class MemoryStorage {
   constructor() { this.map = new Map(); }
@@ -154,11 +166,17 @@ second.roomDO.recruit(second.room, user2, "ROVERS", freeTargetModule.id, "CrewSl
 let recruited = player2.cadets[player2.cadets.length - 1];
 assert.equal(recruited.moduleId, freeTargetModule.id);
 assert.equal(recruited.slotId, "CrewSlot_02");
+assert.equal(recruited.topic, "ROVERS");
 recruited.status = "GRADUATED";
 second.roomDO.recruit(second.room, user2, "TURKISH_SATELLITES", freeTargetModule.id, "CrewSlot_02");
 recruited = player2.cadets[player2.cadets.length - 1];
 assert.equal(recruited.moduleId, freeTargetModule.id);
 assert.equal(recruited.slotId, "CrewSlot_02");
+assert.equal(recruited.topic, "TURKISH_SATELLITES");
+
+let occupiedSlotRejected = false;
+try { second.roomDO.recruit(second.room, user2, "PLANETS", freeTargetModule.id, "CrewSlot_02"); } catch { occupiedSlotRejected = true; }
+assert.equal(occupiedSlotRejected, true);
 
 // Legacy rooms are migrated deterministically on load without a D1 schema migration.
 const legacyState = { storage: new MemoryStorage() };
@@ -191,4 +209,4 @@ const snapshotIds = legacyPlayer.modules.map(module => module.id);
 const migratedB = await legacyDO.load();
 assert.deepEqual(migratedB.players[0].modules.map(module => module.id), snapshotIds);
 
-console.log("AlbaSpace persistent station layout + Build Mode audit passed");
+console.log("AlbaSpace persistent station layout + Build Mode + Crew Slot Interaction audit passed");
