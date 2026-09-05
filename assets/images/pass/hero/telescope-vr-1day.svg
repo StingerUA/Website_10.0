@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Telescope and VR one-day experience">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#061127"/><stop offset=".55" stop-color="#12315b"/><stop offset=".8" stop-color="#6e3f37"/><stop offset="1" stop-color="#e0873d"/></linearGradient>
+  <radialGradient id="neb"><stop stop-color="#9eeaff" stop-opacity=".62"/><stop offset=".28" stop-color="#4a91ff" stop-opacity=".28"/><stop offset="1" stop-color="#2a1f68" stop-opacity="0"/></radialGradient>
+  <radialGradient id="planet"><stop stop-color="#f6cab1"/><stop offset=".58" stop-color="#a55d53"/><stop offset="1" stop-color="#311c32"/></radialGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
+  <pattern id="stars" width="155" height="115" patternUnits="userSpaceOnUse"><circle cx="18" cy="21" r="1.6" fill="#fff"/><circle cx="73" cy="18" r=".8" fill="#a9dcff"/><circle cx="130" cy="48" r="1.5" fill="#fff"/><circle cx="46" cy="91" r="1" fill="#91c7ff"/><circle cx="112" cy="99" r=".8" fill="#fff"/></pattern>
+  <linearGradient id="visor"><stop stop-color="#07131e"/><stop offset=".5" stop-color="#12344a"/><stop offset="1" stop-color="#06101b"/></linearGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#sky)"/><rect width="1600" height="680" fill="url(#stars)" opacity=".78"/>
+<ellipse cx="890" cy="290" rx="600" ry="330" fill="url(#neb)" filter="url(#glow)" opacity=".55"/>
+<path d="M585 0 C730 120 815 246 950 368 C1060 468 1195 518 1425 540" fill="none" stroke="#d4efff" stroke-width="26" opacity=".08" filter="url(#glow)"/>
+<circle cx="1280" cy="210" r="105" fill="url(#planet)"/><ellipse cx="1280" cy="210" rx="157" ry="31" fill="none" stroke="#d6a07c" stroke-width="13" opacity=".55" transform="rotate(-15 1280 210)"/>
+<circle cx="1115" cy="300" r="36" fill="#6aa4c4"/>
+<path d="M0 677 C180 601 320 636 470 620 C625 604 720 674 880 629 C1064 577 1220 647 1378 604 C1474 578 1530 563 1600 552 L1600 900 L0 900Z" fill="#04080d"/>
+<path d="M0 715 C210 664 365 703 520 681 C700 656 835 720 1015 672 C1184 627 1395 682 1600 625" fill="none" stroke="#1e2630" stroke-width="7" opacity=".65"/>
+<!-- telescope -->
+<g fill="#03070b" stroke="#17222e" stroke-width="5" transform="translate(120 430) rotate(-14 300 100)">
+  <rect x="90" y="58" width="470" height="98" rx="38"/><rect x="55" y="76" width="82" height="62" rx="16"/><rect x="525" y="78" width="112" height="54" rx="14"/><rect x="320" y="145" width="60" height="105" rx="15"/><circle cx="350" cy="251" r="36"/>
+  <path d="M350 267 L185 505 L230 515 L356 297Z"/><path d="M350 267 L448 515 L493 498 L365 294Z"/><path d="M350 267 L330 520 L376 520 L362 294Z"/>
+</g>
+<!-- VR person -->
+<path d="M865 900 C850 790 879 692 956 636 C1004 600 1028 558 1026 507 C1023 409 1098 335 1200 340 C1291 344 1355 413 1356 500 C1357 566 1321 618 1270 648 C1351 696 1391 783 1399 900Z" fill="#02060b"/>
+<path d="M1025 504 C1023 410 1092 340 1191 340 C1258 340 1313 377 1342 434 L1311 573 C1277 622 1225 643 1162 636 C1076 627 1027 584 1025 504Z" fill="#08111a"/>
+<g transform="translate(1030 405) rotate(4 170 80)"><rect x="0" y="18" width="330" height="144" rx="58" fill="url(#visor)" stroke="#235e7d" stroke-width="7"/><path d="M300 48 C379 53 399 78 389 116 C379 150 349 163 302 154" fill="none" stroke="#111d27" stroke-width="29" stroke-linecap="round"/><path d="M43 49 C-28 51 -49 78 -38 112 C-28 145 0 156 48 150" fill="none" stroke="#111b24" stroke-width="27" stroke-linecap="round"/><path d="M66 54 C130 29 218 30 278 55" fill="none" stroke="#71d9ff" stroke-width="4" opacity=".65"/></g>
+<path d="M666 124 L671 148 L696 153 L671 158 L666 182 L661 158 L636 153 L661 148Z" fill="#fff" opacity=".8"/>
+<path d="M1015 185 L1019 204 L1038 208 L1019 212 L1015 231 L1011 212 L992 208 L1011 204Z" fill="#9fe1ff" opacity=".8"/>
+<rect x="18" y="18" width="1564" height="864" rx="46" fill="none" stroke="#f5b732" stroke-width="4" opacity=".88"/>
+</svg>
