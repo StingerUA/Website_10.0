@@ -1,55 +1,34 @@
-/* Mobile reliability fixes for Pass product artwork and QR alignment. */
-/*
- * Keep background sprites as a no-JS fallback. The primary renderer now
- * inserts a real <img> element and crops the vertical 5-card sprite.
- */
-html[lang^="ru"] .pass-product-art{
-  background-image:url('/assets/images/pass-cards/ru-sprite.webp?v=20260905-0855')!important;
-}
-html[lang^="tr"] .pass-product-art{
-  background-image:url('/assets/images/pass-cards/tr-sprite.webp?v=20260905-0855')!important;
-}
-
+/* High-resolution textless Pass hero artwork and QR alignment. */
 .pass-product-art{
   position:relative;
   overflow:hidden;
-  background-repeat:no-repeat!important;
-  background-size:100% 500%!important;
-  background-color:#020617;
-}
-
-/* Background fallback positions. */
-.pass-product-art[style*="--pass-art-y:0%"]{background-position:50% 0!important}
-.pass-product-art[style*="--pass-art-y:25%"]{background-position:50% 25%!important}
-.pass-product-art[style*="--pass-art-y:50%"]{background-position:50% 50%!important}
-.pass-product-art[style*="--pass-art-y:75%"]{background-position:50% 75%!important}
-.pass-product-art[style*="--pass-art-y:100%"]{background-position:50% 100%!important}
-
-/* Primary renderer: real image, not CSS background. */
-.pass-product-art.pass-product-art-img-ready{
+  aspect-ratio:16 / 9!important;
+  min-height:0;
+  background:#020617!important;
   background-image:none!important;
+  border-bottom:1px solid rgba(245,183,50,.2);
 }
+
 .pass-product-art-img{
-  position:absolute!important;
-  left:0!important;
-  top:0;
   display:block!important;
   width:100%!important;
   max-width:none!important;
-  height:500%!important;
-  object-fit:fill!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center!important;
   margin:0!important;
   padding:0!important;
   border:0!important;
   pointer-events:none;
   user-select:none;
 }
-.pass-product-art-img-0 .pass-product-art-img{top:0!important}
-.pass-product-art-img-1 .pass-product-art-img{top:-100%!important}
-.pass-product-art-img-2 .pass-product-art-img{top:-200%!important}
-.pass-product-art-img-3 .pass-product-art-img{top:-300%!important}
-.pass-product-art-img-4 .pass-product-art-img{top:-400%!important}
-.pass-product-art-img-error{background:#020617!important}
+
+.pass-product-art-img-loaded{
+  background:#020617!important;
+}
+.pass-product-art-img-error{
+  background:#020617!important;
+}
 
 .pass-qr{
   box-sizing:border-box;
@@ -67,10 +46,7 @@ html[lang^="tr"] .pass-product-art{
 }
 
 @media(max-width:760px){
-  .pass-product-art{
-    background-size:100% 500%!important;
-    min-height:0;
-  }
+  .pass-product-art{aspect-ratio:16 / 9!important}
   .pass-ticket-qr{padding:14px}
   .pass-qr{width:min(260px,100%)}
 }
