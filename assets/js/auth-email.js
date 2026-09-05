@@ -2,7 +2,7 @@
  * auth-email.js
  * Adds email/password register & login form to the existing alien dropdown.
  * Works alongside Google auth — uses the same session cookie system.
- * 
+ *
  * Inject via include.js after header loads:
  *   <script src="/assets/js/auth-email.js" defer></script>
  */
@@ -16,6 +16,12 @@
     if (p.startsWith('/eng/')) return 'en';
     if (p.startsWith('/rus/')) return 'ru';
     return 'tr';
+  }
+
+  function forgotHref(lang) {
+    if (lang === 'en') return '/eng/forgot-password.html';
+    if (lang === 'ru') return '/rus/forgot-password.html';
+    return '/forgot-password.html';
   }
 
   var T = {
@@ -117,6 +123,16 @@
       text-align: center;
       min-height: 16px;
     }
+    .aem-forgot-link {
+      display: block;
+      width: fit-content;
+      margin: 0 auto;
+      color: #7dd3fc;
+      font-size: 12px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .aem-forgot-link:hover { text-decoration: underline; }
     .aem-divider {
       display: flex;
       align-items: center;
@@ -150,6 +166,20 @@
     t._t = setTimeout(function () { t.classList.remove('show'); }, 3000);
   }
 
+  function ensureAccountPageForgotLink() {
+    var form = document.getElementById('amFormLogin');
+    if (!form || form.querySelector('.aem-account-forgot')) return;
+    var lang = getLang();
+    var t = T[lang] || T.tr;
+    var link = document.createElement('a');
+    link.className = 'aem-forgot-link aem-account-forgot';
+    link.href = forgotHref(lang);
+    link.textContent = t.forgotPw;
+    var button = document.getElementById('amLoginBtn');
+    if (button && button.parentNode === form) button.insertAdjacentElement('afterend', link);
+    else form.appendChild(link);
+  }
+
   function buildForm() {
     var lang = getLang();
     var t    = T[lang] || T.tr;
@@ -175,6 +205,7 @@
         <input class="aem-input" id="aem-login-pw"    type="password" placeholder="${t.password}" autocomplete="current-password">
         <div class="aem-error" id="aem-login-err"></div>
         <button class="aem-submit" id="aem-login-btn">${t.loginBtn}</button>
+        <a class="aem-forgot-link" href="${forgotHref(lang)}">${t.forgotPw}</a>
       </div>
 
       <!-- Register form -->
@@ -268,6 +299,7 @@
 
   function init() {
     injectCSS();
+    ensureAccountPageForgotLink();
 
     // If header is already in the DOM — build immediately
     if (document.querySelector('#alienMenu .alien-auth-logged-out')) {
@@ -281,6 +313,7 @@
     // - Hard timeout (10s) disconnects the observer if header never arrives,
     //   preventing a forever-running observer on broken pages
     var observer = new MutationObserver(function () {
+      ensureAccountPageForgotLink();
       if (document.querySelector('#alienMenu .alien-auth-logged-out')) {
         observer.disconnect();
         clearTimeout(giveUpTimer);
