@@ -45,6 +45,9 @@ jobs:
           test -f ar/account.html
           grep -q "localizedAccountPage" assets/js/worker-auth.js
 
+      - name: Validate multilingual AlbaSpace game
+        run: node cloudflare-worker/tests/albaspace.audit.mjs
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
