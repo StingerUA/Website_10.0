@@ -73,6 +73,7 @@ jobs:
           node --check assets/js/pass-api.js
           node --check assets/js/pass-locale.js
           node --check assets/js/pass-customer.js
+          node --check assets/js/pass-art.js
           node --check assets/js/pass-staff.js
           node --check assets/js/pass-offline.js
           node --check assets/js/barcode-detector-qr-polyfill.js
