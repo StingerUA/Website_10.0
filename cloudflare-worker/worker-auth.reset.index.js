@@ -1,4 +1,4 @@
-import baseWorker, { GameRoomDO } from './worker-auth.index.js';
+import baseWorker, { GameRoomDO } from './pass-entry.js';
 import { handlePasswordResetRequest } from './password-reset-backend.js';
 
 export { GameRoomDO };
@@ -11,6 +11,8 @@ export default {
   },
 
   async scheduled(controller, env, ctx) {
-    return baseWorker.scheduled(controller, env, ctx);
+    if (typeof baseWorker.scheduled === 'function') {
+      return baseWorker.scheduled(controller, env, ctx);
+    }
   }
 };
