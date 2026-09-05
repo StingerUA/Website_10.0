@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="VR space experience">
+<defs>
+  <linearGradient id="bg" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#020814"/><stop offset=".48" stop-color="#092547"/><stop offset="1" stop-color="#25104a"/></linearGradient>
+  <radialGradient id="neb"><stop stop-color="#51c8ff" stop-opacity=".8"/><stop offset=".35" stop-color="#2077ff" stop-opacity=".35"/><stop offset="1" stop-color="#172a72" stop-opacity="0"/></radialGradient>
+  <radialGradient id="planet"><stop offset="0" stop-color="#ffcf71"/><stop offset=".48" stop-color="#d87536"/><stop offset="1" stop-color="#442346"/></radialGradient>
+  <linearGradient id="visor" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#08131f"/><stop offset=".55" stop-color="#0b3048"/><stop offset="1" stop-color="#07101b"/></linearGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="28"/></filter>
+  <pattern id="stars" width="155" height="118" patternUnits="userSpaceOnUse"><circle cx="17" cy="23" r="1.6" fill="#fff"/><circle cx="69" cy="13" r=".9" fill="#91d7ff"/><circle cx="128" cy="54" r="1.4" fill="#d9efff"/><circle cx="42" cy="94" r="1" fill="#fff"/><circle cx="111" cy="101" r=".8" fill="#a899ff"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/><rect width="1600" height="900" fill="url(#stars)" opacity=".8"/>
+<ellipse cx="1120" cy="360" rx="520" ry="350" fill="url(#neb)" filter="url(#glow)" opacity=".85"/>
+<circle cx="1265" cy="245" r="128" fill="url(#planet)"/><ellipse cx="1265" cy="245" rx="190" ry="38" fill="none" stroke="#df9a63" stroke-width="18" opacity=".68" transform="rotate(-14 1265 245)"/>
+<circle cx="1075" cy="338" r="45" fill="#5da7cd" opacity=".9"/><circle cx="1430" cy="420" r="32" fill="#9070d2"/>
+<path d="M986 155 C1122 205 1242 310 1386 372" fill="none" stroke="#76dcff" stroke-width="4" opacity=".38"/>
+<!-- ISS-inspired silhouette -->
+<g transform="translate(1085 585) rotate(-11)" fill="#cbe7ff" opacity=".68"><rect x="0" y="0" width="190" height="20" rx="4"/><rect x="78" y="-37" width="36" height="94"/><rect x="-86" y="-23" width="75" height="66" rx="4"/><rect x="201" y="-23" width="75" height="66" rx="4"/><path d="M-10 10 L-65 72 L-52 78 L20 18Z"/><path d="M200 10 L250 72 L238 80 L170 20Z"/></g>
+<!-- user silhouette -->
+<path d="M320 900 C310 770 360 650 465 599 C515 574 545 534 550 475 C559 364 645 280 759 286 C850 290 921 352 931 442 C939 516 905 572 852 612 C950 660 1005 757 1016 900Z" fill="#03070d"/>
+<path d="M535 491 C535 356 620 277 755 286 C827 291 886 329 918 389 L881 548 C844 602 787 630 710 620 C602 606 535 563 535 491Z" fill="#08131e"/>
+<!-- VR headset -->
+<g transform="translate(527 350) rotate(4 210 95)">
+  <rect x="22" y="32" width="365" height="165" rx="66" fill="url(#visor)" stroke="#1c5f86" stroke-width="8"/>
+  <path d="M382 79 C474 91 496 117 483 157 C470 198 430 209 376 190" fill="none" stroke="#121d27" stroke-width="34" stroke-linecap="round"/>
+  <path d="M28 73 C-50 74 -80 102 -68 143 C-57 182 -23 194 35 183" fill="none" stroke="#111b25" stroke-width="31" stroke-linecap="round"/>
+  <path d="M90 69 C164 39 260 42 326 75" fill="none" stroke="#62c9ff" stroke-width="5" opacity=".7"/>
+  <ellipse cx="200" cy="118" rx="118" ry="50" fill="#1e8fc0" opacity=".12" filter="url(#glow)"/>
+</g>
+<path d="M669 615 C720 629 789 619 843 585 C821 673 765 728 680 747 C626 759 574 744 526 712 C562 657 606 626 669 615Z" fill="#07101a"/>
+<path d="M100 716 C310 642 419 692 551 662" fill="none" stroke="#14304a" stroke-width="3" opacity=".8"/>
+<rect x="18" y="18" width="1564" height="864" rx="46" fill="none" stroke="#f5b732" stroke-width="4" opacity=".85"/>
+</svg>
