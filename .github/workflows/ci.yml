@@ -57,6 +57,9 @@ jobs:
       - name: Validate AlbaSpace result FX
         run: node cloudflare-worker/tests/result-fx.audit.mjs
 
+      - name: Validate AlbaSpace visual polish
+        run: node cloudflare-worker/tests/visual-polish.audit.mjs
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
