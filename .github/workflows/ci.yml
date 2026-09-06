@@ -54,6 +54,9 @@ jobs:
       - name: Validate AlbaSpace cadet inspect interaction
         run: node cloudflare-worker/tests/cadet-inspect.audit.mjs
 
+      - name: Validate AlbaSpace result FX
+        run: node cloudflare-worker/tests/result-fx.audit.mjs
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
