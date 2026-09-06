@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Account Settings | ALBA Space</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/account-settings.css?v=20260906-1">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260904-avatar1" defer></script>
+  <script src="/assets/js/account-settings.js?v=20260906-1" defer></script>
+</head>
+<body class="account-settings-page">
+  <div data-include="/header-en.html"></div>
+  <main class="account-settings-main">
+    <a class="account-settings-back" data-settings-back href="/eng/account.html">← Back to account</a>
+    <header class="account-settings-hero"><h1 data-settings-title>Account Settings</h1><p data-settings-desc>Manage your sign-in name and local password.</p></header>
+    <div class="account-settings-grid">
+      <section class="account-settings-card"><h2 data-summary-title>Account details</h2><div class="account-settings-summary"><div><span data-current-login-label>Current login</span><strong data-current-login>—</strong></div><div><span data-account-type-label>Account type</span><strong data-account-type>—</strong></div></div><div class="account-settings-message" data-global-message></div></section>
+      <section class="account-settings-card" data-login-card><h2 data-login-title>Change username</h2><p data-login-help></p><form class="account-settings-form" data-login-form><div class="account-settings-field"><label data-new-login-label>New username</label><input class="account-settings-input" data-new-login type="text" autocomplete="username" maxlength="32"></div><div class="account-settings-field"><label data-login-password-label>Current password</label><input class="account-settings-input" data-login-password type="password" autocomplete="current-password"></div><button class="account-settings-button" data-login-submit type="submit">Change username</button><div class="account-settings-message" data-login-message></div></form></section>
+      <section class="account-settings-card account-settings-hidden" data-login-unavailable></section>
+      <section class="account-settings-card" data-password-card><h2 data-password-title>Change password</h2><p data-password-help></p><form class="account-settings-form" data-password-form><div class="account-settings-field"><label data-password-current-label>Current password</label><input class="account-settings-input" data-password-current type="password" autocomplete="current-password"></div><div class="account-settings-field"><label data-new-password-label>New password</label><input class="account-settings-input" data-new-password type="password" autocomplete="new-password"></div><div class="account-settings-field"><label data-confirm-password-label>Repeat new password</label><input class="account-settings-input" data-confirm-password type="password" autocomplete="new-password"></div><button class="account-settings-button" data-password-submit type="submit">Change password</button><div class="account-settings-message" data-password-message></div></form></section>
+      <section class="account-settings-card account-settings-hidden" data-password-unavailable></section>
+    </div>
+  </main>
+  <div data-include="/footer-en.html"></div>
+</body>
+</html>
