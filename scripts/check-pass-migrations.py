@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sqlite3
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +19,8 @@ REQUIRED_TABLES = {
     "entitlement_usage",
     "pass_idempotency",
     "audit_log",
+    "quick_accounts",
+    "google_link_intents",
 }
 EXPECTED_EMPLOYEES = (
     "nncdecdgc@gmail.com",
@@ -31,9 +34,13 @@ def apply_pass_migrations(conn: sqlite3.Connection) -> None:
         "0003_albaspace_pass_mvp.sql",
         "0004_albaspace_pass_atomic_guards.sql",
         "0007_add_staff_employees.sql",
+        "0008_quick_uzaydash_accounts.sql",
     ):
         sql = (MIGRATIONS / filename).read_text(encoding="utf-8")
         conn.executescript(sql)
+
+    # 0008 is intentionally CREATE IF NOT EXISTS-only and must be safe to re-run.
+    conn.executescript((MIGRATIONS / "0008_quick_uzaydash_accounts.sql").read_text(encoding="utf-8"))
 
 
 def validate(conn: sqlite3.Connection, label: str) -> None:
@@ -69,6 +76,33 @@ def validate(conn: sqlite3.Connection, label: str) -> None:
     audit_columns = {row[1] for row in conn.execute("PRAGMA table_info(audit_log)")}
     if "request_id" not in audit_columns:
         raise SystemExit(f"[{label}] Missing audit_log.request_id")
+
+    quick_columns = {row[1] for row in conn.execute("PRAGMA table_info(quick_accounts)")}
+    for column in ("account_no", "user_id", "username", "created_at", "linked_at"):
+        if column not in quick_columns:
+            raise SystemExit(f"[{label}] Missing quick_accounts.{column}")
+
+    link_columns = {row[1] for row in conn.execute("PRAGMA table_info(google_link_intents)")}
+    for column in ("state", "user_id", "return_url", "expires_at", "created_at"):
+        if column not in link_columns:
+            raise SystemExit(f"[{label}] Missing google_link_intents.{column}")
+
+    # AUTOINCREMENT must give globally ordered Uzaydash numbers even when two
+    # accounts are created close together.
+    user_ids = [row[0] for row in conn.execute("SELECT id FROM users ORDER BY rowid LIMIT 2")]
+    if len(user_ids) >= 2:
+        first = conn.execute(
+            "INSERT INTO quick_accounts (user_id, username, created_at) VALUES (?, NULL, 1)",
+            (user_ids[0],),
+        ).lastrowid
+        second = conn.execute(
+            "INSERT INTO quick_accounts (user_id, username, created_at) VALUES (?, NULL, 1)",
+            (user_ids[1],),
+        ).lastrowid
+        if second != first + 1:
+            raise SystemExit(f"[{label}] Uzaydash AUTOINCREMENT sequence is not monotonic")
+        conn.execute("UPDATE quick_accounts SET username = ? WHERE account_no = ?", (f"Uzaydash-{first}", first))
+        conn.execute("UPDATE quick_accounts SET username = ? WHERE account_no = ?", (f"Uzaydash-{second}", second))
 
     fk_errors = list(conn.execute("PRAGMA foreign_key_check"))
     if fk_errors:
@@ -133,6 +167,17 @@ def text_id_case() -> None:
     conn.close()
 
 
+def syntax_checks() -> None:
+    for relative in (
+        "cloudflare-worker/quick-account-backend.js",
+        "cloudflare-worker/worker-auth.quick.index.js",
+        "assets/js/quick-account.js",
+        "assets/js/auth-email.js",
+    ):
+        subprocess.run(["node", "--check", relative], cwd=ROOT, check=True)
+
+
 integer_id_case()
 text_id_case()
-print("ALBA Space Pass migrations: OK (INTEGER/TEXT ids + staff RBAC seeds)")
+syntax_checks()
+print("ALBA Space Pass migrations: OK (INTEGER/TEXT ids + staff RBAC + Uzaydash quick accounts)")

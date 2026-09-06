@@ -24,6 +24,16 @@
     return '/forgot-password.html';
   }
 
+  function loadQuickAccountPage() {
+    var path = (window.location.pathname || '').toLowerCase();
+    if (!/\/(?:eng\/|rus\/|ar\/)?account-menu\.html$/.test(path)) return;
+    if (document.querySelector('script[src*="quick-account.js"]')) return;
+    var script = document.createElement('script');
+    script.src = '/assets/js/quick-account.js?v=20260906-uzaydash-v1';
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+
   var T = {
     tr: {
       tabLogin: 'Giriş Yap', tabRegister: 'Kayıt Ol',
@@ -299,6 +309,7 @@
 
   function init() {
     injectCSS();
+    loadQuickAccountPage();
     ensureAccountPageForgotLink();
 
     // If header is already in the DOM — build immediately
