@@ -7,5 +7,9 @@
 @import url('/assets/css/dropdown-optimized-legacy.css?v=20260829-services-up-2cm');
 @import url('/assets/css/header-dropdown-blue.css?v=20260829-services-up-2cm');
 @import url('/assets/css/desktop-header-clearance.css?v=20260829-services-up-2cm');
-@import url('/assets/css/desktop-about-dropdown-left.css?v=20260829-services-up-2cm');
 @import url('/assets/css/desktop-blog-gap-normalization.css?v=20260829-services-up-2cm');
+
+/* IMPORTANT: load the one canonical desktop ABOUT/Hakkimizda position last.
+   The unique cache key also prevents an older cached left:-25px version from
+   winning after deployment. */
+@import url('/assets/css/desktop-about-dropdown-left.css?v=20260906-about-left-final');
