@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>إعدادات الحساب | ALBA Space</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/rtl.css">
+  <link rel="stylesheet" href="/assets/css/account-settings.css?v=20260906-1">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260904-avatar1" defer></script>
+  <script src="/assets/js/account-settings.js?v=20260906-1" defer></script>
+</head>
+<body class="account-settings-page">
+  <div data-include="/header-ar.html"></div>
+  <main class="account-settings-main">
+    <a class="account-settings-back" data-settings-back href="/ar/account.html">← العودة إلى الحساب</a>
+    <header class="account-settings-hero"><h1 data-settings-title>إعدادات الحساب</h1><p data-settings-desc>إدارة اسم تسجيل الدخول وكلمة المرور المحلية.</p></header>
+    <div class="account-settings-grid">
+      <section class="account-settings-card"><h2 data-summary-title>بيانات الحساب</h2><div class="account-settings-summary"><div><span data-current-login-label>تسجيل الدخول الحالي</span><strong data-current-login>—</strong></div><div><span data-account-type-label>نوع الحساب</span><strong data-account-type>—</strong></div></div><div class="account-settings-message" data-global-message></div></section>
+      <section class="account-settings-card" data-login-card><h2 data-login-title>تغيير اسم المستخدم</h2><p data-login-help></p><form class="account-settings-form" data-login-form><div class="account-settings-field"><label data-new-login-label>اسم المستخدم الجديد</label><input class="account-settings-input" data-new-login type="text" autocomplete="username" maxlength="32"></div><div class="account-settings-field"><label data-login-password-label>كلمة المرور الحالية</label><input class="account-settings-input" data-login-password type="password" autocomplete="current-password"></div><button class="account-settings-button" data-login-submit type="submit">تغيير اسم المستخدم</button><div class="account-settings-message" data-login-message></div></form></section>
+      <section class="account-settings-card account-settings-hidden" data-login-unavailable></section>
+      <section class="account-settings-card" data-password-card><h2 data-password-title>تغيير كلمة المرور</h2><p data-password-help></p><form class="account-settings-form" data-password-form><div class="account-settings-field"><label data-password-current-label>كلمة المرور الحالية</label><input class="account-settings-input" data-password-current type="password" autocomplete="current-password"></div><div class="account-settings-field"><label data-new-password-label>كلمة المرور الجديدة</label><input class="account-settings-input" data-new-password type="password" autocomplete="new-password"></div><div class="account-settings-field"><label data-confirm-password-label>أعد كلمة المرور الجديدة</label><input class="account-settings-input" data-confirm-password type="password" autocomplete="new-password"></div><button class="account-settings-button" data-password-submit type="submit">تغيير كلمة المرور</button><div class="account-settings-message" data-password-message></div></form></section>
+      <section class="account-settings-card account-settings-hidden" data-password-unavailable></section>
+    </div>
+  </main>
+  <div data-include="/footer-ar.html"></div>
+</body>
+</html>
