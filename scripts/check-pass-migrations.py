@@ -21,6 +21,7 @@ REQUIRED_TABLES = {
     "audit_log",
     "quick_accounts",
     "google_link_intents",
+    "local_usernames",
 }
 EXPECTED_EMPLOYEES = (
     "nncdecdgc@gmail.com",
@@ -35,12 +36,14 @@ def apply_pass_migrations(conn: sqlite3.Connection) -> None:
         "0004_albaspace_pass_atomic_guards.sql",
         "0007_add_staff_employees.sql",
         "0008_quick_uzaydash_accounts.sql",
+        "0009_account_local_usernames.sql",
     ):
         sql = (MIGRATIONS / filename).read_text(encoding="utf-8")
         conn.executescript(sql)
 
-    # 0008 is intentionally CREATE IF NOT EXISTS-only and must be safe to re-run.
+    # 0008/0009 are CREATE IF NOT EXISTS / INSERT OR IGNORE migrations and must be safe to re-run.
     conn.executescript((MIGRATIONS / "0008_quick_uzaydash_accounts.sql").read_text(encoding="utf-8"))
+    conn.executescript((MIGRATIONS / "0009_account_local_usernames.sql").read_text(encoding="utf-8"))
 
 
 def validate(conn: sqlite3.Connection, label: str) -> None:
@@ -87,8 +90,14 @@ def validate(conn: sqlite3.Connection, label: str) -> None:
         if column not in link_columns:
             raise SystemExit(f"[{label}] Missing google_link_intents.{column}")
 
+    local_columns = {row[1] for row in conn.execute("PRAGMA table_info(local_usernames)")}
+    for column in ("user_id", "username", "created_at", "updated_at"):
+        if column not in local_columns:
+            raise SystemExit(f"[{label}] Missing local_usernames.{column}")
+
     # AUTOINCREMENT must give globally ordered Uzaydash numbers even when two
-    # accounts are created close together.
+    # accounts are created close together. 0009 triggers must mirror those names
+    # into local_usernames so custom-login auth can use the same identity.
     user_ids = [row[0] for row in conn.execute("SELECT id FROM users ORDER BY rowid LIMIT 2")]
     if len(user_ids) >= 2:
         first = conn.execute(
@@ -101,8 +110,13 @@ def validate(conn: sqlite3.Connection, label: str) -> None:
         ).lastrowid
         if second != first + 1:
             raise SystemExit(f"[{label}] Uzaydash AUTOINCREMENT sequence is not monotonic")
-        conn.execute("UPDATE quick_accounts SET username = ? WHERE account_no = ?", (f"Uzaydash-{first}", first))
-        conn.execute("UPDATE quick_accounts SET username = ? WHERE account_no = ?", (f"Uzaydash-{second}", second))
+        first_name = f"Uzaydash-{first}"
+        second_name = f"Uzaydash-{second}"
+        conn.execute("UPDATE quick_accounts SET username = ? WHERE account_no = ?", (first_name, first))
+        conn.execute("UPDATE quick_accounts SET username = ? WHERE account_no = ?", (second_name, second))
+        mirrored = dict(conn.execute("SELECT user_id, username FROM local_usernames"))
+        if mirrored.get(user_ids[0]) != first_name or mirrored.get(user_ids[1]) != second_name:
+            raise SystemExit(f"[{label}] quick account username trigger did not sync local_usernames")
 
     fk_errors = list(conn.execute("PRAGMA foreign_key_check"))
     if fk_errors:
@@ -171,8 +185,11 @@ def syntax_checks() -> None:
     for relative in (
         "cloudflare-worker/quick-account-backend.js",
         "cloudflare-worker/worker-auth.quick.index.js",
+        "cloudflare-worker/account-settings-backend.js",
+        "cloudflare-worker/worker-auth.settings.index.js",
         "assets/js/quick-account.js",
         "assets/js/auth-email.js",
+        "assets/js/account-settings.js",
     ):
         subprocess.run(["node", "--check", relative], cwd=ROOT, check=True)
 
@@ -180,4 +197,4 @@ def syntax_checks() -> None:
 integer_id_case()
 text_id_case()
 syntax_checks()
-print("ALBA Space Pass migrations: OK (INTEGER/TEXT ids + staff RBAC + Uzaydash quick accounts)")
+print("ALBA Space Pass migrations: OK (INTEGER/TEXT ids + staff RBAC + Uzaydash + account settings)")
