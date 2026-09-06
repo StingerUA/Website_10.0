@@ -2,10 +2,10 @@
   const raw=(document.documentElement.lang||'tr').toLowerCase();
   const lang=raw.startsWith('ru')?'ru':raw.startsWith('en')?'en':raw.startsWith('ar')?'ar':'tr';
   const copy={
-    tr:{title:'ALBA Space Experience Pass',desc:'Etkinlik deneyimlerini ayır, ödeme durumunu takip et ve aktif QR Pass’lerini görüntüle.',buy:'Experience Pass al',mine:'QR Pass’lerim',staffTitle:'Personel araçları',staffDesc:'Ödeme onayı, müşteri arama ve QR entitlement kullanımı.',staff:'Personel paneli',admin:'Pass yönetimi'},
-    en:{title:'ALBA Space Experience Pass',desc:'Reserve event experiences, track payment status and open your active QR Passes.',buy:'Get Experience Pass',mine:'My QR Passes',staffTitle:'Staff tools',staffDesc:'Confirm payments, search customers and redeem QR entitlements.',staff:'Staff panel',admin:'Pass administration'},
-    ru:{title:'ALBA Space Experience Pass',desc:'Бронируйте впечатления на мероприятиях, следите за оплатой и открывайте активные QR Pass.',buy:'Приобрести Experience Pass',mine:'Мои QR Pass',staffTitle:'Инструменты сотрудника',staffDesc:'Подтверждение оплаты, поиск клиентов и списание прав по QR.',staff:'Панель сотрудника',admin:'Управление Pass'},
-    ar:{title:'ALBA Space Experience Pass',desc:'احجز تجارب الفعاليات وتابع حالة الدفع وافتح تصاريح QR النشطة الخاصة بك.',buy:'احصل على Experience Pass',mine:'تصاريح QR الخاصة بي',staffTitle:'أدوات الموظفين',staffDesc:'تأكيد المدفوعات والبحث عن العملاء واستخدام صلاحيات QR.',staff:'لوحة الموظف',admin:'إدارة Pass'}
+    tr:{title:'ALBA Space Experience Pass',desc:'Etkinlik deneyimlerini ayır, ödeme durumunu takip et ve aktif QR Pass’lerini görüntüle.',buy:'Experience Pass al',mine:'QR Pass’lerim',staffTitle:'Personel araçları',staffDesc:'Ödeme onayı, müşteri arama ve QR entitlement kullanımı.',staff:'Personel paneli',admin:'Pass yönetimi',logout:'Hesaptan çık'},
+    en:{title:'ALBA Space Experience Pass',desc:'Reserve event experiences, track payment status and open your active QR Passes.',buy:'Get Experience Pass',mine:'My QR Passes',staffTitle:'Staff tools',staffDesc:'Confirm payments, search customers and redeem QR entitlements.',staff:'Staff panel',admin:'Pass administration',logout:'Sign out of account'},
+    ru:{title:'ALBA Space Experience Pass',desc:'Бронируйте впечатления на мероприятиях, следите за оплатой и открывайте активные QR Pass.',buy:'Приобрести Experience Pass',mine:'Мои QR Pass',staffTitle:'Инструменты сотрудника',staffDesc:'Подтверждение оплаты, поиск клиентов и списание прав по QR.',staff:'Панель сотрудника',admin:'Управление Pass',logout:'Выйти из аккаунта'},
+    ar:{title:'ALBA Space Experience Pass',desc:'احجز تجارب الفعاليات وتابع حالة الدفع وافتح تصاريح QR النشطة الخاصة بك.',buy:'احصل على Experience Pass',mine:'تصاريح QR الخاصة بي',staffTitle:'أدوات الموظفين',staffDesc:'تأكيد المدفوعات والبحث عن العملاء واستخدام صلاحيات QR.',staff:'لوحة الموظف',admin:'إدارة Pass',logout:'تسجيل الخروج من الحساب'}
   }[lang];
   // Arabic Pass pages are not localized yet, so keep those links on the existing English UI rather than creating 404 routes.
   const prefix=lang==='en'?'/eng':lang==='ru'?'/rus':lang==='ar'?'/eng':'';
@@ -28,6 +28,19 @@
     }
   }
 
+  function addLogoutAction(main){
+    if(main.querySelector('[data-account-logout]'))return;
+    const section=document.createElement('section');
+    section.className='account-logout-section';
+    section.innerHTML=`<button type="button" class="account-logout-button" data-account-logout>${esc(copy.logout)}</button>`;
+    main.appendChild(section);
+    if(!document.querySelector('script[src*="account-logout.js"]')){
+      const script=document.createElement('script');
+      script.src='/assets/js/account-logout.js?v=20260906-1';
+      document.head.appendChild(script);
+    }
+  }
+
   async function init(){
     const main=document.querySelector('.account-main');
     const first=main?.querySelector('.account-card');
@@ -37,6 +50,7 @@
     customer.className='account-card account-section account-pass-section';
     customer.innerHTML=`<h2>${esc(copy.title)}</h2><p>${esc(copy.desc)}</p><div class="account-pass-actions"><a class="account-pass-link primary" href="${prefix}/experience-pass.html">🎟️ ${esc(copy.buy)}</a><a class="account-pass-link" href="${prefix}/passes.html">📱 ${esc(copy.mine)}</a></div>`;
     first.insertAdjacentElement('afterend',customer);
+    addLogoutAction(main);
 
     try{
       if(!window.AlbaPassApi)return;
