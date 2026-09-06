@@ -1,13 +1,15 @@
 /* Desktop-only canonical layout for ABOUT / HAKKIMIZDA dropdown.
-   There must be exactly one desktop position for this panel: it is anchored to
-   the trigger's right edge and expands to the left, so it never runs off-screen.
-   The legacy generic active/hover transforms are explicitly neutralized here.
+   This file is the final authority for the desktop About menu.
+   Older shared dropdown CSS still contains a legacy left:-25px/right:auto
+   layout. The selectors below intentionally outrank that rule so there is
+   only one desktop position: the menu is anchored to the trigger's RIGHT edge
+   and grows to the LEFT, never off-screen to the right.
    Mobile layout is untouched. */
 
 @media (min-width: 1024px) {
-  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu,
-  .main-nav .dropdown.active > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu,
-  .main-nav .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu:hover {
+  html body .site-header .main-nav > .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu,
+  html body .site-header .main-nav > .dropdown.active > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu,
+  html body .site-header .main-nav > .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu:hover {
     position: absolute !important;
     left: auto !important;
     right: 0 !important;
@@ -15,8 +17,34 @@
     margin-top: 8px !important;
     transform: none !important;
     transform-origin: top right !important;
-    /* Do not animate transform: the old stylesheet changed the X transform on
-       hover, which made the same menu jump into a second, right-opening layout. */
+    width: max-content !important;
+    min-width: max-content !important;
+    max-width: none !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    /* Never animate X/Y transforms. The legacy rule used transform changes
+       that made this same panel appear to jump to the old right-opening
+       position. */
     transition: opacity 0.3s ease, visibility 0.3s ease !important;
+  }
+
+  /* Closed state. Keep it in the one canonical position even while hidden. */
+  html body .site-header .main-nav > .dropdown:not(.active) > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: none !important;
+  }
+
+  /* Open state. Do not let the generic .dropdown.active transform re-center
+     or shift the About menu to the right. */
+  html body .site-header .main-nav > .dropdown.active > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu,
+  html body .site-header .main-nav > .dropdown > .dropdown-trigger[href$="hakkimizda.html"] + .dropdown-menu:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    left: auto !important;
+    right: 0 !important;
+    transform: none !important;
   }
 }
