@@ -14,6 +14,31 @@
 
   var DATE_LOCALE = { tr: 'tr-TR', en: 'en-US', ru: 'ru-RU', ar: 'ar-SA' }[LOCALE];
 
+  var MUZAFFER_NAMES = [
+    'Muzaffer Enes İpçi',
+    'Музаффер Энес Ипчи',
+    'مظفر إنس إيبجي'
+  ];
+  var MUZAFFER_ROLE = {
+    tr: 'Yazar',
+    en: 'Writer',
+    ru: 'Автор',
+    ar: 'كاتب'
+  };
+
+  function normalizeMuzafferRole() {
+    document.querySelectorAll('.blog-author-details').forEach(function (details) {
+      var author = details.querySelector('.blog-author');
+      if (!author || MUZAFFER_NAMES.indexOf(author.textContent.trim()) === -1) return;
+
+      var role = author.nextElementSibling;
+      if (role && role.classList && role.classList.contains('dot')) {
+        role = role.nextElementSibling;
+      }
+      if (role) role.textContent = MUZAFFER_ROLE[LOCALE] || MUZAFFER_ROLE.tr;
+    });
+  }
+
   function fmtDate(iso) {
     try {
       var opts = { day: '2-digit', month: 'long', year: 'numeric' };
@@ -225,6 +250,7 @@
   });
 
   document.addEventListener('DOMContentLoaded', function () {
+    normalizeMuzafferRole();
     renderGrid();
     renderArticleExtras();
   });
