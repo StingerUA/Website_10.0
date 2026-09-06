@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hesap Ayarları | ALBA Space</title>
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/account-settings.css?v=20260906-1">
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+  <script src="/assets/js/worker-auth.js?v=20260904-avatar1" defer></script>
+  <script src="/assets/js/account-settings.js?v=20260906-1" defer></script>
+</head>
+<body class="account-settings-page">
+  <div data-include="/header-tr.html"></div>
+  <main class="account-settings-main">
+    <a class="account-settings-back" data-settings-back href="/account.html">← Hesaba dön</a>
+    <header class="account-settings-hero"><h1 data-settings-title>Hesap Ayarları</h1><p data-settings-desc>Giriş bilgilerini ve yerel parolanı yönet.</p></header>
+    <div class="account-settings-grid">
+      <section class="account-settings-card"><h2 data-summary-title>Hesap bilgileri</h2><div class="account-settings-summary"><div><span data-current-login-label>Geçerli giriş</span><strong data-current-login>—</strong></div><div><span data-account-type-label>Hesap türü</span><strong data-account-type>—</strong></div></div><div class="account-settings-message" data-global-message></div></section>
+      <section class="account-settings-card" data-login-card><h2 data-login-title>Kullanıcı adını değiştir</h2><p data-login-help></p><form class="account-settings-form" data-login-form><div class="account-settings-field"><label data-new-login-label>Yeni kullanıcı adı</label><input class="account-settings-input" data-new-login type="text" autocomplete="username" maxlength="32"></div><div class="account-settings-field"><label data-login-password-label>Mevcut parola</label><input class="account-settings-input" data-login-password type="password" autocomplete="current-password"></div><button class="account-settings-button" data-login-submit type="submit">Kullanıcı adını değiştir</button><div class="account-settings-message" data-login-message></div></form></section>
+      <section class="account-settings-card account-settings-hidden" data-login-unavailable></section>
+      <section class="account-settings-card" data-password-card><h2 data-password-title>Parolayı değiştir</h2><p data-password-help></p><form class="account-settings-form" data-password-form><div class="account-settings-field"><label data-password-current-label>Mevcut parola</label><input class="account-settings-input" data-password-current type="password" autocomplete="current-password"></div><div class="account-settings-field"><label data-new-password-label>Yeni parola</label><input class="account-settings-input" data-new-password type="password" autocomplete="new-password"></div><div class="account-settings-field"><label data-confirm-password-label>Yeni parolayı tekrar yaz</label><input class="account-settings-input" data-confirm-password type="password" autocomplete="new-password"></div><button class="account-settings-button" data-password-submit type="submit">Parolayı değiştir</button><div class="account-settings-message" data-password-message></div></form></section>
+      <section class="account-settings-card account-settings-hidden" data-password-unavailable></section>
+    </div>
+  </main>
+  <div data-include="/footer-tr.html"></div>
+</body>
+</html>
