@@ -12,6 +12,15 @@ export default {
       return new Response(null, { status: 204, headers: cors });
     }
 
+    // Emergency resource switch: keep online QR/payment workflows and legacy
+    // offline sync intact, but do not generate any new large offline snapshot.
+    // Set OFFLINE_STAFF_BOOTSTRAP_ENABLED=true later to re-enable deliberately.
+    if (url.pathname === '/api/staff/offline/bootstrap'
+      && request.method === 'POST'
+      && String(env.OFFLINE_STAFF_BOOTSTRAP_ENABLED || 'false').toLowerCase() !== 'true') {
+      return json({ error: 'OFFLINE_SNAPSHOT_DISABLED' }, 503, cors);
+    }
+
     if (isAccountSettingsRoute(url.pathname, request.method)) {
       try {
         return await handleAccountSettingsRequest(request, env, cors);
