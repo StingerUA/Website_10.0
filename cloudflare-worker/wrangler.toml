@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat", "streams_enable_constructors"]
 workers_dev = true
 
 [triggers]
-crons = ["0 */5 * * *", "17 * * * *"]
+crons = ["0 */5 * * *", "17 */3 * * *"]
 
 [[d1_databases]]
 binding = "DB"
@@ -34,4 +34,5 @@ PASSWORD_RESET_FROM = "AlbaSpace <no-reply@albaspace.com.tr>"
 QUESTIONS_URL = "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.json"
 QUESTIONS_URL_TR = "https://albaspace.com.tr/game/AlbaSpace/tr/data/questions.ru.json"
 QUESTIONS_URL_EN = "https://albaspace.com.tr/game/AlbaSpace/en/data/questions.en.json"
-LL2_UPSTREAM_BUDGET_PER_HOUR = "14"
+LL2_UPSTREAM_BUDGET_PER_HOUR = "6"
+OFFLINE_STAFF_BOOTSTRAP_ENABLED = "false"

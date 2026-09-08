@@ -3,9 +3,9 @@ import appWorker, { GameRoomDO } from "./worker-with-ll2-auth.js";
 export { GameRoomDO };
 
 const PROD_PREFIX = "https://ll.thespacedevs.com/2.3.0/";
-const REFRESH_CRON = "17 * * * *";
-const MAX_REFRESHES_PER_RUN = 3;
-const DEFAULT_BUDGET = 14;
+const REFRESH_CRON = "17 */3 * * *";
+const MAX_REFRESHES_PER_RUN = 2;
+const DEFAULT_BUDGET = 6;
 const WORKERS_DEV_ORIGIN = "https://albaspace-api.nncdecdgc.workers.dev";
 
 function policyForUrl(value) {
@@ -15,14 +15,14 @@ function policyForUrl(value) {
     path = url.pathname.replace(/^\/2\.3\.0\//, "");
   } catch {}
 
-  if (path === "launches/upcoming/") return { fresh: 5 * 60, stale: 2 * 60 * 60 };
-  if (/^launches\/[0-9a-f-]{32,40}\/$/i.test(path)) return { fresh: 30 * 60, stale: 24 * 60 * 60 };
-  if (path === "launches/previous/") return { fresh: 6 * 60 * 60, stale: 7 * 24 * 60 * 60 };
-  if (path === "launches/") return { fresh: 2 * 60 * 60, stale: 3 * 24 * 60 * 60 };
-  if (path === "agencies/") return { fresh: 24 * 60 * 60, stale: 30 * 24 * 60 * 60 };
-  if (path === "pads/") return { fresh: 6 * 60 * 60, stale: 30 * 24 * 60 * 60 };
-  if (/^launcher_configurations\/\d+\/$/.test(path)) return { fresh: 24 * 60 * 60, stale: 30 * 24 * 60 * 60 };
-  return { fresh: 6 * 60 * 60, stale: 14 * 24 * 60 * 60 };
+  if (path === "launches/upcoming/") return { fresh: 15 * 60, stale: 6 * 60 * 60 };
+  if (/^launches\/[0-9a-f-]{32,40}\/$/i.test(path)) return { fresh: 60 * 60, stale: 24 * 60 * 60 };
+  if (path === "launches/previous/") return { fresh: 12 * 60 * 60, stale: 7 * 24 * 60 * 60 };
+  if (path === "launches/") return { fresh: 6 * 60 * 60, stale: 3 * 24 * 60 * 60 };
+  if (path === "agencies/") return { fresh: 7 * 24 * 60 * 60, stale: 30 * 24 * 60 * 60 };
+  if (path === "pads/") return { fresh: 24 * 60 * 60, stale: 30 * 24 * 60 * 60 };
+  if (/^launcher_configurations\/\d+\/$/.test(path)) return { fresh: 7 * 24 * 60 * 60, stale: 30 * 24 * 60 * 60 };
+  return { fresh: 12 * 60 * 60, stale: 14 * 24 * 60 * 60 };
 }
 
 async function ensureBudgetSchema(env) {
@@ -64,23 +64,28 @@ async function reserveUpstreamAttempt(env, now) {
   }
 }
 
-async function oldestCachedRows(env) {
+async function oldestCachedRows(env, now) {
   if (!env.DB) return [];
   try {
     const result = await env.DB.prepare(`SELECT cache_key, updated_at, refresh_at
       FROM orbital_ll2_cache
       WHERE cache_key LIKE ?
+        AND refresh_at <= ?
+        AND cache_key NOT LIKE '%search=%'
+        AND cache_key NOT LIKE '%offset=%'
       ORDER BY
         CASE
           WHEN cache_key LIKE '%/launches/upcoming/%' THEN 0
           WHEN cache_key LIKE '%/launches/?%' OR cache_key LIKE '%/launches/' THEN 1
-          WHEN cache_key LIKE '%/agencies/%' THEN 2
-          WHEN cache_key LIKE '%/pads/%' THEN 3
-          ELSE 4
+          WHEN cache_key LIKE '%/launcher_configurations/%' THEN 2
+          WHEN cache_key LIKE '%/agencies/%' THEN 3
+          WHEN cache_key LIKE '%/pads/%' THEN 4
+          ELSE 5
         END,
+        refresh_at ASC,
         updated_at ASC
-      LIMIT 12`
-    ).bind(`${PROD_PREFIX}%`).all();
+      LIMIT 8`
+    ).bind(`${PROD_PREFIX}%`, now).all();
     return Array.isArray(result?.results) ? result.results : [];
   } catch (error) {
     console.warn("LL2 scheduled cache scan failed", error);
@@ -137,7 +142,8 @@ async function purgeEdgeCopies(env, cacheKey) {
 }
 
 async function refreshProductionCache(env) {
-  const rows = await oldestCachedRows(env);
+  const startedAt = Math.floor(Date.now() / 1000);
+  const rows = await oldestCachedRows(env, startedAt);
   if (!rows.length) return { attempted: 0, updated: 0, rateLimited: false };
 
   let attempted = 0;
@@ -157,7 +163,7 @@ async function refreshProductionCache(env) {
 
     const headers = {
       Accept: "application/json",
-      "User-Agent": "AlbaSpace-OrbitalAtlas-ScheduledRefresh/1.0 (https://albaspace.com.tr)"
+      "User-Agent": "AlbaSpace-OrbitalAtlas-ScheduledRefresh/1.1 (https://albaspace.com.tr)"
     };
     if (token) headers.Authorization = `Token ${token}`;
 
