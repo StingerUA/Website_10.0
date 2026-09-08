@@ -35,3 +35,4 @@ QUESTIONS_URL = "https://albaspace.com.tr/game/AlbaSpace/ru/data/questions.ru.js
 QUESTIONS_URL_TR = "https://albaspace.com.tr/game/AlbaSpace/tr/data/questions.ru.json"
 QUESTIONS_URL_EN = "https://albaspace.com.tr/game/AlbaSpace/en/data/questions.en.json"
 LL2_UPSTREAM_BUDGET_PER_HOUR = "6"
+OFFLINE_STAFF_BOOTSTRAP_ENABLED = "false"
