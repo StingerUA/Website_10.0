@@ -69,6 +69,9 @@ jobs:
       - name: Validate AlbaSpace external equipment
         run: node cloudflare-worker/tests/external-equipment.audit.mjs
 
+      - name: Validate AlbaSpace cinematic environment
+        run: node cloudflare-worker/tests/cinematic-environment.audit.mjs
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
