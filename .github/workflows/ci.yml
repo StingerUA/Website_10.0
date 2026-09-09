@@ -78,6 +78,9 @@ jobs:
       - name: Validate AlbaSpace station phase UX
         run: node cloudflare-worker/tests/station-phase-ui.audit.mjs
 
+      - name: Validate AlbaSpace endgame UX
+        run: node cloudflare-worker/tests/endgame-ux.audit.mjs
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
