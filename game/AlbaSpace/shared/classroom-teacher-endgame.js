@@ -168,7 +168,7 @@
       if (includeCredits) {
         return `<tr class="${winner ? "winner" : ""}"><td>${winner ? "🏆" : index + 1}</td><td><strong>${escapeHtml(player.company || "—")}</strong></td><td>${moduleCount(player)}/10</td><td>${Number(player.graduates || 0)}</td><td>${Number(player.credits || 0)}</td></tr>`;
       }
-      return `<div class="alba-rank-row ${winner ? "winner" : ""><div class="alba-rank-pos">${winner ? "🏆" : index + 1}</div><div class="alba-rank-company">${escapeHtml(player.company || "—")}</div><div class="alba-rank-metric">🛰️ <strong>${moduleCount(player)}/10</strong></div><div class="alba-rank-metric">🎓 <strong>${Number(player.graduates || 0)}</strong></div></div>`;
+      return `<div class="alba-rank-row ${winner ? "winner" : ""}"><div class="alba-rank-pos">${winner ? "🏆" : index + 1}</div><div class="alba-rank-company">${escapeHtml(player.company || "—")}</div><div class="alba-rank-metric">🛰️ <strong>${moduleCount(player)}/10</strong></div><div class="alba-rank-metric">🎓 <strong>${Number(player.graduates || 0)}</strong></div></div>`;
     }).join("");
   }
 
