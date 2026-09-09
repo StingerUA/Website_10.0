@@ -19,7 +19,8 @@
 try{
  const rs=await Promise.all(['app.001.txt','app.002.txt'].map(x=>fetch(x,{cache:'force-cache'})));
  if(rs.some(r=>!r.ok))throw new Error('app');
- const code=(await Promise.all(rs.map(r=>r.text()))).join('');
+ let code=(await Promise.all(rs.map(r=>r.text()))).join('');
+ code=code.replace("'data.003.b64'","'data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'");
  await import(URL.createObjectURL(new Blob([code],{type:'text/javascript'})));
 }catch(e){console.error(e);document.getElementById('loading').innerHTML='<div><strong>ALBAMEN Cosmos</strong><span>Unable to load the game. Please refresh the page.</span></div>'}
 </script>
