@@ -75,6 +75,9 @@ jobs:
       - name: Validate AlbaSpace living motion
         run: node cloudflare-worker/tests/living-motion.audit.mjs
 
+      - name: Validate AlbaSpace station phase UX
+        run: node cloudflare-worker/tests/station-phase-ui.audit.mjs
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
