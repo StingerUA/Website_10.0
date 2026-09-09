@@ -72,6 +72,9 @@ jobs:
       - name: Validate AlbaSpace cinematic environment
         run: node cloudflare-worker/tests/cinematic-environment.audit.mjs
 
+      - name: Validate AlbaSpace living motion
+        run: node cloudflare-worker/tests/living-motion.audit.mjs
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
