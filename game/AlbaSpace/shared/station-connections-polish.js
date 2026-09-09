@@ -97,8 +97,9 @@
     torusAt(renderer, `ConnectionCollar_A_${id}`, start, direction, collarDiameter, 0.105, shell);
     torusAt(renderer, `ConnectionCollar_B_${id}`, end, direction, collarDiameter, 0.105, shell);
 
-    const side = perpendicular(direction).scale(shellDiameter * 0.6);
-    const lift = BABYLON.Vector3.Cross(direction, side.normalize()).normalize().scale(shellDiameter * 0.42);
+    const sideDir = perpendicular(direction);
+    const side = sideDir.scale(shellDiameter * 0.6);
+    const lift = BABYLON.Vector3.Cross(direction, sideDir).normalize().scale(shellDiameter * 0.42);
     cylinderBetween(renderer, `ConnectionRail_L_${id}`, start.add(side).add(lift), end.add(side).add(lift), 0.045, rail, 8);
     cylinderBetween(renderer, `ConnectionRail_R_${id}`, start.subtract(side).add(lift), end.subtract(side).add(lift), 0.045, rail, 8);
 
