@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#020617">
+<title>ALBAMEN Cosmos — AlbaSpace</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+
+:root {
+  --background: #07091A;
+  --foreground: #F0F4FF;
+  --card: #0E1330;
+  --card-foreground: #F0F4FF;
+  --primary: #4F6EF7;
+  --primary-foreground: #ffffff;
+  --secondary: #1A2040;
+  --secondary-foreground: #A8B4D8;
+  --muted: #141830;
+  --muted-foreground: #6B7BAA;
+  --accent: #00D4FF;
+  --accent-foreground: #07091A;
+  --border: rgba(79, 110, 247, 0.2);
+  --ring: #4F6EF7;
+  --radius: 1rem;
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(79, 110, 247, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(79, 110, 247, 0.6); }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes flip-card {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(180deg); }
+}
+
+@keyframes xp-pop {
+  0% { transform: scale(0.5) translateY(0); opacity: 1; }
+  100% { transform: scale(1.2) translateY(-40px); opacity: 0; }
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 0.4s ease-out; }
+.animate-xp-pop { animation: xp-pop 1s ease-out forwards; }
+.animate-star-twinkle { animation: star-twinkle 2s ease-in-out infinite; }
+
+.card-flip-container {
+  perspective: 1000px;
+}
+
+.card-flip-inner {
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.card-flip-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.space-bg {
+  background: radial-gradient(ellipse at 20% 20%, rgba(79, 110, 247, 0.12) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
+              #07091A;
+}
+
+.cosmos-card {
+  background: linear-gradient(135deg, rgba(14, 19, 48, 0.95), rgba(26, 32, 64, 0.9));
+  border: 1px solid rgba(79, 110, 247, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.glow-blue { box-shadow: 0 0 20px rgba(79, 110, 247, 0.4), 0 4px 24px rgba(0, 0, 0, 0.4); }
+.glow-cyan { box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 4px 24px rgba(0, 0, 0, 0.4); }
+.glow-purple { box-shadow: 0 0 20px rgba(138, 43, 226, 0.4), 0 4px 24px rgba(0, 0, 0, 0.4); }
+
+.progress-bar-fill {
+  background: linear-gradient(90deg, #4F6EF7, #00D4FF);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4F6EF7, #6B8BFF);
+  border: none;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(79, 110, 247, 0.4); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-accent {
+  background: linear-gradient(135deg, #00D4FF, #0099CC);
+  border: none;
+  color: #07091A;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.stars-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+}
+
+/* AlbaSpace account + locale shell */
+.account-strip{position:fixed;top:8px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:406px;z-index:1000;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 9px;border:1px solid rgba(79,110,247,.25);border-radius:12px;background:rgba(7,9,26,.82);backdrop-filter:blur(14px);font-family:Montserrat,system-ui,sans-serif;color:#a8b4d8;font-size:11px}.account-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.language-switch{display:flex;gap:3px;flex-shrink:0}.language-switch button{border:0;border-radius:7px;padding:5px 7px;background:rgba(79,110,247,.12);color:#8290bd;font:700 10px Montserrat,system-ui;cursor:pointer}.language-switch button.active{background:linear-gradient(135deg,#4F6EF7,#00D4FF);color:#fff}.account-strip+* .space-bg{padding-top:42px}.auth-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 20%,#18235d 0,#07091a 52%,#02040e 100%);font-family:Montserrat,system-ui,sans-serif;color:#f0f4ff}.auth-card{width:min(390px,100%);padding:32px 24px;text-align:center;border:1px solid rgba(79,110,247,.28);border-radius:24px;background:rgba(14,19,48,.9);box-shadow:0 24px 80px rgba(0,0,0,.35)}.auth-logo{font-size:54px}.auth-card h1{margin:12px 0 8px}.auth-card p{margin:0 0 22px;color:#a8b4d8;line-height:1.6;font-size:14px}.auth-login{border:0;border-radius:14px;padding:13px 20px;background:linear-gradient(135deg,#4F6EF7,#00D4FF);color:white;font-weight:800;cursor:pointer;width:100%}
+
+#boot-status{position:fixed;inset:0;display:grid;place-items:center;background:#07091a;color:#cbd5e1;font-family:Montserrat,system-ui,sans-serif;z-index:99999;text-align:center;padding:24px}
+#boot-status strong{display:block;color:#fff;font-size:20px;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="boot-status"><div><strong>ALBAMEN Cosmos</strong><span>Loading…</span></div></div>
+<script type="module">
+const partFiles=['app.001.b64', 'app.002.b64', 'app.003.b64', 'app.004.b64', 'app.005.b64', 'app.006.b64', 'app.007.b64', 'app.008.b64', 'app.009.b64', 'app.010.b64', 'app.011.b64', 'app.012.b64', 'app.013.b64', 'app.014.b64'];
+try {
+  const responses=await Promise.all(partFiles.map(name=>fetch(name,{cache:'force-cache'})));
+  for (const response of responses) {
+    if (!response.ok) throw new Error(`Failed to load ${response.url} (${response.status})`);
+  }
+  const b=(await Promise.all(responses.map(r=>r.text()))).map(s=>s.trim()).join('');
+  const bytes=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
+  if (!('DecompressionStream' in window)) throw new Error('This browser does not support DecompressionStream.');
+  const code=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+  document.getElementById('boot-status')?.remove();
+  await import(URL.createObjectURL(new Blob([code],{type:'text/javascript'})));
+} catch (error) {
+  console.error(error);
+  const status=document.getElementById('boot-status');
+  if(status) status.innerHTML='<div><strong>Unable to start the game</strong><span>Please refresh the page or use a current browser.</span></div>';
+}
+</script>
+</body>
+</html>
