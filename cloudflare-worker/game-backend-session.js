@@ -7,8 +7,15 @@ const SESSION_MAX_MINUTES = 85;
 const SESSION_DEFAULT_MINUTES = 60;
 const SESSION_EXTENSION_MINUTES = 15;
 
+class SessionError extends Error {
+  constructor(message, status = 400) { super(message); this.status = status; }
+}
+
 const userKey = user => String(user?.id || user?.google_id || user?.email || "");
-const localeOf = request => String(request.headers.get("X-Game-Locale") || new URL(request.url).searchParams.get("locale") || "ru").toLowerCase();
+const requestLocale = request => {
+  const value = String(request.headers.get("X-Game-Locale") || new URL(request.url).searchParams.get("locale") || "ru").toLowerCase();
+  return ["ru", "tr", "en"].includes(value) ? value : "ru";
+};
 const responseJson = (value, status = 200) => new Response(JSON.stringify(value), { status, headers: { "Content-Type": "application/json" } });
 
 function normalizedDuration(value) {
@@ -78,8 +85,8 @@ export class GameRoomDO extends BaseGameRoomDO {
 
   async startQuestion(room, user) {
     ensureSessionClock(room);
-    if (room.finalRoundActive) throw new Error("Финальный вопрос уже запущен. После него нужно завершить игру.");
-    if (sessionExpired(room)) throw new Error("Запланированное время занятия закончилось. Выберите финальный вопрос или продление на 15 минут.");
+    if (room.finalRoundActive) throw new SessionError("Финальный вопрос уже запущен. После него нужно завершить игру.");
+    if (sessionExpired(room)) throw new SessionError("Запланированное время занятия закончилось. Выберите финальный вопрос или продление на 15 минут.");
     return super.startQuestion(room, user);
   }
 
@@ -98,10 +105,10 @@ export class GameRoomDO extends BaseGameRoomDO {
   setSessionDuration(room, user, minutes) {
     this.requireTeacher(room, user);
     ensureSessionClock(room);
-    if (room.status !== "LOBBY" || room.phase !== "LOBBY") throw new Error("Длительность занятия можно менять только до старта игры.");
+    if (room.status !== "LOBBY" || room.phase !== "LOBBY") throw new SessionError("Длительность занятия можно менять только до старта игры.");
     const numeric = Number(minutes);
     if (!Number.isFinite(numeric) || Math.round(numeric) !== numeric || numeric < SESSION_MIN_MINUTES || numeric > SESSION_MAX_MINUTES) {
-      throw new Error(`Длительность занятия должна быть от ${SESSION_MIN_MINUTES} до ${SESSION_MAX_MINUTES} минут.`);
+      throw new SessionError(`Длительность занятия должна быть от ${SESSION_MIN_MINUTES} до ${SESSION_MAX_MINUTES} минут.`);
     }
     room.plannedDurationMinutes = numeric;
     room.plannedEndAt = null;
@@ -110,9 +117,9 @@ export class GameRoomDO extends BaseGameRoomDO {
   extendSession(room, user) {
     this.requireTeacher(room, user);
     ensureSessionClock(room);
-    if (room.status !== "ACTIVE" || room.phase !== "STATION") throw new Error("Продлить занятие можно в фазе станции после завершения текущего раунда.");
-    if (room.finalRoundActive) throw new Error("Финальный вопрос уже выбран — продление больше недоступно.");
-    if (!sessionExpired(room)) throw new Error("Запланированное время занятия ещё не закончилось.");
+    if (room.status !== "ACTIVE" || room.phase !== "STATION") throw new SessionError("Продлить занятие можно в фазе станции после завершения текущего раунда.");
+    if (room.finalRoundActive) throw new SessionError("Финальный вопрос уже выбран — продление больше недоступно.");
+    if (!sessionExpired(room)) throw new SessionError("Запланированное время занятия ещё не закончилось.");
     const decisionAt = Date.now();
     room.plannedEndAt = decisionAt + SESSION_EXTENSION_MINUTES * 60_000;
     room.extensionMinutes = Number(room.extensionMinutes || 0) + SESSION_EXTENSION_MINUTES;
@@ -123,9 +130,9 @@ export class GameRoomDO extends BaseGameRoomDO {
   async startFinalRound(room, user) {
     this.requireTeacher(room, user);
     ensureSessionClock(room);
-    if (room.status !== "ACTIVE" || room.phase !== "STATION") throw new Error("Финальный вопрос можно запустить после завершения текущего раунда, в фазе станции.");
-    if (room.finalRoundActive) throw new Error("Финальный вопрос уже запущен.");
-    if (!sessionExpired(room)) throw new Error("Финальный вопрос становится доступен после окончания запланированного времени.");
+    if (room.status !== "ACTIVE" || room.phase !== "STATION") throw new SessionError("Финальный вопрос можно запустить после завершения текущего раунда, в фазе станции.");
+    if (room.finalRoundActive) throw new SessionError("Финальный вопрос уже запущен.");
+    if (!sessionExpired(room)) throw new SessionError("Финальный вопрос становится доступен после окончания запланированного времени.");
 
     await super.startQuestion(room, user);
     const decisionAt = Date.now();
@@ -145,7 +152,7 @@ export class GameRoomDO extends BaseGameRoomDO {
     this.requireTeacher(room, user);
     ensureSessionClock(room);
     if (!room.finalRoundActive || !room.finalStationPending || room.phase !== "STATION") {
-      throw new Error("Сначала завершите финальный вопрос и перейдите к последней фазе станции.");
+      throw new SessionError("Сначала завершите финальный вопрос и перейдите к последней фазе станции.");
     }
     this.endSession(room, user);
     room.finalStationPending = false;
@@ -209,7 +216,7 @@ export class GameRoomDO extends BaseGameRoomDO {
       if (["SET_SESSION_DURATION", "EXTEND_SESSION", "START_FINAL_ROUND", "FINISH_FINAL_ROUND"].includes(String(body.type || ""))) {
         let user = null;
         try { user = JSON.parse(request.headers.get("X-Game-User") || "null"); } catch {}
-        return this.sessionCommand(body, user, localeOf(request));
+        return this.sessionCommand(body, user, requestLocale(request));
       }
     }
     return super.fetch(request);
