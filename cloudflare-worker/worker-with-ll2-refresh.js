@@ -1,4 +1,5 @@
-import appWorker, { GameRoomDO } from "./worker-with-ll2-auth.js";
+import appWorker from "./worker-with-ll2-auth.js";
+import { GameRoomDO } from "./game-backend-session.js";
 
 export { GameRoomDO };
 
