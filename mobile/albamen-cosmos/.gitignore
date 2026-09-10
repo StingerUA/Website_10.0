@@ -1,0 +1,6 @@
+node_modules/
+.expo/
+.eas/
+dist/
+*.log
+.DS_Store
