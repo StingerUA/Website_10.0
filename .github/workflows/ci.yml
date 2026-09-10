@@ -84,6 +84,9 @@ jobs:
       - name: Validate AlbaSpace Teacher and Classroom endgame
         run: node cloudflare-worker/tests/classroom-endgame.audit.mjs
 
+      - name: Validate AlbaSpace planned session timing
+        run: node cloudflare-worker/tests/session-timing.audit.mjs
+
       - name: Validate launch image scripts
         run: |
           node --check orbital-launch-images.js
