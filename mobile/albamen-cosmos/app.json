@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "ALBAMEN Cosmos",
+    "slug": "albamen-cosmos",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "albamencosmos",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#07091A",
+    "android": {
+      "package": "com.albaspace.albamencosmos",
+      "versionCode": 1,
+      "edgeToEdgeEnabled": true
+    }
+  }
+}
