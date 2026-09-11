@@ -798,6 +798,47 @@
           "url": "/ar/blog/yildizlarin-yasi-nasil-hesaplaniyor.html"
         }
       }
+    },
+    {
+      "slug": "yapay-zeka-matematigin-en-zor-sorularindan-birini-cozdu-mu",
+      "category": "uzay",
+      "publishAt": "2026-09-12T01:26:36+03:00",
+      "cover": "/assets/images/blog/yapay-zeka-matematigin-en-zor-sorularindan-birini-cozdu-mu-cover.jpg",
+      "readingMinutes": 5,
+      "author": {
+        "tr": "İdris Albayrak",
+        "en": "İdris Albayrak",
+        "ru": "İdris Albayrak",
+        "ar": "İdris Albayrak"
+      },
+      "authorRole": {
+        "tr": "Uzay Girişimcisi, Fütürist ve Eğitmen",
+        "en": "Space Entrepreneur, Futurist, and Educator",
+        "ru": "Космический предприниматель, футурист и преподаватель",
+        "ar": "رائد أعمال فضائي، مستقبلي ومدرِّب"
+      },
+      "locales": {
+        "tr": {
+          "title": "YAPAY ZEKÂ MATEMATİĞİN EN ZOR SORULARINDAN BİRİNİ ÇÖZDÜ MÜ?",
+          "excerpt": "ZOR SORULARINDAN BİRİNİ",
+          "url": "/blog/yapay-zeka-matematigin-en-zor-sorularindan-birini-cozdu-mu.html"
+        },
+        "en": {
+          "title": "HAS ARTIFICIAL INTELLIGENCE SOLVED ONE OF THE MOST DIFFICULT QUESTIONS IN MATHEMATICS?",
+          "excerpt": "ONE OF THE DIFFICULT QUESTIONS",
+          "url": "/eng/blog/yapay-zeka-matematigin-en-zor-sorularindan-birini-cozdu-mu.html"
+        },
+        "ru": {
+          "title": "РЕШИЛ ЛИ ИСКУССТВЕННЫЙ ИНТЕЛЛЕКТ ОДИН ИЗ САМЫХ СЛОЖНЫХ ВОПРОСОВ В МАТЕМАТИКЕ?",
+          "excerpt": "ОДИН ИЗ СЛОЖНЫХ ВОПРОСОВ",
+          "url": "/rus/blog/yapay-zeka-matematigin-en-zor-sorularindan-birini-cozdu-mu.html"
+        },
+        "ar": {
+          "title": "هل حل الذكاء الاصطناعي أحد أصعب الأسئلة في الرياضيات؟",
+          "excerpt": "أحد الأسئلة الصعبة",
+          "url": "/ar/blog/yapay-zeka-matematigin-en-zor-sorularindan-birini-cozdu-mu.html"
+        }
+      }
     }
   ]
 }
