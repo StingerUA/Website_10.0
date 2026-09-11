@@ -4,6 +4,7 @@
   const AUTH_TOKEN_KEY = "albaspace_access_token";
   const raw = String(document.documentElement.lang || "ru").toLowerCase();
   const GAME_LOCALE = raw.startsWith("tr") ? "tr" : raw.startsWith("en") ? "en" : "ru";
+  const ACCOUNT_PAGE = GAME_LOCALE === "en" ? "/eng/account-menu.html" : GAME_LOCALE === "ru" ? "/rus/account-menu.html" : "/account-menu.html";
   const COPY = {
     ru:{server:"Ошибка сервера",loginMessage:"Для игры войдите в AlbaSpace account.",auth:"Авторизация",title:"Войдите в AlbaSpace",button:"Войти в AlbaSpace"},
     tr:{server:"Sunucu hatası",loginMessage:"Oyun için AlbaSpace hesabınıza giriş yapın.",auth:"Kimlik doğrulama",title:"AlbaSpace'e giriş yapın",button:"AlbaSpace'e giriş yap"},
@@ -43,12 +44,11 @@
     finally { clearTimeout(timeout); }
   }
   function login() {
-    sessionStorage.setItem("albaspace_auth_return_to", window.location.href);
-    window.location.href = `${API}/auth/google?from=${encodeURIComponent(window.location.href)}`;
+    try { sessionStorage.setItem("albaspace_auth_return_to", window.location.href); } catch {}
+    window.location.href = ACCOUNT_PAGE;
   }
-  function requireLogin(app, message = COPY.loginMessage) {
-    app.innerHTML = `<section class="card center"><div class="phase">${COPY.auth}</div><h1>${COPY.title}</h1><p class="muted">${esc(message)}</p><button id="login" class="btn primary">${COPY.button}</button></section>`;
-    document.getElementById("login").onclick = login;
+  function requireLogin() {
+    login();
   }
   function requestId() { return `${REQUEST_PREFIX}${makeId()}`; }
   async function createRoom(presentationMode, timingMode = "STANDARD") { return request("/api/game/rooms", { method:"POST", body:JSON.stringify({ presentationMode, mode:timingMode, locale:GAME_LOCALE }) }); }
