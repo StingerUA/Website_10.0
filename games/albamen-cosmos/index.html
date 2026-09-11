@@ -1,1 +1,48 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07091A"><title>ALBAMEN Cosmos — AlbaSpace</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></head><body><div id="root"></div><script type="module">const unpack=async parts=>{const rs=await Promise.all(parts.map(x=>fetch(x,{cache:'no-cache'})));if(rs.some(r=>!r.ok))throw new Error('asset');const b=(await Promise.all(rs.map(r=>r.text()))).map(x=>x.trim()).join('');const u=Uint8Array.from(atob(b),c=>c.charCodeAt(0));return new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text()};try{const [css,code]=await Promise.all([unpack(['style-v4.001.00.b64','style-v4.001.01.b64','style-v4.002.b64']),unpack(['app-safe.00.b64','app-safe.01.b64','app-safe.02.b64','app-safe.03.b64','app-safe.04.b64'])]);const s=document.createElement('style');s.textContent=css;document.head.appendChild(s);await import(URL.createObjectURL(new Blob([code],{type:'text/javascript'})));}catch(e){console.error(e);document.getElementById('root').innerHTML='<div style="min-height:100vh;display:grid;place-items:center;background:#07091A;color:#F0F4FF;font-family:system-ui;text-align:center;padding:24px"><div><b>ALBAMEN Cosmos</b><p>Unable to load the game. Please refresh the page.</p></div></div>'}</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07091A">
+  <title>ALBAMEN Cosmos — Choose language</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    (() => {
+      const params = new URLSearchParams(location.search);
+      const lang = (params.get('lang') || '').toLowerCase();
+      if (!['tr', 'en', 'ru'].includes(lang)) return;
+      params.delete('lang');
+      const rest = params.toString();
+      location.replace(`./${lang}/${rest ? `?${rest}` : ''}${location.hash}`);
+    })();
+  </script>
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:#07091a;color:#f0f4ff;font-family:Montserrat,system-ui,sans-serif}
+    body{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 18%,rgba(85,103,255,.24),transparent 35%),#07091a}
+    .card{width:min(560px,100%);padding:38px 28px 32px;border:1px solid rgba(255,255,255,.12);border-radius:28px;background:rgba(15,18,43,.88);box-shadow:0 30px 80px rgba(0,0,0,.42);text-align:center}
+    .planet{font-size:52px;line-height:1;margin-bottom:14px}
+    h1{margin:0;font-size:clamp(30px,7vw,48px);font-weight:900;letter-spacing:.04em}
+    .subtitle{margin:10px 0 28px;color:#aab2cf;line-height:1.6;font-size:14px}
+    .languages{display:grid;gap:12px}
+    .languages a{display:flex;align-items:center;justify-content:center;min-height:56px;padding:0 22px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:#151a3a;color:#f7f9ff;text-decoration:none;font-weight:800;letter-spacing:.02em;transition:transform .15s ease,border-color .15s ease,background .15s ease}
+    .languages a:hover,.languages a:focus-visible{transform:translateY(-1px);border-color:#7c8cff;background:#1b2149;outline:none}
+    .note{margin:22px 0 0;color:#77809f;font-size:12px;line-height:1.5}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="planet" aria-hidden="true">🪐</div>
+    <h1>ALBAMEN Cosmos</h1>
+    <p class="subtitle">Dil seçin · Choose language · Выберите язык</p>
+    <nav class="languages" aria-label="Language selection">
+      <a href="./tr/" lang="tr">Türkçe</a>
+      <a href="./en/" lang="en">English</a>
+      <a href="./ru/" lang="ru">Русский</a>
+    </nav>
+    <p class="note">Each language opens as a separate version of the game.</p>
+  </main>
+</body>
+</html>

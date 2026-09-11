@@ -12,7 +12,7 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { WebView } from 'react-native-webview';
 
-const GAME_URL = 'https://albaspace.com.tr/games/albamen-cosmos/?lang=tr';
+const GAME_URL = 'https://albaspace.com.tr/games/albamen-cosmos/tr/';
 
 const INTERNAL_HOSTS = new Set([
   'albaspace.com.tr',

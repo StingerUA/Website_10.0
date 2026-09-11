@@ -1,8 +1,8 @@
 # ALBAMEN Cosmos — Android wrapper
 
-This Expo project packages only the ALBAMEN Cosmos web game:
+This Expo project packages only the Turkish ALBAMEN Cosmos web game:
 
-`https://albaspace.com.tr/games/albamen-cosmos/?lang=tr`
+`https://albaspace.com.tr/games/albamen-cosmos/tr/`
 
 It does not package or open the full AlbaSpace website as the home screen.
 
@@ -44,13 +44,13 @@ The `production` profile produces an Android App Bundle (`.aab`) for Google Play
 
 - App name: `ALBAMEN Cosmos`
 - Android package: `com.albaspace.albamencosmos`
-- Start URL: `https://albaspace.com.tr/games/albamen-cosmos/?lang=tr`
+- Start URL: `https://albaspace.com.tr/games/albamen-cosmos/tr/`
 
 Do not change the Android package name after the app has been published to Google Play.
 
 ## Current wrapper behavior
 
-- Opens only ALBAMEN Cosmos as the start screen.
+- Opens only the separate Turkish ALBAMEN Cosmos version as the start screen.
 - Uses the existing online game, so most game-content updates do not require publishing a new APK/AAB.
 - Shows a native Turkish retry screen when the web page fails to load.
 - Android Back navigates back inside the WebView when possible.
