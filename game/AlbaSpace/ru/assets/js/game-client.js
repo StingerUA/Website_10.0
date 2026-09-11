@@ -40,12 +40,11 @@
     }
   }
   function login() {
-    sessionStorage.setItem("albaspace_auth_return_to", window.location.href);
-    window.location.href = `${API}/auth/google?from=${encodeURIComponent(window.location.href)}`;
+    try { sessionStorage.setItem("albaspace_auth_return_to", window.location.href); } catch {}
+    window.location.href = "/rus/account-menu.html";
   }
-  function requireLogin(app, message = "Для игры войдите в AlbaSpace account.") {
-    app.innerHTML = `<section class="card center"><div class="phase">Авторизация</div><h1>Войдите в AlbaSpace</h1><p class="muted">${esc(message)}</p><button id="login" class="btn primary">Войти в AlbaSpace</button></section>`;
-    document.getElementById("login").onclick = login;
+  function requireLogin() {
+    login();
   }
   function requestId() { return `${REQUEST_PREFIX}${makeId()}`; }
   async function createRoom(presentationMode, timingMode = "STANDARD") { return request("/api/game/rooms", { method: "POST", body: JSON.stringify({ presentationMode, mode: timingMode, locale: GAME_LOCALE }) }); }
