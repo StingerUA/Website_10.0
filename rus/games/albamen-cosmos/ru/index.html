@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>.lang,.language-switcher,.language-selector,#auth-lang,[data-lang],select[name="lang"]{display:none!important}</style>
+  <script src="/games/albamen-cosmos/asteroid-visuals.js?v=20260912-3"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -36,91 +37,13 @@ const authObserver=new MutationObserver(redirectIfLoginRequired);
 authObserver.observe(document.documentElement,{childList:true,subtree:true});
 setTimeout(()=>authObserver.disconnect(),15000);
 
-const unpack=async(parts,cache='no-cache')=>{
-  const rs=await Promise.all(parts.map(x=>fetch(x,{cache})));
+const unpack=async parts=>{
+  const rs=await Promise.all(parts.map(x=>fetch(x,{cache:'no-cache'})));
   if(rs.some(r=>!r.ok))throw new Error('asset');
   const b=(await Promise.all(rs.map(r=>r.text()))).map(x=>x.trim()).join('');
   const u=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
   return new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
 };
-
-const loadAtlas=async()=>{
-  const parts=[1,2,3,4,5,6,7,8,9].map(n=>'assets/asteroids-comets/atlas.'+String(n).padStart(2,'0')+'.b64');
-  const rs=await Promise.all(parts.map(x=>fetch(x,{cache:'no-cache'})));
-  if(rs.some(r=>!r.ok))throw new Error('asteroid-atlas');
-  return 'data:image/webp;base64,'+(await Promise.all(rs.map(r=>r.text()))).map(x=>x.trim()).join('');
-};
-
-const normalize=s=>String(s||'').replace(/\s+/g,' ').trim().toLowerCase();
-const categoryPattern=/asteroid|comet|астеро|комет|asteroit|kuyruk/i;
-
-function installAsteroidVisuals(atlas,data){
-  const translations=data?.translations?.[LANG]||data?.translations?.en||{};
-  const categories=data?.categories?.[LANG]||data?.categories?.en||{};
-  const asteroidCid=Object.keys(categories).find(cid=>categoryPattern.test(String(categories[cid]||'')));
-  if(!asteroidCid){console.warn('[ALBAMEN Cosmos] asteroid category not found');return;}
-
-  const qIds=Object.keys(data.qmeta||{}).filter(id=>data.qmeta[id]?.cid===asteroidCid);
-  const fIds=Object.keys(data.fcmeta||{}).filter(id=>data.fcmeta[id]?.cid===asteroidCid);
-  const questionIndex=new Map(qIds.map((id,index)=>[normalize(translations[id]?.question),index]));
-  const cardIndex=new Map(fIds.map((id,index)=>[normalize(translations[id]?.front),index]));
-  let lastCard={counter:'',category:'',index:-1};
-
-  const ensureVisual=(container,index,isBack,anchor,label)=>{
-    const old=container.querySelector(':scope > .asteroid-card-visual');
-    if(!Number.isInteger(index)||index<0||index>9){if(old)old.remove();return;}
-    const side=isBack?'back':'front';
-    if(old&&old.dataset.index===String(index)&&old.dataset.side===side)return;
-    if(old)old.remove();
-    const visual=document.createElement('div');
-    visual.className='asteroid-card-visual';
-    visual.dataset.index=String(index);
-    visual.dataset.side=side;
-    visual.setAttribute('role','img');
-    visual.setAttribute('aria-label',label);
-    visual.style.backgroundImage=`url(${atlas})`;
-    visual.style.backgroundPosition=`${isBack?100:0}% ${index===0?0:index/9*100}%`;
-    if(anchor)container.insertBefore(visual,anchor);else container.prepend(visual);
-  };
-
-  const decorate=()=>{
-    const card=document.getElementById('flash-card');
-    if(card){
-      const category=card.querySelector('.badge')?.textContent||'';
-      const old=card.querySelector(':scope > .asteroid-card-visual');
-      if(categoryPattern.test(category)){
-        const counter=document.querySelector('.section-title span')?.textContent||'';
-        const front=card.querySelector('h2')?.textContent||'';
-        let index=cardIndex.get(normalize(front));
-        if(Number.isInteger(index)) lastCard={counter,category,index};
-        else if(lastCard.counter===counter&&lastCard.category===category) index=lastCard.index;
-        else {
-          const match=counter.match(/^(\d+)\s*\/\s*10$/);
-          if(match) index=Math.max(0,Math.min(9,Number(match[1])-1));
-        }
-        const isBack=!!card.querySelector('.answer-side');
-        ensureVisual(card,index,isBack,card.querySelector('.answer-side,h2'),isBack?'Иллюстрация ответа':'Иллюстрация карточки');
-      }else if(old)old.remove();
-    }
-
-    const quizPanel=document.querySelector('.quiz-head + .panel');
-    if(quizPanel){
-      const category=document.querySelector('.quiz-meta small')?.textContent||'';
-      const old=quizPanel.querySelector(':scope > .asteroid-card-visual');
-      if(categoryPattern.test(category)){
-        const question=quizPanel.querySelector('.question')?.textContent||'';
-        const index=questionIndex.get(normalize(question));
-        const isBack=!!quizPanel.querySelector('.feedback');
-        ensureVisual(quizPanel,index,isBack,quizPanel.querySelector('.question'),isBack?'Иллюстрация ответа':'Иллюстрация вопроса');
-      }else if(old)old.remove();
-    }
-  };
-
-  const root=document.getElementById('root');
-  const observer=new MutationObserver(()=>requestAnimationFrame(decorate));
-  observer.observe(root,{childList:true,subtree:true});
-  decorate();
-}
 
 try{
   const [css,code]=await Promise.all([
@@ -128,16 +51,12 @@ try{
     unpack(['app-safe.00.b64','app-safe.01.b64','app-safe.02.b64','app-safe.03.b64','app-safe.04.b64'])
   ]);
   const s=document.createElement('style');
-  s.textContent=css+'\n.lang,.language-switcher,.language-selector,#auth-lang,[data-lang],select[name="lang"]{display:none!important}\n.asteroid-card-visual{width:min(100%,320px);aspect-ratio:1/1;margin:12px auto 18px;border-radius:18px;background-repeat:no-repeat;background-size:200% 1000%;background-color:#0b1028;box-shadow:0 14px 32px rgba(0,0,0,.28);pointer-events:none}.flash-card .asteroid-card-visual{margin-top:14px}@media(max-width:520px){.asteroid-card-visual{width:min(72vw,300px)}}';
+  s.textContent=css+'\n.lang,.language-switcher,.language-selector,#auth-lang,[data-lang],select[name="lang"]{display:none!important}';
   document.head.appendChild(s);
   await import(URL.createObjectURL(new Blob([code],{type:'text/javascript'})));
+  window.AlbamenAsteroidVisuals?.install();
   redirectIfLoginRequired();
   history.replaceState(history.state,document.title,location.pathname+(cleanSearch?'?'+cleanSearch:'')+location.hash);
-
-  Promise.all([
-    loadAtlas(),
-    unpack(['data.001.b64','data.002.b64','data.003.b64'],'force-cache').then(JSON.parse)
-  ]).then(([atlas,data])=>installAsteroidVisuals(atlas,data)).catch(error=>console.warn('[ALBAMEN Cosmos] asteroid visuals unavailable',error));
 }catch(e){
   console.error('[ALBAMEN Cosmos]',e);
   document.getElementById('root').innerHTML='<div style="min-height:100vh;display:grid;place-items:center;background:#07091A;color:#F0F4FF;font-family:system-ui;text-align:center;padding:24px"><div><b>ALBAMEN Cosmos</b><p>Не удалось загрузить игру. Обновите страницу.</p></div></div>';
