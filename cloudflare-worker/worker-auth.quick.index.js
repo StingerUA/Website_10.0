@@ -12,6 +12,7 @@ export { GameRoomDO };
 const OAUTH_STATE_COOKIE = 'albaspace_oauth_state';
 const SESSION_COOKIE = 'albaspace_session';
 const AUTH_TOKEN_QUERY = 'access_token';
+const LEGACY_AUTH_TOKEN_QUERY = 'albaspace_access_token';
 
 export default {
   async fetch(request, env, ctx) {
@@ -39,6 +40,11 @@ export default {
       try { intent = await getGoogleLinkIntent(env, state); }
       catch (error) { console.error('Google link intent lookup failed', error); }
       if (intent) return handleGoogleLinkCallback(request, env, cors, intent);
+
+      // Handle ordinary Google sign-in here too. This keeps old and new
+      // frontend token names compatible and safely links a legacy
+      // email/password identity when Google proves ownership of the same email.
+      return handleNormalGoogleCallback(request, env);
     }
 
     return baseWorker.fetch(request, env, ctx);
@@ -58,6 +64,140 @@ function isQuickPath(pathname) {
     || pathname === '/auth/login';
 }
 
+async function handleNormalGoogleCallback(request, env) {
+  const url = new URL(request.url);
+  const code = url.searchParams.get('code');
+  const stateParam = url.searchParams.get('state') || '';
+  const oauthError = url.searchParams.get('error');
+  const cookies = parseCookies(request.headers.get('Cookie'));
+  const cookieState = cookies[OAUTH_STATE_COOKIE];
+  const clearStateCookie = serializeCookie(OAUTH_STATE_COOKIE, '', {
+    httpOnly: true, secure: true, sameSite: 'Lax', path: '/', maxAge: 0
+  });
+
+  const [receivedState, ...urlParts] = stateParam.split('|');
+  const returnUrl = safeReturnUrl(urlParts.join('|') || env.FRONT_ORIGIN, env);
+
+  if (oauthError) {
+    return redirect(withQuery(returnUrl, 'login_error', oauthError), {
+      'Set-Cookie': clearStateCookie
+    });
+  }
+
+  if (!cookieState || receivedState !== cookieState) {
+    // Preserve the site's existing behaviour for ordinary login: warn rather
+    // than breaking users whose browser dropped the short-lived state cookie.
+    console.warn('Google login state mismatch — cookieState:', cookieState, 'received:', receivedState);
+  }
+
+  if (!code) {
+    return redirect(withQuery(returnUrl, 'login_error', 'missing_google_code'), {
+      'Set-Cookie': clearStateCookie
+    });
+  }
+
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      code,
+      client_id: env.GOOGLE_CLIENT_ID,
+      client_secret: env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${env.PUBLIC_BASE_URL}/auth/google/callback`,
+      grant_type: 'authorization_code'
+    })
+  });
+
+  if (!tokenRes.ok) {
+    console.error('Google login token exchange error:', await tokenRes.text());
+    return redirect(withQuery(returnUrl, 'login_error', 'token_exchange_failed'), {
+      'Set-Cookie': clearStateCookie
+    });
+  }
+
+  const tokenData = await tokenRes.json();
+  const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { Authorization: `Bearer ${tokenData.access_token}` }
+  });
+  if (!userRes.ok) {
+    return redirect(withQuery(returnUrl, 'login_error', 'google_profile_failed'), {
+      'Set-Cookie': clearStateCookie
+    });
+  }
+
+  const googleUser = await userRes.json();
+  const googleId = String(googleUser.sub || '').trim();
+  const email = String(googleUser.email || '').trim().toLowerCase();
+  const name = String(googleUser.name || '').trim();
+  const googleAvatar = String(googleUser.picture || '').trim();
+
+  if (!googleId || !email) {
+    return redirect(withQuery(returnUrl, 'login_error', 'invalid_google_profile'), {
+      'Set-Cookie': clearStateCookie
+    });
+  }
+
+  const existingByGoogle = await env.DB.prepare(
+    'SELECT id, google_id, email, name, avatar FROM users WHERE google_id = ? LIMIT 1'
+  ).bind(googleId).first();
+
+  if (existingByGoogle) {
+    const avatar = isManagedAvatar(existingByGoogle.avatar) ? existingByGoogle.avatar : (googleAvatar || existingByGoogle.avatar || '');
+    await env.DB.prepare(
+      'UPDATE users SET email = ?, name = ?, avatar = ? WHERE google_id = ?'
+    ).bind(email, name || existingByGoogle.name || email, avatar, googleId).run();
+  } else {
+    const existingByEmail = await env.DB.prepare(
+      'SELECT id, google_id, email, name, avatar FROM users WHERE lower(email) = ? LIMIT 1'
+    ).bind(email).first();
+
+    if (existingByEmail && existingByEmail.google_id !== googleId) {
+      const oldGoogleId = String(existingByEmail.google_id || '');
+
+      // Email/password accounts use an `email:` synthetic identity. Google has
+      // now verified ownership of the same mailbox, so link Google to that same
+      // row instead of creating a duplicate or returning account_identity_conflict.
+      if (oldGoogleId.startsWith('email:')) {
+        const avatar = isManagedAvatar(existingByEmail.avatar)
+          ? existingByEmail.avatar
+          : (googleAvatar || existingByEmail.avatar || '');
+        await env.DB.batch([
+          env.DB.prepare(
+            'UPDATE users SET google_id = ?, email = ?, name = ?, avatar = ? WHERE id = ? AND google_id = ?'
+          ).bind(googleId, email, name || existingByEmail.name || email, avatar, existingByEmail.id, oldGoogleId),
+          env.DB.prepare(
+            'UPDATE sessions SET user_google_id = ? WHERE user_google_id = ?'
+          ).bind(googleId, oldGoogleId)
+        ]);
+      } else {
+        return redirect(withQuery(returnUrl, 'login_error', 'account_identity_conflict'), {
+          'Set-Cookie': clearStateCookie
+        });
+      }
+    } else if (!existingByEmail) {
+      await env.DB.prepare(
+        'INSERT INTO users (google_id, email, name, avatar) VALUES (?, ?, ?, ?)'
+      ).bind(googleId, email, name || email, googleAvatar).run();
+    }
+  }
+
+  const sessionId = randomToken();
+  const sessionTtl = Number(env.SESSION_TTL_SECONDS || 60 * 60 * 24 * 30);
+  const now = Math.floor(Date.now() / 1000);
+  await env.DB.prepare(
+    'INSERT INTO sessions (id, user_google_id, expires_at) VALUES (?, ?, ?)'
+  ).bind(sessionId, googleId, now + sessionTtl).run();
+
+  return redirect(withAuthToken(returnUrl, sessionId), {
+    'Set-Cookie': [
+      serializeCookie(SESSION_COOKIE, sessionId, {
+        httpOnly: true, secure: true, sameSite: 'None', path: '/', maxAge: sessionTtl
+      }),
+      clearStateCookie
+    ]
+  });
+}
+
 async function handleGoogleLinkCallback(request, env, cors, intent) {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
@@ -75,8 +215,8 @@ async function handleGoogleLinkCallback(request, env, cors, intent) {
     return redirect(withQuery(returnUrl, 'google_link_error', oauthError), { 'Set-Cookie': clearStateCookie });
   }
 
-  // Linking changes account identity, so unlike the legacy normal-login callback
-  // this path requires an exact OAuth state-cookie match.
+  // Linking changes account identity, so unlike ordinary login this path
+  // requires an exact OAuth state-cookie match.
   if (!cookieState || state !== cookieState || state !== intent.state) {
     await deleteGoogleLinkIntent(env, state).catch(() => {});
     return redirect(withQuery(returnUrl, 'google_link_error', 'state_mismatch'), { 'Set-Cookie': clearStateCookie });
@@ -184,10 +324,22 @@ function withQuery(value, key, val) {
 
 function withAuthToken(value, token) {
   const target = new URL(value);
-  const fragment = target.hash.replace(/^#/, '');
-  const rest = fragment ? `&${fragment}` : '';
-  target.hash = `${AUTH_TOKEN_QUERY}=${encodeURIComponent(token)}${rest}`;
+  const fragmentParts = target.hash.replace(/^#/, '').split('&').filter(Boolean)
+    .filter(part => !part.startsWith(`${AUTH_TOKEN_QUERY}=`) && !part.startsWith(`${LEGACY_AUTH_TOKEN_QUERY}=`));
+  const authParts = [
+    `${AUTH_TOKEN_QUERY}=${encodeURIComponent(token)}`,
+    `${LEGACY_AUTH_TOKEN_QUERY}=${encodeURIComponent(token)}`
+  ];
+  target.hash = [...authParts, ...fragmentParts].join('&');
   return target.toString();
+}
+
+function isManagedAvatar(value) {
+  try {
+    return new URL(String(value || '')).pathname.startsWith('/avatar/');
+  } catch {
+    return false;
+  }
 }
 
 function randomToken() {
