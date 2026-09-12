@@ -2,7 +2,7 @@
   'use strict';
 
   const BASE = '/games/albamen-cosmos/';
-  const VERSION = '20260912-6';
+  const VERSION = '20260912-7';
   const CATEGORY_RE = /asteroid|comet|астеро|комет|asteroit|kuyruk/i;
   const ATLAS_PARTS = Array.from({ length: 9 }, (_, i) => `${BASE}assets/asteroids-comets/atlas.${String(i + 1).padStart(2, '0')}.b64?v=${VERSION}`);
   const DATA_NAMES = [
@@ -17,6 +17,8 @@
   let atlasError = '';
   let questionIndex = new Map();
   let scheduled = false;
+  let lastCardLog = '';
+  let lastQuizLog = '';
 
   function normalize(value) {
     return String(value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase();
@@ -67,8 +69,8 @@
   }
 
   function visibleCounterIndex() {
-    const preferred = document.querySelectorAll('.section-title span,.q-count');
-    for (const node of preferred) {
+    const nodes = [...document.querySelectorAll('.section-title span,.q-count')];
+    for (const node of nodes) {
       const match = String(node.textContent || '').match(/\b(10|[1-9])\s*\/\s*10\b/);
       if (match) return Number(match[1]) - 1;
     }
@@ -76,53 +78,78 @@
     return match ? Number(match[1]) - 1 : -1;
   }
 
+  function findAsteroidBadge() {
+    return [...document.querySelectorAll('.badge')].find(node => CATEGORY_RE.test(node.textContent || '')) || null;
+  }
+
   function findFlashCard() {
-    return document.getElementById('flash-card') ||
-      document.querySelector('.flash-card') ||
-      [...document.querySelectorAll('section.card,.card,section')].find(el => el.querySelector('.badge') && el.querySelector('h2,.answer-side,.tiny')) ||
-      null;
+    const direct = document.getElementById('flash-card');
+    if (direct) return direct;
+    const badge = findAsteroidBadge();
+    if (badge) return badge.closest('.flash-card,.card,section,div');
+    return [...document.querySelectorAll('.flash-card,.card,section')].find(el =>
+      CATEGORY_RE.test(el.textContent || '') && el.querySelector('h2,.answer-side,.tiny')
+    ) || null;
   }
 
-  function currentCardCategory(card) {
-    const badge = card?.querySelector('.badge')?.textContent || '';
-    if (badge) return badge;
-    const titles = [...document.querySelectorAll('.section-title h3')];
-    return titles.map(x => x.textContent || '').find(x => CATEGORY_RE.test(x)) || '';
+  function visualStyle(index, back) {
+    const y = index === 0 ? 0 : (index / 9) * 100;
+    return [
+      'display:block',
+      'width:min(82%,260px)',
+      'aspect-ratio:1/1',
+      'flex:0 0 auto',
+      'margin:42px auto 14px',
+      'border-radius:16px',
+      'box-sizing:border-box',
+      'background-color:#0b1028',
+      `background-image:${atlasUrl ? `url("${atlasUrl}")` : 'none'}`,
+      `background-position:${back ? 100 : 0}% ${y}%`,
+      'background-size:200% 1000%',
+      'background-repeat:no-repeat',
+      'box-shadow:0 10px 26px rgba(0,0,0,.25)',
+      'pointer-events:none',
+      'position:relative',
+      'z-index:2'
+    ].join(';');
   }
 
-  function applyVisual(host, index, back) {
-    if (!host || !Number.isInteger(index) || index < 0 || index > 9) return;
-    host.classList.add('asteroid-visual-host');
-    host.classList.toggle('asteroid-visual-loading', !atlasUrl && !atlasError);
-    host.classList.toggle('asteroid-visual-error', !!atlasError);
-    host.style.setProperty('--asteroid-visual-image', atlasUrl ? `url("${atlasUrl}")` : 'none');
-    host.style.setProperty('--asteroid-visual-x', back ? '100%' : '0%');
-    host.style.setProperty('--asteroid-visual-y', `${index === 0 ? 0 : (index / 9) * 100}%`);
-    host.dataset.asteroidVisualIndex = String(index);
-    host.dataset.asteroidVisualSide = back ? 'back' : 'front';
-  }
-
-  function clearVisual(host) {
-    if (!host) return;
-    host.classList.remove('asteroid-visual-host','asteroid-visual-loading','asteroid-visual-error');
-    host.style.removeProperty('--asteroid-visual-image');
-    host.style.removeProperty('--asteroid-visual-x');
-    host.style.removeProperty('--asteroid-visual-y');
-    delete host.dataset.asteroidVisualIndex;
-    delete host.dataset.asteroidVisualSide;
+  function upsertVisual(host, index, back, kind) {
+    if (!host || !Number.isInteger(index) || index < 0 || index > 9) return false;
+    let visual = host.querySelector(':scope > .asteroid-inline-visual');
+    if (!visual) {
+      visual = document.createElement('div');
+      visual.className = 'asteroid-inline-visual';
+      visual.setAttribute('aria-hidden', 'true');
+      const anchor = host.querySelector('h2,.answer-side,.question,.tiny');
+      if (anchor && anchor.parentNode === host) host.insertBefore(visual, anchor);
+      else host.appendChild(visual);
+    }
+    visual.style.cssText = visualStyle(index, back);
+    visual.dataset.index = String(index);
+    visual.dataset.side = back ? 'back' : 'front';
+    visual.dataset.kind = kind;
+    return true;
   }
 
   function decorateCard() {
     const card = findFlashCard();
     if (!card) return;
-    const category = currentCardCategory(card);
-    if (!CATEGORY_RE.test(category)) {
-      clearVisual(card);
-      return;
-    }
+    const badge = card.querySelector('.badge') || findAsteroidBadge();
+    const category = badge?.textContent || '';
+    if (!CATEGORY_RE.test(category)) return;
+
     const index = visibleCounterIndex();
     if (index < 0) return;
-    applyVisual(card, index, !!card.querySelector('.answer-side'));
+    const back = !!card.querySelector('.answer-side');
+    card.style.setProperty('justify-content', 'flex-start', 'important');
+    if (upsertVisual(card, index, back, 'card')) {
+      const key = `${index}:${back}:${!!atlasUrl}`;
+      if (key !== lastCardLog) {
+        lastCardLog = key;
+        console.info('[ALBAMEN Cosmos] asteroid card visual applied', { index: index + 1, side: back ? 'B' : 'F', atlas: !!atlasUrl, host: card.id || card.className });
+      }
+    }
   }
 
   function decorateQuiz() {
@@ -131,16 +158,20 @@
     const panel = question.closest('section') || question.parentElement;
     if (!panel) return;
     const category = document.querySelector('.quiz-meta small')?.textContent || document.querySelector('.quiz-meta strong')?.textContent || '';
-    if (!CATEGORY_RE.test(category)) {
-      clearVisual(panel);
-      return;
-    }
+    if (!CATEGORY_RE.test(category)) return;
 
     const questionText = normalize(question.textContent || '');
     let index = questionIndex.get(questionText);
     if (!Number.isInteger(index)) index = visibleCounterIndex();
     if (index < 0) return;
-    applyVisual(panel, index, !!panel.querySelector('.feedback'));
+    const back = !!panel.querySelector('.feedback');
+    if (upsertVisual(panel, index, back, 'quiz')) {
+      const key = `${index}:${back}:${!!atlasUrl}`;
+      if (key !== lastQuizLog) {
+        lastQuizLog = key;
+        console.info('[ALBAMEN Cosmos] asteroid quiz visual applied', { index: index + 1, side: back ? 'B' : 'F', atlas: !!atlasUrl });
+      }
+    }
   }
 
   function decorate() {
@@ -161,45 +192,10 @@
     });
   }
 
-  function installStyles() {
-    if (document.getElementById('albamen-asteroid-visual-styles')) return;
-    const style = document.createElement('style');
-    style.id = 'albamen-asteroid-visual-styles';
-    style.textContent = `
-      .asteroid-visual-host::before{
-        content:""!important;
-        display:block!important;
-        width:min(82%,260px)!important;
-        aspect-ratio:1/1!important;
-        flex:0 0 auto!important;
-        margin:34px auto 16px!important;
-        box-sizing:border-box!important;
-        border-radius:16px!important;
-        background-image:var(--asteroid-visual-image)!important;
-        background-position:var(--asteroid-visual-x) var(--asteroid-visual-y)!important;
-        background-size:200% 1000%!important;
-        background-repeat:no-repeat!important;
-        background-color:#0b1028!important;
-        box-shadow:0 10px 26px rgba(0,0,0,.25)!important;
-        pointer-events:none!important;
-      }
-      .panel.asteroid-visual-host::before{margin:0 auto 16px!important}
-      .asteroid-visual-host.asteroid-visual-loading::before{border:1px dashed rgba(72,202,255,.45)!important}
-      .asteroid-visual-host.asteroid-visual-error::before{border:1px solid #fb7185!important}
-      .flash-card.asteroid-visual-host{justify-content:flex-start!important}
-      .flash-card.asteroid-visual-host h2{margin-top:4px!important}
-      @media(max-width:520px){
-        .asteroid-visual-host::before{width:min(70vw,238px)!important}
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
   function install() {
     if (installed) return;
     installed = true;
     window.__albamenAsteroidVisualsVersion = VERSION;
-    installStyles();
 
     const observer = new MutationObserver(scheduleDecorate);
     observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
