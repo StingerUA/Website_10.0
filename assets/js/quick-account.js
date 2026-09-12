@@ -103,6 +103,13 @@
     try{
       var res=await fetch(API+'/auth/quick-account',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'});
       var data=await res.json().catch(function(){return {};});
+      if(res.status===409&&data.error==='already_logged_in'){
+        // The session cookie is valid but a stale bearer token can make the
+        // account page look logged out. Prefer the live cookie session here.
+        try{localStorage.removeItem(TOKEN_KEY);}catch(e){}
+        location.reload();
+        return;
+      }
       if(!res.ok)throw new Error(data.error||text().createError);
       saveToken(data.token);
       try{sessionStorage.setItem(CREDENTIALS_KEY,JSON.stringify(data.credentials));}catch(e){}
