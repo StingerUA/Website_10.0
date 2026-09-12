@@ -2,7 +2,7 @@
   'use strict';
 
   const BASE = '/games/albamen-cosmos/';
-  const VERSION = '20260912-5';
+  const VERSION = '20260912-6';
   const CATEGORY_RE = /asteroid|comet|астеро|комет|asteroit|kuyruk/i;
   const ATLAS_PARTS = Array.from({ length: 9 }, (_, i) => `${BASE}assets/asteroids-comets/atlas.${String(i + 1).padStart(2, '0')}.b64?v=${VERSION}`);
   const DATA_NAMES = [
@@ -77,63 +77,52 @@
   }
 
   function findFlashCard() {
-    const direct = document.getElementById('flash-card');
-    if (direct) return direct;
-    const candidates = document.querySelectorAll('section.card,section.flash-card,.flash-card,section');
-    for (const el of candidates) {
-      const badge = el.querySelector('.badge');
-      if (!badge || !CATEGORY_RE.test(badge.textContent || '')) continue;
-      if (el.querySelector('h2,.answer-side,.tiny')) return el;
-    }
-    return null;
+    return document.getElementById('flash-card') ||
+      document.querySelector('.flash-card') ||
+      [...document.querySelectorAll('section.card,.card,section')].find(el => el.querySelector('.badge') && el.querySelector('h2,.answer-side,.tiny')) ||
+      null;
   }
 
-  function ensureVisual(container, index, back, anchor, label) {
-    if (!container || index < 0 || index > 9) return;
-    let visual = container.querySelector(':scope > .asteroid-card-visual');
-    if (!visual) {
-      visual = document.createElement('div');
-      visual.className = 'asteroid-card-visual';
-      visual.setAttribute('role', 'img');
-      if (anchor && anchor.parentNode === container) container.insertBefore(visual, anchor);
-      else container.prepend(visual);
-    }
+  function currentCardCategory(card) {
+    const badge = card?.querySelector('.badge')?.textContent || '';
+    if (badge) return badge;
+    const titles = [...document.querySelectorAll('.section-title h3')];
+    return titles.map(x => x.textContent || '').find(x => CATEGORY_RE.test(x)) || '';
+  }
 
-    const side = back ? 'back' : 'front';
-    const state = `${index}:${side}:${atlasUrl ? 'ready' : atlasError ? 'error' : 'loading'}`;
-    if (visual.dataset.renderState === state) return;
-    visual.dataset.renderState = state;
-    visual.dataset.index = String(index);
-    visual.dataset.side = side;
-    visual.setAttribute('aria-label', label);
+  function applyVisual(host, index, back) {
+    if (!host || !Number.isInteger(index) || index < 0 || index > 9) return;
+    host.classList.add('asteroid-visual-host');
+    host.classList.toggle('asteroid-visual-loading', !atlasUrl && !atlasError);
+    host.classList.toggle('asteroid-visual-error', !!atlasError);
+    host.style.setProperty('--asteroid-visual-image', atlasUrl ? `url("${atlasUrl}")` : 'none');
+    host.style.setProperty('--asteroid-visual-x', back ? '100%' : '0%');
+    host.style.setProperty('--asteroid-visual-y', `${index === 0 ? 0 : (index / 9) * 100}%`);
+    host.dataset.asteroidVisualIndex = String(index);
+    host.dataset.asteroidVisualSide = back ? 'back' : 'front';
+  }
 
-    if (atlasUrl) {
-      visual.className = 'asteroid-card-visual';
-      visual.textContent = '';
-      visual.style.backgroundImage = `url("${atlasUrl}")`;
-      visual.style.backgroundPosition = `${back ? 100 : 0}% ${index === 0 ? 0 : (index / 9) * 100}%`;
-    } else if (atlasError) {
-      visual.className = 'asteroid-card-visual is-error';
-      visual.style.backgroundImage = 'none';
-      visual.textContent = `Image error: ${atlasError}`;
-    } else {
-      visual.className = 'asteroid-card-visual is-loading';
-      visual.style.backgroundImage = 'none';
-      visual.textContent = 'Loading image…';
-    }
+  function clearVisual(host) {
+    if (!host) return;
+    host.classList.remove('asteroid-visual-host','asteroid-visual-loading','asteroid-visual-error');
+    host.style.removeProperty('--asteroid-visual-image');
+    host.style.removeProperty('--asteroid-visual-x');
+    host.style.removeProperty('--asteroid-visual-y');
+    delete host.dataset.asteroidVisualIndex;
+    delete host.dataset.asteroidVisualSide;
   }
 
   function decorateCard() {
     const card = findFlashCard();
     if (!card) return;
-    const badgeText = card.querySelector('.badge')?.textContent || '';
-    if (!CATEGORY_RE.test(badgeText)) return;
-
+    const category = currentCardCategory(card);
+    if (!CATEGORY_RE.test(category)) {
+      clearVisual(card);
+      return;
+    }
     const index = visibleCounterIndex();
     if (index < 0) return;
-    const isBack = !!card.querySelector('.answer-side');
-    const anchor = card.querySelector('h2,.answer-side,.tiny');
-    ensureVisual(card, index, isBack, anchor, isBack ? 'Answer image' : 'Card image');
+    applyVisual(card, index, !!card.querySelector('.answer-side'));
   }
 
   function decorateQuiz() {
@@ -142,14 +131,16 @@
     const panel = question.closest('section') || question.parentElement;
     if (!panel) return;
     const category = document.querySelector('.quiz-meta small')?.textContent || document.querySelector('.quiz-meta strong')?.textContent || '';
-    if (!CATEGORY_RE.test(category)) return;
+    if (!CATEGORY_RE.test(category)) {
+      clearVisual(panel);
+      return;
+    }
 
     const questionText = normalize(question.textContent || '');
     let index = questionIndex.get(questionText);
     if (!Number.isInteger(index)) index = visibleCounterIndex();
     if (index < 0) return;
-    const isBack = !!panel.querySelector('.feedback');
-    ensureVisual(panel, index, isBack, question, isBack ? 'Answer image' : 'Question image');
+    applyVisual(panel, index, !!panel.querySelector('.feedback'));
   }
 
   function decorate() {
@@ -175,29 +166,31 @@
     const style = document.createElement('style');
     style.id = 'albamen-asteroid-visual-styles';
     style.textContent = `
-      .asteroid-card-visual{
+      .asteroid-visual-host::before{
+        content:""!important;
+        display:block!important;
         width:min(82%,260px)!important;
         aspect-ratio:1/1!important;
-        display:flex!important;
-        align-items:center!important;
-        justify-content:center!important;
         flex:0 0 auto!important;
-        margin:14px auto 16px!important;
-        padding:8px!important;
+        margin:34px auto 16px!important;
         box-sizing:border-box!important;
         border-radius:16px!important;
-        background-repeat:no-repeat!important;
+        background-image:var(--asteroid-visual-image)!important;
+        background-position:var(--asteroid-visual-x) var(--asteroid-visual-y)!important;
         background-size:200% 1000%!important;
+        background-repeat:no-repeat!important;
         background-color:#0b1028!important;
-        color:#9fb0d8!important;
-        font:600 12px/1.35 Montserrat,system-ui,sans-serif!important;
-        text-align:center!important;
         box-shadow:0 10px 26px rgba(0,0,0,.25)!important;
         pointer-events:none!important;
       }
-      .asteroid-card-visual.is-loading{border:1px dashed rgba(72,202,255,.45)!important}
-      .asteroid-card-visual.is-error{border:1px solid #fb7185!important;color:#fb7185!important}
-      @media(max-width:520px){.asteroid-card-visual{width:min(76vw,240px)!important}}
+      .panel.asteroid-visual-host::before{margin:0 auto 16px!important}
+      .asteroid-visual-host.asteroid-visual-loading::before{border:1px dashed rgba(72,202,255,.45)!important}
+      .asteroid-visual-host.asteroid-visual-error::before{border:1px solid #fb7185!important}
+      .flash-card.asteroid-visual-host{justify-content:flex-start!important}
+      .flash-card.asteroid-visual-host h2{margin-top:4px!important}
+      @media(max-width:520px){
+        .asteroid-visual-host::before{width:min(70vw,238px)!important}
+      }
     `;
     document.head.appendChild(style);
   }
@@ -212,8 +205,8 @@
     observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
     scheduleDecorate();
 
-    const timer = setInterval(scheduleDecorate, 500);
-    setTimeout(() => clearInterval(timer), 120000);
+    const timer = setInterval(scheduleDecorate, 400);
+    setTimeout(() => clearInterval(timer), 180000);
 
     loadAtlas().then(url => {
       atlasUrl = url;
