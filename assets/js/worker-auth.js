@@ -9,18 +9,21 @@ const WORKER_PROFILE_URL = `${WORKER_BASE_URL}/profile`;
 const AUTH_RETURN_KEY = "albaspace_auth_return_to";
 const AUTH_SOURCE_KEY = "albaspace_auth_source";
 const AUTH_TOKEN_KEY = "albaspace_access_token";
+const AUTH_FRAGMENT_KEYS = ["access_token", AUTH_TOKEN_KEY];
 
 
 function consumeAuthToken() {
   const hash = window.location.hash.replace(/^#/, "");
   const parts = hash ? hash.split("&") : [];
-  const tokenPart = parts.find(part => part.startsWith(AUTH_TOKEN_KEY + "="));
-  if (!tokenPart) return;
-  const token = decodeURIComponent(tokenPart.slice(AUTH_TOKEN_KEY.length + 1));
+  const tokenPart = parts.find(part => AUTH_FRAGMENT_KEYS.some(key => part.startsWith(key + "=")));
+  if (!tokenPart) return false;
+  const eq = tokenPart.indexOf("=");
+  const token = decodeURIComponent(eq >= 0 ? tokenPart.slice(eq + 1) : "");
   if (token) { try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (error) { console.warn("Unable to store auth token:", error); } }
-  const rest = parts.filter(part => !part.startsWith(AUTH_TOKEN_KEY + "="));
+  const rest = parts.filter(part => !AUTH_FRAGMENT_KEYS.some(key => part.startsWith(key + "=")));
   const clean = window.location.pathname + window.location.search + (rest.length ? "#" + rest.join("&") : "");
   window.history.replaceState({}, document.title, clean);
+  return !!token;
 }
 function authHeaders() {
   try {
