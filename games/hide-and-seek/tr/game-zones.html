@@ -253,14 +253,17 @@ async function init() {
   currentUser = await checkLogin();
   document.getElementById('auth-checking').classList.remove('show');
 
-  if (!currentUser || !currentUser.email) {
+  // A valid Uzaydash quick account intentionally has an empty email address.
+  // Authentication is established by a successful /me response, not by email.
+  if (!currentUser) {
     document.getElementById('auth-required').classList.add('show');
     return;
   }
 
   document.getElementById('game-content').style.display = 'block';
   const chip = document.getElementById('user-chip');
-  chip.innerHTML = `${currentUser.avatar ? `<img src="${currentUser.avatar}">` : ''}<span>${currentUser.name || currentUser.email}</span>`;
+  const displayName = currentUser.name || currentUser.quick_username || currentUser.email || 'Uzaydash';
+  chip.innerHTML = `${currentUser.avatar ? `<img src="${currentUser.avatar}">` : ''}<span>${displayName}</span>`;
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
