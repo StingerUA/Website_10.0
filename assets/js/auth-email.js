@@ -10,6 +10,7 @@
   'use strict';
 
   var API = 'https://api.albaspace.com.tr';
+  var AUTH_TOKEN_KEY = 'albaspace_access_token';
 
   function getLang() {
     var p = window.location.pathname || '/';
@@ -22,6 +23,36 @@
     if (lang === 'en') return '/eng/forgot-password.html';
     if (lang === 'ru') return '/rus/forgot-password.html';
     return '/forgot-password.html';
+  }
+
+  // OAuth callbacks from the Worker use #access_token=..., while older
+  // frontend code used #albaspace_access_token=.... Accept both, persist the
+  // token under the single localStorage key used by the site, and remove the
+  // sensitive token from the address bar immediately.
+  function consumeAccessTokenCompat() {
+    var hash = window.location.hash.replace(/^#/, '');
+    var parts = hash ? hash.split('&') : [];
+    var keys = ['access_token', AUTH_TOKEN_KEY];
+    var tokenPart = parts.find(function (part) {
+      return keys.some(function (key) { return part.indexOf(key + '=') === 0; });
+    });
+    if (!tokenPart) return false;
+
+    var eq = tokenPart.indexOf('=');
+    var value = decodeURIComponent(eq >= 0 ? tokenPart.slice(eq + 1) : '');
+    if (value) {
+      try { localStorage.setItem(AUTH_TOKEN_KEY, value); } catch (e) {}
+    }
+
+    var rest = parts.filter(function (part) {
+      return !keys.some(function (key) { return part.indexOf(key + '=') === 0; });
+    });
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname + window.location.search + (rest.length ? '#' + rest.join('&') : '')
+    );
+    return !!value;
   }
 
   function loadQuickAccountPage() {
@@ -308,6 +339,14 @@
   }
 
   function init() {
+    // account-menu.html performs its own auth check before this dynamically
+    // loaded helper runs. If an OAuth token is present, store it first and
+    // reload once so that check sees the authenticated user immediately.
+    if (consumeAccessTokenCompat()) {
+      window.location.reload();
+      return;
+    }
+
     injectCSS();
     loadQuickAccountPage();
     ensureAccountPageForgotLink();
