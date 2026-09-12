@@ -1,3 +1,53 @@
+// Authentication compatibility for the restaurant page.
+// Quick Uzaydash accounts intentionally have no email address, while the
+// legacy restaurant gate used `user.email` as its logged-in flag. Keep the
+// backend user intact everywhere else and only provide this page with a stable
+// compatibility identity for /me.
+const AUTH_API = 'https://api.albaspace.com.tr';
+const AUTH_TOKEN_KEY = 'albaspace_access_token';
+const AUTH_FRAGMENT_KEYS = ['access_token', AUTH_TOKEN_KEY];
+
+function consumeRestaurantAuthToken() {
+  const hash = window.location.hash.replace(/^#/, '');
+  const parts = hash ? hash.split('&') : [];
+  const tokenPart = parts.find((part) => AUTH_FRAGMENT_KEYS.some((key) => part.startsWith(`${key}=`)));
+  if (!tokenPart) return;
+  const eq = tokenPart.indexOf('=');
+  const token = decodeURIComponent(eq >= 0 ? tokenPart.slice(eq + 1) : '');
+  if (token) {
+    try { localStorage.setItem(AUTH_TOKEN_KEY, token); } catch (error) {}
+  }
+  const rest = parts.filter((part) => !AUTH_FRAGMENT_KEYS.some((key) => part.startsWith(`${key}=`)));
+  history.replaceState({}, document.title, location.pathname + location.search + (rest.length ? `#${rest.join('&')}` : ''));
+}
+
+consumeRestaurantAuthToken();
+
+const nativeFetch = window.fetch.bind(window);
+window.fetch = async function restaurantAuthCompatibleFetch(input, init) {
+  const response = await nativeFetch(input, init);
+  let requestUrl = '';
+  try {
+    requestUrl = typeof input === 'string' ? input : (input && input.url) || String(input || '');
+  } catch (error) {}
+
+  if (!response.ok || requestUrl !== `${AUTH_API}/me`) return response;
+
+  try {
+    const user = await response.clone().json();
+    if (user && !user.email && (user.id || user.name || user.google_id)) {
+      const compatibilityIdentity = user.quick_username || user.name || `user-${user.id || 'quick'}`;
+      return new Response(JSON.stringify({ ...user, email: compatibilityIdentity }), {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers
+      });
+    }
+  } catch (error) {}
+
+  return response;
+};
+
 // Load the full restaurant menu engine in the browser without making this
 // adapter an ES-module-only file. The repository CI validates this file with
 // `node --check`, while the page itself still loads it with type="module".
