@@ -115,6 +115,22 @@
       const root = viewer.closest('.container') || viewer.parentElement;
       if (!root) return;
 
+      // A few older educational pages (for example /gokturk-1/) store the
+      // entire narration inside one <p> and separate logical paragraphs only
+      // with blank lines in the HTML source. The shared story-card parser uses
+      // <br><br> as its legacy delimiter, so normalize those blank lines first.
+      // Single newlines remain untouched so sentence wrapping inside one logical
+      // paragraph is preserved.
+      Array.from(root.querySelectorAll('p')).forEach((p) => {
+        const html = String(p.innerHTML || '');
+        if (/<br\s*\/?\s*>/i.test(html) || !/\r?\n\s*\r?\n/.test(html)) return;
+        const blocks = html
+          .split(/\r?\n\s*\r?\n+/)
+          .map((block) => block.trim())
+          .filter(Boolean);
+        if (blocks.length >= 4) p.innerHTML = blocks.join('<br><br>');
+      });
+
       const paragraphs = Array.from(root.querySelectorAll('p'));
       const hasLongAlbamanStory = paragraphs.some((p) => {
         const html = String(p.innerHTML || '');
