@@ -1,0 +1,66 @@
+name: One-time extract Cosmos asteroid cards
+
+on:
+  push:
+    paths:
+      - '.github/workflows/one_time_extract_cosmos_asteroid_cards.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow
+        run: python -m pip install --quiet pillow
+      - name: Rebuild individual F/B images from the existing asteroid atlas
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from io import BytesIO
+          from PIL import Image
+          import base64, re
+
+          root = Path('games/albamen-cosmos')
+          chunks = sorted((root / 'assets/asteroids-comets').glob('atlas.*.b64'))
+          if not chunks:
+              raise SystemExit('No asteroid atlas chunks found')
+
+          text = ''.join(p.read_text(encoding='utf-8') for p in chunks)
+          clean = re.sub(r'[^A-Za-z0-9+/]', '', text)
+          clean += '=' * ((4 - len(clean) % 4) % 4)
+          raw = base64.b64decode(clean, validate=False)
+          atlas = Image.open(BytesIO(raw)).convert('RGB')
+
+          if atlas.width % 2 or atlas.height % 10:
+              raise SystemExit(f'Unexpected atlas size: {atlas.size}')
+          tile_w = atlas.width // 2
+          tile_h = atlas.height // 10
+          out = root / 'assets/topic-images/05-asteroids-comets'
+          out.mkdir(parents=True, exist_ok=True)
+
+          for row in range(10):
+              for col, side in ((0, 'F'), (1, 'B')):
+                  tile = atlas.crop((col*tile_w, row*tile_h, (col+1)*tile_w, (row+1)*tile_h))
+                  tile.save(out / f'{row+1:02d} {side}.webp', 'WEBP', quality=92, method=6)
+
+          print('Extracted', 20, 'images from', atlas.size, 'atlas')
+          PY
+      - name: Commit extracted images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add games/albamen-cosmos/assets/topic-images/05-asteroids-comets
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Extract real asteroid card images"
+          git push origin HEAD:main
