@@ -138,48 +138,23 @@
     video.disablePictureInPicture = true;
     holder.appendChild(video);
 
-    const parts = [
-      '/assets/video/home-hero-v2/part-00.b64?v=20260913-1',
-      '/assets/video/home-hero-v2/part-01.b64?v=20260913-1'
-    ];
+    video.src = '/assets/video/home-hero-original.mp4?v=20260913-original-quality';
+    video.preload = 'auto';
 
-    Promise.all(parts.map(url => fetch(url, { cache: 'force-cache' }).then(response => {
-      if (!response.ok) throw new Error('Hero video part failed: ' + response.status);
-      return response.text();
-    }))).then(chunks => {
-      const encoded = chunks.join('').replace(/\s+/g, '');
-      const binary = atob(encoded);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+    video.addEventListener('playing', () => {
+      holder.classList.add('is-video-playing');
+    }, { once: true });
 
-      const objectUrl = URL.createObjectURL(new Blob([bytes], { type: 'video/mp4' }));
-      video.src = objectUrl;
-      video.preload = 'auto';
-
-      video.addEventListener('playing', () => {
-        holder.classList.add('is-video-playing');
-      }, { once: true });
-
-      video.addEventListener('error', () => {
-        holder.classList.remove('is-video-playing');
-        try { URL.revokeObjectURL(objectUrl); } catch(e){}
-      }, { once: true });
-
-      const playAttempt = video.play();
-      if (playAttempt && typeof playAttempt.catch === 'function') {
-        playAttempt.catch(() => {
-          // Autoplay restrictions or a temporary network problem should never
-          // leave an empty hero: the original image remains visible.
-        });
-      }
-
-      window.addEventListener('pagehide', () => {
-        try { URL.revokeObjectURL(objectUrl); } catch(e){}
-      }, { once: true });
-    }).catch(() => {
-      // Fail closed to the original image/poster.
+    video.addEventListener('error', () => {
       holder.classList.remove('is-video-playing');
-    });
+    }, { once: true });
+
+    const playAttempt = video.play();
+    if (playAttempt && typeof playAttempt.catch === 'function') {
+      playAttempt.catch(() => {
+        // If autoplay is blocked, keep the original poster visible.
+      });
+    }
   }
 
   function injectHeroVideoStyles(){
