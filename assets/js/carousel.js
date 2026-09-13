@@ -108,9 +108,128 @@
     carousel.__carousel = { pauseAutoplay, resumeAutoplay, stopAutoplay, startAutoplay };
   }
 
+  // Homepage hero: keep the existing image visible immediately, then fade to
+  // the muted looping video only after the browser has fully loaded and begun
+  // playing it. If loading/autoplay ever fails, the image simply remains.
+  function initHeroVideo(){
+    const holder = document.querySelector('.home-page .hero-image');
+    if (!holder || holder.dataset.albaHeroVideo === '1') return;
+
+    const poster = holder.querySelector('img');
+    if (!poster) return;
+
+    holder.dataset.albaHeroVideo = '1';
+    holder.classList.add('alba-hero-media');
+    injectHeroVideoStyles();
+
+    const video = document.createElement('video');
+    video.className = 'alba-hero-video';
+    video.muted = true;
+    video.defaultMuted = true;
+    video.autoplay = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.controls = false;
+    video.preload = 'none';
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('aria-hidden', 'true');
+    video.disablePictureInPicture = true;
+    holder.appendChild(video);
+
+    const parts = [
+      '/assets/video/home-hero-v2/part-00.b64?v=20260913-1',
+      '/assets/video/home-hero-v2/part-01.b64?v=20260913-1'
+    ];
+
+    Promise.all(parts.map(url => fetch(url, { cache: 'force-cache' }).then(response => {
+      if (!response.ok) throw new Error('Hero video part failed: ' + response.status);
+      return response.text();
+    }))).then(chunks => {
+      const encoded = chunks.join('').replace(/\s+/g, '');
+      const binary = atob(encoded);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+
+      const objectUrl = URL.createObjectURL(new Blob([bytes], { type: 'video/mp4' }));
+      video.src = objectUrl;
+      video.preload = 'auto';
+
+      video.addEventListener('playing', () => {
+        holder.classList.add('is-video-playing');
+      }, { once: true });
+
+      video.addEventListener('error', () => {
+        holder.classList.remove('is-video-playing');
+        try { URL.revokeObjectURL(objectUrl); } catch(e){}
+      }, { once: true });
+
+      const playAttempt = video.play();
+      if (playAttempt && typeof playAttempt.catch === 'function') {
+        playAttempt.catch(() => {
+          // Autoplay restrictions or a temporary network problem should never
+          // leave an empty hero: the original image remains visible.
+        });
+      }
+
+      window.addEventListener('pagehide', () => {
+        try { URL.revokeObjectURL(objectUrl); } catch(e){}
+      }, { once: true });
+    }).catch(() => {
+      // Fail closed to the original image/poster.
+      holder.classList.remove('is-video-playing');
+    });
+  }
+
+  function injectHeroVideoStyles(){
+    if (document.getElementById('alba-home-hero-video-style')) return;
+    const style = document.createElement('style');
+    style.id = 'alba-home-hero-video-style';
+    style.textContent = `
+      .home-page .hero-image.alba-hero-media{
+        position:relative;
+        overflow:hidden;
+        border-radius:24px;
+        aspect-ratio:1 / 1;
+        background:#020617;
+      }
+      .home-page .hero-image.alba-hero-media > img,
+      .home-page .hero-image.alba-hero-media > .alba-hero-video{
+        width:100%;
+        height:100%;
+        display:block;
+        object-fit:cover;
+        border-radius:inherit;
+      }
+      .home-page .hero-image.alba-hero-media > img{
+        position:relative;
+        z-index:1;
+        opacity:1;
+        transition:opacity .7s ease;
+      }
+      .home-page .hero-image.alba-hero-media > .alba-hero-video{
+        position:absolute;
+        inset:0;
+        z-index:2;
+        opacity:0;
+        pointer-events:none;
+        transition:opacity .7s ease;
+      }
+      .home-page .hero-image.alba-hero-media.is-video-playing > .alba-hero-video{opacity:1;}
+      .home-page .hero-image.alba-hero-media.is-video-playing > img{opacity:0;}
+      @media (prefers-reduced-motion: reduce){
+        .home-page .hero-image.alba-hero-media > img,
+        .home-page .hero-image.alba-hero-media > .alba-hero-video{transition:none;}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   function initAll(){
     const carousels = document.querySelectorAll('.logo-carousel');
     carousels.forEach(initCarousel);
+    initHeroVideo();
   }
 
   if (document.readyState === 'loading') {
