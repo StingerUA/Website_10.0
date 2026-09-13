@@ -201,7 +201,38 @@
     document.head.appendChild(style);
   }
 
+  function injectCompactLogoStyles(){
+    if (!document.body.classList.contains('home-page')) return;
+    if (document.getElementById('alba-home-logo-compact-style')) return;
+
+    const style = document.createElement('style');
+    style.id = 'alba-home-logo-compact-style';
+    style.textContent = `
+      body.home-page .logo-carousel-wrap{
+        padding:15px 10px !important;
+        margin:10px 0 30px !important;
+      }
+      body.home-page .logo-carousel{
+        height:60px !important;
+        margin-bottom:20px !important;
+        padding-left:6px !important;
+        padding-right:6px !important;
+      }
+      body.home-page .carousel-track{gap:7px !important;}
+      body.home-page .logo-card{min-width:70px !important;}
+      body.home-page .logo-card img{max-width:130px !important;}
+      @media (max-width:900px){
+        body.home-page .logo-carousel{height:55px !important;}
+        body.home-page .carousel-track{gap:6px !important;}
+        body.home-page .logo-card{min-width:40px !important;}
+        body.home-page .logo-card img{max-width:110px !important;}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   function initAll(){
+    injectCompactLogoStyles();
     const carousels = document.querySelectorAll('.logo-carousel');
     carousels.forEach(initCarousel);
     initHeroVideo();
