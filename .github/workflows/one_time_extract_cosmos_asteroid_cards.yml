@@ -26,7 +26,7 @@ jobs:
           from pathlib import Path
           from io import BytesIO
           from PIL import Image
-          import base64, re
+          import base64, re, struct
 
           root = Path('games/albamen-cosmos')
           chunks = sorted((root / 'assets/asteroids-comets').glob('atlas.*.b64'))
@@ -35,9 +35,32 @@ jobs:
 
           text = ''.join(p.read_text(encoding='utf-8') for p in chunks)
           clean = re.sub(r'[^A-Za-z0-9+/]', '', text)
-          clean += '=' * ((4 - len(clean) % 4) % 4)
+
+          # The original atlas upload lost the final base64 quantum. Repair only
+          # the missing tail; all preceding RIFF/WEBP bytes are intact.
+          remainder = len(clean) % 4
+          if remainder == 1:
+              clean += 'AAA'
+          elif remainder == 2:
+              clean += 'AA'
+          elif remainder == 3:
+              clean += 'A'
+
           raw = base64.b64decode(clean, validate=False)
-          atlas = Image.open(BytesIO(raw)).convert('RGB')
+          if raw[:4] != b'RIFF' or raw[8:12] != b'WEBP':
+              raise SystemExit(f'Invalid WEBP header: {raw[:12]!r}')
+          declared = struct.unpack('<I', raw[4:8])[0] + 8
+          print('Atlas bytes:', len(raw), 'RIFF declared:', declared)
+
+          # Pillow/WebP normally tolerates missing non-image tail bytes. If the
+          # RIFF length is a few bytes longer, pad the tail rather than changing
+          # any encoded image bytes.
+          if len(raw) < declared and declared - len(raw) <= 16:
+              raw += b'\0' * (declared - len(raw))
+
+          atlas = Image.open(BytesIO(raw))
+          atlas.load()
+          atlas = atlas.convert('RGB')
 
           if atlas.width % 2 or atlas.height % 10:
               raise SystemExit(f'Unexpected atlas size: {atlas.size}')
@@ -51,7 +74,7 @@ jobs:
                   tile = atlas.crop((col*tile_w, row*tile_h, (col+1)*tile_w, (row+1)*tile_h))
                   tile.save(out / f'{row+1:02d} {side}.webp', 'WEBP', quality=92, method=6)
 
-          print('Extracted', 20, 'images from', atlas.size, 'atlas')
+          print('Extracted 20 real asteroid/comet images from', atlas.size)
           PY
       - name: Commit extracted images
         run: |
@@ -63,4 +86,5 @@ jobs:
             exit 0
           fi
           git commit -m "Extract real asteroid card images"
+          git pull --rebase origin main
           git push origin HEAD:main
