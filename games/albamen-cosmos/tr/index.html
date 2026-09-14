@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>.lang,.language-switcher,.language-selector,#auth-lang,[data-lang],select[name="lang"]{display:none!important}</style>
-  <script src="/games/albamen-cosmos/topic-card-visuals.js?v=20260914-3"></script>
+  <script src="/games/albamen-cosmos/topic-card-visuals.js?v=20260914-4"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -26,41 +26,10 @@ forced.set('lang',LANG);
 history.replaceState(history.state,document.title,location.pathname+'?'+forced.toString()+location.hash);
 try{localStorage.setItem('albamen_cosmos_lang',LANG)}catch{}
 document.documentElement.lang=LANG;
-
-const redirectIfLoginRequired=()=>{
-  if(!document.querySelector('#auth button#login,.auth-card button#login,button.login#login'))return false;
-  try{sessionStorage.setItem('albaspace_auth_return_to',location.pathname+(cleanSearch?'?'+cleanSearch:'')+location.hash)}catch{}
-  location.href=ACCOUNT_PAGE;
-  return true;
-};
-const authObserver=new MutationObserver(redirectIfLoginRequired);
-authObserver.observe(document.documentElement,{childList:true,subtree:true});
-setTimeout(()=>authObserver.disconnect(),15000);
-
-const unpack=async parts=>{
-  const rs=await Promise.all(parts.map(x=>fetch(x,{cache:'no-cache'})));
-  if(rs.some(r=>!r.ok))throw new Error('asset');
-  const b=(await Promise.all(rs.map(r=>r.text()))).map(x=>x.trim()).join('');
-  const u=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
-  return new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
-};
-
-try{
-  const [css,code]=await Promise.all([
-    unpack(['style-v4.001.00.b64','style-v4.001.01.b64','style-v4.002.b64']),
-    unpack(['app-safe.00.b64','app-safe.01.b64','app-safe.02.b64','app-safe.03.b64','app-safe.04.b64'])
-  ]);
-  const s=document.createElement('style');
-  s.textContent=css+'\n.lang,.language-switcher,.language-selector,#auth-lang,[data-lang],select[name="lang"]{display:none!important}';
-  document.head.appendChild(s);
-  await import(URL.createObjectURL(new Blob([code],{type:'text/javascript'})));
-  window.AlbamenTopicCardVisuals?.install();
-  redirectIfLoginRequired();
-  history.replaceState(history.state,document.title,location.pathname+(cleanSearch?'?'+cleanSearch:'')+location.hash);
-}catch(e){
-  console.error('[ALBAMEN Cosmos]',e);
-  document.getElementById('root').innerHTML='<div style="min-height:100vh;display:grid;place-items:center;background:#07091A;color:#F0F4FF;font-family:system-ui;text-align:center;padding:24px"><div><b>ALBAMEN Cosmos</b><p>Oyun yüklenemedi. Lütfen sayfayı yenileyin.</p></div></div>';
-}
+const redirectIfLoginRequired=()=>{if(!document.querySelector('#auth button#login,.auth-card button#login,button.login#login'))return false;try{sessionStorage.setItem('albaspace_auth_return_to',location.pathname+(cleanSearch?'?'+cleanSearch:'')+location.hash)}catch{}location.href=ACCOUNT_PAGE;return true;};
+const authObserver=new MutationObserver(redirectIfLoginRequired);authObserver.observe(document.documentElement,{childList:true,subtree:true});setTimeout(()=>authObserver.disconnect(),15000);
+const unpack=async parts=>{const rs=await Promise.all(parts.map(x=>fetch(x,{cache:'no-cache'})));if(rs.some(r=>!r.ok))throw new Error('asset');const b=(await Promise.all(rs.map(r=>r.text()))).map(x=>x.trim()).join('');const u=Uint8Array.from(atob(b),c=>c.charCodeAt(0));return new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text();};
+try{const [css,code]=await Promise.all([unpack(['style-v4.001.00.b64','style-v4.001.01.b64','style-v4.002.b64']),unpack(['app-safe.00.b64','app-safe.01.b64','app-safe.02.b64','app-safe.03.b64','app-safe.04.b64'])]);const s=document.createElement('style');s.textContent=css+'\n.lang,.language-switcher,.language-selector,#auth-lang,[data-lang],select[name="lang"]{display:none!important}';document.head.appendChild(s);await import(URL.createObjectURL(new Blob([code],{type:'text/javascript'})));window.AlbamenTopicCardVisuals?.install();redirectIfLoginRequired();history.replaceState(history.state,document.title,location.pathname+(cleanSearch?'?'+cleanSearch:'')+location.hash);}catch(e){console.error('[ALBAMEN Cosmos]',e);document.getElementById('root').innerHTML='<div style="min-height:100vh;display:grid;place-items:center;background:#07091A;color:#F0F4FF;font-family:system-ui;text-align:center;padding:24px"><div><b>ALBAMEN Cosmos</b><p>Oyun yüklenemedi. Lütfen sayfayı yenileyin.</p></div></div>';}
 </script>
 </body>
 </html>
