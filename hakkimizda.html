@@ -1,286 +1,112 @@
-<!DOCTYPE html><html lang="tr">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
-  <!-- Универсальный favicon-блок -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alba Space – Hakkımızda</title>
+  <meta name="description" content="Alba Space - Uzayı, bilimi ve teknolojiyi herkes için erişilebilir kılan bir uzay girişimi.">
   <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#020617">
-  <meta name="msapplication-TileColor" content="#020617">
-  <meta name="msapplication-TileImage" content="/favicon.png">
-  <meta charset="UTF-8">  <title>Alba Space – Hakkımızda</title>  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Alba Space - Uzayı, bilimi ve teknolojiyi herkes için erişilebilir kılan bir uzay girişimi.">  <!-- Стили сайта -->  <link rel="stylesheet" href="/assets/css/site.css" />
-  <link rel="stylesheet" href="/assets/css/fix-layout.css">  <!-- Встроенные стили для этой страницы -->  <style>
-    :root {
-      --header-bg: #020617;
-      --accent: #00c2ff;
-      --page-bg: #020617;
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
-    }
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <style>
+    :root{--accent:#00c2ff;--text-main:#f9fafb;--text-muted:#9ca3af}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text-main);min-height:100vh;display:flex;flex-direction:column;background:#020617}
+    .about-shell{max-width:1100px;margin:50px auto 80px;padding:0 20px;flex:1}
+    .about-card{border-radius:26px;box-shadow:0 28px 90px rgba(0,0,0,.85);padding:28px 24px 36px;border:1px solid rgba(148,163,184,.4);backdrop-filter:blur(12px)}
+    .page-title{font-size:32px;text-align:center;margin-bottom:6px;color:#f9fafb}
+    .page-sub{font-size:14px;text-align:center;color:var(--text-muted);margin-bottom:26px}
+    .about-text{font-size:16px;line-height:1.7;color:#e5e7eb;margin-bottom:32px;white-space:pre-line}
+    .about-text strong{color:#fff}
+    .team-title{font-size:24px;text-align:center;margin-bottom:18px;color:#f9fafb;text-transform:uppercase;letter-spacing:.12em}
+    .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:22px;margin-top:10px}
+    .team-card{text-align:center;padding:18px 14px 20px;border-radius:18px;border:1px solid rgba(55,65,81,.8);box-shadow:0 12px 32px rgba(0,0,0,.6);transition:transform .2s ease}
+    .team-card:hover{transform:translateY(-5px)}
+    .team-photo{width:min(120px,100%);height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:50%;margin-bottom:10px;box-shadow:0 10px 28px rgba(0,0,0,.8);border:2px solid rgba(148,163,184,.7);background:#1e293b}
+    .team-card h3{font-size:17px;margin-bottom:4px;color:#f9fafb}
+    .team-card p{font-size:13px;color:var(--text-muted)}
+    .team-socials{display:flex;justify-content:center;align-items:center;gap:10px;margin:12px 0 0;flex-wrap:wrap;min-height:24px}
+    .team-socials a{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:0;background:none;text-decoration:none;transition:transform .2s ease,filter .2s ease}
+    .team-socials a:hover{transform:translateY(-2px);filter:brightness(1.15)}
+    .team-socials img{display:block;width:22px!important;height:22px!important;max-width:none!important;aspect-ratio:auto!important;object-fit:contain!important;border-radius:4px!important;margin:0!important;box-shadow:none!important;border:0!important;background:transparent!important}
+    @media(max-width:768px){.about-shell{margin:40px auto 60px;padding:0 14px}.about-card{padding:22px 16px 26px}.page-title{font-size:26px}.team-grid{gap:16px}}
+  </style>
+</head>
+<body>
+  <div data-include="/header-tr.html" id="header-placeholder"></div>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <div class="about-shell">
+    <div class="about-card">
+      <h1 class="page-title">ALBA SPACE</h1>
+      <p class="page-sub">Uzayı, bilimi ve teknolojiyi herkes için erişilebilir kılan bir uzay girişimi.</p>
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-color: #020617;
-    }
+      <div class="about-text">
+        2022 yılında Türkiye’de kurulan <strong>ALBA SPACE</strong>, Türkiye’de ilk ve tek olarak markaları uzaya çıkaran ve stratosfer tabakasında bilimsel deneyler yapan lider bir uzay teknolojisi oluşumudur.
 
-    .about-shell {
-      max-width: 1100px;
-      margin: 50px auto 80px;
-      padding: 0 20px;
-      flex: 1;
-    }
+        Profesyonel ve uzman ekibiyle uzay teknolojileri alanında; sosyal sorumluluk ve farkındalık projeleri, eğitim programları ve yenilikçi deneyim tasarımlarıyla karbon nötr prensibi doğrultusunda gelecek neslin ve gezegenimizin sağlığını önemseyerek geleceği olumlu tasarlamada önemli rol oynamaktadır.
+      </div>
 
-    .about-card {
-      border-radius: 26px;
-      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.85);
-      padding: 28px 24px 36px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      backdrop-filter: blur(12px);
-    }
+      <h2 class="team-title">EKİBİMİZ</h2>
 
-    .page-title {
-      font-size: 32px;
-      text-align: center;
-      margin-bottom: 6px;
-      color: #f9fafb;
-    }
+      <div class="team-grid">
+        <div class="team-card">
+          <img class="team-photo" src="/assets/images/team-idris.jpg" alt="İdris Albayrak" onerror="this.src='https://ui-avatars.com/api/?name=Idris+A&background=0D8ABC&color=fff'">
+          <h3>İdris ALBAYRAK</h3>
+          <p>Kurucu ve Genel Koordinatör</p>
+          <div class="team-socials">
+            <a href="https://www.instagram.com/idrisalbayrak_?igsi=MWM1MDR1ZHd2anZ5ZA%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><img src="/assets/icons/inst.png" alt="Instagram"></a>
+            <a href="https://www.linkedin.com/in/idrisalbayrak?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><img src="/assets/icons/linkdin.png" alt="LinkedIn"></a>
+          </div>
+        </div>
 
-    .page-sub {
-      font-size: 14px;
-      text-align: center;
-      color: var(--text-muted);
-      margin-bottom: 26px;
-    }
+        <div class="team-card">
+          <img class="team-photo" src="/assets/images/team-nick.jpg" alt="Nick Nesterenko" onerror="this.src='https://ui-avatars.com/api/?name=Nick+N&background=0D8ABC&color=fff'">
+          <h3>Nick NESTERENKO</h3>
+          <p>2D/3D Tasarım Uzmanı ve AR APP Geliştirici</p>
+          <div class="team-socials">
+            <a href="https://www.instagram.com/nick_nesterenko" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><img src="/assets/icons/inst.png" alt="Instagram"></a>
+            <a href="https://www.linkedin.com/in/nickolas-nesterenko-348596255/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><img src="/assets/icons/linkdin.png" alt="LinkedIn"></a>
+            <a href="https://www.artstation.com/double__n" target="_blank" rel="noopener noreferrer" aria-label="Portfolio" title="Portfolio"><img src="data:image/png;base64,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" alt="Portfolio"></a>
+          </div>
+        </div>
 
-    .about-text {
-      font-size: 16px;
-      line-height: 1.7;
-      color: #e5e7eb;
-      margin-bottom: 32px;
-      white-space: pre-line;
-    }
+        <div class="team-card">
+          <img class="team-photo" src="/assets/images/a2.jpg" alt="Sümeyye AKSOY" onerror="this.src='https://ui-avatars.com/api/?name=Sumeyye+A&background=0D8ABC&color=fff'">
+          <h3>Sümeyye AKSOY</h3>
+          <p>Kurumsal Satış Temsilcisi</p>
+          <div class="team-socials">
+            <a href="https://www.instagram.com/sumeyyee.aksy?igsi=MWpyb3R3a2d5NDh0cg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><img src="/assets/icons/inst.png" alt="Instagram"></a>
+          </div>
+        </div>
 
-    .about-text strong {
-      color: #ffffff;
-    }
+        <div class="team-card">
+          <img class="team-photo" src="/assets/images/team-doga.jpg" alt="Doğa TOPÇU" onerror="this.src='https://ui-avatars.com/api/?name=Doga+T&background=0D8ABC&color=fff'">
+          <h3>Doğa TOPÇU</h3>
+          <p>Kurumsal Satış Temsilcisi</p>
+          <div class="team-socials">
+            <a href="https://www.instagram.com/doga.to?igsi=bnFtZnYxMHJ6NGpi" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><img src="/assets/icons/inst.png" alt="Instagram"></a>
+            <a href="https://www.linkedin.com/in/dogatopcu10?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><img src="/assets/icons/linkdin.png" alt="LinkedIn"></a>
+          </div>
+        </div>
 
-    .team-title {
-      font-size: 24px;
-      text-align: center;
-      margin-bottom: 18px;
-      color: #f9fafb;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
-      gap: 22px;
-      margin-top: 10px;
-    }
-
-    .team-card {
-      text-align: center;
-      padding: 18px 14px 20px;
-      border-radius: 18px;
-      border: 1px solid rgba(55, 65, 81, 0.8);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
-      transition: transform 0.2s ease;
-    }
-
-    .team-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .team-card img {
-      width: min(120px, 100%);
-      height: auto;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-bottom: 10px;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.8);
-      border: 2px solid rgba(148, 163, 184, 0.7);
-      background-color: #1e293b;
-    }
-
-    .team-card h3 {
-      font-size: 17px;
-      margin-bottom: 4px;
-      color: #f9fafb;
-    }
-
-    .team-card p {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    /* Социальные сети */
-    .team-socials {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 10px 0 12px;
-      flex-wrap: wrap;
-    }
-
-    .team-socials a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      border: none;
-      background: none;
-      transition: transform 0.2s ease;
-    }
-
-    .team-socials a:hover {
-      transform: translateY(-2px);
-    }
-
-    .team-socials img {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-    }
-
-    @media (max-width: 768px) {
-      .about-shell {
-        margin: 40px auto 60px;
-        padding: 0 14px;
-      }
-
-      .about-card {
-        padding: 22px 16px 26px;
-      }
-
-      .page-title {
-        font-size: 26px;
-      }
-
-      .team-grid {
-        gap: 16px;
-      }
-    }
-  </style></head><body>  <!-- Header Placeholder -->  <div data-include="/header-tr.html" id="header-placeholder">
-    <!-- Fallback content if JS fails or file missing -->
-    <header style="padding: 20px; text-align: center; border-bottom: 1px solid #333;">
-      <span style="color: #00c2ff; font-weight: bold;">ALBA SPACE</span> Navigation
-    </header>
-  </div>  <div class="about-shell">
-    <div class="about-card">  <h1 class="page-title">ALBA SPACE</h1>
-
-  <p class="page-sub">
-    Uzayı, bilimi ve teknolojiyi herkes için erişilebilir kılan bir uzay girişimi.
-  </p>
-
-  <div class="about-text">
-    2022 yılında Türkiye’de kurulan <strong>ALBA SPACE</strong>, Türkiye’de ilk ve tek olarak markaları uzaya çıkaran ve stratosfer tabakasında bilimsel deneyler yapan lider bir uzay teknolojisi oluşumudur.
-
-    Profesyonel ve uzman ekibiyle uzay teknolojileri alanında; sosyal sorumluluk ve farkındalık projeleri, eğitim programları ve yenilikçi deneyim tasarımlarıyla karbon nötr prensibi doğrultusunda gelecek neslin ve gezegenimizin sağlığını önemseyerek geleceği olumlu tasarlamada önemli rol oynamaktadır.
+        <div class="team-card">
+          <img class="team-photo" src="/assets/images/team-asli.jpg" alt="Aslı BOLAT" onerror="this.src='https://ui-avatars.com/api/?name=Asli+B&background=0D8ABC&color=fff'">
+          <h3>Aslı BOLAT</h3>
+          <p>Astronom ve Eğitmen</p>
+          <div class="team-socials">
+            <a href="https://www.instagram.com/thesunbeamasli?igsi=MXU0MTNsY3pobXc3Mg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><img src="/assets/icons/inst.png" alt="Instagram"></a>
+            <a href="https://www.linkedin.com/in/asl%C4%B1-bolatt?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><img src="/assets/icons/linkdin.png" alt="LinkedIn"></a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <h2 class="team-title">EKİBİMİZ</h2>
-
-  <div class="team-grid">
-
-    <!-- İdris ALBAYRAK -->
-    <div class="team-card">
-      <img
-        src="/assets/images/team-idris.jpg"
-        alt="İdris Albayrak"
-        onerror="this.src='https://ui-avatars.com/api/?name=Idris+A&background=0D8ABC&color=fff'"
-      >
-
-      <h3>İdris ALBAYRAK</h3>
-      <p>Kurucu ve Genel Koordinatör</p>
-    </div>
-
-    <!-- Nick NESTERENKO -->
-    <div class="team-card">
-      <img
-        src="/assets/images/team-nick.jpg"
-        alt="Nick Nesterenko"
-        onerror="this.src='https://ui-avatars.com/api/?name=Nick+N&background=0D8ABC&color=fff'"
-      >
-
-      <h3>Nick NESTERENKO</h3>
-      <p>2D/3D Tasarım Uzmanı ve AR APP Geliştirici</p>
-    </div>
-
-    <!-- Sümeyye AKSOY -->
-    <div class="team-card">
-      <img
-        src="/assets/images/a2.jpg"
-        alt="Sümeyye AKSOY"
-        onerror="this.src='https://ui-avatars.com/api/?name=Sumeyye+A&background=0D8ABC&color=fff'"
-      >
-
-      <h3>Sümeyye AKSOY</h3>
-      <p>Kurumsal Satış Temsilcisi</p>
-    </div>
-
-    <!-- Doğa TOPÇU -->
-    <div class="team-card">
-      <img
-        src="/assets/images/team-doga.jpg"
-        alt="Doğa TOPÇU"
-        onerror="this.src='https://ui-avatars.com/api/?name=Doga+T&background=0D8ABC&color=fff'"
-      >
-
-      <h3>Doğa TOPÇU</h3>
-      <p>Kurumsal Satış Temsilcisi</p>
-    </div>
-
-    <!-- Aslı BOLAT -->
-    <div class="team-card">
-      <img
-        src="/assets/images/team-asli.jpg"
-        alt="Aslı BOLAT"
-        onerror="this.src='https://ui-avatars.com/api/?name=Asli+B&background=0D8ABC&color=fff'"
-      >
-
-      <h3>Aslı BOLAT</h3>
-      <p>Astronom ve Eğitmen</p>
-    </div>
-
-  </div>
-</div>
-
-  </div>  <div data-include="/footer-tr.html"></div>  <!-- Scripts -->  <script src="/assets/js/include.js" defer></script>  <script src="/assets/js/menu-toggle.js" defer></script>  <script>
-    const revealItems = document.querySelectorAll('.reveal');
-
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.18,
-      rootMargin: '0px 0px -8% 0px'
-    });
-
-    revealItems.forEach((item, index) => {
-      const delay = item.dataset.direction === 'left'
-        ? index * 0.025
-        : index * 0.03;
-
-      item.style.setProperty('--reveal-delay', `${delay}s`);
-      observer.observe(item);
-    });
-  </script>  <!-- Social links -->    <!-- Person-specific team social links -->
-  <script>
-    const artstationIcon = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84Qz
+  <div data-include="/footer-tr.html"></div>
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+</body>
+</html>
