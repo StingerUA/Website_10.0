@@ -216,7 +216,7 @@
       >
 
       <h3>Nick NESTERENKO</h3>
-      <p>3B Tasarım Uzmanı/AR APP Developer</p>
+      <p>2D/3D Tasarım Uzmanı ve AR APP Geliştirici</p>
     </div>
 
     <!-- Sümeyye AKSOY -->
@@ -283,49 +283,4 @@
     });
   </script>  <!-- Social links -->    <!-- Person-specific team social links -->
   <script>
-    const teamSocialLinks = [
-      [
-        { href: 'https://www.instagram.com/idrisalbayrak_?igsi=MWM1MDR1ZHd2anZ5ZA%3D%3D&utm_source=qr', label: 'Instagram', icon: '/assets/icons/inst.png' },
-        { href: 'https://www.linkedin.com/in/idrisalbayrak?utm_source=share_via&utm_content=profile&utm_medium=member_ios', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' }
-      ],
-      [
-        { href: 'https://www.instagram.com/nick_nesterenko', label: 'Instagram', icon: '/assets/icons/inst.png' },
-        { href: 'https://www.linkedin.com/in/nickolas-nesterenko-348596255/', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' }
-      ],
-      [
-        { href: 'https://www.instagram.com/sumeyyee.aksy?igsi=MWpyb3R3a2d5NDh0cg==', label: 'Instagram', icon: '/assets/icons/inst.png' }
-      ],
-      [
-        { href: 'https://www.instagram.com/doga.to?igsi=bnFtZnYxMHJ6NGpi', label: 'Instagram', icon: '/assets/icons/inst.png' },
-        { href: 'https://www.linkedin.com/in/dogatopcu10?utm_source=share_via&utm_content=profile&utm_medium=member_ios', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' }
-      ],
-      [
-        { href: 'https://www.instagram.com/thesunbeamasli?igsi=MXU0MTNsY3pobXc3Mg==', label: 'Instagram', icon: '/assets/icons/inst.png' },
-        { href: 'https://www.linkedin.com/in/asl%C4%B1-bolatt?utm_source=share_via&utm_content=profile&utm_medium=member_ios', label: 'LinkedIn', icon: '/assets/icons/linkdin.png' }
-      ]
-    ];
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.team-card').forEach((card, index) => {
-        if (card.querySelector('.team-socials')) return;
-
-        const socials = document.createElement('div');
-        socials.className = 'team-socials';
-
-        (teamSocialLinks[index] || []).forEach(({ href, label, icon }) => {
-          const link = document.createElement('a');
-          link.href = href;
-          link.target = '_blank';
-          link.rel = 'noopener noreferrer';
-          link.setAttribute('aria-label', label);
-          link.setAttribute('title', label);
-          link.innerHTML = `<img src="${icon}" alt="${label}" width="16" height="16">`;
-          socials.appendChild(link);
-        });
-
-        card.appendChild(socials);
-      });
-    });
-  </script>
-</body>
-</html>
+    const artstationIcon = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84Qz
