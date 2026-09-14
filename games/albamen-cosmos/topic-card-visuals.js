@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20260914-2';
+const VERSION='20260914-3';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const FOLDERS=['01-solar-system','02-planets','03-moon','04-stars','05-asteroids-comets','06-topic-06','07-topic-07','08-topic-08','09-topic-09','10-topic-10'];
 let installed=false,DATA=null;
@@ -44,11 +44,11 @@ function ensureStyle(){
   const s=document.createElement('style');
   s.id='cosmos-topic-visual-style';
   s.textContent=`
-    #flash-card.flash-card{height:auto!important;min-height:0!important;max-height:none!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;overflow:visible!important;transform:none!important;rotate:none!important;scale:1!important;transform-style:flat!important;backface-visibility:visible!important;perspective:none!important;padding-bottom:22px!important;}
-    #flash-card.flash-card>.badge{position:static!important;align-self:flex-start!important;transform:none!important;backface-visibility:visible!important;}
-    #flash-card.flash-card>.cosmos-topic-visual{order:2!important;}
-    #flash-card.flash-card>h2,#flash-card.flash-card>.answer-side{order:3!important;position:static!important;inset:auto!important;width:100%!important;max-width:none!important;transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important;text-align:center!important;margin:8px 0 0!important;padding:0 16px!important;box-sizing:border-box!important;}
-    #flash-card.flash-card>.tiny,#flash-card.flash-card>.explain{order:4!important;position:static!important;inset:auto!important;width:100%!important;max-width:none!important;transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important;text-align:center!important;margin:10px 0 0!important;padding:0 16px!important;box-sizing:border-box!important;}
+    #flash-card.flash-card{height:auto!important;min-height:0!important;max-height:none!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;overflow:visible!important;transform:none!important;rotate:none!important;scale:1!important;transform-style:flat!important;backface-visibility:visible!important;perspective:none!important;padding:16px 0 22px!important;}
+    #flash-card.flash-card>.badge{display:none!important;}
+    #flash-card.flash-card>.cosmos-topic-visual{order:1!important;}
+    #flash-card.flash-card>h2,#flash-card.flash-card>.answer-side{order:2!important;position:static!important;inset:auto!important;width:100%!important;max-width:none!important;transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important;text-align:center!important;margin:8px 0 0!important;padding:0 16px!important;box-sizing:border-box!important;}
+    #flash-card.flash-card>.tiny,#flash-card.flash-card>.explain{order:3!important;position:static!important;inset:auto!important;width:100%!important;max-width:none!important;transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important;text-align:center!important;margin:10px 0 0!important;padding:0 16px!important;box-sizing:border-box!important;}
     #flash-card.flash-card .cosmos-topic-visual,#flash-card.flash-card .cosmos-topic-visual *{transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important;perspective:none!important;}
     .cosmos-topic-visual img{transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important;image-orientation:from-image!important;}
     .card-actions{position:static!important;transform:none!important;}
@@ -73,11 +73,8 @@ function applyCardLayout(host){
 function visual(host,kind){
   let v=host.querySelector(':scope > .cosmos-topic-visual');if(v)return v;
   v=document.createElement('div');v.className='cosmos-topic-visual';v.setAttribute('aria-hidden','true');
-  v.style.cssText=`display:block!important;position:relative!important;overflow:hidden!important;width:min(${kind==='quiz'?'88%':'88%'},340px)!important;aspect-ratio:1/1!important;flex:0 0 auto!important;margin:${kind==='quiz'?'0 auto 18px':'16px auto 18px'}!important;border-radius:16px!important;background:#0b1028!important;box-shadow:0 8px 22px rgba(0,0,0,.22)!important;pointer-events:none!important;z-index:1!important;transform:none!important;backface-visibility:visible!important;`;
-  if(kind==='card'){
-    const badge=host.querySelector(':scope > .badge');
-    if(badge)badge.insertAdjacentElement('afterend',v);else host.prepend(v);
-  }else host.prepend(v);
+  v.style.cssText=`display:block!important;position:relative!important;overflow:hidden!important;width:min(88%,340px)!important;aspect-ratio:1/1!important;flex:0 0 auto!important;margin:${kind==='quiz'?'0 auto 18px':'0 auto 18px'}!important;border-radius:16px!important;background:#0b1028!important;box-shadow:0 8px 22px rgba(0,0,0,.22)!important;pointer-events:none!important;z-index:1!important;transform:none!important;backface-visibility:visible!important;`;
+  host.prepend(v);
   return v;
 }
 function paint(v,a){
