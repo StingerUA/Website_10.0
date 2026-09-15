@@ -1,90 +1,50 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20260915-2';
+const VERSION='20260915-3';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const FOLDERS=['01-solar-system','02-planets','03-moon','04-stars','05-asteroids-comets','06-topic-06','07-topic-07','08-topic-08','09-topic-09','10-topic-10'];
-let installed=false,DATA=null;
+let installed=false,DATA=null,observer=null;
 let categoryIds=[],categoryFolder=new Map(),labelToCid=new Map(),flashMap=new Map(),questionMap=new Map();
-let assetCache=new Map(),lastCardLog='',lastQuizLog='';
 const norm=v=>String(v||'').replace(/\s+/g,' ').trim().toLocaleLowerCase();
-const visible=el=>{if(!el)return false;const r=el.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(el).visibility!=='hidden'&&getComputedStyle(el).display!=='none';};
-async function text(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}: ${url}`);return (await r.text()).trim();}
-async function loadData(){const parts=await Promise.all(DATA_FILES.map(n=>text(BASE+n+'?v='+VERSION)));const b64=parts.join('').replace(/\s+/g,'');const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(stream).text());}
-function buildMaps(){const cats=DATA?.categories||{};const pref=cats.en||cats.tr||cats.ru||cats[Object.keys(cats)[0]]||{};categoryIds=Object.keys(pref).slice(0,10);categoryIds.forEach((cid,i)=>categoryFolder.set(cid,FOLDERS[i]||`topic-${i+1}`));for(const table of Object.values(cats))for(const [cid,label] of Object.entries(table||{})){const k=norm(label);if(k)labelToCid.set(k,cid);}for(const cid of categoryIds){const qids=Object.keys(DATA.qmeta||{}).filter(id=>DATA.qmeta[id]?.cid===cid).slice(0,10);const fids=Object.keys(DATA.fcmeta||{}).filter(id=>DATA.fcmeta[id]?.cid===cid).slice(0,10);for(const table of Object.values(DATA.translations||{})){qids.forEach((id,index)=>{const s=norm(table?.[id]?.question);if(s)questionMap.set(s,{cid,index});});fids.forEach((id,index)=>{const f=norm(table?.[id]?.front),b=norm(table?.[id]?.back);if(f)flashMap.set(f,{cid,index,side:'F'});if(b)flashMap.set(b,{cid,index,side:'B'});});}}console.info('[ALBAMEN Cosmos] topic image map ready',{categories:categoryIds.length,questions:questionMap.size,cards:flashMap.size});}
+const txt=el=>String(el?.textContent||'').replace(/\s+/g,' ').trim();
+const visible=el=>{if(!el)return false;const r=el.getBoundingClientRect();const s=getComputedStyle(el);return r.width>0&&r.height>0&&s.display!=='none'&&s.visibility!=='hidden';};
+async function getText(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}: ${url}`);return (await r.text()).trim();}
+async function loadData(){const parts=await Promise.all(DATA_FILES.map(n=>getText(BASE+n+'?v='+VERSION)));const b64=parts.join('').replace(/\s+/g,'');const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(stream).text());}
+function buildMaps(){const cats=DATA?.categories||{};const pref=cats.en||cats.tr||cats.ru||cats[Object.keys(cats)[0]]||{};categoryIds=Object.keys(pref).slice(0,10);categoryIds.forEach((cid,i)=>categoryFolder.set(cid,FOLDERS[i]||`topic-${i+1}`));for(const table of Object.values(cats))for(const [cid,label] of Object.entries(table||{})){const k=norm(label);if(k)labelToCid.set(k,cid);}for(const cid of categoryIds){const qids=Object.keys(DATA.qmeta||{}).filter(id=>DATA.qmeta[id]?.cid===cid).slice(0,10);const fids=Object.keys(DATA.fcmeta||{}).filter(id=>DATA.fcmeta[id]?.cid===cid).slice(0,10);for(const table of Object.values(DATA.translations||{})){qids.forEach((id,index)=>{const s=norm(table?.[id]?.question);if(s)questionMap.set(s,{cid,index});});fids.forEach((id,index)=>{const f=norm(table?.[id]?.front),b=norm(table?.[id]?.back);if(f)flashMap.set(f,{cid,index,side:'F'});if(b)flashMap.set(b,{cid,index,side:'B'});});}}console.info('[ALBAMEN Cosmos] image map ready',{categories:categoryIds.length,cards:flashMap.size,questions:questionMap.size});}
 function cidFromText(v){const x=norm(v);let best='',len=0;for(const [label,cid] of labelToCid){if(label.length>len&&(x===label||x.includes(label))){best=cid;len=label.length;}}return best;}
-function visibleCounterIndex(){for(const n of document.querySelectorAll('.section-title span,.q-count,[class*="count"]')){if(!visible(n))continue;const m=String(n.textContent||'').match(/\b(10|[1-9])\s*\/\s*10\b/);if(m)return Number(m[1])-1;}return -1;}
-function isHintText(t){return /cevabı görmek için karta dokun|tap the card|нажмите[^.]{0,40}карточ|нажми[^.]{0,40}карточ/.test(norm(t));}
-function getCard(){
-  const direct=[document.getElementById('flash-card'),document.getElementById('flash'),...document.querySelectorAll('.flash-card')].filter(Boolean);
-  for(const el of direct)if(visible(el))return el;
-  let hint=null;
-  for(const el of document.querySelectorAll('p,span,div,small')){if(visible(el)&&isHintText(el.textContent)){hint=el;break;}}
-  if(!hint)return null;
-  let p=hint.parentElement,best=null;
-  for(let i=0;p&&i<6;i++,p=p.parentElement){
-    const r=p.getBoundingClientRect();
-    if(r.width>=220&&r.width<=700&&r.height>=160&&p.querySelector('h1,h2,h3')&&p.querySelector('.badge,[class*="badge"]')){best=p;break;}
-  }
-  return best;
-}
-function getCardMainText(host){for(const el of host?.querySelectorAll('h1,h2,h3,.answer-side,[class*="answer-side"]')||[]){if(!visible(el))continue;const t=norm(el.textContent);if(t&&t.length>2)return t;}return '';}
-function currentCategoryCid(host){const candidates=[document.querySelector('.section-title')?.textContent,host?.querySelector('.badge,[class*="badge"]')?.textContent,host?.textContent];for(const x of candidates){const cid=cidFromText(x);if(cid)return cid;}return '';}
-function isBack(host){return [...host.querySelectorAll('.answer-side,[class*="answer-side"],.explain,[class*="explain"]')].some(visible);}
-function pathFor(entry,side){const folder=categoryFolder.get(entry.cid);if(!folder)return'';return `${BASE}assets/topic-images/${folder}/${String(entry.index+1).padStart(2,'0')} ${side}.webp`;}
-async function resolveAsset(entry,side){const path=pathFor(entry,side);if(!path)return null;const key=path+'|'+VERSION;if(assetCache.has(key))return assetCache.get(key);const p=(async()=>{const r=await fetch(path+'?v='+VERSION,{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}: ${path}`);return{url:URL.createObjectURL(await r.blob()),path};})().catch(e=>{console.warn('[ALBAMEN Cosmos] topic image load failed',e);return null;});assetCache.set(key,p);return p;}
-function ensureStyle(){if(document.getElementById('cosmos-topic-visual-style'))return;const s=document.createElement('style');s.id='cosmos-topic-visual-style';s.textContent=`
-.cosmos-card-host{height:auto!important;min-height:0!important;max-height:none!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;overflow:visible!important;transform:none!important;transform-style:flat!important;backface-visibility:visible!important;padding:14px 16px 22px!important}
-.cosmos-card-host>.badge,.cosmos-card-host>[class*="badge"]{display:none!important}
-.cosmos-card-host>.cosmos-topic-visual{order:1!important}
-.cosmos-card-host>h1,.cosmos-card-host>h2,.cosmos-card-host>h3,.cosmos-card-host>.answer-side,.cosmos-card-host>[class*="answer-side"]{order:2!important;position:static!important;transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important;text-align:center!important;margin:10px 0 0!important;padding:0 8px!important}
-.cosmos-card-host>.tiny,.cosmos-card-host>.explain,.cosmos-card-host>[class*="explain"]{order:3!important;position:static!important;transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important;text-align:center!important;margin:10px 0 0!important;padding:0 8px!important}
-.cosmos-topic-visual,.cosmos-topic-visual *{transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important}
-.card-actions{display:grid!important;grid-template-columns:repeat(3,1fr)!important;position:static!important;transform:none!important}
+function counterIndex(){for(const n of document.querySelectorAll('.section-title span,.q-count,[class*="count"]')){if(!visible(n))continue;const m=txt(n).match(/\b(10|[1-9])\s*\/\s*10\b/);if(m)return Number(m[1])-1;}return -1;}
+function originalCard(){for(const sel of ['#flash-card','#flash','.flash-card','section.card.flash-card']){for(const el of document.querySelectorAll(sel)){if(visible(el)||el.offsetParent!==null)return el;}}return null;}
+function cardSide(card){return card.querySelector('.answer-side,[class*="answer-side"]')?'B':'F';}
+function cardText(card,side){if(side==='B'){const box=card.querySelector('.answer-side,[class*="answer-side"]');const h=box?.querySelector('h1,h2,h3,strong')||box;const explain=card.querySelector('.explain,[class*="explain"]');return{title:txt(h),sub:txt(explain)};}const h=card.querySelector('h1,h2,h3');const hint=card.querySelector('.tiny,[class*="tiny"]');return{title:txt(h),sub:txt(hint)};}
+function currentEntry(card,side){if(!DATA)return null;const t=cardText(card,side).title;let e=flashMap.get(norm(t));if(e)return{cid:e.cid,index:e.index,side};const cid=cidFromText(document.querySelector('.section-title')?.textContent)||cidFromText(card.textContent);const index=counterIndex();return cid&&index>=0?{cid,index,side}:null;}
+function imagePath(entry){if(!entry)return'';const folder=categoryFolder.get(entry.cid);if(!folder)return'';return `${BASE}assets/topic-images/${folder}/${String(entry.index+1).padStart(2,'0')} ${entry.side}.webp?v=${VERSION}`;}
+function ensureStyle(){document.getElementById('cosmos-topic-visual-style')?.remove();let s=document.getElementById('cosmos-unified-style');if(s)return;s=document.createElement('style');s.id='cosmos-unified-style';s.textContent=`
+.cosmos-original-hidden{display:none!important}
+.cosmos-unified-card{box-sizing:border-box;width:100%;max-width:100%;display:flex;flex-direction:column;gap:14px;padding:16px;border:1px solid rgba(50,215,255,.22);border-radius:22px;background:linear-gradient(180deg,rgba(18,28,68,.96),rgba(15,23,58,.96));box-shadow:0 0 24px rgba(0,205,255,.10);position:relative;overflow:hidden;transform:none!important}
+.cosmos-unified-card *{box-sizing:border-box;transform:none!important;backface-visibility:visible!important}
+.cosmos-unified-image{width:100%;aspect-ratio:1/1;border-radius:16px;overflow:hidden;background:#0b1028;border:1px solid rgba(120,150,255,.28);display:grid;place-items:center;color:#8393c9;font:700 12px Montserrat,sans-serif}
+.cosmos-unified-image img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.cosmos-unified-copy{text-align:center;padding:2px 8px 0}
+.cosmos-unified-title{margin:0;color:#f4f6ff;font:800 clamp(20px,5vw,28px)/1.18 Montserrat,sans-serif}
+.cosmos-unified-sub{margin:10px 0 0;color:#7f8eb8;font:500 12px/1.45 Montserrat,sans-serif;min-height:17px}
+.cosmos-unified-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.cosmos-unified-actions button,.cosmos-unified-nav button{min-width:0;border:1px solid rgba(110,140,230,.28);border-radius:13px;background:#18244f;color:#f4f6ff;font:700 11px/1.2 Montserrat,sans-serif;padding:12px 6px;cursor:pointer}
+.cosmos-unified-actions button:nth-child(2){border-color:rgba(255,174,51,.5)}
+.cosmos-unified-nav{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.cosmos-unified-nav button{font-size:18px;padding:13px}
+.cosmos-unified-card.cosmos-back .cosmos-unified-image,.cosmos-unified-card.cosmos-back .cosmos-unified-copy{transform:none!important}
+@media(max-width:520px){.cosmos-unified-card{padding:14px;border-radius:20px;gap:12px}.cosmos-unified-image{border-radius:14px}.cosmos-unified-actions button{font-size:10px;padding:11px 4px}}
 `;document.head.appendChild(s);}
-function cleanup(keep=null){for(const v of document.querySelectorAll('.cosmos-topic-visual'))if(v!==keep)v.remove();for(const h of document.querySelectorAll('.cosmos-card-host'))if(!keep||h!==keep.parentElement)h.classList.remove('cosmos-card-host');}
-function visual(host,kind){
-  let v=host.querySelector(':scope > .cosmos-topic-visual');
-  if(v){v.dataset.kind=kind;cleanup(v);return v;}
-  cleanup();
-  v=document.createElement('div');v.className='cosmos-topic-visual';v.dataset.kind=kind;
-  v.style.cssText='display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;overflow:hidden!important;width:min(88%,340px)!important;aspect-ratio:1/1!important;flex:0 0 auto!important;margin:0 auto 18px!important;border:1px solid rgba(120,150,255,.45)!important;border-radius:16px!important;background:#0b1028!important;color:#8291c9!important;font:600 12px Montserrat,sans-serif!important;box-shadow:0 8px 22px rgba(0,0,0,.22)!important;pointer-events:none!important;z-index:2!important;';
-  v.textContent='IMAGE';
-  const anchor=[...host.querySelectorAll('h1,h2,h3,.answer-side,[class*="answer-side"]')].find(visible);
-  if(anchor)anchor.insertAdjacentElement('beforebegin',v);else host.prepend(v);
-  return v;
-}
-function paint(v,a){if(!v)return;if(!a){if(!v.querySelector('img'))v.textContent='IMAGE';return;}if(v.dataset.key===a.path&&v.querySelector('img'))return;v.dataset.key=a.path;v.replaceChildren();const img=document.createElement('img');img.alt='';img.draggable=false;img.src=a.url;img.style.cssText='display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;transform:none!important;rotate:none!important;scale:1!important;backface-visibility:visible!important;';img.onerror=()=>{v.replaceChildren();v.textContent='IMAGE';console.warn('[ALBAMEN Cosmos] image decode failed',a.path)};v.appendChild(img);}
-async function card(host=getCard()){
-  if(!host)return false;
-  host.classList.add('cosmos-card-host');
-  const v=visual(host,'card');
-  if(!DATA){paint(v,null);return true;}
-  const main=getCardMainText(host);let e=flashMap.get(main);const side=isBack(host)?'B':'F';
-  if(!e){const cid=currentCategoryCid(host),i=visibleCounterIndex();if(cid&&i>=0)e={cid,index:i,side};}
-  if(!e){paint(v,null);return true;}
-  const a=await resolveAsset(e,side);paint(v,a);
-  const log=`${e.cid}:${e.index}:${side}:${a?.path||'none'}`;if(log!==lastCardLog){lastCardLog=log;console.info('[ALBAMEN Cosmos] card image applied',{category:e.cid,index:e.index+1,side,path:a?.path||''});}
-  return true;
-}
-async function quiz(){
-  if(!DATA)return false;
-  for(const el of document.querySelectorAll('.question,[class*="question"],h1,h2,h3')){
-    if(!visible(el))continue;const e=questionMap.get(norm(el.textContent));if(!e)continue;
-    const host=el.closest('section.panel')||el.closest('section')||el.parentElement;if(!host)return false;
-    const v=visual(host,'quiz');const side=[...host.querySelectorAll('.feedback,[class*="feedback"]')].some(visible)?'B':'F';
-    const a=await resolveAsset(e,side);paint(v,a);
-    const log=`${e.cid}:${e.index}:${side}:${a?.path||'none'}`;if(log!==lastQuizLog){lastQuizLog=log;console.info('[ALBAMEN Cosmos] quiz image applied',{category:e.cid,index:e.index+1,side,path:a?.path||''});}
-    return true;
-  }
-  return false;
-}
-function decorate(){
-  const host=getCard();
-  if(host){card(host).catch(e=>console.error('[ALBAMEN Cosmos] card image error',e));return;}
-  cleanup();
-  quiz().catch(e=>console.error('[ALBAMEN Cosmos] quiz image error',e));
-}
-function install(){if(installed)return;installed=true;ensureStyle();cleanup();window.__albamenTopicImagesVersion=VERSION;console.info('[ALBAMEN Cosmos] topic image renderer installed',VERSION);decorate();loadData().then(d=>{DATA=d;buildMaps();decorate();}).catch(e=>console.error('[ALBAMEN Cosmos] topic image data failed',e));const timer=setInterval(decorate,500);setTimeout(()=>clearInterval(timer),600000);document.addEventListener('click',()=>setTimeout(decorate,0),true);document.addEventListener('visibilitychange',decorate);}
-window.AlbamenTopicCardVisuals={install,decorate,version:VERSION};
+function originalControls(){const actions=document.querySelector('.card-actions');const actionButtons=actions?[...actions.querySelectorAll('button')]:[];const arrows=[...document.querySelectorAll('button')].filter(b=>visible(b)&&['←','→'].includes(txt(b)));return{actions,actionButtons,arrows};}
+function hideOriginal(card){card.classList.add('cosmos-original-hidden');const c=originalControls();if(c.actions)c.actions.classList.add('cosmos-original-hidden');for(const b of c.arrows)b.classList.add('cosmos-original-hidden');return c;}
+function makeButton(label,cls){const b=document.createElement('button');b.type='button';b.className=cls||'';b.textContent=label;return b;}
+function ensureUnified(card){const parent=card.parentElement;if(!parent)return null;let ui=parent.querySelector(':scope > .cosmos-unified-card');if(!ui){document.querySelectorAll('.cosmos-unified-card').forEach(x=>x.remove());ui=document.createElement('article');ui.className='cosmos-unified-card';ui.innerHTML='<div class="cosmos-unified-image">IMAGE</div><div class="cosmos-unified-copy"><h2 class="cosmos-unified-title"></h2><p class="cosmos-unified-sub"></p></div><div class="cosmos-unified-actions"></div><div class="cosmos-unified-nav"></div>';parent.insertBefore(ui,card);ui.querySelector('.cosmos-unified-image').addEventListener('click',()=>{card.click();setTimeout(sync,30)});ui.querySelector('.cosmos-unified-copy').addEventListener('click',()=>{card.click();setTimeout(sync,30)});}return ui;}
+function syncControls(ui,card){const c=hideOriginal(card);const actions=ui.querySelector('.cosmos-unified-actions');const nav=ui.querySelector('.cosmos-unified-nav');actions.replaceChildren();nav.replaceChildren();const fallback=['✅ Öğrendim','🔄 Tekrar Et','😊 Zor'];const labels=c.actionButtons.length?c.actionButtons.map(txt):fallback;labels.slice(0,3).forEach((label,i)=>{const b=makeButton(label||fallback[i]);b.onclick=e=>{e.stopPropagation();c.actionButtons[i]?.click();setTimeout(sync,30)};actions.appendChild(b);});const arrowSrc=c.arrows.length>=2?c.arrows.slice(0,2):[];['←','→'].forEach((label,i)=>{const b=makeButton(label);b.onclick=e=>{e.stopPropagation();arrowSrc[i]?.click();setTimeout(sync,30)};nav.appendChild(b);});}
+function syncImage(ui,entry){const box=ui.querySelector('.cosmos-unified-image');const path=imagePath(entry);if(!path){box.dataset.src='';box.replaceChildren();box.textContent='IMAGE';return;}if(box.dataset.src===path&&box.querySelector('img'))return;box.dataset.src=path;box.replaceChildren();const img=document.createElement('img');img.alt='';img.draggable=false;img.src=path;img.onload=()=>{box.classList.add('loaded')};img.onerror=()=>{box.replaceChildren();box.textContent='IMAGE';console.warn('[ALBAMEN Cosmos] image failed',path)};box.appendChild(img);}
+function syncCard(){const card=originalCard();if(!card){document.querySelectorAll('.cosmos-unified-card').forEach(x=>x.remove());return false;}const ui=ensureUnified(card);if(!ui)return false;const side=cardSide(card);const copy=cardText(card,side);ui.classList.toggle('cosmos-back',side==='B');ui.querySelector('.cosmos-unified-title').textContent=copy.title||'';ui.querySelector('.cosmos-unified-sub').textContent=copy.sub||'';syncControls(ui,card);syncImage(ui,currentEntry(card,side));return true;}
+function syncQuiz(){if(!DATA)return;const cardPresent=originalCard();if(cardPresent)return;for(const q of document.querySelectorAll('.question,[class*="question"],h1,h2,h3')){if(!visible(q))continue;const entry=questionMap.get(norm(q.textContent));if(!entry)continue;const panel=q.closest('section.panel')||q.closest('section')||q.parentElement;if(!panel)return;let box=panel.querySelector(':scope > .cosmos-quiz-image');if(!box){box=document.createElement('div');box.className='cosmos-unified-image cosmos-quiz-image';panel.insertBefore(box,q);}const side=panel.querySelector('.feedback,[class*="feedback"]')?'B':'F';syncImage({querySelector:sel=>sel==='.cosmos-unified-image'?box:null},{...entry,side});return;}}
+function sync(){try{if(syncCard())return;syncQuiz();}catch(e){console.error('[ALBAMEN Cosmos] unified card sync failed',e);}}
+function install(){if(installed)return;installed=true;ensureStyle();document.querySelectorAll('.cosmos-topic-visual').forEach(x=>x.remove());document.querySelectorAll('.cosmos-card-host').forEach(x=>x.classList.remove('cosmos-card-host'));window.__albamenTopicImagesVersion=VERSION;console.info('[ALBAMEN Cosmos] unified card renderer installed',VERSION);loadData().then(d=>{DATA=d;buildMaps();sync();}).catch(e=>console.error('[ALBAMEN Cosmos] image data failed',e));sync();let scheduled=false;observer=new MutationObserver(()=>{if(scheduled)return;scheduled=true;setTimeout(()=>{scheduled=false;sync()},40)});const root=document.getElementById('root')||document.body;observer.observe(root,{childList:true,subtree:true,characterData:true});document.addEventListener('click',()=>setTimeout(sync,40),true);}
+window.AlbamenTopicCardVisuals={install,decorate:sync,version:VERSION};
 })();
