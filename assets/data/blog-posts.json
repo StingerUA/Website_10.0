@@ -880,6 +880,47 @@
           "url": "/ar/blog/ayin-haritasini-yapay-zeka-cikaracak-nasa-ve-ibmden-yeni-donem.html"
         }
       }
+    },
+    {
+      "slug": "evrenin-panoramik-gozu-nancy-grace-roman-uzay-teleskobu",
+      "category": "uzay",
+      "publishAt": "2026-09-19T14:45:56+03:00",
+      "cover": "/assets/images/blog/evrenin-panoramik-gozu-nancy-grace-roman-uzay-teleskobu-cover.jpg",
+      "readingMinutes": 5,
+      "author": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Aslı Bolat",
+        "ar": "Aslı Bolat"
+      },
+      "authorRole": {
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer and Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومدرِّبة"
+      },
+      "locales": {
+        "tr": {
+          "title": "Evrenin Panoramik Gözü: Nancy Grace\nRoman Uzay Teleskobu",
+          "excerpt": "Roman Uzay Teleskobu",
+          "url": "/blog/evrenin-panoramik-gozu-nancy-grace-roman-uzay-teleskobu.html"
+        },
+        "en": {
+          "title": "The Panoramic Eye of the Universe: Nancy Grace\nRoman Space Telescope",
+          "excerpt": "Roman Space Telescope",
+          "url": "/eng/blog/evrenin-panoramik-gozu-nancy-grace-roman-uzay-teleskobu.html"
+        },
+        "ru": {
+          "title": "Панорамный взгляд Вселенной: Нэнси Грейс\nРимский космический телескоп",
+          "excerpt": "Римский космический телескоп",
+          "url": "/rus/blog/evrenin-panoramik-gozu-nancy-grace-roman-uzay-teleskobu.html"
+        },
+        "ar": {
+          "title": "عين البانورامية للكون: نانسي غريس\nتلسكوب الفضاء الروماني",
+          "excerpt": "تلسكوب الفضاء الروماني",
+          "url": "/ar/blog/evrenin-panoramik-gozu-nancy-grace-roman-uzay-teleskobu.html"
+        }
+      }
     }
   ]
 }
