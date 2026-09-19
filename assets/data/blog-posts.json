@@ -921,6 +921,47 @@
           "url": "/ar/blog/evrenin-panoramik-gozu-nancy-grace-roman-uzay-teleskobu.html"
         }
       }
+    },
+    {
+      "slug": "insanlik-neden-yeniden-aya-sonra-marsa-gidiyor",
+      "category": "uzay",
+      "publishAt": "2026-09-19T17:57:36+03:00",
+      "cover": "/assets/images/blog/insanlik-neden-yeniden-aya-sonra-marsa-gidiyor-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Ali Batuhan Özsürmeli",
+        "en": "Ali Batuhan Özsürmeli",
+        "ru": "Ali Batuhan Özsürmeli",
+        "ar": "Ali Batuhan Özsürmeli"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "İnsanlık Neden Yeniden Ay'a, Sonra\nMars'a Gidiyor?",
+          "excerpt": "Mars'a Gidiyor?",
+          "url": "/blog/insanlik-neden-yeniden-aya-sonra-marsa-gidiyor.html"
+        },
+        "en": {
+          "title": "Why Humanity Goes to the Moon Again, Then\nGoing to Mars?",
+          "excerpt": "Going to Mars?",
+          "url": "/eng/blog/insanlik-neden-yeniden-aya-sonra-marsa-gidiyor.html"
+        },
+        "ru": {
+          "title": "Почему человечество снова отправляется на Луну?\nНа Марс?",
+          "excerpt": "На Марс?",
+          "url": "/rus/blog/insanlik-neden-yeniden-aya-sonra-marsa-gidiyor.html"
+        },
+        "ar": {
+          "title": "لماذا تذهب البشرية إلى القمر مرة أخرى إذا؟\nذاهب إلى المريخ؟",
+          "excerpt": "ذاهب إلى المريخ؟",
+          "url": "/ar/blog/insanlik-neden-yeniden-aya-sonra-marsa-gidiyor.html"
+        }
+      }
     }
   ]
 }
