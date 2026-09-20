@@ -58,7 +58,11 @@ function renderMenu() {
     const text = document.createElement('span'), name = document.createElement('strong'), small = document.createElement('small');
     name.textContent = description.name; small.textContent = description.description; text.append(name, small);
     const price = document.createElement('span'); price.className = 'price'; price.textContent = d.price;
-    b.append(img, text, price); b.onclick = () => { menu(false); void selectDish(d); }; return b;
+    b.append(img, text, price); b.onclick = () => {
+      menu(false);
+      // Setting the same src does not emit another model-viewer load event.
+      if (d.id !== selected.id || !loaded) void selectDish(d);
+    }; return b;
   }));
 }
 function showDishInfo() {

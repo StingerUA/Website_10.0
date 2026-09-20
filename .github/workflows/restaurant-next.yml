@@ -14,7 +14,8 @@ permissions:
   contents: read
 jobs:
   prototype:
-    runs-on: ubuntu-latest
+    # Match the existing Playwright 1.42 lockfile's supported system libraries.
+    runs-on: ubuntu-22.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
