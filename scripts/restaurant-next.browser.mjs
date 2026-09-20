@@ -11,6 +11,12 @@ const server = spawn('python3',['-m','http.server','4173','--bind','127.0.0.1'],
 let browser, page;
 const results=[], errors=[], missing=[], diagnostics=[];
 const record=message=>{results.push(message);console.log(message);};
+function observePage(page){
+  page.on('pageerror',error=>errors.push(String(error)));
+  page.on('console',message=>{if(['warning','error'].includes(message.type()))diagnostics.push(message.text());});
+  page.on('requestfailed',request=>diagnostics.push(`${request.url()}: ${request.failure()?.errorText}`));
+  page.on('response',r=>{if(r.status()===404&&r.url().includes('127.0.0.1'))missing.push(r.url());});
+}
 try {
   for(let i=0;i<60;i++){
     try{const response=await fetch('http://127.0.0.1:4173/rus/ar-restaurant-next/');if(response.ok)break;}catch{}
@@ -19,10 +25,7 @@ try {
   browser = await chromium.launch({headless:true,args:['--use-fake-ui-for-media-stream','--use-fake-device-for-media-stream','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
   const context=await browser.newContext({viewport:{width:412,height:915},deviceScaleFactor:1,permissions:['camera']});
   page=await context.newPage();
-  page.on('pageerror',error=>errors.push(String(error)));
-  page.on('console',message=>{if(['warning','error'].includes(message.type()))diagnostics.push(message.text());});
-  page.on('requestfailed',request=>diagnostics.push(`${request.url()}: ${request.failure()?.errorText}`));
-  page.on('response',r=>{if(r.status()===404&&r.url().includes('127.0.0.1'))missing.push(r.url());});
+  observePage(page);
   await page.goto('http://127.0.0.1:4173/rus/ar-restaurant-next/');
   await page.waitForFunction(()=>document.querySelector('#dish-viewer').loaded,{},{timeout:60000});
   await page.screenshot({path:`${output}/ru-mobile-preview.png`});
@@ -98,8 +101,16 @@ try {
   await page.locator('#menu-toggle').click();
   await page.screenshot({path:`${output}/ru-mobile-menu.png`});
   await page.locator('#menu-close').click();
+  assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
+  // A separate desktop page bounds retained GLB/SwiftShader memory after the
+  // mobile catalogue stress pass and sets the viewport before WebGL starts.
+  await page.close();
+  page=await context.newPage();observePage(page);
   await page.setViewportSize({width:1440,height:960});
-  await page.screenshot({path:`${output}/ru-desktop.png`});
+  await page.goto('http://127.0.0.1:4173/rus/ar-restaurant-next/');
+  await page.waitForFunction(()=>document.querySelector('#dish-viewer').loaded,{},{timeout:60000});
+  await page.screenshot({path:`${output}/ru-desktop.png`,timeout:60000});
+  record('Desktop RU preview loads at 1440×960');
   assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
 
   // Auth is mocked at the backend boundary only. The real gate runs unchanged.
@@ -114,7 +125,7 @@ try {
   await page.reload();
   await page.waitForFunction(()=>document.querySelector('#dish-viewer').loaded,{},{timeout:60000});
   assert.equal(await page.locator('#auth-gate').isVisible(),false);
-  await page.screenshot({path:`${output}/tr-desktop.png`});
+  await page.screenshot({path:`${output}/tr-desktop.png`,timeout:60000});
   record('TR accepts verified quick accounts without an email');
 
   for(const route of ['/ar-restaurant/','/rus/ar-restaurant/']){
