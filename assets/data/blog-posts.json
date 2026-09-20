@@ -962,6 +962,47 @@
           "url": "/ar/blog/insanlik-neden-yeniden-aya-sonra-marsa-gidiyor.html"
         }
       }
+    },
+    {
+      "slug": "yeni-bir-sinir-yeni-sorunlar-uzayda-ortaya-cikan-zorluklar",
+      "category": "uzay",
+      "publishAt": "2026-09-20T15:27:37+03:00",
+      "cover": "/assets/images/blog/yeni-bir-sinir-yeni-sorunlar-uzayda-ortaya-cikan-zorluklar-cover.jpg",
+      "readingMinutes": 2,
+      "author": {
+        "tr": "Precious B. Adeleye",
+        "en": "Precious B. Adeleye",
+        "ru": "Precious B. Adeleye",
+        "ar": "Precious B. Adeleye"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Yeni Bir Sınır, Yeni Sorunlar:\nUzayda Ortaya Çıkan Zorluklar",
+          "excerpt": "Uzayda Ortaya Çıkan Zorluklar",
+          "url": "/blog/yeni-bir-sinir-yeni-sorunlar-uzayda-ortaya-cikan-zorluklar.html"
+        },
+        "en": {
+          "title": "A New Frontier, New Challenges: \nEmerging Challenges in Space",
+          "excerpt": "Emerging Challenges in Space",
+          "url": "/eng/blog/yeni-bir-sinir-yeni-sorunlar-uzayda-ortaya-cikan-zorluklar.html"
+        },
+        "ru": {
+          "title": "Новый рубеж, новые вызовы: \nНовые вызовы в космосе",
+          "excerpt": "Новые вызовы в космосе",
+          "url": "/rus/blog/yeni-bir-sinir-yeni-sorunlar-uzayda-ortaya-cikan-zorluklar.html"
+        },
+        "ar": {
+          "title": "حدود جديدة، تحديات جديدة: \nالتحديات الناشئة في الفضاء",
+          "excerpt": "التحديات الناشئة في الفضاء",
+          "url": "/ar/blog/yeni-bir-sinir-yeni-sorunlar-uzayda-ortaya-cikan-zorluklar.html"
+        }
+      }
     }
   ]
 }
