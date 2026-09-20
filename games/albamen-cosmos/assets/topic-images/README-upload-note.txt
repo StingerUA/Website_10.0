@@ -1,1 +1,1 @@
-Image slot structure is active in main. Replace any NN F.webp / NN B.webp file manually; Study Cards and Quiz share the same pair.
+Image slot structure is active in main. Replace any NN F.png / NN B.png file manually; Study Cards and Quiz share the same pair.
