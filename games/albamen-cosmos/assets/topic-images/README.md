@@ -4,8 +4,8 @@ Each topic folder contains the shared image slots used by both Study Cards and Q
 
 Naming convention per topic:
 
-- `01 F.webp` ... `10 F.webp` = front/question image
-- `01 B.webp` ... `10 B.webp` = back/answer image
+- `01 F.png` ... `10 F.png` = front/question image
+- `01 B.png` ... `10 B.png` = back/answer image
 
 Study Cards and Quiz intentionally reuse the same F/B pair for the same topic/index.
 
