@@ -1003,6 +1003,47 @@
           "url": "/ar/blog/yeni-bir-sinir-yeni-sorunlar-uzayda-ortaya-cikan-zorluklar.html"
         }
       }
+    },
+    {
+      "slug": "dunyadan-uzaya-insan-beslenmesinin-yeni-siniri",
+      "category": "uzay",
+      "publishAt": "2026-09-20T21:51:22+03:00",
+      "cover": "/assets/images/blog/dunyadan-uzaya-insan-beslenmesinin-yeni-siniri-cover.jpg",
+      "readingMinutes": 1,
+      "author": {
+        "tr": "Muzaffer Enes İpçi",
+        "en": "Muzaffer Enes İpçi",
+        "ru": "Muzaffer Enes İpçi",
+        "ar": "Muzaffer Enes İpçi"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "DÜNYA’DAN UZAYA: İNSAN BESLENMESİNİN YENİ SINIRI",
+          "excerpt": "BESLENMESİNİN YENİ SINIRI",
+          "url": "/blog/dunyadan-uzaya-insan-beslenmesinin-yeni-siniri.html"
+        },
+        "en": {
+          "title": "FROM EARTH TO SPACE: THE NEW FRONTIER OF HUMAN NUTRITION",
+          "excerpt": "THE NEW FRONTIER OF NUTRITION",
+          "url": "/eng/blog/dunyadan-uzaya-insan-beslenmesinin-yeni-siniri.html"
+        },
+        "ru": {
+          "title": "ОТ ЗЕМЛИ К КОСМОСУ: НОВЫЙ РУБЕЖ ЧЕЛОВЕЧЕСКОГО ПИТАНИЯ",
+          "excerpt": "НОВЫЙ РУБЕЖ ПИТАНИЯ",
+          "url": "/rus/blog/dunyadan-uzaya-insan-beslenmesinin-yeni-siniri.html"
+        },
+        "ar": {
+          "title": "من الأرض إلى الفضاء: الحدود الجديدة لتغذية الإنسان",
+          "excerpt": "الحدود الجديدة للتغذية",
+          "url": "/ar/blog/dunyadan-uzaya-insan-beslenmesinin-yeni-siniri.html"
+        }
+      }
     }
   ]
 }
