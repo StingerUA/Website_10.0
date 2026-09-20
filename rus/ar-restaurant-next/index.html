@@ -1,166 +1,44 @@
 <!doctype html>
 <html lang="ru" data-auth-mode="guest">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <meta name="theme-color" content="#050b1a">
-  <meta name="description" content="AR-меню ресторана Alba Space на Google WebXR, Scene Viewer и Apple Quick Look.">
-  <title>AR-меню — Alba Space</title>
-  <link rel="stylesheet" href="/assets/css/restaurant-next/app.css?v=0.1.0">
-  <script type="module" src="/assets/js/model-viewer.min.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07131d"><meta name="robots" content="noindex">
+<meta name="description" content="Выберите блюдо. Рассмотрите. Разместите на столе."><title>AR Restaurant Next — Alba Space</title>
+<link rel="stylesheet" href="/assets/css/restaurant-next/app.css?v=0.1.0">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
+<script type="module" src="/assets/js/model-viewer.min.js"></script>
 </head>
 <body>
-  <main id="ar-app" class="ar-app" aria-label="AR-меню ресторана Alba Space" data-ar-status="not-presenting">
-    <model-viewer id="mobile-model-viewer"
-      class="mobile-model-viewer"
-      alt="Трёхмерная модель блюда из меню ресторана Alba Space"
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      ar-placement="floor"
-      ar-scale="fixed"
-      camera-controls
-      touch-action="none"
-      interaction-prompt="auto"
-      interaction-prompt-threshold="1800"
-      camera-orbit="25deg 68deg auto"
-      min-camera-orbit="auto 20deg auto"
-      max-camera-orbit="auto 88deg auto"
-      shadow-intensity="1.15"
-      shadow-softness="0.85"
-      exposure="1.15"
-      environment-image="neutral"
-      xr-environment
-      poster="/assets/images/restaurant/menu/tavuk-doner-durum.webp"
-      loading="eager"
-      reveal="auto">
-    </model-viewer>
-
-    <a-scene id="ar-scene"
-      embedded
-      vr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: false"
-      renderer="alpha: true; colorManagement: true; physicallyCorrectLights: true; antialias: true">
-      <a-entity id="ambient-light" light="type: ambient; color: #ffffff; intensity: 1.7"></a-entity>
-      <a-entity id="key-light" light="type: directional; color: #fff4df; intensity: 1.2" position="0 1 1"></a-entity>
-      <a-entity id="desktop-environment" visible="false">
-        <a-sky
-          src="/assets/images/restaurant/warm-restaurant-day-2k.jpg?v=daylight-restaurant-table-1"
-          rotation="0 -92 0"
-          radius="38"
-          material="shader: flat; side: back">
-        </a-sky>
-        <a-circle position="0 0.012 0" rotation="-90 0 0" radius="2.25"
-          material="color: #7a6048; opacity: 0.24; transparent: true; roughness: 1">
-        </a-circle>
-        <a-cylinder id="desktop-table-top" position="0 0.79 0" radius="1.04" height="0.12"
-          material="color: #8a4f28; roughness: 0.62; metalness: 0.02">
-        </a-cylinder>
-        <a-cylinder position="0 0.715 0" radius="0.96" height="0.035"
-          material="color: #d9a35f; roughness: 0.48; metalness: 0.08">
-        </a-cylinder>
-        <a-cylinder position="0 0.39 0" radius="0.13" height="0.67"
-          material="color: #332016; roughness: 0.72; metalness: 0.04">
-        </a-cylinder>
-        <a-cylinder position="0 0.055 0" radius="0.56" height="0.09"
-          material="color: #332016; roughness: 0.74; metalness: 0.03">
-        </a-cylinder>
-        <a-torus position="0 0.075 0" rotation="90 0 0" radius="0.47" radius-tubular="0.025"
-          material="color: #c79555; roughness: 0.45; metalness: 0.22">
-        </a-torus>
-        <a-entity light="type: directional; color: #fff7e8; intensity: 2.2" position="-3 5 3"></a-entity>
-        <a-entity light="type: directional; color: #d7efff; intensity: 0.85" position="3 2 -2"></a-entity>
-        <a-entity light="type: point; color: #ffd89d; intensity: 0.7; distance: 5; decay: 2" position="0 2.8 1.2"></a-entity>
-      </a-entity>
-      <a-entity id="dish-stable-stage" visible="false">
-        <a-entity id="dish-rotation" rotation="0 0 0">
-          <a-entity id="dish-plate"
-            gltf-model="/assets/models/restaurant/wooden-cutting-board.glb?v=local-board-1"
-            position="0 0 0.003"
-            rotation="90 0 0"
-            scale="1.35 1.35 1.35"
-            visible="true">
-          </a-entity>
-          <a-entity id="dish-model" position="0 0 0.028" rotation="90 0 0" scale="0.28 0.28 0.28"></a-entity>
-        </a-entity>
-      </a-entity>
-      <a-camera id="scene-camera" position="0 1.6 3.15" rotation="-12 0 0" fov="50" look-controls="enabled: false"></a-camera>
-    </a-scene>
-
-    <div id="dish-loading-poster" class="dish-loading-poster" aria-hidden="true">
-      <img id="dish-loading-poster-image"
-        src="/assets/images/restaurant/menu/tavuk-doner-durum.webp"
-        alt=""
-        width="720"
-        height="720"
-        decoding="async">
-      <span class="dish-loading-poster-shimmer" aria-hidden="true"></span>
+<main id="next-app" data-mode="preview" inert>
+  <model-viewer id="dish-viewer" ar ar-modes="scene-viewer quick-look" ar-placement="floor" ar-scale="fixed" camera-controls touch-action="pan-y" camera-orbit="25deg 68deg auto" min-camera-orbit="auto 20deg auto" max-camera-orbit="auto 88deg auto" shadow-intensity="1.15" shadow-softness="0.85" environment-image="neutral" loading="eager" reveal="auto"><button slot="ar-button" hidden></button></model-viewer>
+  <video id="camera-video" muted playsinline autoplay hidden></video>
+  <div id="scene-host" hidden></div>
+  <div id="overlay">
+    <div id="interaction" hidden></div>
+    <header class="topbar">
+      <a class="brand" href="/rus/"><span class="brand-mark" aria-hidden="true">a.</span> ALBA SPACE <span class="badge">NEXT 0.1</span></a>
+      <nav><button id="exit" data-copy="exit" hidden>Завершить</button><button id="menu-toggle" aria-expanded="false" aria-controls="menu-panel" data-copy="menu">Меню</button></nav>
+    </header>
+    <section id="status" role="status" aria-live="polite"><span class="status-dot" aria-hidden="true"></span><div><strong id="status-title">Подготовка просмотра…</strong><small id="status-detail"></small><progress id="load-progress" max="1" value="0" aria-label="Загрузка блюда…" hidden></progress></div><button id="retry" data-copy="retry" hidden>Попробовать снова</button></section>
+    <section class="dish-info"><span class="eyebrow" data-copy="version">Экспериментальная версия · v0.1</span><h1 id="dish-name">AR Restaurant Next</h1><p id="dish-description">Выберите блюдо. Рассмотрите. Разместите на столе.</p><strong id="dish-price"></strong></section>
+    <div class="bottom-controls">
+      <p id="camera-note" data-copy="cameraNote" hidden>Тест жестов на изображении камеры. Блюдо здесь не закреплено на настоящем столе.</p>
+      <div id="manipulation" hidden><div class="sliders"><label><span data-copy="scale">Размер</span><input id="scale" type="range" min="0.25" max="3" step="0.01" value="1"></label><label><span data-copy="rotation">Поворот</span><input id="rotation" type="range" min="-180" max="180" value="0"></label></div><div class="minor-actions"><button id="reset" data-copy="reset">Сбросить размер и поворот</button><button id="rescan" data-copy="rescan">Выбрать другое место</button></div></div>
+      <button id="start-ar" class="primary" data-copy="start" disabled>Разместить на столе</button>
+      <button id="place" class="primary" data-copy="place" hidden>Разместить здесь</button>
+      <button id="hands-toggle" data-copy="hands" disabled>Управление рукой · эксперимент</button>
+      <button id="camera-flip" data-copy="flip" hidden>Сменить камеру</button>
     </div>
-
-    <button id="ar-launch-button" class="ar-launch-button" slot="ar-button" type="button">
-      <span class="ar-launch-icon" aria-hidden="true">⌗</span>
-      <span>Разместить на столе</span>
-    </button>
-    <button id="ar-exit-button" class="ar-exit-button" slot="exit-webxr-ar-button" type="button" aria-label="Выйти из AR">×</button>
-
-    <div id="experience-ui" class="experience-ui">
-      <header class="top-bar" aria-label="Навигация">
-        <div class="top-brand" aria-label="AR-меню Alba Space">AR <span>МЕНЮ</span></div>
-        <button id="menu-button" class="menu-button" type="button" aria-expanded="false" aria-controls="menu-panel">Меню</button>
-      </header>
-
-      <section id="status-card" class="status-card" aria-live="polite" hidden>
-        <div class="loading-mark" aria-hidden="true"><span></span></div>
-        <div class="status-copy">
-          <strong id="status-label">Каталог блюд загружается</strong>
-          <span id="status-detail">Пожалуйста, подождите</span>
-        </div>
-        <div class="loading-bar" aria-hidden="true"><span id="loading-progress"></span></div>
-      </section>
-
-      <section id="surface-prompt" class="surface-prompt" aria-live="polite" hidden>
-        <span class="surface-scan-icon" aria-hidden="true"></span>
-        <strong>Медленно поводите камерой над столом</strong>
-        <small>Когда телефон распознает поверхность, блюдо разместится автоматически.</small>
-      </section>
-
-      <section id="viewer-intro" class="viewer-intro" aria-live="polite">
-        <span class="menu-kicker">ALBA SPACE · WEBXR</span>
-        <strong id="viewer-dish-name">Куриный донер-дюрюм</strong>
-        <small>Рассмотрите блюдо или разместите его на настоящем столе в AR.</small>
-      </section>
-
-      <section id="menu-panel" class="menu-panel" hidden aria-labelledby="menu-title">
-        <div class="menu-panel-head">
-          <div>
-            <span class="menu-kicker">ALBA SPACE</span>
-            <h1 id="menu-title">Меню</h1>
-          </div>
-          <button id="menu-close" class="menu-close" type="button" aria-label="Закрыть меню">×</button>
-        </div>
-        <p class="menu-anchor-note"><span class="mobile-only">Нажмите «Разместить на столе» и медленно поводите камерой, пока телефон не найдёт поверхность. Двумя пальцами можно менять размер и поворачивать блюдо вокруг вертикальной оси. Если WebXR недоступен, откроется стандартный AR‑просмотрщик телефона.</span><span class="desktop-only">На компьютере камера и AR отключены. Перетаскивайте виртуальную ресторанную сцену мышью, колесом приближайте.</span></p>
-        <button id="recalibrate-button" class="recalibrate-button" type="button">Открыть AR-просмотр</button>
-        <div id="menu-category-buttons" class="menu-categories" role="tablist" aria-label="Категории блюд"></div>
-        <div id="menu-item-buttons" class="menu-items" aria-live="polite"></div>
-      </section>
-
-      <div class="zoom-hint" aria-hidden="true"><span class="mobile-only">AR: перемещение · двумя пальцами масштаб и поворот</span><span class="desktop-only">Перетаскивание: сцена · Колесо: масштаб · Shift + колесо: блюдо</span></div>
-    </div>
-  </main>
-
-  <section id="auth-gate" class="session-gate" aria-live="polite" hidden>
-    <div class="gate-card">
-      <div id="auth-checking" class="gate-state">
-        <div class="gate-spinner" aria-hidden="true"></div>
-        <h1>Подготовка гостевой сессии</h1>
-        <p>Пожалуйста, подождите.</p>
-      </div>
-      <div id="auth-required" class="gate-state" hidden>
-        <h1>Для русской версии вход не требуется</h1>
-        <a id="login-link" class="gate-action" href="/rus/account-menu.html" hidden>Войти</a>
-      </div>
-    </div>
-  </section>
-
-  <script type="module" src="/assets/js/restaurant-next/legacy-adapter.js?v=0.1.0"></script>
-</body>
-</html>
+    <button id="lab-toggle" class="lab-toggle" aria-controls="lab-panel" aria-expanded="false">AR LAB</button>
+    <aside id="lab-panel" aria-label="AR LAB" hidden><strong>AR LAB · v0.1</strong><dl id="lab-values"></dl></aside>
+    <section id="menu-panel" role="dialog" aria-modal="false" aria-labelledby="menu-title" hidden>
+      <div class="menu-heading"><div><span class="eyebrow">ALBA SPACE</span><h2 id="menu-title" data-copy="menu">Меню</h2></div><button id="menu-close" data-copy="close">Закрыть</button></div>
+      <div id="categories" aria-label="Меню"></div><div id="dishes"></div><p class="privacy" data-copy="privacy">Камера включается только по нажатию. Изображение обрабатывается на устройстве и не отправляется на сервер.</p>
+    </section>
+    <div id="cursors" aria-hidden="true"></div>
+  </div>
+</main>
+<section id="auth-gate" hidden><div><span class="eyebrow">ALBA SPACE</span><h1 id="auth-text" data-copy="authChecking">Проверка входа…</h1><a id="login-link" href="/rus/account-menu.html" data-copy="login" hidden>Войти или зарегистрироваться</a></div></section>
+<noscript><p>JavaScript gereklidir / Для просмотра включите JavaScript.</p></noscript>
+<script type="module" src="/assets/js/restaurant-next/app.mjs?v=0.1.0"></script>
+</body></html>
