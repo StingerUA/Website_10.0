@@ -120,7 +120,13 @@ async function prepareScene() {
   if (sceneDishId === selected.id && scene.ready) return;
   const dish = selected;
   if (!loadScenePromise || loadScenePromise.id !== dish.id) {
-    const promise = scene.setDish(dish).then(ready => { if (ready && selected.id === dish.id) sceneDishId = dish.id; }).catch(error => { loadScenePromise = null; throw error; });
+    const promise = scene.setDish(dish).then(ready => {
+      if (ready && selected.id === dish.id) sceneDishId = dish.id;
+    }).finally(() => {
+      // Reuse an in-flight request only. Camera-mode menu changes can replace
+      // the scene after a previous preparation has already finished.
+      if (loadScenePromise?.promise === promise) loadScenePromise = null;
+    });
     loadScenePromise = {id: dish.id, promise};
   }
   await loadScenePromise.promise;

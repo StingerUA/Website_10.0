@@ -52,7 +52,8 @@ try {
   await page.waitForFunction(()=>/Inference ms\s+\d+/.test(document.querySelector('#lab-values').innerText),{},{timeout:30000});
   record('MediaPipe worker initializes, processes synthetic camera frames, and reports inference telemetry');
   await page.locator('#lab-toggle').click();
-  for(const dish of dishes){
+  // Finish on a different dish from the one originally prepared for camera.
+  for(const dish of [...dishes.slice(1),dishes[0]]){
     await page.locator('#menu-toggle').click();
     await page.locator('#categories').getByRole('button',{name:categories.find(c=>c.id===dish.category).label.ru,exact:true}).click();
     await page.locator('#dishes button').filter({hasText:dish.copy.ru.name}).click();
@@ -64,6 +65,17 @@ try {
   await page.locator('#exit').click();
   await page.waitForFunction(()=>document.querySelector('#camera-video').srcObject===null&&document.querySelector('#next-app').dataset.mode==='preview');
   record('Exit releases the camera and returns to 3D');
+  const cameraDish=dishes.at(-1);
+  await page.locator('#menu-toggle').click();
+  await page.locator('#categories').getByRole('button',{name:categories.find(c=>c.id===cameraDish.category).label.ru,exact:true}).click();
+  await page.locator('#dishes button').filter({hasText:cameraDish.copy.ru.name}).click();
+  await page.waitForFunction(src=>{const v=document.querySelector('#dish-viewer');return v.loaded&&v.src.endsWith(src)&&document.querySelector('#load-progress').hidden;},cameraDish.src,{timeout:60000});
+  await page.locator('#hands-toggle').click();
+  await page.getByText('Сведите большой и указательный пальцы над блюдом, чтобы захватить его. Две руки меняют размер и поворот.',{exact:true}).waitFor({timeout:90000});
+  await page.waitForFunction(()=>document.querySelector('#camera-video').videoWidth>0);
+  await page.locator('#exit').click();
+  await page.waitForFunction(()=>document.querySelector('#camera-video').srcObject===null&&document.querySelector('#next-app').dataset.mode==='preview');
+  record('Camera mode reopens after changing dishes and returning to a previously prepared model');
   const replay=await page.evaluate(async()=>{
     const {RestaurantScene}=await import('/assets/js/restaurant-next/scene.mjs?v=0.1.0');
     const THREE=await import('three');
