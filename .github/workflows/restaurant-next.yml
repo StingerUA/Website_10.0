@@ -1,0 +1,40 @@
+name: Restaurant Next
+on:
+  push:
+    branches: ['feature/ar-restaurant-next']
+  pull_request:
+    paths:
+      - 'ar-restaurant-next/**'
+      - 'rus/ar-restaurant-next/**'
+      - 'assets/js/restaurant-next/**'
+      - 'assets/css/restaurant-next/**'
+      - 'scripts/restaurant-next*'
+      - '.github/workflows/restaurant-next.yml'
+permissions:
+  contents: read
+jobs:
+  prototype:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+      - name: Syntax and state tests
+        run: |
+          for file in assets/js/restaurant-next/*.mjs assets/js/restaurant-next/*.js; do node --check "$file"; done
+          node --test scripts/restaurant-next.test.mjs
+      - run: npx playwright install --with-deps chromium
+      - name: Real model loading, UI and synthetic camera tests
+        run: node scripts/restaurant-next.browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: restaurant-next-checks
+          path: test-results/restaurant-next
+          retention-days: 7
