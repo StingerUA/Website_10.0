@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20260921-5';
+const VERSION='20260921-6';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const FOLDERS=['01-solar-system','02-planets','03-moon','04-stars','05-asteroids-comets','06-topic-06','07-topic-07','08-topic-08','09-topic-09','10-topic-10'];
 let installed=false,DATA=null,timer=null;
@@ -97,18 +97,32 @@ function cardImageTarget(record,side){
   if(!folder||index<0)return null;
   return{folder,index,side};
 }
-function quizVisibleFolder(){
-  const meta=norm(document.querySelector('.quiz-meta')?.textContent||'');
-  if(/asteroid|comet|asteroit|kuyruk|астеро|комет/.test(meta))return'05-asteroids-comets';
-  if(/solar system|güneş sistemi|солнечн/.test(meta))return'01-solar-system';
-  if(/planet|gezegen|планет/.test(meta))return'02-planets';
-  if(/(^|\s)(moon|ay|луна|луны)(\s|$)/.test(meta))return'03-moon';
-  if(/star|yıldız|звезд/.test(meta))return'04-stars';
-  const cid=cidFromText(meta);
+function folderFromText(v){
+  const text=norm(v);
+  if(/asteroid|comet|asteroit|kuyruk|астеро|комет/.test(text))return'05-asteroids-comets';
+  if(/solar system|güneş sistemi|солнечн/.test(text))return'01-solar-system';
+  if(/planet|gezegen|планет/.test(text))return'02-planets';
+  if(/(^|\s)(moon|ay|луна|луны)(\s|$)/.test(text))return'03-moon';
+  if(/star|yıldız|звезд/.test(text))return'04-stars';
+  return'';
+}
+function quizVisibleFolder(q){
+  const panel=q?.closest('section.panel')||q?.closest('section')||q?.parentElement;
+  const candidates=[
+    document.querySelector('.quiz-meta')?.textContent,
+    panel?.querySelector('.badge')?.textContent,
+    panel?.querySelector('[class*="meta"]')?.textContent,
+    panel?.querySelector('[class*="category"]')?.textContent,
+    ...Array.from(panel?.querySelectorAll('small')||[]).map(x=>x.textContent)
+  ].filter(Boolean);
+  for(const value of candidates){const folder=folderFromText(value);if(folder)return folder;}
+  const questionFolder=folderFromText(q?.textContent||'');
+  if(questionFolder)return questionFolder;
+  const cid=cidFromText(candidates.join(' '));
   return cid?categoryFolder.get(cid)||'':'';
 }
-function quizImageTarget(entry,side){
-  const folder=quizVisibleFolder()||categoryFolder.get(entry?.cid);
+function quizImageTarget(entry,side,q){
+  const folder=quizVisibleFolder(q)||categoryFolder.get(entry?.cid);
   const index=entry?.index??-1;
   if(!folder||index<0)return null;
   return{folder,index,side};
@@ -173,7 +187,7 @@ function syncQuiz(){
     let box=panel.querySelector(':scope > .cosmos-quiz-image');
     if(!box){box=document.createElement('div');box.className='cosmos-unified-image cosmos-quiz-image';panel.insertBefore(box,q);}
     const side=panel.querySelector('.feedback,[class*="feedback"]')?'B':'F';
-    const target=quizImageTarget(entry,side),path=targetPath(target),fallback=targetRawPath(target);
+    const target=quizImageTarget(entry,side,q),path=targetPath(target),fallback=targetRawPath(target);
     console.info('[ALBAMEN Cosmos] quiz image target',{question:txt(q),meta:txt(document.querySelector('.quiz-meta')),entry,target,path});
     if(box.dataset.src!==path){
       box.dataset.src=path;box.replaceChildren();

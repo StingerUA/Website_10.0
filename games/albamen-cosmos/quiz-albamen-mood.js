@@ -1,8 +1,8 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const HAPPY=BASE+'assets/ui/albamen-happy.webp?v=20260921-1';
-const SAD=BASE+'assets/ui/albamen-sad.webp?v=20260921-1';
+const HAPPY=BASE+'assets/ui/albamen-happy.webp?v=20260921-2';
+const SAD=BASE+'assets/ui/albamen-sad.webp?v=20260921-2';
 
 function ensureStyle(){
   if(document.getElementById('quiz-albamen-mood-style'))return;
@@ -20,12 +20,12 @@ function ensureStyle(){
 
 function answerState(panel){
   if(!panel)return'';
-  if(panel.querySelector('.answer.wrong,button.answer.wrong,[class~="answer"][class~="wrong"]'))return'wrong';
-  if(panel.querySelector('.answer.correct,button.answer.correct,[class~="answer"][class~="correct"]'))return'correct';
   const feedback=panel.querySelector('.feedback,[class*="feedback"]');
   const t=String(feedback?.textContent||'').toLocaleLowerCase();
-  if(/не совсем|невер|неправ|yanlış|hatal|not quite|wrong|incorrect/.test(t))return'wrong';
-  if(/верно|правиль|doğru|correct/.test(t))return'correct';
+  if(/не совсем|невер|неправ|ничего|следующ|yanlış|hatal|bir dahaki|not quite|wrong|incorrect|next time|try again/.test(t))return'wrong';
+  if(/верно|правиль|отлично|doğru|harika|correct|great/.test(t))return'correct';
+  if(panel.querySelector('.wrong,.incorrect,[data-correct="false"].selected,[aria-pressed="true"][data-correct="false"]'))return'wrong';
+  if(panel.querySelector('.correct,[data-correct="true"].selected,[aria-pressed="true"][data-correct="true"]'))return'correct';
   return'';
 }
 
@@ -39,11 +39,14 @@ function syncOne(panel){
   feedback.classList.toggle('quiz-albamen-wrong',state==='wrong');
 
   const src=state==='correct'?HAPPY:SAD;
-  let img=feedback.querySelector('img.albamen-avatar,img.quiz-albamen-mood-img,img[alt*="albamen" i]');
+  let img=feedback.querySelector('.albamen-avatar-wrap img,img.albamen-avatar,img.quiz-albamen-mood-img,img[alt*="albamen" i],img');
   if(img){
     img.src=src;
     img.classList.add('quiz-albamen-mood-img');
-    if(!img.closest('.quiz-albamen-mood-wrap')){
+    const existingWrap=img.closest('.albamen-avatar-wrap,.quiz-albamen-mood-wrap');
+    if(existingWrap){
+      existingWrap.classList.add('quiz-albamen-mood-wrap');
+    }else{
       const wrap=document.createElement('div');
       wrap.className='quiz-albamen-mood-wrap';
       img.parentNode?.insertBefore(wrap,img);
