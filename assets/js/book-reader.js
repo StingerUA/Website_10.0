@@ -74,7 +74,7 @@ function wire(){
     pinchStartDistance=touchDistance(e.touches);
     pinchStartZoom=zoom;
     pinchCenter=touchCenter(e.touches);
-  },{passive:true});
+  },{passive:true,capture:true});
 
   els.stage.addEventListener('touchmove',e=>{
     if(e.touches.length!==2||!pinchStartDistance)return;
@@ -82,7 +82,7 @@ function wire(){
     const distance=touchDistance(e.touches);
     const center=touchCenter(e.touches)||pinchCenter;
     setZoom(pinchStartZoom*(distance/pinchStartDistance),center,false);
-  },{passive:false});
+  },{passive:false,capture:true});
 
   els.stage.addEventListener('touchend',e=>{
     if(e.touches.length<2&&pinchStartDistance){
@@ -91,13 +91,13 @@ function wire(){
       pinchCenter=null;
       toast(`${Math.round(zoom*100)}%`);
     }
-  },{passive:true});
+  },{passive:true,capture:true});
 
   els.stage.addEventListener('touchcancel',()=>{
     pinchStartDistance=0;
     pinchStartZoom=zoom;
     pinchCenter=null;
-  },{passive:true});
+  },{passive:true,capture:true});
 }
 async function init(){wire();if(cfg.status==='comingSoon'){showState('coming');return}if(!window.pdfjsLib||!window.St){showState('error');return}pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';try{setBusy(t('loading','Loading book…'));pdf=await pdfjsLib.getDocument({url:cfg.pdfUrl,withCredentials:false}).promise;await buildDescriptors();makePages();createFlip();els.state.classList.add('hidden');els.book.classList.remove('hidden');setBusy(`${t('page','Page')} 1 / ${descriptors.length}`);pageFlip.on('flip',e=>{els.status.textContent=`${t('page','Page')} ${e.data+1} / ${descriptors.length}`});warm(0);analytics('book_open',{total_pages:descriptors.length,source_pdf_pages:pdf.numPages})}catch(e){console.error(e);showState('error')}}
 init();
