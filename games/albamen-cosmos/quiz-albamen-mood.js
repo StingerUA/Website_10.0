@@ -1,8 +1,8 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const HAPPY=BASE+'assets/ui/albamen-happy.webp?v=20260921-2';
-const SAD=BASE+'assets/ui/albamen-sad.webp?v=20260921-2';
+const HAPPY=BASE+'assets/ui/albamen-happy.webp?v=20260921-3';
+const SAD=BASE+'assets/ui/albamen-sad.webp?v=20260921-3';
 
 function ensureStyle(){
   if(document.getElementById('quiz-albamen-mood-style'))return;
@@ -10,7 +10,7 @@ function ensureStyle(){
   s.id='quiz-albamen-mood-style';
   s.textContent=`
   .quiz-albamen-mood-wrap{width:92px;min-width:92px;height:92px;border-radius:18px;overflow:hidden;flex:0 0 92px;background:#0b1028;border:1px solid rgba(120,150,255,.28);box-shadow:0 10px 24px rgba(0,0,0,.28)}
-  .quiz-albamen-mood-wrap img,.feedback .albamen-avatar.quiz-albamen-mood-img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center top!important;border-radius:18px!important;transform:none!important;animation:none!important}
+  .quiz-albamen-mood-wrap img,.feedback img.quiz-albamen-face{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center top!important;border-radius:18px!important;transform:none!important;animation:none!important;filter:none!important}
   .feedback.quiz-albamen-correct .quiz-albamen-mood-wrap{border-color:rgba(34,197,94,.6);box-shadow:0 0 20px rgba(34,197,94,.22)}
   .feedback.quiz-albamen-wrong .quiz-albamen-mood-wrap{border-color:rgba(251,113,133,.55);box-shadow:0 0 20px rgba(251,113,133,.18)}
   @media(max-width:520px){.quiz-albamen-mood-wrap{width:78px;min-width:78px;height:78px;flex-basis:78px}}
@@ -29,52 +29,47 @@ function answerState(panel){
   return'';
 }
 
-function syncOne(panel){
-  const feedback=panel?.querySelector('.feedback,[class*="feedback"]');
-  if(!feedback)return;
-  const state=answerState(panel);
-  if(!state)return;
-
-  feedback.classList.toggle('quiz-albamen-correct',state==='correct');
-  feedback.classList.toggle('quiz-albamen-wrong',state==='wrong');
-
-  const src=state==='correct'?HAPPY:SAD;
-  let img=feedback.querySelector('.albamen-avatar-wrap img,img.albamen-avatar,img.quiz-albamen-mood-img,img[alt*="albamen" i],img');
-  if(img){
-    img.src=src;
-    img.classList.add('quiz-albamen-mood-img');
-    const existingWrap=img.closest('.albamen-avatar-wrap,.quiz-albamen-mood-wrap');
-    if(existingWrap){
-      existingWrap.classList.add('quiz-albamen-mood-wrap');
-    }else{
-      const wrap=document.createElement('div');
-      wrap.className='quiz-albamen-mood-wrap';
-      img.parentNode?.insertBefore(wrap,img);
-      wrap.appendChild(img);
-    }
-    return;
-  }
-
-  let wrap=feedback.querySelector('.quiz-albamen-mood-wrap');
-  if(!wrap){
-    wrap=document.createElement('div');
-    wrap.className='quiz-albamen-mood-wrap';
-    img=document.createElement('img');
-    img.className='quiz-albamen-mood-img';
-    img.alt='ALBAMEN';
-    wrap.appendChild(img);
-    feedback.prepend(wrap);
-  }else{
-    img=wrap.querySelector('img')||document.createElement('img');
-    if(!img.parentNode)wrap.appendChild(img);
-  }
-  img.src=src;
+function stateFromFeedback(feedback){
+  const t=String(feedback?.textContent||'').toLocaleLowerCase();
+  if(/не совсем|невер|неправ|ничего|следующ|yanlış|hatal|bir dahaki|not quite|wrong|incorrect|next time|try again/.test(t))return'wrong';
+  if(/верно|правиль|отлично|doğru|harika|correct|great/.test(t))return'correct';
+  return'';
 }
 
-function sync(){
-  document.querySelectorAll('section.panel,.panel').forEach(panel=>{
-    if(panel.querySelector('.question')&&panel.querySelector('.feedback,[class*="feedback"]'))syncOne(panel);
+function syncFeedback(feedback){
+  const state=stateFromFeedback(feedback);
+  if(!state)return;
+  feedback.classList.toggle('quiz-albamen-correct',state==='correct');
+  feedback.classList.toggle('quiz-albamen-wrong',state==='wrong');
+  const src=state==='correct'?HAPPY:SAD;
+
+  let wrap=feedback.querySelector('.albamen-avatar-wrap,.quiz-albamen-mood-wrap');
+  if(!wrap){
+    wrap=document.createElement('div');
+    feedback.prepend(wrap);
+  }
+  wrap.className='albamen-avatar-wrap quiz-albamen-mood-wrap';
+  let face=wrap.querySelector('img.quiz-albamen-face');
+  if(!face){
+    wrap.replaceChildren();
+    face=document.createElement('img');
+    face.className='quiz-albamen-face';
+    face.alt='ALBAMEN';
+    wrap.appendChild(face);
+  }
+  if(face.getAttribute('src')!==src)face.src=src;
+
+  feedback.querySelectorAll('img').forEach(img=>{
+    if(img!==face)img.style.setProperty('display','none','important');
   });
+}
+
+function syncOne(panel){
+  const feedback=panel?.querySelector('.feedback,[class*="feedback"]');
+  if(feedback)syncFeedback(feedback);
+}
+function sync(){
+  document.querySelectorAll('.feedback,[class*="feedback"]').forEach(syncFeedback);
 }
 
 function install(){
