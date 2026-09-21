@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20260921-1';
+const VERSION='20260921-2';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const FOLDERS=['01-solar-system','02-planets','03-moon','04-stars','05-asteroids-comets','06-topic-06','07-topic-07','08-topic-08','09-topic-09','10-topic-10'];
 let installed=false,DATA=null,timer=null;
@@ -20,7 +20,9 @@ function counterIndex(){for(const n of document.querySelectorAll('.section-title
 function originalCard(){return document.getElementById('flash')||document.getElementById('flash-card')||document.querySelector('.flash-card');}
 function categoryCid(card){return cidFromText(document.querySelector('.section-title')?.textContent)||cidFromText(card?.textContent)||'';}
 function currentRecord(card){if(!DATA)return null;const cid=categoryCid(card),index=counterIndex();if(!cid||index<0)return null;const id=cardIdsByCid.get(cid)?.[index];if(!id)return{cid,index,id:null,front:'',back:''};const row=translations()?.[id]||{};return{cid,index,id,front:String(row.front||''),back:String(row.back||''),explanation:String(row.explanation||'')};}
-function imageFile(record,side){return record?`${String(record.index+1).padStart(2,'0')} ${side}.png`:'';}\nfunction imagePath(record,side){if(!record)return'';const folder=categoryFolder.get(record.cid);if(!folder)return'';const file=imageFile(record,side);return `${BASE}assets/topic-images/${folder}/${encodeURIComponent(file)}?v=${VERSION}`;}\nfunction rawImagePath(record,side){if(!record)return'';const folder=categoryFolder.get(record.cid);if(!folder)return'';const file=imageFile(record,side);return `https://raw.githubusercontent.com/StingerUA/Website_10.0/main/games/albamen-cosmos/assets/topic-images/${folder}/${encodeURIComponent(file)}?v=${VERSION}`;}
+function imageFile(record,side){return record?`${String(record.index+1).padStart(2,'0')} ${side}.png`:'';}
+function imagePath(record,side){if(!record)return'';const folder=categoryFolder.get(record.cid);if(!folder)return'';const file=imageFile(record,side);return `${BASE}assets/topic-images/${folder}/${encodeURIComponent(file)}?v=${VERSION}`;}
+function rawImagePath(record,side){if(!record)return'';const folder=categoryFolder.get(record.cid);if(!folder)return'';const file=imageFile(record,side);return `https://raw.githubusercontent.com/StingerUA/Website_10.0/main/games/albamen-cosmos/assets/topic-images/${folder}/${encodeURIComponent(file)}?v=${VERSION}`;}
 function dispatchClick(el){if(!el)return false;try{el.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));return true}catch{try{el.click();return true}catch{return false}}}
 function exactStatusButton(status){return document.querySelector(`.card-actions [data-status="${status}"]`)||document.querySelector(`[data-status="${status}"]`)}
 function exactNavButton(dir){return document.getElementById(dir==='prev'?'prev-card':'next-card')}
