@@ -1,11 +1,11 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20260921-2';
+const VERSION='20260921-3';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const FOLDERS=['01-solar-system','02-planets','03-moon','04-stars','05-asteroids-comets','06-topic-06','07-topic-07','08-topic-08','09-topic-09','10-topic-10'];
 let installed=false,DATA=null,timer=null;
-let categoryIds=[],categoryFolder=new Map(),labelToCid=new Map(),questionMap=new Map(),cardIdsByCid=new Map();
+let categoryIds=[],categoryFolder=new Map(),labelToCid=new Map(),questionMap=new Map(),cardIdsByCid=new Map(),cardTextMap=new Map(),cardTerms=[];
 let manualSide='F',lastCardKey='';
 const norm=v=>String(v||'').replace(/\s+/g,' ').trim().toLocaleLowerCase();
 const txt=el=>String(el?.textContent||'').replace(/\s+/g,' ').trim();
@@ -14,12 +14,66 @@ async function getText(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok
 async function loadData(){const parts=await Promise.all(DATA_FILES.map(n=>getText(BASE+n+'?v='+VERSION)));const b64=parts.join('').replace(/\s+/g,'');const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(stream).text());}
 function lang(){const l=(document.documentElement.lang||'tr').toLowerCase();return l.startsWith('ru')?'ru':l.startsWith('en')?'en':'tr';}
 function translations(){return DATA?.translations?.[lang()]||DATA?.translations?.tr||DATA?.translations?.en||DATA?.translations?.ru||{};}
-function buildMaps(){const cats=DATA?.categories||{};const pref=cats.en||cats.tr||cats.ru||cats[Object.keys(cats)[0]]||{};categoryIds=Object.keys(pref).slice(0,10);categoryIds.forEach((cid,i)=>categoryFolder.set(cid,FOLDERS[i]||`topic-${i+1}`));for(const table of Object.values(cats))for(const [cid,label] of Object.entries(table||{})){const k=norm(label);if(k)labelToCid.set(k,cid);}for(const cid of categoryIds){const fids=Object.keys(DATA.fcmeta||{}).filter(id=>DATA.fcmeta[id]?.cid===cid).slice(0,10);const qids=Object.keys(DATA.qmeta||{}).filter(id=>DATA.qmeta[id]?.cid===cid).slice(0,10);cardIdsByCid.set(cid,fids);for(const table of Object.values(DATA.translations||{}))qids.forEach((id,index)=>{const q=norm(table?.[id]?.question);if(q)questionMap.set(q,{cid,index});});}console.info('[ALBAMEN Cosmos] unified data ready',{categories:categoryIds.length,cards:[...cardIdsByCid.values()].reduce((n,x)=>n+x.length,0)});}
+function buildMaps(){
+  const cats=DATA?.categories||{};
+  const pref=cats.en||cats.tr||cats.ru||cats[Object.keys(cats)[0]]||{};
+  categoryIds=Object.keys(pref).slice(0,10);
+  categoryIds.forEach((cid,i)=>categoryFolder.set(cid,FOLDERS[i]||`topic-${i+1}`));
+  labelToCid.clear();questionMap.clear();cardIdsByCid.clear();cardTextMap.clear();cardTerms=[];
+  for(const table of Object.values(cats))for(const [cid,label] of Object.entries(table||{})){const k=norm(label);if(k)labelToCid.set(k,cid);}
+  for(const cid of categoryIds){
+    const fids=Object.keys(DATA.fcmeta||{}).filter(id=>DATA.fcmeta[id]?.cid===cid).slice(0,10);
+    const qids=Object.keys(DATA.qmeta||{}).filter(id=>DATA.qmeta[id]?.cid===cid).slice(0,10);
+    cardIdsByCid.set(cid,fids);
+    for(const table of Object.values(DATA.translations||{})){
+      qids.forEach((id,index)=>{const q=norm(table?.[id]?.question);if(q)questionMap.set(q,{cid,index});});
+      fids.forEach((id,index)=>{
+        const front=norm(table?.[id]?.front),back=norm(table?.[id]?.back),meta={cid,index,id};
+        if(front){cardTextMap.set(front,meta);cardTerms.push({text:front,...meta});}
+        if(back){cardTextMap.set(back,meta);cardTerms.push({text:back,...meta});}
+      });
+    }
+  }
+  cardTerms.sort((a,b)=>b.text.length-a.text.length);
+  console.info('[ALBAMEN Cosmos] unified data ready',{categories:categoryIds.length,cards:[...cardIdsByCid.values()].reduce((n,x)=>n+x.length,0),cardTexts:cardTextMap.size});
+}
 function cidFromText(v){const x=norm(v);let best='',len=0;for(const [label,cid] of labelToCid){if(label.length>len&&(x===label||x.includes(label))){best=cid;len=label.length;}}return best;}
-function counterIndex(){for(const n of document.querySelectorAll('.section-title small,.section-title span,.q-count,[class*="count"]')){const m=txt(n).match(/\b(10|[1-9])\s*\/\s*10\b/);if(m)return Number(m[1])-1;}return -1;}
+function counterIndex(card){
+  for(const n of document.querySelectorAll('.section-title small,.section-title span,.q-count,[class*="count"]')){
+    const m=txt(n).match(/\b(10|[1-9])\s*\/\s*10\b/);
+    if(m)return Number(m[1])-1;
+  }
+  const scope=card?.parentElement||card;
+  const m=txt(scope).match(/\b(10|[1-9])\s*\/\s*10\b/);
+  return m?Number(m[1])-1:-1;
+}
 function originalCard(){return document.getElementById('flash')||document.getElementById('flash-card')||document.querySelector('.flash-card');}
 function categoryCid(card){return cidFromText(document.querySelector('.section-title')?.textContent)||cidFromText(card?.textContent)||'';}
-function currentRecord(card){if(!DATA)return null;const cid=categoryCid(card),index=counterIndex();if(!cid||index<0)return null;const id=cardIdsByCid.get(cid)?.[index];if(!id)return{cid,index,id:null,front:'',back:''};const row=translations()?.[id]||{};return{cid,index,id,front:String(row.front||''),back:String(row.back||''),explanation:String(row.explanation||'')};}
+function currentRecord(card){
+  if(!DATA)return null;
+  const nodes=card?[...card.querySelectorAll('h1,h2,h3,h4,p,div,span,strong')]:[];
+  let matched=null;
+  for(const node of nodes){
+    const e=cardTextMap.get(norm(node.textContent));
+    if(e){matched=e;break;}
+  }
+  if(!matched&&card){
+    const all=norm(card.textContent);
+    for(const term of cardTerms){
+      if(term.text.length>=5&&all.includes(term.text)){matched=term;break;}
+    }
+  }
+  if(matched){
+    const row=translations()?.[matched.id]||{};
+    return{cid:matched.cid,index:matched.index,id:matched.id,front:String(row.front||''),back:String(row.back||''),explanation:String(row.explanation||'')};
+  }
+  const cid=categoryCid(card),index=counterIndex(card);
+  if(!cid||index<0)return null;
+  const id=cardIdsByCid.get(cid)?.[index];
+  if(!id)return{cid,index,id:null,front:'',back:''};
+  const row=translations()?.[id]||{};
+  return{cid,index,id,front:String(row.front||''),back:String(row.back||''),explanation:String(row.explanation||'')};
+}
 function imageFile(record,side){return record?`${String(record.index+1).padStart(2,'0')} ${side}.png`:'';}
 function imagePath(record,side){if(!record)return'';const folder=categoryFolder.get(record.cid);if(!folder)return'';const file=imageFile(record,side);return `${BASE}assets/topic-images/${folder}/${encodeURIComponent(file)}?v=${VERSION}`;}
 function rawImagePath(record,side){if(!record)return'';const folder=categoryFolder.get(record.cid);if(!folder)return'';const file=imageFile(record,side);return `https://raw.githubusercontent.com/StingerUA/Website_10.0/main/games/albamen-cosmos/assets/topic-images/${folder}/${encodeURIComponent(file)}?v=${VERSION}`;}
