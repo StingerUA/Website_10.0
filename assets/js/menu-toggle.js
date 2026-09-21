@@ -33,7 +33,6 @@
       about: [
         { href: '/hakkimizda.html', label: 'HAKKIMIZDA' },
         { href: '/basindabiz.html', label: 'BASINDA BİZ' },
-        { href: '/galeri.html', label: 'GALERİ' },
         { href: '/iletisim.html', label: 'İLETİŞİM' }
       ]
     },
@@ -53,7 +52,6 @@
       about: [
         { href: '/eng/hakkimizda.html', label: 'ABOUT US' },
         { href: '/eng/basindabiz.html', label: 'PRESS' },
-        { href: '/eng/galeri.html', label: 'GALLERY' },
         { href: '/eng/iletisim.html', label: 'CONTACT' }
       ]
     },
@@ -73,7 +71,6 @@
       about: [
         { href: '/rus/hakkimizda.html', label: 'О НАС' },
         { href: '/rus/basindabiz.html', label: 'ПРЕССА' },
-        { href: '/rus/galeri.html', label: 'ГАЛЕРЕЯ' },
         { href: '/rus/iletisim.html', label: 'КОНТАКТЫ' }
       ]
     },
@@ -93,7 +90,6 @@
       about: [
         { href: '/ar/hakkimizda.html', label: 'من نحن' },
         { href: '/ar/basindabiz.html', label: 'الصحافة' },
-        { href: '/ar/galeri.html', label: 'المعرض' },
         { href: '/ar/iletisim.html', label: 'اتصل بنا' }
       ]
     }
