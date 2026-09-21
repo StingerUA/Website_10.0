@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20260921-4';
+const VERSION='20260921-5';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const FOLDERS=['01-solar-system','02-planets','03-moon','04-stars','05-asteroids-comets','06-topic-06','07-topic-07','08-topic-08','09-topic-09','10-topic-10'];
 let installed=false,DATA=null,timer=null;
@@ -97,8 +97,18 @@ function cardImageTarget(record,side){
   if(!folder||index<0)return null;
   return{folder,index,side};
 }
+function quizVisibleFolder(){
+  const meta=norm(document.querySelector('.quiz-meta')?.textContent||'');
+  if(/asteroid|comet|asteroit|kuyruk|астеро|комет/.test(meta))return'05-asteroids-comets';
+  if(/solar system|güneş sistemi|солнечн/.test(meta))return'01-solar-system';
+  if(/planet|gezegen|планет/.test(meta))return'02-planets';
+  if(/(^|\s)(moon|ay|луна|луны)(\s|$)/.test(meta))return'03-moon';
+  if(/star|yıldız|звезд/.test(meta))return'04-stars';
+  const cid=cidFromText(meta);
+  return cid?categoryFolder.get(cid)||'':'';
+}
 function quizImageTarget(entry,side){
-  const folder=visibleTopicFolder()||categoryFolder.get(entry?.cid);
+  const folder=quizVisibleFolder()||categoryFolder.get(entry?.cid);
   const index=entry?.index??-1;
   if(!folder||index<0)return null;
   return{folder,index,side};
@@ -164,6 +174,7 @@ function syncQuiz(){
     if(!box){box=document.createElement('div');box.className='cosmos-unified-image cosmos-quiz-image';panel.insertBefore(box,q);}
     const side=panel.querySelector('.feedback,[class*="feedback"]')?'B':'F';
     const target=quizImageTarget(entry,side),path=targetPath(target),fallback=targetRawPath(target);
+    console.info('[ALBAMEN Cosmos] quiz image target',{question:txt(q),meta:txt(document.querySelector('.quiz-meta')),entry,target,path});
     if(box.dataset.src!==path){
       box.dataset.src=path;box.replaceChildren();
       const img=document.createElement('img');img.alt='';let triedFallback=false;
