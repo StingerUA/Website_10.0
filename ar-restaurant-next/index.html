@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="tr" data-auth-mode="required">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07131d"><meta name="robots" content="noindex">
+<meta name="description" content="Bir yemek seçin. İnceleyin. Masanıza yerleştirin."><title>AR Restaurant Next — Alba Space</title>
+<link rel="stylesheet" href="/assets/css/restaurant-next/app.css?v=0.1.0">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
+<script type="module" src="/assets/js/model-viewer.min.js"></script>
+</head>
+<body>
+<main id="next-app" data-mode="preview" inert>
+  <model-viewer id="dish-viewer" ar ar-modes="scene-viewer quick-look" ar-placement="floor" ar-scale="fixed" camera-controls touch-action="pan-y" camera-orbit="25deg 68deg auto" min-camera-orbit="auto 20deg auto" max-camera-orbit="auto 88deg auto" shadow-intensity="1.15" shadow-softness="0.85" environment-image="neutral" loading="eager" reveal="auto"><button slot="ar-button" hidden></button></model-viewer>
+  <video id="camera-video" muted playsinline autoplay hidden></video>
+  <div id="scene-host" hidden></div>
+  <div id="overlay">
+    <div id="interaction" hidden></div>
+    <header class="topbar">
+      <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">a.</span> ALBA SPACE <span class="badge">NEXT 0.1</span></a>
+      <nav><button id="exit" data-copy="exit" hidden>Bitir</button><button id="menu-toggle" aria-expanded="false" aria-controls="menu-panel" data-copy="menu">Menü</button></nav>
+    </header>
+    <section id="status" role="status" aria-live="polite"><span class="status-dot" aria-hidden="true"></span><div><strong id="status-title">Görünüm hazırlanıyor…</strong><small id="status-detail"></small><progress id="load-progress" max="1" value="0" aria-label="Yemek yükleniyor…" hidden></progress></div><button id="retry" data-copy="retry" hidden>Tekrar dene</button></section>
+    <section class="dish-info"><span class="eyebrow" data-copy="version">Deneysel sürüm · v0.1</span><h1 id="dish-name">AR Restaurant Next</h1><p id="dish-description">Bir yemek seçin. İnceleyin. Masanıza yerleştirin.</p><strong id="dish-price"></strong></section>
+    <div class="bottom-controls">
+      <p id="camera-note" data-copy="cameraNote" hidden>Kamera görüntüsü üzerinde el kontrolü deneyi. Yemek gerçek masaya sabitlenmez.</p>
+      <div id="manipulation" hidden><div class="sliders"><label><span data-copy="scale">Boyut</span><input id="scale" type="range" min="0.25" max="3" step="0.01" value="1"></label><label><span data-copy="rotation">Dönüş</span><input id="rotation" type="range" min="-180" max="180" value="0"></label></div><div class="minor-actions"><button id="reset" data-copy="reset">Boyutu ve dönüşü sıfırla</button><button id="rescan" data-copy="rescan">Başka bir yer seç</button></div></div>
+      <button id="start-ar" class="primary" data-copy="start" disabled>Masaya yerleştir</button>
+      <button id="place" class="primary" data-copy="place" hidden>Buraya yerleştir</button>
+      <button id="hands-toggle" data-copy="hands" disabled>Elle kontrol · deneysel</button>
+      <button id="camera-flip" data-copy="flip" hidden>Kamerayı değiştir</button>
+    </div>
+    <button id="lab-toggle" class="lab-toggle" aria-controls="lab-panel" aria-expanded="false">AR LAB</button>
+    <aside id="lab-panel" aria-label="AR LAB" hidden><strong>AR LAB · v0.1</strong><dl id="lab-values"></dl></aside>
+    <section id="menu-panel" role="dialog" aria-modal="false" aria-labelledby="menu-title" hidden>
+      <div class="menu-heading"><div><span class="eyebrow">ALBA SPACE</span><h2 id="menu-title" data-copy="menu">Menü</h2></div><button id="menu-close" data-copy="close">Kapat</button></div>
+      <div id="categories" aria-label="Menü"></div><div id="dishes"></div><p class="privacy" data-copy="privacy">Kamera yalnızca dokunduğunuzda açılır. Görüntü cihazda işlenir, sunucuya gönderilmez.</p>
+    </section>
+    <div id="cursors" aria-hidden="true"></div>
+  </div>
+</main>
+<section id="auth-gate" ><div><span class="eyebrow">ALBA SPACE</span><h1 id="auth-text" data-copy="authChecking">Giriş kontrol ediliyor…</h1><a id="login-link" href="/account-menu.html" data-copy="login" hidden>Giriş yap veya hesap oluştur</a></div></section>
+<noscript><p>JavaScript gereklidir / Для просмотра включите JavaScript.</p></noscript>
+<script type="module" src="/assets/js/restaurant-next/app.mjs?v=0.1.0"></script>
+</body></html>
