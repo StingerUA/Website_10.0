@@ -1,8 +1,8 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const HAPPY=BASE+'assets/ui/albamen-happy.webp?v=20260921-3';
-const SAD=BASE+'assets/ui/albamen-sad.webp?v=20260921-3';
+const HAPPY=BASE+'assets/ui/albamen-happy.webp?v=20260922-1';
+const SAD=BASE+'assets/ui/albamen-sad.webp?v=20260922-1';
 
 function ensureStyle(){
   if(document.getElementById('quiz-albamen-mood-style'))return;
@@ -39,31 +39,22 @@ function stateFromFeedback(feedback){
 function syncFeedback(feedback){
   const state=stateFromFeedback(feedback);
   if(!state)return;
+  const src=state==='correct'?HAPPY:SAD;
+  if(feedback.dataset.albamenMood===state&&feedback.querySelector('img.quiz-albamen-face'))return;
+  feedback.dataset.albamenMood=state;
   feedback.classList.toggle('quiz-albamen-correct',state==='correct');
   feedback.classList.toggle('quiz-albamen-wrong',state==='wrong');
-  const src=state==='correct'?HAPPY:SAD;
 
   let wrap=feedback.querySelector('.albamen-avatar-wrap,.quiz-albamen-mood-wrap');
-  if(!wrap){
-    wrap=document.createElement('div');
-    feedback.prepend(wrap);
-  }
-  wrap.className='albamen-avatar-wrap quiz-albamen-mood-wrap';
-  let face=wrap.querySelector('img.quiz-albamen-face');
-  if(!face){
-    wrap.replaceChildren();
-    face=document.createElement('img');
-    face.className='quiz-albamen-face';
-    face.alt='ALBAMEN';
-    wrap.appendChild(face);
-  }
-  if(face.getAttribute('src')!==src)face.src=src;
+  if(!wrap){wrap=document.createElement('div');feedback.prepend(wrap);}
+  wrap.classList.add('albamen-avatar-wrap','quiz-albamen-mood-wrap');
+  wrap.replaceChildren();
+  const face=document.createElement('img');
+  face.className='quiz-albamen-face';face.alt='ALBAMEN';face.src=src;
+  wrap.appendChild(face);
 
-  feedback.querySelectorAll('img').forEach(img=>{
-    if(img!==face)img.style.setProperty('display','none','important');
-  });
+  feedback.querySelectorAll('img').forEach(img=>{if(img!==face)img.remove();});
 }
-
 function syncOne(panel){
   const feedback=panel?.querySelector('.feedback,[class*="feedback"]');
   if(feedback)syncFeedback(feedback);
@@ -75,11 +66,13 @@ function sync(){
 function install(){
   ensureStyle();
   [HAPPY,SAD].forEach(src=>{const i=new Image();i.src=src;});
-  sync();
   const root=document.getElementById('root')||document.body;
-  const observer=new MutationObserver(()=>queueMicrotask(sync));
-  observer.observe(root,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  let queued=false;
+  const queue=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;sync();});};
+  const observer=new MutationObserver(queue);
+  observer.observe(root,{childList:true,subtree:true,characterData:true});
   document.addEventListener('click',()=>setTimeout(sync,0),true);
+  sync();
 }
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});

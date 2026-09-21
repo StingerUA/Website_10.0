@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20260921-6';
+const VERSION='20260922-1';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const FOLDERS=['01-solar-system','02-planets','03-moon','04-stars','05-asteroids-comets','06-topic-06','07-topic-07','08-topic-08','09-topic-09','10-topic-10'];
 let installed=false,DATA=null,timer=null;
@@ -47,7 +47,10 @@ function counterIndex(card){
   const m=txt(scope).match(/\b(10|[1-9])\s*\/\s*10\b/);
   return m?Number(m[1])-1:-1;
 }
-function originalCard(){return document.getElementById('flash')||document.getElementById('flash-card')||document.querySelector('.flash-card');}
+function originalCard(){
+  const candidates=[document.getElementById('flash'),document.getElementById('flash-card'),...document.querySelectorAll('.flash-card')].filter(Boolean);
+  return candidates.find(visible)||null;
+}
 function categoryCid(card){return cidFromText(document.querySelector('.section-title')?.textContent)||cidFromText(card?.textContent)||'';}
 function currentRecord(card){
   if(!DATA)return null;
@@ -178,27 +181,59 @@ function triggerNav(dir){const b=exactNavButton(dir);if(!b){console.warn('[ALBAM
 function nativeStatusIsActive(status){const b=exactStatusButton(status);if(!b)return false;return b.classList.contains('active')||/border-color\s*:/i.test(b.getAttribute('style')||'')||b.getAttribute('aria-pressed')==='true';}
 function syncControls(ui){const actions=ui.querySelector('.cosmos-unified-actions');const nav=ui.querySelector('.cosmos-unified-nav');const labels=fallbackLabels(),states=['learned','review','hard'];if(actions.dataset.ready!=='1'){actions.dataset.ready='1';labels.forEach((label,i)=>{const b=document.createElement('button');b.type='button';b.dataset.status=states[i];b.textContent=label;b.onclick=e=>{e.stopPropagation();triggerRating(states[i])};actions.appendChild(b);});}states.forEach(status=>actions.querySelector(`[data-status="${status}"]`)?.classList.toggle('active',nativeStatusIsActive(status)));if(nav.dataset.ready!=='1'){nav.dataset.ready='1';[['←','prev'],['→','next']].forEach(([label,dir])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=e=>{e.stopPropagation();triggerNav(dir)};nav.appendChild(b);});}}
 function syncCard(){const card=originalCard();if(!card){setUnifiedMode(false);document.querySelectorAll('.cosmos-unified-card').forEach(x=>x.remove());return false;}setUnifiedMode(true);const record=currentRecord(card);const key=record?`${record.cid}:${record.index}`:'';if(key&&key!==lastCardKey){lastCardKey=key;manualSide='F';}const ui=ensureUnified(card);if(!ui)return false;syncCopy(ui,record,card);syncImage(ui,record);syncControls(ui);return true;}
-function syncQuiz(){
-  setUnifiedMode(false);if(!DATA||originalCard())return;
-  for(const q of document.querySelectorAll('.question,[class*="question"],h1,h2,h3')){
-    if(!visible(q))continue;
-    const entry=questionMap.get(norm(q.textContent));if(!entry)continue;
-    const panel=q.closest('section.panel')||q.closest('section')||q.parentElement;if(!panel)return;
-    let box=panel.querySelector(':scope > .cosmos-quiz-image');
-    if(!box){box=document.createElement('div');box.className='cosmos-unified-image cosmos-quiz-image';panel.insertBefore(box,q);}
-    const side=panel.querySelector('.feedback,[class*="feedback"]')?'B':'F';
-    const target=quizImageTarget(entry,side,q),path=targetPath(target),fallback=targetRawPath(target);
-    console.info('[ALBAMEN Cosmos] quiz image target',{question:txt(q),meta:txt(document.querySelector('.quiz-meta')),entry,target,path});
-    if(box.dataset.src!==path){
-      box.dataset.src=path;box.replaceChildren();
-      const img=document.createElement('img');img.alt='';let triedFallback=false;
-      img.onerror=()=>{if(!triedFallback&&fallback){triedFallback=true;img.src=fallback;return;}box.replaceChildren();box.textContent='IMAGE';console.warn('[ALBAMEN Cosmos] quiz image failed',path,fallback,target);};
-      img.src=path;box.appendChild(img);
-    }
-    return;
+function findQuizQuestion(){
+  const candidates=[...document.querySelectorAll('.question,[class*="question"],h1,h2,h3')].filter(visible);
+  for(const q of candidates){
+    const key=norm(q.textContent);
+    if(questionMap.has(key))return{q,entry:questionMap.get(key)};
   }
+  return null;
 }
-function sync(){try{if(syncCard())return;syncQuiz();}catch(e){console.error('[ALBAMEN Cosmos] unified card sync failed',e);}}
-function install(){if(installed)return;installed=true;ensureStyle();window.__albamenTopicImagesVersion=VERSION;console.info('[ALBAMEN Cosmos] unified card renderer installed',VERSION);loadData().then(d=>{DATA=d;buildMaps();sync();}).catch(e=>console.error('[ALBAMEN Cosmos] image data failed',e));sync();timer=setInterval(sync,250);document.addEventListener('click',()=>setTimeout(sync,0),true);}
+function syncQuiz(){
+  setUnifiedMode(false);
+  document.querySelectorAll('.cosmos-unified-card').forEach(x=>x.remove());
+  if(!DATA)return false;
+  const found=findQuizQuestion();
+  if(!found){document.querySelectorAll('.cosmos-quiz-image').forEach(x=>x.remove());return false;}
+  const {q,entry}=found;
+  const panel=q.closest('section.panel')||q.closest('section')||q.parentElement;
+  if(!panel)return false;
+  let box=panel.querySelector(':scope > .cosmos-quiz-image');
+  if(!box){
+    box=document.createElement('div');
+    box.className='cosmos-unified-image cosmos-quiz-image';
+    panel.insertBefore(box,q);
+  }
+  const answered=!!panel.querySelector('.feedback,[class*="feedback"]');
+  const side=answered?'B':'F';
+  const target=quizImageTarget(entry,side,q),path=targetPath(target),fallback=targetRawPath(target);
+  if(!path){box.dataset.src='';box.replaceChildren();box.textContent='IMAGE';return true;}
+  if(box.dataset.src!==path||!box.querySelector('img')){
+    box.dataset.src=path;box.replaceChildren();
+    const img=document.createElement('img');img.alt='';img.draggable=false;
+    let triedFallback=false;
+    img.onerror=()=>{if(!triedFallback&&fallback){triedFallback=true;img.src=fallback;return;}box.replaceChildren();box.textContent='IMAGE';console.warn('[ALBAMEN Cosmos] quiz image failed',path,fallback,target);};
+    img.src=path;box.appendChild(img);
+  }
+  return true;
+}
+function sync(){try{
+  const card=originalCard();
+  if(card){syncCard();return;}
+  syncQuiz();
+}catch(e){console.error('[ALBAMEN Cosmos] visual sync failed',e);}}
+function install(){
+  if(installed)return;installed=true;ensureStyle();window.__albamenTopicImagesVersion=VERSION;
+  console.info('[ALBAMEN Cosmos] unified card renderer installed',VERSION);
+  loadData().then(d=>{DATA=d;buildMaps();sync();}).catch(e=>console.error('[ALBAMEN Cosmos] image data failed',e));
+  const root=document.getElementById('root')||document.body;
+  let queued=false;
+  const queue=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;sync();});};
+  const observer=new MutationObserver(queue);
+  observer.observe(root,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class','style']});
+  document.addEventListener('click',()=>setTimeout(sync,0),true);
+  timer=setInterval(sync,1200);
+  sync();
+}
 window.AlbamenTopicCardVisuals={install,decorate:sync,version:VERSION};
 })();
