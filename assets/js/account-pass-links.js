@@ -18,12 +18,12 @@
     if(!document.querySelector('link[href*="account-avatar.css"]')){
       const link=document.createElement('link');
       link.rel='stylesheet';
-      link.href='/assets/css/account-avatar.css?v=20260904-1';
+      link.href='/assets/css/account-avatar.css?v=20260927-1';
       document.head.appendChild(link);
     }
     if(!document.querySelector('script[src*="account-avatar.js"]')){
       const script=document.createElement('script');
-      script.src='/assets/js/account-avatar.js?v=20260904-1';
+      script.src='/assets/js/account-avatar.js?v=20260927-1';
       script.defer=true;
       document.head.appendChild(script);
     }
