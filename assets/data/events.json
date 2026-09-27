@@ -657,7 +657,7 @@
         "tr": {
           "title": "ICTürkiye2026 International Brokerage Event",
           "excerpt": "Ufuk Avrupa kapsamında çevrim içi uluslararası iş birliği ve proje ortaklığı etkinliği.",
-          "url": "/etkinlikler/icturkiye2026-international-brokerage-event.html",
+          "url": "/etkinlikler/event.html?slug=icturkiye2026-international-brokerage-event",
           "hero": "29 Eylül 2026 tarihinde çevrim içi olarak gerçekleştirilecek ICTürkiye2026 International Brokerage Event.",
           "body": [
             "Etkinlik, uluslararası proje ortaklıkları ve iş birliği fırsatları için çevrim içi bir buluşma sunar."
@@ -671,7 +671,7 @@
         "en": {
           "title": "ICTürkiye2026 International Brokerage Event",
           "excerpt": "An online international brokerage and project-partnership event within Horizon Europe.",
-          "url": "/eng/etkinlikler/icturkiye2026-international-brokerage-event.html",
+          "url": "/eng/etkinlikler/event.html?slug=icturkiye2026-international-brokerage-event",
           "hero": "ICTürkiye2026 International Brokerage Event will take place online on September 29, 2026.",
           "body": [
             "The event provides an online meeting point for international project partnerships and collaboration opportunities."
@@ -685,7 +685,7 @@
         "ru": {
           "title": "ICTürkiye2026 International Brokerage Event",
           "excerpt": "Международное онлайн-мероприятие для поиска партнёров и проектного сотрудничества в рамках Horizon Europe.",
-          "url": "/rus/etkinlikler/icturkiye2026-international-brokerage-event.html",
+          "url": "/rus/etkinlikler/event.html?slug=icturkiye2026-international-brokerage-event",
           "hero": "ICTürkiye2026 International Brokerage Event состоится онлайн 29 сентября 2026 года.",
           "body": [
             "Мероприятие создаёт онлайн-площадку для международного проектного сотрудничества и поиска партнёров."
@@ -699,7 +699,7 @@
         "ar": {
           "title": "ICTürkiye2026 International Brokerage Event",
           "excerpt": "فعالية دولية عبر الإنترنت للتعاون وبناء الشراكات ضمن Horizon Europe.",
-          "url": "/ar/etkinlikler/icturkiye2026-international-brokerage-event.html",
+          "url": "/ar/etkinlikler/event.html?slug=icturkiye2026-international-brokerage-event",
           "hero": "يقام ICTürkiye2026 International Brokerage Event عبر الإنترنت في 29 سبتمبر 2026.",
           "body": [
             "توفر الفعالية مساحة عبر الإنترنت للتعاون الدولي وبناء الشراكات للمشاريع."
@@ -735,7 +735,7 @@
         "tr": {
           "title": "TÜBİTAK 4009 Projesi",
           "excerpt": "TÜBİTAK 4009 Projesi kapsamında Kızlaç Ortaokulu’nda gerçekleştirilecek etkinlik.",
-          "url": "/etkinlikler/tubitak-4009-osmaniye-bahce-kizlac-2026.html",
+          "url": "/etkinlikler/event.html?slug=tubitak-4009-osmaniye-bahce-kizlac-2026",
           "hero": "30 Eylül 2026 tarihinde Osmaniye Bahçe Kızlaç Ortaokulu’nda TÜBİTAK 4009 Projesi kapsamında gerçekleştirilecek etkinlik.",
           "body": [
             "Etkinlik, TÜBİTAK 4009 Projesi kapsamında Kızlaç Ortaokulu’nda gerçekleştirilecektir."
@@ -749,7 +749,7 @@
         "en": {
           "title": "TÜBİTAK 4009 Project",
           "excerpt": "An event within the TÜBİTAK 4009 Project at Kızlaç Middle School.",
-          "url": "/eng/etkinlikler/tubitak-4009-osmaniye-bahce-kizlac-2026.html",
+          "url": "/eng/etkinlikler/event.html?slug=tubitak-4009-osmaniye-bahce-kizlac-2026",
           "hero": "An event within the TÜBİTAK 4009 Project will take place at Kızlaç Middle School in Bahçe, Osmaniye on September 30, 2026.",
           "body": [
             "The event will be held at Kızlaç Middle School as part of the TÜBİTAK 4009 Project."
@@ -763,7 +763,7 @@
         "ru": {
           "title": "Проект TÜBİTAK 4009",
           "excerpt": "Мероприятие в рамках проекта TÜBİTAK 4009 в средней школе Kızlaç.",
-          "url": "/rus/etkinlikler/tubitak-4009-osmaniye-bahce-kizlac-2026.html",
+          "url": "/rus/etkinlikler/event.html?slug=tubitak-4009-osmaniye-bahce-kizlac-2026",
           "hero": "30 сентября 2026 года в средней школе Kızlaç в районе Bahçe, Османие, состоится мероприятие в рамках проекта TÜBİTAK 4009.",
           "body": [
             "Мероприятие пройдёт в средней школе Kızlaç в рамках проекта TÜBİTAK 4009."
@@ -777,7 +777,7 @@
         "ar": {
           "title": "مشروع TÜBİTAK 4009",
           "excerpt": "فعالية ضمن مشروع TÜBİTAK 4009 في مدرسة Kızlaç المتوسطة.",
-          "url": "/ar/etkinlikler/tubitak-4009-osmaniye-bahce-kizlac-2026.html",
+          "url": "/ar/etkinlikler/event.html?slug=tubitak-4009-osmaniye-bahce-kizlac-2026",
           "hero": "تقام فعالية ضمن مشروع TÜBİTAK 4009 في مدرسة Kızlaç المتوسطة في Bahçe بولاية عثمانية في 30 سبتمبر 2026.",
           "body": [
             "ستقام الفعالية في مدرسة Kızlaç ضمن مشروع TÜBİTAK 4009."
@@ -813,7 +813,7 @@
         "tr": {
           "title": "ITS Istanbul 2026",
           "excerpt": "İstanbul Fuar Merkezi’nde 7-10 Ekim 2026 tarihleri arasında düzenlenecek teknoloji ve yazılım buluşması.",
-          "url": "/etkinlikler/its-istanbul-2026.html",
+          "url": "/etkinlikler/event.html?slug=its-istanbul-2026",
           "hero": "ITS Istanbul 2026, 7-10 Ekim 2026 tarihleri arasında İstanbul Fuar Merkezi’nde gerçekleştirilecek.",
           "body": [
             "Etkinlik, teknoloji, yazılım, ihracat, yatırım, fuar, konferans ve B2B buluşmalarını bir araya getirir."
@@ -827,7 +827,7 @@
         "en": {
           "title": "ITS Istanbul 2026",
           "excerpt": "A technology and software gathering at Istanbul Expo Center from October 7 to 10, 2026.",
-          "url": "/eng/etkinlikler/its-istanbul-2026.html",
+          "url": "/eng/etkinlikler/event.html?slug=its-istanbul-2026",
           "hero": "ITS Istanbul 2026 will take place at Istanbul Expo Center from October 7 to 10, 2026.",
           "body": [
             "The event brings together technology, software, export, investment, exhibition, conference and B2B meetings."
@@ -841,7 +841,7 @@
         "ru": {
           "title": "ITS Istanbul 2026",
           "excerpt": "Встреча представителей технологий и программного обеспечения в Стамбульском выставочном центре 7–10 октября 2026 года.",
-          "url": "/rus/etkinlikler/its-istanbul-2026.html",
+          "url": "/rus/etkinlikler/event.html?slug=its-istanbul-2026",
           "hero": "ITS Istanbul 2026 пройдёт в Стамбульском выставочном центре с 7 по 10 октября 2026 года.",
           "body": [
             "Мероприятие объединяет технологии, программное обеспечение, экспорт, инвестиции, выставочную программу, конференцию и B2B-встречи."
@@ -855,7 +855,7 @@
         "ar": {
           "title": "ITS Istanbul 2026",
           "excerpt": "لقاء للتكنولوجيا والبرمجيات في مركز إسطنبول للمعارض من 7 إلى 10 أكتوبر 2026.",
-          "url": "/ar/etkinlikler/its-istanbul-2026.html",
+          "url": "/ar/etkinlikler/event.html?slug=its-istanbul-2026",
           "hero": "يقام ITS Istanbul 2026 في مركز إسطنبول للمعارض من 7 إلى 10 أكتوبر 2026.",
           "body": [
             "تجمع الفعالية بين التكنولوجيا والبرمجيات والتصدير والاستثمار والمعرض والمؤتمر واجتماعات B2B."
@@ -890,7 +890,7 @@
         "tr": {
           "title": "TÜBİTAK 4009 Köy Okullarına Destek Bilim Şenliği",
           "excerpt": "Köy okullarına destek amacıyla düzenlenen TÜBİTAK 4009 Bilim Şenliği.",
-          "url": "/etkinlikler/tubitak-4009-baltakoy-2026.html",
+          "url": "/etkinlikler/event.html?slug=tubitak-4009-baltakoy-2026",
           "hero": "14 Ekim 2026 tarihinde Baltaköy Hacı İbrahim Akdemir İlkokulu / Ortaokulu’nda TÜBİTAK 4009 Köy Okullarına Destek Bilim Şenliği gerçekleştirilecek.",
           "body": [
             "Bilim şenliği, köy okullarına destek amacıyla TÜBİTAK 4009 kapsamında düzenlenecektir."
@@ -904,7 +904,7 @@
         "en": {
           "title": "TÜBİTAK 4009 Science Festival Supporting Village Schools",
           "excerpt": "A TÜBİTAK 4009 science festival supporting village schools.",
-          "url": "/eng/etkinlikler/tubitak-4009-baltakoy-2026.html",
+          "url": "/eng/etkinlikler/event.html?slug=tubitak-4009-baltakoy-2026",
           "hero": "The TÜBİTAK 4009 Science Festival Supporting Village Schools will take place on October 14, 2026 at Baltaköy Hacı İbrahim Akdemir Primary / Middle School.",
           "body": [
             "The science festival is organized within TÜBİTAK 4009 to support village schools."
@@ -918,7 +918,7 @@
         "ru": {
           "title": "Научный фестиваль TÜBİTAK 4009 в поддержку сельских школ",
           "excerpt": "Научный фестиваль TÜBİTAK 4009, направленный на поддержку сельских школ.",
-          "url": "/rus/etkinlikler/tubitak-4009-baltakoy-2026.html",
+          "url": "/rus/etkinlikler/event.html?slug=tubitak-4009-baltakoy-2026",
           "hero": "14 октября 2026 года в начальной и средней школе Baltaköy Hacı İbrahim Akdemir состоится научный фестиваль TÜBİTAK 4009 в поддержку сельских школ.",
           "body": [
             "Научный фестиваль организован в рамках TÜBİTAK 4009 для поддержки сельских школ."
@@ -932,7 +932,7 @@
         "ar": {
           "title": "مهرجان TÜBİTAK 4009 لدعم مدارس القرى",
           "excerpt": "مهرجان علمي ضمن TÜBİTAK 4009 لدعم مدارس القرى.",
-          "url": "/ar/etkinlikler/tubitak-4009-baltakoy-2026.html",
+          "url": "/ar/etkinlikler/event.html?slug=tubitak-4009-baltakoy-2026",
           "hero": "يقام مهرجان TÜBİTAK 4009 العلمي لدعم مدارس القرى في مدرسة Baltaköy Hacı İbrahim Akdemir الابتدائية / المتوسطة في 14 أكتوبر 2026.",
           "body": [
             "ينظم المهرجان ضمن TÜBİTAK 4009 لدعم مدارس القرى."
