@@ -61,7 +61,8 @@
   }
 
   function cardHtml(data, post) {
-    var loc = post.locales[LOCALE] || post.locales.tr;
+    var loc = post.locales && post.locales[LOCALE];
+    if (!loc) return '';
     var authorLine = typeof post.author === 'object' 
       ? (post.author[LOCALE] || post.author.tr) 
       : post.author;
