@@ -176,7 +176,7 @@
         '<h1 class="events-article-title">' + escapeHtml(loc.title) + '</h1>' +
         '<div class="events-article-meta"><span>' + escapeHtml(fmtDateRange(event.startAt, event.endAt)) + '</span><span>•</span><span>' + escapeHtml(location) + '</span><span>•</span><span>' + escapeHtml(event.contact) + '</span></div>' +
         '<img class="events-article-cover' + (event.coverFit === 'contain' ? ' events-article-cover--contain' : '') + '" src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '">' +
-        '<div class="events-pass-cta-wrap"><a class="events-pass-cta" href="' + passHref() + '">🎟️ ' + escapeHtml(UI.buyPass) + '</a></div>' +
+        (['icturkiye2026-international-brokerage-event','tubitak-4009-osmaniye-bahce-kizlac-2026','its-istanbul-2026','tubitak-4009-baltakoy-2026'].indexOf(event.slug) === -1 ? '<div class="events-pass-cta-wrap"><a class="events-pass-cta" href="' + passHref() + '">🎟️ ' + escapeHtml(UI.buyPass) + '</a></div>' : '') +
         '<div class="events-article-body"><p><strong>' + escapeHtml(loc.hero) + '</strong></p>' + body +
         '<div class="events-highlights"><h3>' + escapeHtml(UI.upcoming) + '</h3><ul>' + highlights + '</ul></div>' +
         '<div class="events-highlights"><h3>' + escapeHtml(UI.organizers) + '</h3><ul>' + organizerHtml + '</ul></div>' +
