@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var DATA_URL = '/assets/data/events.json';
+  var DATA_URL = '/assets/data/events.json?v=20260928';
   var LOCALE = (document.documentElement.getAttribute('lang') || 'tr').slice(0, 2);
   if (['tr', 'en', 'ru', 'ar'].indexOf(LOCALE) === -1) LOCALE = 'tr';
 
