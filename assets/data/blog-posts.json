@@ -1044,6 +1044,41 @@
           "url": "/ar/blog/dunyadan-uzaya-insan-beslenmesinin-yeni-siniri.html"
         }
       }
+    },
+    {
+      "slug": "uzayda-uyumak-isste-bir-gunun-16-safagi",
+      "category": "uzay",
+      "publishAt": "2026-09-28T00:07:59+03:00",
+      "cover": "/assets/images/blog/uzayda-uyumak-isste-bir-gunun-16-safagi-cover.jpg",
+      "readingMinutes": 2,
+      "author": {
+        "tr": "Ali Batuhan Özsürmeli",
+        "en": "Ali Batuhan Özsürmeli",
+        "ru": "Ali Batuhan Özsürmeli"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Uzayda Uyumak: ISS'te Bir Günün 16 Şafağı",
+          "excerpt": "Dünya'da güneş günde bir kez doğar, bir kez batar. Uluslararası Uzay İstasyonu'nda (ISS) ise bu 16 kez oluyor — çünkü istasyon Dünya'nın etrafını her ",
+          "url": "/blog/uzayda-uyumak-isste-bir-gunun-16-safagi.html"
+        },
+        "en": {
+          "title": "Sleeping in Space: The 16 Dawns of a Day on the ISS",
+          "excerpt": "On Earth, the sun rises once and sets once a day. On the International Space Station (ISS), however, this happens 16 times — because the station orbit",
+          "url": "/eng/blog/uzayda-uyumak-isste-bir-gunun-16-safagi.html"
+        },
+        "ru": {
+          "title": "Sleeping in Space: The 16 Dawns of a Day on the ISS",
+          "excerpt": "On Earth, the sun rises once and sets once a day. On the International Space Station (ISS), however, this happens 16 times — because the station orbit",
+          "url": "/rus/blog/uzayda-uyumak-isste-bir-gunun-16-safagi.html"
+        }
+      }
     }
   ]
 }
