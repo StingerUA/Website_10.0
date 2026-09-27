@@ -1079,6 +1079,41 @@
           "url": "/rus/blog/uzayda-uyumak-isste-bir-gunun-16-safagi.html"
         }
       }
+    },
+    {
+      "slug": "gunesin-en-buyuk-gizemi-neden-atmosferi-yuzeyinden-daha-sicak",
+      "category": "uzay",
+      "publishAt": "2026-09-28T00:34:05+03:00",
+      "cover": "/assets/images/blog/gunesin-en-buyuk-gizemi-neden-atmosferi-yuzeyinden-daha-sicak-cover.jpg",
+      "readingMinutes": 5,
+      "author": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Aslı Bolat"
+      },
+      "authorRole": {
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer and Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومدرِّبة"
+      },
+      "locales": {
+        "tr": {
+          "title": "Güneş'in En Büyük Gizemi: Neden Atmosferi Yüzeyinden Daha Sıcak?",
+          "excerpt": "Bir kamp ateşinin yanında durduğunuzda fizik oldukça basit işler: Ateşten uzaklaştıkça sıcaklık azalır. Ancak söz konusu Güneş olduğunda, doğanın alış",
+          "url": "/blog/gunesin-en-buyuk-gizemi-neden-atmosferi-yuzeyinden-daha-sicak.html"
+        },
+        "en": {
+          "title": "The Sun's Greatest Mystery: Why Is Its Atmosphere Hotter Than Its",
+          "excerpt": "Surface?",
+          "url": "/eng/blog/gunesin-en-buyuk-gizemi-neden-atmosferi-yuzeyinden-daha-sicak.html"
+        },
+        "ru": {
+          "title": "Величайшая загадка Солнца: почему его атмосфера горячее",
+          "excerpt": "поверхности?",
+          "url": "/rus/blog/gunesin-en-buyuk-gizemi-neden-atmosferi-yuzeyinden-daha-sicak.html"
+        }
+      }
     }
   ]
 }
