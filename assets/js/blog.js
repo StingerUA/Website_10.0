@@ -116,6 +116,7 @@
 
       var posts = data.posts
         .filter(isPublished)
+        .filter(function (p) { return !!p.locales && !!p.locales[LOCALE]; })
         .filter(function (p) { return activeTag === 'all' || p.category === activeTag; })
         .sort(function (a, b) { return new Date(b.publishAt) - new Date(a.publishAt); });
 
@@ -135,23 +136,23 @@
     var slug = el.getAttribute('data-slug');
 
     loadData().then(function (data) {
-      var published = data.posts.filter(isPublished).sort(function (a, b) { return new Date(a.publishAt) - new Date(b.publishAt); });
+      var published = data.posts.filter(isPublished).filter(function (p) { return !!p.locales && !!p.locales[LOCALE]; }).sort(function (a, b) { return new Date(a.publishAt) - new Date(b.publishAt); });
       var idx = published.findIndex(function (p) { return p.slug === slug; });
-      var current = data.posts.find(function (p) { return p.slug === slug; });
+      var current = data.posts.find(function (p) { return p.slug === slug && p.locales && p.locales[LOCALE]; });
       var prev = idx > 0 ? published[idx - 1] : null;
       var next = idx >= 0 && idx < published.length - 1 ? published[idx + 1] : null;
 
       var navHtml = '<div class="blog-pagenav">';
       navHtml += prev
-        ? '<a class="blog-pagenav-item is-prev" href="' + (prev.locales[LOCALE] || prev.locales.tr).url + '"><span class="blog-pagenav-label">← ' + UI.prev + '</span><span class="blog-pagenav-title">' + escapeHtml((prev.locales[LOCALE] || prev.locales.tr).title) + '</span></a>'
+        ? '<a class="blog-pagenav-item is-prev" href="' + prev.locales[LOCALE].url + '"><span class="blog-pagenav-label">← ' + UI.prev + '</span><span class="blog-pagenav-title">' + escapeHtml(prev.locales[LOCALE].title) + '</span></a>'
         : '<span></span>';
       navHtml += next
-        ? '<a class="blog-pagenav-item is-next" href="' + (next.locales[LOCALE] || next.locales.tr).url + '"><span class="blog-pagenav-label">' + UI.next + ' →</span><span class="blog-pagenav-title">' + escapeHtml((next.locales[LOCALE] || next.locales.tr).title) + '</span></a>'
+        ? '<a class="blog-pagenav-item is-next" href="' + next.locales[LOCALE].url + '"><span class="blog-pagenav-label">' + UI.next + ' →</span><span class="blog-pagenav-title">' + escapeHtml(next.locales[LOCALE].title) + '</span></a>'
         : '<span></span>';
       navHtml += '</div>';
 
       var related = current
-        ? data.posts.filter(isPublished).filter(function (p) { return p.slug !== slug && p.category === current.category; }).slice(0, 3)
+        ? data.posts.filter(isPublished).filter(function (p) { return p.slug !== slug && p.category === current.category && p.locales && p.locales[LOCALE]; }).slice(0, 3)
         : [];
 
       var relatedHtml = '';
