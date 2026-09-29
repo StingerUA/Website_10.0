@@ -154,6 +154,12 @@ export class RestaurantScene {
     this.release(); this.scanStart = performance.now(); this.onState('scanning');
   }
   resetTransform() { this.scale = 1; this.yaw = 0; this.applyTransform(); this.release(); }
+  removeDish() {
+    this.root.visible = false;
+    this.placed = false;
+    this.release();
+    this.onState('removed');
+  }
   applyTransform() {
     this.scale = clamp(this.scale, CONFIG.minScale, CONFIG.maxScale);
     this.root.scale.setScalar(this.scale); this.root.rotation.y = this.yaw;
@@ -224,12 +230,12 @@ export class RestaurantScene {
     this.camera.lookAt(0, (this.radius || 0.2) * 0.35, 0); this.camera.updateMatrixWorld();
   }
   cameraHands(hands) {
-    this.stats.hands = hands.length;
-    const pressed = hands.filter(h => h.pressed).slice(0, 2).sort((a, b) => a.id - b.id);
+    this.stats.hands = hands.length ? 1 : 0;
+    const pressed = hands.filter(h => h.pressed).slice(0, 1);
     if (!this.handPrevious?.length && pressed.length && !this.hitsDish(pressed[0].x, pressed[0].y)) return;
     this.manipulate(this.handPrevious, pressed);
     this.handPrevious = pressed.length ? pressed.map(h => ({...h})) : null;
-    this.stats.gesture = pressed.length > 1 ? 'two-hand scale / rotate' : pressed.length ? 'pinch / move' : 'none';
+    this.stats.gesture = pressed.length ? 'one-hand pinch / move' : 'none';
   }
   updateXRHands(frame, reference, tracked) {
     const hands = [];
@@ -246,25 +252,18 @@ export class RestaurantScene {
     if (this.mode !== 'xr') return;
     this.stats.hands = hands.length;
     this.stats.xrHands = [...frame.session.inputSources].some(s => Boolean(s.hand));
-    const active = hands.filter(h => h.pressed);
+    const active = hands.filter(h => h.pressed).slice(0, 1);
     if (!this.interactive || !this.placed || !tracked || !this.ready || !active.length) { this.xrHandPrevious = null; this.stats.gesture = 'none'; return; }
     if (!this.xrHandPrevious) {
       const bounds = new THREE.Box3().setFromObject(this.root).expandByScalar(0.1);
-      if (!active.some(h => bounds.containsPoint(h.p))) return;
-    } else if (active.length === this.xrHandPrevious.length && active.every((h, i) => h.source === this.xrHandPrevious[i].source)) {
-      const centroid = list => list.reduce((sum, h) => sum.add(h.p), new THREE.Vector3()).multiplyScalar(1 / list.length);
-      const delta = centroid(active).sub(centroid(this.xrHandPrevious));
+      if (!bounds.containsPoint(active[0].p)) return;
+    } else if (this.xrHandPrevious[0]?.source === active[0].source) {
+      const delta = active[0].p.clone().sub(this.xrHandPrevious[0].p);
       if (delta.length() < 0.25) { delta.y = 0; this.root.position.add(delta); }
-      if (active.length === 2) {
-        const a = this.xrHandPrevious[1].p.clone().sub(this.xrHandPrevious[0].p), b = active[1].p.clone().sub(active[0].p);
-        if (a.length() > 0.06) this.scale *= clamp(b.length() / a.length(), 0.8, 1.25);
-        const difference = Math.atan2(b.z, b.x) - Math.atan2(a.z, a.x);
-        this.yaw -= Math.atan2(Math.sin(difference), Math.cos(difference));
-      }
       this.applyTransform();
     }
     this.xrHandPrevious = active;
-    this.stats.gesture = active.length > 1 ? 'two-hand scale / rotate' : 'pinch / move';
+    this.stats.gesture = 'one-hand pinch / move';
   }
   measure(time) {
     this.frameCount = (this.frameCount || 0) + 1;
