@@ -35,6 +35,24 @@
       <div class="menu-heading"><div><span class="eyebrow">ALBA SPACE</span><h2 id="menu-title" data-copy="menu">Меню</h2></div><button id="menu-close" data-copy="close">Закрыть</button></div>
       <div id="categories" aria-label="Меню"></div><div id="dishes"></div><p class="privacy" data-copy="privacy">Камера включается только по нажатию. Изображение обрабатывается на устройстве и не отправляется на сервер.</p>
     </section>
+    <div id="hand-actions" class="hand-actions" hidden aria-label="AR dish controls">
+      <button type="button" data-hand-action="scale-down" aria-label="Уменьшить">−</button>
+      <button type="button" data-hand-action="rotate-left" aria-label="Повернуть влево">↺</button>
+      <button type="button" data-hand-action="next" aria-label="Следующее блюдо">→</button>
+      <button type="button" data-hand-action="rotate-right" aria-label="Повернуть вправо">↻</button>
+      <button type="button" data-hand-action="scale-up" aria-label="Увеличить">+</button>
+      <button type="button" class="danger" data-hand-action="delete" aria-label="Удалить блюдо">⌫</button>
+      <button type="button" class="confirm" data-hand-action="confirm" aria-label="Подтвердить">✓</button>
+    </div>
+    <button id="camera-open" class="camera-open" type="button" aria-label="Камера" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5h3l1.6-2h2.8l1.6 2H16a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3v-5a3 3 0 0 1 3-3Z"/><circle cx="10" cy="13" r="3.2"/></svg>
+    </button>
+    <div id="capture-ui" class="capture-ui" hidden>
+      <button id="capture-shutter" class="capture-shutter" type="button" aria-label="Сделать фото или записать видео">
+        <span></span>
+      </button>
+      <small id="capture-hint">Нажмите — фото · удерживайте — видео</small>
+    </div>
     <div id="cursors" aria-hidden="true"></div>
   </div>
 </main>
