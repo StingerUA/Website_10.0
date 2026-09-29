@@ -17,6 +17,7 @@ const stats = {mode: '3d', fps: '—', hitTest: 'not tested', xrHands: 'not test
 let sceneDishId = '', loadScenePromise;
 
 for (const node of document.querySelectorAll('[data-copy]')) node.textContent = t[node.dataset.copy] || node.textContent;
+$('capture-hint').textContent = language === 'ru' ? 'Нажмите — фото · удерживайте — видео' : 'Basın — fotoğraf · basılı tutun — video';
 $('login-link').addEventListener('click', rememberReturn);
 $('lab-toggle').hidden = !CONFIG.lab || new URLSearchParams(location.search).get('lab') === '0';
 
