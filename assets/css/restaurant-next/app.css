@@ -12,3 +12,27 @@
 @keyframes pulse{to{opacity:.3;transform:scale(.75)}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}
 @media(max-width:600px){.topbar{left:18px;right:18px;top:max(14px,env(safe-area-inset-top))}.brand{font-size:10px;gap:7px}.brand-mark{font-size:28px}.badge{font-size:8px;padding:5px 7px}.topbar button{font-size:12px;padding:9px 12px}#status{top:78px;padding:12px 14px}#status strong{font-size:12px}#status small{font-size:11px}.dish-info{left:24px;bottom:177px;width:calc(100% - 48px)}h1{font-size:28px;margin:8px 0}#dish-description{font-size:12px;line-height:1.4;max-width:310px;margin:6px 0}#dish-price{font-size:14px}.bottom-controls{right:20px;left:20px;bottom:max(48px,calc(env(safe-area-inset-bottom) + 36px));width:auto}.primary{padding:15px 18px}.lab-toggle{left:20px;bottom:max(4px,env(safe-area-inset-bottom));min-height:32px}.dish{grid-template-columns:62px 1fr;gap:10px;padding:10px}.dish img{width:62px;height:62px;grid-row:span 2}.dish .price{grid-column:2}.dish small{font-size:10px}#menu-panel{top:72px;right:12px;bottom:12px;width:calc(100% - 24px);padding:20px;border-radius:20px}#lab-panel{top:76px;left:16px;max-height:calc(100% - 128px)}#next-app[data-mode=xr] .dish-info,#next-app[data-mode=camera] .dish-info{top:168px;left:20px;width:auto;max-width:calc(100% - 40px);padding:9px 13px}#next-app[data-mode=camera] .dish-info{display:none}.minor-actions button{font-size:10px}.sliders{padding:10px}.sliders label{font-size:11px}}
 @media(max-height:600px) and (min-width:601px){.topbar{top:10px}#status{top:68px;width:42%;left:26%;padding:10px}.bottom-controls{bottom:14px;width:320px}.dish-info{bottom:62px;width:42%}#dish-description{display:none}#next-app[data-mode=xr] .dish-info{top:145px}.lab-toggle{bottom:10px}}
+
+.hand-actions{position:fixed;left:50%;bottom:calc(116px + env(safe-area-inset-bottom));transform:translateX(-50%);display:grid;grid-template-columns:repeat(5,44px);grid-template-rows:44px 44px;gap:8px;padding:10px;border:1px solid #ffffff24;border-radius:18px;background:#071923dd;backdrop-filter:blur(12px);box-shadow:0 18px 60px #0008;pointer-events:auto;z-index:9}
+.hand-actions button{width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;font-size:21px;background:#163244;border-color:#ffffff2b}
+.hand-actions button:active,.hand-actions button.hand-hover{background:var(--mint);color:#062b28;transform:scale(.94)}
+.hand-actions .danger{grid-column:2;font-size:18px}
+.hand-actions .confirm{grid-column:4;color:#062b28;background:var(--mint);font-weight:800}
+.camera-open{position:fixed;left:max(18px,env(safe-area-inset-left));bottom:calc(22px + env(safe-area-inset-bottom));width:48px;height:48px;min-height:48px;padding:0;border-radius:50%;font-size:25px;background:#071923cc;border-color:#ffffff35;backdrop-filter:blur(10px);box-shadow:0 8px 30px #0008;pointer-events:auto;z-index:10}
+.capture-ui{position:fixed;inset:0;display:grid;place-items:center;z-index:11;pointer-events:none}
+.capture-shutter{position:relative;width:88px;height:88px;min-height:88px;padding:0;border:4px solid white;border-radius:50%;background:#ffffff18;box-shadow:0 0 0 8px #0003,0 0 34px #0009;pointer-events:auto;touch-action:none}
+.capture-shutter span{display:block;width:66px;height:66px;margin:auto;border-radius:50%;background:#fff;transition:transform .12s,background .12s}
+.capture-shutter.recording{border-color:#ff6b6b;box-shadow:0 0 0 8px #ff6b6b22,0 0 38px #000b}
+.capture-shutter.recording span{background:#ff4d4d;transform:scale(.48);border-radius:12px}
+.capture-ui[data-recording=true] #capture-hint{color:#ff8b8b}
+#capture-hint{position:absolute;top:calc(50% + 60px);font-size:11px;color:#eef5f5;background:#06141fdd;padding:8px 12px;border-radius:999px;white-space:nowrap}
+#next-app[data-mode=camera] .camera-open{display:block}
+#next-app[data-mode=preview] .hand-actions,#next-app[data-mode=xr] .hand-actions{display:none}
+@media(max-width:600px){
+  .hand-actions{bottom:calc(108px + env(safe-area-inset-bottom));grid-template-columns:repeat(5,40px);grid-template-rows:40px 40px;gap:7px;padding:8px}
+  .hand-actions button{width:40px;height:40px;min-height:40px;font-size:19px}
+  .hand-actions .danger{font-size:16px}
+  .camera-open{width:46px;height:46px;min-height:46px;font-size:23px}
+  .capture-shutter{width:82px;height:82px;min-height:82px}
+  .capture-shutter span{width:60px;height:60px}
+}
