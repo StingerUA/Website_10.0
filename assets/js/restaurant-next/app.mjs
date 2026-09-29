@@ -2,6 +2,7 @@ import {CONFIG, detectCapabilities} from './config.mjs?v=0.1.0';
 import {categories, dishes} from './catalog.mjs?v=0.1.0';
 import {localize} from './i18n.mjs?v=0.1.0';
 import {checkSession, consumeToken, rememberReturn} from './auth.mjs?v=0.1.0';
+import {ARCapture} from './capture.mjs?v=0.1.0';
 
 const $ = id => document.getElementById(id);
 const language = document.documentElement.lang;
@@ -10,11 +11,13 @@ const app = $('next-app'), viewer = $('dish-viewer'), overlay = $('overlay');
 let selected = dishes[0], category = categories[0].id, mode = 'preview';
 let capabilities = {}, scene, scenePromise, handTracker, handBusy = false;
 let loaded = false, authorized = false, preferNative = false, loadingTimer, modelRequest = 0, operation = 0;
+let capture, captureOpen = false, capturePressTimer = 0, captureLongPress = false, handWasPressed = false, handSelected = false;
 let facingMode = /Android|iPhone|iPad/i.test(navigator.userAgent) ? 'environment' : 'user';
 const stats = {mode: '3d', fps: '—', hitTest: 'not tested', xrHands: 'not tested', hands: 0, gesture: 'none', scale: 1};
 let sceneDishId = '', loadScenePromise;
 
 for (const node of document.querySelectorAll('[data-copy]')) node.textContent = t[node.dataset.copy] || node.textContent;
+$('capture-hint').textContent = language === 'ru' ? 'Нажмите — фото · удерживайте — видео' : 'Basın — fotoğraf · basılı tutun — video';
 $('login-link').addEventListener('click', rememberReturn);
 $('lab-toggle').hidden = !CONFIG.lab || new URLSearchParams(location.search).get('lab') === '0';
 
@@ -31,6 +34,13 @@ function setMode(next) {
   $('camera-flip').hidden = next !== 'camera'; $('manipulation').hidden = next === 'preview';
   $('rescan').hidden = next !== 'xr'; $('place').hidden = true;
   $('hands-toggle').textContent = next === 'camera' ? t.stopHands : t.hands;
+  $('camera-open').hidden = next !== 'camera';
+  if (next !== 'camera') {
+    $('capture-ui').hidden = true;
+    captureOpen = false;
+    $('hand-actions').hidden = true;
+    handSelected = false;
+  }
   stats.mode = next === 'preview' ? '3d' : next;
   refreshButtons();
 }
@@ -172,6 +182,8 @@ function startAR() {
 async function exitMode() {
   ++operation; handBusy = false;
   handTracker?.stop();
+  handWasPressed = false;
+  capture?.stop();
   // Change mode before awaiting session.end to avoid an end-event recursion.
   setMode('preview');
   await scene?.stop();
@@ -192,7 +204,7 @@ async function startHands() {
     const {CameraHands} = await import('./hands.mjs?v=0.1.0');
     if (op !== operation) return;
     handTracker ||= new CameraHands({video: $('camera-video'), bounds: $('interaction'),
-      onHands: hands => { scene?.cameraHands(hands); drawCursors(hands); },
+      onHands: hands => { handleHandInteractions(hands); scene?.cameraHands(hands.slice(0, 1)); drawCursors(hands.slice(0, 1)); },
       onStats: data => Object.assign(stats, data),
       onError: error => { console.warn('Restaurant Next hands:', error.message); void exitMode().then(() => status(t.cameraError)); },
     });
@@ -206,10 +218,60 @@ async function startHands() {
   }
 }
 function drawCursors(hands) {
-  $('cursors').replaceChildren(...hands.map(hand => {
+  $('cursors').replaceChildren(...hands.slice(0, 1).map(hand => {
     const cursor = document.createElement('span'); cursor.className = 'hand-cursor' + (hand.pressed ? ' pressed' : '');
     cursor.style.transform = `translate(${hand.x}px, ${hand.y}px)`; return cursor;
   }));
+}
+function showHandActions(show = true) {
+  handSelected = show;
+  $('hand-actions').hidden = !show;
+}
+function nextDishInCategory() {
+  const list = dishes.filter(d => d.category === category);
+  const index = list.findIndex(d => d.id === selected.id);
+  const next = list[(index + 1) % list.length];
+  if (next) void selectDish(next);
+}
+function advanceCategory() {
+  const order = ['meat', 'drink', 'dessert'];
+  const index = order.indexOf(category);
+  if (index < 0) {
+    status(language === 'ru' ? 'Выбор подтверждён' : 'Seçim onaylandı', language === 'ru' ? 'Блюдо подтверждено.' : 'Yemek onaylandı.');
+    return;
+  }
+  if (index === order.length - 1) {
+    status(language === 'ru' ? 'Заказ собран' : 'Sipariş tamamlandı', language === 'ru' ? 'Мясо, напиток и десерт выбраны.' : 'Et, içecek ve tatlı seçildi.');
+    showHandActions(false);
+    return;
+  }
+  category = order[index + 1];
+  const next = dishes.find(d => d.category === category);
+  if (next) { showHandActions(false); void selectDish(next); }
+}
+function handAction(action) {
+  if (!scene) return;
+  if (action === 'scale-down') { scene.scale -= 0.1; scene.applyTransform(); }
+  if (action === 'scale-up') { scene.scale += 0.1; scene.applyTransform(); }
+  if (action === 'rotate-left') { scene.yaw -= Math.PI / 12; scene.applyTransform(); }
+  if (action === 'rotate-right') { scene.yaw += Math.PI / 12; scene.applyTransform(); }
+  if (action === 'next') nextDishInCategory();
+  if (action === 'delete') { scene.removeDish(); showHandActions(false); status(language === 'ru' ? 'Блюдо удалено' : 'Yemek kaldırıldı'); }
+  if (action === 'confirm') advanceCategory();
+}
+function handleHandInteractions(hands) {
+  const hand = hands[0];
+  if (!hand) { handWasPressed = false; return; }
+  const element = document.elementFromPoint(hand.x, hand.y);
+  const actionButton = element?.closest?.('[data-hand-action]');
+  document.querySelectorAll('.hand-actions .hand-hover').forEach(node => node.classList.remove('hand-hover'));
+  actionButton?.classList.add('hand-hover');
+  const justPressed = hand.pressed && !handWasPressed;
+  if (justPressed) {
+    if (actionButton) actionButton.click();
+    else if (scene?.hitsDish(hand.x, hand.y)) showHandActions(true);
+  }
+  handWasPressed = hand.pressed;
 }
 function renderLab() {
   if ($('lab-panel').hidden) return;
@@ -232,6 +294,49 @@ $('rescan').onclick = () => scene?.rescan();
 $('reset').onclick = () => scene?.resetTransform();
 $('exit').onclick = () => void exitMode();
 $('hands-toggle').onclick = () => void startHands();
+$('camera-open').onclick = () => {
+  captureOpen = !captureOpen;
+  $('capture-ui').hidden = !captureOpen;
+};
+const shutter = $('capture-shutter');
+shutter.addEventListener('pointerdown', event => {
+  event.preventDefault();
+  shutter.setPointerCapture?.(event.pointerId);
+  captureLongPress = false;
+  clearTimeout(capturePressTimer);
+  capturePressTimer = setTimeout(() => {
+    captureLongPress = true;
+    if (!capture) capture = new ARCapture({
+      video: $('camera-video'),
+      sceneCanvas: scene?.renderer?.domElement,
+      onState: state => {
+        if (state === 'recording') {
+          shutter.classList.add('recording'); $('capture-ui').dataset.recording = 'true';
+          $('capture-hint').textContent = language === 'ru' ? 'Запись… отпустите для остановки (макс. 1 мин)' : 'Kayıt… durdurmak için bırakın (maks. 1 dk)';
+        } else if (state === 'video') {
+          shutter.classList.remove('recording'); delete $('capture-ui').dataset.recording;
+          $('capture-hint').textContent = language === 'ru' ? 'Нажмите — фото · удерживайте — видео' : 'Basın — fotoğraf · basılı tutun — video';
+        } else if (state === 'error' || state === 'unsupported') {
+          shutter.classList.remove('recording'); delete $('capture-ui').dataset.recording;
+          status(language === 'ru' ? 'Запись недоступна' : 'Kayıt kullanılamıyor');
+        }
+      }
+    });
+    capture.startRecording();
+  }, 360);
+});
+const finishCapturePress = () => {
+  clearTimeout(capturePressTimer);
+  if (captureLongPress) capture?.stopRecording();
+  else {
+    if (!capture) capture = new ARCapture({video: $('camera-video'), sceneCanvas: scene?.renderer?.domElement});
+    void capture.photo();
+  }
+  captureLongPress = false;
+};
+shutter.addEventListener('pointerup', finishCapturePress);
+shutter.addEventListener('pointercancel', finishCapturePress);
+document.querySelectorAll('[data-hand-action]').forEach(button => button.addEventListener('click', () => handAction(button.dataset.handAction)));
 $('camera-flip').onclick = async () => { await exitMode(); facingMode = facingMode === 'user' ? 'environment' : 'user'; await startHands(); };
 $('retry').onclick = () => void selectDish(selected, true);
 $('lab-toggle').onclick = () => { $('lab-panel').hidden = !$('lab-panel').hidden; $('lab-toggle').setAttribute('aria-expanded', String(!$('lab-panel').hidden)); renderLab(); };
