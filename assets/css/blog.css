@@ -267,8 +267,15 @@
 
 .blog-article-body h2{
   font-size: 21px;
-  font-weight: 600;
+  font-weight: 700;
   margin: 34px 0 14px;
+  color: #ffffff;
+}
+
+.blog-article-body h3{
+  font-size: 18px;
+  font-weight: 700;
+  margin: 26px 0 10px;
   color: #ffffff;
 }
 
