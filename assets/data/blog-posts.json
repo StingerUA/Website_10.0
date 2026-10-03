@@ -1134,18 +1134,18 @@
       },
       "locales": {
         "tr": {
-          "title": "Uzayda Yazıcıdan Alet Çıkarmak: ISS'te 3D Baskı\nDevri",
-          "excerpt": "Devri",
+          "title": "Uzayda Yazıcıdan Alet Çıkarmak: ISS'te 3D Baskı Devri",
+          "excerpt": "Uzayda Yazıcıdan Alet Çıkarmak: ISS'te 3D Baskı Devri",
           "url": "/blog/uzayda-yazicidan-alet-cikarmak-isste-3d-baski-devri.html"
         },
         "en": {
-          "title": "Making Tools from a Printer in Space: The",
-          "excerpt": "Age of 3D Printing on the ISS",
+          "title": "Making Tools from a Printer in Space: The Era of 3D Printing on the ISS",
+          "excerpt": "Making Tools from a Printer in Space: The Era of 3D Printing on the ISS",
           "url": "/eng/blog/uzayda-yazicidan-alet-cikarmak-isste-3d-baski-devri.html"
         },
         "ru": {
-          "title": "Печать инструментов в космосе: эпоха",
-          "excerpt": "3D-печати на МКС",
+          "title": "Печать инструментов в космосе: эпоха 3D-печати на МКС",
+          "excerpt": "Печать инструментов в космосе: эпоха 3D-печати на МКС",
           "url": "/rus/blog/uzayda-yazicidan-alet-cikarmak-isste-3d-baski-devri.html"
         }
       }
