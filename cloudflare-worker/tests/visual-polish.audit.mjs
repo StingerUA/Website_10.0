@@ -20,7 +20,7 @@ assert.match(visual, /CadetHair_/);
 assert.match(visual, /CadetEye_/);
 assert.match(visual, /CadetArm_/);
 assert.match(visual, /CadetLeg_/);
-assert.match(visual, /visualSeed/);
+assert.match(visual, /visualSeed/);\nassert.match(visual, /CadetTopicBand_/);\nassert.match(visual, /CadetTopicBadge_/);\nassert.match(visual, /cadetLabel/);\nassert.match(visual, /width: 0\.80/);\nassert.match(visual, /width: 0\.76/);\nassert.match(visual, /slice\(0, 13\)/);
 assert.match(visual, /proto\.buildCadet/);
 assert.doesNotMatch(visual, /CadetHelmet_/);
 assert.doesNotMatch(visual, /CadetVisor_/);
