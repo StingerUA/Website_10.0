@@ -119,7 +119,12 @@
 
     const belt = box(renderer.scene, `CadetBelt_${cadet.id}`, { width: 0.31, height: 0.07, depth: 0.28 }, new BABYLON.Vector3(0, -0.19, 0), root, suitDark);
     const chestPanel = box(renderer.scene, `CadetChest_${cadet.id}`, { width: 0.19, height: 0.11, depth: 0.035 }, new BABYLON.Vector3(0, 0.08, -0.16), root, suitDark);
-    const topicBand = box(renderer.scene, `CadetTopicBand_${cadet.id}`, { width: 0.30, height: 0.065, depth: 0.035 }, new BABYLON.Vector3(0, 0.19, -0.17), root, accentMat);\n    const patch = box(renderer.scene, `Patch_${cadet.id}`, { width: 0.16, height: 0.16, depth: 0.03 }, new BABYLON.Vector3(0.13, 0.12, -0.19), root, accentMat);\n    const topicBadge = BABYLON.MeshBuilder.CreateSphere(`CadetTopicBadge_${cadet.id}`, { diameter: 0.13, segments: 10 }, renderer.scene);\n    topicBadge.position.set(-0.13, 0.12, -0.195);\n    topicBadge.parent = root;\n    topicBadge.material = accentMat;
+    const topicBand = box(renderer.scene, `CadetTopicBand_${cadet.id}`, { width: 0.30, height: 0.065, depth: 0.035 }, new BABYLON.Vector3(0, 0.19, -0.17), root, accentMat);
+    const patch = box(renderer.scene, `Patch_${cadet.id}`, { width: 0.16, height: 0.16, depth: 0.03 }, new BABYLON.Vector3(0.13, 0.12, -0.19), root, accentMat);
+    const topicBadge = BABYLON.MeshBuilder.CreateSphere(`CadetTopicBadge_${cadet.id}`, { diameter: 0.13, segments: 10 }, renderer.scene);
+    topicBadge.position.set(-0.13, 0.12, -0.195);
+    topicBadge.parent = root;
+    topicBadge.material = accentMat;
 
     const head = BABYLON.MeshBuilder.CreateSphere(`CadetHead_${cadet.id}`, { diameter: 0.27, segments: 14 }, renderer.scene);
     head.position.y = 0.39;
@@ -165,10 +170,36 @@
     });
 
     const topicLabel = cadet.name || cadet.topic || "Cadet";
-    renderer.label(root, topicLabel, new BABYLON.Vector3(0, 0.82, 0));
+    renderer.cadetLabel(root, topicLabel, new BABYLON.Vector3(0, 0.70, -0.38), topicColor);
   }
 
-  const proto = window.AlbaStation3D.Station3DRenderer.prototype;\n\n  if (!proto.cadetLabel) {\n    proto.cadetLabel = function (parent, text, position, topicColor) {\n      const raw = String(text || "Cadet").trim();\n      const safeText = raw.length > 14 ? `${raw.slice(0, 13).trim()}…` : raw;\n      const key = safeText.replace(/[^a-z0-9]/gi, "_");\n      const plate = BABYLON.MeshBuilder.CreateBox(`CadetLabelPlate_${key}_${Math.random()}`, { width: 0.80, height: 0.17, depth: 0.035 }, this.scene);\n      plate.position.copyFrom(position);\n      plate.parent = parent;\n      plate.material = this.material(topicColor, 0.22, true);\n      const plane = BABYLON.MeshBuilder.CreatePlane(`CadetLabel_${key}_${Math.random()}`, { width: 0.76, height: 0.14 }, this.scene);\n      plane.position.set(position.x, position.y, position.z - 0.022);\n      plane.parent = parent;\n      plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;\n      const texture = new BABYLON.DynamicTexture(`CadetLabelTexture_${Math.random()}`, { width: 512, height: 128 }, this.scene, true);\n      texture.hasAlpha = true;\n      texture.drawText(safeText, 256, 82, "bold 30px Arial", "#f7fbff", topicColor, true, true);\n      const material = new BABYLON.StandardMaterial(`CadetLabelMaterial_${Math.random()}`, this.scene);\n      material.diffuseTexture = texture;\n      material.emissiveColor = BABYLON.Color3.FromHexString(topicColor);\n      material.emissiveIntensity = 0.55;\n      material.opacityTexture = texture;\n      material.backFaceCulling = false;\n      plane.material = material;\n    };\n  }
+  const proto = window.AlbaStation3D.Station3DRenderer.prototype;
+
+  if (!proto.cadetLabel) {
+    proto.cadetLabel = function (parent, text, position, topicColor) {
+      const raw = String(text || "Cadet").trim();
+      const safeText = raw.length > 14 ? `${raw.slice(0, 13).trim()}…` : raw;
+      const key = safeText.replace(/[^a-z0-9]/gi, "_");
+      const plate = BABYLON.MeshBuilder.CreateBox(`CadetLabelPlate_${key}_${Math.random()}`, { width: 0.80, height: 0.17, depth: 0.035 }, this.scene);
+      plate.position.copyFrom(position);
+      plate.parent = parent;
+      plate.material = this.material(topicColor, 0.22, true);
+      const plane = BABYLON.MeshBuilder.CreatePlane(`CadetLabel_${key}_${Math.random()}`, { width: 0.76, height: 0.14 }, this.scene);
+      plane.position.set(position.x, position.y, position.z - 0.022);
+      plane.parent = parent;
+      plane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
+      const texture = new BABYLON.DynamicTexture(`CadetLabelTexture_${Math.random()}`, { width: 512, height: 128 }, this.scene, true);
+      texture.hasAlpha = true;
+      texture.drawText(safeText, 256, 82, "bold 30px Arial", "#f7fbff", topicColor, true, true);
+      const material = new BABYLON.StandardMaterial(`CadetLabelMaterial_${Math.random()}`, this.scene);
+      material.diffuseTexture = texture;
+      material.emissiveColor = BABYLON.Color3.FromHexString(topicColor);
+      material.emissiveIntensity = 0.55;
+      material.opacityTexture = texture;
+      material.backFaceCulling = false;
+      plane.material = material;
+    };
+  }
   if (!proto.__albaVisualPolishPatched) {
     const originalInterior = proto.buildInterior;
     proto.buildInterior = function (meta, root, length, diameter, accent, accentMat) {
