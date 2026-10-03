@@ -1114,6 +1114,41 @@
           "url": "/rus/blog/gunesin-en-buyuk-gizemi-neden-atmosferi-yuzeyinden-daha-sicak.html"
         }
       }
+    },
+    {
+      "slug": "uzayda-yazicidan-alet-cikarmak-isste-3d-baski-devri",
+      "category": "uzay",
+      "publishAt": "2026-10-03T12:01:44+03:00",
+      "cover": "/assets/images/blog/uzayda-yazicidan-alet-cikarmak-isste-3d-baski-devri-cover.jpg",
+      "readingMinutes": 2,
+      "author": {
+        "tr": "Ali Batuhan Özsürmeli",
+        "en": "Ali Batuhan Özsürmeli",
+        "ru": "Ali Batuhan Özsürmeli"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Uzayda Yazıcıdan Alet Çıkarmak: ISS'te 3D Baskı\nDevri",
+          "excerpt": "Devri",
+          "url": "/blog/uzayda-yazicidan-alet-cikarmak-isste-3d-baski-devri.html"
+        },
+        "en": {
+          "title": "Making Tools from a Printer in Space: The",
+          "excerpt": "Age of 3D Printing on the ISS",
+          "url": "/eng/blog/uzayda-yazicidan-alet-cikarmak-isste-3d-baski-devri.html"
+        },
+        "ru": {
+          "title": "Печать инструментов в космосе: эпоха",
+          "excerpt": "3D-печати на МКС",
+          "url": "/rus/blog/uzayda-yazicidan-alet-cikarmak-isste-3d-baski-devri.html"
+        }
+      }
     }
   ]
 }
