@@ -63,6 +63,22 @@
         "ru": "Космический предприниматель, футурист и преподаватель",
         "ar": "رائد أعمال فضائي، مستقبلي ومدرِّب"
       }
+    },
+    {
+      "id": "precious-b-adeleye",
+      "image": "/assets/images/blog/authors/yeni-bir-sinir-yeni-sorunlar-uzayda-ortaya-cikan-zorluklar-author.jpg",
+      "name": {
+        "tr": "Precious B. Adeleye",
+        "en": "Precious B. Adeleye",
+        "ru": "Precious B. Adeleye",
+        "ar": "Precious B. Adeleye"
+      },
+      "role": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      }
     }
   ]
 }
