@@ -44,7 +44,7 @@
   }[LOCALE];
 
   var CSS_URL = '/assets/css/blog-author-filters.css?v=20260829-1';
-  var AUTHORS_URL = '/assets/data/blog-authors.json?v=20260829-1';
+  var AUTHORS_URL = '/assets/data/blog-authors.json?v=20261004-1';
   var POSTS_URL = '/assets/data/blog-posts.json';
 
   function escapeHtml(value) {
