@@ -187,8 +187,8 @@
     {
       "slug": "aydin-tedx-2026",
       "category": "egitim",
-      "startAt": "2026-09-26T00:00:00+03:00",
-      "endAt": "2026-09-26T23:59:59+03:00",
+      "startAt": "2026-11-27T00:00:00+03:00",
+      "endAt": "2026-11-27T23:59:59+03:00",
       "cover": "/assets/images/ivent2.jpeg",
       "location": "Aydın / TÜRKİYE",
       "contact": "AlbaSpace",
@@ -208,7 +208,7 @@
           "title": "Aydın TEDx",
           "excerpt": "Fikirlerin, ilhamın ve yeni bakış açılarının buluştuğu TEDx etkinliği Aydın’da düzenlenecek.",
           "url": "/etkinlikler.html",
-          "hero": "26 Eylül 2026’da Aydın’da gerçekleştirilecek Aydın TEDx, ilham verici konuşmalar ve düşünce paylaşımı için bir araya gelir.",
+          "hero": "27 Kasım 2026’da Aydın’da gerçekleştirilecek Aydın TEDx, ilham verici konuşmalar ve düşünce paylaşımı için bir araya gelir.",
           "body": [
             "TEDx, bireylerin fikirlerini özgürce paylaşmasını ve yeni perspektiflerle üretmesine destek olur. Etkinlik, özellikle yaratıcı düşünceyi ve toplumsal katkıyı öne çıkarır.",
             "Bu özel gecede konuşmacılar, ilham verici deneyimlerini ve değişim yaratma yolculuklarını paylaşacak."
@@ -224,7 +224,7 @@
           "title": "Aydın TEDx",
           "excerpt": "TEDx brings ideas, inspiration and fresh perspectives together in Aydın.",
           "url": "/etkinlikler.html",
-          "hero": "On September 26, 2026, Aydın TEDx will bring together inspiring talks and meaningful ideas in Aydın.",
+          "hero": "On November 27, 2026, Aydın TEDx will bring together inspiring talks and meaningful ideas in Aydın.",
           "body": [
             "TEDx creates space for individuals to share ideas freely and build new perspectives. The event highlights creativity and social impact.",
             "At this special gathering, speakers will share life experiences and stories that inspire meaningful change."
