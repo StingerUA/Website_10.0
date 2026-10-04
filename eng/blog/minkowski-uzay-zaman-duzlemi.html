@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Универсальный favicon-блок -->
+  <link rel="icon" type="image/png" href="/assets/icons/AlbaLogo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/icons/AlbaLogo.png" sizes="180x180">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#020617">
+  <meta name="msapplication-TileColor" content="#020617">
+  <meta name="msapplication-TileImage" content="/favicon.png">
+  <meta charset="UTF-8">
+  <title>MINKOWSKI SPACETIME PLANE – Alba Space Blog</title>
+  <meta name="description" content="MINKOWSKI SPACETIME PLANE • Corporate science blog">
+  <meta property="og:title" content="MINKOWSKI SPACETIME PLANE">
+  <meta property="og:description" content="MINKOWSKI SPACETIME PLANE • Corporate science blog">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://albaspace.com.tr/eng/blog/minkowski-uzay-zaman-duzlemi.html">
+  <meta property="og:image" content="https://albaspace.com.tr/assets/images/blog/minkowski-uzay-zaman-duzlemi-cover.jpg">
+  <meta property="og:image:alt" content="MINKOWSKI SPACETIME PLANE">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://albaspace.com.tr/assets/images/blog/minkowski-uzay-zaman-duzlemi-cover.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    :root{ --header-bg:#020617; }
+    body{ margin:0; background:#020617; color:#e5e7eb; }
+  </style>
+
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/blog.css">
+  <style>
+    .blog-article-body p{margin:0 0 1.15rem;line-height:1.8}
+    .blog-article-body h2{margin:2.1rem 0 .85rem;line-height:1.28}
+    .blog-article-body h3{margin:1.55rem 0 .65rem;line-height:1.32}
+    .blog-article-body .blog-article-list{margin:.7rem 0 1.4rem;padding-inline-start:1.6rem}
+    .blog-article-body .blog-article-list li{margin:.38rem 0;line-height:1.72;padding-inline-start:.2rem}
+    .blog-article-body .blog-article-list li::marker{color:currentColor}
+    html[dir="rtl"] .blog-article-body .blog-article-list{padding-inline-start:0;padding-inline-end:1.6rem}
+  </style>
+  <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
+</head>
+<body>
+  <div data-include="/header-en.html"></div>
+
+  <article class="blog-article">
+    <span class="blog-article-tag">Space</span>
+    <h1 class="blog-article-title">MINKOWSKI SPACETIME PLANE</h1>
+    <div class="blog-article-meta">
+      <img class="blog-author-avatar" src="/assets/images/blog/authors/minkowski-uzay-zaman-duzlemi-author.jpg" alt="Barış Dinçer"
+       onerror="this.src='https://ui-avatars.com/api/?name=BD&background=0D8ABC&color=fff'">
+      <div class="blog-author-details">
+        <span class="blog-author">Barış Dinçer</span>
+        <span class="dot">·</span>
+        <span>Guest Writer</span>
+        <span class="dot">·</span>
+        <span>October 04, 2026</span>
+        <span class="dot">·</span>
+        <span>25 min read</span>
+      </div>
+    </div>
+
+    <img class="blog-article-cover" src="/assets/images/blog/minkowski-uzay-zaman-duzlemi-cover.jpg" alt="MINKOWSKI SPACETIME PLANE">
+
+    <div class="blog-article-body">
+      <p>MINKOWSKI SPACETIME PLANE • Corporate science blog</p>
+      <h3>From Einstein’s Logic of Relativity to Light Cones, Lorentz Transformations, and the Transition to General Relativity</h3>
+      <p>Intermediate-level technical science communication • Mathematical backbone, physical intuition, and observational/technological connections</p>
+      <p>Note: All graphics in this work were computed from the relevant physics equations and plotted with Python/Matplotlib. No artificial imagery, stock illustrations, or decorative art have been used. Editorial scope. Rather than directly repeating the video’s narrative of black holes, white holes, the Einstein–Rosen bridge, and Kerr spacetime, this article centers on the foundation of the causal-geometric thinking on which the video rests — Minkowski spacetime. In this way, starting from light cones and the spacetime interval, the reader can follow mathematically why solutions such as Schwarzschild/Kerr are needed.</p>
+      <h2>Abstract</h2>
+      <p>Minkowski spacetime is the geometric language of special relativity: space and time are not separate “stages” but a four-dimensional structure that transforms together under Lorentz transformations. The fundamental object of this geometry is the event: a specific position in spacetime, μ x =(ct,x,y,z). Instead of the Euclidean distance between two events, the Lorentz-invariant spacetime interval is used: ds²=c²dt²−dx²−dy²−dz². The sign of the interval determines causality. ds²&gt;0 is timelike, ds²=0 is lightlike (null), and ds²&lt;0 is spacelike. The light cone visually separates these three regions and turns the question “which event can influence which event?” into geometry. Lorentz transformations preserve the interval. Therefore time dilation, length contraction, and the relativity of simultaneity are not three independent oddities but different coordinate consequences of a single geometric principle. In general relativity, the fixed flat metric of Minkowski is replaced by a metric field g that</p>
+      <p>μν</p>
+      <p>μ ν</p>
+      <p>depends on position and time: ds²=g dx dx. The Einstein field equations express how this</p>
+      <p>μν</p>
+      <p>geometry is determined by matter and energy.</p>
+      <h2>Contents</h2>
+      <ol class="blog-article-list">
+        <li>Why Minkowski? The transition from Newton to Einstein</li>
+        <li>Einstein’s perspective: measurement, light, and simultaneity</li>
+        <li>Event, reference frame, and four coordinates</li>
+        <li>The Minkowski metric and the spacetime interval</li>
+        <li>Light cones: the geometry of causality</li>
+        <li>How do Lorentz transformations arise?</li>
+        <li>Hyperbolic rotation, rapidity, and Lorentz geometry</li>
+        <li>Time dilation, length contraction, and the relativity of simultaneity</li>
+        <li>Proper time and the worldline: what clocks actually measure</li>
+        <li>Four-velocity, four-momentum, and E²=p²c²+m²c⁴</li>
+        <li>From Minkowski to the Einstein field equations: from flat space to curved spacetime</li>
+        <li>How is the black hole chain in the video read through Minkowski logic?</li>
+        <li>The boundary between a mathematical solution and physical reality</li>
+        <li>A measurable consequence of relativity: atomic clocks and GNSS</li>
+        <li>Conclusion: More than a diagram</li>
+      </ol>
+      <p>Page 1 MINKOWSKI SPACETIME PLANE • Corporate science blog</p>
+      <h2>1. Why Minkowski? The transition from Newton to</h2>
+      <h2>Einstein</h2>
+      <p>In classical mechanics, space and time are assumed to be independent of each other. The position of a body is given by three spatial coordinates, while time is a universal parameter separate from them. In the Newtonian framework, the transformation between different inertial observers is Galilean in form: x′=x−vt and t′=t. In this structure two observers may measure different positions, but the “now” is the same. The break brought about by special relativity begins precisely here. The fundamental principles of Einstein’s 1905 work are that the laws of physics take the same form in inertial reference frames, and that the speed of light in vacuum is “c”, independent of the inertial motion of the source/observer. When these two postulates are considered together, the Galilean time transformation can no longer be maintained; the time coordinate must also transform together with the spatial coordinates. While Einstein’s 1905 paper established this physical kinematics, Minkowski systematized the same structure in 1907–1908 as a geometric spacetime. [1][2] The main message of Minkowski’s 1908 Cologne address is to treat space and time not as separate absolute entities but as a physically meaningful union. It is important to draw this historical distinction correctly: saying “special relativity = Minkowski” would be to equate Einstein’s 1905 kinematic work with Minkowski’s later geometric synthesis. The more accurate statement is that special relativity attains its most natural mathematical form in Minkowski geometry. [2]</p>
+      <h2>2. Einstein’s perspective: measurement, light, and</h2>
+      <h2>simultaneity</h2>
+      <p>For Einstein, “time” is first of all not a metaphysical concept but an operational physical quantity defined by clock readings and light signals. To say that two distant clocks show the same time, one must first state how these clocks are synchronized. In Einstein’s 1905 approach, synchronization is carried out by means of light signals. Thus simultaneity ceases to be a universal fact independent of the observer’s reference frame. [1] It is useful to think of this with an analogy: you want to determine the events occurring “at exactly the same moment” in two laboratories at opposite ends of the Earth. Without an electrical network or a time-transfer system such as GPS, you need a physical synchronization rule. In special relativity, the finite and invariant speed of light is at the center of this rule. The relative motion between one observer and another changes the coordinate meaning of the words “at the same time.” The radical result here is not that time “slows down”; what is more fundamental is that the space and time coordinates mix with each other. Time dilation and length contraction are the consequences of this mixing on measurement.</p>
+      <h2>3. Event, reference frame, and four coordinates</h2>
+      <p>In Minkowski spacetime, the fundamental object is not the “body” but the event. An event is</p>
+      <p>μ</p>
+      <p>expressed by four coordinates: x =(ct,x,y,z), μ=0,1,2,3. Here, the fact that ct has the dimension of length ensures that the time coordinate is written with the same dimension as the spatial coordinates. In the SI system, the speed of light is defined exactly as c=299 792 458 m/s. [3] The history of a particle in spacetime is represented by a worldline. In Newtonian thinking, a “trajectory” is mostly drawn as a curve in three-dimensional space; in a Minkowski diagram, since the position of the body at each instant is a point, the entire history turns into a single curve. The</p>
+      <p>Page 2 MINKOWSKI SPACETIME PLANE • Corporate science blog worldline of a particle at rest is a straight line parallel to the ct axis (the time axis); that of a particle with constant velocity is a straight line at an angle, and that of an accelerating particle is a curve.</p>
+      <p>This language prepares the fundamental visualization for the video’s later black hole analysis. To understand the “allowed motions” inside or outside a black hole, instead of looking at individual spatial coordinates, we look at how worldlines and light cones behave.</p>
+      <h2>4. The Minkowski metric and the spacetime interval</h2>
+      <p>In Euclidean geometry, the distance between two points does not change when you rotate the coordinate system: dℓ²=dx²+dy²+dz². In special relativity, the quantity that must be preserved for spacetime is a quadratic form with differing signs. With the +−−− signature:</p>
+      <h3>ds² = c²dt² − dx² − dy² − dz²</h3>
+      <p>Equation source / derivation framework: [2][4] Minkowski spacetime and the Lorentz metric. The other common signature is −+++; the physics is the same, the sign convention differs.</p>
+      <p>This expression is the first example of a “metric.” In matrix form we can write</p>
+      <p>μ ν</p>
+      <p>η =diag(1,−1,−1,−1) and say ds²=η dx dx. In general relativistic notation, the Einstein μν μν summation convention, in which repeated indices are summed, is used. Why is there a minus sign? Because time and space are not included as if they were physically equal types of coordinates, but together within a Lorentzian geometry. The Euclidean distance is positive-definite in every direction; the Minkowski interval, however, can be positive, zero, or negative. This sign structure ensures that causality is encoded geometrically. [4][5] For a finite separation between two events, Δs²=c²Δt²−Δx²−Δy²−Δz² is used. Because spacetime is flat, this form is the same everywhere in spacetime in inertial coordinates; when gravity is taken into account, this fixed metric is no longer sufficient.</p>
+      <p>Page 3 MINKOWSKI SPACETIME PLANE • Corporate science blog Figure 1. A Minkowski diagram in the x–ct plane. Light signals travel along 45° lines; the β=0.6 worldline remains below the speed of light. The dashed x′ axis shows the t′=0 simultaneity line of the moving observer. The graph was computed directly from Lorentz geometry.</p>
+      <h2>5. Light cones: the geometry of causality</h2>
+      <p>The light cone is perhaps the most powerful intuitive tool of Minkowski geometry. Consider that the light emitted from an event A propagates in all directions at speed c. When we draw one spatial dimension and one time dimension, the condition Δs²=0 is obtained for light:</p>
+      <h3>0 = c²Δt² − Δx² ⇒ Δx = ±cΔt</h3>
+      <p>Equation source / derivation framework: [4] Direct consequence of the null interval condition in 1+1 dimensions.</p>
+      <p>When we choose x and ct as the axes, these two lines make angles of ±45°. When two more spatial dimensions are added, the expanding spheres of the light front at a single instant form a “double cone” over time. The upper cone bounds the events the event can influence in the future; the lower cone bounds the events by which the event was influenced in the past. The region of spacetime outside the cone cannot be causally connected to that event by a signal slower than the speed of light. [6] We can picture this with a traffic-network analogy: all the points that a vehicle can reach in a single moment from where you are in a city form a “reach sphere.” In the relativistic case, however, what determines the radius of this reach sphere is not the ordinary vehicle speed but the universal upper limit c (the speed of light). In a diagram that stacks time, the reachable regions turn into the light cone. If gravity changes the geometry, the direction and shape of the light cones in a coordinate diagram can also change. Thus the question “is escape possible?” becomes, before it is a question of how powerful an engine is, a question of which direction the future light cone allows.</p>
+      <p>Page 4 MINKOWSKI SPACETIME PLANE • Corporate science blog</p>
+      <h2>6. How do Lorentz transformations arise?</h2>
+      <p>It is more instructive to see the Lorentz transformation not as two formulas to be memorized but as the coordinate transformation that must preserve the interval. For two inertial reference frames with relative velocity v in the x direction, in the standard configuration the transformation is written as:</p>
+      <h3>x′ = γ(x − vt) ct′ = γ(ct − βx), β=v/c, γ=1/√(1−β²)</h3>
+      <p>Equation source / derivation framework: [1][4] Einstein’s 1905 work and modern Lorentz-geometric notation. The mixing of the time coordinate with the space coordinate is the critical structure.</p>
+      <p>To see the origin of this form, let us return to 1+1 dimensions. Let us ask for a linear transformation: x′=A x+B ct and ct′=C x+D ct. In addition, let us require that the light lines retain the form x=±ct in both frames and that the spacetime interval not change. These conditions force the coefficients into a single family of Lorentz transformations. As a result, instead of the Galilean intuition that “t (time) stays constant,” the time coordinate and the spatial coordinate must transform together. [1][4] In more technical language, Lorentz transformations are the linear transformations that preserve</p>
+      <p>T T</p>
+      <p>the metric tensor η: Λ η Λ=η. This is analogous to the condition R R=I of an ordinary rotation</p>
+      <p>μν</p>
+      <p>in Euclidean space; the difference is that the Minkowski metric is not positive-definite. For this reason, calling a Lorentz boost a “hyperbolic rotation” is extremely apt.</p>
+      <p>Figure 2. The appearance of a Lorentz boost for β=0.8 as hyperbolic geometry. Unlike a Euclidean rotation, the x′ and ct′ axes tilt symmetrically with respect to the null lines on either side of the light cone; the invariant hyperbolas represent the same Minkowski interval.</p>
+      <p>Page 5 MINKOWSKI SPACETIME PLANE • Corporate science blog</p>
+      <h2>7. Hyperbolic rotation, rapidity, and Lorentz geometry</h2>
+      <p>When rapidity η is used instead of the velocity parameter β, Lorentz boosts become mathematically cleaner. Rapidity is defined by the condition tanh η=β. Thus:</p>
+      <h3>β = tanh η, γ = cosh η, γβ = sinh η</h3>
+      <p>Equation source / derivation framework: [4][5] The standard parametrization of the Lorentz group with hyperbolic functions.</p>
+      <p>For this reason the transformation matrix can be written with the functions cosh and sinh instead of the cos and sin we see in Euclidean rotation. This is not merely an aesthetic rewriting. The fact that rapidities add when two boosts are applied along the same line explains the geometric core of multiple relativistic velocity transformations. The hyperbola in Figure 2 shows, for example, the level set of the condition c²t²−x²=constant. In Euclidean geometry constant distance is represented by circles; in Minkowski geometry, a similar invariance is represented by hyperbolas. Consequently, in relativity there is “rotation,” but the space that rotates is not Euclidean space but Lorentzian spacetime.</p>
+      <p>Figure 3. Variation of the Lorentz factor γ with β=v/c. The effect is weak at low speeds and looks approximately Newtonian; as β→1, γ grows rapidly. The divergence of the curve is related to the mathematical background of why a massive particle would require infinite energy to reach c.</p>
+      <h2>8. Time dilation, length contraction, and the relativity of</h2>
+      <h2>simultaneity</h2>
+      <p>There are three famous results in special relativity, but rather than viewing them as separate “new laws,” they should be thought of as different slices of the same Lorentz geometry. A clock records the time interval it measures along its own worldline as proper time. For a clock moving at constant velocity, with respect to coordinate time:</p>
+      <h3>Δτ = Δt √(1−β²) = Δt/γ</h3>
+      <p>Equation source / derivation framework: [4][5] Definition of proper time and the Lorentz transformation.</p>
+      <p>Therefore a moving clock accumulates less proper time in the coordinates of another inertial frame. The everyday expression “the clock slowed down” can be used, but the physically more accurate statement is that the proper-time separation between the same two events is different</p>
+      <p>Page 6 MINKOWSKI SPACETIME PLANE • Corporate science blog for different worldlines.</p>
+      <p>Length contraction likewise depends on the choice of simultaneity. If the length of a rod measured in its own rest frame is L₀, then when the rod is in motion the length measured along the direction of motion is L=L₀/γ. Since this measurement requires the positions of the endpoints at the same instant, the “at the same time” condition changes together with the transforming coordinate system. We can see the relativity of simultaneity from the x′ axis in Figure 1. Surfaces of constant t are the “simultaneity” lines of one observer, whereas the t′=0 line of the moving observer has a different slope. Two events that are chosen simultaneous in one frame may have different time coordinates in the other. NIST reports that this effect has been experimentally verified with high-precision clocks, and that the same physical clocks give different tick-rate measurements depending on motion and position conditions. [7]</p>
+      <h2>9. Proper time and the worldline: what clocks actually</h2>
+      <h2>measure</h2>
+      <p>The physical power of Minkowski geometry is that it turns an observer’s measurement of their own clock directly into a geometric quantity. For a timelike worldline:</p>
+      <h3>c²dτ² = ds² ⇒ dτ = (1/c)√(ds²)</h3>
+      <p>Equation source / derivation framework: [4][5] Definition of proper time for a timelike interval; the +−−− signature is used.</p>
+      <p>For motion at constant velocity, this expression reduces to the time dilation formula above. For an accelerated path, integrating dτ gives the total aging along the worldline. Thus the question “who aged less?” between two clocks is expressed in terms of which physical path accumulates more or less proper time in spacetime. By analogy, imagine two hikers going between the same start and end points along different trails. In the Euclidean plane, the “longer path” is measured by geometric length. In Minkowski spacetime, the corresponding natural measure for physical clocks is proper time; when two worldlines differ, the two clocks need not show the same proper time. Figure 5 directly shows how the ratio Δτ/Δt for a constant-velocity worldline decreases as β increases. The graph is based not on any simulation assumption but on the analytic result of the proper-time equation.</p>
+      <p>Page 7 MINKOWSKI SPACETIME PLANE • Corporate science blog Figure 5. Proper-time rate of an observer moving at constant velocity. When β=0.8, Δτ/Δt=0.6; that is, for 1 unit of coordinate time measured in the external reference frame, the moving clock accumulates 0.6 units of proper time along the same worldline.</p>
+      <h2>10. Four-velocity, four-momentum, and the</h2>
+      <h2>energy–momentum relation</h2>
+      <p>Packaging vectors in four-dimensional form in Minkowski spacetime is one of the most powerful ways of making the equations of physics Lorentz covariant. Starting with the four-position μ x =(ct,x,y,z) and differentiating with respect to proper time, we obtain the four-velocity:</p>
+      <p>μ μ</p>
+      <h3>U = dx /dτ = γ(c, v, v, v)</h3>
+      <p>x y z</p>
+      <p>μ</p>
+      <p>Equation source / derivation framework: [4][5] Definition of four-velocity. The Minkowski norm U U =c² is invariant.</p>
+      <p>μ</p>
+      <p>μ μ</p>
+      <p>Multiplying by the mass m gives the four-momentum P =mU. Thus the time component is related to the total energy, and the spatial components to the three-momentum:</p>
+      <p>μ</p>
+      <h3>P = (E/c, p, p, p)</h3>
+      <p>x y z</p>
+      <p>Equation source / derivation framework: [4][5] The standard representation of relativistic four-momentum.</p>
+      <p>The Minkowski norm of this four-vector is Lorentz invariant. Therefore:</p>
+      <p>μ</p>
+      <h3>P P = (E/c)² − p² = m²c²</h3>
+      <p>μ</p>
+      <p>Equation source / derivation framework: [4][5] The energy–momentum invariant.</p>
+      <p>from which:</p>
+      <h3>E² = p²c² + m²c⁴</h3>
+      <p>Equation source / derivation framework: [4][5] The relativistic energy–momentum relation. Taking p=0 for a particle at rest gives E =mc². The conceptual beauty here is this: before it is the slogan of “mass being converted into energy,” E=mc² is a special case of the combination of energy and momentum, as components of a single four-vector, in the same Lorentz geometry. Mass, in turn, is an invariant quantity related to the invariant norm of this four-momentum.</p>
+      <p>Page 8 MINKOWSKI SPACETIME PLANE • Corporate science blog</p>
+      <h2>11. From Minkowski to the Einstein field equations: from</h2>
+      <h2>flat space to curved spacetime</h2>
+      <p>Now we come to the critical point that prepares the transition to the video’s black hole narrative. The Minkowski metric is sufficient in special relativity, where gravity can be neglected and spacetime is flat. In general relativity, however, the mass–energy distribution determines the geometry of spacetime. For this reason, instead of the fixed η, we use a general metric field</p>
+      <p>μν</p>
+      <p>g (x): μν</p>
+      <p>μ ν</p>
+      <h3>ds² = g (x) dx dx</h3>
+      <p>μν</p>
+      <p>Equation source / derivation framework: [8][9] The fundamental line-element representation of general relativistic spacetime geometry.</p>
+      <p>Here, “curvature” is not simply the bending of a grid drawn on a picture. Even if the coordinates themselves are badly chosen, curvature can appear to arise. Physical curvature is characterized by coordinate-independent tensorial quantities; for example, the Riemann curvature tensor and the scalars derived from it. The modern standard form of the field equations that Einstein set out in his paper “Die Feldgleichungen der Gravitation” of 25 November 1915, with the cosmological constant included, is:</p>
+      <h3>G + Λ g = (8πG/c⁴) T</h3>
+      <p>μν μν μν</p>
+      <p>Equation source / derivation framework: [9] Modern tensor representation of Einstein’s 1915 field equations. For Einstein’s original 1915 text and the 1916 general theoretical presentation, see sources [8][9].</p>
+      <p>It is possible to summarize this equality intuitively as “matter tells spacetime how to curve, spacetime tells matter how to move”; however, the mathematical meaning of the equation is more precise. On the left side are the Einstein tensor G, which describes the geometry, and the</p>
+      <p>μν</p>
+      <p>cosmological constant if present; on the right side is the energy–momentum tensor T. In general</p>
+      <p>μν</p>
+      <p>relativity, matter sources determine the dynamics of the metric field; the metric, in turn, determines the geodesics of free particles and the null geodesics of light. [9][10] For this reason, Minkowski spacetime can be seen as a “special case”: under suitable conditions g =η and the curvature tensor is zero. General relativity does not throw Minkowski geometry μν μν away; it contains it as the gravity-free local flat limit.</p>
+      <p>Page 9 MINKOWSKI SPACETIME PLANE • Corporate science blog Figure 6. Two different diagnostics at the scale of the Schwarzschild radius r_s. f(r)=1−r_s/r represents one of the basic components of the time/space coefficients in Schwarzschild coordinates, while the normalized Kretschmann scalar K r_s⁴=12(r_s/r)⁶ shows that the magnitude of the true curvature increases strongly. This distinction is important for telling apart a coordinate singularity from a physical curvature singularity.</p>
+      <h2>12. How is the black hole chain in the video read</h2>
+      <h2>through Minkowski logic?</h2>
+      <p>Each of these structures needs a more general cousin of the Minkowski diagram. In flat spacetime, light cones have the same slope everywhere, whereas in curved spacetime the local null directions are determined by the spacetime geometry itself. In other words, “light still travels locally at c (the constant speed of light),” but in a global diagram the orientation of the light cones and their coordinate representation can change. [6][10] In a Schwarzschild black hole, r=r_s gives the event horizon. Although this surface seems to behave specially in Schwarzschild coordinates, with suitable coordinates it is seen to be a coordinate singularity; the true curvature singularity at r=0 shows up in invariant curvature measures. This is why the effect of “nothing seems to be entering” is created. In Kerr spacetime the situation is more complicated: rotation, frame dragging, and an ergosphere arise; the causal diagrams of the idealized “maximally extended” Kerr solution can mathematically open onto other regions and white-hole-like structures. We do not have sufficient evidence to say that these idealized extensions necessarily occur in nature. In particular, because of inner horizon instabilities and backreaction, the “universes in an infinite chain” interpretation should not be taken as a physically reliable prediction. [V][11]</p>
+      <h2>13. The boundary between a mathematical solution and</h2>
+      <h2>physical reality</h2>
+      <p>In general relativity, finding a solution of a differential equation and showing that this solution will be realized in nature are not the same scientific claim. The Schwarzschild and Kerr solutions are exact solutions of the vacuum Einstein equations; but their maximal extensions are idealizations stripped of physical conditions such as the collapse of a real star, surrounding matter, radiation, perturbations, and quantum effects.</p>
+      <p>Page 10 MINKOWSKI SPACETIME PLANE • Corporate science blog This distinction is extremely important from the standpoint of theoretical physics. That a solution is “mathematically possible” does not make it observationally supported. Physical possibility is evaluated with additional criteria such as formation mechanism, stability, energy conditions, response to perturbations, and observational/experimental agreement. For this reason, the Veritasium video also presents the white hole, wormhole, and parallel universe inferences as “the result of an equation extension,” while building a cautious framework about their reality in nature.</p>
+      <p>[V] This methodological principle must also be preserved in science communication: between “the equation allows it” and “the universe realizes it” there is always a separate verification step.</p>
+      <h2>14. A measurable consequence of relativity: atomic</h2>
+      <h2>clocks and GNSS</h2>
+      <p>Minkowski geometry is not merely a theoretical drawing tool. The time dilation of special relativity and the gravitational clock shift of general relativity are today part of precision timing and navigation systems. NIST reports that the special-relativistic effect arising from the motion of GPS satellites makes the satellite clocks fall behind clocks on Earth by about 7 microseconds per day; that their being in a weaker gravitational field produces, because of general relativity, a forward shift of about 45 microseconds/day; and that the net effect is about +38 microseconds/day. Although this scale seems small, because it accumulates continuously it must necessarily be accounted for in the GNSS timing model. [12] Similarly, in 2022 the JILA/NIST group measured the clock-rate difference predicted by general relativity between atomic clocks separated by a height difference of only about one millimeter. This result shows that gravitational time dilation is not a macroscopic abstraction; it can be measured with precision atomic clocks even at very small height differences. [13] From a data scientist’s point of view, what matters is this: the relativistic model here is not a “philosophical correction”; it is a physical model that enters the error budget of timestamps, signal propagation, and position estimation.</p>
+      <p>Figure 7. A rounded representation of the approximate GPS clock shifts reported by NIST: −7 μs/day from motion, +45 μs/day from weaker gravity, and about +38 μs/day net difference. These are not single-term calculations that replace the full GNSS orbit/gravity model; they are representative values that convey the scale of the relativistic effect. [12]</p>
+      <p>Page 11 MINKOWSKI SPACETIME PLANE • Corporate science blog</p>
+      <h2>15. Conclusion: More than a diagram</h2>
+      <p>The real value of learning Minkowski spacetime is not “drawing a four-dimensional graph.” The value is understanding which quantities of physics are truly independent of coordinates. The interval between two events, an observer’s proper time, the null structure of light, the invariant norm of the four-momentum, and the group structure of Lorentz transformations are different faces of the same geometric core. Einstein’s 1905 special relativity approach built the speed of light and relative motion into the rules of measurement. Minkowski turned this structure into a four-dimensional pseudo-Euclidean geometry. Einstein’s general relativity program, in turn, generalized this flat geometry to a more general metric field. Seen this way, special and general relativity can be read not as two disconnected theories but as two successively broader stages of the question “which geometry is physically possible?” [1][2][9] The black hole examples in the video are therefore a natural continuation of Minkowski logic. First we learn causality through the light cone; then we ask how light cones change when the metric changes; then we examine geodesics and the “global causal structure”; and finally we test whether structures such as black holes, white holes, or wormholes are actually physical, using criteria of formation and stability. The most powerful scientific conclusion is this: accepting that space and time are not separate, absolute boxes does not merely change coordinates; it redefines what “distance,” what “time,” what “at the same moment,” and what “cause and effect” are. Minkowski spacetime is the mathematical stage of this redefinition.</p>
+      <p>Page 12 MINKOWSKI SPACETIME PLANE • Corporate science blog</p>
+      <h2>Conceptual map: 10 key equations and ideas</h2>
+      <p>Concept Mathematical expression Physical meaning</p>
+      <p>μ</p>
+      <p>Four-position x =(ct,x,y,z) Coordinates of an event in spacetime Minkowski metric η =diag(1,−1,−1,−1) Lorentzian geometry of flat spacetime</p>
+      <p>μν</p>
+      <p>Lorentz invariant; basis of causal</p>
+      <p>Interval ds²=c²dt²−dx²−dy²−dz²</p>
+      <p>classification</p>
+      <p>Null condition ds²=0 Light and the causal boundary</p>
+      <p>−1/2</p>
+      <p>Lorentz factor γ=(1−β²) Motion-induced relativistic scaling</p>
+      <p>Time measured by a clock along its own</p>
+      <p>Proper time dτ=ds/c (timelike)</p>
+      <p>worldline</p>
+      <p>μ μ</p>
+      <p>Four-velocity U =dx /dτ Covariant form of relativistic velocity</p>
+      <p>μ Energy and momentum combined in a single</p>
+      <p>Four-momentum P =(E/c, p, p, p)</p>
+      <p>x y z object</p>
+      <p>Lorentz invariant; fundamental relation of a</p>
+      <p>Energy–momentum E²=p²c²+m²c⁴</p>
+      <p>massive particle</p>
+      <p>μ ν</p>
+      <p>General metric ds²=g dx dx Local geometry of curved spacetime</p>
+      <p>μν</p>
+      <h2>References and recommended further reading</h2>
+      <p>[1] Einstein, A. (1905). “On the Electrodynamics of Moving Bodies.” Annalen der Physik, 17, 891–921. DOI: 10.1002/andp.200590006. Online transcription: University of Pittsburgh / Einstein 1905 text. [2] Minkowski, H. (1908). “Space and Time.” Address delivered in Cologne, 21 September 1908. English translation and historical material via Minkowski Institute; public-domain translation also available through Wikisource. [3] NIST, SI definitions: speed of light in vacuum c=299 792 458 m/s and definition of the second. NIST Guide to the SI / SP 811 and SP 330. [4] Rindler, W. (2006). Relativity: Special, General, and Cosmological. 2nd ed. Oxford University Press. [5] Carroll, S. M. (2004). Spacetime and Geometry: An Introduction to General Relativity. Addison-Wesley. [6] Einstein Online (Max Planck Institute for Gravitational Physics). “Spacetime” and “Light cone” entries. Especially useful for causal structure and light-cone interpretation. [7] NIST. “Relativity and Optical Clocks” and related precision-clock publications. Experimental confirmation of motion-related and gravitational time-dilation effects. [8] Einstein, A. (1916). “The Foundation of the General Theory of Relativity.” Annalen der Physik, 49, 769–822. English translation available via CERN / John D. Norton teaching archive. [9] Einstein, A. (1915). “Die Feldgleichungen der Gravitation.” Preussische Akademie der Wissenschaften, Sitzungsberichte, 25 November 1915, 844–847. CERN Document Server and Max Planck Institute digital archives. [10] Poisson, E. (2004). A Relativist’s Toolkit: The Mathematics of Black-Hole Mechanics. Cambridge University Press. [11] Dafermos, M., Luk, J., Rodnianski, I. (2018). “The interior of dynamical vacuum black holes I: The C -stability of the Kerr Cauchy horizon.” arXiv / related mathematical relativity literature. Studies of this kind provide an advanced reference for understanding why the behavior of the inner horizon must be assessed separately from the idealized Kerr extension. [12] NIST. “Putting Einstein to the Test.” In GPS satellites, approximately −7 μs/day special relativity, +45 μs/day general relativity, and approximately +38 μs/day net clock difference. [13] NIST/JILA (2022). “JILA Atomic Clocks Measure Einstein’s General Relativity at Millimeter Scale.” Experimental study published in Nature and NIST news summary.</p>
+      <p>Page 13 MINKOWSKI SPACETIME PLANE • Corporate science blog [V] Veritasium (2024). “Something Strange Happens When You Follow Einstein’s Math.” YouTube video, 37:02. Video description and speech transcript; the video uses the black hole/white hole/wormhole/Kerr and maximal-extension theme as its narrative backbone.</p>
+      <h2>Direct online sources</h2>
+      <p>Veritasium video: https://www.youtube.com/watch?v=6akmv1bsz1M Einstein 1905 text (University of Pittsburgh): https://sites.pitt.edu/~jdnorton/teaching/HPS_0410/chapters/orig ins_pathway/On-the_electrodynamics/index.html Minkowski 1908, Space and Time: https://www.minkowskiinstitute.org/mip/books/minkowski.html Einstein 1915 field equations (CERN): https://cds.cern.ch/record/632320 Einstein Online: Spacetime: https://www.einstein-online.info/en/spacetime/Einstein Online: Light cone: https://www.einstein-online.info/en/explandict/light-cone/NIST: Putting Einstein to the Test: https://www.nist.gov/atomic-clocks/a-powerful-tool-for-science/putting-einst ein-test NIST/JILA millimeter-scale gravitational time dilation: https://www.nist.gov/news-events/news/2022/02/jila-ato mic-clocks-measure-einsteins-general-relativity-millimeter-scale</p>
+      <h2>Editorial note: production of the graphics</h2>
+      <p>Figures 1–7 were computed numerically from the equations given in the text. The light cone, the Lorentz boost, γ(β), the interval classification, the proper-time ratio, the Schwarzschild diagnostic curves, and the scale of the GPS clock differences are based directly on the relevant formulas. The graphics are for scientific visualization purposes; they should not be interpreted as if they were observational data. In particular, the curves in Figure 6 are not an observation of a real black hole but a display of the analytic functions of the Schwarzschild solution; Figure 7 is a rounded representative bar chart of the typical GPS relativistic effects reported by NIST. Baris Dincer</p>
+      <ul class="blog-article-list">
+        <li>Astronomical Data Scientist</li>
+      </ul>
+      <p>Page 14</p>
+    </div>
+
+    <div class="blog-share">
+      <span>Share</span>
+      <a href="https://wa.me/?text=MINKOWSKI%20SPACETIME%20PLANE%20-%20https%3A%2F%2Falbaspace.com.tr%2Feng%2Fblog%2Fminkowski-uzay-zaman-duzlemi.html" target="_blank" rel="noopener" aria-label="Share on WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </a>
+      <button type="button" class="blog-copy-link" data-url="https://albaspace.com.tr/eng/blog/minkowski-uzay-zaman-duzlemi.html" aria-label="Copy link">
+        <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </button>
+    </div>
+
+    <div id="blog-article-extras" data-slug="minkowski-uzay-zaman-duzlemi"></div>
+  </article>
+
+  <div data-include="/footer-en.html"></div>
+
+  <script src="/assets/js/blog.js" defer></script>
+</body>
+</html>
