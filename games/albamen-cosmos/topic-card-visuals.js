@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20260926-1';
+const VERSION='20261005-1';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const TR_FILES=['tr.001.b64','tr.002.1.b64','tr.002.2.b64','tr.002.3.b64','tr.002.4.b64','tr.002.5.b64','tr.002.6.1.b64','tr.002.6.2.b64','tr.002.6.3.b64','tr.002.6.4.b64','tr.003.b64'];
 let installed=false,DATA=null,asteroidCid='',questionMap=new Map(),cardMap=new Map();
@@ -47,6 +47,8 @@ function ensureStyle(){
   const s=document.createElement('style');s.id='cosmos-topic-images-style';s.textContent=`
   .cosmos-topic-image{width:100%;aspect-ratio:1/1;border-radius:16px;overflow:hidden;background:#0b1028;border:1px solid rgba(120,150,255,.28);margin:0 0 14px;display:block}
   .cosmos-topic-image img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+  .cosmos-square-image{width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:16px;margin:0 0 14px;display:block;background:#0b1028}
+  .cosmos-square-image img{width:100%!important;height:100%!important;display:block;object-fit:cover;object-position:center}
   .flash-face .cosmos-topic-image{margin:10px 0 16px}
   `;document.head.appendChild(s);
 }
@@ -66,6 +68,18 @@ function putImage(host,index,side,before){
   img.src=src;box.appendChild(img);
 }
 function removeImage(host){host?.querySelector(':scope > .cosmos-topic-image')?.remove();}
+function normalizeSquareImages(){
+  const selectors=['.flash-front img','.flash-back img','.question-card img'];
+  document.querySelectorAll(selectors.join(',')).forEach(img=>{
+    if(img.closest('.cosmos-topic-image')||img.closest('.cosmos-square-image'))return;
+    const parent=img.parentElement;
+    if(!parent)return;
+    const box=document.createElement('div');
+    box.className='cosmos-square-image';
+    parent.insertBefore(box,img);
+    box.appendChild(img);
+  });
+}
 function syncQuiz(){
   const q=[...document.querySelectorAll('.question-text')].find(visible);
   if(!q)return false;
@@ -105,6 +119,7 @@ function syncCards(){
 }
 function sync(){
   try{
+    normalizeSquareImages();
     if(syncQuiz())return;
     syncCards();
   }catch(e){console.error('[ALBAMEN Cosmos] topic image sync failed',e);}
