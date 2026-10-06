@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20261005-1';
+const VERSION='20261006-1';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const TR_FILES=['tr.001.b64','tr.002.1.b64','tr.002.2.b64','tr.002.3.b64','tr.002.4.b64','tr.002.5.b64','tr.002.6.1.b64','tr.002.6.2.b64','tr.002.6.3.b64','tr.002.6.4.b64','tr.003.b64'];
 let installed=false,DATA=null,asteroidCid='',questionMap=new Map(),cardMap=new Map();
@@ -49,6 +49,9 @@ function ensureStyle(){
   .cosmos-topic-image img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
   .cosmos-square-image{width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:16px;margin:0 0 14px;display:block;background:#0b1028}
   .cosmos-square-image img{width:100%!important;height:100%!important;display:block;object-fit:cover;object-position:center}
+  .flash-front img,.flash-back img,.question-card img{width:100%!important;height:auto!important;aspect-ratio:1/1!important;display:block!important;object-fit:cover!important;object-position:center!important}
+  .flash-front picture,.flash-back picture,.question-card picture{width:100%!important;aspect-ratio:1/1!important;display:block!important;overflow:hidden!important}
+  .flash-front picture img,.flash-back picture img,.question-card picture img{height:100%!important}
   .flash-face .cosmos-topic-image{margin:10px 0 16px}
   `;document.head.appendChild(s);
 }
