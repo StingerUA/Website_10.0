@@ -1,0 +1,93 @@
+{
+  "batch": "Q-MIS-006_to_Q-MIS-010",
+  "revision": 1,
+  "question_count": 5,
+  "front_count": 5,
+  "back_count": 5,
+  "image_count": 10,
+  "aspect_ratio": "1:1",
+  "images": [
+    {
+      "file": "Q-MIS-006_F.png",
+      "question_id": "Q-MIS-006",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "95ae4c08360ab764a0a13ad0267a08b2bb5a920cbf424d7f4cc6566e4bf6aa3b"
+    },
+    {
+      "file": "Q-MIS-006_B.png",
+      "question_id": "Q-MIS-006",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "ca4792e0a9454bca80f3da419e864b20672bb8159c480ba4a11accb8a5e292a6"
+    },
+    {
+      "file": "Q-MIS-007_F.png",
+      "question_id": "Q-MIS-007",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e851469952f3e0f362242eb080a68f422f0eb92c891c8c6135a73c521e31d921"
+    },
+    {
+      "file": "Q-MIS-007_B.png",
+      "question_id": "Q-MIS-007",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "1b550805dc8f9a58e94e867ec27e4ef290c582c35da692c2c36d50f8bb0d8f6e"
+    },
+    {
+      "file": "Q-MIS-008_F.png",
+      "question_id": "Q-MIS-008",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "100dcf5eab7a662a71547c307e310dc64487055c92deee9d21c75f875bf127e2"
+    },
+    {
+      "file": "Q-MIS-008_B.png",
+      "question_id": "Q-MIS-008",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "52ce84bae2d7eb8aa5bcf468080d97c5ad1955894cc93567f448326288fb5633"
+    },
+    {
+      "file": "Q-MIS-009_F.png",
+      "question_id": "Q-MIS-009",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "655b9963cd21d27438a173153ddb40ad7b4f197cb2b4ecef82fac5d1050f6072"
+    },
+    {
+      "file": "Q-MIS-009_B.png",
+      "question_id": "Q-MIS-009",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "5f8150cecbd79c775bb4cc46f5e1bd0308a88223aefb2946f37f44ead4fb6b2a"
+    },
+    {
+      "file": "Q-MIS-010_F.png",
+      "question_id": "Q-MIS-010",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "8c8e1779cbb5c2a020e0b3c38567cf67c5afad56eb50498ccba1058ad84bee36"
+    },
+    {
+      "file": "Q-MIS-010_B.png",
+      "question_id": "Q-MIS-010",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "47d2d344942c71bd96eec419ba88275a0ee8d051ab3d98452d3a7e1802e16ff2"
+    }
+  ],
+  "costume_detail": "Ten cyan bubbles on the anatomical right shoulder of both Albamen and Lara.",
+  "next_batch": "Q-COS-001_to_Q-COS-005"
+}

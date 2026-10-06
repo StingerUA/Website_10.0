@@ -1,0 +1,92 @@
+{
+  "batch": "Q-TEL-006_to_Q-TEL-010",
+  "revision": 1,
+  "question_count": 5,
+  "front_count": 5,
+  "back_count": 5,
+  "image_count": 10,
+  "aspect_ratio": "1:1",
+  "images": [
+    {
+      "file": "Q-TEL-006_F.png",
+      "question_id": "Q-TEL-006",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "d8fa82be63091acd883df6d14a2c2888da7ba89a4be8a31e4b42f7294cda6819"
+    },
+    {
+      "file": "Q-TEL-006_B.png",
+      "question_id": "Q-TEL-006",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "9c51639a62b00ea48a095382b20cf04368cd623ea4ad8066d69b81422d10a56a"
+    },
+    {
+      "file": "Q-TEL-007_F.png",
+      "question_id": "Q-TEL-007",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "e931f8db1717689e8d49e733fddd61bb523f9205636da5ca5a7dcd9e146a9324"
+    },
+    {
+      "file": "Q-TEL-007_B.png",
+      "question_id": "Q-TEL-007",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f36d9769833ade6ca31435da9c588fc80a59cd138000d25baa3cc190bf0d4ff6"
+    },
+    {
+      "file": "Q-TEL-008_F.png",
+      "question_id": "Q-TEL-008",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "4c22e3f7f02c210235844f25fcd1487e86af2b0717b8d85c76d1cb3a6d086362"
+    },
+    {
+      "file": "Q-TEL-008_B.png",
+      "question_id": "Q-TEL-008",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a68acb9e538a9a8206c41cecb9726d6a5dccfd47ce103bbd9da53382bcc817ac"
+    },
+    {
+      "file": "Q-TEL-009_F.png",
+      "question_id": "Q-TEL-009",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "975151b5eb1e6695cbe7579463d7c7974e15aa16032ec4eb160a69dfea508a4b"
+    },
+    {
+      "file": "Q-TEL-009_B.png",
+      "question_id": "Q-TEL-009",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "5faeb88c86e1929f324c6c171cd394135a575973a444685d00d60b7d8a2ea395"
+    },
+    {
+      "file": "Q-TEL-010_F.png",
+      "question_id": "Q-TEL-010",
+      "side": "Front",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "651eaa71250743913442d1f1e9bf25da357497de8c6cf9f649f7192063bf3240"
+    },
+    {
+      "file": "Q-TEL-010_B.png",
+      "question_id": "Q-TEL-010",
+      "side": "Back",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "27e6f609af87c986a10e38c27c855f80107104051546d8a2beef2a55de78a4b5"
+    }
+  ],
+  "next_batch": "Q-MIS-001_to_Q-MIS-005"
+}

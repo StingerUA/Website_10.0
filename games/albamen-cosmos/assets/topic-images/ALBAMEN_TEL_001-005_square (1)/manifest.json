@@ -1,0 +1,71 @@
+{
+  "revision": 1,
+  "question_count": 5,
+  "front_count": 5,
+  "back_count": 5,
+  "image_count": 10,
+  "aspect_ratio": "1:1",
+  "images": [
+    {
+      "file": "Q-TEL-001_F.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "531cc43f69312caa479f39301f3aa3cccf6f7453fc66af1f5ee9445b884ad327"
+    },
+    {
+      "file": "Q-TEL-001_B.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f4428e3eccab023935fcec0bc3aa3c3624a658f40f7dbea8a36b4b384f37a04c"
+    },
+    {
+      "file": "Q-TEL-002_F.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "cd932c745f0cdee7cf3242939001944ce3e17721cffd666aee367200c0366ab9"
+    },
+    {
+      "file": "Q-TEL-002_B.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "637dc6bafa3c0a0f254877c0328328d0fa9d47a9eb0cd4d8a76b86cd8b251f64"
+    },
+    {
+      "file": "Q-TEL-003_F.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "1d4613e514b189e64bab07328cc8e52db4aa2fd289a6d51a136710781c5e66d7"
+    },
+    {
+      "file": "Q-TEL-003_B.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "c1326feb2a63eee5f20f6fbf631cc8493e28b7071270a70c58d04161f92d4044"
+    },
+    {
+      "file": "Q-TEL-004_F.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "7e350a60fa74b30a4aa22daadcb6e9ebde7c85c1b1e6bca75395893d7fc10ce2"
+    },
+    {
+      "file": "Q-TEL-004_B.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "4abb404e5f13b519f0b5ae6b10d22849872a0b91188ede1f902bb1b7daec8cb6"
+    },
+    {
+      "file": "Q-TEL-005_F.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "f4329a780a82ff786d06bdcf20520c3e46ba473228e4a01309fdb000a5548f28"
+    },
+    {
+      "file": "Q-TEL-005_B.png",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "39ffbf56c0c0cc0878f0e1519621eedea5c5e36ced84c56b7685adfa7683bc28"
+    }
+  ],
+  "next_batch": "Q-TEL-006_to_Q-TEL-010"
+}
