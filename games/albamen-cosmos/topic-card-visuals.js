@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 const BASE='/games/albamen-cosmos/';
-const VERSION='20261006-1';
+const VERSION='20261007-1';
 const DATA_FILES=['data.001.b64','data.002.b64','data.003.1.b64','data.003.2.b64','data.003.3.b64','data.003.4.b64','data.003.5.b64','data.003.6.b64','data.003.7.b64','data.003.8.b64'];
 const TR_FILES=['tr.001.b64','tr.002.1.b64','tr.002.2.b64','tr.002.3.b64','tr.002.4.b64','tr.002.5.b64','tr.002.6.1.b64','tr.002.6.2.b64','tr.002.6.3.b64','tr.002.6.4.b64','tr.003.b64'];
 let installed=false,DATA=null,asteroidCid='',questionMap=new Map(),cardMap=new Map();
@@ -52,6 +52,7 @@ function ensureStyle(){
   .flash-front img,.flash-back img,.question-card img{width:100%!important;height:auto!important;aspect-ratio:1/1!important;display:block!important;object-fit:cover!important;object-position:center!important}
   .flash-front picture,.flash-back picture,.question-card picture{width:100%!important;aspect-ratio:1/1!important;display:block!important;overflow:hidden!important}
   .flash-front picture img,.flash-back picture img,.question-card picture img{height:100%!important}
+  .cosmos-square-media{width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1/1!important;overflow:hidden!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;flex:0 0 auto!important}
   .flash-face .cosmos-topic-image{margin:10px 0 16px}
   `;document.head.appendChild(s);
 }
@@ -81,6 +82,19 @@ function normalizeSquareImages(){
     box.className='cosmos-square-image';
     parent.insertBefore(box,img);
     box.appendChild(img);
+  });
+  document.querySelectorAll('.flash-front,.flash-back,.question-card').forEach(face=>{
+    face.querySelectorAll('*').forEach(el=>{
+      if(el.classList.contains('cosmos-topic-image')||el.classList.contains('cosmos-square-image'))return;
+      const s=getComputedStyle(el);
+      const bg=s.backgroundImage||'';
+      if(bg.includes('url(')){
+        const r=el.getBoundingClientRect();
+        if(r.width>120&&r.height>80&&r.width/r.height>1.15){
+          el.classList.add('cosmos-square-media');
+        }
+      }
+    });
   });
 }
 function syncQuiz(){
