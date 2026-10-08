@@ -1,0 +1,924 @@
+{
+  "version": "20261008-1",
+  "quiz": {
+    "Q-STR-001": {
+      "front": "04-stars/stellar-core-front.png",
+      "back": "04-stars/stellar-core-fusion-back.png"
+    },
+    "Q-STR-002": {
+      "front": "04-stars/sun-class-front.png",
+      "back": "04-stars/sun-overview-back.png"
+    },
+    "Q-STR-003": {
+      "front": "04-stars/star-colors-front.png",
+      "back": "04-stars/star-temperature-back.png"
+    },
+    "Q-STR-004": {
+      "front": "04-stars/stellar-evolution-diagram-front.png",
+      "back": "04-stars/stellar-lifecycle-back.png"
+    },
+    "Q-STR-005": {
+      "front": "04-stars/red-giant-front.png",
+      "back": "04-stars/red-giant-back.png"
+    },
+    "Q-STR-006": {
+      "front": "04-stars/white-dwarf-front.png",
+      "back": "04-stars/stellar-remnants-back.png"
+    },
+    "Q-STR-007": {
+      "front": "04-stars/star-formation-back.png",
+      "back": "04-stars/nebula-back.png"
+    },
+    "Q-STR-008": {
+      "front": "04-stars/stellar-interior-front.png",
+      "back": "04-stars/stellar-core-fusion-back.png"
+    },
+    "Q-STR-009": {
+      "front": "04-stars/neutron-star-back.png",
+      "back": "04-stars/neutron-star-back.png"
+    },
+    "Q-STR-010": {
+      "front": "04-stars/stellar-evolution-front.png",
+      "back": "04-stars/stellar-lifecycle-back.png"
+    },
+    "Q-MON-001": {
+      "front": "03-moon/moon-orbit-front.png",
+      "back": "03-moon/moon-orbit-back.png"
+    },
+    "Q-MON-002": {
+      "front": "03-moon/moon-observation-front.png",
+      "back": "03-moon/synchronous-rotation-back.png"
+    },
+    "Q-MON-003": {
+      "front": "03-moon/lunar-craters-front.png",
+      "back": "03-moon/crater-formation-back.png"
+    },
+    "Q-MON-004": {
+      "front": "03-moon/lunar-eclipse-front.png",
+      "back": "03-moon/lunar-eclipse-back.png"
+    },
+    "Q-MON-005": {
+      "front": "03-moon/moon-surface-front.png",
+      "back": "03-moon/lunar-craters-front.png"
+    },
+    "Q-MON-006": {
+      "front": "03-moon/tides-front.png",
+      "back": "03-moon/tides-back.png"
+    },
+    "Q-MON-007": {
+      "front": "03-moon/lunar-craters-front.png",
+      "back": "03-moon/crater-impact-diagram-back.png"
+    },
+    "Q-MON-008": {
+      "front": "03-moon/lunar-gravity-jump.png",
+      "back": "03-moon/lunar-gravity-comparison.png"
+    },
+    "Q-MON-009": {
+      "front": "03-moon/lunar-phases-front.png",
+      "back": "03-moon/lunar-phases-back.png"
+    },
+    "Q-MON-010": {
+      "front": "03-moon/apollo-landing-front.png",
+      "back": "03-moon/apollo-landing-back.png"
+    },
+    "Q-AST-001": {
+      "front": "05-asteroids-comets/Q-AST-001_F.png",
+      "back": "05-asteroids-comets/Q-AST-001_B.png"
+    },
+    "Q-AST-002": {
+      "front": "05-asteroids-comets/Q-AST-002_F.png",
+      "back": "05-asteroids-comets/Q-AST-002_B.png"
+    },
+    "Q-AST-003": {
+      "front": "05-asteroids-comets/Q-AST-003_F.png",
+      "back": "05-asteroids-comets/Q-AST-003_B.png"
+    },
+    "Q-AST-004": {
+      "front": "05-asteroids-comets/Q-AST-004_F.png",
+      "back": "05-asteroids-comets/Q-AST-004_B.png"
+    },
+    "Q-AST-005": {
+      "front": "05-asteroids-comets/Q-AST-005_F.png",
+      "back": "05-asteroids-comets/Q-AST-005_B.png"
+    },
+    "Q-AST-006": {
+      "front": "05-asteroids-comets/Q-AST-006_F.png",
+      "back": "05-asteroids-comets/Q-AST-006_B.png"
+    },
+    "Q-AST-007": {
+      "front": "05-asteroids-comets/Q-AST-007_F.png",
+      "back": "05-asteroids-comets/Q-AST-007_B.png"
+    },
+    "Q-AST-008": {
+      "front": "05-asteroids-comets/Q-AST-009_F.png",
+      "back": "05-asteroids-comets/Q-AST-002_B.png"
+    },
+    "Q-AST-009": {
+      "front": "05-asteroids-comets/Q-AST-008_F.png",
+      "back": "05-asteroids-comets/Q-AST-008_B.png"
+    },
+    "Q-AST-010": {
+      "front": "05-asteroids-comets/Q-AST-002_F.png",
+      "back": "05-asteroids-comets/Q-AST-007_B.png"
+    },
+    "Q-SNV-001": {
+      "front": "06-supernovae/stellar-explosion-front.png",
+      "back": "06-supernovae/stellar-explosion-back.png"
+    },
+    "Q-SNV-002": {
+      "front": "06-supernovae/core-collapse-front.png",
+      "back": "06-supernovae/stellar-remnants-back.png"
+    },
+    "Q-SNV-003": {
+      "front": "06-supernovae/heavy-elements-front.png",
+      "back": "06-supernovae/heavy-elements-back.png"
+    },
+    "Q-SNV-004": {
+      "front": "06-supernovae/stellar-remnant-front.png",
+      "back": "06-supernovae/stellar-remnants-back.png"
+    },
+    "Q-SNV-005": {
+      "front": "06-supernovae/distance-measurement-front.png",
+      "back": "06-supernovae/distance-measurement-back.png"
+    },
+    "Q-SNV-006": {
+      "front": "06-supernovae/element-dispersal-front.png",
+      "back": "06-supernovae/shock-wave-back.png"
+    },
+    "Q-SNV-007": {
+      "front": "06-supernovae/supernova-brightness-front.png",
+      "back": "06-supernovae/supernova-brightness-back.png"
+    },
+    "Q-SNV-008": {
+      "front": "06-supernovae/supernova-remnant-front.png",
+      "back": "06-supernovae/supernova-remnant-back.png"
+    },
+    "Q-SNV-009": {
+      "front": "06-supernovae/stellar-explosion-front.png",
+      "back": "06-supernovae/stellar-explosion-back.png"
+    },
+    "Q-SNV-010": {
+      "front": "06-supernovae/stellar-evolution-front.png",
+      "back": "06-supernovae/supernova-research-back.png"
+    },
+    "Q-BH-001": {
+      "front": "07-black-holes/black-hole-front.png",
+      "back": "07-black-holes/event-horizon-back.png"
+    },
+    "Q-BH-002": {
+      "front": "07-black-holes/event-horizon-front.png",
+      "back": "07-black-holes/event-horizon-back.png"
+    },
+    "Q-BH-003": {
+      "front": "07-black-holes/black-hole-observations-front.png",
+      "back": "07-black-holes/black-hole-research-back.png"
+    },
+    "Q-BH-004": {
+      "front": "07-black-holes/accretion-disk-front.png",
+      "back": "07-black-holes/accretion-disk-overview-front.png"
+    },
+    "Q-BH-005": {
+      "front": "07-black-holes/galactic-center-front.png",
+      "back": "07-black-holes/galactic-center-back.png"
+    },
+    "Q-BH-006": {
+      "front": "07-black-holes/black-hole-space-view-front.png",
+      "back": "07-black-holes/black-hole-formation-back.png"
+    },
+    "Q-BH-007": {
+      "front": "07-black-holes/binary-black-holes-back.png",
+      "back": "07-black-holes/gravitational-waves-back.png"
+    },
+    "Q-BH-008": {
+      "front": "07-black-holes/spacetime-curvature-front.png",
+      "back": "07-black-holes/black-hole-quantum-model-back.png"
+    },
+    "Q-BH-009": {
+      "front": "07-black-holes/galactic-center-front.png",
+      "back": "07-black-holes/galactic-center-back.png"
+    },
+    "Q-BH-010": {
+      "front": "07-black-holes/spacetime-curvature-front.png",
+      "back": "07-black-holes/gravity-model-back.png"
+    },
+    "Q-GAL-001": {
+      "front": "08-galaxies/galaxy-travel-front.png",
+      "back": "08-galaxies/galaxy-cluster-display-back.png"
+    },
+    "Q-GAL-002": {
+      "front": "08-galaxies/milky-way-front.png",
+      "back": "08-galaxies/milky-way-location-back.png"
+    },
+    "Q-GAL-003": {
+      "front": "08-galaxies/galaxy-shapes-front.png",
+      "back": "08-galaxies/galaxy-shapes-back.png"
+    },
+    "Q-GAL-004": {
+      "front": "08-galaxies/galactic-center-front.png",
+      "back": "08-galaxies/galactic-center-front.png"
+    },
+    "Q-GAL-005": {
+      "front": "08-galaxies/spiral-galaxy-front.png",
+      "back": "08-galaxies/spiral-structure-back.png"
+    },
+    "Q-GAL-006": {
+      "front": "08-galaxies/galactic-orbits-front.png",
+      "back": "08-galaxies/galaxy-rotation-curve-back.png"
+    },
+    "Q-GAL-007": {
+      "front": "08-galaxies/galaxy-cluster-back.png",
+      "back": "08-galaxies/galaxy-cluster-map-back.png"
+    },
+    "Q-GAL-008": {
+      "front": "08-galaxies/galaxy-collision-back.png",
+      "back": "08-galaxies/galaxy-collision-back.png"
+    },
+    "Q-GAL-009": {
+      "front": "08-galaxies/galaxy-display-front.png",
+      "back": "08-galaxies/galaxy-collision-back.png"
+    },
+    "Q-GAL-010": {
+      "front": "08-galaxies/galaxy-spectrum-back.png",
+      "back": "08-galaxies/galaxy-spectrum-comparison-back.png"
+    },
+    "Q-EXO-001": {
+      "front": "09-exoplanets/extrasolar-orbits-front.png",
+      "back": "09-exoplanets/extrasolar-orbits-back.png"
+    },
+    "Q-EXO-002": {
+      "front": "09-exoplanets/direct-imaging-front.png",
+      "back": "09-exoplanets/direct-imaging-back.png"
+    },
+    "Q-EXO-003": {
+      "front": "09-exoplanets/transit-front.png",
+      "back": "09-exoplanets/transit-back.png"
+    },
+    "Q-EXO-004": {
+      "front": "09-exoplanets/habitable-zone-front.png",
+      "back": "09-exoplanets/habitable-zone-back.png"
+    },
+    "Q-EXO-005": {
+      "front": "09-exoplanets/radial-velocity-front.png",
+      "back": "09-exoplanets/radial-velocity-back.png"
+    },
+    "Q-EXO-006": {
+      "front": "09-exoplanets/planetary-system-diversity-front.png",
+      "back": "09-exoplanets/planetary-system-diversity-back.png"
+    },
+    "Q-EXO-007": {
+      "front": "11-telescopes/Q-TEL-008_F.png",
+      "back": "11-telescopes/Q-TEL-008_B.png"
+    },
+    "Q-EXO-008": {
+      "front": "11-telescopes/Q-TEL-004_F.png",
+      "back": "11-telescopes/Q-TEL-004_B.png"
+    },
+    "Q-EXO-009": {
+      "front": "09-exoplanets/habitability-comparison-front.png",
+      "back": "09-exoplanets/habitability-comparison-back.png"
+    },
+    "Q-EXO-010": {
+      "front": "09-exoplanets/planetary-system-diversity-front.png",
+      "back": "09-exoplanets/planetary-system-diversity-back.png"
+    },
+    "Q-SYS-001": {
+      "front": "01-solar-system/sun.png",
+      "back": "01-solar-system/sun.png"
+    },
+    "Q-SYS-002": {
+      "front": "12-space-missions/Q-MIS-002_B.png",
+      "back": "12-space-missions/Q-MIS-002_B.png"
+    },
+    "Q-SYS-003": {
+      "front": "02-planets/jupiter.png",
+      "back": "02-planets/jupiter.png"
+    },
+    "Q-SYS-004": {
+      "front": "05-asteroids-comets/Q-AST-002_F.png",
+      "back": "05-asteroids-comets/Q-AST-002_B.png"
+    },
+    "Q-SYS-005": {
+      "front": "02-planets/mercury.png",
+      "back": "02-planets/mercury.png"
+    },
+    "Q-SYS-006": {
+      "front": "02-planets/jupiter.png",
+      "back": "02-planets/jupiter.png"
+    },
+    "Q-SYS-007": {
+      "front": "05-asteroids-comets/Q-AST-004_B.png",
+      "back": "05-asteroids-comets/Q-AST-004_B.png"
+    },
+    "Q-SYS-008": {
+      "front": "12-space-missions/Q-MIS-007_B.png",
+      "back": "12-space-missions/Q-MIS-007_B.png"
+    },
+    "Q-SYS-009": {
+      "front": "05-asteroids-comets/Q-AST-003_F.png",
+      "back": "05-asteroids-comets/Q-AST-003_B.png"
+    },
+    "Q-SYS-010": {
+      "front": "04-stars/star-formation-back.png",
+      "back": "04-stars/nebula-back.png"
+    },
+    "Q-PLN-001": {
+      "front": "02-planets/venus.png",
+      "back": "02-planets/venus.png"
+    },
+    "Q-PLN-002": {
+      "front": "03-moon/moon-orbit-front.png",
+      "back": "03-moon/moon-orbit-back.png"
+    },
+    "Q-PLN-003": {
+      "front": "02-planets/saturn.png",
+      "back": "02-planets/saturn.png"
+    },
+    "Q-PLN-004": {
+      "front": "02-planets/mars.png",
+      "back": "02-planets/mars.png"
+    },
+    "Q-PLN-005": {
+      "front": "02-planets/jupiter.png",
+      "back": "02-planets/jupiter.png"
+    },
+    "Q-PLN-006": {
+      "front": "02-planets/uranus.png",
+      "back": "02-planets/uranus.png"
+    },
+    "Q-PLN-007": {
+      "front": "02-planets/neptune.png",
+      "back": "02-planets/neptune.png"
+    },
+    "Q-PLN-008": {
+      "front": "02-planets/earth.png",
+      "back": "02-planets/earth.png"
+    },
+    "Q-PLN-009": {
+      "front": "02-planets/mercury.png",
+      "back": "02-planets/mercury.png"
+    },
+    "Q-PLN-010": {
+      "front": "02-planets/neptune.png",
+      "back": "02-planets/neptune.png"
+    },
+    "Q-SPC-001": {
+      "front": "05-asteroids-comets/Q-AST-001_F.png",
+      "back": "05-asteroids-comets/Q-AST-008_F.png"
+    },
+    "Q-SPC-002": {
+      "front": "12-space-missions/Q-MIS-009_F.png",
+      "back": "12-space-missions/Q-MIS-008_F.png"
+    },
+    "Q-SPC-003": {
+      "front": "12-space-missions/Q-MIS-010_F.png",
+      "back": "12-space-missions/Q-MIS-010_B.png"
+    },
+    "Q-SPC-004": {
+      "front": "12-space-missions/Q-MIS-003_B.png",
+      "back": "12-space-missions/Q-MIS-003_B.png"
+    },
+    "Q-SPC-005": {
+      "front": "12-space-missions/Q-MIS-006_F.png",
+      "back": "12-space-missions/Q-MIS-009_B.png"
+    },
+    "Q-SPC-006": {
+      "front": "05-asteroids-comets/Q-AST-001_F.png",
+      "back": "12-space-missions/Q-MIS-009_F.png"
+    },
+    "Q-SPC-007": {
+      "front": "12-space-missions/Q-MIS-010_F.png",
+      "back": "12-space-missions/Q-MIS-010_B.png"
+    },
+    "Q-SPC-008": {
+      "front": "05-asteroids-comets/Q-AST-008_F.png",
+      "back": "05-asteroids-comets/Q-AST-001_F.png"
+    },
+    "Q-SPC-009": {
+      "front": "12-space-missions/Q-MIS-008_F.png",
+      "back": "12-space-missions/Q-MIS-008_B.png"
+    },
+    "Q-SPC-010": {
+      "front": "12-space-missions/Q-MIS-002_B.png",
+      "back": "12-space-missions/Q-MIS-010_F.png"
+    }
+  },
+  "cards": {
+    "FC-AST-001": {
+      "front": "05-asteroids-comets/Q-AST-001_F.png",
+      "back": "05-asteroids-comets/Q-AST-001_B.png"
+    },
+    "FC-AST-002": {
+      "front": "05-asteroids-comets/Q-AST-002_F.png",
+      "back": "05-asteroids-comets/Q-AST-002_B.png"
+    },
+    "FC-AST-003": {
+      "front": "05-asteroids-comets/Q-AST-003_F.png",
+      "back": "05-asteroids-comets/Q-AST-003_B.png"
+    },
+    "FC-AST-004": {
+      "front": "05-asteroids-comets/Q-AST-004_F.png",
+      "back": "05-asteroids-comets/Q-AST-004_B.png"
+    },
+    "FC-AST-005": {
+      "front": "05-asteroids-comets/Q-AST-005_F.png",
+      "back": "05-asteroids-comets/Q-AST-005_B.png"
+    },
+    "FC-AST-006": {
+      "front": "05-asteroids-comets/Q-AST-006_F.png",
+      "back": "05-asteroids-comets/Q-AST-006_B.png"
+    },
+    "FC-AST-007": {
+      "front": "05-asteroids-comets/Q-AST-007_F.png",
+      "back": "05-asteroids-comets/Q-AST-007_B.png"
+    },
+    "FC-AST-008": {
+      "front": "05-asteroids-comets/Q-AST-008_F.png",
+      "back": "05-asteroids-comets/Q-AST-008_B.png"
+    },
+    "FC-AST-009": {
+      "front": "05-asteroids-comets/Q-AST-009_F.png",
+      "back": "05-asteroids-comets/Q-AST-002_B.png"
+    },
+    "FC-AST-010": {
+      "front": "05-asteroids-comets/Q-AST-002_F.png",
+      "back": "05-asteroids-comets/Q-AST-007_B.png"
+    },
+    "FC-STAR-001": {
+      "front": "04-stars/sun-class-front.png",
+      "back": "04-stars/sun-overview-back.png"
+    },
+    "FC-STAR-002": {
+      "front": "04-stars/stellar-core-front.png",
+      "back": "04-stars/stellar-core-fusion-back.png"
+    },
+    "FC-STAR-003": {
+      "front": "04-stars/star-colors-front.png",
+      "back": "04-stars/star-temperature-back.png"
+    },
+    "FC-STAR-004": {
+      "front": "04-stars/star-formation-back.png",
+      "back": "04-stars/nebula-back.png"
+    },
+    "FC-STAR-005": {
+      "front": "04-stars/stellar-interior-front.png",
+      "back": "04-stars/stellar-core-fusion-back.png"
+    },
+    "FC-STAR-006": {
+      "front": "04-stars/red-giant-front.png",
+      "back": "04-stars/red-giant-back.png"
+    },
+    "FC-STAR-007": {
+      "front": "04-stars/white-dwarf-front.png",
+      "back": "04-stars/stellar-remnants-back.png"
+    },
+    "FC-STAR-008": {
+      "front": "06-supernovae/stellar-explosion-front.png",
+      "back": "06-supernovae/stellar-explosion-back.png"
+    },
+    "FC-STAR-009": {
+      "front": "04-stars/stellar-evolution-diagram-front.png",
+      "back": "04-stars/stellar-lifecycle-back.png"
+    },
+    "FC-STAR-010": {
+      "front": "04-stars/sun-class-front.png",
+      "back": "04-stars/sun-overview-back.png"
+    },
+    "FC-SUN-001": {
+      "front": "01-solar-system/sun.png",
+      "back": "01-solar-system/sun.png"
+    },
+    "FC-SUN-002": {
+      "front": "04-stars/stellar-core-front.png",
+      "back": "04-stars/stellar-core-fusion-back.png"
+    },
+    "FC-SUN-003": {
+      "front": "04-stars/stellar-core-front.png",
+      "back": "04-stars/stellar-core-fusion-back.png"
+    },
+    "FC-SUN-004": {
+      "front": "01-solar-system/sun.png",
+      "back": "01-solar-system/sun.png"
+    },
+    "FC-SUN-005": {
+      "front": "01-solar-system/sun.png",
+      "back": "01-solar-system/sun.png"
+    },
+    "FC-SUN-006": {
+      "front": "04-stars/stellar-interior-front.png",
+      "back": "04-stars/sun-overview-back.png"
+    },
+    "FC-SUN-007": {
+      "front": "01-solar-system/sun.png",
+      "back": "01-solar-system/sun.png"
+    },
+    "FC-SUN-008": {
+      "front": "04-stars/sun-overview-back.png",
+      "back": "04-stars/sun-overview-back.png"
+    },
+    "FC-SUN-009": {
+      "front": "01-solar-system/sun.png",
+      "back": "01-solar-system/sun.png"
+    },
+    "FC-SUN-010": {
+      "front": "04-stars/red-giant-front.png",
+      "back": "04-stars/white-dwarf-front.png"
+    },
+    "FC-PLANET-001": {
+      "front": "12-space-missions/Q-MIS-002_B.png",
+      "back": "12-space-missions/Q-MIS-002_B.png"
+    },
+    "FC-PLANET-002": {
+      "front": "02-planets/mercury.png",
+      "back": "02-planets/mercury.png"
+    },
+    "FC-PLANET-003": {
+      "front": "02-planets/jupiter.png",
+      "back": "02-planets/jupiter.png"
+    },
+    "FC-PLANET-004": {
+      "front": "02-planets/saturn.png",
+      "back": "02-planets/saturn.png"
+    },
+    "FC-PLANET-005": {
+      "front": "03-moon/moon-orbit-front.png",
+      "back": "03-moon/moon-orbit-back.png"
+    },
+    "FC-PLANET-006": {
+      "front": "02-planets/venus.png",
+      "back": "02-planets/venus.png"
+    },
+    "FC-PLANET-007": {
+      "front": "02-planets/mars.png",
+      "back": "02-planets/mars.png"
+    },
+    "FC-PLANET-008": {
+      "front": "02-planets/uranus.png",
+      "back": "02-planets/uranus.png"
+    },
+    "FC-PLANET-009": {
+      "front": "02-planets/neptune.png",
+      "back": "02-planets/neptune.png"
+    },
+    "FC-PLANET-010": {
+      "front": "12-space-missions/Q-MIS-007_B.png",
+      "back": "12-space-missions/Q-MIS-007_B.png"
+    },
+    "FC-MOON-001": {
+      "front": "03-moon/moon-orbit-front.png",
+      "back": "03-moon/moon-orbit-back.png"
+    },
+    "FC-MOON-002": {
+      "front": "03-moon/moon-observation-front.png",
+      "back": "03-moon/moon-surface-front.png"
+    },
+    "FC-MOON-003": {
+      "front": "03-moon/lunar-phases-front.png",
+      "back": "03-moon/lunar-phases-back.png"
+    },
+    "FC-MOON-004": {
+      "front": "03-moon/moon-surface-front.png",
+      "back": "03-moon/lunar-craters-front.png"
+    },
+    "FC-MOON-005": {
+      "front": "03-moon/lunar-craters-front.png",
+      "back": "03-moon/crater-formation-back.png"
+    },
+    "FC-MOON-006": {
+      "front": "03-moon/tides-front.png",
+      "back": "03-moon/tides-back.png"
+    },
+    "FC-MOON-007": {
+      "front": "03-moon/moon-observation-front.png",
+      "back": "03-moon/synchronous-rotation-back.png"
+    },
+    "FC-MOON-008": {
+      "front": "03-moon/lunar-eclipse-front.png",
+      "back": "03-moon/lunar-eclipse-back.png"
+    },
+    "FC-MOON-009": {
+      "front": "03-moon/moon-phases-orbit-front.png",
+      "back": "03-moon/lunar-phases-back.png"
+    },
+    "FC-MOON-010": {
+      "front": "03-moon/moon-orbit-front.png",
+      "back": "03-moon/crater-formation-back.png"
+    },
+    "FC-SN-001": {
+      "front": "06-supernovae/stellar-explosion-front.png",
+      "back": "06-supernovae/stellar-explosion-back.png"
+    },
+    "FC-SN-002": {
+      "front": "06-supernovae/stellar-evolution-front.png",
+      "back": "06-supernovae/stellar-evolution-back.png"
+    },
+    "FC-SN-003": {
+      "front": "06-supernovae/core-collapse-front.png",
+      "back": "06-supernovae/stellar-remnants-back.png"
+    },
+    "FC-SN-004": {
+      "front": "06-supernovae/distance-measurement-front.png",
+      "back": "06-supernovae/distance-measurement-back.png"
+    },
+    "FC-SN-005": {
+      "front": "06-supernovae/heavy-elements-front.png",
+      "back": "06-supernovae/heavy-elements-back.png"
+    },
+    "FC-SN-006": {
+      "front": "06-supernovae/stellar-remnant-front.png",
+      "back": "06-supernovae/stellar-remnants-back.png"
+    },
+    "FC-SN-007": {
+      "front": "06-supernovae/supernova-remnant-front.png",
+      "back": "06-supernovae/supernova-remnant-back.png"
+    },
+    "FC-SN-008": {
+      "front": "06-supernovae/element-dispersal-front.png",
+      "back": "06-supernovae/galactic-enrichment-back.png"
+    },
+    "FC-SN-009": {
+      "front": "06-supernovae/element-dispersal-front.png",
+      "back": "06-supernovae/shock-wave-back.png"
+    },
+    "FC-SN-010": {
+      "front": "06-supernovae/stellar-evolution-front.png",
+      "back": "06-supernovae/supernova-research-back.png"
+    },
+    "FC-BH-001": {
+      "front": "07-black-holes/black-hole-front.png",
+      "back": "07-black-holes/event-horizon-back.png"
+    },
+    "FC-BH-002": {
+      "front": "07-black-holes/event-horizon-front.png",
+      "back": "07-black-holes/event-horizon-back.png"
+    },
+    "FC-BH-003": {
+      "front": "07-black-holes/black-hole-observations-front.png",
+      "back": "07-black-holes/black-hole-research-back.png"
+    },
+    "FC-BH-004": {
+      "front": "07-black-holes/accretion-disk-front.png",
+      "back": "07-black-holes/accretion-disk-overview-front.png"
+    },
+    "FC-BH-005": {
+      "front": "07-black-holes/black-hole-space-view-front.png",
+      "back": "07-black-holes/black-hole-formation-back.png"
+    },
+    "FC-BH-006": {
+      "front": "07-black-holes/stellar-gravity-comparison-back.png",
+      "back": "07-black-holes/orbital-gravity-back.png"
+    },
+    "FC-BH-007": {
+      "front": "07-black-holes/galactic-center-front.png",
+      "back": "07-black-holes/galactic-center-back.png"
+    },
+    "FC-BH-008": {
+      "front": "07-black-holes/binary-black-holes-back.png",
+      "back": "07-black-holes/gravitational-waves-back.png"
+    },
+    "FC-BH-009": {
+      "front": "07-black-holes/spacetime-curvature-front.png",
+      "back": "07-black-holes/black-hole-quantum-model-back.png"
+    },
+    "FC-BH-010": {
+      "front": "07-black-holes/spacetime-curvature-front.png",
+      "back": "07-black-holes/gravity-model-back.png"
+    },
+    "FC-GAL-001": {
+      "front": "08-galaxies/galaxy-travel-front.png",
+      "back": "08-galaxies/galaxy-cluster-display-back.png"
+    },
+    "FC-GAL-002": {
+      "front": "08-galaxies/milky-way-front.png",
+      "back": "08-galaxies/milky-way-location-back.png"
+    },
+    "FC-GAL-003": {
+      "front": "08-galaxies/galaxy-shapes-front.png",
+      "back": "08-galaxies/galaxy-shapes-back.png"
+    },
+    "FC-GAL-004": {
+      "front": "08-galaxies/galactic-center-front.png",
+      "back": "08-galaxies/galactic-center-front.png"
+    },
+    "FC-GAL-005": {
+      "front": "08-galaxies/galaxy-spectrum-back.png",
+      "back": "08-galaxies/galaxy-spectrum-comparison-back.png"
+    },
+    "FC-GAL-006": {
+      "front": "08-galaxies/galaxy-cluster-back.png",
+      "back": "08-galaxies/galaxy-cluster-map-back.png"
+    },
+    "FC-GAL-007": {
+      "front": "08-galaxies/spiral-galaxy-front.png",
+      "back": "08-galaxies/spiral-structure-back.png"
+    },
+    "FC-GAL-008": {
+      "front": "08-galaxies/galaxy-collision-back.png",
+      "back": "08-galaxies/galaxy-collision-back.png"
+    },
+    "FC-GAL-009": {
+      "front": "08-galaxies/galactic-orbits-front.png",
+      "back": "08-galaxies/galaxy-rotation-curve-back.png"
+    },
+    "FC-GAL-010": {
+      "front": "08-galaxies/galaxy-display-front.png",
+      "back": "08-galaxies/galaxy-collision-back.png"
+    },
+    "FC-EXO-001": {
+      "front": "09-exoplanets/extrasolar-orbits-front.png",
+      "back": "09-exoplanets/extrasolar-orbits-back.png"
+    },
+    "FC-EXO-002": {
+      "front": "09-exoplanets/direct-imaging-front.png",
+      "back": "09-exoplanets/direct-imaging-back.png"
+    },
+    "FC-EXO-003": {
+      "front": "09-exoplanets/transit-front.png",
+      "back": "09-exoplanets/transit-back.png"
+    },
+    "FC-EXO-004": {
+      "front": "09-exoplanets/radial-velocity-front.png",
+      "back": "09-exoplanets/radial-velocity-back.png"
+    },
+    "FC-EXO-005": {
+      "front": "09-exoplanets/habitable-zone-front.png",
+      "back": "09-exoplanets/habitable-zone-back.png"
+    },
+    "FC-EXO-006": {
+      "front": "09-exoplanets/habitability-comparison-front.png",
+      "back": "09-exoplanets/habitability-comparison-back.png"
+    },
+    "FC-EXO-007": {
+      "front": "11-telescopes/Q-TEL-008_F.png",
+      "back": "11-telescopes/Q-TEL-008_B.png"
+    },
+    "FC-EXO-008": {
+      "front": "09-exoplanets/planetary-system-diversity-front.png",
+      "back": "09-exoplanets/planetary-system-diversity-back.png"
+    },
+    "FC-EXO-009": {
+      "front": "09-exoplanets/planetary-system-diversity-front.png",
+      "back": "09-exoplanets/planetary-system-diversity-back.png"
+    },
+    "FC-EXO-010": {
+      "front": "11-telescopes/Q-TEL-004_F.png",
+      "back": "11-telescopes/Q-TEL-004_B.png"
+    },
+    "FC-SPC-001": {
+      "front": "05-asteroids-comets/Q-AST-001_F.png",
+      "back": "05-asteroids-comets/Q-AST-008_F.png"
+    },
+    "FC-SPC-002": {
+      "front": "12-space-missions/Q-MIS-002_B.png",
+      "back": "12-space-missions/Q-MIS-010_F.png"
+    },
+    "FC-SPC-003": {
+      "front": "12-space-missions/Q-MIS-009_F.png",
+      "back": "12-space-missions/Q-MIS-008_F.png"
+    },
+    "FC-SPC-004": {
+      "front": "12-space-missions/Q-MIS-003_B.png",
+      "back": "12-space-missions/Q-MIS-003_B.png"
+    },
+    "FC-SPC-005": {
+      "front": "12-space-missions/Q-MIS-006_F.png",
+      "back": "12-space-missions/Q-MIS-009_B.png"
+    },
+    "FC-SPC-006": {
+      "front": "05-asteroids-comets/Q-AST-001_F.png",
+      "back": "12-space-missions/Q-MIS-009_F.png"
+    },
+    "FC-SPC-007": {
+      "front": "05-asteroids-comets/Q-AST-008_F.png",
+      "back": "05-asteroids-comets/Q-AST-001_F.png"
+    },
+    "FC-SPC-008": {
+      "front": "12-space-missions/Q-MIS-010_F.png",
+      "back": "12-space-missions/Q-MIS-010_B.png"
+    },
+    "FC-SPC-009": {
+      "front": "12-space-missions/Q-MIS-010_F.png",
+      "back": "12-space-missions/Q-MIS-010_B.png"
+    },
+    "FC-SPC-010": {
+      "front": "12-space-missions/Q-MIS-008_F.png",
+      "back": "12-space-missions/Q-MIS-008_B.png"
+    }
+  },
+  "reserved": {
+    "Q-MIS-006": {
+      "front": "12-space-missions/Q-MIS-006_F.png",
+      "back": "12-space-missions/Q-MIS-006_B.png"
+    },
+    "Q-MIS-007": {
+      "front": "12-space-missions/Q-MIS-007_F.png",
+      "back": "12-space-missions/Q-MIS-007_B.png"
+    },
+    "Q-MIS-008": {
+      "front": "12-space-missions/Q-MIS-008_F.png",
+      "back": "12-space-missions/Q-MIS-008_B.png"
+    },
+    "Q-MIS-009": {
+      "front": "12-space-missions/Q-MIS-009_F.png",
+      "back": "12-space-missions/Q-MIS-009_B.png"
+    },
+    "Q-MIS-010": {
+      "front": "12-space-missions/Q-MIS-010_F.png",
+      "back": "12-space-missions/Q-MIS-010_B.png"
+    },
+    "Q-TEL-001": {
+      "front": "11-telescopes/Q-TEL-001_F.png",
+      "back": "11-telescopes/Q-TEL-001_B.png"
+    },
+    "Q-TEL-002": {
+      "front": "11-telescopes/Q-TEL-002_F.png",
+      "back": "11-telescopes/Q-TEL-002_B.png"
+    },
+    "Q-TEL-003": {
+      "front": "11-telescopes/Q-TEL-003_F.png",
+      "back": "11-telescopes/Q-TEL-003_B.png"
+    },
+    "Q-TEL-004": {
+      "front": "11-telescopes/Q-TEL-004_F.png",
+      "back": "11-telescopes/Q-TEL-004_B.png"
+    },
+    "Q-TEL-005": {
+      "front": "11-telescopes/Q-TEL-005_F.png",
+      "back": "11-telescopes/Q-TEL-005_B.png"
+    },
+    "Q-TEL-006": {
+      "front": "11-telescopes/Q-TEL-006_F.png",
+      "back": "11-telescopes/Q-TEL-006_B.png"
+    },
+    "Q-TEL-007": {
+      "front": "11-telescopes/Q-TEL-007_F.png",
+      "back": "11-telescopes/Q-TEL-007_B.png"
+    },
+    "Q-TEL-008": {
+      "front": "11-telescopes/Q-TEL-008_F.png",
+      "back": "11-telescopes/Q-TEL-008_B.png"
+    },
+    "Q-TEL-009": {
+      "front": "11-telescopes/Q-TEL-009_F.png",
+      "back": "11-telescopes/Q-TEL-009_B.png"
+    },
+    "Q-TEL-010": {
+      "front": "11-telescopes/Q-TEL-010_F.png",
+      "back": "11-telescopes/Q-TEL-010_B.png"
+    },
+    "Q-COS-001": {
+      "front": "13-cosmology/Q-COS-001_F.png",
+      "back": "13-cosmology/Q-COS-001_B.png"
+    },
+    "Q-COS-002": {
+      "front": "13-cosmology/Q-COS-002_F.png",
+      "back": "13-cosmology/Q-COS-002_B.png"
+    },
+    "Q-COS-003": {
+      "front": "13-cosmology/Q-COS-003_F.png",
+      "back": "13-cosmology/Q-COS-003_B.png"
+    },
+    "Q-COS-004": {
+      "front": "13-cosmology/Q-COS-004_F.png",
+      "back": "13-cosmology/Q-COS-004_B.png"
+    },
+    "Q-COS-005": {
+      "front": "13-cosmology/Q-COS-005_F.png",
+      "back": "13-cosmology/Q-COS-005_B.png"
+    },
+    "Q-MIS-001": {
+      "back": "12-space-missions/Q-MIS-001_B.png"
+    },
+    "Q-MIS-002": {
+      "back": "12-space-missions/Q-MIS-002_B.png"
+    },
+    "Q-MIS-003": {
+      "back": "12-space-missions/Q-MIS-003_B.png"
+    },
+    "Q-MIS-004": {
+      "back": "12-space-missions/Q-MIS-004_B.png"
+    },
+    "Q-MIS-005": {
+      "back": "12-space-missions/Q-MIS-005_B.png"
+    }
+  },
+  "context_only": [
+    "Q-SYS-006",
+    "Q-SYS-009",
+    "Q-PLN-009",
+    "Q-EXO-006",
+    "Q-SPC-006",
+    "Q-SPC-008",
+    "FC-SUN-003",
+    "FC-SUN-004",
+    "FC-SUN-005",
+    "FC-SUN-006",
+    "FC-SUN-007",
+    "FC-SUN-008",
+    "FC-SUN-009",
+    "FC-MOON-002",
+    "FC-MOON-010",
+    "FC-SPC-006",
+    "FC-SPC-007",
+    "FC-EXO-008"
+  ]
+}

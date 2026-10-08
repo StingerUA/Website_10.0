@@ -1,0 +1,2261 @@
+{
+  "version": "20261008-1",
+  "original_file_count": 453,
+  "unique_original_images": 224,
+  "original_bytes_preserved": true,
+  "assets": [
+    {
+      "path": "01-solar-system/sun.png",
+      "sha256": "6fe58649fc9809b7e891bcbcf73e569ff2caa35336b20267b95255e6323e909d",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_55 (1).png"
+      ]
+    },
+    {
+      "path": "02-planets/earth.png",
+      "sha256": "4130f627416af1b61d0d1a31727ddcb616083a8651d77f90277d180e3b6cfb8d",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_56 (4).png"
+      ]
+    },
+    {
+      "path": "02-planets/jupiter.png",
+      "sha256": "bd44161d5a3379181dd10193dbac36568039807abf716ce40f2cf5db202e0238",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_57 (6).png"
+      ]
+    },
+    {
+      "path": "02-planets/mars.png",
+      "sha256": "72f50ac01d3ddb728927c82dbd728c94002ce3dab74d30885f3bf066bc50372f",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_56 (5).png"
+      ]
+    },
+    {
+      "path": "02-planets/mercury.png",
+      "sha256": "143167ab9df24c682888c64de17c77769e396980b028d8ee2c3601d20542bdec",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_55 (2).png"
+      ]
+    },
+    {
+      "path": "02-planets/neptune.png",
+      "sha256": "896566e2d62e4a13dbe9af23e10778f28093244f19819f750b675f08e80f4ab4",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_58 (9).png"
+      ]
+    },
+    {
+      "path": "02-planets/saturn.png",
+      "sha256": "52c1ea68f39ad6fc770be245ff771be9145681adf0dd6f95e69981a30f5fffa5",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_57 (7).png"
+      ]
+    },
+    {
+      "path": "02-planets/uranus.png",
+      "sha256": "4b42228f006e2a065884254bf116e65e98d52b54e30af040071096db1ffb51f8",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_58 (8).png"
+      ]
+    },
+    {
+      "path": "02-planets/venus.png",
+      "sha256": "5aae42a4e0bdc76369e58651318fc59de41dc5ea0da793081b73b86b82817b9b",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_55 (3).png"
+      ]
+    },
+    {
+      "path": "03-moon/apollo-landing-back.png",
+      "sha256": "d0f183c7daa6c5a01688849e16bce1fbf43dbe50ed303b5a47429da5267d2829",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/ChatGPT Image 10 сент. 2026 г., 07_41_21 (10).png"
+      ]
+    },
+    {
+      "path": "03-moon/apollo-landing-front.png",
+      "sha256": "295094ecbc357a7edc20bf2aa5e1a86ee1b49fd5dac3ede2a35f953aff63c997",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/ChatGPT Image 10 сент. 2026 г., 07_41_19 (9).png"
+      ]
+    },
+    {
+      "path": "03-moon/crater-formation-back.png",
+      "sha256": "8d193baa5a5e814c82ec964dc0d054d3c953397816287d562328ae5eb4d43673",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/ChatGPT Image 10 сент. 2026 г., 07_41_01 (1).png"
+      ]
+    },
+    {
+      "path": "03-moon/crater-impact-back.png",
+      "sha256": "4aa22215f651f5d1219297ba91cb3363b1b38f09ffc83fae21e2009bbac099f0",
+      "width": 1122,
+      "height": 1402,
+      "sources": [
+        "03-moon/5 B.png"
+      ]
+    },
+    {
+      "path": "03-moon/crater-impact-diagram-back.png",
+      "sha256": "46cea97c1c985839d225c2771004c152718567cbf5786d78006b5b0c7e141e07",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/ChatGPT Image 10 сент. 2026 г., 07_41_08 (4).png"
+      ]
+    },
+    {
+      "path": "03-moon/lunar-craters-front.png",
+      "sha256": "9836ffa130ffd661119d410cd89486f76c4ec545efb3e127be0758594fc10312",
+      "width": 1122,
+      "height": 1402,
+      "sources": [
+        "03-moon/5 F.png"
+      ]
+    },
+    {
+      "path": "03-moon/lunar-eclipse-back.png",
+      "sha256": "ee1d6a6fcfc822ef28000a3668991db3ee9e5c66e5742c91ccb5806d082b0586",
+      "width": 1122,
+      "height": 1402,
+      "sources": [
+        "03-moon/8 B.png"
+      ]
+    },
+    {
+      "path": "03-moon/lunar-eclipse-front.png",
+      "sha256": "33df1da48710f03c2e9a40eb761be0e0199e5892e0ffe660c0094330955764cc",
+      "width": 1122,
+      "height": 1402,
+      "sources": [
+        "03-moon/8 F.png"
+      ]
+    },
+    {
+      "path": "03-moon/lunar-gravity-comparison.png",
+      "sha256": "8239b950d7d9c2d4d5d6928e3053ad414520ee23b8f81d1e0206e20f6f35363c",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/ChatGPT Image 10 сент. 2026 г., 07_41_13 (6).png"
+      ]
+    },
+    {
+      "path": "03-moon/lunar-gravity-jump.png",
+      "sha256": "16626babb843511bfa76db47ca583b15e5d7106a1dd733cd849284b1b79338c8",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/ChatGPT Image 10 сент. 2026 г., 07_41_06 (3).png"
+      ]
+    },
+    {
+      "path": "03-moon/lunar-phases-back.png",
+      "sha256": "a25895fcb0466a75e9f43e6b7484f4727ac383dab54ceacf675ce285c39c69a9",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/9 B.png"
+      ]
+    },
+    {
+      "path": "03-moon/lunar-phases-front.png",
+      "sha256": "c51c5834cf3e4ad60dcd24988691999d8bf7a9b1afa6da8d992d2865425a9c65",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/9 F.png"
+      ]
+    },
+    {
+      "path": "03-moon/moon-observation-front.png",
+      "sha256": "dc34671dcf81761511c67e9d4369d525b1b7a5b3803cd5a4fef07ab02d7e587d",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "03-moon/7 F dsfdf .png"
+      ]
+    },
+    {
+      "path": "03-moon/moon-orbit-back.png",
+      "sha256": "365efc38ddf4e9de20d7f148a575e8a1776f25922e696b226bc0948c3a7bb97c",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "03-moon/ChatGPT Image 10 сент. 2026 г., 05_55_24.png"
+      ]
+    },
+    {
+      "path": "03-moon/moon-orbit-front.png",
+      "sha256": "032d5cfc50afad0cf1af8334fc125cba78f580878d03a90470f4bf728ba94060",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "03-moon/ChatGPT Image 10 сент. 2026 г., 04_43_11.png"
+      ]
+    },
+    {
+      "path": "03-moon/moon-phases-orbit-front.png",
+      "sha256": "f4a4c4d68735546c0db8adbfac52bbc44512318561b8c8b5fdb1dc50429dec0b",
+      "width": 1122,
+      "height": 1402,
+      "sources": [
+        "03-moon/3 F.png"
+      ]
+    },
+    {
+      "path": "03-moon/moon-surface-front.png",
+      "sha256": "a2f5e40bfd52d7ec034444577ab8c57bb34c352ce85b76adf91cf6ff23d7757f",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "03-moon/ChatGPT Image 10 сент. 2026 г., 06_30_08 (2).png"
+      ]
+    },
+    {
+      "path": "03-moon/synchronous-rotation-back.png",
+      "sha256": "996ff5a2b49c0187a5b8da6ff1013088678d694cee8983d864c4c07a997d0dd8",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "03-moon/7 Bdfg.png"
+      ]
+    },
+    {
+      "path": "03-moon/tides-back.png",
+      "sha256": "a74eb501132761ce5a9c89521d239a5f0205777574c8eb13bcf77bd97663b5f8",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/6 B.png"
+      ]
+    },
+    {
+      "path": "03-moon/tides-front.png",
+      "sha256": "b0a5551a2a9275bf7a7db23332332bc36e92a8f76405ca01cb5013e470a94976",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "03-moon/6 F.png"
+      ]
+    },
+    {
+      "path": "04-stars/nebula-back.png",
+      "sha256": "97e011b08318e508685f51017ec7acc02795bd223aaac625d3187eb02b22a4cc",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_58_50 (5).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_58_50 (5).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_58_50 (5).png"
+      ]
+    },
+    {
+      "path": "04-stars/neutron-star-back.png",
+      "sha256": "bd46c3c8e59d84d4bd18582f75a298527242e392eaa8144ddbd869ab5d152ba5",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_58_51 (7).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_58_51 (7).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_58_51 (7).png"
+      ]
+    },
+    {
+      "path": "04-stars/nuclear-fusion-back.png",
+      "sha256": "40e17f6ee0a46688c862efdc2eed18aa12c98dfcf9adfdfca03a6ce4de727aee",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/2 B.png",
+        "04-stars/2 B.png",
+        "3/2 B.png"
+      ]
+    },
+    {
+      "path": "04-stars/red-giant-back.png",
+      "sha256": "7c2d50cebc31e908f06c80affdf65920d35c65554b74b6b528accae8998db40c",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_58_49 (2).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_58_49 (2).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_58_49 (2).png"
+      ]
+    },
+    {
+      "path": "04-stars/red-giant-front.png",
+      "sha256": "e6d29a310d85cddb17739d4b9ed67da29fc00978a11b4b8391ef4a7ec71d59f2",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/2 F.png",
+        "04-stars/2 F.png",
+        "3/2 F.png"
+      ]
+    },
+    {
+      "path": "04-stars/star-colors-front.png",
+      "sha256": "25aec014ba7c7449ad7d041ba97b8aa48ff899bf8e8c7561f1ec635ecd3b6fa7",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_38_31 (2).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_38_31 (2).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_38_31 (2).png"
+      ]
+    },
+    {
+      "path": "04-stars/star-formation-back.png",
+      "sha256": "a14ca16229d8524e8d20a4971e0e64bf5207301475f057111f03139e9bb6f431",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_58_51 (8).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_58_51 (8).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_58_51 (8).png"
+      ]
+    },
+    {
+      "path": "04-stars/star-temperature-back.png",
+      "sha256": "394569a7e01e24ae2460cc2f05fc212459baf76abfd67cf66a59d7db10e3e5a0",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/10 B.png",
+        "04-stars/10 B.png",
+        "3/10 B.png"
+      ]
+    },
+    {
+      "path": "04-stars/star-temperature-front.png",
+      "sha256": "f9e5f9836f5c53463950e3dfb86c2b7af8887ece61772c1c220ed62043b647df",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/10 F.png",
+        "04-stars/10 F.png",
+        "3/10 F.png"
+      ]
+    },
+    {
+      "path": "04-stars/stellar-core-front.png",
+      "sha256": "068372c508752291841b0c950f7aa636feb32db17d336eda509c5936448bcdfc",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/3 F.png",
+        "04-stars/3 F.png",
+        "3/3 F.png"
+      ]
+    },
+    {
+      "path": "04-stars/stellar-core-fusion-back.png",
+      "sha256": "9ccc3a20b91d524a411d01b2fc215c24caf99929a912a6ef71a3cae12b76e9e7",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/3B.png",
+        "04-stars/3B.png",
+        "3/3B.png"
+      ]
+    },
+    {
+      "path": "04-stars/stellar-evolution-diagram-front.png",
+      "sha256": "fe95c8d7fc458ec5cb5dad49d6b194d148ce3ab4f4da2e0760ec401c2e9b96ca",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_38_34 (10).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_38_34 (10).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_38_34 (10).png"
+      ]
+    },
+    {
+      "path": "04-stars/stellar-evolution-front.png",
+      "sha256": "8004c0492d5682f1b83d19bc863e27d6b0100243327199d847ea0ec4936b939a",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_38_30 (1).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_38_30 (1).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_38_30 (1).png"
+      ]
+    },
+    {
+      "path": "04-stars/stellar-interior-front.png",
+      "sha256": "fd9b195b604607be26e0b490a52cedd9fc954eb67d1066e75a5a955d78756eef",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_38_32 (5).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_38_32 (5).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_38_32 (5).png"
+      ]
+    },
+    {
+      "path": "04-stars/stellar-lifecycle-back.png",
+      "sha256": "7b3c72323701846c725bf36a415fdd1e05cbc3d570667f7852ab95fa5c898ad3",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_58_50 (4).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_58_50 (4).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_58_50 (4).png"
+      ]
+    },
+    {
+      "path": "04-stars/stellar-remnants-back.png",
+      "sha256": "80cf4281c9dac206852a9438b42cfdad9eecda69a05c81b43a117a3ea38001b0",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_58_49 (1).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_58_49 (1).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_58_49 (1).png"
+      ]
+    },
+    {
+      "path": "04-stars/sun-class-front.png",
+      "sha256": "93c4a5729d9e68ecd45b2956b58a9c56e0f7797a7c7306cd49ea0bea1548f8e1",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_38_31 (3).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_38_31 (3).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_38_31 (3).png"
+      ]
+    },
+    {
+      "path": "04-stars/sun-overview-back.png",
+      "sha256": "d7346bc4ec5e4816634c274490b355570cc4f562962f278ab79c55457974c77c",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_58_50 (3).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_58_50 (3).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_58_50 (3).png"
+      ]
+    },
+    {
+      "path": "04-stars/supernova-remnant-back.png",
+      "sha256": "197a9234157bb5160948a395f54edeecfb8e95e5322810234082957411413bec",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_58_51 (6).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_58_51 (6).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_58_51 (6).png"
+      ]
+    },
+    {
+      "path": "04-stars/white-dwarf-front.png",
+      "sha256": "a8afb4739705327a7cd696efede01a2a88f816400b21f56ce2ec7532a200bea9",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "01-solar-system/ChatGPT Image 10 сент. 2026 г., 07_38_32 (4).png",
+        "04-stars/ChatGPT Image 10 сент. 2026 г., 07_38_32 (4).png",
+        "3/ChatGPT Image 10 сент. 2026 г., 07_38_32 (4).png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-001_B.png",
+      "sha256": "3d07241cb35559704275f19f0dc9cc80811a95367483542f26bd68d3fd6c74f1",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/1 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-001_F.png",
+      "sha256": "e512ec4b9ab691e71571222c1607023db71c50f925b93df0652ba90a183e8b04",
+      "width": 1024,
+      "height": 1024,
+      "sources": [
+        "05-asteroids-comets/01 F.png",
+        "05-asteroids-comets/1 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-002_B.png",
+      "sha256": "40c61eab9b3b750c49612fedd0b7ca7cc3e30387dac9b040048b7304749f0583",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/2 B.png",
+        "05-asteroids-comets/9 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-002_F.png",
+      "sha256": "23d3dd3a7162eff021fac711074f191c9019c710f68179bd79903e346867f57e",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/02 F.png",
+        "05-asteroids-comets/2 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-003_B.png",
+      "sha256": "18effc01776b86615589b3260cc43fce9632289209c4f4056eae4ca862c9ce8c",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/3 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-003_F.png",
+      "sha256": "4c1addada5405c2eae2b44aed05b4d3fd15188bc13cd9532d9cea73ea497116d",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/3 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-004_B.png",
+      "sha256": "f3b934ae4fc7b0ff742af18974dcd1e2a0970c3b98e8a01cee9c9757a3acb1d1",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/4 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-004_F.png",
+      "sha256": "6003e7eb7bf5bfd07f963532c9ef0c94aa4dc34c5594a720e1665d3ac677a43b",
+      "width": 256,
+      "height": 256,
+      "sources": [
+        "05-asteroids-comets/04 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-005_B.png",
+      "sha256": "717fbcd25deb1554a107ec67092c11ddb3e744274b6f3394505571530c7baa7c",
+      "width": 256,
+      "height": 256,
+      "sources": [
+        "05-asteroids-comets/05 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-005_F.png",
+      "sha256": "802ee06a2772308a114644aa2d019687cdd021a4c6ac4bfb11e872efe7f8be05",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/5 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-006_B.png",
+      "sha256": "9ced19db7233b8b5c410f61cdc0ea1795c981c2772651b11eac3c3df327e4ad5",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/6 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-006_F.png",
+      "sha256": "5b45fab415e8688bc425292b7f29e9283f1082ed499dd5961f52d10a74cf2486",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/6 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-007_B.png",
+      "sha256": "ad01cf36e8b4ccc770615f5be78626fb529594353f86a9f23b89981bac194c71",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/7 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-007_F.png",
+      "sha256": "547b504097b00b205bcecbe375983b81b4d9c8d6feeabc509caf1b2536e7362c",
+      "width": 256,
+      "height": 256,
+      "sources": [
+        "05-asteroids-comets/07 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-008_B.png",
+      "sha256": "7d8fe3f1d75bc2275b566ad77715593818375fc841737e915973b4ded0fa2be6",
+      "width": 256,
+      "height": 256,
+      "sources": [
+        "05-asteroids-comets/08 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-008_F.png",
+      "sha256": "2aa35bb077a4e8b1d705363b7e080facdee8824646060bf5bdd1070696998e7c",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/8 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/Q-AST-009_F.png",
+      "sha256": "b2db0990c763d53064fb43724e3234c442d88d15ef768fc99bae344a3199e40c",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "05-asteroids-comets/9 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-001_B-1086x1448.png",
+      "sha256": "0f3a19ab883207fff8c1d7d11a6066be45d73e3df9c2a9a45c081556c6b8e80a",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/01 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-002_B-1086x1448.png",
+      "sha256": "2cf64edc59fc9fe558a04e2fd77e7fd0fbcb99dd4792a81d6cf2da7cb5036139",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/02 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-003_B-1086x1448.png",
+      "sha256": "d0428ffab56bd78e1054d3b020dcfa1aff05929a8092aa0a0a0249ee7de4e3fc",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/03 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-003_F-1086x1448.png",
+      "sha256": "6c401beed9480b91853a32cd4a916b18fef66f932f1b168d421dd6a948ce1774",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/03 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-004_B-1086x1448.png",
+      "sha256": "f2b9c208fddcbe5cf8cb738a0d81a0b02962640b4a6d4ce76ebea0fc3b241a1e",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/04 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-005_F-1086x1448.png",
+      "sha256": "11fc3b1c358caaad7b659895064c9684d60d60b5b8787713d0bb87ce70cbc04a",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/05.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-005_F-256x256.png",
+      "sha256": "c0176542ba2d94cda686ed17432e97929474a5d0b1676c4ef2b8505767647756",
+      "width": 256,
+      "height": 256,
+      "sources": [
+        "05-asteroids-comets/05 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-006_B-1086x1448.png",
+      "sha256": "d224e0acd610022058e97c778d40556343962bac09a6f72f1e7495b0eb5f88a8",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/06 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-006_F-1086x1448.png",
+      "sha256": "d8eff3e7652a42c9d6980ad0873a32a3ec061b687085b6079419720f73850a3d",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/06 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-007_B-1086x1448.png",
+      "sha256": "0fab8e32f003d2d636cb57936bd38808a00c389e0bc494acf3ff5a3ff9fe9768",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/07 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-008_F-896x1195.png",
+      "sha256": "dae38da2c3e50b02d5c7cbe491acbf4f6d88d6dd0150dd7ae406d9015492a474",
+      "width": 896,
+      "height": 1195,
+      "sources": [
+        "05-asteroids-comets/08 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-009_B-1086x1448.png",
+      "sha256": "97152bdc7df35ec6a14c1e05bd67d11a2f5c0cb00937c3e740ac7c5843f5d63d",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "05-asteroids-comets/09 B.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/Q-AST-009_F-896x1195.png",
+      "sha256": "c737342c2a61eb4b955f9b194cb856690ca57e7ba55da4da9c963e4468ff58fa",
+      "width": 896,
+      "height": 1195,
+      "sources": [
+        "05-asteroids-comets/09 F.png"
+      ]
+    },
+    {
+      "path": "05-asteroids-comets/variants/asteroid-composition-rotated.png",
+      "sha256": "5e20c6361a0158ad90768b30eccdb8e610a5e00ff6e70c64dc1d03a776ec3b6a",
+      "width": 1448,
+      "height": 1086,
+      "sources": [
+        "05-asteroids-comets/010.png"
+      ]
+    },
+    {
+      "path": "06-supernovae/core-collapse-front.png",
+      "sha256": "a04640a860844b883b4dcd36b846a92a6cf351a32361ab029c72b991e1461dff",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_39 (3).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/distance-measurement-back.png",
+      "sha256": "ee07c548a8837e2722378dccbd45d773549146b980a478b2c4d1424519d226b4",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_48 (3).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/distance-measurement-front.png",
+      "sha256": "91c79decf0b2beaa30415b0a02654b0198d0754b59e5b592eeb57a57fc893c4d",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_42 (9).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/element-dispersal-front.png",
+      "sha256": "b66d954ff9177c80cd475b5d92a62d53bd790f8bad51d6e21c55d22a62fd9d40",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_41 (6).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/galactic-enrichment-back.png",
+      "sha256": "c3efb4a4bf1d11e2ae67528ff32de020388f2ad6b5d810135059ca5bbfdc5dd4",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_50 (7).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/heavy-elements-back.png",
+      "sha256": "4a577790927dfb8aee542e3f13a37a74b1305821fdf571874ee8dbcd8566ef0e",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_48 (2).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/heavy-elements-front.png",
+      "sha256": "b70588b767cb8d361d3c2d6caf218ab63cc6d0f9a3fdb8c7e0a8077ff060cd4a",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_40 (5).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/shock-wave-back.png",
+      "sha256": "72c3671cc9f582c24fee7567e4c0bb3c02aacafc5c919d97830fd1b1134f8287",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_49 (5).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/stellar-evolution-back.png",
+      "sha256": "617a6bafb5db92b6e8163dd2c597b3ccfc232a86437c3892d4d53246494bce69",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_50 (8).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/stellar-evolution-front.png",
+      "sha256": "84cacca9d11f1f05f0f13813426bfb5a6a59163cc98a7e65bbcde6cd1f76df83",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_42 (10).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/stellar-explosion-back.png",
+      "sha256": "1b947b8d7913ac4fa0fab36c6ea002e3b18013391816660951aa1c76d4e87952",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_48 (1).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/stellar-explosion-front.png",
+      "sha256": "955befec4777fdec37aba222dc5e3058eef247982b41323bb01f8e0066aa5b26",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_38 (1).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/stellar-remnant-front.png",
+      "sha256": "22eaf944ad5eb38e459caa1e5975a703167ef3900c275f6b3ddcd5b6f6a21ee2",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_40 (4).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/stellar-remnants-back.png",
+      "sha256": "05f5984de0a7d66ffcf52965be1b9a83a290778b74c353942ad960e6a0705279",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_50 (6).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/supernova-brightness-back.png",
+      "sha256": "c6926b84e8ad760300847562ce1eb7ad3120944bae9a03209abcc4793e143783",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_49 (4).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/supernova-brightness-front.png",
+      "sha256": "42d0f21bb9c235eccecee2457cf9741171ef81b3a7c6b2afddfa26d5f65c9e76",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_41 (8).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/supernova-remnant-back.png",
+      "sha256": "23155d44e2bca60f6686777170787378fe4d9fd873d4f89ba33dd3c0701a3bff",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_51 (9).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/supernova-remnant-front.png",
+      "sha256": "91d99e2f447026a100a8195b8931879a394fb74042302b0f0749479a4b1e85f8",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_41 (7).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/supernova-research-back.png",
+      "sha256": "f4c242c023c65f3944b23335917ccb2f7ef245700df1e13148f02a3b10f38291",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_26_51 (10).png"
+      ]
+    },
+    {
+      "path": "06-supernovae/supernova-space-view-front.png",
+      "sha256": "df883482bb6758925b75d48adddc3f6785b02bac315b8ee7a64e833d146e7953",
+      "width": 1024,
+      "height": 1536,
+      "sources": [
+        "4 Q-SNV-001 — Q-SNV-010/ChatGPT Image 10 сент. 2026 г., 08_14_39 (2).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/accretion-disk-front.png",
+      "sha256": "9504b79dab5761c4d2094b2459260a3d3bad65e107b1b2084b9afcf7cffe1d3e",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_18 (3).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/accretion-disk-overview-front.png",
+      "sha256": "e834e895a967d095e710a70ab5eb45b00ffdde3708027ac091ce4a68d1d2518b",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_19 (6).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/binary-black-holes-back.png",
+      "sha256": "d9d96e4ad89f157d0f2327f487515739684f295db6bdd2c10f7af9874c8e18f1",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_50_55 (1).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/black-hole-closeup-front.png",
+      "sha256": "960d7fe2ab76c6b144593432aa5556931c7698ae1c31b4f488c5251ee4252666",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_20 (7).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/black-hole-formation-back.png",
+      "sha256": "11445335777b64129e686e07c3b556b5ae5b14e6e2f769619ed84e2e1fbb296f",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_50_58 (6).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/black-hole-front.png",
+      "sha256": "862d4cc7c7fabfdfbe77d393e54cbc574848ef470715079681ab863618ddaae8",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_17 (1).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/black-hole-landscape.png",
+      "sha256": "c5837e48bc13552b92ed78d73fe399e7462b76917af7b94adf89fda9226a29ab",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "02-planets/ChatGPT Image 10 сент. 2026 г., 00_56_59 (10).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/black-hole-observations-front.png",
+      "sha256": "1d8fdc2298b0577ffbde9ed0586df4481314148b23aff204487de6ad1624376e",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_19 (5).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/black-hole-quantum-model-back.png",
+      "sha256": "63534f42d89bc53d27584bc39bcba1d0d1213c4f0ec525ca9868c1cf7d6b2328",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_50_59 (8).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/black-hole-research-back.png",
+      "sha256": "9d4dbe22637b9975c13820fa7f643ce4471a3be250dc942470a39adf28f2b9fb",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_51_00 (10).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/black-hole-space-view-front.png",
+      "sha256": "19e8232d0e955ab15ca992d9b67585fc88594798cf699fcd619d9e152265e57d",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_21 (10).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/event-horizon-back.png",
+      "sha256": "708d47ea2ae99cce115913b23069676f5098d790d3cbf8772c7854f1891538cf",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_50_59 (7).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/event-horizon-comparison-front.png",
+      "sha256": "79ad372f58ec34608878c1a68e3190c09d6d029572a6e0b4a0e1b0841b684b3e",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_20 (8).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/event-horizon-front.png",
+      "sha256": "6162d41148ebc4317dc71e9f96a75a71fe1562c089af77a7f63ff6870a643311",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_17 (2).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/galactic-center-back.png",
+      "sha256": "e6c0369e3dd6c19f7ba598042a84664195c1008630c808b6d17f5314bacf74c8",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_50_55 (2).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/galactic-center-front.png",
+      "sha256": "330b74198c94d0c11604f084d7693012e6b53c9443c1e206976cd2d1d85b2549",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_21 (9).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/gravitational-waves-back.png",
+      "sha256": "e99c6558691a314e9632e3d831dde4f3d58f56960760433fecaac9251ac3354d",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_50_57 (4).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/gravity-model-back.png",
+      "sha256": "7e7958e1c936abaf01935491db91362a281386e344f27d33a54278e362053b74",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_50_59 (9).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/orbital-gravity-back.png",
+      "sha256": "162f3341d773e900c00bf1ebe9e97e675b3422f80c8cc6e6a343ca653de6128b",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_50_58 (5).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/spacetime-curvature-front.png",
+      "sha256": "930afbc00e47db616d0020436afdf9b6e790d34c11dd4fa1dfed56c72da3bc5b",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_41_18 (4).png"
+      ]
+    },
+    {
+      "path": "07-black-holes/stellar-gravity-comparison-back.png",
+      "sha256": "54685082ade25c4423fc9e5cb314aad6ba7c53a73a93f786a3e8525c69eed0c4",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "5 Q-BH-001 — Q-BH-010/ChatGPT Image 10 сент. 2026 г., 08_50_56 (3).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galactic-center-front.png",
+      "sha256": "556447009228f06e7b5ae7f21b43f6f6ec8e26fb1688b4ce504350b6e381604f",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/ChatGPT Image 11 сент. 2026 г., 13_09_28 (9).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galactic-orbits-front.png",
+      "sha256": "d748d593384c98c4f1921b1778d806308c4d5b53fee5921fc9feea153c4b6311",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/ChatGPT Image 11 сент. 2026 г., 13_08_00 (4).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galactic-structure-front.png",
+      "sha256": "2505ed05e91074e02ec45cc604127a9d87a4ad0d084f38930d14d4d4d1727eec",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/ChatGPT Image 11 сент. 2026 г., 13_09_09 (8).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-cluster-back.png",
+      "sha256": "93e9d7389953434cd8d7dccadb82cfaa56498e9ca0959bd13c7f61de38d81047",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_50_03 (5).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-cluster-display-back.png",
+      "sha256": "79e024febed594d47648f562ee3fe3f81a20428de6941be82c3a8e9ceb55f825",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_49_53 (1).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-cluster-map-back.png",
+      "sha256": "4a37341527a51db2eb3033902d9e5bc2f515d3e0f2de4c04b7bf0e5c58ae34c0",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_50_03 (8).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-collision-back.png",
+      "sha256": "6a03c07df5d0a178fb17682778284456b8a4c6f7e7fb8b5137f2b41da8321275",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_50_03 (7).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-composition-front.png",
+      "sha256": "449259962ec232e6e805729b6c1e833dbe4d020996166bf838974d38091d3b0c",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/ChatGPT Image 11 сент. 2026 г., 13_08_18 (5).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-display-front.png",
+      "sha256": "e8122cd950bf9b0221f7f95e63f463deb06118f43c307b26ac778638e8728c58",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/ChatGPT Image 11 сент. 2026 г., 13_08_40 (7).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-rotation-curve-back.png",
+      "sha256": "330cb2a59deaf8c352651560354ed84434aa0fe1cdddfd5c988278f2df97776b",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_49_53 (3).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-shapes-back.png",
+      "sha256": "104817fbde1559fcf33feac2096b8800341ef320a3fc5c36dc6d5bba1087cb33",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_50_03 (6).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-shapes-front.png",
+      "sha256": "c6530f58b724105f6fb9b2e88b83bed51cc657a06a6c77c5b6f762b7efeac4fd",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/ChatGPT Image 11 сент. 2026 г., 13_07_28 (2).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-spectrum-back.png",
+      "sha256": "392cce0087b7344a96dee76d9b776c0442dd2d10183f83d352eddf8200bfa9e2",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_49_53 (2).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-spectrum-comparison-back.png",
+      "sha256": "359d00ea36372bafd74129db112aceb391b9a108464ddfecfd4b5d66811d2225",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_50_03 (4).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/galaxy-travel-front.png",
+      "sha256": "031dde80825bd273a5eb6bd9e5a9cdc7b6d96bb719e011896fb929f4383be799",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/ChatGPT Image 11 сент. 2026 г., 13_07_24 (1).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/milky-way-front.png",
+      "sha256": "f47276237c8a9bbd5176ea2e3aa77fc460406af014763c30fa5961170578d171",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/ChatGPT Image 11 сент. 2026 г., 13_07_37 (3).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/milky-way-location-back.png",
+      "sha256": "5f4d79e6ca73ad7a2d6ecc3acbda032e3bf59d43102dd8b2a3bc85fa3e36ae56",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_50_13 (10).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/spiral-galaxy-front.png",
+      "sha256": "33cd9f2c8d0d03f19f45c24fbf6dbf248e5e2f17ccfa62700a2f562152fc8366",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/ChatGPT Image 11 сент. 2026 г., 13_08_18 (6).png"
+      ]
+    },
+    {
+      "path": "08-galaxies/spiral-structure-back.png",
+      "sha256": "437b2bea10bc7a8a0352a7979697b591428cf1b5403420b294568e27efb16ac7",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "6 Q-GAL-001 — Q-GAL-010/2/ChatGPT Image 11 сент. 2026 г., 13_50_09 (9).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/direct-imaging-back.png",
+      "sha256": "fc69c35f82d6f7dc3bbf8e73a70ddbd92ac490d09a8e21fde305d2708b45e2e6",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (10).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/direct-imaging-front.png",
+      "sha256": "d6f07a6804f954250a1beb1e490d5a58fee0e09e1558e24e2dc33d7679191e5a",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (9).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/exoplanet-survey-back.png",
+      "sha256": "a3aeb7c32d7344e0b3f459f86251621cd0803d4325c932d00bf72d45c1f6d342",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (4).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/exoplanet-survey-front.png",
+      "sha256": "c25ec1a8af783cf339b172e1398761bc69bbcecc3a003fd4ee6fdff4a357fcda",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (3).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/extrasolar-orbits-back.png",
+      "sha256": "6de042808bb519f2554c82d84f97d95866e579398596439a40b87b166b9a5af3",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/1 B.png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/extrasolar-orbits-front.png",
+      "sha256": "4358c9c6809338a9976c6c5a876d24fa307896cf23897a93181eb59254c17789",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/1 F.png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/habitability-comparison-back.png",
+      "sha256": "577eb0dc345bb9283a81fdfcb382c78be4fe10ce0dcca73c80a515536deaddc5",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (8).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/habitability-comparison-front.png",
+      "sha256": "90181b2fcebd2bf4fde3e3637c2380e35d61ffab6561615843a197223ba07680",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (7).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/habitable-zone-back.png",
+      "sha256": "85eb7fe8694eea428a27184bf623c645ebde8b80cdfd8d55c77e8b825d0e974b",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/5 B.png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/habitable-zone-front.png",
+      "sha256": "608feb33c1f57aa22a740d087dfad9f90d61253ca2cb0d21a20cbc8710ec6b08",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/5.png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/hot-jupiter-back.png",
+      "sha256": "f787701fbd5e24c0ae6d0ee57cfd0b63063a4c0c8fec4b614758d3370b209250",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (6).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/hot-jupiter-front.png",
+      "sha256": "9ce3ec27e46b8664df31822da746a80dfa3aafab5c8d4d5e347118f212698481",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (5).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/planetary-system-diversity-back.png",
+      "sha256": "6e70f0dbd8bfbf483d762e0161a111fcbf24bf920f626c7ccbfd3d5531579b2e",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (2).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/planetary-system-diversity-front.png",
+      "sha256": "400ba41a67ffe740e643d04aef7d3201f9b695e0529f90be54fc8d4f9de6b0ef",
+      "width": 1254,
+      "height": 1254,
+      "sources": [],
+      "from_archive": "7 Q-EXO-001 по Q-EXO-010/ALBAMEN_EXO_006-010_square (2).zip!/Q-EXO-006_F.png"
+    },
+    {
+      "path": "09-exoplanets/radial-velocity-back.png",
+      "sha256": "b8009fe52f6ece768e65535ae88d81d412426782535d32ddd4ec929b17c718b4",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/3 B.png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/radial-velocity-front.png",
+      "sha256": "fe571938048d737a9f03cc1f6cefa901141ebcb809eea80dab36ee124f8a8833",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/3 F.png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/stellar-glare-back.png",
+      "sha256": "5706e951ddc441609500053be6255d7b94d3b148950af03e340f9013de678106",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/2 B.png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/stellar-glare-front.png",
+      "sha256": "5071c8297e67d50e1a5ed0b2a3897989673e31b59e111f9dc2f02f38b4bb7d2c",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/2 F.png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/transit-back.png",
+      "sha256": "8d41121e0689babaaa6174c5c922f80cff8c06675395d133ab638c128a04049b",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/ChatGPT Image 11 сент. 2026 г., 16_45_18 (10).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/transit-front.png",
+      "sha256": "58b1b4bea6d4cb335187d0d1cd0f79f14bf65be154f1e4aa636955e9d7317306",
+      "width": 1086,
+      "height": 1448,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/ChatGPT Image 11 сент. 2026 г., 16_45_18 (9).png"
+      ]
+    },
+    {
+      "path": "09-exoplanets/variants/planetary-system-diversity-front-original.png",
+      "sha256": "97e97c6dd9be2e35d41c4b3ff177c0a3ac4d517007563f32bde9c0cf99f937f0",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "7 Q-EXO-001 по Q-EXO-010/Q-EXO-006–Q-EXO-010/ChatGPT Image 14 сент. 2026 г., 07_53_15 (1).png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-001_B.png",
+      "sha256": "f4428e3eccab023935fcec0bc3aa3c3624a658f40f7dbea8a36b4b384f37a04c",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-001_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-001_F.png",
+      "sha256": "531cc43f69312caa479f39301f3aa3cccf6f7453fc66af1f5ee9445b884ad327",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-001_F.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-002_B.png",
+      "sha256": "637dc6bafa3c0a0f254877c0328328d0fa9d47a9eb0cd4d8a76b86cd8b251f64",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-002_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-002_F.png",
+      "sha256": "cd932c745f0cdee7cf3242939001944ce3e17721cffd666aee367200c0366ab9",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-002_F.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-003_B.png",
+      "sha256": "c1326feb2a63eee5f20f6fbf631cc8493e28b7071270a70c58d04161f92d4044",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-003_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-003_F.png",
+      "sha256": "1d4613e514b189e64bab07328cc8e52db4aa2fd289a6d51a136710781c5e66d7",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-003_F.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-004_B.png",
+      "sha256": "4abb404e5f13b519f0b5ae6b10d22849872a0b91188ede1f902bb1b7daec8cb6",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-004_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-004_F.png",
+      "sha256": "7e350a60fa74b30a4aa22daadcb6e9ebde7c85c1b1e6bca75395893d7fc10ce2",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-004_F.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-005_B.png",
+      "sha256": "39ffbf56c0c0cc0878f0e1519621eedea5c5e36ced84c56b7685adfa7683bc28",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-005_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-005_F.png",
+      "sha256": "f4329a780a82ff786d06bdcf20520c3e46ba473228e4a01309fdb000a5548f28",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_001-005_square (1)/Q-TEL-005_F.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-006_B.png",
+      "sha256": "9c51639a62b00ea48a095382b20cf04368cd623ea4ad8066d69b81422d10a56a",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-006_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-006_F.png",
+      "sha256": "d8fa82be63091acd883df6d14a2c2888da7ba89a4be8a31e4b42f7294cda6819",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-006_F.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-007_B.png",
+      "sha256": "f36d9769833ade6ca31435da9c588fc80a59cd138000d25baa3cc190bf0d4ff6",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-007_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-007_F.png",
+      "sha256": "e931f8db1717689e8d49e733fddd61bb523f9205636da5ca5a7dcd9e146a9324",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-007_F.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-008_B.png",
+      "sha256": "a68acb9e538a9a8206c41cecb9726d6a5dccfd47ce103bbd9da53382bcc817ac",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-008_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-008_F.png",
+      "sha256": "4c22e3f7f02c210235844f25fcd1487e86af2b0717b8d85c76d1cb3a6d086362",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-008_F.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-009_B.png",
+      "sha256": "5faeb88c86e1929f324c6c171cd394135a575973a444685d00d60b7d8a2ea395",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-009_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-009_F.png",
+      "sha256": "975151b5eb1e6695cbe7579463d7c7974e15aa16032ec4eb160a69dfea508a4b",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-009_F.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-010_B.png",
+      "sha256": "27e6f609af87c986a10e38c27c855f80107104051546d8a2beef2a55de78a4b5",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-010_B.png"
+      ]
+    },
+    {
+      "path": "11-telescopes/Q-TEL-010_F.png",
+      "sha256": "651eaa71250743913442d1f1e9bf25da357497de8c6cf9f649f7192063bf3240",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_TEL_006-010_square (1)/Q-TEL-010_F.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-001_B.png",
+      "sha256": "194b7565ef7181ecd383c1a53f8b12bb5f759ebd3af8199417c068a7a08fad46",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_001-005_Back_only/01_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-002_B.png",
+      "sha256": "1cc547c701cec9a1235dca584b06cd985d61a3a3d683e042ce7f63da5574fc89",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_001-005_Back_only/02_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-003_B.png",
+      "sha256": "ce4af9b6db8e45951a30d7d8e31f3d41eec9d299620360012f648d0ac0b0dd05",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_001-005_Back_only/03_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-004_B.png",
+      "sha256": "dd1385e8de1b1d96e7ebafe3032fda67803a929e0f651949887301c56140ed27",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_001-005_Back_only/04_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-005_B.png",
+      "sha256": "8df079ff11944238bea07f8d585bf913d8bd0ae3dd196e158abe0d9c4900dcf9",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_001-005_Back_only/05_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-006_B.png",
+      "sha256": "ca4792e0a9454bca80f3da419e864b20672bb8159c480ba4a11accb8a5e292a6",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/06_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-006_F.png",
+      "sha256": "95ae4c08360ab764a0a13ad0267a08b2bb5a920cbf424d7f4cc6566e4bf6aa3b",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/06_F.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-007_B.png",
+      "sha256": "1b550805dc8f9a58e94e867ec27e4ef290c582c35da692c2c36d50f8bb0d8f6e",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/07_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-007_F.png",
+      "sha256": "e851469952f3e0f362242eb080a68f422f0eb92c891c8c6135a73c521e31d921",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/07_F.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-008_B.png",
+      "sha256": "52ce84bae2d7eb8aa5bcf468080d97c5ad1955894cc93567f448326288fb5633",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/08_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-008_F.png",
+      "sha256": "100dcf5eab7a662a71547c307e310dc64487055c92deee9d21c75f875bf127e2",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/Q-MIS-008_F.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-009_B.png",
+      "sha256": "5f8150cecbd79c775bb4cc46f5e1bd0308a88223aefb2946f37f44ead4fb6b2a",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/Q-MIS-009_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-009_F.png",
+      "sha256": "655b9963cd21d27438a173153ddb40ad7b4f197cb2b4ecef82fac5d1050f6072",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/Q-MIS-009_F.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-010_B.png",
+      "sha256": "47d2d344942c71bd96eec419ba88275a0ee8d051ab3d98452d3a7e1802e16ff2",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/Q-MIS-010_B.png"
+      ]
+    },
+    {
+      "path": "12-space-missions/Q-MIS-010_F.png",
+      "sha256": "8c8e1779cbb5c2a020e0b3c38567cf67c5afad56eb50498ccba1058ad84bee36",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "ALBAMEN_MIS_006-010_square/Q-MIS-010_F.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-001_B.png",
+      "sha256": "8f1c81e194edef3fa8e8941cd37a34b7fa02a697dc23b4a979e794143267be12",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-001_B.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-001_F.png",
+      "sha256": "9c353c64f419e24ce05a0d6843c89aed2656321b06b1bf920f72f771b8583f2c",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-001_F.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-002_B.png",
+      "sha256": "1f06c09feaed5c4ac5d5ee8cca427306cd28b3f38baf36983452cf83e576ffe6",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-002_B.png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_44 (6).png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-002_F.png",
+      "sha256": "a13c180446cb768a7aa3d5f137275a0fb34fda470adfdce48c6b0d52e01ecf4a",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-002_F.png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_36 (4) (1).png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-003_B.png",
+      "sha256": "215224331e7e91e2d6a743702c3264838afb422da46840d0dbd342b3281b7722",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-003_B.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-003_F.png",
+      "sha256": "5094f8ba33d187bf2c584c599bb889c58f25142238943fe1640a4ef0887ec3f9",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-003_F.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-004_B.png",
+      "sha256": "7f64ef16000cc325fb9f49e976a18d3c9f401461115dc30f5a9770fbde0c927c",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-004_B.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-004_F.png",
+      "sha256": "20ef79b4bcd6b93d6b6e217f8d8b99dc3bc410dd485d9a6763c7861d1c599e3f",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-004_F.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-005_B.png",
+      "sha256": "0e195518f8233e32c09f1c50342ed098db84bf7eff31eeeb286a1004c4cfaac2",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-005_B.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/Q-COS-005_F.png",
+      "sha256": "661457ccc60c3c0c86b7c19c464ae3b5ca809c79255c39e8e5c698b705cb8d6f",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/ALBAMEN_COS_001-005_square/Q-COS-005_F.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/astronomy-observations.png",
+      "sha256": "f88a6669391a99dd3cefefb99958cfcdc5423e5f1126b2d89fe4b2314be9b77b",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/dcc03d91-1238-4b8a-88a3-affe70f9f4bb.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/cosmic-background-overview.png",
+      "sha256": "8c56a30a90713897900e73dc130b1604ad1715e0130be4bf586a71f8363727ae",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/f1bd7c6e-d413-45bf-8d6c-05d3cdadb206.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/cosmic-microwave-background-display.png",
+      "sha256": "dd5004e67184d90fac0f67799c6598de6ca6ff6fa33e63779f561b1d41167b48",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/c00a6dc6-a4ee-41ce-b6d5-8b374de2a8d4.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/expansion-grid-back.png",
+      "sha256": "af8b8b50bf1d375eb8edad0ebbd616562191b2f67e1bf0404953a46d576ea291",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/aac84f2b-24ba-451f-bebf-4117287ed717.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/expansion-grid-front.png",
+      "sha256": "f5347a0eed78e77ccc73921a7f142724f488882b52d077b26c85340f19f9197d",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/84d5421d-1ad0-4e4a-829b-32159ab18ab1.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/galaxy-cluster-back.png",
+      "sha256": "5387dc10cd7b633e8d5abf8c0efdb3a7cb7428797aa241312ecbf84dc9111d38",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/d342fec7-1689-4668-9469-4e687d1d093c.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/galaxy-cluster-front.png",
+      "sha256": "f86f0df873554d1c3d9d03e6a610ab6c9adc25513aee9940c6c6edd2bf370fb7",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/44318aed-e96e-4ea3-86f0-51c405bcd2b8.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/galaxy-distribution.png",
+      "sha256": "fca42e72731ba660f577a1c1aa9e3761eba7d379afc80e1e05ced97e1c26baca",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/0533c078-794b-4835-ba48-51ac52ed4c12.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/universe-history-back.png",
+      "sha256": "19a9407a82def26821f727b9f0098806dc380e4dc4714b4e31f17447ebbb8b34",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/6bf4dfbe-2926-45e2-92ab-05b7a3d10812.png"
+      ]
+    },
+    {
+      "path": "13-cosmology/universe-history-front.png",
+      "sha256": "133c10a4259cc58449c19a3f9b42066e090bc969ea07aa001dc4fdda656dfbf6",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/39e5d502-83a3-4e3e-af4b-c6a45207b53c (1).png"
+      ]
+    },
+    {
+      "path": "13-cosmology/variants/cosmic-background-sphere-revised.png",
+      "sha256": "c2ed6822a4bb5034c4f12aebbac1910127366b7511724cc5c964910522786618",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_47 (7) (1).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_47 (7).png"
+      ]
+    },
+    {
+      "path": "13-cosmology/variants/cosmic-web-answer-revised.png",
+      "sha256": "43864601a6f552137a0ab1cc943ab825664e36e8e87bad3ce9b72f643681974b",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_40 (5) (1).png"
+      ]
+    },
+    {
+      "path": "13-cosmology/variants/cosmic-web-revised.png",
+      "sha256": "ae2b1d8301009970ab3d0cfc74b59267657e7c3b6824f231f85ce77f67525c4f",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_06 (1).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_15 (1).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_25 (1).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_36 (1).png"
+      ]
+    },
+    {
+      "path": "13-cosmology/variants/cosmic-web-variant.png",
+      "sha256": "cf7f850d0d854fc79bdab354c8bf1c6bff86c13c0114b899be6adb14d7dee4c5",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_54 (9) (2).png"
+      ]
+    },
+    {
+      "path": "13-cosmology/variants/microwave-background-overview-revised.png",
+      "sha256": "8197d28641206ee3eccc794a2bb6e2a898ba27c7902729c7101fadee95aa4f2a",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_50 (8) (1).png"
+      ]
+    },
+    {
+      "path": "13-cosmology/variants/microwave-background-revised.png",
+      "sha256": "d7eaa46aa2053e7eb833eeb6cf96c30695406da1e2a39202439eb45bbc0ef7cb",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_31 (3) (1).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_31 (3) (2).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_31 (3).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_36 (3).png"
+      ]
+    },
+    {
+      "path": "13-cosmology/variants/universe-history-revised.png",
+      "sha256": "347b80b970d784e010578114070f924c6627cf2cca6d2a882fd62ee67185e427",
+      "width": 1254,
+      "height": 1254,
+      "sources": [
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_19 (2) (1).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_19 (2).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_25 (2).png",
+        "Q-COS-006 Q-COS-010/Q-COS-001–005/ChatGPT Image 28 сент. 2026 г., 02_38_36 (2).png"
+      ]
+    },
+    {
+      "path": "placeholders/back.png",
+      "sha256": "cd6335bb3738ffd066ed0e7754e87ecfdda43d0bac452903c43df40618a53f02",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        "01-solar-system/01 B.png",
+        "01-solar-system/02 B.png",
+        "01-solar-system/03 B.png",
+        "01-solar-system/04 B.png",
+        "01-solar-system/05 B.png",
+        "01-solar-system/06 B.png",
+        "01-solar-system/07 B.png",
+        "01-solar-system/08 B.png",
+        "01-solar-system/09 B.png",
+        "02-planets/01 B.png",
+        "02-planets/02 B.png",
+        "02-planets/03 B.png",
+        "02-planets/04 B.png",
+        "02-planets/05 B.png",
+        "02-planets/06 B.png",
+        "02-planets/07 B.png",
+        "02-planets/08 B.png",
+        "02-planets/09 B.png",
+        "02-planets/10 B.png",
+        "03-moon/01 B.png",
+        "03-moon/02 B.png",
+        "03-moon/03 B.png",
+        "03-moon/04 B.png",
+        "03-moon/05 B.png",
+        "03-moon/06 B.png",
+        "03-moon/07 B.png",
+        "03-moon/08 B.png",
+        "03-moon/09 B.png",
+        "03-moon/10 B.png",
+        "04-stars/01 B.png",
+        "04-stars/02 B.png",
+        "04-stars/03 B.png",
+        "04-stars/04 B.png",
+        "04-stars/05 B.png",
+        "04-stars/06 B.png",
+        "04-stars/07 B.png",
+        "04-stars/08 B.png",
+        "04-stars/09 B.png",
+        "06-topic-06/01 B.png",
+        "06-topic-06/02 B.png",
+        "06-topic-06/03 B.png",
+        "06-topic-06/04 B.png",
+        "06-topic-06/05 B.png",
+        "06-topic-06/06 B.png",
+        "06-topic-06/07 B.png",
+        "06-topic-06/08 B.png",
+        "06-topic-06/09 B.png",
+        "06-topic-06/10 B.png",
+        "07-topic-07/01 B.png",
+        "07-topic-07/02 B.png",
+        "07-topic-07/03 B.png",
+        "07-topic-07/04 B.png",
+        "07-topic-07/05 B.png",
+        "07-topic-07/06 B.png",
+        "07-topic-07/07 B.png",
+        "07-topic-07/08 B.png",
+        "07-topic-07/09 B.png",
+        "07-topic-07/10 B.png",
+        "08-topic-08/01 B.png",
+        "08-topic-08/02 B.png",
+        "08-topic-08/03 B.png",
+        "08-topic-08/04 B.png",
+        "08-topic-08/05 B.png",
+        "08-topic-08/06 B.png",
+        "08-topic-08/07 B.png",
+        "08-topic-08/08 B.png",
+        "08-topic-08/09 B.png",
+        "08-topic-08/10 B.png",
+        "09-topic-09/01 B.png",
+        "09-topic-09/02 B.png",
+        "09-topic-09/03 B.png",
+        "09-topic-09/04 B.png",
+        "09-topic-09/05 B.png",
+        "09-topic-09/06 B.png",
+        "09-topic-09/07 B.png",
+        "09-topic-09/08 B.png",
+        "09-topic-09/09 B.png",
+        "09-topic-09/10 B.png",
+        "10-topic-10/01 B.png",
+        "10-topic-10/02 B.png",
+        "10-topic-10/03 B.png",
+        "10-topic-10/04 B.png",
+        "10-topic-10/05 B.png",
+        "10-topic-10/06 B.png",
+        "10-topic-10/07 B.png",
+        "10-topic-10/08 B.png",
+        "10-topic-10/09 B.png",
+        "10-topic-10/10 B.png"
+      ]
+    },
+    {
+      "path": "placeholders/front.png",
+      "sha256": "8dfaefd7a71e9eb2ef10b570ef6fb7dbd5dd33c626b8b9a39ef8921377cdb31d",
+      "width": 640,
+      "height": 640,
+      "sources": [
+        "01-solar-system/01 F.png",
+        "01-solar-system/02 F.png",
+        "01-solar-system/03 F.png",
+        "01-solar-system/04 F.png",
+        "01-solar-system/05 F.png",
+        "01-solar-system/06 F.png",
+        "01-solar-system/07 F.png",
+        "01-solar-system/08 F.png",
+        "01-solar-system/09 F.png",
+        "02-planets/01 F.png",
+        "02-planets/02 F.png",
+        "02-planets/03 F.png",
+        "02-planets/04 F.png",
+        "02-planets/05 F.png",
+        "02-planets/06 F.png",
+        "02-planets/07 F.png",
+        "02-planets/08 F.png",
+        "02-planets/09 F.png",
+        "02-planets/10 F.png",
+        "03-moon/01 F.png",
+        "03-moon/02 F.png",
+        "03-moon/03 F.png",
+        "03-moon/04 F.png",
+        "03-moon/05 F.png",
+        "03-moon/06 F.png",
+        "03-moon/07 F.png",
+        "03-moon/08 F.png",
+        "03-moon/09 F.png",
+        "03-moon/10 F.png",
+        "04-stars/01 F.png",
+        "04-stars/02 F.png",
+        "04-stars/03 F.png",
+        "04-stars/04 F.png",
+        "04-stars/05 F.png",
+        "04-stars/06 F.png",
+        "04-stars/07 F.png",
+        "04-stars/08 F.png",
+        "04-stars/09 F.png",
+        "06-topic-06/01 F.png",
+        "06-topic-06/02 F.png",
+        "06-topic-06/03 F.png",
+        "06-topic-06/04 F.png",
+        "06-topic-06/05 F.png",
+        "06-topic-06/06 F.png",
+        "06-topic-06/07 F.png",
+        "06-topic-06/08 F.png",
+        "06-topic-06/09 F.png",
+        "06-topic-06/10 F.png",
+        "07-topic-07/01 F.png",
+        "07-topic-07/02 F.png",
+        "07-topic-07/03 F.png",
+        "07-topic-07/04 F.png",
+        "07-topic-07/05 F.png",
+        "07-topic-07/06 F.png",
+        "07-topic-07/07 F.png",
+        "07-topic-07/08 F.png",
+        "07-topic-07/09 F.png",
+        "07-topic-07/10 F.png",
+        "08-topic-08/01 F.png",
+        "08-topic-08/02 F.png",
+        "08-topic-08/03 F.png",
+        "08-topic-08/04 F.png",
+        "08-topic-08/05 F.png",
+        "08-topic-08/06 F.png",
+        "08-topic-08/07 F.png",
+        "08-topic-08/08 F.png",
+        "08-topic-08/09 F.png",
+        "08-topic-08/10 F.png",
+        "09-topic-09/01 F.png",
+        "09-topic-09/02 F.png",
+        "09-topic-09/03 F.png",
+        "09-topic-09/04 F.png",
+        "09-topic-09/05 F.png",
+        "09-topic-09/06 F.png",
+        "09-topic-09/07 F.png",
+        "09-topic-09/08 F.png",
+        "09-topic-09/09 F.png",
+        "09-topic-09/10 F.png",
+        "10-topic-10/01 F.png",
+        "10-topic-10/02 F.png",
+        "10-topic-10/03 F.png",
+        "10-topic-10/04 F.png",
+        "10-topic-10/05 F.png",
+        "10-topic-10/06 F.png",
+        "10-topic-10/07 F.png",
+        "10-topic-10/08 F.png",
+        "10-topic-10/09 F.png",
+        "10-topic-10/10 F.png"
+      ]
+    }
+  ]
+}
