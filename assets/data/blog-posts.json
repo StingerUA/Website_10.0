@@ -1219,6 +1219,41 @@
           "url": "/rus/blog/gokyuzunun-termometresi-yildizlarin-renginden-sicakligini-nasil-anlariz.html"
         }
       }
+    },
+    {
+      "slug": "yildizsiz-gezegenler-evrenin-karanliginda-tek-basina-dolasan-gezegenler",
+      "category": "uzay",
+      "publishAt": "2026-10-10T20:11:49+03:00",
+      "cover": "/assets/images/blog/yildizsiz-gezegenler-evrenin-karanliginda-tek-basina-dolasan-gezegenler-cover.jpg",
+      "readingMinutes": 4,
+      "author": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Aslı Bolat"
+      },
+      "authorRole": {
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer and Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومدرِّبة"
+      },
+      "locales": {
+        "tr": {
+          "title": "Yıldızsız Gezegenler: Evrenin Karanlığında Tek Başına Dolaşan Gezegenler",
+          "excerpt": "Ya bir gezegenin gökyüzünde hiçbir yıldızı yoksa? Ne gün doğumu ne de gün batımı… Yalnızca sonsuz bir karanlık ve yıldızlararası uzayın soğuk sessizli",
+          "url": "/blog/yildizsiz-gezegenler-evrenin-karanliginda-tek-basina-dolasan-gezegenler.html"
+        },
+        "en": {
+          "title": "Starless Planets: Planets Wandering Alone in",
+          "excerpt": "the Darkness of the Universe",
+          "url": "/eng/blog/yildizsiz-gezegenler-evrenin-karanliginda-tek-basina-dolasan-gezegenler.html"
+        },
+        "ru": {
+          "title": "Планеты без звёзд: планеты, одиноко",
+          "excerpt": "блуждающие во тьме Вселенной",
+          "url": "/rus/blog/yildizsiz-gezegenler-evrenin-karanliginda-tek-basina-dolasan-gezegenler.html"
+        }
+      }
     }
   ]
 }
