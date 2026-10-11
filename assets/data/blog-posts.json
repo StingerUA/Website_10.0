@@ -1254,6 +1254,41 @@
           "url": "/rus/blog/yildizsiz-gezegenler-evrenin-karanliginda-tek-basina-dolasan-gezegenler.html"
         }
       }
+    },
+    {
+      "slug": "gunes-firtinalari-gunes-bir-gun-dunyanin-internetini-kapatabilir-mi",
+      "category": "uzay",
+      "publishAt": "2026-10-11T16:15:03+03:00",
+      "cover": "/assets/images/blog/gunes-firtinalari-gunes-bir-gun-dunyanin-internetini-kapatabilir-mi-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Ali Batuhan Özsürmeli",
+        "en": "Ali Batuhan Özsürmeli",
+        "ru": "Ali Batuhan Özsürmeli"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Güneş Fırtınaları: Güneş Bir Gün Dünya'nın\nİnternetini Kapatabilir mi?",
+          "excerpt": "İnternetini Kapatabilir mi?",
+          "url": "/blog/gunes-firtinalari-gunes-bir-gun-dunyanin-internetini-kapatabilir-mi.html"
+        },
+        "en": {
+          "title": "Solar Storms: Could the Sun One Day Shut",
+          "excerpt": "Down Earth's Internet?",
+          "url": "/eng/blog/gunes-firtinalari-gunes-bir-gun-dunyanin-internetini-kapatabilir-mi.html"
+        },
+        "ru": {
+          "title": "Солнечные бури: может ли Солнце",
+          "excerpt": "однажды отключить интернет на Земле?",
+          "url": "/rus/blog/gunes-firtinalari-gunes-bir-gun-dunyanin-internetini-kapatabilir-mi.html"
+        }
+      }
     }
   ]
 }
