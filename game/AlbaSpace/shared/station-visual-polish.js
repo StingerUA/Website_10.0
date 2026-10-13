@@ -97,6 +97,11 @@
     box(renderer.scene, `${meta.id}_ToolRail`, { width: length * 0.64, height: 0.05, depth: 0.05 }, new BABYLON.Vector3(0, -0.46, -0.22), root, glow);
   }
 
+  // Leave room for the head, top frame and zero-g drift in both hull sizes.
+  function cadetLabelOffset(moduleType) {
+    return moduleType === "SMALL" ? 0.58 : 0.64;
+  }
+
   function createCadet(renderer, module, local, cadet, slotId) {
     const root = new BABYLON.TransformNode(`Cadet_${cadet.id}`, renderer.scene);
     root.parent = renderer.stationRoot;
@@ -170,7 +175,7 @@
     });
 
     const topicLabel = cadet.name || cadet.topic || "Cadet";
-    renderer.cadetLabel(root, topicLabel, new BABYLON.Vector3(0, 0.70, -0.38), topicColor);
+    renderer.cadetLabel(root, topicLabel, new BABYLON.Vector3(0, cadetLabelOffset(module.type), -0.38), topicColor);
   }
 
   const proto = window.AlbaStation3D.Station3DRenderer.prototype;
@@ -217,5 +222,5 @@
     proto.__albaVisualPolishPatched = true;
   }
 
-  window.AlbaStationVisualPolish = { version: "20261003-cadet2" };
+  window.AlbaStationVisualPolish = { version: "20261014-cadet3", cadetLabelOffset };
 })();

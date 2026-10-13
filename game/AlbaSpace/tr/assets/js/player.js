@@ -27,15 +27,40 @@ function playerViewKey(snapshot) {
   });
 }
 
+function rankingRows(snapshot = state) {
+  return AlbaSpace.rank(snapshot).map((item, index) => `<div class="drawer-row"><span>${index + 1}. ${AlbaGame.esc(item.company)}</span><span>🛰️ ${Number(item.small || 0) + Number(item.large || 0)}/10 · 🎓 ${item.graduates}</span></div>`).join("");
+}
+
+function refreshRankingDrawer() {
+  const drawer = document.getElementById("drawer");
+  if (!drawer || drawer.classList.contains("hidden") || drawer.dataset.activeDrawer !== "ranking") return;
+  const html = `<strong>SIRALAMA</strong>${rankingRows(state)}`;
+  if (drawer.innerHTML !== html) drawer.innerHTML = html;
+}
 function apply(next) {
   const input = document.getElementById("answer");
   if (input && document.activeElement === input) draftAnswer = input.value;
   const previousKey = playerViewKey(state);
+  const existingDrawer = document.getElementById("drawer");
+  const wasRankingOpen = existingDrawer?.dataset.activeDrawer === "ranking" && !existingDrawer.classList.contains("hidden");
   state = next;
-  if (previousKey !== playerViewKey(next) || !document.querySelector("#app > *")) render();
-  else renderHud(me());
+  if (previousKey !== playerViewKey(next) || !document.querySelector("#app > *")) {
+    render();
+    // Preserve the open ranking across own-state updates, without reopening other drawers.
+    if (wasRankingOpen) {
+      const drawer = document.getElementById("drawer");
+      if (drawer) {
+        drawer.dataset.activeDrawer = "ranking";
+        drawer.classList.remove("hidden");
+        refreshRankingDrawer();
+      }
+    }
+  } else {
+    renderHud(me());
+    // An opponent can gain modules/credits without changing this player's render key.
+    refreshRankingDrawer();
+  }
 }
-
 async function send(type, payload = {}) {
   try { const response = await AlbaGame.command(roomId, type, payload); apply(response.state); }
   catch (error) { toast(error.message); }
@@ -154,14 +179,13 @@ function renderStation(player) {
   const free = AlbaSpace.freeSeats(player);
   const active = (player.cadets || []).filter(cadet => cadet.status === "ACTIVE");
   const crew = active.map(cadet => `<button class="drawer-row recruit-like" data-cadet="${AlbaGame.esc(cadet.id)}"><span>${AlbaGame.esc(cadet.name || AlbaSpace.TOPICS[cadet.topic]?.label || "Öğrenci")}</span><span>${AlbaSpace.TOPICS[cadet.topic]?.label || cadet.topic} · ${cadet.knowledge}/4</span></button>`).join("");
-  const ranking = AlbaSpace.rank(state).map((item, index) => `<div class="drawer-row"><span>${index + 1}. ${AlbaGame.esc(item.company)}</span><span>${item.correct}/${state.round || 0} · 🎓 ${item.graduates}</span></div>`).join("");
   const panel = `<aside class="station-controls card"><div class="control-tabs"><button class="btn ghost compact" data-drawer="crew">Ekip ▾</button><button class="btn ghost compact" data-drawer="ranking">Sıralama ▾</button></div><div id="drawer" class="drawer hidden"></div><div class="phase">İstasyon · ${modeLabel()}</div><div class="notice">Boş koltuk: <strong>${free}</strong></div><h2>+ Modül</h2><div class="grid two"><button id="small" class="btn" ${player.small >= AlbaSpace.MAX.small || player.credits < AlbaSpace.ECON.small ? "disabled" : ""}>SMALL<br><strong>650 ALBA Coins</strong><br>+2 koltuk</button><button id="large" class="btn" ${player.large >= AlbaSpace.MAX.large || player.credits < AlbaSpace.ECON.large ? "disabled" : ""}>LARGE<br><strong>950 ALBA Coins</strong><br>+3 koltuk</button></div><p class="muted small-note">Sunucu onayından sonra kullanılabilir docking portlar Build View'da vurgulanır.</p><div class="sep"></div><h2>Öğrenciyi kabul et</h2>${free > 0 ? `<div class="grid two">${Object.entries(AlbaSpace.TOPICS).map(([key, topic]) => `<button class="btn ghost recruit" data-topic="${key}">${topic.label}</button>`).join("")}</div>` : `<p class="muted">Boş koltuk yok.</p>`}</aside>`;
   app.innerHTML = stationLayout(player, panel) + `<section class="card station-summary"><div class="phase">İstasyon durumu</div><div class="kpis"><span class="kpi">LARGE ${player.large}/3</span><span class="kpi">SMALL ${player.small}/7</span><span class="kpi">Ekip ${active.length}/${player.seatCapacity}</span></div>${player.small + player.large === 9 ? `<div class="milestone">🚨 Bir modül!</div>` : ""}</section>`;
   mount3D(player);
   document.getElementById("small")?.addEventListener("click", () => send("BUY_MODULE", { type: "SMALL" }));
   document.getElementById("large")?.addEventListener("click", () => send("BUY_MODULE", { type: "LARGE" }));
   document.querySelectorAll(".recruit").forEach(button => button.onclick = () => send("RECRUIT_CADET", { topic: button.dataset.topic }));
-  document.querySelectorAll("[data-drawer]").forEach(button => button.onclick = () => { const drawer = document.getElementById("drawer"); drawer.classList.remove("hidden"); drawer.innerHTML = button.dataset.drawer === "crew" ? `<strong>EKİP · ${active.length}/${player.seatCapacity}</strong>${crew || `<p class=\"muted\">Şimdilik boş.</p>`}` : `<strong>SIRALAMA</strong>${ranking}`; });
+  document.querySelectorAll("[data-drawer]").forEach(button => button.onclick = () => { const drawer = document.getElementById("drawer"); drawer.classList.remove("hidden"); drawer.dataset.activeDrawer = button.dataset.drawer; drawer.innerHTML = button.dataset.drawer === "crew" ? `<strong>EKİP · ${active.length}/${player.seatCapacity}</strong>${crew || `<p class=\"muted\">Şimdilik boş.</p>`}` : `<strong>SIRALAMA</strong>${rankingRows(state)}`; });
 }
 
 function renderEnd(player) {

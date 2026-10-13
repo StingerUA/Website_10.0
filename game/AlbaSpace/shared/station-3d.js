@@ -278,7 +278,7 @@
     crewLocal(slotIndex, moduleType) {
       const positions = moduleType === "LARGE"
         ? [new BABYLON.Vector3(-0.55, -0.08, -0.28), new BABYLON.Vector3(0, 0.2, -0.28), new BABYLON.Vector3(0.55, -0.08, -0.28)]
-        : [new BABYLON.Vector3(-0.36, -0.08, -0.28), new BABYLON.Vector3(0.36, 0.18, -0.28)];
+        : [new BABYLON.Vector3(-0.36, -0.08, -0.28), new BABYLON.Vector3(0.36, 0.02, -0.28)];
       return positions[slotIndex] || positions[0];
     }
 
