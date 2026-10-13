@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="/assets/css/site.css" />
   <link rel="stylesheet" href="/assets/css/fix-layout.css">
   <link rel="stylesheet" href="/assets/css/model-viewer-controls.css" />
+  <link rel="stylesheet" href="/assets/css/iss-interiors.css" />
   <script src="/assets/js/include.js" defer></script>
   <script src="/assets/js/menu-toggle.js" defer></script>
   <script src="/assets/js/model-viewer-controls-visibility.js" defer></script>
@@ -171,6 +172,38 @@ Vael-khrun…
       ar
       ar-modes="webxr scene-viewer quick-look">
     </model-viewer>
+
+    <!-- ISS interior explorer uses the existing #mainViewer; do not add a second viewer. -->
+    <section id="iss-interior-explorer" aria-label="ISS İç Modülleri">
+      <div class="iss-map-head">
+        <strong class="iss-map-title">🛰️ ISS İç Modülleri — 3D Keşif</strong>
+        <div class="iss-map-options">
+          <label for="iss-interior-quality">Kalite</label>
+          <select id="iss-interior-quality" aria-label="Model kalitesi">
+            <option value="optimized">Optimize</option>
+            <option value="detailed">Detaylı</option>
+          </select>
+          <button type="button" id="iss-interior-outside">↩ Tüm İstasyon</button>
+        </div>
+      </div>
+      <div id="iss-interior-status" class="iss-map-status" role="status" aria-live="polite">Modüller kontrol ediliyor…</div>
+      <div class="iss-map-viewport">
+        <svg viewBox="0 0 680 145" xmlns="http://www.w3.org/2000/svg" aria-label="ISS basitleştirilmiş modül haritası">
+          <path class="iss-map-guide" d="M16 68H655"/>
+          <g data-iss-module="zvezda"><rect class="iss-map-shape" x="22" y="52" rx="7" width="88" height="31"/><text class="iss-map-label" x="66" y="72">ZVEZDA</text></g>
+          <g data-iss-module="zarya"><rect class="iss-map-shape" x="117" y="52" rx="7" width="82" height="31"/><text class="iss-map-label" x="158" y="72">ZARYA</text></g>
+          <g data-iss-module="unity"><rect class="iss-map-shape" x="205" y="52" rx="7" width="60" height="31"/><text class="iss-map-label" x="235" y="72">UNITY</text></g>
+          <g data-iss-module="destiny"><rect class="iss-map-shape" x="271" y="50" rx="7" width="100" height="35"/><text class="iss-map-label" x="321" y="73">DESTINY</text></g>
+          <g data-iss-module="harmony"><rect class="iss-map-shape" x="377" y="52" rx="7" width="81" height="31"/><text class="iss-map-label" x="417" y="72">HARMONY</text></g>
+          <g data-iss-module="kibo"><rect class="iss-map-shape" x="380" y="11" rx="7" width="77" height="31"/><text class="iss-map-label" x="418" y="32">KIBO</text></g>
+          <g data-iss-module="columbus"><rect class="iss-map-shape" x="379" y="96" rx="7" width="89" height="32"/><text class="iss-map-label" x="423" y="117">COLUMBUS</text></g>
+          <g data-iss-module="tranquility"><rect class="iss-map-shape" x="206" y="98" rx="7" width="94" height="31"/><text class="iss-map-label" x="253" y="118">NODE 3</text></g>
+          <g data-iss-module="cupola"><circle class="iss-map-shape" cx="327" cy="113" r="18"/><text class="iss-map-label" x="327" y="116" style="font-size:8px">CUPOLA</text></g>
+        </svg>
+      </div>
+      <div class="iss-map-foot">Şema ölçekli değildir. Soluk modüller henüz yüklenmemiştir. Mouse veya dokunarak 3D modeli döndürebilirsiniz.</div>
+    </section>
+
     
   </div>
 
@@ -178,6 +211,7 @@ Vael-khrun…
 
   
   <script src="/assets/js/particles.js"></script>
+  <script src="/assets/js/iss-interiors.js" defer></script>
 
 </body>
 </html>

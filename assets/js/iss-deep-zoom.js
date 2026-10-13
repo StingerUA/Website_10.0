@@ -37,6 +37,11 @@
       if (!Number.isFinite(orbit.radius) || orbit.radius <= 0) return;
       baseRadius = orbit.radius; range.disabled = false; reset.disabled = false;
     }
+    viewer.addEventListener('iss-explorer-camera-changed', () => {
+      baseRadius = 0;
+      range.value = '100'; readout.textContent = '100%';
+      requestAnimationFrame(ready);
+    });
     viewer.addEventListener('load', ready);
     if (viewer.loaded) ready();
     range.addEventListener('input', () => apply(Number(range.value)));

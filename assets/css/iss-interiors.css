@@ -1,0 +1,21 @@
+/* ISS interior explorer: scoped to /iss/, keeping existing station viewer and zoom. */
+#iss-interior-explorer{margin:14px auto 32px;padding:16px 18px;border-radius:16px;border:1px solid rgba(0,194,255,.4);background:linear-gradient(135deg,rgba(5,23,42,.97),rgba(5,11,25,.95));box-shadow:0 13px 30px #0008;color:#e6f6ff;text-align:left}
+#iss-interior-explorer *{box-sizing:border-box}
+#iss-interior-explorer .iss-map-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+#iss-interior-explorer .iss-map-title{font-size:17px;font-weight:700}
+#iss-interior-explorer .iss-map-options{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#iss-interior-explorer select,#iss-interior-explorer button{font:inherit;border:1px solid #357c9b;border-radius:9px;background:#0d2b44;color:#e6f6ff;padding:8px 12px;cursor:pointer}
+#iss-interior-explorer button:hover,#iss-interior-explorer button:focus-visible,#iss-interior-explorer select:focus-visible{outline:2px solid #45c6ec;border-color:#45c6ec}
+#iss-interior-explorer .iss-map-status{font-size:13px;min-height:22px;color:#a5c5d9;margin:7px 0 2px}
+#iss-interior-explorer .iss-map-viewport{overflow-x:auto;perspective:800px}
+#iss-interior-explorer svg{display:block;width:100%;min-width:610px;max-height:175px;transform:rotateX(15deg);transform-origin:center bottom}
+#iss-interior-explorer .iss-map-guide{stroke:#51738a;stroke-width:5;stroke-dasharray:7 7;opacity:.6}
+#iss-interior-explorer .iss-map-shape{fill:rgba(19,74,108,.95);stroke:#55bfe5;stroke-width:1.8;transition:fill .2s,opacity .2s}
+#iss-interior-explorer .iss-map-label{fill:#e3faff;pointer-events:none;font:700 11px system-ui,sans-serif;text-anchor:middle}
+#iss-interior-explorer [data-iss-module]{cursor:pointer;outline:none}
+#iss-interior-explorer [data-iss-module]:hover .iss-map-shape,#iss-interior-explorer [data-iss-module]:focus-visible .iss-map-shape{fill:#147eaa;stroke:#fff}
+#iss-interior-explorer [data-iss-module].is-selected .iss-map-shape{fill:#04b2e7;stroke:#fff;stroke-width:2.8}
+#iss-interior-explorer [data-iss-module].is-selected .iss-map-label{fill:#04131f}
+#iss-interior-explorer [data-iss-module].is-unavailable{opacity:.42}
+#iss-interior-explorer .iss-map-foot{font-size:11px;color:#8ca9bd;margin-top:8px;line-height:1.5}
+@media(max-width:700px){#iss-interior-explorer{padding:12px 11px;margin:10px auto 20px}#iss-interior-explorer .iss-map-title{font-size:15px}#iss-interior-explorer svg{min-width:580px}#iss-interior-explorer .iss-map-options{width:100%}}

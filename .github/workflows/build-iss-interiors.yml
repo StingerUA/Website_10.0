@@ -1,0 +1,35 @@
+name: Build ISS Interior Models
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/iss-interiors/build_glb_without_blender.py'
+      - '.github/workflows/build-iss-interiors.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out website
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install procedural model dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'trimesh>=4,<5'
+      - name: Export four models
+        run: python tools/iss-interiors/build_glb_without_blender.py
+      - name: Commit GLB exports to main
+        run: |
+          mkdir -p assets/models/interior
+          cp tools/iss-interiors/ISS_GLBS/*.glb assets/models/interior/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/models/interior/*.glb
+          if ! git diff --cached --quiet; then
+            git commit -m 'Build ISS Destiny and Cupola optimized/detailed GLBs'
+            git push
+          fi
