@@ -33,7 +33,7 @@ assert.doesNotMatch(visual, /CadetVisor_/);
 
 for (const lang of ["ru", "tr", "en"]) {
   const html = readFileSync(join(root, `game/AlbaSpace/${lang}/player.html`), "utf8");
-  assert.match(html, /\.\.\/shared\/station-visual-polish\.js\?v=20261003-cadet2/);
+  assert.match(html, /\.\.\/shared\/station-visual-polish\.js\?v=20261014-cadet3/);
   assert.ok(html.indexOf("station-3d.js") < html.indexOf("station-visual-polish.js"));
   assert.ok(html.indexOf("station-visual-polish.js") < html.indexOf("station-build-mode.js"));
 }

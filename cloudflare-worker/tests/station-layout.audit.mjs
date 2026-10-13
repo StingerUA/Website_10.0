@@ -17,7 +17,7 @@ for (const file of [
 
 for (const lang of ["ru", "tr", "en"]) {
   const html = readFileSync(join(root, `game/AlbaSpace/${lang}/player.html`), "utf8");
-  assert.match(html, /\.\.\/shared\/station-3d\.js\?v=20260905-layout1/);
+  assert.match(html, /\.\.\/shared\/station-3d\.js\?v=20261014-layout2/);
   assert.match(html, /\.\.\/shared\/station-build-mode\.js\?v=20260905-build1/);
   assert.match(html, /\.\.\/shared\/station-crew-mode\.js\?v=20260905-crew1/);
 }
