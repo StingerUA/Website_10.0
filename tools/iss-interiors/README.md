@@ -33,3 +33,6 @@ Hotspots are intentionally disabled until real model coordinates are calibrated:
 configure `window.ISS_INTERIOR_HOTSPOTS = { destiny:'...', cupola:'...' }` before the JS loads.
 Camera presets for future models are placeholders; calibrate each module's target/orbit after uploading.
 AR support remains dependent on platform. A web AR button alone does not guarantee that users can physically enter a model at 1:1 scale.
+
+## Explorer v2 fixes (October 2026)
+Only existing files are shown as main clickable cards. Future modules on the map display a clear missing-file message rather than appearing clickable without feedback. Selection scrolls to the viewer, checks availability again, and falls back to the available quality automatically. The site's model preloader no longer overwrites a model that a visitor selected before lazy loading begins.

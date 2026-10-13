@@ -1,21 +1,70 @@
-/* ISS interior explorer: scoped to /iss/, keeping existing station viewer and zoom. */
-#iss-interior-explorer{margin:14px auto 32px;padding:16px 18px;border-radius:16px;border:1px solid rgba(0,194,255,.4);background:linear-gradient(135deg,rgba(5,23,42,.97),rgba(5,11,25,.95));box-shadow:0 13px 30px #0008;color:#e6f6ff;text-align:left}
+/* ISS interior explorer v2 — isolated styles, accessible high-contrast navigation. */
+#iss-interior-explorer{--iss-accent:#4edbf5;--iss-ink:#eaf8ff;--iss-muted:#9fbdcc;position:relative;isolation:isolate;max-width:1200px;margin:24px auto 40px;padding:0;color:var(--iss-ink);background:linear-gradient(130deg,rgba(9,27,49,.97),rgba(3,11,24,.99));border:1px solid rgba(89,172,215,.32);border-radius:22px;overflow:hidden;box-shadow:0 28px 70px rgba(0,4,22,.55),inset 0 1px rgba(255,255,255,.06);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;text-align:left}
+#iss-interior-explorer:before{content:"";position:absolute;inset:-160px -130px auto auto;width:480px;height:310px;background:radial-gradient(ellipse,rgba(23,146,219,.16),transparent 70%);z-index:-1;pointer-events:none}
 #iss-interior-explorer *{box-sizing:border-box}
-#iss-interior-explorer .iss-map-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-#iss-interior-explorer .iss-map-title{font-size:17px;font-weight:700}
-#iss-interior-explorer .iss-map-options{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-#iss-interior-explorer select,#iss-interior-explorer button{font:inherit;border:1px solid #357c9b;border-radius:9px;background:#0d2b44;color:#e6f6ff;padding:8px 12px;cursor:pointer}
-#iss-interior-explorer button:hover,#iss-interior-explorer button:focus-visible,#iss-interior-explorer select:focus-visible{outline:2px solid #45c6ec;border-color:#45c6ec}
-#iss-interior-explorer .iss-map-status{font-size:13px;min-height:22px;color:#a5c5d9;margin:7px 0 2px}
-#iss-interior-explorer .iss-map-viewport{overflow-x:auto;perspective:800px}
-#iss-interior-explorer svg{display:block;width:100%;min-width:610px;max-height:175px;transform:rotateX(15deg);transform-origin:center bottom}
-#iss-interior-explorer .iss-map-guide{stroke:#51738a;stroke-width:5;stroke-dasharray:7 7;opacity:.6}
-#iss-interior-explorer .iss-map-shape{fill:rgba(19,74,108,.95);stroke:#55bfe5;stroke-width:1.8;transition:fill .2s,opacity .2s}
-#iss-interior-explorer .iss-map-label{fill:#e3faff;pointer-events:none;font:700 11px system-ui,sans-serif;text-anchor:middle}
-#iss-interior-explorer [data-iss-module]{cursor:pointer;outline:none}
-#iss-interior-explorer [data-iss-module]:hover .iss-map-shape,#iss-interior-explorer [data-iss-module]:focus-visible .iss-map-shape{fill:#147eaa;stroke:#fff}
-#iss-interior-explorer [data-iss-module].is-selected .iss-map-shape{fill:#04b2e7;stroke:#fff;stroke-width:2.8}
-#iss-interior-explorer [data-iss-module].is-selected .iss-map-label{fill:#04131f}
-#iss-interior-explorer [data-iss-module].is-unavailable{opacity:.42}
-#iss-interior-explorer .iss-map-foot{font-size:11px;color:#8ca9bd;margin-top:8px;line-height:1.5}
-@media(max-width:700px){#iss-interior-explorer{padding:12px 11px;margin:10px auto 20px}#iss-interior-explorer .iss-map-title{font-size:15px}#iss-interior-explorer svg{min-width:580px}#iss-interior-explorer .iss-map-options{width:100%}}
+#iss-interior-explorer .iss-explorer-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:21px 25px;border-bottom:1px solid rgba(114,182,219,.16)}
+#iss-interior-explorer .iss-explorer-brand{display:flex;align-items:center;gap:15px}
+#iss-interior-explorer .iss-explorer-emblem{width:48px;height:48px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#17476b,#09243d);border:1px solid #3d85b0;box-shadow:inset 0 1px #ffffff24,0 0 22px #00baf024;font-size:25px;color:#67dbfd}
+#iss-interior-explorer .iss-explorer-eyebrow{color:#66b3d6;font-size:10px;letter-spacing:2.2px;font-weight:800;margin-bottom:4px}
+#iss-interior-explorer h2{font:700 clamp(17px,2.2vw,23px)/1.15 system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#f1fbff;margin:0;padding:0;text-align:left;letter-spacing:-.45px;text-shadow:none}
+#iss-interior-explorer .iss-explorer-actions{display:flex;align-items:center;justify-content:flex-end;gap:11px;flex-wrap:wrap}
+#iss-interior-explorer .iss-explorer-counter{display:inline-flex;align-items:center;gap:6px;background:#0e263b;color:#b6dfef;border:1px solid #245577;border-radius:999px;padding:9px 13px;letter-spacing:.9px;font-size:10px;font-weight:800;white-space:nowrap}
+#iss-interior-explorer .iss-counter-led{width:7px;height:7px;border-radius:50%;background:#36e7ab;box-shadow:0 0 11px #36e7ab}
+#iss-interior-explorer .iss-explorer-quality{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#a8c9d9}
+#iss-interior-explorer select,#iss-interior-explorer button{font:inherit;cursor:pointer}
+#iss-interior-explorer select{border:1px solid #436b89;border-radius:9px;background:#0a2941;color:#fff;padding:9px 11px;font-size:13px}
+#iss-interior-explorer .iss-exterior-button{border:1px solid #3a7797;border-radius:10px;padding:10px 14px;background:linear-gradient(150deg,#123b57,#0d2b44);color:#edfaff;font-size:12px;font-weight:800;transition:border-color .2s,background .2s}
+#iss-interior-explorer button:hover,#iss-interior-explorer .iss-exterior-button:hover{border-color:#6bddfc}
+#iss-interior-explorer button:focus-visible,#iss-interior-explorer select:focus-visible,#iss-interior-explorer [data-iss-module]:focus-visible{outline:3px solid #75dbff;outline-offset:3px}
+#iss-interior-explorer .iss-explorer-layout{display:grid;grid-template-columns:minmax(250px,310px) minmax(0,1fr);gap:24px;padding:20px 24px 24px}
+#iss-interior-explorer .iss-explorer-sidebar{min-width:0;display:flex;flex-direction:column;gap:12px}
+#iss-interior-explorer .iss-explorer-section-label{color:#81b1cd;letter-spacing:1.35px;font-size:11px;font-weight:800;display:flex;justify-content:space-between}
+#iss-interior-explorer .iss-side-dot{color:#38e2a6;font-size:9px}
+#iss-interior-explorer .iss-available-list{display:grid;gap:9px;max-height:235px;overflow:auto;padding:1px 2px 1px 0;scrollbar-color:#315b75 transparent;scrollbar-width:thin}
+#iss-interior-explorer .iss-explorer-placeholder{font-size:13px;color:#8daebf;padding:25px 12px;text-align:center;border:1px dashed #32536b;border-radius:13px}
+#iss-interior-explorer .iss-module-card{display:flex;align-items:center;gap:13px;width:100%;min-height:75px;padding:13px;border:1px solid rgba(80,142,183,.43);background:linear-gradient(110deg,rgba(18,53,77,.92),rgba(9,29,50,.97));color:#eefaff;border-radius:13px;text-align:left;transition:transform .2s,border-color .2s,background .2s,box-shadow .2s}
+#iss-interior-explorer .iss-module-card:hover{transform:translateY(-2px);border-color:#47c7f3;box-shadow:0 8px 24px #00aaff19}
+#iss-interior-explorer .iss-module-card.is-active{border-color:#50daf8;background:linear-gradient(110deg,rgba(19,88,118,.94),rgba(7,45,65,.97));box-shadow:inset 3px 0 #62e8ff,0 0 15px #00c5ff16}
+#iss-interior-explorer .iss-card-icon{flex:0 0 39px;width:39px;height:39px;border-radius:11px;display:grid;place-items:center;background:#13486a;color:#95ecff;font-size:21px}
+#iss-interior-explorer .iss-card-copy{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+#iss-interior-explorer .iss-card-name{font-size:15px;font-weight:800;color:#f6fcff}
+#iss-interior-explorer .iss-card-desc{font-size:11px;color:#abd0dc;line-height:1.35}
+#iss-interior-explorer .iss-card-arrow{font-size:22px;color:#70dfef;align-self:center}
+#iss-interior-explorer .iss-explorer-status{margin-top:auto;min-height:65px;border-radius:12px;background:#051929;border:1px solid #264a62;padding:12px 13px;display:flex;align-items:flex-start;gap:9px;color:#c2e1ee;font-size:12px;line-height:1.5;text-align:left}
+#iss-interior-explorer .iss-explorer-status:before{content:"●";color:#44ceff;font-size:10px;margin-top:3px}
+#iss-interior-explorer .iss-explorer-status[data-kind="warning"]{border-color:#8d6d3f;background:#272010;color:#ffe0ac}
+#iss-interior-explorer .iss-explorer-status[data-kind="warning"]:before{color:#ffc16c}
+#iss-interior-explorer .iss-explorer-status[data-kind="success"]{border-color:#206e64;color:#c6fff1}
+#iss-interior-explorer .iss-explorer-status[data-kind="success"]:before{color:#4ee2ad}
+#iss-interior-explorer .iss-explorer-schematic{min-width:0;position:relative;border:1px solid rgba(83,146,189,.21);border-radius:16px;overflow:hidden;background:linear-gradient(165deg,#071c30,#071325 72%);box-shadow:inset 0 1px #ffffff09}
+#iss-interior-explorer .iss-schematic-top{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;padding:15px 17px 6px;font-size:11px;font-weight:900;letter-spacing:1.3px;color:#c5e7f8}
+#iss-interior-explorer .iss-schematic-beacon{color:#5bd9f7;margin-right:7px}
+#iss-interior-explorer .iss-schematic-kicker{font-size:9px;letter-spacing:1px;color:#789eb6}
+#iss-interior-explorer .iss-schematic-scroll{width:100%;overflow:auto hidden;scrollbar-width:thin;scrollbar-color:#315b75 transparent;padding:0 8px}
+#iss-interior-explorer .iss-station-map{display:block;min-width:570px;width:100%;height:auto;min-height:240px}
+#iss-interior-explorer .iss-node{cursor:pointer;outline:none}
+#iss-interior-explorer .iss-node-shadow{fill:#010b14;opacity:.8}
+#iss-interior-explorer .iss-node-body{fill:#13273a;stroke:#49677b;stroke-width:1.6;transition:fill .2s,stroke .2s,filter .2s}
+#iss-interior-explorer .iss-node-seam{fill:none;stroke:#76b9db;stroke-width:2;stroke-linecap:round;opacity:.45;pointer-events:none}
+#iss-interior-explorer .iss-node-name{font:800 12px system-ui,Segoe UI,sans-serif;fill:#d8e9f2;text-anchor:middle;pointer-events:none;letter-spacing:.45px}
+#iss-interior-explorer .iss-node-sub{font:700 8px system-ui,Segoe UI,sans-serif;fill:#7797a8;text-anchor:middle;pointer-events:none;letter-spacing:1px}
+#iss-interior-explorer .iss-cupola-window{fill:#1c6b87;stroke:#79cfe6;stroke-width:1.5;pointer-events:none}
+#iss-interior-explorer .iss-node.is-ready .iss-node-body{fill:url(#iss-ready-surface);stroke:#51c4ef;stroke-width:2}
+#iss-interior-explorer .iss-node.is-ready .iss-node-name{fill:#eaffff}
+#iss-interior-explorer .iss-node.is-ready .iss-node-sub{fill:#83cce2}
+#iss-interior-explorer .iss-node.is-active .iss-node-body{fill:url(#iss-hover-surface);stroke:#9ff5ff;stroke-width:3;filter:drop-shadow(0 0 9px #03c8f56b)}
+#iss-interior-explorer .iss-node.is-active .iss-node-name{fill:#fff}
+#iss-interior-explorer .iss-node.is-pending .iss-node-body{stroke-dasharray:4 4;fill:#102336;opacity:.85}
+#iss-interior-explorer .iss-node.is-pending .iss-node-name{fill:#adc6d3}
+#iss-interior-explorer .iss-node:hover .iss-node-body,#iss-interior-explorer .iss-node:focus-visible .iss-node-body{stroke:#b5efff;stroke-width:3;filter:drop-shadow(0 0 6px #36c9ef63)}
+#iss-interior-explorer .iss-map-orbit-label{font:700 9px system-ui,Segoe UI,sans-serif;fill:#537e97;letter-spacing:1.5px;pointer-events:none}
+#iss-interior-explorer .iss-schematic-legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:10px 16px 14px;border-top:1px solid #17394e;color:#9ebecf;font-size:10px;letter-spacing:.2px}
+#iss-interior-explorer .iss-schematic-legend span{display:inline-flex;align-items:center;gap:7px}
+#iss-interior-explorer .iss-legend-dot{height:9px;width:9px;border-radius:50%;display:inline-block}
+#iss-interior-explorer .iss-legend-dot.is-live{background:#35d9f8;box-shadow:0 0 9px #23c9ee}
+#iss-interior-explorer .iss-legend-dot.is-pending{border:1px solid #7291a4;background:#183249}
+#iss-interior-explorer .iss-map-legend-hint{margin-left:auto;color:#648ba4}
+#iss-interior-explorer .iss-module-card:disabled{opacity:.7;cursor:not-allowed}
+@media(max-width:980px){#iss-interior-explorer .iss-explorer-layout{grid-template-columns:1fr;gap:14px}#iss-interior-explorer .iss-available-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:none}#iss-interior-explorer .iss-explorer-status{min-height:unset}}
+@media(max-width:680px){#iss-interior-explorer{margin:16px 0 30px;border-radius:17px}#iss-interior-explorer .iss-explorer-heading{padding:15px;gap:13px}#iss-interior-explorer .iss-explorer-emblem{width:40px;height:40px}#iss-interior-explorer .iss-explorer-eyebrow{font-size:8px;letter-spacing:1.3px}#iss-interior-explorer h2{font-size:18px}#iss-interior-explorer .iss-explorer-actions{justify-content:flex-start;gap:9px}#iss-interior-explorer .iss-explorer-counter{padding:7px 9px;font-size:9px}#iss-interior-explorer .iss-exterior-button{padding:8px 10px}#iss-interior-explorer .iss-explorer-layout{padding:13px;gap:14px}#iss-interior-explorer .iss-available-list{grid-template-columns:1fr}#iss-interior-explorer .iss-schematic-top{padding:12px}#iss-interior-explorer .iss-schematic-kicker{display:none}#iss-interior-explorer .iss-station-map{min-width:560px;min-height:215px}#iss-interior-explorer .iss-map-legend-hint{display:none}}
+@media(prefers-reduced-motion:reduce){#iss-interior-explorer .iss-module-card,#iss-interior-explorer .iss-node-body{transition:none}}

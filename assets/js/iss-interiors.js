@@ -1,129 +1,189 @@
-/* ISS module map + lazy GLB swapping. Non-destructive integration with #mainViewer. */
+/* AlbaSpace ISS interior explorer v2. No replacement viewer: works with #mainViewer. */
 (() => {
   'use strict';
-  const viewer = document.getElementById('mainViewer');
   const panel = document.getElementById('iss-interior-explorer');
-  if (!viewer || !panel) return;
+  const viewer = document.getElementById('mainViewer');
+  if (!panel || !viewer) return;
+
   const quality = panel.querySelector('#iss-interior-quality');
   const status = panel.querySelector('#iss-interior-status');
-  const outside = panel.querySelector('#iss-interior-outside');
-  const nodes = [...panel.querySelectorAll('[data-iss-module]')];
-  const exteriorPath = viewer.getAttribute('data-src') || viewer.getAttribute('src') || '/assets/models/iss.glb';
+  const list = panel.querySelector('#iss-available-list');
+  const count = panel.querySelector('#iss-ready-count');
+  const exteriorButton = panel.querySelector('#iss-interior-outside');
+  const mapNodes = [...panel.querySelectorAll('[data-iss-module]')];
+  const exteriorURL = '/assets/models/iss.glb';
   const directory = '/assets/models/interior/';
-  // Add further module keys here only when a matching map node exists.
   const modules = {
-    destiny: ['Destiny', '0deg 90deg 0.25m', '0m 0m 0m', '80deg'],
-    cupola: ['Cupola', '180deg 88deg 0.25m', '0m 0.78m 0m', '85deg'],
-    harmony: ['Harmony', '0deg 90deg 0.35m', '0m 0m 0m', '80deg'],
-    columbus: ['Columbus', '0deg 90deg 0.35m', '0m 0m 0m', '80deg'],
-    kibo: ['Kibo', '0deg 90deg 0.35m', '0m 0m 0m', '80deg'],
-    tranquility: ['Tranquility', '0deg 90deg 0.35m', '0m 0m 0m', '80deg'],
-    unity: ['Unity', '0deg 90deg 0.35m', '0m 0m 0m', '80deg'],
-    zarya: ['Zarya', '0deg 90deg 0.35m', '0m 0m 0m', '80deg'],
-    zvezda: ['Zvezda', '0deg 90deg 0.35m', '0m 0m 0m', '80deg']
+    destiny: {label:'Destiny',description:'ABD araştırma laboratuvarı',symbol:'⚗',orbit:'0deg 90deg 0.30m',target:'0m 0m 0m',fov:'80deg'},
+    cupola: {label:'Cupola',description:'7 pencereli Dünya gözlem kubbesi',symbol:'◉',orbit:'180deg 88deg 0.40m',target:'0m 0.78m 0m',fov:'80deg'},
+    harmony: {label:'Harmony',description:'Mürettebat yaşam bölümü',symbol:'◇',orbit:'0deg 90deg 0.4m',target:'0m 0m 0m',fov:'75deg'},
+    columbus: {label:'Columbus',description:'Avrupa araştırma laboratuvarı',symbol:'◇',orbit:'0deg 90deg 0.4m',target:'0m 0m 0m',fov:'75deg'},
+    kibo: {label:'Kibō',description:'Japon araştırma laboratuvarı',symbol:'◇',orbit:'0deg 90deg 0.4m',target:'0m 0m 0m',fov:'75deg'},
+    tranquility: {label:'Tranquility',description:'Yaşam destek sistemleri',symbol:'◇',orbit:'0deg 90deg 0.4m',target:'0m 0m 0m',fov:'75deg'},
+    unity: {label:'Unity',description:'Bağlantı modülü',symbol:'◇',orbit:'0deg 90deg 0.4m',target:'0m 0m 0m',fov:'75deg'},
+    zarya: {label:'Zarya',description:'Fonksiyonel kargo bloğu',symbol:'◇',orbit:'0deg 90deg 0.4m',target:'0m 0m 0m',fov:'75deg'},
+    zvezda: {label:'Zvezda',description:'Servis modülü',symbol:'◇',orbit:'0deg 90deg 0.4m',target:'0m 0m 0m',fov:'75deg'}
   };
+  const versions = new Map();
   let current = 'exterior';
-  let requested = 'exterior';
-  const availability = new Map();
-  const urlFor = (key, kind) => directory + key + '_' + kind + '.glb';
-  function setStatus(message) { status.textContent = message; }
-  function markMap() {
-    for (const node of nodes) {
-      const key = node.dataset.issModule;
-      node.classList.toggle('is-selected', key === current);
-      node.classList.toggle('is-unavailable', !(availability.get(key)?.[quality.value]));
-      node.setAttribute('aria-label', modules[key][0] + (availability.get(key)?.[quality.value] ? ' modülünü aç' : ' — model henüz yüklenmedi'));
+  let activeQuality = 'optimized';
+  let activeSrc = exteriorURL;
+  let transaction = 0;
+
+  const modelPath = (key, kind) => directory + key + '_' + kind + '.glb';
+  const message = (text, kind = 'info') => {status.textContent = text; status.dataset.kind = kind;};
+  async function exists(url) {
+    try {
+      const r = await fetch(url, {method:'HEAD', cache:'no-store'});
+      const type = (r.headers.get('content-type') || '').toLowerCase();
+      return r.ok && !type.includes('text/html');
+    } catch (error) {
+      console.warn('[ISS interior] Model check failed:', url, error);
+      return false;
     }
   }
-  async function check(url) {
-    try {
-      const response = await fetch(url, {method:'HEAD', cache:'no-store'});
-      const type = (response.headers.get('content-type') || '').toLowerCase();
-      return response.ok && !type.includes('text/html');
-    } catch (_) { return false; }
+  function ready(key, kind = quality.value) {
+    return Boolean(versions.get(key)?.[kind]);
   }
-  async function discover() {
+  function repaint() {
+    const names = Object.keys(modules).filter(key => ready(key));
+    count.textContent = String(names.length).padStart(2,'0');
+    for (const node of mapNodes) {
+      const key = node.dataset.issModule;
+      const isReady = ready(key);
+      node.classList.toggle('is-ready',isReady);
+      node.classList.toggle('is-pending',!isReady);
+      node.classList.toggle('is-active',current === key);
+      node.setAttribute('aria-label',modules[key].label + (isReady ? ': 3D modülü aç' : ': Yakında, model henüz yüklenmedi'));
+    }
+    list.replaceChildren();
+    if (!names.length) {
+      const placeholder=document.createElement('div');
+      placeholder.className='iss-explorer-placeholder';
+      placeholder.textContent='Bu kalitede henüz modül bulunamadı. Diğer kaliteyi deneyin.';
+      list.appendChild(placeholder);
+    }
+    for (const key of names) {
+      const module=modules[key];
+      const card=document.createElement('button');
+      card.type='button';
+      card.className='iss-module-card';
+      card.dataset.issGo=key;
+      card.classList.toggle('is-active',current === key);
+      const glyph=document.createElement('span'); glyph.className='iss-card-icon'; glyph.textContent=module.symbol;
+      const copy=document.createElement('span'); copy.className='iss-card-copy';
+      const title=document.createElement('span'); title.className='iss-card-name'; title.textContent=module.label;
+      const subtitle=document.createElement('span');subtitle.className='iss-card-desc';subtitle.textContent=module.description;
+      const arrow=document.createElement('span');arrow.className='iss-card-arrow';arrow.textContent='↗';arrow.setAttribute('aria-hidden','true');
+      copy.append(title,subtitle);card.append(glyph,copy,arrow);
+      card.setAttribute('aria-label',module.label + ' 3D modelini göster');
+      card.addEventListener('click',()=>select(key));
+      list.appendChild(card);
+    }
+    exteriorButton.setAttribute('aria-pressed',String(current === 'exterior'));
+  }
+  async function scan() {
     await Promise.all(Object.keys(modules).map(async key => {
-      const [optimized, detailed] = await Promise.all([check(urlFor(key,'optimized')),check(urlFor(key,'detailed'))]);
-      availability.set(key,{optimized,detailed});
+      const [optimized,detailed]=await Promise.all([
+        exists(modelPath(key,'optimized')),
+        exists(modelPath(key,'detailed'))
+      ]);
+      versions.set(key,{optimized,detailed});
+      repaint();
     }));
-    markMap();
-    const count = [...availability.values()].filter(entry => entry[quality.value]).length;
-    if (current === 'exterior') setStatus(count ? 'Hazır: ' + count + ' modül. Bir modül seçin.' : 'Modeller henüz yüklenmedi; dış ISS modeli kullanılabilir.');
+    const n=Object.keys(modules).filter(key => ready(key)).length;
+    if (current === 'exterior') message(n ? n + ' modül hazır. Soldan seçerek içine girebilirsiniz.' : 'Henüz hazır modül bulunamadı. Ana ISS modeli kullanılabilir.',n?'success':'info');
   }
-  function applyCamera(key) {
+  function positionCamera(key) {
     if (key === 'exterior') {
-      viewer.setAttribute('camera-target','0m 0m 0m');
+      viewer.setAttribute('camera-target','auto auto auto');
       viewer.setAttribute('camera-orbit','35deg 65deg 110%');
       viewer.setAttribute('field-of-view','45deg');
       viewer.setAttribute('ar-scale','auto');
     } else {
-      const config = modules[key];
-      viewer.setAttribute('camera-target',config[2]);
-      viewer.setAttribute('camera-orbit',config[1]);
-      viewer.setAttribute('field-of-view',config[3]);
+      const m=modules[key];
+      viewer.setAttribute('camera-target',m.target);
+      viewer.setAttribute('camera-orbit',m.orbit);
+      viewer.setAttribute('field-of-view',m.fov);
       viewer.setAttribute('ar-scale','fixed');
     }
     viewer.setAttribute('min-camera-orbit','auto auto 0.005m');
-    requestAnimationFrame(() => viewer.dispatchEvent(new CustomEvent('iss-explorer-camera-changed')));
+    if (typeof viewer.jumpCameraToGoal === 'function') viewer.jumpCameraToGoal();
+    viewer.dispatchEvent(new CustomEvent('iss-explorer-camera-changed'));
   }
-  async function change(key) {
-    if (key !== 'exterior' && !modules[key]) return;
-    const kind = quality.value;
-    let src = exteriorPath;
-    if (key !== 'exterior') {
-      src = urlFor(key,kind);
-      // Perform a new check so the user can upload files without stale availability.
-      if (!(await check(src))) {
-        availability.set(key,{...(availability.get(key)||{}),[kind]:false});
-        markMap();
-        setStatus('Model bulunamadı: ' + src + ' — lütfen dosyayı yükleyin.');
-        return;
+  function revealViewer() {
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    requestAnimationFrame(() => viewer.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}));
+  }
+  function showCurrent() {
+    const label=current==='exterior'?'Tüm istasyon':modules[current].label;
+    message(label + ' — 3D görünüm hazır. Modeli döndürüp yakınlaştırabilirsiniz.','success');
+  }
+  async function select(key) {
+    if (key!=='exterior' && !modules[key]) return;
+    const id=++transaction;
+    let kind=quality.value;
+    let url=exteriorURL;
+    if (key!=='exterior') {
+      message(modules[key].label + ' modeli kontrol ediliyor…');
+      let found=await exists(modelPath(key,kind));
+      if (id!==transaction) return;
+      versions.set(key,{...(versions.get(key)||{}),[kind]:found});
+      if (!found) {
+        const other=kind==='optimized'?'detailed':'optimized';
+        if (ready(key,other) || await exists(modelPath(key,other))) {
+          if (id!==transaction) return;
+          versions.set(key,{...(versions.get(key)||{}),[other]:true});
+          quality.value=other;
+          kind=other;
+          message(modules[key].label + ' yalnızca ' + (kind==='optimized'?'optimize':'detaylı') + ' kalitede mevcut; otomatik seçildi.','warning');
+        } else {
+          if (id!==transaction) return;
+          repaint();
+          message(modules[key].label + ' henüz hazır değil. Dosyayı assets/models/interior/' + key + '_' + kind + '.glb konumuna ekleyin.','warning');
+          return;
+        }
       }
-      availability.set(key,{...(availability.get(key)||{}),[kind]:true});
+      url=modelPath(key,kind);
     }
-    requested = key;
-    current = key;
-    markMap();
-    setStatus(key === 'exterior' ? 'İstasyonun dış modeli yükleniyor…' : modules[key][0] + ' yükleniyor…');
-    // Keep the site's lazy preloader data-src in sync with the active model.
-    viewer.setAttribute('data-src',src);
-    if (viewer.getAttribute('src') === src && viewer.loaded) {
-      applyCamera(key);
-      setStatus(key === 'exterior' ? 'Tüm istasyon' : modules[key][0] + ' — iç görünüm');
-      return;
+    current=key;
+    activeQuality=kind;
+    activeSrc=url;
+    viewer.setAttribute('data-src',url);
+    repaint();
+    if (key==='exterior') message('İstasyonun dış görünümüne dönülüyor…');
+    else message(modules[key].label + ' — 3D model yükleniyor…');
+    if (viewer.getAttribute('src')===url && viewer.loaded) {
+      positionCamera(key);
+      showCurrent();
+    } else {
+      viewer.setAttribute('src',url);
     }
-    viewer.setAttribute('src',src);
+    revealViewer();
   }
-  viewer.addEventListener('load', () => {
-    const key = requested;
-    const expected = key === 'exterior' ? exteriorPath : urlFor(key,quality.value);
-    if (viewer.getAttribute('src') !== expected) return;
-    applyCamera(key);
-    setStatus(key === 'exterior' ? 'Tüm istasyon' : modules[key][0] + ' — iç görünüm');
+  viewer.addEventListener('load',() => {
+    // Asynchronous loads may complete after a newer selection.
+    if (viewer.getAttribute('src')!==activeSrc) return;
+    positionCamera(current);
+    showCurrent();
   });
-  viewer.addEventListener('error', () => {
-    const key = requested;
-    setStatus('Model yüklenemedi: ' + (key === 'exterior' ? exteriorPath : urlFor(key,quality.value)));
+  viewer.addEventListener('error',() => {
+    if (viewer.getAttribute('src')!==activeSrc) return;
+    message((current==='exterior'?'ISS':modules[current].label) + ' dosyası yüklenemedi. Ağ bağlantısını ve GLB dosyasını kontrol edin.','warning');
   });
-  outside.addEventListener('click', () => change('exterior'));
-  quality.addEventListener('change', () => {markMap(); if (current !== 'exterior') change(current);});
-  nodes.forEach(node => {
-    const key = node.dataset.issModule;
-    node.setAttribute('role','button'); node.setAttribute('tabindex','0');
-    node.addEventListener('click',() => change(key));
-    node.addEventListener('keydown',e => {if (e.key === 'Enter' || e.key === ' ') {e.preventDefault(); change(key);}});
+  exteriorButton.addEventListener('click',() => select('exterior'));
+  quality.addEventListener('change',() => {
+    repaint();
+    if (current!=='exterior') select(current);
+    else message('Kalite değiştirildi. Keşfedilebilir modüllerden birini seçin.');
   });
-  // Calibrate these coordinates against the real iss.glb before enabling hotspots.
-  // window.ISS_INTERIOR_HOTSPOTS = {destiny:'0m 0m 0m', ...};
-  const hotspots = window.ISS_INTERIOR_HOTSPOTS || {};
-  Object.entries(hotspots).forEach(([key,position]) => {
-    if (!modules[key] || !/^[-+\d.m\s]+$/.test(position)) return;
-    const button = document.createElement('button');
-    button.slot = 'hotspot-' + key; button.setAttribute('data-position',position);
-    button.textContent = modules[key][0]; button.type = 'button';
-    button.className = 'iss-interior-hotspot';
-    button.addEventListener('click',() => change(key));viewer.appendChild(button);
-  });
-  discover();
+  for (const node of mapNodes) {
+    const key=node.dataset.issModule;
+    node.addEventListener('click',()=>select(key));
+    node.addEventListener('keydown',e=> {
+      if (e.key==='Enter'||e.key===' ') {e.preventDefault();select(key);}
+    });
+  }
+  // Coordinates for 3D hotspots are deliberately not invented. Calibrate against the actual ISS GLB first.
+  scan();
 })();

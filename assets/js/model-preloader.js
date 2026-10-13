@@ -275,8 +275,11 @@
 
     if (lazySrc && !viewer.getAttribute('src')){
       const startLoad = () => {
+        // A user (e.g. ISS interior explorer) may change src before lazy activation.
+        // Never overwrite that selected model with the initially captured lazySrc.
+        if (viewer.hasAttribute('src')) return;
         startWatchers();
-        viewer.setAttribute('src', lazySrc);
+        viewer.setAttribute('src', viewer.dataset.src || lazySrc);
       };
       if (isEager){
         enqueueLoad(startLoad, true);
