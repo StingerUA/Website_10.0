@@ -22,9 +22,13 @@
     </style>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/iss-interiors.css" />
+  <link rel="stylesheet" href="/assets/css/iss-holographic-hud.css" />
 <script defer="" src="/assets/js/include.js"></script>
 <script defer="" src="/assets/js/menu-toggle.js"></script>
 <script defer="" src="/assets/js/model-viewer-debug.js"></script>
+  <script src="/assets/js/model-viewer-controls-visibility.js" defer></script>
+  <script src="/assets/js/iss-deep-zoom.js" defer></script>
 </head>
 <body>
 <div data-include="/header-en.html"></div>
@@ -142,6 +146,88 @@ Vael-khrun...
 May the starlight within you always shine bright!"
     </p>
 
+    <model-viewer id="mainViewer" data-track="model_view" data-model-name="iss" data-src="/assets/models/iss.glb"
+      src="/assets/models/iss.glb" camera-controls ar ar-modes="webxr scene-viewer quick-look">
+    </model-viewer>
+
+    <section id="iss-interior-explorer" class="iss-explorer" aria-labelledby="iss-explorer-title">
+      <header class="iss-explorer-heading">
+        <div class="iss-explorer-brand">
+          <span class="iss-explorer-emblem" aria-hidden="true">✦</span>
+          <div>
+            <div class="iss-explorer-eyebrow">ALBASPACE / ORBITAL EXPLORER</div>
+            <h2 id="iss-explorer-title">Explore Inside the Station</h2>
+          </div>
+        </div>
+        <div class="iss-explorer-actions">
+          <span class="iss-explorer-counter"><span class="iss-counter-led"></span><b id="iss-ready-count">—</b> MODULES READY</span>
+          <label class="iss-explorer-quality">Quality
+            <select id="iss-interior-quality" aria-label="3D model quality">
+              <option value="optimized">Optimized</option>
+              <option value="detailed">Detailed</option>
+            </select>
+          </label>
+          <button type="button" id="iss-interior-outside" class="iss-exterior-button">↶ Exterior View</button>
+        </div>
+      </header>
+      <div class="iss-explorer-layout">
+        <aside class="iss-explorer-sidebar">
+          <div class="iss-explorer-section-label">AVAILABLE MODULES <span class="iss-side-dot">●</span></div>
+          <div id="iss-available-list" class="iss-available-list" aria-label="Available modules">
+            <div class="iss-explorer-placeholder">Scanning available 3D modules…</div>
+          </div>
+          <div id="iss-interior-status" class="iss-explorer-status" aria-live="polite" role="status">Checking modules…</div>
+          <div id="iss-tranquility-route" class="iss-tranquility-route" hidden aria-label="Tranquility to Cupola navigation">
+            <button type="button" id="iss-look-cupola">↓ Look into Cupola</button>
+            <button type="button" id="iss-back-corridor">↶ Back to Corridor</button>
+          </div>
+        </aside>
+        <div class="iss-explorer-schematic">
+          <div class="iss-schematic-top"><span><span class="iss-schematic-beacon">◆</span> ISS MODULE NETWORK</span><span class="iss-schematic-kicker">SCHEMATIC · NOT TO SCALE</span></div>
+          <div class="iss-schematic-scroll">
+            <svg class="iss-station-map" viewBox="0 0 650 277" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive ISS module schematic">
+              <defs>
+                <linearGradient id="iss-ready-surface" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#164c73"/><stop offset="1" stop-color="#0b263e"/></linearGradient>
+                <linearGradient id="iss-hover-surface" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#136d96"/><stop offset="1" stop-color="#124662"/></linearGradient>
+                <linearGradient id="iss-panel-metal" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#91b5d0"/><stop offset="0.45" stop-color="#466780"/><stop offset="1" stop-color="#1c374e"/></linearGradient>
+                <pattern id="iss-map-grid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#316580" stroke-opacity=".17" stroke-width=".8"/></pattern>
+                <filter id="iss-map-lit"><feGaussianBlur stdDeviation="4"/></filter>
+              </defs>
+              <rect width="650" height="277" rx="12" fill="url(#iss-map-grid)"/>
+              <g opacity=".7" stroke="#365972" stroke-width="2" fill="none">
+                <path d="M25 130H617"/><path d="M25 140H617"/>
+                <path d="M110 130l20 10m0-10-20 10m56-10 20 10m0-10-20 10m58-10 20 10m0-10-20 10m67-10 20 10m0-10-20 10m69-10 20 10m0-10-20 10"/>
+                <path d="M288 150V210M525 108V72M525 155V201M374 151V214" stroke-dasharray="4 5"/>
+              </g>
+              <g opacity=".55" transform="translate(4 0)">
+                <rect x="22" y="29" width="178" height="9" rx="3" fill="#23435b"/>
+                <rect x="22" y="42" width="178" height="9" rx="3" fill="#23435b"/>
+                <rect x="440" y="29" width="178" height="9" rx="3" fill="#23435b"/>
+                <rect x="440" y="42" width="178" height="9" rx="3" fill="#23435b"/>
+                <path d="M22 34H200M22 46H200M440 34H618M440 46H618" stroke="#64a1c4" stroke-width=".9" stroke-dasharray="10 3"/>
+              </g>
+              <g class="iss-node" data-iss-module="zvezda" role="button" tabindex="0"><rect class="iss-node-shadow" x="36" y="116" width="97" height="48" rx="15"/><rect class="iss-node-body" x="34" y="109" width="97" height="48" rx="15"/><path class="iss-node-seam" d="M48 119H117"/><text class="iss-node-name" x="82" y="138">ZVEZDA</text><text class="iss-node-sub" x="82" y="150">SERVICE</text></g>
+              <g class="iss-node" data-iss-module="zarya" role="button" tabindex="0"><rect class="iss-node-shadow" x="152" y="117" width="84" height="46" rx="13"/><rect class="iss-node-body" x="150" y="110" width="84" height="46" rx="13"/><path class="iss-node-seam" d="M162 120H220"/><text class="iss-node-name" x="192" y="137">ZARYA</text><text class="iss-node-sub" x="192" y="149">FGB</text></g>
+              <g class="iss-node" data-iss-module="unity" role="button" tabindex="0"><rect class="iss-node-shadow" x="250" y="117" width="65" height="46" rx="11"/><rect class="iss-node-body" x="248" y="110" width="65" height="46" rx="11"/><path class="iss-node-seam" d="M259 120H303"/><text class="iss-node-name" x="281" y="137">UNITY</text><text class="iss-node-sub" x="281" y="149">NODE 1</text></g>
+              <g class="iss-node" data-iss-module="destiny" role="button" tabindex="0"><rect class="iss-node-shadow" x="335" y="114" width="126" height="52" rx="14"/><rect class="iss-node-body" x="333" y="107" width="126" height="52" rx="14"/><path class="iss-node-seam" d="M346 117H446"/><text class="iss-node-name" x="396" y="137">DESTINY</text><text class="iss-node-sub" x="396" y="150">US LAB</text></g>
+              <g class="iss-node" data-iss-module="harmony" role="button" tabindex="0"><rect class="iss-node-shadow" x="486" y="117" width="105" height="46" rx="11"/><rect class="iss-node-body" x="484" y="110" width="105" height="46" rx="11"/><path class="iss-node-seam" d="M496 120H577"/><text class="iss-node-name" x="536" y="137">HARMONY</text><text class="iss-node-sub" x="536" y="149">NODE 2</text></g>
+              <g class="iss-node" data-iss-module="kibo" role="button" tabindex="0"><rect class="iss-node-shadow" x="482" y="65" width="105" height="39" rx="12"/><rect class="iss-node-body" x="480" y="58" width="105" height="39" rx="12"/><text class="iss-node-name" x="533" y="78">KIBŌ</text><text class="iss-node-sub" x="533" y="90">JAPAN</text></g>
+              <g class="iss-node" data-iss-module="columbus" role="button" tabindex="0"><rect class="iss-node-shadow" x="482" y="206" width="112" height="42" rx="13"/><rect class="iss-node-body" x="480" y="199" width="112" height="42" rx="13"/><text class="iss-node-name" x="536" y="218">COLUMBUS</text><text class="iss-node-sub" x="536" y="232">ESA</text></g>
+              <g class="iss-node" data-iss-module="tranquility" role="button" tabindex="0"><rect class="iss-node-shadow" x="236" y="208" width="106" height="42" rx="12"/><rect class="iss-node-body" x="234" y="201" width="106" height="42" rx="12"/><text class="iss-node-name" x="287" y="221">TRANQUILITY</text><text class="iss-node-sub" x="287" y="234">NODE 3</text></g>
+              <path d="M342 221H353" stroke="#5e8199" stroke-width="4"/>
+              <g class="iss-node" data-iss-module="cupola" role="button" tabindex="0"><circle class="iss-node-shadow" cx="393" cy="226" r="35"/><circle class="iss-node-body" cx="391" cy="220" r="35"/><circle class="iss-cupola-window" cx="391" cy="213" r="10"/><text class="iss-node-name" x="391" y="240">CUPOLA</text></g>
+              <text class="iss-map-orbit-label" x="34" y="270">ISS / MODULE NETWORK</text><text class="iss-map-orbit-label" x="618" y="270" text-anchor="end">LEO · 400 KM</text>
+            </svg>
+          </div>
+          <footer class="iss-schematic-legend">
+            <span><i class="iss-legend-dot is-live"></i> 3D available</span>
+            <span><i class="iss-legend-dot is-pending"></i> Coming soon</span>
+            <span class="iss-map-legend-hint">Tap or click a module</span>
+          </footer>
+        </div>
+      </div>
+    </section>
+
       
     </div>
 </div>
@@ -177,5 +263,6 @@ May the starlight within you always shine bright!"
     })();
   </script>
 
+  <script src="/assets/js/iss-interiors.js" defer></script>
 </body>
 </html>
