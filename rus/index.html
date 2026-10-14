@@ -83,6 +83,31 @@
   .btn-primary { background: var(--accent) !important; color: #020617 !important; }
 </style>
 
+<style>
+/* Albamen trailer: half the original homepage width on desktop */
+.home-page .hero .albamen-trailer-frame {
+  position: relative;
+  width: 50%;
+  aspect-ratio: 16 / 9;
+  margin-top: 26px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 12px 38px rgba(0,0,0,.36);
+}
+.home-page .hero .albamen-trailer-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+@media (max-width: 600px) {
+  .home-page .hero .albamen-trailer-frame {
+    width: min(100%, 360px);
+  }
+}
+</style>
 <body class="home-page">
 <div data-include="/header-ru.html"></div>
 <main class="home-main">
@@ -104,6 +129,15 @@
 <strong>15</strong>
 <span>Успехов в космосе</span>
 </div>
+</div>
+<!-- Official YouTube trailer below homepage statistics -->
+<div class="albamen-trailer-frame">
+<iframe src="https://www.youtube.com/embed/psIAyp9y1DM"
+ title="Альбамен и Лара — трейлер «Забытый визит»"
+ loading="lazy"
+ referrerpolicy="strict-origin-when-cross-origin"
+ allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+ allowfullscreen></iframe>
 </div>
 </div>
 <div class="hero-image">
