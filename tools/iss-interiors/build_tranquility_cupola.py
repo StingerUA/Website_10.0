@@ -179,7 +179,7 @@ def geometry(high):
              point(.67,a1+t,-4.04),point(.67,a1-t,-4.04)],'nomex')
         b.rod('Cupola blue grab bar',point(1.2,a0+.17,-3.06),point(1.2,a0+.49,-3.06),.018,'blue',10)
     center_ring(b,.39,.70,-4.06,'steel',n)
-    b.cylinder('Cupola nadir 80cm window',(0,CY,-4.078),.39,.015,'glass',sections=n)
+    b.cylinder('Cupola nadir 80cm window',(0,CY,-4.078),.39,.015,'glass')
     b.box('Cupola RWS console',(.66,CY-.13,-3.60),(.38,.69,.09),'black')
     for dy in (-.30,.20):
         b.box('RWS screen case',(.62,CY+dy,-3.46),(.10,.38,.29),'black')
