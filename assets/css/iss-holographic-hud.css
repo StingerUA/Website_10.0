@@ -1,0 +1,183 @@
+/* AlbaSpace ISS / ORBITAL COMMAND DECK — premium responsive skin.
+   Applies only to the shared explorer, without touching model-viewer geometry. */
+#iss-interior-explorer{
+ --iss-accent:#7eeaff;--iss-ink:#eefbff;--iss-muted:#accddb;
+ margin:clamp(26px,4vw,56px) auto 50px;
+ border:1px solid #73dcff65;border-radius:26px;
+ background:radial-gradient(ellipse at 85% -8%,#2594c135,transparent 52%),
+ radial-gradient(ellipse at 0% 110%,#5e5dcc26,transparent 50%),
+ linear-gradient(144deg,#0c223a,#07182a 48%,#030d1b);
+ box-shadow:0 32px 85px #000b,inset 0 1px #def7ff22,0 0 0 1px #76dfff0a;
+}
+#iss-interior-explorer::before{
+ content:"";position:absolute;inset:0;width:auto;height:auto;z-index:-1;
+ background:repeating-linear-gradient(90deg,transparent 0,transparent 70px,#70e4ff05 71px,#70e4ff05 72px);
+}
+#iss-interior-explorer::after{
+ content:"";position:absolute;inset:0;border-radius:inherit;z-index:3;pointer-events:none;
+ background:linear-gradient(90deg,#6defff 0,#6defff 30px,transparent 30px,transparent calc(100% - 30px),#6defff calc(100% - 30px)) top/100% 2px no-repeat;
+ opacity:.55;
+}
+#iss-interior-explorer .iss-explorer-heading{
+ padding:clamp(19px,3vw,30px);background:linear-gradient(100deg,#07192f9c,#0a2d4775);
+ border-bottom:1px solid #74b8dd33;
+}
+#iss-interior-explorer .iss-explorer-brand{gap:18px}
+#iss-interior-explorer .iss-explorer-emblem{
+ width:54px;height:54px;border-radius:15px;
+ background:radial-gradient(circle at 40% 20%,#267f9e,#103351 65%,#071729);
+ border:1px solid #90eeffb8;box-shadow:0 0 0 5px #2da5d218,0 0 28px #0aa7e651,inset 0 1px #e4fdff66;
+ color:#b8fbff;font-size:29px;
+}
+#iss-interior-explorer .iss-explorer-eyebrow{
+ letter-spacing:2.6px;font-size:10px;color:#80d8ed;
+}
+#iss-interior-explorer h2{
+ font-size:clamp(21px,2.5vw,29px);line-height:1.2;letter-spacing:-.6px;
+ font-weight:800;text-wrap:balance;
+}
+#iss-interior-explorer .iss-explorer-counter{
+ background:linear-gradient(125deg,#0e3448,#0a2234);
+ border-color:#4ecdaa7d;color:#e3fffb;padding:11px 15px;
+ box-shadow:inset 0 1px #defaff19;
+}
+#iss-interior-explorer .iss-counter-led{
+ background:#4dffc3;box-shadow:0 0 13px #1cffb5;
+ animation:iss-pulse 2.8s ease-in-out infinite;
+}
+#iss-interior-explorer .iss-explorer-quality{
+ background:#061c2ea8;border:1px solid #528fa65c;padding:3px 4px 3px 12px;border-radius:12px;
+ color:#d4edfc;
+}
+#iss-interior-explorer select{
+ min-height:39px;background:#10324b;border-color:#578eaa;border-radius:9px;font-weight:700;
+}
+#iss-interior-explorer .iss-exterior-button{
+ min-height:44px;background:linear-gradient(135deg,#196079,#102f48);
+ border-color:#61c9e8ab;border-radius:12px;
+ box-shadow:inset 0 1px #e0f9ff2a,0 8px 22px #0005;
+}
+#iss-interior-explorer .iss-exterior-button:hover{
+ background:linear-gradient(135deg,#227b95,#133c55);box-shadow:0 0 18px #30c8fa3b;
+}
+#iss-interior-explorer .iss-explorer-layout{
+ grid-template-columns:minmax(240px,310px) minmax(0,1fr);
+ padding:clamp(15px,2.5vw,28px);gap:clamp(16px,2.5vw,29px);
+}
+#iss-interior-explorer .iss-explorer-sidebar{gap:14px}
+#iss-interior-explorer .iss-explorer-section-label{
+ color:#96d5eb;letter-spacing:1.9px;font-size:10px;padding:6px 3px 0;
+}
+#iss-interior-explorer .iss-available-list{max-height:335px;gap:10px;padding:4px 7px 4px 1px}
+#iss-interior-explorer .iss-module-card{
+ position:relative;overflow:hidden;min-height:75px;border-radius:14px;
+ border-color:#70bddd55;
+ background:linear-gradient(110deg,#173b51bb,#091e31ed);
+ box-shadow:inset 0 1px #e3faff12,0 9px 25px #0005;
+}
+#iss-interior-explorer .iss-module-card::before{
+ content:"";position:absolute;top:19%;bottom:19%;left:0;width:2px;
+ background:#358daf88;transition:background .2s,box-shadow .2s;
+}
+#iss-interior-explorer .iss-module-card:hover{
+ transform:translateX(3px);border-color:#a2f6ff;box-shadow:0 0 20px #10bdec25;
+}
+#iss-interior-explorer .iss-module-card.is-active{
+ background:linear-gradient(115deg,#1b5d78,#10364e);
+ border-color:#88edff;box-shadow:0 0 0 1px #72eaff21,0 0 28px #0eb9e62e;
+}
+#iss-interior-explorer .iss-module-card.is-active::before{
+ background:#b5fbff;box-shadow:0 0 12px #6eeeff;
+}
+#iss-interior-explorer .iss-card-icon{
+ background:radial-gradient(circle at 30% 15%,#28779a,#0b344d 75%);
+ border:1px solid #70c9df77;color:#d2f9ff;
+}
+#iss-interior-explorer .iss-card-name{font-size:14px}
+#iss-interior-explorer .iss-card-desc{color:#bdd4e4}
+#iss-interior-explorer .iss-explorer-status{
+ background:linear-gradient(135deg,#0a3044,#061828f5);
+ border-color:#57a0bb7d;line-height:1.5;
+ box-shadow:inset 0 1px #bbf5ff1a;
+}
+#iss-interior-explorer .iss-explorer-schematic{
+ border-radius:18px;border-color:#70cef76e;
+ background:radial-gradient(ellipse at 50% 40%,#12587368,transparent 63%),
+ linear-gradient(144deg,#061d33,#051226 73%);
+ box-shadow:0 16px 40px #0006,inset 0 0 0 1px #98f2ff0c;
+}
+#iss-interior-explorer .iss-explorer-schematic::before{
+ content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;
+ background:
+ linear-gradient(#81ecff,#81ecff) top 12px left 12px/22px 2px no-repeat,
+ linear-gradient(#81ecff,#81ecff) top 12px left 12px/2px 22px no-repeat,
+ linear-gradient(#81ecff,#81ecff) top 12px right 12px/22px 2px no-repeat,
+ linear-gradient(#81ecff,#81ecff) top 12px right 12px/2px 22px no-repeat,
+ linear-gradient(#81ecff,#81ecff) bottom 12px left 12px/22px 2px no-repeat,
+ linear-gradient(#81ecff,#81ecff) bottom 12px left 12px/2px 22px no-repeat,
+ linear-gradient(#81ecff,#81ecff) bottom 12px right 12px/22px 2px no-repeat,
+ linear-gradient(#81ecff,#81ecff) bottom 12px right 12px/2px 22px no-repeat;
+ opacity:.5;
+}
+#iss-interior-explorer .iss-schematic-top{
+ position:relative;z-index:2;padding:22px 26px 13px;
+ color:#edfbff;font-size:12px;letter-spacing:2px;
+}
+#iss-interior-explorer .iss-schematic-beacon{color:#9df9ff;text-shadow:0 0 12px #46deff}
+#iss-interior-explorer .iss-schematic-kicker{color:#9bcce3;letter-spacing:1.2px}
+#iss-interior-explorer .iss-schematic-scroll{
+ position:relative;padding:9px 15px 14px;
+ background:linear-gradient(transparent,#061b2d61);
+}
+#iss-interior-explorer .iss-station-map{
+ position:relative;z-index:0;min-width:560px;min-height:236px;
+}
+#iss-interior-explorer .iss-node-body{
+ stroke:#5b849a;filter:drop-shadow(0 5px 3px #0008);
+}
+#iss-interior-explorer .iss-node.is-ready .iss-node-body{
+ fill:url(#iss-ready-surface);stroke:#77efff;filter:drop-shadow(0 0 5px #1dd7f15b);
+}
+#iss-interior-explorer .iss-node.is-active .iss-node-body{
+ fill:url(#iss-hover-surface);stroke:#c8ffff;filter:drop-shadow(0 0 10px #00dbffc2);
+}
+#iss-interior-explorer .iss-node.is-pending .iss-node-body{stroke:#5c879d;opacity:.94}
+#iss-interior-explorer .iss-node:hover .iss-node-body,
+#iss-interior-explorer .iss-node:focus-visible .iss-node-body{
+ stroke:#d1faff;filter:drop-shadow(0 0 10px #4feeffa8);
+}
+#iss-interior-explorer .iss-schematic-legend{
+ position:relative;z-index:2;
+ padding:15px 24px 19px;border-top:1px solid #57bde743;
+ background:linear-gradient(100deg,#09273eaf,#0b243b74);
+ color:#c4e1ef;font-size:11px;
+}
+#iss-interior-explorer .iss-map-legend-hint{color:#b1d9ea}
+#iss-interior-explorer .iss-tranquility-route button{
+ background:linear-gradient(140deg,#156d87,#0d3351);
+ border-color:#61cce7a8;box-shadow:inset 0 1px #d5f9ff20;
+}
+@keyframes iss-pulse{
+ 0%,100%{opacity:1;box-shadow:0 0 0 3px #35ffb516,0 0 13px #1cffb5}
+ 50%{opacity:.65;box-shadow:0 0 0 5px #35ffb509,0 0 19px #1cffb5}
+}
+@media(max-width:980px){
+ #iss-interior-explorer .iss-explorer-layout{grid-template-columns:1fr}
+ #iss-interior-explorer .iss-available-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:none}
+}
+@media(max-width:680px){
+ #iss-interior-explorer{border-radius:17px}
+ #iss-interior-explorer .iss-explorer-heading{padding:17px 15px}
+ #iss-interior-explorer .iss-explorer-emblem{width:42px;height:42px}
+ #iss-interior-explorer .iss-explorer-eyebrow{letter-spacing:1px}
+ #iss-interior-explorer .iss-explorer-layout{padding:13px;gap:15px}
+ #iss-interior-explorer .iss-available-list{grid-template-columns:1fr}
+ #iss-interior-explorer .iss-schematic-top{padding:19px 17px 12px;letter-spacing:1px}
+ #iss-interior-explorer .iss-schematic-scroll{padding:6px 6px 12px}
+ #iss-interior-explorer .iss-station-map{min-width:550px;min-height:215px}
+ #iss-interior-explorer .iss-schematic-legend{padding:14px 16px}
+}
+@media(prefers-reduced-motion:reduce){
+ #iss-interior-explorer .iss-counter-led{animation:none}
+ #iss-interior-explorer .iss-module-card{transition:none}
+}
