@@ -10,6 +10,9 @@
   const list = panel.querySelector('#iss-available-list');
   const count = panel.querySelector('#iss-ready-count');
   const exteriorButton = panel.querySelector('#iss-interior-outside');
+  const tranquilityRoute = panel.querySelector('#iss-tranquility-route');
+  const lookCupola = panel.querySelector('#iss-look-cupola');
+  const backCorridor = panel.querySelector('#iss-back-corridor');
   const mapNodes = [...panel.querySelectorAll('[data-iss-module]')];
   const exteriorURL = '/assets/models/iss.glb';
   const directory = '/assets/models/interior/';
@@ -56,6 +59,7 @@
       node.classList.toggle('is-active',current === key);
       node.setAttribute('aria-label',modules[key].label + (isReady ? ': 3D modülü aç' : ': Yakında, model henüz yüklenmedi'));
     }
+    tranquilityRoute.hidden = current !== 'tranquility' || !ready('tranquility');
     list.replaceChildren();
     if (!names.length) {
       const placeholder=document.createElement('div');
@@ -170,6 +174,27 @@
   viewer.addEventListener('error',() => {
     if (viewer.getAttribute('src')!==activeSrc) return;
     message((current==='exterior'?'ISS':modules[current].label) + ' dosyası yüklenemedi. Ağ bağlantısını ve GLB dosyasını kontrol edin.','warning');
+  });
+
+  lookCupola.addEventListener('click',() => {
+    if (current !== 'tranquility' || !viewer.loaded) {
+      message('Önce Tranquility modelinin yüklenmesini bekleyin.','warning');
+      return;
+    }
+    // GLB-local nadir port: center at (X=0, GLTF-Y=-2.55, GLTF-Z=-1.73).
+    viewer.setAttribute('camera-target','0m -2.55m -1.73m');
+    viewer.setAttribute('camera-orbit','0deg 23deg 2.15m');
+    viewer.setAttribute('field-of-view','70deg');
+    if (typeof viewer.jumpCameraToGoal === 'function') viewer.jumpCameraToGoal();
+    viewer.dispatchEvent(new CustomEvent('iss-explorer-camera-changed'));
+    revealViewer();
+    message('Tranquility zeminindeki kapaktan Cupola pencerelerine bakıyorsunuz.','success');
+  });
+  backCorridor.addEventListener('click',() => {
+    if (current !== 'tranquility' || !viewer.loaded) return;
+    positionCamera('tranquility');
+    revealViewer();
+    message('Tranquility ana koridoruna geri döndünüz.','success');
   });
   exteriorButton.addEventListener('click',() => select('exterior'));
   quality.addEventListener('change',() => {
