@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The remarkable story of the first human to step onto the Moon.">
+  <title>NEIL ARMSTRONG — THE FIRST STEP ON THE MOON — AlbaSpace Atlas</title>
+  <link rel="icon" href="/favicon.png">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <link rel="stylesheet" href="/assets/css/fix-layout.css">
+  <link rel="stylesheet" href="/assets/css/model-viewer-controls.css">
+  <link rel="stylesheet" href="/assets/css/neil-armstrong.css?v=20261015">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js" crossorigin="anonymous"></script>
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+  <script defer src="/assets/js/include.js"></script>
+  <script defer src="/assets/js/menu-toggle.js"></script>
+</head>
+<body>
+  <div data-include="/header-en.html"></div>
+  <main class="neil-shell" data-neil-experience>
+    <section class="neil-hero">
+      <span class="neil-eyebrow">ALBASPACE ATLAS / PEOPLE</span>
+      <h1>NEIL ARMSTRONG — THE FIRST STEP ON THE MOON</h1>
+      <p class="neil-lead">The remarkable story of the first human to step onto the Moon.</p>
+      <div class="neil-facts"><span>August 5, 1930 · Ohio</span><span>Apollo 11 · 1969</span><span>July 20 · Moon landing</span></div>
+    </section>
+    <section class="neil-story" aria-label="Albamen narration">
+      <p>Shae, my space friends! 🌌 Albamen here! Today we're meeting a courageous explorer whose journey helped humanity reach another world. His name is <strong>Neil Armstrong</strong>. Ready? We're travelling back to a night in 1969 that the world would never forget! 🚀</p>
+<p>Imagine looking through a window far from Earth. Below you is a grey world covered in craters. No trees, no birdsong, no air to breathe. And above the silent landscape hangs a beautiful blue planet: our Earth. 🌍</p>
+<p>Neil Armstrong was born on August 5, 1930, in Ohio in the United States. As a child, he was fascinated by airplanes. He learned to fly, studied engineering and became a pilot who tested aircraft in difficult conditions. His curiosity, careful preparation and calm judgment would one day take him much farther.</p>
+<p>In 1966 he flew aboard <strong>Gemini 8</strong>. Its crew achieved the first successful docking of two spacecraft in orbit. But moments later, their spacecraft began spinning dangerously fast! Armstrong and David Scott regained control. The mission showed that explorers need more than courage: they need training, teamwork and sound decisions.</p>
+<p>Then came <strong>July 16, 1969</strong>. An enormous Saturn V rocket waited on a launch pad in Florida. Three astronauts were aboard: Neil Armstrong, Buzz Aldrin and Michael Collins. Their mission was called <strong>Apollo 11</strong>. Their goal was to visit the Moon and return safely to Earth.</p>
+<p>On <strong>July 20, 1969</strong>, Armstrong and Aldrin descended in the lunar module Eagle while Collins remained in lunar orbit aboard Columbia. Computer alarms sounded and landing fuel was running low. Armstrong searched for a safe landing site. At last, Mission Control heard the famous message: <strong>“The Eagle has landed.”</strong></p>
+<p>Then the unforgettable moment arrived. Armstrong descended the ladder and became the first person to step onto the Moon. Buzz Aldrin soon joined him. Together they collected rock and soil samples, set up scientific instruments and photographed an alien landscape. Imagine standing on a world humans had only seen in the night sky! 🌕</p>
+<p>What was it like to walk there? The Moon's gravity is about one-sixth of Earth's, so astronauts weigh less. Yet bulky spacesuits make moving difficult, and the Moon has no breathable atmosphere. Every step depends on careful engineering and the work of many people.</p>
+<p>On <strong>July 24, 1969</strong>, the Apollo 11 crew returned to Earth and splashed down in the Pacific Ocean. Although Armstrong became world-famous, Apollo 11 was not the achievement of one person alone. Thousands of engineers, technicians, mathematicians and mission controllers made it possible.</p>
+<p>Now I have a question for you, my space explorer: If you were the first person to step onto the Moon, what would you feel? Excitement? Wonder? Maybe a little fear? Being brave doesn't mean never feeling afraid. It means preparing well and exploring together.</p>
+<p>Perhaps one day, someone listening to me today will become the first human to walk on Mars. Remember: <strong>knowledge is your greatest superpower!</strong> Vael-khrun… Let your dreams carry you to the stars! ✨</p>
+    </section>
+    <section class="neil-model-panel">
+      <h2>🧑‍🚀 Neil Armstrong 3D model</h2>
+      <model-viewer id="neilMainViewer" data-track="model_view" data-model-name="neil-armstrong"
+        alt="Neil Armstrong 3D" camera-controls auto-rotate ar
+        ar-modes="webxr scene-viewer quick-look"
+        exposure="1.0" shadow-intensity="0.8" interaction-prompt="auto"></model-viewer>
+      <p class="neil-model-status" data-model-status aria-live="polite">The model will appear here once it is uploaded.</p>
+    </section>
+    <section class="neil-photo">
+      <h2>📷 Photo and video with Neil Armstrong</h2>
+      <p>Open the camera, step into the frame with the astronaut, rotate and resize the character. Take a photo or record an eight-second clip. Supported devices can place the real person's silhouette in front of the model.</p>
+      <button type="button" class="neil-primary" data-open-portrait disabled>📸 Open photo / video camera</button>
+    </section>
+    <div class="neil-back"><a href="/eng/atlas.html">← Back to Atlas</a></div>
+  </main>
+  <div id="neilPortraitModal" class="neil-portrait-modal" hidden role="dialog" aria-modal="true" aria-label="Photo and video with Neil Armstrong">
+    <div class="neil-portrait-inner">
+      <div class="neil-portrait-head">
+        <span>ALBASPACE · NEIL ARMSTRONG</span>
+        <button type="button" class="neil-close" data-portrait-close aria-label="Close">×</button>
+      </div>
+      <div class="neil-portrait-frame">
+        <video id="neilCameraVideo" autoplay playsinline muted></video>
+        <canvas id="neilPortraitCanvas" aria-label="AR camera preview"></canvas>
+      </div>
+      <div class="neil-portrait-bottom">
+        <p class="neil-portrait-status" data-portrait-status aria-live="polite"></p>
+        <div class="neil-controls">
+          <button type="button" data-resize-down aria-label="Smaller">−</button>
+          <button type="button" data-rotate-avatar aria-label="Rotate">⟳</button>
+          <button type="button" class="neil-take-photo" data-take-photo aria-label="📸 Photo" title="📸 Photo">📷</button>
+          <button type="button" class="neil-record" data-take-video data-idle-label="●" aria-label="🔴 8-sec video" title="🔴 8-sec video">●</button>
+          <button type="button" data-resize-up aria-label="Larger">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div data-include="/footer-en.html"></div>
+  <script type="module" src="/assets/js/neil-portrait.js?v=20261015"></script>
+  <script src="/assets/js/particles.js"></script>
+</body>
+</html>
