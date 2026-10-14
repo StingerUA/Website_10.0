@@ -108,9 +108,10 @@
     carousel.__carousel = { pauseAutoplay, resumeAutoplay, stopAutoplay, startAutoplay };
   }
 
-  // Homepage hero: keep the existing image visible immediately, then fade to
-  // the muted looping video only after the browser has fully loaded and begun
-  // playing it. If loading/autoplay ever fails, the image simply remains.
+
+  // Homepage video: one video element, displayed as a fixed background on
+  // desktop and in the original square hero tile on mobile. Never run two
+  // simultaneous decoders for the same large source video.
   function initHeroVideo(){
     const holder = document.querySelector('.home-page .hero-image');
     if (!holder || holder.dataset.albaHeroVideo === '1') return;
@@ -122,6 +123,21 @@
     holder.classList.add('alba-hero-media');
     injectHeroVideoStyles();
 
+    const desktop = window.matchMedia('(min-width: 901px)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'alba-home-video-backdrop';
+    backdrop.setAttribute('aria-hidden', 'true');
+    backdrop.hidden = !desktop.matches;
+
+    const backgroundPoster = document.createElement('img');
+    backgroundPoster.src = poster.getAttribute('src');
+    backgroundPoster.alt = '';
+    backgroundPoster.decoding = 'async';
+    backdrop.appendChild(backgroundPoster);
+    document.body.prepend(backdrop);
+
     const video = document.createElement('video');
     video.className = 'alba-hero-video';
     video.muted = true;
@@ -130,74 +146,65 @@
     video.loop = true;
     video.playsInline = true;
     video.controls = false;
-    video.preload = 'none';
+    video.preload = 'auto';
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
     video.setAttribute('aria-hidden', 'true');
     video.disablePictureInPicture = true;
-    holder.appendChild(video);
-
     video.src = '/assets/video/home-hero-original.mp4?v=20260913-original-quality';
-    video.preload = 'auto';
+
+    let playing = false;
+    function updateVisibility(){
+      backdrop.classList.toggle('is-video-playing', playing && desktop.matches && !reducedMotion.matches);
+      holder.classList.toggle('is-video-playing', playing && !desktop.matches && !reducedMotion.matches);
+    }
+    function playIfAllowed(){
+      if (document.hidden || reducedMotion.matches) {
+        video.pause();
+        updateVisibility();
+        return;
+      }
+      const attempt = video.play();
+      if (attempt && typeof attempt.catch === 'function') {
+        attempt.catch(() => {
+          playing = false;
+          updateVisibility();
+        });
+      }
+    }
+    function placeVideo(){
+      const onDesktop = desktop.matches;
+      backdrop.hidden = !onDesktop;
+      const parent = onDesktop ? backdrop : holder;
+      if (video.parentElement !== parent) parent.appendChild(video);
+      updateVisibility();
+      playIfAllowed();
+    }
 
     video.addEventListener('playing', () => {
-      holder.classList.add('is-video-playing');
-    }, { once: true });
-
+      playing = true;
+      updateVisibility();
+    });
+    video.addEventListener('pause', () => {
+      playing = false;
+      updateVisibility();
+    });
     video.addEventListener('error', () => {
-      holder.classList.remove('is-video-playing');
-    }, { once: true });
-
-    const playAttempt = video.play();
-    if (playAttempt && typeof playAttempt.catch === 'function') {
-      playAttempt.catch(() => {
-        // If autoplay is blocked, keep the original poster visible.
-      });
-    }
+      playing = false;
+      updateVisibility();
+    });
+    if (desktop.addEventListener) desktop.addEventListener('change', placeVideo);
+    if (reducedMotion.addEventListener) reducedMotion.addEventListener('change', playIfAllowed);
+    document.addEventListener('visibilitychange', playIfAllowed);
+    placeVideo();
   }
 
   function injectHeroVideoStyles(){
     if (document.getElementById('alba-home-hero-video-style')) return;
     const style = document.createElement('style');
     style.id = 'alba-home-hero-video-style';
-    style.textContent = `
-      .home-page .hero-image.alba-hero-media{
-        position:relative;
-        overflow:hidden;
-        border-radius:24px;
-        aspect-ratio:1 / 1;
-        background:#020617;
-      }
-      .home-page .hero-image.alba-hero-media > img,
-      .home-page .hero-image.alba-hero-media > .alba-hero-video{
-        width:100%;
-        height:100%;
-        display:block;
-        object-fit:cover;
-        border-radius:inherit;
-      }
-      .home-page .hero-image.alba-hero-media > img{
-        position:relative;
-        z-index:1;
-        opacity:1;
-        transition:opacity .7s ease;
-      }
-      .home-page .hero-image.alba-hero-media > .alba-hero-video{
-        position:absolute;
-        inset:0;
-        z-index:2;
-        opacity:0;
-        pointer-events:none;
-        transition:opacity .7s ease;
-      }
-      .home-page .hero-image.alba-hero-media.is-video-playing > .alba-hero-video{opacity:1;}
-      .home-page .hero-image.alba-hero-media.is-video-playing > img{opacity:0;}
-      @media (prefers-reduced-motion: reduce){
-        .home-page .hero-image.alba-hero-media > img,
-        .home-page .hero-image.alba-hero-media > .alba-hero-video{transition:none;}
-      }
-    `;
+    style.textContent = "\n  /* Hero media remains in its original square slot on mobile/tablet. */\n  .home-page .hero-image.alba-hero-media{\n    position:relative;\n    overflow:hidden;\n    border-radius:24px;\n    aspect-ratio:1 / 1;\n    background:#020617;\n  }\n  .home-page .hero-image.alba-hero-media > img,\n  .home-page .hero-image.alba-hero-media > .alba-hero-video{\n    display:block;\n    width:100%;\n    height:100%;\n    object-fit:cover;\n    border-radius:inherit;\n  }\n  .home-page .hero-image.alba-hero-media > img{\n    position:relative;\n    z-index:1;\n    opacity:1;\n    transition:opacity .7s ease;\n  }\n  .home-page .hero-image.alba-hero-media > .alba-hero-video{\n    position:absolute;\n    inset:0;\n    z-index:2;\n    opacity:0;\n    pointer-events:none;\n    transition:opacity .7s ease;\n  }\n  .home-page .hero-image.alba-hero-media.is-video-playing > .alba-hero-video{opacity:1}\n  .home-page .hero-image.alba-hero-media.is-video-playing > img{opacity:0}\n\n  /* Full-viewport fixed background only on desktop; poster is its fallback. */\n  body.home-page > .alba-home-video-backdrop{\n    position:fixed;\n    inset:0;\n    width:100%;\n    height:100%;\n    z-index:0;\n    pointer-events:none;\n    overflow:hidden;\n    background:#020617;\n    display:none;\n  }\n  body.home-page > .alba-home-video-backdrop[hidden]{display:none!important}\n  body.home-page > .alba-home-video-backdrop > img,\n  body.home-page > .alba-home-video-backdrop > .alba-hero-video{\n    position:absolute;\n    inset:0;\n    width:100%;\n    height:100%;\n    display:block;\n    object-fit:cover;\n    object-position:center center;\n  }\n  body.home-page > .alba-home-video-backdrop > img{opacity:1}\n  body.home-page > .alba-home-video-backdrop > .alba-hero-video{\n    opacity:0;\n    transition:opacity .9s ease;\n  }\n  body.home-page > .alba-home-video-backdrop.is-video-playing > .alba-hero-video{opacity:1}\n  body.home-page > .alba-home-video-backdrop::after{\n    content:\"\";\n    position:absolute;\n    inset:0;\n    z-index:2;\n    background:\n      linear-gradient(90deg,rgba(2,6,23,.88) 0%,rgba(2,6,23,.67) 42%,rgba(2,6,23,.35) 100%),\n      linear-gradient(180deg,rgba(2,6,23,.45),rgba(2,6,23,.16) 34%,rgba(2,6,23,.66) 100%);\n  }\n\n  @media (min-width:901px){\n    body.home-page > .alba-home-video-backdrop:not([hidden]){display:block}\n    body.home-page > .home-main,\n    body.home-page > [data-include]{position:relative;z-index:1}\n    body.home-page .hero{\n      grid-template-columns:minmax(0,1fr);\n      min-height:clamp(530px,75vh,820px);\n      align-items:center;\n    }\n    body.home-page .hero-image.alba-hero-media{display:none}\n    body.home-page .hero-content{\n      width:100%;\n      max-width:660px;\n      padding:clamp(22px,3vw,40px);\n      border:1px solid rgba(155,210,245,.18);\n      border-radius:24px;\n      background:linear-gradient(120deg,rgba(3,12,28,.72),rgba(5,19,38,.40));\n      box-shadow:0 25px 72px rgba(0,0,0,.23);\n      -webkit-backdrop-filter:blur(5px);\n      backdrop-filter:blur(5px);\n    }\n    body.home-page .hero h1{\n      font-size:clamp(40px,4.1vw,58px);\n      color:#fff;\n      text-shadow:0 3px 20px rgba(0,0,0,.65);\n    }\n    body.home-page .hero .lead{\n      color:#d9e5f3;\n      max-width:590px;\n      text-shadow:0 2px 9px rgba(0,0,0,.7);\n    }\n    body.home-page .hero-stats{color:#c2d6e8}\n  }\n\n  @media (prefers-reduced-motion:reduce){\n    .home-page .hero-image.alba-hero-media > img,\n    .home-page .hero-image.alba-hero-media > .alba-hero-video,\n    body.home-page > .alba-home-video-backdrop > .alba-hero-video{\n      transition:none;\n    }\n  }\n";
     document.head.appendChild(style);
   }
 
