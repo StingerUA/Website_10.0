@@ -1,0 +1,51 @@
+name: Build ISS Harmony Models
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/iss-interiors/build_harmony_only.py'
+      - '.github/workflows/build-iss-harmony.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  harmony:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out website
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install mesh export dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'trimesh>=4,<5'
+      - name: Export Harmony only
+        run: python tools/iss-interiors/build_harmony_only.py
+      - name: Verify both files and geometry
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import trimesh
+          expected = {'optimized':3660, 'detailed':6076}
+          for q, expected_faces in expected.items():
+              f=Path('tools/iss-interiors/ISS_GLBS')/f'harmony_{q}.glb'
+              data=f.read_bytes()
+              assert data[:4]==b'glTF', f
+              scene=trimesh.load(str(f), force='scene')
+              count=sum(len(m.faces) for m in scene.geometry.values())
+              assert count==expected_faces, (q,count,expected_faces)
+              print(f.name,f.stat().st_size,'bytes',count,'triangles')
+          PY
+      - name: Publish Harmony GLBs to main
+        run: |
+          mkdir -p assets/models/interior
+          cp tools/iss-interiors/ISS_GLBS/harmony_optimized.glb assets/models/interior/
+          cp tools/iss-interiors/ISS_GLBS/harmony_detailed.glb assets/models/interior/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/models/interior/harmony_optimized.glb assets/models/interior/harmony_detailed.glb
+          if ! git diff --cached --quiet; then
+            git commit -m "Add Harmony optimized and detailed ISS interior GLBs"
+            git push
+          fi
