@@ -38,3 +38,8 @@ body.neil-portrait-open{overflow:hidden}
 .neil-controls button.recording{background:#6e1026;animation:neil-pulse 1s infinite alternate}
 @keyframes neil-pulse{to{box-shadow:0 0 20px #fa356e}}
 @media(max-width:600px){.neil-shell{margin-top:95px}.neil-hero{padding:25px 15px}.neil-story{font-size:16px}.neil-portrait-modal{padding:0}.neil-portrait-inner{height:100dvh;border-radius:0;border:0}}
+
+.neil-cart-wrap{display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;margin:20px auto 8px;color:#d5eeff;font-weight:700}
+.neil-cart-button{border:1px solid #61cafa;border-radius:999px;padding:11px 22px;color:#dff8ff;background:#0e3f6e;cursor:pointer;font-weight:700}
+.neil-cart-button:hover{background:#176097}
+.neil-cart-feedback{width:100%;text-align:center;color:#a8e8ff;font-weight:400;min-height:18px}
