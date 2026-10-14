@@ -47,7 +47,7 @@ if (root) {
       saved: 'Файл сохранён.',
       videoUnavailable: 'В этом браузере недоступна запись видео. Можно сделать фото.'
     }
-  })[lang] || {}) ;
+  })[lang] || {};
   const modelUrl = '/assets/models/neil-armstrong.glb';
   const viewer = root.querySelector('model-viewer');
   const availability = root.querySelector('[data-model-status]');
@@ -71,6 +71,7 @@ if (root) {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(35, 1, .05, 100);
   camera.position.set(0, 1.2, 5);
+  camera.lookAt(0, 0, 0);
   scene.add(new THREE.HemisphereLight(0xeefaff, 0x283c67, 2.0));
   const light = new THREE.DirectionalLight(0xffffff, 2.2);
   light.position.set(-2, 5, 6);
@@ -128,6 +129,7 @@ if (root) {
     open.disabled = false;
   }).catch(() => {
     viewer.style.display = 'none';
+    if (viewer.closest('.viewer-wrapper')) viewer.closest('.viewer-wrapper').style.display = 'none';
     availability.textContent = L.pending;
     open.disabled = true;
   });
