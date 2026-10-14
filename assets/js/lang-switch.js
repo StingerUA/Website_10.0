@@ -8,13 +8,19 @@
     if (!container) return;
 
     const isWhoIsInSpace = fileName === 'orbital-crew.html';
+    const isNeilAtlas = /^\/(?:eng\/|rus\/)?atlas\/atlas-neil-armstrong\/(?:index\.html)?$/.test(path);
 
     container.querySelectorAll('[data-lang]').forEach(a => {
       const lang = a.dataset.lang;
       if (!lang) return;
 
       let targetHref;
-      if (isWhoIsInSpace) {
+      if (isNeilAtlas) {
+        if (lang === 'tr') targetHref = '/atlas/atlas-neil-armstrong/';
+        else if (lang === 'en') targetHref = '/eng/atlas/atlas-neil-armstrong/';
+        else if (lang === 'ru') targetHref = '/rus/atlas/atlas-neil-armstrong/';
+        else return;
+      } else if (isWhoIsInSpace) {
         // Orbital Atlas keeps its legacy Russian page at the root while the
         // Turkish, English and Arabic versions live in language directories.
         if (lang === 'tr') targetHref = '/tr/orbital-crew.html';
