@@ -309,7 +309,15 @@
     const h1 = document.querySelector('h1');
     const p  = document.querySelector('.container p, main p, p');
     const title = h1 ? h1.textContent.trim() : slug;
-    const desc  = p  ? p.textContent.trim()  : '';
+    let desc = p ? p.textContent.trim() : '';
+    // Neil Armstrong's Atlas page has a separate long Albamen story section.
+    // If its localized MP3 has not been uploaded, read that story instead
+    // of using only the short hero subtitle as TTS fallback.
+    if (slug === 'neil-armstrong') {
+      const story = Array.from(document.querySelectorAll('.neil-story p'))
+        .map(node => node.textContent.trim()).filter(Boolean).join('\n\n');
+      if (story) desc = story;
+    }
     const trackName = title + ' — Sesli Anlatım';
 
     // Инжектируем CSS
