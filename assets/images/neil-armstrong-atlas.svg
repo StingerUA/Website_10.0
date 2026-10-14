@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-label="Astronaut and Moon illustration">
+<defs><radialGradient id="bg" cx="50%" cy="30%" r="85%"><stop stop-color="#134b8a"/><stop offset="1" stop-color="#020918"/></radialGradient><linearGradient id="face" x2="0.7" y2="1"><stop stop-color="#e5f7ff"/><stop offset="1" stop-color="#739bbd"/></linearGradient></defs>
+<rect width="800" height="480" fill="url(#bg)"/><circle cx="630" cy="115" r="94" fill="#a0c5df" opacity=".18"/><circle cx="630" cy="115" r="77" fill="#bed7e2" opacity=".64"/>
+<g fill="#d6efff"><circle cx="85" cy="76" r="3"/><circle cx="164" cy="129" r="2"/><circle cx="510" cy="42" r="3"/><circle cx="725" cy="310" r="2"/><circle cx="745" cy="60" r="2"/></g>
+<g transform="translate(285 62)" stroke="#11314f" stroke-width="8">
+ <path d="M50 195 Q-12 212 2 328 L20 422 H237 L252 328 Q259 218 203 193Z" fill="url(#face)"/>
+ <path d="M65 321 L58 423 M198 321 L209 423" fill="none" stroke="#6f95b9" stroke-width="14"/>
+ <path d="M55 201 Q5 210 -13 286 L-24 366 Q0 385 24 369 L65 286" fill="#dfebf7"/>
+ <path d="M207 202 Q261 211 282 290 L299 362 Q278 382 253 366 L206 288" fill="#dbefff"/>
+ <ellipse cx="130" cy="114" rx="115" ry="117" fill="#e5f4ff"/>
+ <ellipse cx="130" cy="112" rx="88" ry="81" fill="#11253b"/>
+ <path d="M65 138 Q135 34 203 138" fill="none" stroke="#4f98c8" stroke-width="15" opacity=".7"/>
+ <rect x="87" y="250" width="92" height="65" rx="14" fill="#3e6c92"/>
+ <rect x="106" y="267" width="51" height="29" rx="6" fill="#0a2036"/>
+</g>
+<rect x="35" y="402" width="730" height="2" fill="#53b5e0" opacity=".48"/>
+<text x="34" y="446" fill="#d9f3ff" font-size="29" font-family="Arial,sans-serif" font-weight="bold" letter-spacing="3">NEIL ARMSTRONG · APOLLO 11</text>
+</svg>
