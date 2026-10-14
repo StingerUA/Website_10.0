@@ -32,7 +32,7 @@ jobs:
               length=struct.unpack_from('<I',data,12)[0]
               gltf=json.loads(data[20:20+length])
               assert len(gltf.get('images',[]))>=2
-              assert any('Cupola' in mesh.get('name','') for mesh in gltf.get('meshes',[]))
+              assert any('Tranquility_ECLSS_WRS_Panel' in mesh.get('name','') for mesh in gltf.get('meshes',[]))
               print(file,len(data),'bytes',len(gltf['meshes']),'meshes')
           PY
       - name: Publish optimized and detailed module models
