@@ -88,7 +88,7 @@
 /* Official YouTube trailer below the homepage hero statistics */
 .home-page .hero .albamen-trailer-frame {
   position: relative;
-  width: 100%;
+  width: 50%;
   aspect-ratio: 16 / 9;
   margin-top: 26px;
   overflow: hidden;
@@ -102,4 +102,9 @@
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+/* Keep the YouTube controls usable at narrow phone widths. */
+@media (max-width: 600px) {
+  .home-page .hero .albamen-trailer-frame { width: min(100%, 360px); }
 }
