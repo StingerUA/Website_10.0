@@ -69,4 +69,19 @@
     <priority>0.80</priority>
   </url>
 
+  <url>
+    <loc>https://albaspace.com.tr/atlas/atlas-neil-armstrong/</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/eng/atlas/atlas-neil-armstrong/</loc>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://albaspace.com.tr/rus/atlas/atlas-neil-armstrong/</loc>
+    <priority>0.80</priority>
+  </url>
+
 </urlset>
