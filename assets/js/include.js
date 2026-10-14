@@ -4,6 +4,15 @@ runAfterDomReady(() => {
   // AI-виджеты включены — используются для текстового и голосового общения
   window.__disableAiWidgets = false;
   
+  // Android ARCore Depth: opt-in Scene Viewer launcher; skips ISS models.
+  if (!document.querySelector('script[data-alba-ar-depth]')) {
+    const depthScript = document.createElement('script');
+    depthScript.src = '/assets/js/ar-depth-launch.js?v=20261015';
+    depthScript.defer = true;
+    depthScript.dataset.albaArDepth = 'true';
+    document.head.appendChild(depthScript);
+  }
+
   // 0. Inject model-viewer error handler (very first, before analytics)
   if (!document.querySelector('script[src*="model-viewer-error-handler"]')) {
     const errorScript = document.createElement('script');
