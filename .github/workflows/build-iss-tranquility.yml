@@ -1,0 +1,68 @@
+name: Build ISS Tranquility & Docked Cupola
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/iss-interiors/tranquility_builder_source.b64'
+      - '.github/workflows/build-iss-tranquility.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  tranquility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install model export dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'trimesh>=4,<5' 'pillow>=10,<13'
+      - name: Recover and verify generator source
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64, zlib, hashlib, pathlib
+          encoded=pathlib.Path('tools/iss-interiors/tranquility_builder_source.b64').read_text().strip()
+          sha='a4d1278455bf54bd743cbc26708bee8a3612be40c34da746f5e5b4acd79627d1'
+          attempts=[encoded] if len(encoded)%4==0 else []
+          if len(encoded)%4 == 1:
+              attempts=(encoded[:i]+encoded[i+1:] for i in range(len(encoded)))
+          recovered=None
+          for item in attempts:
+              try:
+                  decoded=zlib.decompress(base64.b64decode(item,validate=True))
+                  if hashlib.sha256(decoded).hexdigest()==sha:
+                      recovered=decoded
+                      break
+              except (ValueError, zlib.error):
+                  continue
+          if recovered is None:
+              raise RuntimeError('Source bundle validation failed: SHA256 mismatch')
+          file=pathlib.Path('tools/iss-interiors/build_tranquility_cupola.py')
+          file.write_bytes(recovered)
+          print('Verified generator SHA256:',sha)
+          PY
+      - name: Export optimized and detailed combined GLBs
+        run: python tools/iss-interiors/build_tranquility_cupola.py
+      - name: Confirm GLB headers
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for label in ('optimized','detailed'):
+              p=Path(f'tools/iss-interiors/ISS_GLBS/tranquility_{label}.glb')
+              assert p.exists() and p.stat().st_size>50000
+              assert p.read_bytes()[:4]==b'glTF'
+              print(p, p.stat().st_size, 'bytes')
+          PY
+      - name: Commit exported assets to main
+        run: |
+          mkdir -p assets/models/interior
+          cp tools/iss-interiors/ISS_GLBS/tranquility_*.glb assets/models/interior/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/iss-interiors/build_tranquility_cupola.py assets/models/interior/tranquility_optimized.glb assets/models/interior/tranquility_detailed.glb
+          if ! git diff --cached --quiet; then
+            git commit -m "Add Tranquility interior with integrated Cupola optimized/detailed"
+            git push
+          fi
