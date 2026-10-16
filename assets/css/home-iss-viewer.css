@@ -35,6 +35,11 @@
     -webkit-backdrop-filter:blur(9px);
     backdrop-filter:blur(9px);
   }
+  /* Keep the orbital viewer visually at the right even when Arabic page is RTL. */
+  html[dir="rtl"] body.home-page .home-main section.hero {direction:ltr}
+  html[dir="rtl"] body.home-page .home-main section.hero > .hero-content {direction:rtl;text-align:right}
+  html[dir="rtl"] body.home-page .home-iss-showcase {direction:rtl}
+  html[dir="rtl"] body.home-page .home-iss-title {text-align:right}
   body.home-page .home-iss-showcase::before {
     content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
     background:
