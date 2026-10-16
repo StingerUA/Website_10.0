@@ -53,11 +53,10 @@
     viewer.setAttribute('interaction-prompt', 'auto');
     viewer.setAttribute('interaction-prompt-style', 'wiggle');
     viewer.setAttribute('interaction-prompt-threshold', '1200');
-    // The model is much wider than it is tall. The default max-camera-orbit
-    // clamps zoom-out near ~105%, so the requested 226% was previously ignored.
-    // Allow the real zoom-out radius so BOTH solar array wings fit in the canvas.
+    // Keep the generous zoom-out limit for manual inspection.
+    // The starting 113% camera distance displays the ISS ~2x larger than at 226%.
     viewer.setAttribute('max-camera-orbit', 'auto auto 600%');
-    viewer.setAttribute('camera-orbit', '35deg 65deg 226%');
+    viewer.setAttribute('camera-orbit', '35deg 65deg 113%');
     // Let model-viewer choose the FOV that best fits the station's bounding box.
     viewer.setAttribute('field-of-view', 'auto');
     viewer.setAttribute('environment-image', 'neutral');
