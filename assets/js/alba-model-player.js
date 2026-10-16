@@ -604,8 +604,9 @@
 
   // ── Точка входа — ждём загрузки DOM ──────────────────────────
   function tryInit() {
+    if (document.body?.dataset.disableModelExtras === 'true') return;
     const mv = document.querySelector('model-viewer');
-    if (!mv) return; // не страница с моделью — выходим тихо
+    if (!mv || mv.hasAttribute('data-no-model-extras')) return; // Clean homepage viewer: no audio.
     initPlayer(mv);
   }
 
