@@ -12,6 +12,47 @@
   };
   const language = (document.documentElement.lang || 'tr').toLowerCase().slice(0, 2);
   const description = descriptions[language] || descriptions.tr;
+  const arStrings = {
+    tr: {
+      button: 'AR ile aç',
+      title: 'İstasyonu artırılmış gerçeklikte keşfet',
+      help: 'Telefonunuzun kamerasıyla QR kodu tarayın. Açılan ISS sayfasındaki AR düğmesini kullanın.',
+      link: 'ISS sayfasını aç',
+      close: 'Kapat',
+      qr: 'QR kod yükleniyor…',
+      unavailable: 'QR kod görüntülenemiyor. Aşağıdaki bağlantıyı kullanın.'
+    },
+    en: {
+      button: 'View in AR',
+      title: 'Explore the station in augmented reality',
+      help: 'Scan this QR code with your phone, then use the AR button on the ISS page.',
+      link: 'Open the ISS page',
+      close: 'Close',
+      qr: 'Loading QR code…',
+      unavailable: 'QR code unavailable. Use the link below.'
+    },
+    ru: {
+      button: 'Открыть в AR',
+      title: 'Посмотреть МКС в дополненной реальности',
+      help: 'Отсканируйте QR-код телефоном, затем нажмите кнопку AR на странице МКС.',
+      link: 'Открыть страницу МКС',
+      close: 'Закрыть',
+      qr: 'Загрузка QR-кода…',
+      unavailable: 'QR-код недоступен. Воспользуйтесь ссылкой ниже.'
+    },
+    ar: {
+      button: 'عرض في الواقع المعزز',
+      title: 'استكشف المحطة بالواقع المعزز',
+      help: 'امسح رمز QR بهاتفك، ثم استخدم زر AR في صفحة المحطة.',
+      link: 'افتح صفحة المحطة',
+      close: 'إغلاق',
+      qr: 'جارٍ تحميل رمز QR…',
+      unavailable: 'رمز QR غير متاح. استخدم الرابط أدناه.'
+    }
+  };
+  const arText = arStrings[language] || arStrings.tr;
+  const mobilePagePath = language === 'en' ? '/eng/iss/' :
+    language === 'ru' ? '/rus/iss/' : '/iss/';
   let panel = null;
 
   function ensureLibrary() {
@@ -22,6 +63,95 @@
     script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js';
     script.dataset.homeIssLibrary = '1';
     document.head.appendChild(script);
+  }
+
+
+  function createArButton() {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'home-iss-ar-button';
+    button.setAttribute('aria-label', arText.button);
+    const symbol = document.createElement('span');
+    symbol.className = 'home-iss-ar-symbol';
+    symbol.setAttribute('aria-hidden', 'true');
+    symbol.textContent = '◈';
+    const label = document.createElement('span');
+    label.textContent = arText.button;
+    button.append(symbol, label);
+    return button;
+  }
+
+  // Desktop browsers generally cannot launch native AR directly.
+  // Offer a phone hand-off instead of displaying an AR button that does nothing.
+  function showArHandoff() {
+    let dialog = document.querySelector('dialog.home-iss-ar-dialog');
+    if (!dialog) {
+      dialog = document.createElement('dialog');
+      dialog.className = 'home-iss-ar-dialog';
+      dialog.setAttribute('aria-label', arText.title);
+      const wrap = document.createElement('div');
+      wrap.className = 'home-iss-ar-dialog-content';
+      const head = document.createElement('h2');
+      head.textContent = arText.title;
+      const help = document.createElement('p');
+      help.textContent = arText.help;
+      const qr = document.createElement('div');
+      qr.className = 'home-iss-ar-qr';
+      qr.setAttribute('aria-label', arText.qr);
+      qr.textContent = arText.qr;
+      const url = new URL(mobilePagePath, window.location.origin).href;
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = arText.link + ' ↗';
+      link.className = 'home-iss-ar-page-link';
+      const close = document.createElement('button');
+      close.type = 'button';
+      close.textContent = arText.close;
+      close.className = 'home-iss-ar-close';
+      close.addEventListener('click', () => dialog.close());
+      wrap.append(head, help, qr, link, close);
+      dialog.appendChild(wrap);
+      dialog.addEventListener('click', event => {
+        if (event.target === dialog) dialog.close();
+      });
+      document.body.appendChild(dialog);
+
+      const drawQr = () => {
+        if (typeof window.QRCode !== 'function' || qr.dataset.ready === '1') return;
+        qr.replaceChildren();
+        try {
+          new window.QRCode(qr, {
+            text: url,
+            width: 200,
+            height: 200,
+            correctLevel: window.QRCode.CorrectLevel.M
+          });
+          qr.dataset.ready = '1';
+        } catch (e) {
+          qr.textContent = arText.unavailable;
+        }
+      };
+      if (typeof window.QRCode === 'function') {
+        drawQr();
+      } else {
+        let script = document.querySelector('script[data-home-iss-qr-library]');
+        if (!script) {
+          script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+          script.async = true;
+          script.dataset.homeIssQrLibrary = '1';
+          document.head.appendChild(script);
+        }
+        script.addEventListener('load', drawQr, {once:true});
+        script.addEventListener('error', () => {
+          qr.textContent = arText.unavailable;
+        }, {once:true});
+      }
+    }
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
   }
 
   function mount(hero) {
@@ -66,7 +196,27 @@
       console.warn('[AlbaSpace homepage ISS] 3D model could not be loaded.');
     });
 
-    stage.appendChild(viewer);
+    // Native model-viewer AR slot: used when a device supports WebXR/Scene Viewer/Quick Look.
+    const nativeArButton = createArButton();
+    nativeArButton.slot = 'ar-button';
+    viewer.appendChild(nativeArButton);
+
+    // On desktop (where native AR is generally unavailable), show a matching
+    // persistent button at the lower-left with a phone QR hand-off.
+    const desktopArButton = createArButton();
+    desktopArButton.classList.add('home-iss-ar-desktop');
+    desktopArButton.addEventListener('click', showArHandoff);
+
+    const updateArAvailability = () => {
+      desktopArButton.hidden = !!viewer.canActivateAR;
+    };
+    viewer.addEventListener('load', updateArAvailability);
+    viewer.addEventListener('ar-status', updateArAvailability);
+    if (window.customElements && window.customElements.whenDefined) {
+      window.customElements.whenDefined('model-viewer').then(updateArAvailability);
+    }
+
+    stage.append(viewer, desktopArButton);
     aside.appendChild(stage);
     hero.appendChild(aside);
     panel = aside;
