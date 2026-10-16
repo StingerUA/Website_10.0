@@ -32,7 +32,7 @@
     ar: {
       title:'محطة الفضاء الدولية',
       hint:'تدوير · تكبير',
-      link:'استكشف المحطة',
+      link:'شاهد المحطة (بالتركية)',
       loading:'جارٍ تحميل المحطة ثلاثية الأبعاد…',
       failed:'تعذر تحميل النموذج ثلاثي الأبعاد',
       aria:'نموذج ثلاثي الأبعاد تفاعلي لمحطة الفضاء الدولية'
@@ -42,7 +42,7 @@
   const t = strings[language] || strings.tr;
   const path = language === 'en' ? '/eng/iss/' :
     language === 'ru' ? '/rus/iss/' :
-    language === 'ar' ? '/ar/iss/' : '/iss/';
+    language === 'ar' ? '/iss/' : '/iss/';
   let panel = null;
 
   function ensureModelViewerLibrary() {
