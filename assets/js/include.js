@@ -1079,6 +1079,8 @@ function createPreloaderLoader() {
 function createModelPreloaderLoader() {
   let loaded = false;
   return function ensureModelPreloader() {
+    // Homepage uses a clean, frameless ISS model without the global loading overlay.
+    if (document.body?.dataset.disableModelExtras === 'true') return;
     if (loaded) return;
     if (!document.querySelector('model-viewer')) return;
     if (document.querySelector('script[data-model-preloader]')) { loaded = true; return; }
@@ -1108,6 +1110,8 @@ function createModelNavLoader() {
 function createAlbaModelPlayerLoader() {
   let loaded = false;
   return function ensureAlbaModelPlayer() {
+    // Never add a narration player to the standalone homepage 3D showcase.
+    if (document.body?.dataset.disableModelExtras === 'true') return;
     if (loaded) return;
     if (!document.querySelector('model-viewer')) return;
     if (document.querySelector('script[data-alba-model-player]')) { loaded = true; return; }
