@@ -4,7 +4,6 @@
   'use strict';
 
   const desktopQuery = window.matchMedia('(min-width: 901px)');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const descriptions = {
     tr: 'Uluslararası Uzay İstasyonu etkileşimli 3D modeli',
     en: 'Interactive 3D model of the International Space Station',
@@ -50,15 +49,11 @@
     viewer.setAttribute('ar', '');
     viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
     viewer.setAttribute('interaction-prompt', 'none');
-    viewer.setAttribute('camera-orbit', '35deg 65deg 110%');
+    // 110% -> ~147% increases camera distance by 1/0.75, making the ISS ~25% smaller onscreen.
+    viewer.setAttribute('camera-orbit', '35deg 65deg 147%');
     viewer.setAttribute('field-of-view', '45deg');
     viewer.setAttribute('environment-image', 'neutral');
     viewer.setAttribute('exposure', '1.2');
-
-    if (!reducedMotion.matches) {
-      viewer.setAttribute('auto-rotate', '');
-      viewer.setAttribute('rotation-per-second', '3deg');
-    }
 
     viewer.addEventListener('error', () => {
       console.warn('[AlbaSpace homepage ISS] 3D model could not be loaded.');
@@ -87,14 +82,6 @@
     if (desktopQuery.addEventListener) desktopQuery.addEventListener('change', sync);
     else if (desktopQuery.addListener) desktopQuery.addListener(sync);
 
-    if (reducedMotion.addEventListener) {
-      reducedMotion.addEventListener('change', () => {
-        const viewer = panel && panel.querySelector('model-viewer');
-        if (!viewer) return;
-        if (reducedMotion.matches) viewer.removeAttribute('auto-rotate');
-        else viewer.setAttribute('auto-rotate', '');
-      });
-    }
   }
 
   if (document.readyState === 'loading') {
