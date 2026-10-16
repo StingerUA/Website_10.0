@@ -119,3 +119,133 @@
     display: none !important;
   }
 }
+
+
+/* Standard-style AR action anchored in the bottom-left of the ISS viewer.
+   On AR-capable devices the native model-viewer slot is used; otherwise
+   the visible desktop button hands the ISS off to a phone via QR code. */
+body.home-page .home-iss-stage .home-iss-ar-button {
+  display: inline-flex;
+  gap: 9px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 22px;
+  left: 20px;
+  z-index: 8;
+  min-height: 43px;
+  padding: 9px 17px;
+  border: 1px solid rgba(162, 231, 253, .9);
+  border-radius: 999px;
+  background: rgba(249, 253, 255, .96);
+  color: #122b42;
+  font: 700 13px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, .24), 0 1px 2px rgba(255, 255, 255, .2) inset;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+body.home-page .home-iss-stage .home-iss-ar-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, .36);
+}
+body.home-page .home-iss-stage .home-iss-ar-button:focus-visible {
+  outline: 3px solid #64daff;
+  outline-offset: 3px;
+}
+body.home-page .home-iss-stage .home-iss-ar-button[hidden] {
+  display: none !important;
+}
+body.home-page .home-iss-stage .home-iss-ar-symbol {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  border: 1.5px solid currentColor;
+  border-radius: 5px;
+  font-size: 17px;
+  line-height: 1;
+}
+
+/* Phone handoff dialog is an accessible native <dialog>, outside the viewer. */
+dialog.home-iss-ar-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(92vw, 450px);
+  max-height: min(90vh, 740px);
+  padding: 0;
+  border: 1px solid rgba(130, 217, 254, .6);
+  border-radius: 22px;
+  background: linear-gradient(155deg, #0a2338, #061326 70%);
+  color: #f4fbff;
+  box-shadow: 0 30px 100px rgba(0,0,0,.75);
+  overflow: auto;
+  z-index: 20000;
+}
+dialog.home-iss-ar-dialog::backdrop {
+  background: rgba(0, 5, 17, .78);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.home-iss-ar-dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 27px 25px 25px;
+  text-align: center;
+}
+.home-iss-ar-dialog-content h2 {
+  margin: 0;
+  font: 750 clamp(20px, 3vw, 25px)/1.3 system-ui, sans-serif;
+  color: #f7fdff;
+}
+.home-iss-ar-dialog-content p {
+  margin: 0;
+  font: 14px/1.6 system-ui, sans-serif;
+  color: #c0dceb;
+}
+.home-iss-ar-qr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 224px;
+  height: 224px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff;
+  color: #10253a;
+  font: 12px/1.4 system-ui, sans-serif;
+}
+.home-iss-ar-qr img,
+.home-iss-ar-qr canvas {
+  display: block;
+  max-width: 200px;
+  max-height: 200px;
+}
+.home-iss-ar-page-link {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  color: #89e5ff;
+  font: 700 14px/1.3 system-ui, sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.home-iss-ar-close {
+  padding: 10px 22px;
+  min-height: 39px;
+  border: 1px solid rgba(130, 210, 243, .4);
+  border-radius: 999px;
+  background: rgba(75, 139, 178, .17);
+  color: #fff;
+  cursor: pointer;
+  font: 650 13px/1.3 system-ui, sans-serif;
+}
+.home-iss-ar-close:hover { background: rgba(75, 139, 178, .3); }
+@media (prefers-reduced-motion: reduce) {
+  body.home-page .home-iss-stage .home-iss-ar-button { transition: none; }
+}
