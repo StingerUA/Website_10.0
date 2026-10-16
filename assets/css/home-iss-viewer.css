@@ -2,9 +2,10 @@
    Keep the original mobile homepage untouched. */
 @media (min-width: 901px) {
   body.home-page .home-main section.hero {
-    grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+    /* Wider right-hand canvas while keeping the text in its own column. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
     align-items: center;
-    gap: clamp(22px, 3.5vw, 54px);
+    gap: clamp(18px, 2.5vw, 42px);
     position: relative;
   }
 
@@ -40,7 +41,9 @@
   body.home-page .home-iss-stage {
     position: relative;
     width: 100%;
-    height: clamp(350px, 39vw, 530px);
+    /* Increase the actual WebGL viewport, not just CSS overflow: the
+       model-viewer canvas clips rendered geometry to its own dimensions. */
+    height: clamp(460px, 45vw, 640px);
     margin: 0;
     padding: 0;
     overflow: visible;
