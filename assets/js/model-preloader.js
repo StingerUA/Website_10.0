@@ -133,7 +133,8 @@
   }
 
   function attachToViewer(viewer){
-    if (!viewer) return;
+    if (!viewer || document.body?.dataset.disableModelExtras === 'true' ||
+        viewer.hasAttribute('data-no-model-extras')) return;
     if (viewer.closest('.viewer-wrapper')) return; // already wrapped
 
     const wrapper = document.createElement('div');
@@ -294,6 +295,7 @@
   }
 
   function init(){
+    if (document.body?.dataset.disableModelExtras === 'true') return;
     const viewers = document.querySelectorAll('model-viewer');
     if (!viewers || viewers.length === 0) return;
 
