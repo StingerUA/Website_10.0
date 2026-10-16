@@ -48,9 +48,13 @@
     viewer.setAttribute('camera-controls', '');
     viewer.setAttribute('ar', '');
     viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
-    viewer.setAttribute('interaction-prompt', 'none');
-    // 110% -> ~147% increases camera distance by 1/0.75, making the ISS ~25% smaller onscreen.
-    viewer.setAttribute('camera-orbit', '35deg 65deg 147%');
+    // Standard model-viewer hand that wiggles horizontally, then disappears after interaction.
+    // This is a short interaction hint, NOT continuous auto-rotation.
+    viewer.setAttribute('interaction-prompt', 'auto');
+    viewer.setAttribute('interaction-prompt-style', 'wiggle');
+    viewer.setAttribute('interaction-prompt-threshold', '1200');
+    // 147% -> 226% camera distance: the ISS appears about 35% smaller than before.
+    viewer.setAttribute('camera-orbit', '35deg 65deg 226%');
     viewer.setAttribute('field-of-view', '45deg');
     viewer.setAttribute('environment-image', 'neutral');
     viewer.setAttribute('exposure', '1.2');
