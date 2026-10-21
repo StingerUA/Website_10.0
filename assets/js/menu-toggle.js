@@ -22,7 +22,7 @@
         { href: '/hizmetler.html', label: 'HİZMETLER' },
         { href: '/etkinlikler.html', label: 'Yaklaşan Etkinlikler' },
         { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true },
-        { href: '/kubesat.html', label: 'KubeSat' }
+        { href: '/kubesat.html', label: 'Cubesat' }
       ],
       albamen: [
         { href: '/albamen.html', label: 'ALBAMEN' },
@@ -41,7 +41,7 @@
         { href: '/eng/hizmetler.html', label: 'SERVICES' },
         { href: '/eng/etkinlikler.html', label: 'Upcoming Events' },
         { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true },
-        { href: '/eng/kupsat.html', label: 'KubeSat' }
+        { href: '/eng/kupsat.html', label: 'Cubesat' }
       ],
       albamen: [
         { href: '/eng/albamen.html', label: 'ALBAMAN' },
@@ -79,7 +79,7 @@
         { href: '/ar/hizmetler.html', label: 'الخدمات' },
         { href: '/ar/etkinlikler.html', label: 'الفعاليات القادمة' },
         { href: 'https://albaspace.com.tr/ar/hyperclub', label: 'Hyper Club', external: true },
-        { href: '/ar/kubesat.html', label: 'KubeSat' }
+        { href: '/ar/kubesat.html', label: 'Cubesat' }
       ],
       albamen: [
         { href: '/ar/albamen.html', label: 'ALBAMEN' },
