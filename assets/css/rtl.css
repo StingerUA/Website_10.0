@@ -27,7 +27,7 @@ html[dir="rtl"] body {
   overflow-x: clip !important;
 }
 
-/* Numbers, prices, and Latin brand names (ALBAMEN, ATLAS, KubeSat, Alba Space)
+/* Numbers, prices, and Latin brand names (ALBAMEN, ATLAS, Cubesat, Alba Space)
    stay left-to-right even inside RTL text so they don't get visually reversed. */
 html[dir="rtl"] .price,
 html[dir="rtl"] [data-price],
