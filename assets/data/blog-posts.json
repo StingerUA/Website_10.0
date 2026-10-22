@@ -1289,6 +1289,41 @@
           "url": "/rus/blog/gunes-firtinalari-gunes-bir-gun-dunyanin-internetini-kapatabilir-mi.html"
         }
       }
+    },
+    {
+      "slug": "wow-sinyali-evrenden-gelen-72-saniyelik-gizem",
+      "category": "uzay",
+      "publishAt": "2026-10-22T17:46:50+03:00",
+      "cover": "/assets/images/blog/wow-sinyali-evrenden-gelen-72-saniyelik-gizem-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Ali Batuhan Özsürmeli",
+        "en": "Ali Batuhan Özsürmeli",
+        "ru": "Ali Batuhan Özsürmeli"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Wow! Sinyali: Evrenden Gelen 72 Saniyelik Gizem",
+          "excerpt": "Gizem",
+          "url": "/blog/wow-sinyali-evrenden-gelen-72-saniyelik-gizem.html"
+        },
+        "en": {
+          "title": "The Wow! Signal: A 72-Second Mystery",
+          "excerpt": "from the Universe",
+          "url": "/eng/blog/wow-sinyali-evrenden-gelen-72-saniyelik-gizem.html"
+        },
+        "ru": {
+          "title": "Сигнал Wow!: 72-секундная тайна,",
+          "excerpt": "пришедшая из Вселенной",
+          "url": "/rus/blog/wow-sinyali-evrenden-gelen-72-saniyelik-gizem.html"
+        }
+      }
     }
   ]
 }
