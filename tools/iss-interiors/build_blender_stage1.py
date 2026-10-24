@@ -225,6 +225,32 @@ def cupola():
  light((0,-.5,-.1),(0,.5,.6),45,1.2)
  return ((0,-.56,-.46),(0,.18,.64),16)
 
+def spherical_node():
+ r=1.73;vs=[];fs=[];nu=40;nv=24
+ for j in range(nv+1):
+  t=.001+(math.pi-.002)*j/nv
+  for i in range(nu):
+   a=i*2*math.pi/nu;vs.append((r*math.sin(t)*math.cos(a),r*math.sin(t)*math.sin(a),r*math.cos(t)))
+ for j in range(nv):
+  for i in range(nu):fs.append((j*nu+i,j*nu+(i+1)%nu,(j+1)*nu+(i+1)%nu,(j+1)*nu+i))
+ ob=mesh('Spherical pressure cabin',vs,fs,'Nomex')
+ for p in ob.data.polygons:p.use_smooth=True
+ for axis in [(1,0,0),(-1,0,0),(0,1,0),(0,-1,0),(0,0,1),(0,0,-1)]:
+  n=Vector(axis);u=n.cross(Vector((0,0,1)))
+  if u.length<.1:u=n.cross(Vector((0,1,0)))
+  u.normalize();v=n.cross(u);center=n*1.44
+  cyl('Circular docking door',center,center+n*.06,.53,'Ivory',48)
+  for rad,thick,ma in [(.60,.075,'Silver'),(.54,.022,'Gasket')]:
+   cable('Docking ring',[center-n*.025+rad*(math.cos(i*math.pi/32)*u+math.sin(i*math.pi/32)*v) for i in range(65)],thick,ma)
+  for j in range(8):
+   a=j*math.pi/4;p=center+.70*(math.cos(a)*u+math.sin(a)*v);cyl('Port latch',p-n*.06,p,.025,'Dark',8)
+  rail(center-n*.12-u*.19-v*.18,center-n*.12+u*.19-v*.18,'Red')
+ for j in range(8):
+  a=j*math.pi/4;pts=[(r*.98*math.sin(t)*math.cos(a),r*.98*math.sin(t)*math.sin(a),r*.98*math.cos(t)) for t in [.20+i*(math.pi-.40)/24 for i in range(25)]];cable('Pressure shell seam',pts,.018,'Ivory')
+ for x in [-.65,.65]:light((x,-.30,.92),(0,0,-.3),45,1)
+ text('PRICHAL',(0,1.12,.86),.11,'Dark')
+ return ((.06,-1.13,.04),(0,.9,.04),15)
+
 def build(key):
  global ROOT,KEY,M,C
  KEY=key;M={};C={};bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
@@ -251,11 +277,7 @@ def build(key):
    for x in [-.61,.61]:rail((x,-.80,-.53),(x,.8,-.53),'Silver')
    for x in [-.35,.35]:box('Payload carrier',(x,.30,-.43),(.46,.6,.38),'Dark',.025)
   for yy in [-L*.2,L*.2]:light((0,yy,.85),(0,yy,-.6),85,1.2)
- elif kind=='sphere':
-  # Six-port nodal layout, faceted study shell; spherical curvature refined next stage.
-  ys,step=shell(L,n,True)
-  for side in [-1,1]:sideport(side,0)
-  for z in [-1.31,1.31]:box('Zenith / nadir hatch',(0,0,z),(1.1,1.1,.09),'Silver',.09)
+ elif kind=='sphere':camera=spherical_node()
  else:
   ru=kind in ['cargo_ru','service','rulab','airlock_ru'];ys,step=shell(L,n,ru)
   for side in [-1,1]:
@@ -310,6 +332,7 @@ def build(key):
  for o in scene.objects:
   if o.type=='MESH':o.select_set(True)
  bpy.context.view_layer.objects.active=bpy.context.selected_objects[0];bpy.ops.object.join();bpy.context.object.name=key+'_interior'
+ mod=bpy.context.object.modifiers.new('Web triangulation','TRIANGULATE');bpy.ops.object.modifier_apply(modifier=mod.name)
  bpy.ops.export_scene.gltf(filepath=str(OUT/'glb'/f'{key}_optimized.glb'),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_tangents=True,export_cameras=False,export_lights=False,export_extras=True)
  bpy.ops.wm.open_mainfile(filepath=str(OUT/'blend'/f'{key}_stage1.blend'));scene=bpy.context.scene
  if kind=='cupola':
