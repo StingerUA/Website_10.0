@@ -22,7 +22,7 @@
     </style>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link rel="stylesheet" href="/assets/css/fix-layout.css">
-  <link rel="stylesheet" href="/assets/css/iss-interiors.css" />
+  <link rel="stylesheet" href="/assets/css/iss-interiors.css?v=20261024-stage1" />
   <link rel="stylesheet" href="/assets/css/iss-holographic-hud.css" />
 <script defer="" src="/assets/js/include.js"></script>
 <script defer="" src="/assets/js/menu-toggle.js"></script>
@@ -97,39 +97,44 @@ Vael-khrun — пусть свет знаний ведёт детей к звё�
         <div class="iss-explorer-schematic">
           <div class="iss-schematic-top"><span><span class="iss-schematic-beacon">◆</span> СХЕМА МОДУЛЕЙ МКС</span><span class="iss-schematic-kicker">УСЛОВНАЯ СХЕМА · НЕ В МАСШТАБЕ</span></div>
           <div class="iss-schematic-scroll">
-            <svg class="iss-station-map" viewBox="0 0 650 277" xmlns="http://www.w3.org/2000/svg" aria-label="Интерактивная схема модулей МКС">
-              <defs>
-                <linearGradient id="iss-ready-surface" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#164c73"/><stop offset="1" stop-color="#0b263e"/></linearGradient>
-                <linearGradient id="iss-hover-surface" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#136d96"/><stop offset="1" stop-color="#124662"/></linearGradient>
-                <linearGradient id="iss-panel-metal" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#91b5d0"/><stop offset="0.45" stop-color="#466780"/><stop offset="1" stop-color="#1c374e"/></linearGradient>
-                <pattern id="iss-map-grid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#316580" stroke-opacity=".17" stroke-width=".8"/></pattern>
-                <filter id="iss-map-lit"><feGaussianBlur stdDeviation="4"/></filter>
-              </defs>
-              <rect width="650" height="277" rx="12" fill="url(#iss-map-grid)"/>
-              <g opacity=".7" stroke="#365972" stroke-width="2" fill="none">
-                <path d="M25 130H617"/><path d="M25 140H617"/>
-                <path d="M110 130l20 10m0-10-20 10m56-10 20 10m0-10-20 10m58-10 20 10m0-10-20 10m67-10 20 10m0-10-20 10m69-10 20 10m0-10-20 10"/>
-                <path d="M288 150V210M525 108V72M525 155V201M374 151V214" stroke-dasharray="4 5"/>
-              </g>
-              <g opacity=".55" transform="translate(4 0)">
-                <rect x="22" y="29" width="178" height="9" rx="3" fill="#23435b"/>
-                <rect x="22" y="42" width="178" height="9" rx="3" fill="#23435b"/>
-                <rect x="440" y="29" width="178" height="9" rx="3" fill="#23435b"/>
-                <rect x="440" y="42" width="178" height="9" rx="3" fill="#23435b"/>
-                <path d="M22 34H200M22 46H200M440 34H618M440 46H618" stroke="#64a1c4" stroke-width=".9" stroke-dasharray="10 3"/>
-              </g>
-              <g class="iss-node" data-iss-module="zvezda" role="button" tabindex="0"><rect class="iss-node-shadow" x="36" y="116" width="97" height="48" rx="15"/><rect class="iss-node-body" x="34" y="109" width="97" height="48" rx="15"/><path class="iss-node-seam" d="M48 119H117"/><text class="iss-node-name" x="82" y="138">ZVEZDA</text><text class="iss-node-sub" x="82" y="150">SERVICE</text></g>
-              <g class="iss-node" data-iss-module="zarya" role="button" tabindex="0"><rect class="iss-node-shadow" x="152" y="117" width="84" height="46" rx="13"/><rect class="iss-node-body" x="150" y="110" width="84" height="46" rx="13"/><path class="iss-node-seam" d="M162 120H220"/><text class="iss-node-name" x="192" y="137">ZARYA</text><text class="iss-node-sub" x="192" y="149">FGB</text></g>
-              <g class="iss-node" data-iss-module="unity" role="button" tabindex="0"><rect class="iss-node-shadow" x="250" y="117" width="65" height="46" rx="11"/><rect class="iss-node-body" x="248" y="110" width="65" height="46" rx="11"/><path class="iss-node-seam" d="M259 120H303"/><text class="iss-node-name" x="281" y="137">UNITY</text><text class="iss-node-sub" x="281" y="149">NODE 1</text></g>
-              <g class="iss-node" data-iss-module="destiny" role="button" tabindex="0"><rect class="iss-node-shadow" x="335" y="114" width="126" height="52" rx="14"/><rect class="iss-node-body" x="333" y="107" width="126" height="52" rx="14"/><path class="iss-node-seam" d="M346 117H446"/><text class="iss-node-name" x="396" y="137">DESTINY</text><text class="iss-node-sub" x="396" y="150">US LAB</text></g>
-              <g class="iss-node" data-iss-module="harmony" role="button" tabindex="0"><rect class="iss-node-shadow" x="486" y="117" width="105" height="46" rx="11"/><rect class="iss-node-body" x="484" y="110" width="105" height="46" rx="11"/><path class="iss-node-seam" d="M496 120H577"/><text class="iss-node-name" x="536" y="137">HARMONY</text><text class="iss-node-sub" x="536" y="149">NODE 2</text></g>
-              <g class="iss-node" data-iss-module="kibo" role="button" tabindex="0"><rect class="iss-node-shadow" x="482" y="65" width="105" height="39" rx="12"/><rect class="iss-node-body" x="480" y="58" width="105" height="39" rx="12"/><text class="iss-node-name" x="533" y="78">KIBŌ</text><text class="iss-node-sub" x="533" y="90">JAPAN</text></g>
-              <g class="iss-node" data-iss-module="columbus" role="button" tabindex="0"><rect class="iss-node-shadow" x="482" y="206" width="112" height="42" rx="13"/><rect class="iss-node-body" x="480" y="199" width="112" height="42" rx="13"/><text class="iss-node-name" x="536" y="218">COLUMBUS</text><text class="iss-node-sub" x="536" y="232">ESA</text></g>
-              <g class="iss-node" data-iss-module="tranquility" role="button" tabindex="0"><rect class="iss-node-shadow" x="236" y="208" width="106" height="42" rx="12"/><rect class="iss-node-body" x="234" y="201" width="106" height="42" rx="12"/><text class="iss-node-name" x="287" y="221">TRANQUILITY</text><text class="iss-node-sub" x="287" y="234">NODE 3</text></g>
-              <path d="M342 221H353" stroke="#5e8199" stroke-width="4"/>
-              <g class="iss-node" data-iss-module="cupola" role="button" tabindex="0"><circle class="iss-node-shadow" cx="393" cy="226" r="35"/><circle class="iss-node-body" cx="391" cy="220" r="35"/><circle class="iss-cupola-window" cx="391" cy="213" r="10"/><text class="iss-node-name" x="391" y="240">CUPOLA</text></g>
-              <text class="iss-map-orbit-label" x="34" y="270">ISS / MODULE NETWORK</text><text class="iss-map-orbit-label" x="618" y="270" text-anchor="end">LEO · 400 KM</text>
-            </svg>
+            <svg class="iss-station-map" viewBox="0 0 950 625" xmlns="http://www.w3.org/2000/svg" aria-label="ISS module connections">
+<defs><linearGradient id="iss-ready-surface"><stop stop-color="#174b6b"/><stop offset="1" stop-color="#0d263d"/></linearGradient><linearGradient id="iss-hover-surface"><stop stop-color="#177b9c"/><stop offset="1" stop-color="#154b68"/></linearGradient><pattern id="iss-grid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="#28506b" stroke-opacity=".25"/></pattern></defs><rect width="950" height="625" fill="url(#iss-grid)"/>
+<path d="M100 270 L260 270" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M260 270 L420 270" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M420 270 L610 270" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M610 270 L820 270" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M100 270 L100 160" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M100 270 L100 395" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M100 395 L100 515" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M260 270 L260 395" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M420 270 L420 160" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M420 270 L420 435" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M420 435 L290 560" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M420 435 L455 560" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M420 435 L620 560" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M420 435 L615 435" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M820 270 L820 160" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M820 160 L820 60" fill="none" stroke="#537d94" stroke-width="4"/>
+<path d="M820 270 L820 390" fill="none" stroke="#537d94" stroke-width="4"/>
+<g class="iss-node" data-iss-module="zvezda" role="button" tabindex="0"><rect class="iss-node-shadow" x="32" y="248" width="140" height="58" rx="12"/><rect class="iss-node-body" x="30" y="242" width="140" height="56" rx="12"/><text class="iss-node-name" x="100" y="268">ZVEZDA</text><text class="iss-node-sub" x="100" y="284">SERVICE</text></g>
+<g class="iss-node" data-iss-module="zarya" role="button" tabindex="0"><rect class="iss-node-shadow" x="192" y="248" width="140" height="58" rx="12"/><rect class="iss-node-body" x="190" y="242" width="140" height="56" rx="12"/><text class="iss-node-name" x="260" y="268">ZARYA</text><text class="iss-node-sub" x="260" y="284">FGB</text></g>
+<g class="iss-node" data-iss-module="unity" role="button" tabindex="0"><rect class="iss-node-shadow" x="352" y="248" width="140" height="58" rx="12"/><rect class="iss-node-body" x="350" y="242" width="140" height="56" rx="12"/><text class="iss-node-name" x="420" y="268">UNITY</text><text class="iss-node-sub" x="420" y="284">NODE 1</text></g>
+<g class="iss-node" data-iss-module="destiny" role="button" tabindex="0"><rect class="iss-node-shadow" x="542" y="248" width="140" height="58" rx="12"/><rect class="iss-node-body" x="540" y="242" width="140" height="56" rx="12"/><text class="iss-node-name" x="610" y="268">DESTINY</text><text class="iss-node-sub" x="610" y="284">US LAB</text></g>
+<g class="iss-node" data-iss-module="harmony" role="button" tabindex="0"><rect class="iss-node-shadow" x="752" y="248" width="140" height="58" rx="12"/><rect class="iss-node-body" x="750" y="242" width="140" height="56" rx="12"/><text class="iss-node-name" x="820" y="268">HARMONY</text><text class="iss-node-sub" x="820" y="284">NODE 2</text></g>
+<g class="iss-node" data-iss-module="poisk" role="button" tabindex="0"><rect class="iss-node-shadow" x="32" y="138" width="140" height="58" rx="12"/><rect class="iss-node-body" x="30" y="132" width="140" height="56" rx="12"/><text class="iss-node-name" x="100" y="158">POISK</text><text class="iss-node-sub" x="100" y="174">MRM-2</text></g>
+<g class="iss-node" data-iss-module="nauka" role="button" tabindex="0"><rect class="iss-node-shadow" x="32" y="373" width="140" height="58" rx="12"/><rect class="iss-node-body" x="30" y="367" width="140" height="56" rx="12"/><text class="iss-node-name" x="100" y="393">NAUKA</text><text class="iss-node-sub" x="100" y="409">MLM</text></g>
+<g class="iss-node" data-iss-module="prichal" role="button" tabindex="0"><rect class="iss-node-shadow" x="32" y="493" width="140" height="58" rx="12"/><rect class="iss-node-body" x="30" y="487" width="140" height="56" rx="12"/><text class="iss-node-name" x="100" y="513">PRICHAL</text><text class="iss-node-sub" x="100" y="529">DOCKING</text></g>
+<g class="iss-node" data-iss-module="rassvet" role="button" tabindex="0"><rect class="iss-node-shadow" x="192" y="373" width="140" height="58" rx="12"/><rect class="iss-node-body" x="190" y="367" width="140" height="56" rx="12"/><text class="iss-node-name" x="260" y="393">RASSVET</text><text class="iss-node-sub" x="260" y="409">MRM-1</text></g>
+<g class="iss-node" data-iss-module="quest" role="button" tabindex="0"><rect class="iss-node-shadow" x="352" y="138" width="140" height="58" rx="12"/><rect class="iss-node-body" x="350" y="132" width="140" height="56" rx="12"/><text class="iss-node-name" x="420" y="158">QUEST</text><text class="iss-node-sub" x="420" y="174">AIRLOCK</text></g>
+<g class="iss-node" data-iss-module="tranquility" role="button" tabindex="0"><rect class="iss-node-shadow" x="352" y="413" width="140" height="58" rx="12"/><rect class="iss-node-body" x="350" y="407" width="140" height="56" rx="12"/><text class="iss-node-name" x="420" y="433">TRANQUILITY</text><text class="iss-node-sub" x="420" y="449">NODE 3</text></g>
+<g class="iss-node" data-iss-module="leonardo" role="button" tabindex="0"><rect class="iss-node-shadow" x="222" y="538" width="140" height="58" rx="12"/><rect class="iss-node-body" x="220" y="532" width="140" height="56" rx="12"/><text class="iss-node-name" x="290" y="558">LEONARDO</text><text class="iss-node-sub" x="290" y="574">PMM</text></g>
+<g class="iss-node" data-iss-module="beam" role="button" tabindex="0"><rect class="iss-node-shadow" x="387" y="538" width="140" height="58" rx="12"/><rect class="iss-node-body" x="385" y="532" width="140" height="56" rx="12"/><text class="iss-node-name" x="455" y="558">BEAM</text><text class="iss-node-sub" x="455" y="574">EXPANDABLE</text></g>
+<g class="iss-node" data-iss-module="bishop" role="button" tabindex="0"><rect class="iss-node-shadow" x="552" y="538" width="140" height="58" rx="12"/><rect class="iss-node-body" x="550" y="532" width="140" height="56" rx="12"/><text class="iss-node-name" x="620" y="558">BISHOP</text><text class="iss-node-sub" x="620" y="574">AIRLOCK</text></g>
+<g class="iss-node" data-iss-module="cupola" role="button" tabindex="0"><rect class="iss-node-shadow" x="547" y="413" width="140" height="58" rx="12"/><rect class="iss-node-body" x="545" y="407" width="140" height="56" rx="12"/><text class="iss-node-name" x="615" y="433">CUPOLA</text><text class="iss-node-sub" x="615" y="449">OBSERVATORY</text></g>
+<g class="iss-node" data-iss-module="kibo" role="button" tabindex="0"><rect class="iss-node-shadow" x="752" y="138" width="140" height="58" rx="12"/><rect class="iss-node-body" x="750" y="132" width="140" height="56" rx="12"/><text class="iss-node-name" x="820" y="158">KIBO</text><text class="iss-node-sub" x="820" y="174">JEM LAB</text></g>
+<g class="iss-node" data-iss-module="kibo_elm" role="button" tabindex="0"><rect class="iss-node-shadow" x="752" y="38" width="140" height="58" rx="12"/><rect class="iss-node-body" x="750" y="32" width="140" height="56" rx="12"/><text class="iss-node-name" x="820" y="58">KIBO LOGISTICS</text><text class="iss-node-sub" x="820" y="74">JEM ELM-PS</text></g>
+<g class="iss-node" data-iss-module="columbus" role="button" tabindex="0"><rect class="iss-node-shadow" x="752" y="368" width="140" height="58" rx="12"/><rect class="iss-node-body" x="750" y="362" width="140" height="56" rx="12"/><text class="iss-node-name" x="820" y="388">COLUMBUS</text><text class="iss-node-sub" x="820" y="404">ESA LAB</text></g>
+<text class="iss-map-orbit-label" x="30" y="612">ALBASPACE / 18 MODULES / STAGE 1</text></svg>
           </div>
           <footer class="iss-schematic-legend">
             <span><i class="iss-legend-dot is-live"></i> 3D доступна</span>
@@ -172,6 +177,6 @@ Vael-khrun — пусть свет знаний ведёт детей к звё�
     })();
   </script>
   <script src="/assets/js/particles.js"></script>
-  <script src="/assets/js/iss-interiors.js" defer></script>
+  <script src="/assets/js/iss-interiors.js?v=20261024-stage1" defer></script>
 </body>
 </html>
