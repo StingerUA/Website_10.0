@@ -83,3 +83,5 @@
 #iss-interior-explorer .iss-render-link[hidden]{display:none}
 #iss-interior-explorer .iss-station-map{min-width:650px;min-height:430px}
 @media(max-width:980px){#iss-interior-explorer .iss-available-list{max-height:350px}}
+#iss-interior-explorer #iss-interior-quality{color:#eaf8ff!important;background-color:#0a2941!important;color-scheme:dark}
+#iss-interior-explorer #iss-interior-quality option{color:#eaf8ff;background:#0a2941}
