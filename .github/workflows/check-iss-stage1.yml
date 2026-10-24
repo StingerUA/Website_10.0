@@ -1,0 +1,39 @@
+name: Check published ISS models with WebGL
+on:
+  push:
+    branches: [codex/iss-blender-stage1-20261024]
+    paths:
+      - tools/iss-interiors/check_live_stage1.cjs
+      - .github/workflows/check-iss-stage1.yml
+permissions:
+  contents: write
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: tools/iss-interiors
+      - name: Install browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/iss-browser" playwright
+          "$RUNNER_TEMP/iss-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Load and capture every published module
+        env:
+          NODE_PATH: ${{ runner.temp }}/iss-browser/node_modules
+          ISS_QA_OUTPUT: tools/iss-interiors/qa-stage1
+        run: node tools/iss-interiors/check_live_stage1.cjs
+      - name: Store review evidence
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/iss-interiors/qa-stage1
+          git commit -m 'Verify all published ISS GLBs with software WebGL'
+          git push origin HEAD:codex/iss-blender-stage1-20261024
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ISS-WebGL-Review
+          path: tools/iss-interiors/qa-stage1
+          if-no-files-found: ignore
