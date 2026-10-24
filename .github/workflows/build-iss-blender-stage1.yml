@@ -1,0 +1,89 @@
+name: Build and render 18 ISS interiors in Blender
+on:
+  push:
+    branches: [codex/iss-blender-stage1-20261024]
+    paths:
+      - tools/iss-interiors/build_blender_stage1.py
+      - tools/iss-interiors/package_stage1.py
+      - .github/workflows/build-iss-blender-stage1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: iss-blender-stage1
+  cancel-in-progress: false
+jobs:
+  model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 18
+      matrix:
+        module: [destiny, harmony, tranquility, columbus, kibo, unity, zarya, zvezda, nauka, poisk, rassvet, prichal, quest, leonardo, kibo_elm, beam, bishop, cupola]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: tools/iss-interiors
+      - name: Install Blender 4.5 LTS
+        shell: bash
+        run: |
+          curl -fsSL --retry 3 https://download.blender.org/release/Blender4.5/blender-4.5.3-linux-x64.tar.xz -o "$RUNNER_TEMP/blender.tar.xz"
+          tar -xf "$RUNNER_TEMP/blender.tar.xz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/blender-4.5.3-linux-x64" >> "$GITHUB_PATH"
+      - name: Model, export, render
+        run: blender -b --factory-startup -t 2 --python tools/iss-interiors/build_blender_stage1.py -- --out "$RUNNER_TEMP/iss-result" --modules "${{ matrix.module }}" --samples 24 --width 1200
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iss-${{ matrix.module }}
+          path: |
+            ${{ runner.temp }}/iss-result/blend/*.blend
+            ${{ runner.temp }}/iss-result/glb/*.glb
+            ${{ runner.temp }}/iss-result/renders/*.png
+            ${{ runner.temp }}/iss-result/${{ matrix.module }}.json
+          if-no-files-found: error
+          retention-days: 30
+  assemble:
+    needs: model
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/iss-blender-stage1-20261024
+          sparse-checkout: |
+            tools/iss-interiors
+            assets/models/interior
+            assets/images/iss-interiors
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: iss-*
+          merge-multiple: true
+          path: ${{ runner.temp }}/iss-complete
+      - name: Package catalogue, source files and render sheets
+        run: |
+          python -m pip install Pillow
+          python tools/iss-interiors/package_stage1.py "$RUNNER_TEMP/iss-complete"
+      - name: Validate all GLBs
+        run: |
+          npm install --prefix "$RUNNER_TEMP/iss-validator" gltf-validator
+          NODE_PATH="$RUNNER_TEMP/iss-validator/node_modules" node tools/iss-interiors/validate_stage1.cjs
+      - name: Save complete series to review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/models/interior assets/images/iss-interiors
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add 18 Blender ISS interiors, native sources and Cycles renders'
+            git push origin HEAD:codex/iss-blender-stage1-20261024
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ISS-Stage1-Complete
+          path: |
+            assets/models/interior/ISS_Stage1_Blender.zip
+            assets/models/interior/ISS_Stage1_GLB.zip
+            assets/images/iss-interiors/ISS_Stage1_Renders.zip
+            assets/images/iss-interiors/ISS_Stage1_Review_*.jpg
+            assets/models/interior/validation-stage1.json
+          retention-days: 30
