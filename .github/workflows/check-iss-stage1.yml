@@ -1,4 +1,4 @@
-name: Check published ISS models with WebGL
+name: Check ISS Stage 1 models with WebGL
 on:
   push:
     branches: [codex/iss-blender-stage1-20261024]
@@ -14,16 +14,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: tools/iss-interiors
+          sparse-checkout: |
+            tools/iss-interiors
+            assets/js
+            assets/css
+            assets/models/interior
+            assets/images/iss-interiors
+            iss
+            eng/iss
+            rus/iss
       - name: Install browser test runtime
         run: |
-          npm install --prefix "$RUNNER_TEMP/iss-browser" playwright
+          npm install --prefix "$RUNNER_TEMP/iss-browser" playwright @google/model-viewer@3.0.0
           "$RUNNER_TEMP/iss-browser/node_modules/.bin/playwright" install --with-deps chromium
-      - name: Load and capture every published module
+      - name: Load and capture every module from the deployed source
         env:
           NODE_PATH: ${{ runner.temp }}/iss-browser/node_modules
           ISS_QA_OUTPUT: tools/iss-interiors/qa-stage1
-        run: node tools/iss-interiors/check_live_stage1.cjs
+          ISS_QA_BASE_URL: http://127.0.0.1:8765/
+          ISS_MODEL_VIEWER_SCRIPT: ${{ runner.temp }}/iss-browser/node_modules/@google/model-viewer/dist/model-viewer.min.js
+        run: |
+          git show HEAD:assets/models/iss.glb > assets/models/iss.glb
+          python3 -m http.server 8765 --bind 127.0.0.1 > "$RUNNER_TEMP/iss-http.log" 2>&1 &
+          node tools/iss-interiors/check_live_stage1.cjs
       - name: Store review evidence
         run: |
           git config user.name 'github-actions[bot]'
