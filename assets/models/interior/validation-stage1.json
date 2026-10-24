@@ -1,0 +1,146 @@
+[
+  {
+    "id": "destiny",
+    "bytes": 3210772,
+    "triangles": 35200,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "harmony",
+    "bytes": 1404316,
+    "triangles": 13733,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "tranquility",
+    "bytes": 1848596,
+    "triangles": 20207,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "columbus",
+    "bytes": 2839636,
+    "triangles": 30724,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "kibo",
+    "bytes": 4148416,
+    "triangles": 46538,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "unity",
+    "bytes": 1259908,
+    "triangles": 11922,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "zarya",
+    "bytes": 2890108,
+    "triangles": 31428,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "zvezda",
+    "bytes": 2735240,
+    "triangles": 30391,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "nauka",
+    "bytes": 2910860,
+    "triangles": 32582,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "poisk",
+    "bytes": 1139392,
+    "triangles": 10859,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "rassvet",
+    "bytes": 1902336,
+    "triangles": 19646,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "prichal",
+    "bytes": 1126908,
+    "triangles": 20819,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "quest",
+    "bytes": 1363444,
+    "triangles": 13341,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "leonardo",
+    "bytes": 2223020,
+    "triangles": 23308,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "kibo_elm",
+    "bytes": 1557720,
+    "triangles": 15362,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "beam",
+    "bytes": 870628,
+    "triangles": 8542,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "bishop",
+    "bytes": 401176,
+    "triangles": 6266,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "id": "cupola",
+    "bytes": 371296,
+    "triangles": 4476,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  }
+]

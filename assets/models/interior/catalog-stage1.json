@@ -1,0 +1,290 @@
+[
+  {
+    "id": "destiny",
+    "name": "Destiny",
+    "description": {
+      "tr": "ABD araştırma laboratuvarı",
+      "en": "US research laboratory",
+      "ru": "Американская лаборатория"
+    },
+    "glb": "/assets/models/interior/destiny_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/destiny.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07952m 0.03992m 3.69000m",
+    "cameraOrbit": "0.912deg 89.848deg 0.03m",
+    "stage": 1,
+    "triangles": 35200,
+    "bytes": 3210772
+  },
+  {
+    "id": "harmony",
+    "name": "Harmony",
+    "description": {
+      "tr": "Mürettebat ve bağlantı modülü",
+      "en": "Crew quarters and connecting node",
+      "ru": "Спальные отсеки и узел Node 2"
+    },
+    "glb": "/assets/models/interior/harmony_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/harmony.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07938m 0.03990m 2.84001m",
+    "cameraOrbit": "1.177deg 89.804deg 0.03m",
+    "stage": 1,
+    "triangles": 13733,
+    "bytes": 1404316
+  },
+  {
+    "id": "tranquility",
+    "name": "Tranquility",
+    "description": {
+      "tr": "Yaşam destek ve egzersiz",
+      "en": "Life support and exercise",
+      "ru": "Жизнеобеспечение и тренажёры"
+    },
+    "glb": "/assets/models/interior/tranquility_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/tranquility.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07938m 0.03990m 2.84001m",
+    "cameraOrbit": "1.177deg 89.804deg 0.03m",
+    "stage": 1,
+    "triangles": 20207,
+    "bytes": 1848596
+  },
+  {
+    "id": "columbus",
+    "name": "Columbus",
+    "description": {
+      "tr": "Avrupa araştırma laboratuvarı",
+      "en": "European research laboratory",
+      "ru": "Европейская лаборатория"
+    },
+    "glb": "/assets/models/interior/columbus_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/columbus.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07935m 0.03989m 2.69001m",
+    "cameraOrbit": "1.241deg 89.793deg 0.03m",
+    "stage": 1,
+    "triangles": 30724,
+    "bytes": 2839636
+  },
+  {
+    "id": "kibo",
+    "name": "Kibo",
+    "description": {
+      "tr": "Japon araştırma laboratuvarı",
+      "en": "Japanese research laboratory",
+      "ru": "Японская лаборатория"
+    },
+    "glb": "/assets/models/interior/kibo_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/kibo.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07964m 0.03994m 4.89000m",
+    "cameraOrbit": "0.692deg 89.885deg 0.03m",
+    "stage": 1,
+    "triangles": 46538,
+    "bytes": 4148416
+  },
+  {
+    "id": "unity",
+    "name": "Unity",
+    "description": {
+      "tr": "İstasyon bağlantı düğümü",
+      "en": "Station connecting node",
+      "ru": "Соединительный узел Node 1"
+    },
+    "glb": "/assets/models/interior/unity_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/unity.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07922m 0.03987m 2.24001m",
+    "cameraOrbit": "1.481deg 89.753deg 0.03m",
+    "stage": 1,
+    "triangles": 11922,
+    "bytes": 1259908
+  },
+  {
+    "id": "zarya",
+    "name": "Zarya",
+    "description": {
+      "tr": "Fonksiyonel kargo bloğu",
+      "en": "Functional cargo block",
+      "ru": "Функционально-грузовой блок"
+    },
+    "glb": "/assets/models/interior/zarya_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/zarya.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07963m 0.03994m 4.84000m",
+    "cameraOrbit": "0.699deg 89.884deg 0.03m",
+    "stage": 1,
+    "triangles": 31428,
+    "bytes": 2890108
+  },
+  {
+    "id": "zvezda",
+    "name": "Zvezda",
+    "description": {
+      "tr": "Servis ve yaşam modülü",
+      "en": "Service and habitation module",
+      "ru": "Служебный модуль"
+    },
+    "glb": "/assets/models/interior/zvezda_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/zvezda.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07962m 0.03994m 4.64000m",
+    "cameraOrbit": "0.728deg 89.879deg 0.03m",
+    "stage": 1,
+    "triangles": 30391,
+    "bytes": 2735240
+  },
+  {
+    "id": "nauka",
+    "name": "Nauka",
+    "description": {
+      "tr": "Çok amaçlı laboratuvar",
+      "en": "Multipurpose laboratory",
+      "ru": "Многофункциональная лаборатория"
+    },
+    "glb": "/assets/models/interior/nauka_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/nauka.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07961m 0.03994m 4.59000m",
+    "cameraOrbit": "0.736deg 89.877deg 0.03m",
+    "stage": 1,
+    "triangles": 32582,
+    "bytes": 2910860
+  },
+  {
+    "id": "poisk",
+    "name": "Poisk",
+    "description": {
+      "tr": "Araştırma ve hava kilidi",
+      "en": "Research and airlock module",
+      "ru": "Исследовательский и шлюзовой модуль"
+    },
+    "glb": "/assets/models/interior/poisk_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/poisk.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07878m 0.03980m 1.39003m",
+    "cameraOrbit": "2.337deg 89.611deg 0.03m",
+    "stage": 1,
+    "triangles": 10859,
+    "bytes": 1139392
+  },
+  {
+    "id": "rassvet",
+    "name": "Rassvet",
+    "description": {
+      "tr": "Araştırma ve kargo modülü",
+      "en": "Research and cargo module",
+      "ru": "Исследовательский и грузовой модуль"
+    },
+    "glb": "/assets/models/interior/rassvet_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/rassvet.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07917m 0.03986m 2.09001m",
+    "cameraOrbit": "1.584deg 89.736deg 0.03m",
+    "stage": 1,
+    "triangles": 19646,
+    "bytes": 1902336
+  },
+  {
+    "id": "prichal",
+    "name": "Prichal",
+    "description": {
+      "tr": "Altı portlu bağlantı düğümü",
+      "en": "Six-port docking node",
+      "ru": "Узел с шестью стыковочными портами"
+    },
+    "glb": "/assets/models/interior/prichal_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/prichal.jpg?v=20261024-stage1",
+    "cameraTarget": "0.05911m 0.04000m 1.10001m",
+    "cameraOrbit": "1.693deg 90.000deg 0.03m",
+    "stage": 1,
+    "triangles": 20819,
+    "bytes": 1126908
+  },
+  {
+    "id": "quest",
+    "name": "Quest",
+    "description": {
+      "tr": "Uzay yürüyüşü hava kilidi",
+      "en": "Spacewalk airlock",
+      "ru": "Шлюз для выхода в открытый космос"
+    },
+    "glb": "/assets/models/interior/quest_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/quest.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07922m 0.03987m 2.24001m",
+    "cameraOrbit": "1.481deg 89.753deg 0.03m",
+    "stage": 1,
+    "triangles": 13341,
+    "bytes": 1363444
+  },
+  {
+    "id": "leonardo",
+    "name": "Leonardo",
+    "description": {
+      "tr": "Kalıcı lojistik modülü",
+      "en": "Permanent logistics module",
+      "ru": "Постоянный грузовой модуль"
+    },
+    "glb": "/assets/models/interior/leonardo_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/leonardo.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07938m 0.03990m 2.84001m",
+    "cameraOrbit": "1.177deg 89.804deg 0.03m",
+    "stage": 1,
+    "triangles": 23308,
+    "bytes": 2223020
+  },
+  {
+    "id": "kibo_elm",
+    "name": "Kibo Logistics",
+    "description": {
+      "tr": "Japon lojistik modülü",
+      "en": "Japanese logistics module",
+      "ru": "Грузовой отсек Kibo"
+    },
+    "glb": "/assets/models/interior/kibo_elm_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/kibo_elm.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07892m 0.03982m 1.59002m",
+    "cameraOrbit": "2.058deg 89.657deg 0.03m",
+    "stage": 1,
+    "triangles": 15362,
+    "bytes": 1557720
+  },
+  {
+    "id": "beam",
+    "name": "BEAM",
+    "description": {
+      "tr": "Genişletilebilir modül",
+      "en": "Expandable module",
+      "ru": "Развёртываемый модуль"
+    },
+    "glb": "/assets/models/interior/beam_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/beam.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07885m 0.03981m 1.49002m",
+    "cameraOrbit": "2.189deg 89.635deg 0.03m",
+    "stage": 1,
+    "triangles": 8542,
+    "bytes": 870628
+  },
+  {
+    "id": "bishop",
+    "name": "Bishop",
+    "description": {
+      "tr": "Yük hava kilidi",
+      "en": "Payload airlock",
+      "ru": "Шлюз для полезной нагрузки"
+    },
+    "glb": "/assets/models/interior/bishop_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/bishop.jpg?v=20261024-stage1",
+    "cameraTarget": "0.07767m 0.03961m 0.69009m",
+    "cameraOrbit": "4.456deg 89.258deg 0.03m",
+    "stage": 1,
+    "triangles": 6266,
+    "bytes": 401176
+  },
+  {
+    "id": "cupola",
+    "name": "Cupola",
+    "description": {
+      "tr": "Yedi pencereli gözlem kubbesi",
+      "en": "Seven-window observatory",
+      "ru": "Купол с семью окнами"
+    },
+    "glb": "/assets/models/interior/cupola_optimized.glb?v=20261024-stage1",
+    "render": "/assets/images/iss-interiors/cupola.jpg?v=20261024-stage1",
+    "cameraTarget": "0.00000m -0.43511m 0.54325m",
+    "cameraOrbit": "-0.000deg 146.070deg 0.03m",
+    "stage": 1,
+    "triangles": 4476,
+    "bytes": 371296
+  }
+]
