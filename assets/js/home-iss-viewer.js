@@ -3,16 +3,15 @@
 (function () {
   'use strict';
 
-  const desktopQuery = window.matchMedia('(min-width: 901px)');
   // Exactly one of six already-hosted GLBs is picked for each page load.
   // The viewer itself mounts only on desktop, so mobiles load no extra model.
   const models = [
     { id: 'iss', labels: {tr: 'Uluslararası Uzay İstasyonu', en: 'International Space Station', ru: 'Международная космическая станция', ar: 'محطة الفضاء الدولية'} },
-    { id: 'jameswebb', labels: {tr: 'James Webb Uzay Teleskobu', en: 'James Webb Space Telescope', ru: 'Космический телескоп Джеймс Уэбб', ar: 'تلسكوب جيمس ويب الفضائي'} },
-    { id: 'hubble', labels: {tr: 'Hubble Uzay Teleskobu', en: 'Hubble Space Telescope', ru: 'Космический телескоп Хаббл', ar: 'تلسكوب هابل الفضائي'} },
-    { id: 'perseverance', labels: {tr: 'Perseverance Mars Gezgini', en: 'Perseverance Mars Rover', ru: 'Марсоход Perseverance', ar: 'مركبة بيرسيفيرانس المريخية'} },
-    { id: 'gokturk-2', labels: {tr: 'Göktürk-2 Uydusu', en: 'Göktürk-2 Satellite', ru: 'Спутник Göktürk-2', ar: 'القمر الصناعي غوكتورك-2'} },
-    { id: 'saturn', labels: {tr: 'Satürn', en: 'Saturn', ru: 'Сатурн', ar: 'زحل'} }
+    { id: 'gokturk-1', labels: {tr: 'GÖKTÜRK-1', en: 'GÖKTÜRK-1', ru: 'GÖKTÜRK-1', ar: 'غوكتورك-1'} },
+    { id: 'rasat', labels: {tr: 'RASAT', en: 'RASAT', ru: 'RASAT', ar: 'راسات'} },
+    { id: 'opportunity', labels: {tr: 'Opportunity', en: 'Opportunity', ru: 'Opportunity', ar: 'أوبورتيونيتي'} },
+    { id: 'sojourner', labels: {tr: 'Sojourner', en: 'Sojourner', ru: 'Sojourner', ar: 'سوجورنر'} },
+    { id: 'sputnik', labels: {tr: 'Sputnik', en: 'Sputnik', ru: 'Спутник', ar: 'سبوتنيك'} }
   ];
   const desktopQuery = window.matchMedia('(min-width: 901px)');
   const language = (document.documentElement.lang || 'tr').toLowerCase().slice(0, 2);
@@ -29,8 +28,10 @@
     if (model.id === 'iss') {
       return language === 'en' ? '/eng/iss/' : language === 'ru' ? '/rus/iss/' : '/iss/';
     }
+    // Use the same detail pages linked by the Atlas free-preview cards.
+    // Arabic currently shares the Turkish preview pages.
     const prefix = language === 'en' ? '/eng' : language === 'ru' ? '/rus' : '';
-    return prefix + '/atlas/atlas-' + model.id + '/';
+    return prefix + '/' + model.id + '/';
   }
   const arStrings = {
     tr: {
