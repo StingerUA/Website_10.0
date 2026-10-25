@@ -1,58 +1,76 @@
-/* Minimal transparent ISS model-viewer on desktop homepages only.
+/* Minimal transparent random Atlas model-viewer on desktop homepages only.
    Other pages retain their narration, preloader, text toggle and full ISS explorer. */
 (function () {
   'use strict';
 
   const desktopQuery = window.matchMedia('(min-width: 901px)');
-  const descriptions = {
-    tr: 'Uluslararası Uzay İstasyonu etkileşimli 3D modeli',
-    en: 'Interactive 3D model of the International Space Station',
-    ru: 'Интерактивная 3D-модель Международной космической станции',
-    ar: 'نموذج ثلاثي الأبعاد تفاعلي لمحطة الفضاء الدولية'
-  };
+  // Exactly one of six already-hosted GLBs is picked for each page load.
+  // The viewer itself mounts only on desktop, so mobiles load no extra model.
+  const models = [
+    { id: 'iss', labels: {tr: 'Uluslararası Uzay İstasyonu', en: 'International Space Station', ru: 'Международная космическая станция', ar: 'محطة الفضاء الدولية'} },
+    { id: 'jameswebb', labels: {tr: 'James Webb Uzay Teleskobu', en: 'James Webb Space Telescope', ru: 'Космический телескоп Джеймс Уэбб', ar: 'تلسكوب جيمس ويب الفضائي'} },
+    { id: 'hubble', labels: {tr: 'Hubble Uzay Teleskobu', en: 'Hubble Space Telescope', ru: 'Космический телескоп Хаббл', ar: 'تلسكوب هابل الفضائي'} },
+    { id: 'perseverance', labels: {tr: 'Perseverance Mars Gezgini', en: 'Perseverance Mars Rover', ru: 'Марсоход Perseverance', ar: 'مركبة بيرسيفيرانس المريخية'} },
+    { id: 'gokturk-2', labels: {tr: 'Göktürk-2 Uydusu', en: 'Göktürk-2 Satellite', ru: 'Спутник Göktürk-2', ar: 'القمر الصناعي غوكتورك-2'} },
+    { id: 'saturn', labels: {tr: 'Satürn', en: 'Saturn', ru: 'Сатурн', ar: 'زحل'} }
+  ];
+  const desktopQuery = window.matchMedia('(min-width: 901px)');
   const language = (document.documentElement.lang || 'tr').toLowerCase().slice(0, 2);
-  const description = descriptions[language] || descriptions.tr;
+  let activeModel = models[Math.floor(Math.random() * models.length)];
+  const modelLabel = model => model.labels[language] || model.labels.tr;
+  function modelDescription(model) {
+    const name = modelLabel(model);
+    if (language === 'en') return 'Interactive 3D model: ' + name;
+    if (language === 'ru') return 'Интерактивная 3D-модель: ' + name;
+    if (language === 'ar') return 'نموذج ثلاثي الأبعاد تفاعلي: ' + name;
+    return name + ' etkileşimli 3D modeli';
+  }
+  function modelPagePath(model) {
+    if (model.id === 'iss') {
+      return language === 'en' ? '/eng/iss/' : language === 'ru' ? '/rus/iss/' : '/iss/';
+    }
+    const prefix = language === 'en' ? '/eng' : language === 'ru' ? '/rus' : '';
+    return prefix + '/atlas/atlas-' + model.id + '/';
+  }
   const arStrings = {
     tr: {
       button: 'AR ile aç',
-      title: 'İstasyonu artırılmış gerçeklikte keşfet',
-      help: 'Telefonunuzun kamerasıyla QR kodu tarayın. Açılan ISS sayfasındaki AR düğmesini kullanın.',
-      link: 'ISS sayfasını aç',
+      title: 'Modeli artırılmış gerçeklikte keşfet',
+      help: 'Telefonunuzun kamerasıyla QR kodu tarayın. Açılan model sayfasındaki AR düğmesini kullanın.',
+      link: '3D model sayfasını aç',
       close: 'Kapat',
       qr: 'QR kod yükleniyor…',
       unavailable: 'QR kod görüntülenemiyor. Aşağıdaki bağlantıyı kullanın.'
     },
     en: {
       button: 'View in AR',
-      title: 'Explore the station in augmented reality',
-      help: 'Scan this QR code with your phone, then use the AR button on the ISS page.',
-      link: 'Open the ISS page',
+      title: 'Explore this model in augmented reality',
+      help: 'Scan this QR code with your phone, then use the AR button on the model page.',
+      link: 'Open the 3D model page',
       close: 'Close',
       qr: 'Loading QR code…',
       unavailable: 'QR code unavailable. Use the link below.'
     },
     ru: {
       button: 'Открыть в AR',
-      title: 'Посмотреть МКС в дополненной реальности',
-      help: 'Отсканируйте QR-код телефоном, затем нажмите кнопку AR на странице МКС.',
-      link: 'Открыть страницу МКС',
+      title: 'Посмотреть модель в дополненной реальности',
+      help: 'Отсканируйте QR-код телефоном, затем нажмите кнопку AR на странице выбранной модели.',
+      link: 'Открыть страницу 3D-модели',
       close: 'Закрыть',
       qr: 'Загрузка QR-кода…',
       unavailable: 'QR-код недоступен. Воспользуйтесь ссылкой ниже.'
     },
     ar: {
       button: 'عرض في الواقع المعزز',
-      title: 'استكشف المحطة بالواقع المعزز',
-      help: 'امسح رمز QR بهاتفك، ثم استخدم زر AR في صفحة المحطة.',
-      link: 'افتح صفحة المحطة',
+      title: 'استكشف النموذج بالواقع المعزز',
+      help: 'امسح رمز QR بهاتفك، ثم استخدم زر AR في صفحة النموذج.',
+      link: 'افتح صفحة النموذج',
       close: 'إغلاق',
       qr: 'جارٍ تحميل رمز QR…',
       unavailable: 'رمز QR غير متاح. استخدم الرابط أدناه.'
     }
   };
   const arText = arStrings[language] || arStrings.tr;
-  const mobilePagePath = language === 'en' ? '/eng/iss/' :
-    language === 'ru' ? '/rus/iss/' : '/iss/';
   let panel = null;
 
   function ensureLibrary() {
@@ -85,21 +103,27 @@
   // Offer a phone hand-off instead of displaying an AR button that does nothing.
   function showArHandoff() {
     let dialog = document.querySelector('dialog.home-iss-ar-dialog');
+    // If a model failed and ISS became the fallback, refresh the QR target.
+    if (dialog && dialog.dataset.modelId !== activeModel.id) {
+      dialog.remove();
+      dialog = null;
+    }
     if (!dialog) {
       dialog = document.createElement('dialog');
       dialog.className = 'home-iss-ar-dialog';
       dialog.setAttribute('aria-label', arText.title);
+      dialog.dataset.modelId = activeModel.id;
       const wrap = document.createElement('div');
       wrap.className = 'home-iss-ar-dialog-content';
       const head = document.createElement('h2');
-      head.textContent = arText.title;
+      head.textContent = arText.title + ': ' + modelLabel(activeModel);
       const help = document.createElement('p');
       help.textContent = arText.help;
       const qr = document.createElement('div');
       qr.className = 'home-iss-ar-qr';
       qr.setAttribute('aria-label', arText.qr);
       qr.textContent = arText.qr;
-      const url = new URL(mobilePagePath, window.location.origin).href;
+      const url = new URL(modelPagePath(activeModel), window.location.origin).href;
       const link = document.createElement('a');
       link.href = url;
       link.target = '_blank';
@@ -160,19 +184,19 @@
 
     const aside = document.createElement('aside');
     aside.className = 'home-iss-showcase';
-    aside.setAttribute('aria-label', description);
+    aside.setAttribute('aria-label', modelDescription(activeModel));
 
     const stage = document.createElement('div');
     stage.className = 'home-iss-stage';
 
     const viewer = document.createElement('model-viewer');
-    // The very same model used on /iss/, shown directly over the looping Earth background.
-    viewer.setAttribute('src', '/assets/models/iss.glb');
-    viewer.setAttribute('data-model-name', 'iss');
+    // Render the chosen existing Atlas GLB over the looping Earth background.
+    viewer.setAttribute('src', '/assets/models/' + activeModel.id + '.glb');
+    viewer.setAttribute('data-model-name', activeModel.id);
     viewer.setAttribute('data-track', 'model_view');
     viewer.setAttribute('data-no-model-extras', 'true');
-    viewer.setAttribute('alt', description);
-    viewer.setAttribute('aria-label', description);
+    viewer.setAttribute('alt', modelDescription(activeModel));
+    viewer.setAttribute('aria-label', modelDescription(activeModel));
     viewer.setAttribute('loading', 'eager');
     viewer.setAttribute('reveal', 'auto');
     viewer.setAttribute('camera-controls', '');
@@ -184,7 +208,7 @@
     viewer.setAttribute('interaction-prompt-style', 'wiggle');
     viewer.setAttribute('interaction-prompt-threshold', '1200');
     // Keep the generous zoom-out limit for manual inspection.
-    // The starting 113% camera distance displays the ISS ~2x larger than at 226%.
+    // 113% is relative to the current model's bounding box.
     viewer.setAttribute('max-camera-orbit', 'auto auto 600%');
     viewer.setAttribute('camera-orbit', '35deg 65deg 113%');
     // Let model-viewer choose the FOV that best fits the station's bounding box.
@@ -193,7 +217,15 @@
     viewer.setAttribute('exposure', '1.2');
 
     viewer.addEventListener('error', () => {
-      console.warn('[AlbaSpace homepage ISS] 3D model could not be loaded.');
+      console.warn('[AlbaSpace homepage] Could not load 3D model:', activeModel.id);
+      if (activeModel.id !== 'iss') {
+        activeModel = models[0];
+        viewer.setAttribute('src', '/assets/models/iss.glb');
+        viewer.setAttribute('data-model-name', 'iss');
+        viewer.setAttribute('alt', modelDescription(activeModel));
+        viewer.setAttribute('aria-label', modelDescription(activeModel));
+        aside.setAttribute('aria-label', modelDescription(activeModel));
+      }
     });
 
     // Native model-viewer AR slot: used when a device supports WebXR/Scene Viewer/Quick Look.
