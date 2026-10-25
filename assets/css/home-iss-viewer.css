@@ -249,3 +249,43 @@ dialog.home-iss-ar-dialog::backdrop {
 @media (prefers-reduced-motion: reduce) {
   body.home-page .home-iss-stage .home-iss-ar-button { transition: none; }
 }
+
+/* Atlas poster + blue progress bar: desktop hero only. */
+@media (min-width: 901px) {
+ body.home-page .home-iss-stage .home-model-loading {
+   position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;
+   align-items:center;justify-content:center;gap:10px;overflow:hidden;
+   background:rgba(1,9,26,.84);opacity:1;pointer-events:none;
+   transition:opacity .35s ease;
+ }
+ body.home-page .home-iss-stage .home-model-loading.is-complete {opacity:0;visibility:hidden}
+ body.home-page .home-iss-stage .home-model-progress {
+   position:absolute;top:0;left:0;right:0;height:5px;
+   background:rgba(35,160,225,.23);box-shadow:0 0 16px #0982b3;
+ }
+ body.home-page .home-iss-stage .home-model-progress-fill {
+   width:0;height:100%;background:linear-gradient(90deg,#009bde,#00eaff);
+   box-shadow:0 0 16px #00dafa;transition:width .16s ease;
+ }
+ body.home-page .home-iss-stage .home-model-preview {
+   display:block;width:min(95%,680px);height:min(76%,490px);
+   object-fit:contain;flex:0 1 auto;
+ }
+ body.home-page .home-iss-stage .home-model-loading-label {
+   margin:0;text-align:center;color:#c7f4ff;
+   font:700 16px/1.35 system-ui,sans-serif;text-shadow:0 2px 8px #001321;
+ }
+ body.home-page .home-iss-stage .home-model-loading-name {color:#92bcd5;font:600 13px/1.3 system-ui,sans-serif}
+ body.home-page .home-iss-stage .home-model-error-link {
+   padding:8px 13px;border:1px solid #00c3ff;border-radius:20px;
+   color:#fff;background:#07446a;text-decoration:none;
+   font:650 13px system-ui,sans-serif;
+ }
+ body.home-page .home-iss-stage .home-model-error-link[hidden] {display:none!important}
+ body.home-page .home-iss-stage .home-model-loading.is-error {pointer-events:auto}
+ body.home-page .home-iss-stage .home-model-loading.is-error .home-model-progress-fill {background:#ff6877}
+}
+@media (prefers-reduced-motion: reduce) {
+ body.home-page .home-iss-stage .home-model-loading,
+ body.home-page .home-iss-stage .home-model-progress-fill {transition:none}
+}

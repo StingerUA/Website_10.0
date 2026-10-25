@@ -73,13 +73,20 @@
   };
   const arText = arStrings[language] || arStrings.tr;
   let panel = null;
+  const loadingTranslations = {
+    tr: ['3D model yükleniyor…', 'Model yüklenemedi. Sayfada açmayı deneyin.', 'Model sayfasını aç'],
+    en: ['Loading 3D model…', 'Model could not be loaded. Try the model page.', 'Open model page'],
+    ru: ['3D-модель загружается…', 'Модель не загрузилась. Попробуйте её страницу.', 'Открыть страницу модели'],
+    ar: ['جارٍ تحميل النموذج ثلاثي الأبعاد…', 'تعذر تحميل النموذج. جرّب صفحته.', 'افتح صفحة النموذج']
+  };
+  const loadingLocale = loadingTranslations[language] || loadingTranslations.tr;
 
   function ensureLibrary() {
     if (customElements.get('model-viewer') ||
         document.querySelector('script[data-home-iss-library]')) return;
     const script = document.createElement('script');
     script.type = 'module';
-    script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js';
+    script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js';
     script.dataset.homeIssLibrary = '1';
     document.head.appendChild(script);
   }
@@ -190,8 +197,44 @@
     const stage = document.createElement('div');
     stage.className = 'home-iss-stage';
 
+    // Atlas previews are displayed until the first rendered 3D frame.
+    const picture = '/assets/models-pictures/' + activeModel.id + '.png';
+    const overlay = document.createElement('div');
+    overlay.className = 'home-model-loading';
+    overlay.setAttribute('role', 'status');
+    overlay.setAttribute('aria-live', 'polite');
+    overlay.setAttribute('aria-busy', 'true');
+    const bar = document.createElement('div');
+    bar.className = 'home-model-progress';
+    bar.setAttribute('role', 'progressbar');
+    bar.setAttribute('aria-label', loadingLocale[0]);
+    bar.setAttribute('aria-valuemin', '0');
+    bar.setAttribute('aria-valuemax', '100');
+    bar.setAttribute('aria-valuenow', '0');
+    const fill = document.createElement('div');
+    fill.className = 'home-model-progress-fill';
+    bar.appendChild(fill);
+    const image = document.createElement('img');
+    image.className = 'home-model-preview';
+    image.src = picture;
+    image.alt = modelLabel(activeModel);
+    image.decoding = 'async';
+    const message = document.createElement('p');
+    message.className = 'home-model-loading-label';
+    message.textContent = loadingLocale[0];
+    const modelName = document.createElement('span');
+    modelName.className = 'home-model-loading-name';
+    modelName.textContent = modelLabel(activeModel);
+    const link = document.createElement('a');
+    link.className = 'home-model-error-link';
+    link.href = modelPagePath(activeModel);
+    link.textContent = loadingLocale[2];
+    link.hidden = true;
+    overlay.append(bar, image, message, modelName, link);
+
     const viewer = document.createElement('model-viewer');
     // Render the chosen existing Atlas GLB over the looping Earth background.
+    viewer.setAttribute('poster', picture);
     viewer.setAttribute('src', '/assets/models/' + activeModel.id + '.glb');
     viewer.setAttribute('data-model-name', activeModel.id);
     viewer.setAttribute('data-track', 'model_view');
@@ -217,17 +260,39 @@
     viewer.setAttribute('environment-image', 'neutral');
     viewer.setAttribute('exposure', '1.2');
 
-    viewer.addEventListener('error', () => {
-      console.warn('[AlbaSpace homepage] Could not load 3D model:', activeModel.id);
-      if (activeModel.id !== 'iss') {
-        activeModel = models[0];
-        viewer.setAttribute('src', '/assets/models/iss.glb');
-        viewer.setAttribute('data-model-name', 'iss');
-        viewer.setAttribute('alt', modelDescription(activeModel));
-        viewer.setAttribute('aria-label', modelDescription(activeModel));
-        aside.setAttribute('aria-label', modelDescription(activeModel));
-      }
+    // A 100% download event can precede compilation of the first frame;
+    // remove the Atlas picture only after model-viewer's load event.
+    let ready = false;
+    viewer.addEventListener('progress', event => {
+      if (ready) return;
+      const p = event.detail && event.detail.totalProgress;
+      if (typeof p !== 'number' || !Number.isFinite(p)) return;
+      const percent = Math.max(0, Math.min(100, Math.round(p * 100)));
+      fill.style.width = percent + '%';
+      bar.setAttribute('aria-valuenow', String(percent));
     });
+    function onModelReady() {
+      if (ready) return;
+      ready = true;
+      fill.style.width = '100%';
+      bar.setAttribute('aria-valuenow', '100');
+      overlay.classList.add('is-complete');
+      overlay.setAttribute('aria-busy', 'false');
+      overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
+    }
+    viewer.addEventListener('load', onModelReady);
+    viewer.addEventListener('error', event => {
+      if (ready) return;
+      console.warn('[AlbaSpace homepage] Model failed:', activeModel.id, event.detail);
+      overlay.classList.add('is-error');
+      message.textContent = loadingLocale[1];
+      link.hidden = false;
+    });
+    if (window.customElements && window.customElements.whenDefined) {
+      window.customElements.whenDefined('model-viewer').then(() => {
+        if (viewer.loaded && !ready) onModelReady();
+      });
+    }
 
     // Native model-viewer AR slot: used when a device supports WebXR/Scene Viewer/Quick Look.
     const nativeArButton = createArButton();
@@ -249,7 +314,7 @@
       window.customElements.whenDefined('model-viewer').then(updateArAvailability);
     }
 
-    stage.append(viewer, desktopArButton);
+    stage.append(viewer, overlay, desktopArButton);
     aside.appendChild(stage);
     hero.appendChild(aside);
     panel = aside;
