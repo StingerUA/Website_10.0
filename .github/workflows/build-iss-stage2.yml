@@ -1,0 +1,102 @@
+name: Detail 18 ISS interiors in Blender
+on:
+  push:
+    branches: [codex/iss-detail-stage2-20261029]
+    paths:
+      - tools/iss-interiors/build_blender_stage2.py
+      - tools/iss-interiors/package_stage2.py
+      - tools/iss-interiors/validate_stage2.cjs
+      - .github/workflows/build-iss-stage2.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: iss-detail-stage2
+  cancel-in-progress: false
+jobs:
+  model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 18
+      matrix:
+        module: [destiny, harmony, tranquility, columbus, kibo, unity, zarya, zvezda, nauka, poisk, rassvet, prichal, quest, leonardo, kibo_elm, beam, bishop, cupola]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: tools/iss-interiors
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Blender and glTF tools
+        run: |
+          curl -fsSL --retry 3 https://download.blender.org/release/Blender4.5/blender-4.5.3-linux-x64.tar.xz -o "$RUNNER_TEMP/blender.tar.xz"
+          tar -xf "$RUNNER_TEMP/blender.tar.xz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/blender-4.5.3-linux-x64" >> "$GITHUB_PATH"
+          npm install --prefix "$RUNNER_TEMP/gltf-tools" @gltf-transform/cli@4.5.1 gltf-validator@2.0.0-dev.3.10
+          if [ '${{ matrix.module }}' = 'cupola' ]; then
+            curl -fsSL --retry 3 https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57730/land_ocean_ice_2048.png -o "$RUNNER_TEMP/earth.png"
+          fi
+      - name: Build editable scene, review internally and bake PBR occlusion
+        env:
+          ISS_EARTH_TEXTURE: ${{ runner.temp }}/earth.png
+        run: blender -b --factory-startup -t 2 --python tools/iss-interiors/build_blender_stage2.py -- --out "$RUNNER_TEMP/result" --modules '${{ matrix.module }}' --samples 48 --width 1200
+      - name: Validate raw geometry, compress and validate delivery
+        env:
+          NODE_PATH: ${{ runner.temp }}/gltf-tools/node_modules
+        run: |
+          node tools/iss-interiors/validate_stage2.cjs "$RUNNER_TEMP/result/glb/${{ matrix.module }}_stage2.glb"
+          mkdir -p "$RUNNER_TEMP/result/web"
+          "$RUNNER_TEMP/gltf-tools/node_modules/.bin/gltf-transform" optimize "$RUNNER_TEMP/result/glb/${{ matrix.module }}_stage2.glb" "$RUNNER_TEMP/result/web/${{ matrix.module }}.glb" --compress draco --texture-compress webp --simplify false --palette false --instance false --flatten false --join false
+          ISS_VALIDATION_OUTPUT="$RUNNER_TEMP/result/${{ matrix.module }}-validation.json" node tools/iss-interiors/validate_stage2.cjs "$RUNNER_TEMP/result/web/${{ matrix.module }}.glb"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: detail-${{ matrix.module }}
+          path: |
+            ${{ runner.temp }}/result/blend/*_stage2.blend
+            ${{ runner.temp }}/result/web/*.glb
+            ${{ runner.temp }}/result/renders/*.png
+            ${{ runner.temp }}/result/*.json
+          if-no-files-found: error
+          retention-days: 30
+  assemble:
+    needs: model
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/iss-detail-stage2-20261029
+          sparse-checkout: |
+            tools/iss-interiors
+            assets/models/interior
+            assets/images/iss-interiors
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: detail-*
+          merge-multiple: true
+          path: ${{ runner.temp }}/complete
+      - name: Package detailed GLBs and native Blender sources
+        run: |
+          python -m pip install Pillow
+          python tools/iss-interiors/package_stage2.py "$RUNNER_TEMP/complete"
+          npm install --prefix "$RUNNER_TEMP/validator" gltf-validator@2.0.0-dev.3.10
+          ISS_VALIDATION_OUTPUT=assets/models/interior/validation-stage2.json NODE_PATH="$RUNNER_TEMP/validator/node_modules" node tools/iss-interiors/validate_stage2.cjs assets/models/interior/stage2/*.glb
+      - name: Save complete detail pass to review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/models/interior/stage2 assets/models/interior/catalog-stage2.json assets/models/interior/validation-stage2.json assets/images/iss-interiors/stage2
+          if ! git diff --cached --quiet; then
+            git commit -m 'Add 18 detailed Blender interiors with PBR textures and baked occlusion'
+            git push origin HEAD:codex/iss-detail-stage2-20261029
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ISS-Stage2-Complete
+          path: |
+            assets/models/interior/stage2/*.zip
+            assets/models/interior/catalog-stage2.json
+            assets/models/interior/validation-stage2.json
+          retention-days: 30

@@ -203,7 +203,7 @@ def gases(side,y):
 
 def cupola():
  # Six trapezoidal windows, central round window, continuous opaque webbing.
- window=mat('Clear glazing',(.93,.97,1),rough=.08);p=window.node_tree.nodes.get('Principled BSDF');p.inputs['Transmission Weight'].default_value=1;p.inputs['IOR'].default_value=1.45
+ window=mat('Clear glazing',(.98,.99,1),rough=.018);p=window.node_tree.nodes.get('Principled BSDF');p.inputs['Transmission Weight'].default_value=1;p.inputs['IOR'].default_value=1.45
  for i in range(6):
   a=i*math.pi/3;b=(i+1)*math.pi/3
   vs=[Vector((1.23*math.cos(a),1.23*math.sin(a),.08)),Vector((1.23*math.cos(b),1.23*math.sin(b),.08)),Vector((.62*math.cos(b),.62*math.sin(b),1.05)),Vector((.62*math.cos(a),.62*math.sin(a),1.05))]
@@ -377,8 +377,8 @@ def materials():
  mat('Anodized blue',(.027,.075,.15),.68,.34);mat('Aluminium foil',(.56,.58,.55),.94,.32)
  mat('Hose grey',(.36,.37,.34),rough=.85,fabric=True);mat('Orange cable',(.57,.19,.025),rough=.68)
  mat('Circuit board',(.025,.105,.074),.1,.71);mat('Amber indicator',(.92,.33,.025),emission=.6)
- mat('Clear glazing',(.92,.96,.98),rough=.12)
- p=M['Clear glazing'].node_tree.nodes.get('Principled BSDF');p.inputs['Transmission Weight'].default_value=.74;p.inputs['IOR'].default_value=1.46
+ mat('Clear glazing',(.92,.96,.98),rough=.035)
+ p=M['Clear glazing'].node_tree.nodes.get('Principled BSDF');p.inputs['Transmission Weight'].default_value=1.0;p.inputs['IOR'].default_value=1.46
 
 # Tighter edge radii distinguish fabricated panels from upholstered items.
 def box(name,loc,dim,ma='White',bevel=.012,rot=None):
@@ -393,6 +393,10 @@ def cable(name,coords,r=.015,ma='Dark'):
     t=j/5;smooth.append(.5*((2*p1)+(-p0+p2)*t+(2*p0-5*p1+4*p2-p3)*t*t+(-p0+3*p1-3*p2+p3)*t*t*t))
   coords=smooth+[pts[-1]]
  return _base_cable(name,coords,r,ma)
+
+def rail(a,b,ma='Blue'):
+ cyl('Anodized handrail',a,b,.017,ma,16)
+ for p in (a,b):box('Handrail mounting shoe',p,(.043,.048,.046),'Silver',.006)
 
 def fastener(side,y,z,x=1.12):
  cyl('Recessed screw washer',(side*x,y,z),(side*(x-.003),y,z),.012,'Silver',12)
@@ -467,16 +471,23 @@ def rack(side,y,w,idx):
    for k in range(3):box('Indicator',(side*1.111,y-.18+k*.10,zz-.095),(.009,.018,.011),'LED' if k%2 else 'Amber indicator',.002)
  if variant==1:
   # MSG-inspired faceted viewing panel and two restrained access sleeves.
-  box('Glovebox chamber',(side*1.10,y,.13),(.28,w-.18,.99),'Silver',.012)
-  box('Glovebox interior',(side*.94,y,.13),(.012,w-.26,.86),'Dark',.003)
+  box('Glovebox back',(side*1.30,y,.13),(.04,w-.18,.99),'Off white',.005)
+  for oy in [-w*.42,w*.42]:box('Glovebox side wall',(side*1.105,y+oy,.13),(.40,.025,.99),'Silver',.005)
+  for zz in [-.28,.60]:box('Glovebox horizontal wall',(side*1.105,y,zz),(.40,w-.18,.025),'Silver',.005)
+  box('Glovebox instrument backboard',(side*1.27,y,.13),(.012,w-.26,.86),'Ivory',.003)
+  for jj in range(3):
+   yy=y-w*.25+jj*w*.23;box('Glovebox test electronics',(side*1.23,yy,.22),(.09,w*.18,.23),'Dark' if jj%2 else 'Gold',.004)
+   cable('Glovebox internal tube',[(side*1.22,yy,.34),(side*1.13,yy+.04,.17),(side*1.17,yy+.07,-.14)],.008,'Ivory')
   box('Glovebox tray',(side*.87,y,-.19),(.30,w-.28,.018),'Silver',.002)
   yz=[(-w*.38,-.24),(w*.38,-.24),(w*.38,.41),(w*.27,.59),(-w*.27,.59),(-w*.38,.41)]
-  vs=[(side*.91,y+yy,z) for yy,z in yz];mesh('Glovebox glazing',vs,[tuple(range(6))],'Clear glazing')
+  vs=[(side*.91,y+yy,z) for yy,z in yz];gl=mesh('Glovebox glazing',vs,[tuple(range(6))],'Clear glazing')
+  if gl:
+   md=gl.modifiers.new('Physical glass thickness','SOLIDIFY');md.thickness=.003
   cable('Glovebox gasket',vs+[vs[0]],.014,'Gasket')
   for yy in [-w*.22,w*.22]:
    p=(side*.88,y+yy,-.015)
    cable('Glove port flange',[(p[0],p[1]+.13*math.cos(a*math.pi/16),p[2]+.13*math.sin(a*math.pi/16)) for a in range(33)],.018,'Anodized blue')
-   cable('Restrained glove sleeve',[(side*.90,y+yy,0),(side*.82,y+yy,-.055),(side*.81,y+yy+.04,-.14)],.075,'Nomex')
+   cable('Restrained glove sleeve',[(side*.91,y+yy,0),(side*1.045,y+yy,-.055),(side*1.15,y+yy+.04,-.14)],.075,'Nomex')
    for z1 in [-.16,.35]:latch(side,y+yy,z1,.88)
   face_label(side,y,.65,label+' / SCIENCE',w*.65,.09,1.11)
  elif variant==3:
@@ -598,8 +609,8 @@ def finalize_detail(key,name,kind,camera):
  scene.render.filepath=str(OUT/'renders'/f'{key}_stage2.png');bpy.ops.render.render(write_still=True)
  bpy.ops.object.select_all(action='DESELECT')
  for o in scene.objects:
-  if o.type=='MESH':o.select_set(True)
- bpy.context.view_layer.objects.active=bpy.context.selected_objects[0];bpy.ops.object.join();obj=bpy.context.object;obj.name=key+'_detailed'
+  if o.type=='MESH' and not o.get('presentation_background'):o.select_set(True)
+ bpy.context.view_layer.objects.active=bpy.context.selected_objects[0];bpy.ops.object.convert(target='MESH');bpy.ops.object.join();obj=bpy.context.object;obj.name=key+'_detailed'
  bpy.ops.object.transform_apply(location=False,rotation=True,scale=True)
  original=obj.data.uv_layers.get('UVMap');ao_uv=obj.data.uv_layers.new(name='AOMap');obj.data.uv_layers.active=ao_uv;ao_uv.active_render=True
  bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.uv.smart_project(angle_limit=math.radians(66),island_margin=.003);bpy.ops.object.mode_set(mode='OBJECT')
@@ -617,12 +628,87 @@ def finalize_detail(key,name,kind,camera):
   t=texture_node(m,ao,'AOMap');node=m.node_tree.nodes.new('ShaderNodeGroup');node.node_tree=group;m.node_tree.links.new(t.outputs['Color'],node.inputs['Occlusion'])
  obj.data.uv_layers.active=original;original.active_render=True
  mod=obj.modifiers.new('Web triangulation','TRIANGULATE');bpy.ops.object.modifier_apply(modifier=mod.name)
- bpy.ops.export_scene.gltf(filepath=str(OUT/'glb'/f'{key}_stage2.glb'),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_tangents=True,export_cameras=False,export_lights=False,export_extras=True)
+ for ob in scene.objects:
+  if ob.get('presentation_background'):ob.select_set(True)
+ bpy.ops.export_scene.gltf(filepath=str(OUT/'glb'/f'{key}_stage2.glb'),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_tangents=False,export_cameras=False,export_lights=False,export_extras=True)
  # Preserve the exact baked web mesh alongside editable native objects in a separate scene file.
  bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'blend'/f'{key}_stage2_web.blend'),compress=True)
  data=(OUT/'glb'/f'{key}_stage2.glb').read_bytes();ln=struct.unpack_from('<I',data,12)[0];g=json.loads(data[20:20+ln]);tri=sum(g['accessors'][p['indices']]['count']//3 for m in g['meshes'] for p in m['primitives'])
  assert any(m.get('occlusionTexture') for m in g.get('materials',[])),'AO missing from GLB'
  meta={'id':key,'name':name,'stage':2,'bytes':len(data),'triangles':tri,'materials':len(g.get('materials',[])),'textures':len(g.get('images',[])),'aoResolution':size,'camera_blender':camera,'renderer':'Blender 4.5.3 / Cycles','samples':A.samples}
  (OUT/f'{key}.json').write_text(json.dumps(meta,indent=2));print('MODULE_COMPLETE '+json.dumps(meta),flush=True)
+
+# Module-specific second-pass fittings.
+_generic_rack=rack
+_generic_refine=refine_module
+
+def rack(side,y,w,idx):
+ if KEY not in ['zvezda','nauka']:
+  return _generic_rack(side,y,w,idx)
+ names=['ELEKTRON','THERMAL CONTROL','POWER','LIFE SUPPORT','SCIENCE','DATA']
+ box('Russian system cabinet',(side*1.36,y,0),(.38,w-.03,2.18),'Nomex',.022)
+ for j in range(4):
+  z=-.78+j*.52;box('Removable service panel',(side*1.15,y,z),(.038,w-.12,.48),'Off white' if (j+idx)%3 else 'Green',.008)
+  for oy in [-w*.37,w*.37]:
+   for oz in [-.17,.17]:fastener(side,y+oy,z+oz,1.125)
+  if j==2:
+   box('Control fascia',(side*1.12,y,z),(.017,w*.74,.33),'Dark',.005)
+   for k in range(5):
+    yy=y-w*.27+k*w*.135
+    cyl('Panel toggle',(side*1.105,yy,z),(side*1.073,yy,z+.023),.007,'Silver',12)
+    box('Annunciator',(side*1.101,yy,z+.10),(.008,.040,.025),'LED' if k in [0,3] else 'Ivory',.002)
+   face_label(side,y,z-.11,'SYSTEM STATUS / 28 V',w*.6,.045,1.10)
+  elif j==3:
+   for k in range(2):
+    yy=y+(-.20 if k==0 else .20);cyl('Analog gauge bezel',(side*1.121,yy,z),(side*1.097,yy,z),.085,'Silver',24);cyl('Gauge dial',(side*1.095,yy,z),(side*1.091,yy,z),.071,'Ivory',24)
+    cable('Gauge needle',[(side*1.088,yy,z),(side*1.088,yy+.034,z+.033)],.002,'Dark')
+  elif j==0:
+   for k in range(12):box('Fan grille',(side*1.126,y,z-.13+k*.023),(.005,w*.58,.005),'Dark',0)
+  else:
+   for k in [-1,1]:latch(side,y+k*w*.28,z,1.11)
+ face_label(side,y,1.05,names[idx%6],w*.75,.10,1.10)
+ rail((side*1.03,y-w*.41,-.77),(side*1.03,y-w*.41,.77),'Ivory')
+ for j in range(3):cable('Braided service lead',[(side*1.12,y+w*.33,.18),(side*.97,y+w*.32,-.1),(side*.94,y+w*.36,-.63),(side*1.17,y+w*.30,-.91)],.009+j*.004,'Hose grey' if j==1 else 'Ivory')
+
+def earth_background():
+ path=os.environ.get('ISS_EARTH_TEXTURE','')
+ if not path or not Path(path).exists():return
+ im=bpy.data.images.load(path,check_existing=True);im.name='NASA Blue Marble 2002';im.pack()
+ m=bpy.data.materials.new('Earth presentation / NASA Blue Marble');m.use_nodes=True;ns=m.node_tree.nodes;ns.clear();out=ns.new('ShaderNodeOutputMaterial');em=ns.new('ShaderNodeEmission');em.inputs['Strength'].default_value=.7;tex=ns.new('ShaderNodeTexImage');tex.image=im;m.node_tree.links.new(tex.outputs['Color'],em.inputs['Color']);m.node_tree.links.new(em.outputs[0],out.inputs[0])
+ bpy.ops.mesh.primitive_uv_sphere_add(segments=64,ring_count=32,radius=6.5,location=(0,0,8))
+ ob=bpy.context.object;ob.name='Earth presentation background';ob['presentation_background']=True;ob['credit']='NASA / Reto Stoeckli / Robert Simmon, Blue Marble 2002';ob.rotation_euler=(math.radians(112),.2,math.radians(40));ob.data.materials.append(m)
+ for p in ob.data.polygons:p.use_smooth=True
+
+def refine_module(key,L,n,kind):
+ _generic_refine(key,L,n,kind)
+ if key=='cupola':
+  earth_background()
+  for ob in bpy.context.scene.objects:
+   if ob.name.startswith('Cupola glass ') and ob.type=='MESH' and len(ob.data.polygons)==1:
+    md=ob.modifiers.new('Window pane thickness','SOLIDIFY');md.thickness=.004
+   if ob.type=='LIGHT':
+    if hasattr(ob.data,'specular_factor'):ob.data.specular_factor=.1
+    if hasattr(ob,'visible_glossy'):ob.visible_glossy=False
+ if kind in ['airlock','airlock_ru']:
+  for side in [-1,1]:
+   y=L*.28;box('Airlock service console',(side*1.10,y,.40),(.22,.60,.60),'Off white',.012)
+   for j in range(3):
+    yy=y-.19+j*.19;cyl('Pressure gauge',(side*.978,yy,.50),(side*.955,yy,.50),.07,'Silver',24);cyl('Pressure dial',(side*.951,yy,.50),(side*.947,yy,.50),.056,'Ivory',24)
+    cable('Pressure needle',[(side*.943,yy,.50),(side*.943,yy+.022,.529)],.002,'Dark')
+   for j in [-1,1]:
+    cyl('Pressure valve',(side*.96,y+j*.15,.27),(side*.91,y+j*.15,.27),.041,'Red' if j==1 else 'Blue',16)
+    cable('Airlock supply hose',[(side*1.01,y+j*.2,.15),(side*.91,y+j*.27,-.13),(side*1.02,y+j*.33,-.55)],.023,'Ivory')
+   face_label(side,y,.77,'AIRLOCK / PRESSURE',.50,.085,.97)
+ if key=='zvezda':
+  # Galley fittings and restrained drink/food pouches beside the meal table.
+  for side in [-1,1]:
+   box('Galley storage',(side*1.0,1.85,-.40),(.25,.70,.50),'Nomex',.035)
+   for j in range(3):cyl('Drink pouch coupling',(side*.85,1.64+j*.17,-.21),(side*.85,1.64+j*.17,-.14),.018,'Blue',12)
+ if key=='bishop':
+  for x in [-.61,.61]:
+   for y in [-.6,-.3,0,.3,.6]:box('Payload rail clamp',(x,y,-.49),(.075,.08,.045),'Silver',.005)
+ if key=='prichal':
+  for j in range(6):
+   a=j*math.pi/3;box('Node utility junction',(1.25*math.cos(a),1.25*math.sin(a),.67),(.18,.12,.14),'White',.006)
 
 for key in (list(SPECS) if A.modules=='all' else A.modules.split(',')):build(key)
