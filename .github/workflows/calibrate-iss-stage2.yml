@@ -1,0 +1,32 @@
+name: Calibrate ISS interior web lighting
+on:
+  push:
+    branches: [codex/iss-stage2-lighting-20261030]
+    paths:
+      - tools/iss-interiors/calibrate_stage2.py
+      - .github/workflows/calibrate-iss-stage2.yml
+permissions:
+  contents: write
+jobs:
+  calibrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/iss-stage2-lighting-20261030
+          sparse-checkout: |
+            tools/iss-interiors
+            assets/models/interior
+      - name: Calibrate occlusion without changing mesh or textures
+        run: |
+          python tools/iss-interiors/calibrate_stage2.py
+          npm install --prefix "$RUNNER_TEMP/validator" gltf-validator@2.0.0-dev.3.10
+          ISS_VALIDATION_OUTPUT=assets/models/interior/validation-stage2.json NODE_PATH="$RUNNER_TEMP/validator/node_modules" node tools/iss-interiors/validate_stage2.cjs assets/models/interior/stage2/*.glb
+      - name: Save validated delivery models
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/models/interior/stage2 assets/models/interior/catalog-stage2.json assets/models/interior/validation-stage2.json
+          git commit -m 'Balance contact occlusion for ISS interior PBR lighting'
+          git push origin HEAD:codex/iss-stage2-lighting-20261030
