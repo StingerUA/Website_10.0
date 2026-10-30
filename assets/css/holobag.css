@@ -9,7 +9,7 @@ main.holobag-page{margin-top:0!important}
 .holobag-page:before{content:"";position:absolute;z-index:-1;pointer-events:none;inset:40px -5vw auto;height:710px;background:radial-gradient(ellipse at 75% 24%,rgba(65,14,174,.22),transparent 52%),radial-gradient(ellipse at 15% 45%,rgba(0,194,255,.20),transparent 50%);filter:blur(8px)}
 .holo-overline{display:inline-flex;align-items:center;gap:11px;letter-spacing:.19em;text-transform:uppercase;color:#7ee4ff;font-size:clamp(.7rem,1vw,.86rem);font-weight:750}
 .holo-overline:before{content:"";width:32px;height:1px;background:#53dcff;box-shadow:0 0 15px #53dcff}
-.holo-hero{max-width:1020px;margin:0 auto;text-align:center}
+.holo-hero{max-width:1320px;margin:0 auto;text-align:center}
 .holo-hero .holo-overline:before{display:none}
 .holo-heading{margin:23px 0 23px;font-size:clamp(2.8rem,7.4vw,7.2rem);letter-spacing:-.055em;line-height:.96;font-weight:850;text-transform:uppercase;color:#fff;text-wrap:balance;text-shadow:0 0 60px rgba(0,194,255,.36)}
 .holo-heading .holo-gradient{display:block;background:linear-gradient(105deg,#caffff 5%,#37ccff 48%,#86a8ff 86%);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -55,3 +55,14 @@ main.holobag-page{margin-top:0!important}
 @media(max-width:900px){.holo-videos{grid-template-columns:repeat(2,minmax(0,1fr));max-width:730px;margin:auto}.holo-split{grid-template-columns:1fr}.holo-hero{max-width:760px}}
 @media(max-width:480px){.holobag-page{padding:18px 15px 70px}.holo-heading{font-size:clamp(2.55rem,12vw,4.2rem)}.holo-videos{gap:10px}.holo-video-frame{border-radius:12px}.holo-video-placeholder .holo-screen-tag{top:13px;left:10px;font-size:.52rem}.holo-video-placeholder .holo-number{bottom:12px;right:10px}.holo-play-mark{width:54px;height:54px;margin-bottom:12px}.holo-video-placeholder .holo-awaiting{font-size:.81rem}.holo-video-placeholder .holo-file-soon{font-size:.68rem}.holo-video-card figcaption{font-size:.78rem}.holo-panel{border-radius:17px}.holo-contact{border-radius:20px}}
 @media(prefers-reduced-motion:reduce){.holobag-page .whatsapp-btn{transition:none}}
+
+/* Holo-bag hero: mirrored artwork beside title on desktop, one below title on mobile. */
+.holo-title-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.5fr) minmax(0,1fr);align-items:center;column-gap:clamp(4px,1.3vw,20px);max-width:1320px;margin:14px auto 22px}
+.holo-title-stack{min-width:0}
+.holo-title-row .holo-heading{margin:0;font-size:clamp(2.6rem,5.6vw,5.9rem);line-height:1}
+.holo-title-image{display:block;width:100%;max-width:270px;height:auto;filter:drop-shadow(0 0 20px rgba(53,163,249,.17))}
+.holo-title-image-left{justify-self:end;transform:scaleX(-1)}
+.holo-title-image-right{justify-self:start}
+.holo-mobile-image{display:none}
+@media(max-width:900px){.holo-title-row{display:block;margin:12px auto 18px}.holo-title-row .holo-heading{font-size:clamp(2.8rem,7.4vw,7.2rem)}.holo-title-image{display:none}.holo-mobile-image{display:block;width:min(74vw,330px);height:auto;margin:8px auto 12px;filter:drop-shadow(0 0 24px rgba(53,163,249,.12))}}
+@media(max-width:480px){.holo-title-row .holo-heading{font-size:clamp(2.55rem,12vw,4.2rem)}.holo-mobile-image{width:min(78vw,300px)}}
