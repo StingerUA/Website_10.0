@@ -13,9 +13,9 @@
   if (/(?:^|\/)(?:atlas-)?iss(?:\/|$)/.test(pathname) || /(?:^|\/)orbital-iss(?:\.html|\/|$)/.test(pathname)) return;
 
   const copy = {
-    tr: ['AR · Gerçekçi derinlik', 'Kamerada gerçek nesnelerin 3D modelin önünde görünmesini dener. Desteklenen Android cihaz gerekir.'],
-    en: ['AR · Realistic depth', 'Tries real-world occlusion in AR. Requires a compatible Android phone.'],
-    ru: ['AR · Реальная глубина', 'В AR реальные объекты смогут перекрывать модель. Требуется совместимый Android.']
+    tr: ['AR · Gerçekçi derinlik', 'Kamerada gerçek nesnelerin 3D modelin önünde görünmesini dener. Desteklenen Android cihaz gerekir.', 'Google AR hemen kapanırsa yukarıdaki standart AR düğmesini (WebXR) deneyin ve Google uygulamasını güncelleyin.'],
+    en: ['AR · Realistic depth', 'Tries real-world occlusion in AR. Requires a compatible Android phone.', 'If Google AR closes immediately, use the standard AR button above (WebXR) and update the Google app.'],
+    ru: ['AR · Реальная глубина', 'В AR реальные объекты смогут перекрывать модель. Требуется совместимый Android.', 'Если Google AR сразу закрывается, используйте обычную кнопку AR выше (WebXR) и обновите приложение Google.']
   };
   const lang = (document.documentElement.lang || 'tr').slice(0, 2);
   const t = copy[lang] || copy.tr;
@@ -52,6 +52,17 @@
     document.body.appendChild(a);
     a.click(); // Must originate in direct user click; do not await a promise.
     a.remove();
+    // Google app regression (Oct 2026): Scene Viewer may immediately return.
+    // Keep the recovery instruction visible when the user returns to the page.
+    const button = viewer.parentElement?.querySelector('.alba-ar-depth-launch');
+    if (button && !button.nextElementSibling?.classList.contains('alba-ar-depth-note')) {
+      const note = document.createElement('p');
+      note.className = 'alba-ar-depth-note';
+      note.setAttribute('role', 'status');
+      note.textContent = t[2] || copy.en[2];
+      note.style.cssText = 'max-width:650px;margin:-8px auto 20px;text-align:center;color:#c8edff;font:13px/1.4 system-ui,sans-serif';
+      button.insertAdjacentElement('afterend', note);
+    }
   }
 
   function enhance(viewer) {
