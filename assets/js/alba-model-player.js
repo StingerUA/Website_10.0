@@ -17,6 +17,9 @@
 (function () {
   'use strict';
 
+  // Some dedicated character pages hide the generic narration player.
+  if (document.body?.dataset.disableModelPlayer === 'true') return;
+
   const WORKER_URL   = 'https://divine-flower-a0ae.nncdecdgc.workers.dev';
   const DEFAULT_AUDIO_PATH = '/assets/audio/pro/models/';
   const ATLAS_AUDIO_PATH = '/assets/audio/models/';

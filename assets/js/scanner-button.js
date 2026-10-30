@@ -8,7 +8,7 @@
   'use strict';
 
   function extrasDisabled() {
-    return document.body && document.body.dataset.disableModelExtras === 'true';
+    return document.body && (document.body.dataset.disableModelExtras === 'true' || document.body.dataset.disableScanner === 'true');
   }
 
   if (extrasDisabled()) return;

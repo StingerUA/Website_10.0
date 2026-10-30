@@ -50,7 +50,6 @@ if (root) {
   })[lang] || {};
   const modelUrl = '/assets/models/albamen.glb';
   const viewer = root.querySelector('model-viewer');
-  const availability = root.querySelector('[data-model-status]');
   const open = root.querySelector('[data-open-portrait]');
   const modal = document.getElementById('albamenPortraitModal');
   const close = modal.querySelector('[data-portrait-close]');
@@ -124,14 +123,11 @@ if (root) {
   fetch(modelUrl, {method:'HEAD', cache:'no-store'}).then(r => {
     if (!r.ok) throw new Error('No model');
     modelReady = true;
+    // The GLB placeholder remains visible until the real Albamen model is uploaded.
     viewer.src = modelUrl;
-    root.querySelector('.albamen-preview')?.setAttribute('hidden','');
-    availability.textContent = L.ready;
     open.disabled = false;
   }).catch(() => {
-    viewer.style.display = 'none';
-    if (viewer.closest('.viewer-wrapper')) viewer.closest('.viewer-wrapper').style.display = 'none';
-    availability.textContent = L.pending;
+    // Keep /assets/models/zaglushka.glb displayed; only the portrait camera needs the real character.
     open.disabled = true;
   });
 

@@ -18,9 +18,9 @@
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
   <script defer src="/assets/js/include.js"></script>
   <script defer src="/assets/js/menu-toggle.js"></script>
-  <style>.albamen-preview{display:block;max-width:100%;width:100%;height:min(70vh,620px);object-fit:contain;border-radius:18px;background:radial-gradient(circle at 50% 45%,#205f8669,#061325 72%)}.albamen-preview[hidden]{display:none}.albamen-audio audio{display:block;width:min(100%,640px);margin:16px auto}.albamen-audio audio[hidden]{display:none}</style>
+  
 </head>
-<body>
+<body data-disable-scanner="true" data-disable-model-player="true">
   <div data-include="/header-tr.html"></div>
   <main class="neil-shell" data-albamen-experience>
     <section class="neil-hero">
@@ -44,19 +44,12 @@
       <p>Sizden tek bir şey isteyeceğim, uzaydaşlar: Merakınızı asla kaybetmeyin. Gökyüzüne bakın, sorular sorun, deneyler yapın ve birbirinize yardım edin. Çünkü <strong>bilgi, hayal gücü ve iyilik</strong> birleştiğinde en büyük maceralar başlar. Ben Albamen. Lara'yla birlikte yeni keşiflerde buluşmak üzere! <strong>Vael-khrun!</strong> 🚀🌟</p>
     </section>
     <section class="neil-model-panel">
-      <h2>🦸 Albamen'in 3D modeli</h2>
-      <model-viewer id="neilMainViewer" data-track="model_view" data-model-name="albamen"
+      <model-viewer src="/assets/models/zaglushka.glb" id="neilMainViewer" data-track="model_view" data-model-name="albamen"
         alt="Albamen 3D" camera-controls auto-rotate ar
         ar-modes="webxr scene-viewer quick-look"
         exposure="1.0" shadow-intensity="0.8" interaction-prompt="auto"></model-viewer>
-      <img class="albamen-preview" src="/assets/images/albamenai.png" alt="Albamen" loading="lazy">
-      <p class="neil-model-status" data-model-status aria-live="polite">3D model henüz eklenmedi. /assets/models/albamen.glb dosyasını yükleyin.</p>
     </section>
-    <section class="neil-photo albamen-audio">
-      <h2>🎧 Albamen'i dinle</h2>
-      <audio controls preload="none" hidden data-albamen-audio><source src="/assets/audio/albamen/albamen-tr.mp3" type="audio/mpeg"></audio>
-      <p data-audio-status aria-live="polite">Ses kaydı henüz eklenmedi. /assets/audio/albamen/albamen-tr.mp3 dosyasını yükleyin.</p>
-    </section>
+    
     <section class="neil-photo">
       <h2>📷 Albamen ile fotoğraf ve video</h2>
       <p>Kamerayı açın, Albamen'le aynı kareye girin, karakteri döndürün ve boyutunu ayarlayın. Fotoğraf çekin veya 8 saniyelik video kaydedin. Desteklenen cihazlarda kişi silueti modelin önüne geçebilir.</p>
@@ -90,15 +83,6 @@
   
   <script type="module" src="/assets/js/albamen-portrait.js?v=20261030"></script>
   <script src="/assets/js/particles.js"></script>
-  <script>
-  (function(){
-    const player=document.querySelector('[data-albamen-audio]');
-    const status=document.querySelector('[data-audio-status]');
-    if(!player || !status)return;
-    fetch("/assets/audio/albamen/albamen-tr.mp3",{method:'HEAD',cache:'no-store'})
-      .then(r=>{if(!r.ok)throw Error('Audio not uploaded');player.hidden=false;status.textContent="Albamen'in sesli hikâyesi hazır.";})
-      .catch(()=>{player.hidden=true;});
-  })();
-  </script>
+
 </body>
 </html>
