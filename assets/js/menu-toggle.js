@@ -21,8 +21,9 @@
       services: [
         { href: '/hizmetler.html', label: 'HİZMETLER' },
         { href: '/etkinlikler.html', label: 'Yaklaşan Etkinlikler' },
-        { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true },
-        { href: '/kubesat.html', label: 'Cubesat' }
+        { href: '/kubesat.html', label: 'Cubesat' },
+        { href: '/holobag.html', label: 'Holo-bag' },
+        { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true }
       ],
       albamen: [
         { href: '/albamen.html', label: 'ALBAMEN' },
@@ -40,8 +41,9 @@
       services: [
         { href: '/eng/hizmetler.html', label: 'SERVICES' },
         { href: '/eng/etkinlikler.html', label: 'Upcoming Events' },
-        { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true },
-        { href: '/eng/kupsat.html', label: 'Cubesat' }
+        { href: '/eng/kupsat.html', label: 'Cubesat' },
+        { href: '/eng/holobag.html', label: 'Holo-bag' },
+        { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true }
       ],
       albamen: [
         { href: '/eng/albamen.html', label: 'ALBAMAN' },
@@ -59,8 +61,9 @@
       services: [
         { href: '/rus/hizmetler.html', label: 'УСЛУГИ' },
         { href: '/rus/etkinlikler.html', label: 'Предстоящие мероприятия' },
-        { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true },
-        { href: '/rus/kupsat.html', label: 'КубСат' }
+        { href: '/rus/kupsat.html', label: 'КубСат' },
+        { href: '/rus/holobag.html', label: 'Holo-bag' },
+        { href: 'https://albaspace.com.tr/hyperclub', label: 'Hyper Club', external: true }
       ],
       albamen: [
         { href: '/rus/albamen.html', label: 'АЛЬБАМЕН' },
@@ -78,8 +81,9 @@
       services: [
         { href: '/ar/hizmetler.html', label: 'الخدمات' },
         { href: '/ar/etkinlikler.html', label: 'الفعاليات القادمة' },
-        { href: 'https://albaspace.com.tr/ar/hyperclub', label: 'Hyper Club', external: true },
-        { href: '/ar/kubesat.html', label: 'Cubesat' }
+        { href: '/ar/kubesat.html', label: 'Cubesat' },
+        { href: '/holobag.html', label: 'Holo-bag' },
+        { href: 'https://albaspace.com.tr/ar/hyperclub', label: 'Hyper Club', external: true }
       ],
       albamen: [
         { href: '/ar/albamen.html', label: 'ALBAMEN' },
