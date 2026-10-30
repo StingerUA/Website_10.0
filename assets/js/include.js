@@ -5,7 +5,7 @@ runAfterDomReady(() => {
   if (document.querySelector('model-viewer') &&
       !document.querySelector('script[data-alba-android-ar-recovery]')) {
     const androidAR = document.createElement('script');
-    androidAR.src = '/assets/js/android-ar-recovery.js?v=20261030';
+    androidAR.src = '/assets/js/android-ar-recovery.js?v=20261030-ar4';
     androidAR.defer = true;
     androidAR.dataset.albaAndroidArRecovery = 'true';
     document.head.appendChild(androidAR);
@@ -16,7 +16,7 @@ runAfterDomReady(() => {
   // Android ARCore Depth: opt-in Scene Viewer launcher; skips ISS models.
   if (!document.querySelector('script[data-alba-ar-depth]')) {
     const depthScript = document.createElement('script');
-    depthScript.src = '/assets/js/ar-depth-launch.js?v=20261015';
+    depthScript.src = '/assets/js/ar-depth-launch.js?v=20261030';
     depthScript.defer = true;
     depthScript.dataset.albaArDepth = 'true';
     document.head.appendChild(depthScript);
