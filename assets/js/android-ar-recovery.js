@@ -9,15 +9,15 @@
   const NATIVE = 'scene-viewer quick-look';
   const WEBXR = 'webxr scene-viewer quick-look';
   const translations = {
-    tr: ['AR açılmadı mı? Chrome ile açın ve Google Play Hizmetleri (AR) uygulamasını güncelleyin.', 'AR başlatılamadı. Chrome ve Google Play Hizmetleri (AR) uygulamasını kontrol edin.', 'Google AR ile dene', 'Kapat'],
-    en: ['AR did not open? Open this page in Chrome and update Google Play Services for AR.', 'AR could not start. Check Chrome and Google Play Services for AR.', 'Try Google AR', 'Dismiss'],
-    ru: ['AR не открылся? Откройте страницу в Chrome и обновите Google Play Services for AR.', 'AR не запустился. Проверьте Chrome и Google Play Services for AR.', 'Попробовать Google AR', 'Закрыть'],
-    ar: ['لم يعمل الواقع المعزز؟ افتح الصفحة في Chrome وحدّث خدمات Google Play للواقع المعزز.', 'تعذر تشغيل الواقع المعزز. تحقق من Chrome وخدمات Google Play للواقع المعزز.', 'جرّب Google AR', 'إغلاق']
+    tr: ['AR açılmadı mı? Chrome ile açın ve Google Play Hizmetleri (AR) uygulamasını güncelleyin.', 'AR başlatılamadı. Chrome ve Google Play Hizmetleri (AR) uygulamasını kontrol edin.', 'Google AR ile dene', 'Kapat', 'Tarayıcıda AR aç', 'Bu tarayıcı WebXR desteklemiyor. Chrome kullanın.'],
+    en: ['AR did not open? Open this page in Chrome and update Google Play Services for AR.', 'AR could not start. Check Chrome and Google Play Services for AR.', 'Try Google AR', 'Dismiss', 'Open AR in browser', 'This browser does not support WebXR AR. Open this page in Chrome.'],
+    ru: ['AR не открылся? Откройте страницу в Chrome и обновите Google Play Services for AR.', 'AR не запустился. Проверьте Chrome и Google Play Services for AR.', 'Попробовать Google AR', 'Закрыть', 'Открыть AR в браузере', 'Этот браузер не поддерживает WebXR. Откройте страницу в Chrome.'],
+    ar: ['لم يعمل الواقع المعزز؟ افتح الصفحة في Chrome وحدّث خدمات Google Play للواقع المعزز.', 'تعذر تشغيل الواقع المعزز. تحقق من Chrome وخدمات Google Play للواقع المعزز.', 'جرّب Google AR', 'إغلاق', 'فتح AR في المتصفح', 'هذا المتصفح لا يدعم WebXR. افتح الصفحة في Chrome.']
   };
   const t = translations[(document.documentElement.lang || 'tr').slice(0, 2).toLowerCase()] || translations.tr;
   const wired = new WeakSet();
   const style = document.createElement('style');
-  style.textContent = '.alba-ar-recovery{margin:12px auto;padding:12px 14px;max-width:650px;border:1px solid #3183b4;border-radius:10px;background:#10223c;color:#f2faff;font:14px/1.5 system-ui,sans-serif;text-align:center}.alba-ar-recovery[hidden]{display:none!important}.alba-ar-recovery button{margin:8px 4px 0;padding:8px 12px;border:1px solid #4ab6e0;border-radius:7px;background:#164b70;color:#fff;cursor:pointer;font:inherit}.alba-ar-recovery button:focus-visible{outline:2px solid #bcefff;outline-offset:2px}';
+  style.textContent = '.alba-ar-recovery{margin:12px auto;padding:12px 14px;max-width:650px;border:1px solid #3183b4;border-radius:10px;background:#10223c;color:#f2faff;font:14px/1.5 system-ui,sans-serif;text-align:center}.alba-ar-recovery[hidden]{display:none!important}.alba-ar-recovery button{margin:8px 4px 0;padding:8px 12px;border:1px solid #4ab6e0;border-radius:7px;background:#164b70;color:#fff;cursor:pointer;font:inherit}.alba-ar-recovery button:focus-visible{outline:2px solid #bcefff;outline-offset:2px}.alba-ar-browser-button{display:block;margin:10px auto;padding:10px 17px;border:1px solid #45c6f1;border-radius:9px;background:#123d61;color:white;font:600 14px system-ui,sans-serif;cursor:pointer}.alba-ar-browser-button:disabled{opacity:.45;cursor:wait}';
   document.head.appendChild(style);
 
   function canUseNative(viewer) {
@@ -106,6 +106,44 @@
         if (pending && !left && !document.hidden) show(t[0]);
       }, 6500);
     }, true);
+    // Independent AR entry remains visible even when the built-in button
+    // disappears after a failed OS hand-off.
+    const browserButton = document.createElement('button');
+    browserButton.type = 'button';
+    browserButton.className = 'alba-ar-browser-button';
+    browserButton.textContent = t[4];
+    browserButton.disabled = !viewer.loaded;
+    viewer.addEventListener('load', () => { browserButton.disabled = false; });
+    viewer.addEventListener('error', () => { browserButton.disabled = true; });
+    browserButton.addEventListener('click', () => {
+      if (!navigator.xr || typeof navigator.xr.isSessionSupported !== 'function') {
+        show(t[5]);
+        return;
+      }
+      dismiss();
+      left = false;
+      pending = true;
+      clickedAt = Date.now();
+      viewer.setAttribute('ar-modes', 'webxr');
+      timeout = setTimeout(() => {
+        if (pending && !document.hidden) show(t[0]);
+      }, 6500);
+      try {
+        Promise.resolve(viewer.activateAR()).catch(() => {
+          pending = false;
+          cancel();
+          applyMode();
+          show(t[1]);
+        });
+      } catch (_) {
+        pending = false;
+        cancel();
+        applyMode();
+        show(t[1]);
+      }
+    });
+    viewer.insertAdjacentElement('afterend', browserButton);
+
     const markLeft = () => { left = true; hiddenAt = Date.now(); cancel(); };
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) markLeft();
