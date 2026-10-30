@@ -23,6 +23,7 @@ html:has(.holobag-page),body:has(.holobag-page){background:#020617!important;col
 .holo-video-frame{position:relative;aspect-ratio:9/16;width:100%;overflow:hidden;border:1px solid rgba(107,222,255,.34);border-radius:18px;background:radial-gradient(ellipse at 42% 39%,rgba(55,101,179,.48),transparent 56%),linear-gradient(150deg,#122a47,#080b22 53%,#181239);box-shadow:0 20px 65px rgba(0,0,0,.38),inset 0 0 55px rgba(45,141,230,.08)}
 .holo-video-frame:before{content:"";position:absolute;inset:8px;pointer-events:none;border:1px solid rgba(170,218,255,.10);border-radius:12px}
 .holo-video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;color:#dcefff}
+.holo-video-placeholder[hidden]{display:none!important}
 .holo-video-placeholder .holo-screen-tag{position:absolute;top:21px;left:17px;font-size:.63rem;letter-spacing:.2em;font-weight:800;color:#a6eaff}
 .holo-video-placeholder .holo-number{position:absolute;bottom:19px;right:19px;font-size:.75rem;color:#acc9e5;letter-spacing:.1em}
 .holo-play-mark{position:relative;display:grid;place-items:center;width:69px;height:69px;border-radius:50%;border:1px solid rgba(114,222,255,.65);background:rgba(9,31,59,.7);box-shadow:0 0 38px rgba(0,189,255,.2);margin-bottom:23px}
