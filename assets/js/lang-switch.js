@@ -8,6 +8,7 @@
     if (!container) return;
 
     const isWhoIsInSpace = fileName === 'orbital-crew.html';
+    const isAlbamenAtlas = /^\\/(?:eng\\/|rus\\/)?atlas\\/atlas-albamen\\/(?:index\\.html)?$/.test(path);
     const isNeilAtlas = /^\/(?:eng\/|rus\/)?atlas\/atlas-neil-armstrong\/(?:index\.html)?$/.test(path);
 
     container.querySelectorAll('[data-lang]').forEach(a => {
@@ -15,7 +16,12 @@
       if (!lang) return;
 
       let targetHref;
-      if (isNeilAtlas) {
+      if (isAlbamenAtlas) {
+        if (lang === 'tr') targetHref = '/atlas/atlas-albamen/';
+        else if (lang === 'en') targetHref = '/eng/atlas/atlas-albamen/';
+        else if (lang === 'ru') targetHref = '/rus/atlas/atlas-albamen/';
+        else return;
+      } else if (isNeilAtlas) {
         if (lang === 'tr') targetHref = '/atlas/atlas-neil-armstrong/';
         else if (lang === 'en') targetHref = '/eng/atlas/atlas-neil-armstrong/';
         else if (lang === 'ru') targetHref = '/rus/atlas/atlas-neil-armstrong/';
