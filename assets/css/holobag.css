@@ -1,7 +1,9 @@
 /* Holo-bag landing page · AlbaSpace 2026 */
 :root{--holo-bg:#020617;--holo-cyan:#00c2ff;--holo-ink:#eaf6ff;--holo-muted:#b8cbdb}
 html:has(.holobag-page),body:has(.holobag-page){background:#020617!important;color:var(--holo-ink)!important}
-.holobag-page{position:relative;isolation:isolate;max-width:1320px;margin:0 auto;padding:clamp(28px,4vw,60px) 24px 100px;min-height:100vh;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow:visible}
+.holobag-page{position:relative;isolation:isolate;max-width:1320px;margin:0 auto;padding:clamp(20px,2.5vw,40px) 24px 100px;min-height:100vh;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow:visible}
+/* Override global site.css 80px gap above inner pages. */
+main.holobag-page{margin-top:0!important}
 .holobag-page *{box-sizing:border-box}
 .holobag-page a{color:inherit}
 .holobag-page:before{content:"";position:absolute;z-index:-1;pointer-events:none;inset:40px -5vw auto;height:710px;background:radial-gradient(ellipse at 75% 24%,rgba(65,14,174,.22),transparent 52%),radial-gradient(ellipse at 15% 45%,rgba(0,194,255,.20),transparent 50%);filter:blur(8px)}
@@ -51,5 +53,5 @@ html:has(.holobag-page),body:has(.holobag-page){background:#020617!important;col
 .holobag-page .whatsapp-btn:focus-visible,.holo-contact-details a:focus-visible{outline:3px solid #8ef8ff;outline-offset:4px}
 .holo-contact .holo-smallprint{font-size:.87rem;color:#9cbed1;margin:14px 0 0}
 @media(max-width:900px){.holo-videos{grid-template-columns:repeat(2,minmax(0,1fr));max-width:730px;margin:auto}.holo-split{grid-template-columns:1fr}.holo-hero{max-width:760px}}
-@media(max-width:480px){.holobag-page{padding:30px 15px 70px}.holo-heading{font-size:clamp(2.55rem,12vw,4.2rem)}.holo-videos{gap:10px}.holo-video-frame{border-radius:12px}.holo-video-placeholder .holo-screen-tag{top:13px;left:10px;font-size:.52rem}.holo-video-placeholder .holo-number{bottom:12px;right:10px}.holo-play-mark{width:54px;height:54px;margin-bottom:12px}.holo-video-placeholder .holo-awaiting{font-size:.81rem}.holo-video-placeholder .holo-file-soon{font-size:.68rem}.holo-video-card figcaption{font-size:.78rem}.holo-panel{border-radius:17px}.holo-contact{border-radius:20px}}
+@media(max-width:480px){.holobag-page{padding:18px 15px 70px}.holo-heading{font-size:clamp(2.55rem,12vw,4.2rem)}.holo-videos{gap:10px}.holo-video-frame{border-radius:12px}.holo-video-placeholder .holo-screen-tag{top:13px;left:10px;font-size:.52rem}.holo-video-placeholder .holo-number{bottom:12px;right:10px}.holo-play-mark{width:54px;height:54px;margin-bottom:12px}.holo-video-placeholder .holo-awaiting{font-size:.81rem}.holo-video-placeholder .holo-file-soon{font-size:.68rem}.holo-video-card figcaption{font-size:.78rem}.holo-panel{border-radius:17px}.holo-contact{border-radius:20px}}
 @media(prefers-reduced-motion:reduce){.holobag-page .whatsapp-btn{transition:none}}
