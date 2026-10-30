@@ -1,6 +1,15 @@
 // Unified include.js for Alba Space website (Turkish)
 // Includes: Dynamic Header/Footer,   l AI Widget (Text+Voice), Analytics (GA4 + Yandex)
 runAfterDomReady(() => {
+  // Android-only: use native Scene Viewer first and show a recovery hint on AR failures.
+  if (document.querySelector('model-viewer') &&
+      !document.querySelector('script[data-alba-android-ar-recovery]')) {
+    const androidAR = document.createElement('script');
+    androidAR.src = '/assets/js/android-ar-recovery.js?v=20261030';
+    androidAR.defer = true;
+    androidAR.dataset.albaAndroidArRecovery = 'true';
+    document.head.appendChild(androidAR);
+  }
   // AI-виджеты включены — используются для текстового и голосового общения
   window.__disableAiWidgets = false;
   
@@ -987,11 +996,15 @@ function ensureModelViewerLoaded() {
   const hasModelViewer = !!document.querySelector("model-viewer");
   if (!hasModelViewer) return;
   if (window.customElements && window.customElements.get("model-viewer")) return;
-  const googleSrc = "https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js";
-  const fallbackSrc = "https://unpkg.com/@google/model-viewer@3.0.0/dist/model-viewer.min.js";
+  const googleSrc = "https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js";
+  const fallbackSrc = "https://unpkg.com/@google/model-viewer@3.4.0/dist/model-viewer.min.js";
   const localSrc = "/assets/js/model-viewer.min.js";
   const existingGoogleScript = document.querySelector(`script[src="${googleSrc}"]`);
   const existingLocalScript = document.querySelector(`script[src="${localSrc}"]`);
+  // Pages may already ship model-viewer from a different CDN/version.
+  // Never inject a second copy of a custom element that is loading.
+  const existingAnyModelViewerScript = Array.from(document.querySelectorAll('script[src]'))
+    .some(s => /(?:^|\/)model-viewer(?:\.min)?\.js(?:\?|$)/i.test(s.getAttribute('src') || ''));
 
   const loadModelViewerScript = (src, onSuccess, onError) => {
     if (window.customElements && window.customElements.get("model-viewer")) {
@@ -1039,7 +1052,7 @@ function ensureModelViewerLoaded() {
 
   const loadPrimaryModelViewer = () => {
     if (window.customElements && window.customElements.get("model-viewer")) return;
-    if (!existingGoogleScript) {
+    if (!existingAnyModelViewerScript) {
       loadModelViewerScript(googleSrc, () => {
         console.debug('[model-viewer] Primary CDN loaded successfully');
       }, tryFallback);
