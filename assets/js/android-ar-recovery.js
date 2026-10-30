@@ -1,17 +1,18 @@
 /**
  * AlbaSpace: Android AR fallback, 2026-10-30.
- * Scene Viewer first avoids a WebXR requestSession hang. iOS is untouched.
+ * WebXR is primary while an Oct 2026 Google app regression breaks Scene Viewer.
+ * A direct Scene Viewer fallback is also available. iOS is untouched.
  */
 (() => {
   'use strict';
   if (!/Android/i.test(navigator.userAgent)) return;
-  const NATIVE = 'scene-viewer webxr quick-look';
+  const NATIVE = 'scene-viewer quick-look';
   const WEBXR = 'webxr scene-viewer quick-look';
   const translations = {
-    tr: ['AR açılmadı mı? Chrome ile açın ve Google Play Hizmetleri (AR) uygulamasını güncelleyin.', 'AR başlatılamadı. Chrome ve Google Play Hizmetleri (AR) uygulamasını kontrol edin.', 'WebXR ile dene', 'Kapat'],
-    en: ['AR did not open? Open this page in Chrome and update Google Play Services for AR.', 'AR could not start. Check Chrome and Google Play Services for AR.', 'Try WebXR', 'Dismiss'],
-    ru: ['AR не открылся? Откройте страницу в Chrome и обновите Google Play Services for AR.', 'AR не запустился. Проверьте Chrome и Google Play Services for AR.', 'Попробовать WebXR', 'Закрыть'],
-    ar: ['لم يعمل الواقع المعزز؟ افتح الصفحة في Chrome وحدّث خدمات Google Play للواقع المعزز.', 'تعذر تشغيل الواقع المعزز. تحقق من Chrome وخدمات Google Play للواقع المعزز.', 'جرّب WebXR', 'إغلاق']
+    tr: ['AR açılmadı mı? Chrome ile açın ve Google Play Hizmetleri (AR) uygulamasını güncelleyin.', 'AR başlatılamadı. Chrome ve Google Play Hizmetleri (AR) uygulamasını kontrol edin.', 'Google AR ile dene', 'Kapat'],
+    en: ['AR did not open? Open this page in Chrome and update Google Play Services for AR.', 'AR could not start. Check Chrome and Google Play Services for AR.', 'Try Google AR', 'Dismiss'],
+    ru: ['AR не открылся? Откройте страницу в Chrome и обновите Google Play Services for AR.', 'AR не запустился. Проверьте Chrome и Google Play Services for AR.', 'Попробовать Google AR', 'Закрыть'],
+    ar: ['لم يعمل الواقع المعزز؟ افتح الصفحة في Chrome وحدّث خدمات Google Play للواقع المعزز.', 'تعذر تشغيل الواقع المعزز. تحقق من Chrome وخدمات Google Play للواقع المعزز.', 'جرّب Google AR', 'إغلاق']
   };
   const t = translations[(document.documentElement.lang || 'tr').slice(0, 2).toLowerCase()] || translations.tr;
   const wired = new WeakSet();
@@ -29,9 +30,9 @@
   function enhance(viewer) {
     if (wired.has(viewer) || !viewer.hasAttribute('ar') || viewer.closest('[data-no-alba-ar-fix]')) return;
     wired.add(viewer);
-    const applyMode = () => viewer.setAttribute('ar-modes', canUseNative(viewer) ? NATIVE : WEBXR);
+    const applyMode = () => viewer.setAttribute('ar-modes', canUseNative(viewer) ? WEBXR : 'webxr quick-look');
     applyMode();
-    let notice, timeout, pending = false, left = false;
+    let notice, timeout, pending = false, left = false, clickedAt = 0, hiddenAt = 0;
     const cancel = () => { clearTimeout(timeout); timeout = null; };
     const dismiss = () => { cancel(); if (notice) notice.hidden = true; };
     const show = (message) => {
@@ -49,7 +50,14 @@
         retry.textContent = t[2];
         retry.addEventListener('click', () => {
           dismiss();
-          viewer.setAttribute('ar-modes', WEBXR);
+          if (!canUseNative(viewer)) { show(t[1]); return; }
+          pending = true;
+          clickedAt = Date.now();
+          left = false;
+          viewer.setAttribute('ar-modes', NATIVE);
+          timeout = setTimeout(() => {
+            if (pending && !document.hidden) show(t[0]);
+          }, 6500);
           try {
             Promise.resolve(viewer.activateAR()).catch(() => { applyMode(); show(t[1]); });
           } catch (_) { applyMode(); show(t[1]); }
@@ -75,9 +83,11 @@
         pending = false;
         dismiss();
       } else if (status === 'not-presenting') {
+        const quickReturn = pending && Date.now() - clickedAt < 4500;
         pending = false;
         cancel();
-        applyMode(); // restore native priority for the next entry
+        applyMode();
+        if (quickReturn) show(t[0]);
       }
     });
     // Built-in model-viewer AR button lives in the shadow DOM.
@@ -90,14 +100,46 @@
       dismiss();
       left = false;
       pending = true;
+      clickedAt = Date.now();
       timeout = setTimeout(() => {
         timeout = null;
         if (pending && !left && !document.hidden) show(t[0]);
       }, 6500);
     }, true);
-    const markLeft = () => { left = true; cancel(); };
-    document.addEventListener('visibilitychange', () => { if (document.hidden) markLeft(); });
+    const markLeft = () => { left = true; hiddenAt = Date.now(); cancel(); };
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) markLeft();
+      else if (pending && hiddenAt && Date.now() - hiddenAt < 3500) {
+        pending = false;
+        applyMode();
+        show(t[0]); // native app returned immediately
+      }
+    });
     window.addEventListener('pagehide', markLeft);
+
+    // The rest of Atlas already has a separate Scene Viewer / depth button.
+    // ISS deliberately has no depth button: offer a native alternative there.
+    if (/(?:^|\/)(?:atlas-)?iss(?:\/|$)/i.test(location.pathname)) {
+      const alternative = document.createElement('button');
+      alternative.type = 'button';
+      alternative.className = 'alba-ar-native-alternative';
+      alternative.textContent = t[2];
+      alternative.title = t[0];
+      alternative.style.cssText = 'display:block;margin:10px auto;padding:9px 16px;border:1px solid #40aee1;background:#102a48;color:#fff;border-radius:9px;cursor:pointer;font:600 13px system-ui,sans-serif';
+      alternative.addEventListener('click', () => {
+        if (!canUseNative(viewer)) { show(t[1]); return; }
+        dismiss();
+        left = false;
+        pending = true;
+        clickedAt = Date.now();
+        viewer.setAttribute('ar-modes', NATIVE);
+        timeout = setTimeout(() => { if (pending && !document.hidden) show(t[0]); }, 6500);
+        try {
+          Promise.resolve(viewer.activateAR()).catch(() => { pending = false; cancel(); applyMode(); show(t[1]); });
+        } catch (_) { pending = false; cancel(); applyMode(); show(t[1]); }
+      });
+      viewer.insertAdjacentElement('afterend', alternative);
+    }
     new MutationObserver(applyMode).observe(viewer, {attributes:true,attributeFilter:['src','data-src']});
   }
   const scan = (node = document) => {
