@@ -5,15 +5,12 @@
  */
 (() => {
   'use strict';
-  const android = /Android/i.test(navigator.userAgent);
-  const seen = new WeakSet();
+    const seen = new WeakSet();
   const enhance = (viewer) => {
     if (seen.has(viewer)) return;
     seen.add(viewer);
     if (viewer.hasAttribute('ar') && !viewer.hasAttribute('ar-modes')) {
-      viewer.setAttribute('ar-modes', android
-        ? 'scene-viewer webxr quick-look'
-        : 'webxr scene-viewer quick-look');
+      viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
     }
   };
   const scan = (root = document) => {
