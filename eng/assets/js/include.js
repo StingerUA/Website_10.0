@@ -10,7 +10,7 @@ runAfterDomReady(() => {
   if (document.querySelector('model-viewer') &&
       !document.querySelector('script[data-alba-android-ar-recovery]')) {
     const androidAR = document.createElement('script');
-    androidAR.src = '/assets/js/android-ar-recovery.js?v=20261030';
+    androidAR.src = '/assets/js/android-ar-recovery.js?v=20261030-ar4';
     androidAR.defer = true;
     androidAR.dataset.albaAndroidArRecovery = 'true';
     document.head.appendChild(androidAR);
