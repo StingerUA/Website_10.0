@@ -257,7 +257,7 @@ def build(key):
  for data in [bpy.data.meshes,bpy.data.curves,bpy.data.materials,bpy.data.images]:
   for x in list(data):
    if x.users==0:data.remove(x)
- materials();ROOT=bpy.data.objects.new(key.upper()+'_STAGE1',None);bpy.context.collection.objects.link(ROOT);ROOT['quality']='Base / Stage 1';ROOT['accuracy']='Approximate educational reconstruction, not an as-flown survey';ROOT['authoring']='Blender 4.5 LTS'
+ materials();ROOT=bpy.data.objects.new(key.upper()+'_STAGE2',None);bpy.context.collection.objects.link(ROOT);ROOT['quality']='Detailed / Stage 2';ROOT['accuracy']='Approximate educational reconstruction, not an as-flown survey';ROOT['authoring']='Blender 4.5 LTS'
  name,L,n,kind=SPECS[key];camera=((.08,-L/2+.48,.04),(-.04,L/2-.38,.02),18 if L>5 else 16)
  if kind=='cupola':camera=cupola()
  elif kind in ['fabric','bell']:
@@ -324,7 +324,7 @@ def build(key):
  scene.world.use_nodes=True;bg=scene.world.node_tree.nodes.get('Background');bg.inputs[0].default_value=(.25,.32,.41,1);bg.inputs[1].default_value=.22
  scene.view_settings.view_transform='AgX';scene.view_settings.look='AgX - Medium High Contrast';scene.view_settings.exposure=-.85
  d=bpy.data.cameras.new('Review camera');ob=bpy.data.objects.new(d.name,d);bpy.context.collection.objects.link(ob);ob.location=camera[0];ob.rotation_euler=(Vector(camera[1])-ob.location).to_track_quat('-Z','Y').to_euler();d.lens=camera[2];d.clip_start=.018;scene.camera=ob
- light(camera[0],camera[1],18,1.5)
+ if kind!='cupola':light(camera[0],camera[1],18,1.5)
  bpy.ops.object.select_all(action='DESELECT')
  for o in scene.objects:
   if o.type=='FONT':o.select_set(True)
@@ -595,6 +595,27 @@ def refine_module(key,L,n,kind):
   for j in range(6):
    a=j*math.pi/3;cable('Node service duct',[(1.45*math.cos(a),1.45*math.sin(a),-.65),(1.52*math.cos(a+.05),1.52*math.sin(a+.05),0),(1.45*math.cos(a),1.45*math.sin(a),.65)],.028,'Ivory')
 
+def repair_degenerate_tangents(path):
+ # Tiny end caps can have collapsed projected UVs. Preserve valid tangents;
+ # replace only degenerate vectors with a basis orthogonal to the normal.
+ data=bytearray(Path(path).read_bytes());length=struct.unpack_from('<I',data,12)[0]
+ g=json.loads(data[20:20+length]);binary_start=28+length;fixed=0
+ def array(index,width):
+  a=g['accessors'][index];v=g['bufferViews'][a['bufferView']]
+  return np.ndarray((a['count'],width),dtype='<f4',buffer=data,offset=binary_start+v.get('byteOffset',0)+a.get('byteOffset',0),strides=(v.get('byteStride',width*4),4))
+ for me in g.get('meshes',[]):
+  for p in me['primitives']:
+   at=p['attributes']
+   if 'TANGENT' not in at:continue
+   t=array(at['TANGENT'],4);n=array(at['NORMAL'],3);norm=np.linalg.norm(t[:,:3],axis=1)
+   bad=(norm<.999)|(norm>1.001)|~np.isfinite(norm)
+   if not np.any(bad):continue
+   nn=n[bad].copy();nn/=np.maximum(np.linalg.norm(nn,axis=1)[:,None],1e-12)
+   axis=np.zeros_like(nn);axis[np.arange(len(nn)),np.argmin(np.abs(nn),axis=1)]=1
+   fallback=np.cross(nn,axis);fallback/=np.maximum(np.linalg.norm(fallback,axis=1)[:,None],1e-12)
+   t[bad,:3]=fallback;t[bad,3]=1;fixed+=int(np.count_nonzero(bad))
+ Path(path).write_bytes(data);print('TANGENT_REPAIR',fixed,flush=True)
+
 # Ambient occlusion is stored in a second UV set and the standard glTF channel.
 # This retains PBR response and close-up fabric normals in the web viewer.
 def finalize_detail(key,name,kind,camera):
@@ -630,7 +651,8 @@ def finalize_detail(key,name,kind,camera):
  mod=obj.modifiers.new('Web triangulation','TRIANGULATE');bpy.ops.object.modifier_apply(modifier=mod.name)
  for ob in scene.objects:
   if ob.get('presentation_background'):ob.select_set(True)
- bpy.ops.export_scene.gltf(filepath=str(OUT/'glb'/f'{key}_stage2.glb'),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_tangents=False,export_cameras=False,export_lights=False,export_extras=True)
+ bpy.ops.export_scene.gltf(filepath=str(OUT/'glb'/f'{key}_stage2.glb'),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_tangents=True,export_cameras=False,export_lights=False,export_extras=True)
+ repair_degenerate_tangents(OUT/'glb'/f'{key}_stage2.glb')
  # Preserve the exact baked web mesh alongside editable native objects in a separate scene file.
  bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'blend'/f'{key}_stage2_web.blend'),compress=True)
  data=(OUT/'glb'/f'{key}_stage2.glb').read_bytes();ln=struct.unpack_from('<I',data,12)[0];g=json.loads(data[20:20+ln]);tri=sum(g['accessors'][p['indices']]['count']//3 for m in g['meshes'] for p in m['primitives'])
@@ -674,7 +696,7 @@ def earth_background():
  path=os.environ.get('ISS_EARTH_TEXTURE','')
  if not path or not Path(path).exists():return
  im=bpy.data.images.load(path,check_existing=True);im.name='NASA Blue Marble 2002';im.pack()
- m=bpy.data.materials.new('Earth presentation / NASA Blue Marble');m.use_nodes=True;ns=m.node_tree.nodes;ns.clear();out=ns.new('ShaderNodeOutputMaterial');em=ns.new('ShaderNodeEmission');em.inputs['Strength'].default_value=.7;tex=ns.new('ShaderNodeTexImage');tex.image=im;m.node_tree.links.new(tex.outputs['Color'],em.inputs['Color']);m.node_tree.links.new(em.outputs[0],out.inputs[0])
+ m=bpy.data.materials.new('Earth presentation / NASA Blue Marble');m.use_nodes=True;ns=m.node_tree.nodes;ns.clear();out=ns.new('ShaderNodeOutputMaterial');em=ns.new('ShaderNodeEmission');em.inputs['Strength'].default_value=1.4;tex=ns.new('ShaderNodeTexImage');tex.image=im;m.node_tree.links.new(tex.outputs['Color'],em.inputs['Color']);m.node_tree.links.new(em.outputs[0],out.inputs[0])
  bpy.ops.mesh.primitive_uv_sphere_add(segments=64,ring_count=32,radius=6.5,location=(0,0,8))
  ob=bpy.context.object;ob.name='Earth presentation background';ob['presentation_background']=True;ob['credit']='NASA / Reto Stoeckli / Robert Simmon, Blue Marble 2002';ob.rotation_euler=(math.radians(112),.2,math.radians(40));ob.data.materials.append(m)
  for p in ob.data.polygons:p.use_smooth=True
@@ -683,6 +705,9 @@ def refine_module(key,L,n,kind):
  _generic_refine(key,L,n,kind)
  if key=='cupola':
   earth_background()
+  glazing=M['Clear glazing'].node_tree.nodes.get('Principled BSDF')
+  glazing.inputs['IOR'].default_value=1.1
+  glazing.inputs['Specular IOR Level'].default_value=.1
   for ob in bpy.context.scene.objects:
    if ob.name.startswith('Cupola glass ') and ob.type=='MESH' and len(ob.data.polygons)==1:
     md=ob.modifiers.new('Window pane thickness','SOLIDIFY');md.thickness=.004

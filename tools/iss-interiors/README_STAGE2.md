@@ -23,4 +23,4 @@ Replace `destiny` with `all` or a comma-separated list. Each module produces an 
 
 The optional Cupola Earth backdrop uses NASA Blue Marble 2002 (NASA / Reto Stoeckli / Robert Simmon). Set `ISS_EARTH_TEXTURE` to the downloaded `land_ocean_ice_2048.png` to include it. The backdrop is a presentation aid, not scaled station geometry. Earth image source: https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57730/land_ocean_ice_2048.png
 
-Web delivery uses Draco geometry compression and WebP textures without geometry simplification. Ambient occlusion has its own 2048px UV atlas; material weave and microroughness use the original UV set. Tangents are derived by the viewer from the normal map UVs. Both raw and compressed GLB exports are validated.
+Web delivery uses Draco geometry compression and WebP textures without geometry simplification. Ambient occlusion has its own 2048px UV atlas; material weave and microroughness use the original UV set. Tangent bases are embedded. Degenerate tangents on tiny end caps receive an orthonormal fallback from their vertex normal. Both raw and compressed GLB exports are validated.
