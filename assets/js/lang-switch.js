@@ -8,7 +8,7 @@
     if (!container) return;
 
     const isWhoIsInSpace = fileName === 'orbital-crew.html';
-    const isAlbamenAtlas = /^\\/(?:eng\\/|rus\\/)?atlas\\/atlas-albamen\\/(?:index\\.html)?$/.test(path);
+    const isAlbamenAtlas = /^\/(?:eng\/|rus\/)?atlas\/atlas-albamen\/(?:index\.html)?$/.test(path);
     const isNeilAtlas = /^\/(?:eng\/|rus\/)?atlas\/atlas-neil-armstrong\/(?:index\.html)?$/.test(path);
 
     container.querySelectorAll('[data-lang]').forEach(a => {
