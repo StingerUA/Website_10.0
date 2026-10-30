@@ -81,6 +81,7 @@ jobs:
         run: |
           python -m pip install Pillow
           python tools/iss-interiors/package_stage2.py "$RUNNER_TEMP/complete"
+          python tools/iss-interiors/calibrate_stage2.py
           npm install --prefix "$RUNNER_TEMP/validator" gltf-validator@2.0.0-dev.3.10
           ISS_VALIDATION_OUTPUT=assets/models/interior/validation-stage2.json NODE_PATH="$RUNNER_TEMP/validator/node_modules" node tools/iss-interiors/validate_stage2.cjs assets/models/interior/stage2/*.glb
       - name: Save complete detail pass to review branch

@@ -24,3 +24,7 @@ Replace `destiny` with `all` or a comma-separated list. Each module produces an 
 The optional Cupola Earth backdrop uses NASA Blue Marble 2002 (NASA / Reto Stoeckli / Robert Simmon). Set `ISS_EARTH_TEXTURE` to the downloaded `land_ocean_ice_2048.png` to include it. The backdrop is a presentation aid, not scaled station geometry. Earth image source: https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57730/land_ocean_ice_2048.png
 
 Web delivery uses Draco geometry compression and WebP textures without geometry simplification. Ambient occlusion has its own 2048px UV atlas; material weave and microroughness use the original UV set. Tangent bases are embedded. Degenerate tangents on tiny end caps receive an orthonormal fallback from their vertex normal. Both raw and compressed GLB exports are validated.
+
+## Web lighting calibration
+
+An enclosed module makes an unrestricted AO bake very dark. Delivery GLBs limit occlusion strength to 0.25 so it adds contact shading without suppressing the viewer environment lighting. `calibrate_stage2.py` applies this delivery setting without modifying geometry or texture pixels, updates catalogue sizes and repackages the GLB download. Native Blender lighting and editable materials are retained.
