@@ -6,6 +6,15 @@
 // buttons and a call shortcut.
 
 runAfterDomReady(() => {
+  // Android-only: use native Scene Viewer first and show a recovery hint on AR failures.
+  if (document.querySelector('model-viewer') &&
+      !document.querySelector('script[data-alba-android-ar-recovery]')) {
+    const androidAR = document.createElement('script');
+    androidAR.src = '/assets/js/android-ar-recovery.js?v=20261030';
+    androidAR.defer = true;
+    androidAR.dataset.albaAndroidArRecovery = 'true';
+    document.head.appendChild(androidAR);
+  }
   // AI-виджеты включены — используются для текстового и голосового общения
   window.__disableAiWidgets = false;
   // Ensure a valid favicon is present
@@ -431,13 +440,15 @@ function ensureModelViewerLoaded() {
   if (!hasModelViewer) return;
   if (window.customElements && window.customElements.get("model-viewer")) return;
 
-  const googleSrc = "https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js";
-  const fallbackSrc = "https://unpkg.com/@google/model-viewer@3.0.0/dist/model-viewer.min.js";
+  const googleSrc = "https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js";
+  const fallbackSrc = "https://unpkg.com/@google/model-viewer@3.4.0/dist/model-viewer.min.js";
 
   const existingGoogleScript = document.querySelector(`script[src="${googleSrc}"]`);
   const existingFallbackScript = document.querySelector(`script[src="${fallbackSrc}"]`);
+  const existingAnyModelViewerScript = Array.from(document.querySelectorAll('script[src]'))
+    .some(s => /(?:^|\/)model-viewer(?:\.min)?\.js(?:\?|$)/i.test(s.getAttribute('src') || ''));
 
-  if (existingGoogleScript || existingFallbackScript) return;
+  if (existingAnyModelViewerScript) return;
 
   const loadModelViewer = () => {
     if (window.customElements && window.customElements.get("model-viewer")) return;
@@ -463,7 +474,7 @@ function ensureModelViewerLoaded() {
       fallbackScript.async = true;
       document.head.appendChild(fallbackScript);
     }
-  }, 3000);
+  }, 10000);
 }
 
 function createPreloaderLoader() {
