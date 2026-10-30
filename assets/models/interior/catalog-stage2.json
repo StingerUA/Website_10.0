@@ -16,13 +16,14 @@
     "bytes": 3210772,
     "baseRender": "/assets/images/iss-interiors/destiny.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/destiny.glb",
-    "detailBytes": 1776388,
+    "detailBytes": 1776788,
     "detailTriangles": 151798,
     "detailMaterials": 25,
     "detailTextures": 55,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 1
+    "detailSourcePack": 1,
+    "occlusionStrength": 0.25
   },
   {
     "id": "harmony",
@@ -41,13 +42,14 @@
     "bytes": 1404316,
     "baseRender": "/assets/images/iss-interiors/harmony.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/harmony.glb",
-    "detailBytes": 1024072,
+    "detailBytes": 1024344,
     "detailTriangles": 47661,
     "detailMaterials": 17,
     "detailTextures": 49,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 1
+    "detailSourcePack": 1,
+    "occlusionStrength": 0.25
   },
   {
     "id": "tranquility",
@@ -66,13 +68,14 @@
     "bytes": 1848596,
     "baseRender": "/assets/images/iss-interiors/tranquility.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/tranquility.glb",
-    "detailBytes": 1301620,
+    "detailBytes": 1301988,
     "detailTriangles": 83913,
     "detailMaterials": 23,
     "detailTextures": 55,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 1
+    "detailSourcePack": 1,
+    "occlusionStrength": 0.25
   },
   {
     "id": "columbus",
@@ -91,13 +94,14 @@
     "bytes": 2839636,
     "baseRender": "/assets/images/iss-interiors/columbus.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/columbus.glb",
-    "detailBytes": 1616008,
+    "detailBytes": 1616408,
     "detailTriangles": 125753,
     "detailMaterials": 25,
     "detailTextures": 55,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 2
+    "detailSourcePack": 2,
+    "occlusionStrength": 0.25
   },
   {
     "id": "kibo",
@@ -116,13 +120,14 @@
     "bytes": 4148416,
     "baseRender": "/assets/images/iss-interiors/kibo.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/kibo.glb",
-    "detailBytes": 2077712,
+    "detailBytes": 2078112,
     "detailTriangles": 202222,
     "detailMaterials": 25,
     "detailTextures": 55,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 2
+    "detailSourcePack": 2,
+    "occlusionStrength": 0.25
   },
   {
     "id": "unity",
@@ -141,13 +146,14 @@
     "bytes": 1259908,
     "baseRender": "/assets/images/iss-interiors/unity.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/unity.glb",
-    "detailBytes": 1064216,
+    "detailBytes": 1064488,
     "detailTriangles": 50208,
     "detailMaterials": 17,
     "detailTextures": 49,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 2
+    "detailSourcePack": 2,
+    "occlusionStrength": 0.25
   },
   {
     "id": "zarya",
@@ -166,13 +172,14 @@
     "bytes": 2890108,
     "baseRender": "/assets/images/iss-interiors/zarya.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/zarya.glb",
-    "detailBytes": 1884696,
+    "detailBytes": 1884984,
     "detailTriangles": 168820,
     "detailMaterials": 18,
     "detailTextures": 52,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 3
+    "detailSourcePack": 3,
+    "occlusionStrength": 0.25
   },
   {
     "id": "zvezda",
@@ -191,13 +198,14 @@
     "bytes": 2735240,
     "baseRender": "/assets/images/iss-interiors/zvezda.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/zvezda.glb",
-    "detailBytes": 1306752,
+    "detailBytes": 1307104,
     "detailTriangles": 86413,
     "detailMaterials": 22,
     "detailTextures": 55,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 3
+    "detailSourcePack": 3,
+    "occlusionStrength": 0.25
   },
   {
     "id": "nauka",
@@ -216,13 +224,14 @@
     "bytes": 2910860,
     "baseRender": "/assets/images/iss-interiors/nauka.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/nauka.glb",
-    "detailBytes": 1360844,
+    "detailBytes": 1361196,
     "detailTriangles": 94316,
     "detailMaterials": 22,
     "detailTextures": 55,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 3
+    "detailSourcePack": 3,
+    "occlusionStrength": 0.25
   },
   {
     "id": "poisk",
@@ -241,13 +250,14 @@
     "bytes": 1139392,
     "baseRender": "/assets/images/iss-interiors/poisk.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/poisk.glb",
-    "detailBytes": 1059200,
+    "detailBytes": 1059504,
     "detailTriangles": 41399,
     "detailMaterials": 19,
     "detailTextures": 55,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 4
+    "detailSourcePack": 4,
+    "occlusionStrength": 0.25
   },
   {
     "id": "rassvet",
@@ -266,13 +276,14 @@
     "bytes": 1902336,
     "baseRender": "/assets/images/iss-interiors/rassvet.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/rassvet.glb",
-    "detailBytes": 1435036,
+    "detailBytes": 1435324,
     "detailTriangles": 99454,
     "detailMaterials": 18,
     "detailTextures": 52,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 4
+    "detailSourcePack": 4,
+    "occlusionStrength": 0.25
   },
   {
     "id": "prichal",
@@ -291,13 +302,14 @@
     "bytes": 1126908,
     "baseRender": "/assets/images/iss-interiors/prichal.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/prichal.glb",
-    "detailBytes": 682892,
+    "detailBytes": 683004,
     "detailTriangles": 83675,
     "detailMaterials": 7,
     "detailTextures": 22,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 4
+    "detailSourcePack": 4,
+    "occlusionStrength": 0.25
   },
   {
     "id": "quest",
@@ -316,13 +328,14 @@
     "bytes": 1363444,
     "baseRender": "/assets/images/iss-interiors/quest.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/quest.glb",
-    "detailBytes": 1094668,
+    "detailBytes": 1094988,
     "detailTriangles": 51949,
     "detailMaterials": 20,
     "detailTextures": 58,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 5
+    "detailSourcePack": 5,
+    "occlusionStrength": 0.25
   },
   {
     "id": "leonardo",
@@ -341,13 +354,14 @@
     "bytes": 2223020,
     "baseRender": "/assets/images/iss-interiors/leonardo.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/leonardo.glb",
-    "detailBytes": 1553416,
+    "detailBytes": 1553688,
     "detailTriangles": 119582,
     "detailMaterials": 17,
     "detailTextures": 49,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 5
+    "detailSourcePack": 5,
+    "occlusionStrength": 0.25
   },
   {
     "id": "kibo_elm",
@@ -366,13 +380,14 @@
     "bytes": 1557720,
     "baseRender": "/assets/images/iss-interiors/kibo_elm.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/kibo_elm.glb",
-    "detailBytes": 1301764,
+    "detailBytes": 1302036,
     "detailTriangles": 77416,
     "detailMaterials": 17,
     "detailTextures": 49,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 5
+    "detailSourcePack": 5,
+    "occlusionStrength": 0.25
   },
   {
     "id": "beam",
@@ -391,13 +406,14 @@
     "bytes": 870628,
     "baseRender": "/assets/images/iss-interiors/beam.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/beam.glb",
-    "detailBytes": 626064,
+    "detailBytes": 626208,
     "detailTriangles": 35380,
     "detailMaterials": 9,
     "detailTextures": 28,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 6
+    "detailSourcePack": 6,
+    "occlusionStrength": 0.25
   },
   {
     "id": "bishop",
@@ -416,13 +432,14 @@
     "bytes": 401176,
     "baseRender": "/assets/images/iss-interiors/bishop.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/bishop.glb",
-    "detailBytes": 229024,
+    "detailBytes": 229104,
     "detailTriangles": 19218,
     "detailMaterials": 5,
     "detailTextures": 16,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 6
+    "detailSourcePack": 6,
+    "occlusionStrength": 0.25
   },
   {
     "id": "cupola",
@@ -441,12 +458,13 @@
     "bytes": 371296,
     "baseRender": "/assets/images/iss-interiors/cupola.jpg?v=20261024-stage1",
     "detailed": "/assets/models/interior/stage2/cupola.glb",
-    "detailBytes": 814128,
+    "detailBytes": 814256,
     "detailTriangles": 18636,
     "detailMaterials": 9,
     "detailTextures": 17,
     "aoResolution": 2048,
     "detailNote": "First detailing pass; representative reconstruction, not a surveyed replica.",
-    "detailSourcePack": 6
+    "detailSourcePack": 6,
+    "occlusionStrength": 0.25
   }
 ]

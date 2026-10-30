@@ -1,7 +1,7 @@
 [
   {
     "file": "assets/models/interior/stage2/beam.glb",
-    "bytes": 626064,
+    "bytes": 626208,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -69,7 +69,7 @@
   },
   {
     "file": "assets/models/interior/stage2/bishop.glb",
-    "bytes": 229024,
+    "bytes": 229104,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -113,7 +113,7 @@
   },
   {
     "file": "assets/models/interior/stage2/columbus.glb",
-    "bytes": 1616008,
+    "bytes": 1616408,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -277,7 +277,7 @@
   },
   {
     "file": "assets/models/interior/stage2/cupola.glb",
-    "bytes": 814128,
+    "bytes": 814256,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -345,7 +345,7 @@
   },
   {
     "file": "assets/models/interior/stage2/destiny.glb",
-    "bytes": 1776388,
+    "bytes": 1776788,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -509,7 +509,7 @@
   },
   {
     "file": "assets/models/interior/stage2/harmony.glb",
-    "bytes": 1024072,
+    "bytes": 1024344,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -625,7 +625,7 @@
   },
   {
     "file": "assets/models/interior/stage2/kibo.glb",
-    "bytes": 2077712,
+    "bytes": 2078112,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -789,7 +789,7 @@
   },
   {
     "file": "assets/models/interior/stage2/kibo_elm.glb",
-    "bytes": 1301764,
+    "bytes": 1302036,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -905,7 +905,7 @@
   },
   {
     "file": "assets/models/interior/stage2/leonardo.glb",
-    "bytes": 1553416,
+    "bytes": 1553688,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -1021,7 +1021,7 @@
   },
   {
     "file": "assets/models/interior/stage2/nauka.glb",
-    "bytes": 1360844,
+    "bytes": 1361196,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -1167,7 +1167,7 @@
   },
   {
     "file": "assets/models/interior/stage2/poisk.glb",
-    "bytes": 1059200,
+    "bytes": 1059504,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -1295,7 +1295,7 @@
   },
   {
     "file": "assets/models/interior/stage2/prichal.glb",
-    "bytes": 682892,
+    "bytes": 683004,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -1351,7 +1351,7 @@
   },
   {
     "file": "assets/models/interior/stage2/quest.glb",
-    "bytes": 1094668,
+    "bytes": 1094988,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -1485,7 +1485,7 @@
   },
   {
     "file": "assets/models/interior/stage2/rassvet.glb",
-    "bytes": 1435036,
+    "bytes": 1435324,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -1607,7 +1607,7 @@
   },
   {
     "file": "assets/models/interior/stage2/tranquility.glb",
-    "bytes": 1301620,
+    "bytes": 1301988,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -1759,7 +1759,7 @@
   },
   {
     "file": "assets/models/interior/stage2/unity.glb",
-    "bytes": 1064216,
+    "bytes": 1064488,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -1875,7 +1875,7 @@
   },
   {
     "file": "assets/models/interior/stage2/zarya.glb",
-    "bytes": 1884696,
+    "bytes": 1884984,
     "errors": 0,
     "warnings": 0,
     "messages": [
@@ -1997,7 +1997,7 @@
   },
   {
     "file": "assets/models/interior/stage2/zvezda.glb",
-    "bytes": 1306752,
+    "bytes": 1307104,
     "errors": 0,
     "warnings": 0,
     "messages": [
