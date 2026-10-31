@@ -44,6 +44,9 @@
   function initTextToggle() {
     if (extrasDisabled() || !document.querySelector('model-viewer')) return;
 
+    // These story pages have their own disclosure: never collapse the hero lead.
+    if (document.querySelector('main.neil-shell[data-albamen-experience],main.neil-shell[data-neil-experience]')) return;
+
     // New Albaman story cards own their disclosure control. Never wrap an inner card paragraph.
     const story = document.querySelector('.atlas-story-cards,[data-atlas-story-enhanced="true"]');
     if (story) {
