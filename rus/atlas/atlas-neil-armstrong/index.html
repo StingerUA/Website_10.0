@@ -9,10 +9,11 @@
   <link rel="stylesheet" href="/assets/css/site.css">
   <link rel="stylesheet" href="/assets/css/fix-layout.css">
   <link rel="stylesheet" href="/assets/css/model-viewer-controls.css">
-  <link rel="stylesheet" href="/assets/css/neil-armstrong.css?v=20261015">
+  <link rel="stylesheet" href="/assets/css/neil-armstrong.css?v=20261031-3">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js" crossorigin="anonymous"></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
   <script defer src="/assets/js/include.js"></script>
+  <script defer src="/assets/js/atlas-text-toggle-fix.js?v=20261031-3"></script>
   <script defer src="/assets/js/menu-toggle.js"></script>
 </head>
 <body>
@@ -24,7 +25,8 @@
       <p class="neil-lead">Удивительная история первого человека, ступившего на поверхность Луны.</p>
       <div class="neil-facts"><span>5 августа 1930 · Огайо</span><span>Apollo 11 · 1969</span><span>20 июля · Высадка на Луну</span></div>
     </section>
-    <section class="neil-story" aria-label="Albamen narration">
+    <button type="button" id="toggleBtn" class="atlas-character-story-toggle" aria-controls="characterNarration" aria-expanded="false">Показать текст</button>
+    <section id="characterNarration" class="neil-story" data-character-story aria-label="Albamen narration">
       <p>Shae, узайдаши! 🌌 С вами Альбамен! Сегодня я познакомлю вас с отважным исследователем, который помог человечеству сделать невероятное: добраться до другого небесного тела. Его зовут <strong>Нил Армстронг</strong>. Готовы? Мы отправляемся в 1969 год — навстречу событию, которое запомнил весь мир! 🚀</p>
 <p>Представьте: вы смотрите в иллюминатор далеко от Земли. Внизу — серый мир, покрытый кратерами. Ни деревьев, ни птиц, ни воздуха, которым можно дышать. А над тихим лунным пейзажем сияет прекрасная голубая планета — наша Земля! 🌍</p>
 <p>Нил Армстронг родился 5 августа 1930 года в американском штате Огайо. С детства он увлекался самолётами, учился летать, затем изучал инженерное дело и стал лётчиком-испытателем. Любознательность, дисциплина и спокойствие постепенно готовили его к полёту гораздо дальше облаков.</p>
@@ -78,6 +80,6 @@
   <script defer src="/assets/js/neil-cart.js?v=20261015"></script>
   <script type="module" src="/assets/js/neil-portrait.js?v=20261015"></script>
   <script src="/assets/js/particles.js"></script>
-  <script src="/assets/js/atlas-text-toggle-fix.js?v=20261031-2" defer></script>
+  
 </body>
 </html>
