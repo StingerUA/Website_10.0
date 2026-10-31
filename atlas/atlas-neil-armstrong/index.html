@@ -9,10 +9,11 @@
   <link rel="stylesheet" href="/assets/css/site.css">
   <link rel="stylesheet" href="/assets/css/fix-layout.css">
   <link rel="stylesheet" href="/assets/css/model-viewer-controls.css">
-  <link rel="stylesheet" href="/assets/css/neil-armstrong.css?v=20261015">
+  <link rel="stylesheet" href="/assets/css/neil-armstrong.css?v=20261031-3">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js" crossorigin="anonymous"></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
   <script defer src="/assets/js/include.js"></script>
+  <script defer src="/assets/js/atlas-text-toggle-fix.js?v=20261031-3"></script>
   <script defer src="/assets/js/menu-toggle.js"></script>
 </head>
 <body>
@@ -24,7 +25,8 @@
       <p class="neil-lead">Ay’a ilk adım atan insanın olağanüstü hikâyesi.</p>
       <div class="neil-facts"><span>5 Ağustos 1930 · Ohio</span><span>Apollo 11 · 1969</span><span>20 Temmuz · Ay’a iniş</span></div>
     </section>
-    <section class="neil-story" aria-label="Albamen narration">
+    <button type="button" id="toggleBtn" class="atlas-character-story-toggle" aria-controls="characterNarration" aria-expanded="false">Metni göster</button>
+    <section id="characterNarration" class="neil-story" data-character-story aria-label="Albamen narration">
       <p>Shae uzaydaşlar! 🌌 Ben Albamen! Bugün size yalnızca bir astronottan değil, insanlığın hayal gücünü Ay’a kadar taşıyan cesur bir kâşiften söz edeceğim. Onun adı <strong>Neil Armstrong</strong>. Hazır mısınız? Çünkü birazdan 1969 yılının o unutulmaz gecesine gideceğiz! 🚀</p>
 <p>Haydi bir an gözlerinizi kapatın. Dünya’dan çok uzaktasınız. Pencerenizin dışında gri, sessiz ve kraterlerle kaplı bir dünya uzanıyor. Ne ağaç var ne kuş sesi… Yalnızca Ay’ın yüzeyi ve yukarıda, karanlığın içinde parlayan mavi Dünya! 🌍</p>
 <p>Neil Armstrong, 5 Ağustos 1930’da Amerika Birleşik Devletleri’nin Ohio eyaletinde doğdu. Çocukluğundan beri uçaklara büyük ilgi duyuyordu. Henüz küçükken uçmayı öğrenmeye başladı. Daha sonra mühendislik okudu, pilot oldu ve zor koşullarda uçakları sınayan bir test pilotu olarak çalıştı. Merakı, disiplini ve sakinliği onu çok özel bir yolculuğa hazırlıyordu.</p>
@@ -78,6 +80,5 @@
   <script defer src="/assets/js/neil-cart.js?v=20261015"></script>
   <script type="module" src="/assets/js/neil-portrait.js?v=20261015"></script>
   <script src="/assets/js/particles.js"></script>
-</bod  <script src="/assets/js/atlas-text-toggle-fix.js?v=20261031-2" defer></script>
-y>
+</body>
 </html>
