@@ -9,10 +9,11 @@
   <link rel="stylesheet" href="/assets/css/site.css">
   <link rel="stylesheet" href="/assets/css/fix-layout.css">
   <link rel="stylesheet" href="/assets/css/model-viewer-controls.css">
-  <link rel="stylesheet" href="/assets/css/neil-armstrong.css?v=20261015">
+  <link rel="stylesheet" href="/assets/css/neil-armstrong.css?v=20261031-3">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js" crossorigin="anonymous"></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
   <script defer src="/assets/js/include.js"></script>
+  <script defer src="/assets/js/atlas-text-toggle-fix.js?v=20261031-3"></script>
   <script defer src="/assets/js/menu-toggle.js"></script>
 </head>
 <body>
@@ -24,7 +25,8 @@
       <p class="neil-lead">The remarkable story of the first human to step onto the Moon.</p>
       <div class="neil-facts"><span>August 5, 1930 · Ohio</span><span>Apollo 11 · 1969</span><span>July 20 · Moon landing</span></div>
     </section>
-    <section class="neil-story" aria-label="Albamen narration">
+    <button type="button" id="toggleBtn" class="atlas-character-story-toggle" aria-controls="characterNarration" aria-expanded="false">Show text</button>
+    <section id="characterNarration" class="neil-story" data-character-story aria-label="Albamen narration">
       <p>Shae, my space friends! 🌌 Albamen here! Today we're meeting a courageous explorer whose journey helped humanity reach another world. His name is <strong>Neil Armstrong</strong>. Ready? We're travelling back to a night in 1969 that the world would never forget! 🚀</p>
 <p>Imagine looking through a window far from Earth. Below you is a grey world covered in craters. No trees, no birdsong, no air to breathe. And above the silent landscape hangs a beautiful blue planet: our Earth. 🌍</p>
 <p>Neil Armstrong was born on August 5, 1930, in Ohio in the United States. As a child, he was fascinated by airplanes. He learned to fly, studied engineering and became a pilot who tested aircraft in difficult conditions. His curiosity, careful preparation and calm judgment would one day take him much farther.</p>
@@ -78,6 +80,6 @@
   <script defer src="/assets/js/neil-cart.js?v=20261015"></script>
   <script type="module" src="/assets/js/neil-portrait.js?v=20261015"></script>
   <script src="/assets/js/particles.js"></script>
-  <script src="/assets/js/atlas-text-toggle-fix.js?v=20261031-2" defer></script>
+  
 </body>
 </html>
