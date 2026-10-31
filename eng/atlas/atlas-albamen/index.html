@@ -13,10 +13,11 @@
   <link rel="stylesheet" href="/assets/css/site.css">
   <link rel="stylesheet" href="/assets/css/fix-layout.css">
   <link rel="stylesheet" href="/assets/css/model-viewer-controls.css">
-  <link rel="stylesheet" href="/assets/css/neil-armstrong.css?v=20261015">
+  <link rel="stylesheet" href="/assets/css/neil-armstrong.css?v=20261031-3">
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.0.0/model-viewer.min.js" crossorigin="anonymous"></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
   <script defer src="/assets/js/include.js"></script>
+  <script defer src="/assets/js/atlas-text-toggle-fix.js?v=20261031-3"></script>
   <script defer src="/assets/js/menu-toggle.js"></script>
   
 </head>
@@ -29,7 +30,8 @@
       <p class="neil-lead">Hear the story of the explorer from Albaris in his own words.</p>
       <div class="neil-facts"><span>Home: Albaris</span><span>My daughter: Lara</span><span>My mission: Discovery</span></div>
     </section>
-    <section class="neil-story" aria-label="Albaman narration">
+    <button type="button" id="toggleBtn" class="atlas-character-story-toggle" aria-controls="characterNarration" aria-expanded="false">Show text</button>
+    <section id="characterNarration" class="neil-story" data-character-story aria-label="Albaman narration">
       <p>Shae, my space friends! 🌌 I'm <strong>Albaman</strong>! Yes, that curious traveller with the red cape is me. Today I won't be telling you about another explorer. I'll be telling you <strong>my own story</strong>. Ready? Let's head beyond the stars to where it all began! 🚀</p>
       <p>I wasn't born on Earth. My home is a distant planet called <strong>Albaris</strong>. Its skies may look very different from yours, but the desire to discover new things is something we share. The greatest power isn't speed or energy. It's <strong>curiosity and the will to learn</strong>.</p>
       <p>I rarely travel alone. My daughter <strong>Lara</strong> often joins me. She's brave, observant and full of questions. Sometimes she spots things even I have missed! I've learned that a good question can be more powerful than any dazzling superpower.</p>
@@ -84,6 +86,6 @@
   <script type="module" src="/assets/js/albamen-portrait.js?v=20261030"></script>
   <script src="/assets/js/particles.js"></script>
 
-  <script src="/assets/js/atlas-text-toggle-fix.js?v=20261031-2" defer></script>
+  
 </body>
 </html>
