@@ -10,6 +10,36 @@
 .neil-story{padding:20px clamp(16px,4vw,54px);background:rgba(7,22,43,.84);border:1px solid #264d72;border-radius:22px;margin-top:22px;line-height:1.85;font-size:17px}
 .neil-story p{max-width:890px;margin:18px auto;text-align:left}
 .neil-story strong{color:#8be4ff}
+
+/* Albamen / Armstrong: first three lines visible by default; 3D stays outside. */
+.neil-shell .neil-story[data-character-story]:not(.is-expanded)>p:not(:first-of-type){display:none!important}
+.neil-shell .neil-story[data-character-story]:not(.is-expanded)>p:first-of-type{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  line-clamp:3;
+  overflow:hidden!important;
+}
+.neil-shell .neil-story[data-character-story].is-expanded>p{display:block}
+.neil-shell .atlas-character-story-toggle{
+  display:block;
+  width:max-content;
+  max-width:100%;
+  margin:20px auto 12px;
+  padding:12px 24px;
+  border:1px solid #4192cc;
+  border-radius:10px;
+  background:#164669;
+  color:#fff;
+  font:600 16px system-ui,-apple-system,"Segoe UI",sans-serif;
+  cursor:pointer;
+  text-align:center;
+  transition:background .2s ease,box-shadow .2s ease;
+}
+.neil-shell .atlas-character-story-toggle:hover{background:#126d9f;box-shadow:0 0 15px rgba(0,150,255,.3)}
+.neil-shell .atlas-character-story-toggle:focus-visible{outline:3px solid #8deaff;outline-offset:3px}
+@media(max-width:480px){.neil-shell .atlas-character-story-toggle{padding:10px 16px;font-size:14px}}
+
 .neil-model-panel{margin-top:22px;border:1px solid #2e658a;border-radius:24px;background:linear-gradient(150deg,#03101f,#092f55);padding:18px;box-shadow:0 0 40px #00aaff25}
 .neil-model-panel h2,.neil-photo h2{font-size:clamp(20px,3.5vw,28px);margin:7px 0 14px;text-align:center}
 .neil-model-panel model-viewer{display:block;width:100%;height:min(70vh,620px);background:radial-gradient(circle at 50% 52%,#205f8669,#061325 66%);border-radius:18px}
