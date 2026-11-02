@@ -109,7 +109,12 @@
 
   function renderMenuItems(menu, items) {
     if (!menu || !Array.isArray(items)) return;
-    menu.replaceChildren(...items.map(item => {
+    // Keep CubeSat in the desktop Services menu, but move its mobile entry
+    // to the new card on the Services page. Applies to every locale.
+    const visibleItems = window.innerWidth < CONFIG.desktop_breakpoint
+      ? items.filter(item => !/\/(?:kubesat|kupsat)\.html(?:[?#]|$)/i.test(item.href))
+      : items;
+    menu.replaceChildren(...visibleItems.map(item => {
       const link = document.createElement('a');
       link.href = item.href;
       link.textContent = item.label;

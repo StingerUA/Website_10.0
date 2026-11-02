@@ -3704,3 +3704,12 @@ body.index-page .hero-content h1 {
   line-height: 1;
   font-family: Arial, sans-serif;
 }
+
+/* Mobile navigation: CubeSat is now reached through the Services card.
+   Desktop dropdown retains the direct CubeSat link; Holo-bag remains in both. */
+@media (max-width: 1023px) {
+  .site-header .main-nav .dropdown-menu a[href$="/kubesat.html"],
+  .site-header .main-nav .dropdown-menu a[href$="/kupsat.html"] {
+    display: none !important;
+  }
+}
