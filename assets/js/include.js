@@ -279,7 +279,7 @@ runAfterDomReady(() => {
             // Load email/password auth form into the alien dropdown
             if (!document.querySelector('script[src*="auth-email"]')) {
               const _aeScript = document.createElement('script');
-              _aeScript.src = '/assets/js/auth-email.js';
+              _aeScript.src = '/assets/js/auth-email.js?v=20261104-uzaydas-label';
               _aeScript.defer = true;
               document.head.appendChild(_aeScript);
             }
