@@ -60,7 +60,7 @@
     if (!/\/(?:eng\/|rus\/|ar\/)?account-menu\.html$/.test(path)) return;
     if (document.querySelector('script[src*="quick-account.js"]')) return;
     var script = document.createElement('script');
-    script.src = '/assets/js/quick-account.js?v=20260906-uzaydash-v1';
+    script.src = '/assets/js/quick-account.js?v=20261104-uzaydas-label';
     script.defer = true;
     document.head.appendChild(script);
   }
