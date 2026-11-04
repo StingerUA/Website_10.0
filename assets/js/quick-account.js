@@ -15,56 +15,56 @@
 
   var T={
     tr:{
-      loginLabel:'E-posta veya Uzaydash kullanıcı adı',loginPlaceholder:'E-posta veya Uzaydash-1',
-      quickTitle:'E-posta olmadan hızlı hesap',quickButton:'Uzaydash hesabı oluştur',
-      quickHelp:'Tek dokunuşla sıradaki Uzaydash kullanıcı adı ve güçlü bir şifre oluşturulur. Hesabın hemen açılır; şifreni kaydetmen yeterli.',
+      loginLabel:'E-posta veya Uzaydaş kullanıcı adı',loginPlaceholder:'E-posta veya Uzaydash-1',
+      quickTitle:'E-posta olmadan hızlı hesap',quickButton:'Uzaydaş hesabı oluştur',
+      quickHelp:'Tek dokunuşla sıradaki Uzaydaş kullanıcı adı ve güçlü bir şifre oluşturulur. Hesabın hemen açılır; şifreni kaydetmen yeterli.',
       quickDivider:'veya Google / e-posta ile devam et',creating:'Hesap oluşturuluyor…',createError:'Hızlı hesap oluşturulamadı.',
-      readyTitle:'Uzaydash hesabın hazır',readyText:'Giriş yapıldı. Bu bilgileri şimdi kaydet; parola daha sonra açık olarak gösterilemez.',
+      readyTitle:'Uzaydaş hesabın hazır',readyText:'Giriş yapıldı. Bu bilgileri şimdi kaydet; parola daha sonra açık olarak gösterilemez.',
       username:'Kullanıcı',password:'Şifre',copy:'Kopyala',copyAll:'Bilgileri kopyala',continue:'Hesaba devam et',saved:'Kopyalandı',
-      reminderTitle:'Uzaydash giriş bilgilerin',reminderText:'Google hesabını bağlayana kadar bu kullanıcı adı ve şifreyi güvenli bir yerde sakla.',dismiss:'Bilgileri gizle',
+      reminderTitle:'Uzaydaş giriş bilgilerin',reminderText:'Google hesabını bağlayana kadar bu kullanıcı adı ve şifreyi güvenli bir yerde sakla.',dismiss:'Bilgileri gizle',
       linkTitle:'Hesabı Google ile güvenceye al',linkButton:'Google hesabına bağla',
-      linkHelp:'Satın alımların, QR Pass’lerin, hakların ve geçmişin aynı hesapta kalır. Bağladıktan sonra Google ile giriş yapabilirsin; Uzaydash kullanıcı adı ve şifren de çalışmaya devam eder.',
+      linkHelp:'Satın alımların, QR Pass’lerin, hakların ve geçmişin aynı hesapta kalır. Bağladıktan sonra Google ile giriş yapabilirsin; Uzaydaş kullanıcı adı ve şifren de çalışmaya devam eder.',
       linking:'Google açılıyor…',linked:'Google hesabı başarıyla bağlandı.',linkError:'Google hesabı bağlanamadı.',alreadyUsed:'Bu Google hesabı başka bir ALBA Space hesabına bağlı.',
-      quickBadge:'Uzaydash hızlı hesap'
+      quickBadge:'Uzaydaş hızlı hesap'
     },
     en:{
-      loginLabel:'Email or Uzaydash username',loginPlaceholder:'Email or Uzaydash-1',
-      quickTitle:'Quick account without email',quickButton:'Create Uzaydash account',
-      quickHelp:'One tap creates the next Uzaydash username and a strong password and signs you in immediately. Save the password for later.',
+      loginLabel:'Email or Uzaydaş username',loginPlaceholder:'Email or Uzaydash-1',
+      quickTitle:'Quick account without email',quickButton:'Create Uzaydaş account',
+      quickHelp:'One tap creates the next Uzaydaş username and a strong password and signs you in immediately. Save the password for later.',
       quickDivider:'or continue with Google / email',creating:'Creating account…',createError:'Could not create the quick account.',
-      readyTitle:'Your Uzaydash account is ready',readyText:'You are signed in. Save these credentials now; the password cannot be shown again later.',
+      readyTitle:'Your Uzaydaş account is ready',readyText:'You are signed in. Save these credentials now; the password cannot be shown again later.',
       username:'Username',password:'Password',copy:'Copy',copyAll:'Copy credentials',continue:'Continue to account',saved:'Copied',
-      reminderTitle:'Your Uzaydash credentials',reminderText:'Keep this username and password somewhere safe until you link Google.',dismiss:'Hide credentials',
+      reminderTitle:'Your Uzaydaş credentials',reminderText:'Keep this username and password somewhere safe until you link Google.',dismiss:'Hide credentials',
       linkTitle:'Secure this account with Google',linkButton:'Link Google account',
-      linkHelp:'Your purchases, QR Passes, entitlements and history stay on this same account. After linking you can sign in with Google; your Uzaydash username and password will keep working too.',
+      linkHelp:'Your purchases, QR Passes, entitlements and history stay on this same account. After linking you can sign in with Google; your Uzaydaş username and password will keep working too.',
       linking:'Opening Google…',linked:'Google account linked successfully.',linkError:'Could not link the Google account.',alreadyUsed:'This Google account is already linked to another ALBA Space account.',
-      quickBadge:'Uzaydash quick account'
+      quickBadge:'Uzaydaş quick account'
     },
     ru:{
-      loginLabel:'E-mail или логин Uzaydash',loginPlaceholder:'E-mail или Uzaydash-1',
-      quickTitle:'Быстрый аккаунт без e-mail',quickButton:'Создать Uzaydash-аккаунт',
-      quickHelp:'Одним нажатием создадим следующий логин Uzaydash и надёжный пароль и сразу войдём в аккаунт. Пароль нужно сохранить.',
+      loginLabel:'E-mail или логин Uzaydaş',loginPlaceholder:'E-mail или Uzaydash-1',
+      quickTitle:'Быстрый аккаунт без e-mail',quickButton:'Создать Uzaydaş-аккаунт',
+      quickHelp:'Одним нажатием создадим следующий логин Uzaydaş и надёжный пароль и сразу войдём в аккаунт. Пароль нужно сохранить.',
       quickDivider:'или продолжить через Google / e-mail',creating:'Создаём аккаунт…',createError:'Не удалось создать быстрый аккаунт.',
-      readyTitle:'Ваш Uzaydash-аккаунт готов',readyText:'Вы уже вошли. Сохраните эти данные сейчас: позже пароль в открытом виде показать будет невозможно.',
+      readyTitle:'Ваш Uzaydaş-аккаунт готов',readyText:'Вы уже вошли. Сохраните эти данные сейчас: позже пароль в открытом виде показать будет невозможно.',
       username:'Логин',password:'Пароль',copy:'Копировать',copyAll:'Скопировать данные',continue:'Перейти в аккаунт',saved:'Скопировано',
-      reminderTitle:'Ваши данные Uzaydash',reminderText:'Сохраните логин и пароль в надёжном месте, пока не привяжете Google.',dismiss:'Скрыть данные',
+      reminderTitle:'Ваши данные Uzaydaş',reminderText:'Сохраните логин и пароль в надёжном месте, пока не привяжете Google.',dismiss:'Скрыть данные',
       linkTitle:'Привязать аккаунт к Google',linkButton:'Привязать Google аккаунт',
-      linkHelp:'Ваши покупки, QR Pass, права на впечатления и история останутся в этом же аккаунте. После привязки можно будет входить через Google; логин Uzaydash и пароль тоже продолжат работать.',
+      linkHelp:'Ваши покупки, QR Pass, права на впечатления и история останутся в этом же аккаунте. После привязки можно будет входить через Google; логин Uzaydaş и пароль тоже продолжат работать.',
       linking:'Открываем Google…',linked:'Google аккаунт успешно привязан.',linkError:'Не удалось привязать Google аккаунт.',alreadyUsed:'Этот Google аккаунт уже привязан к другому аккаунту ALBA Space.',
-      quickBadge:'Быстрый Uzaydash-аккаунт'
+      quickBadge:'Быстрый Uzaydaş-аккаунт'
     },
     ar:{
-      loginLabel:'البريد الإلكتروني أو اسم Uzaydash',loginPlaceholder:'البريد أو Uzaydash-1',
-      quickTitle:'حساب سريع بدون بريد إلكتروني',quickButton:'إنشاء حساب Uzaydash',
-      quickHelp:'بنقرة واحدة ننشئ اسم Uzaydash التالي وكلمة مرور قوية ونسجّل دخولك فورًا. احفظ كلمة المرور لاستخدامها لاحقًا.',
+      loginLabel:'البريد الإلكتروني أو اسم Uzaydaş',loginPlaceholder:'البريد أو Uzaydash-1',
+      quickTitle:'حساب سريع بدون بريد إلكتروني',quickButton:'إنشاء حساب Uzaydaş',
+      quickHelp:'بنقرة واحدة ننشئ اسم Uzaydaş التالي وكلمة مرور قوية ونسجّل دخولك فورًا. احفظ كلمة المرور لاستخدامها لاحقًا.',
       quickDivider:'أو المتابعة عبر Google / البريد',creating:'جارٍ إنشاء الحساب…',createError:'تعذر إنشاء الحساب السريع.',
-      readyTitle:'حساب Uzaydash جاهز',readyText:'تم تسجيل دخولك. احفظ هذه البيانات الآن؛ لن نعرض كلمة المرور بصورتها الأصلية لاحقًا.',
+      readyTitle:'حساب Uzaydaş جاهز',readyText:'تم تسجيل دخولك. احفظ هذه البيانات الآن؛ لن نعرض كلمة المرور بصورتها الأصلية لاحقًا.',
       username:'اسم المستخدم',password:'كلمة المرور',copy:'نسخ',copyAll:'نسخ البيانات',continue:'المتابعة إلى الحساب',saved:'تم النسخ',
-      reminderTitle:'بيانات دخول Uzaydash',reminderText:'احتفظ باسم المستخدم وكلمة المرور في مكان آمن حتى تربط Google.',dismiss:'إخفاء البيانات',
+      reminderTitle:'بيانات دخول Uzaydaş',reminderText:'احتفظ باسم المستخدم وكلمة المرور في مكان آمن حتى تربط Google.',dismiss:'إخفاء البيانات',
       linkTitle:'ربط الحساب مع Google',linkButton:'ربط حساب Google',
-      linkHelp:'تبقى مشترياتك وQR Pass والحقوق والسجل في الحساب نفسه. بعد الربط يمكنك تسجيل الدخول عبر Google، وسيستمر اسم Uzaydash وكلمة المرور في العمل أيضًا.',
+      linkHelp:'تبقى مشترياتك وQR Pass والحقوق والسجل في الحساب نفسه. بعد الربط يمكنك تسجيل الدخول عبر Google، وسيستمر اسم Uzaydaş وكلمة المرور في العمل أيضًا.',
       linking:'جارٍ فتح Google…',linked:'تم ربط حساب Google بنجاح.',linkError:'تعذر ربط حساب Google.',alreadyUsed:'حساب Google هذا مرتبط بالفعل بحساب ALBA Space آخر.',
-      quickBadge:'حساب Uzaydash سريع'
+      quickBadge:'حساب Uzaydaş سريع'
     }
   };
 
