@@ -66,3 +66,9 @@ main.holobag-page{margin-top:0!important}
 .holo-mobile-image{display:none}
 @media(max-width:900px){.holo-title-row{display:block;margin:12px auto 18px}.holo-title-row .holo-heading{font-size:clamp(2.8rem,7.4vw,7.2rem)}.holo-title-image{display:none}.holo-mobile-image{display:block;width:min(74vw,330px);height:auto;margin:8px auto 12px;filter:drop-shadow(0 0 24px rgba(53,163,249,.12))}}
 @media(max-width:480px){.holo-title-row .holo-heading{font-size:clamp(2.55rem,12vw,4.2rem)}.holo-mobile-image{width:min(78vw,300px)}}
+
+/* Team photo immediately before the Holo-bag reservation section. */
+.holo-team-photo{display:block;width:min(100%,470px);margin:clamp(48px,6vw,84px) auto 0}
+.holo-team-photo img{display:block;width:100%;height:auto;border-radius:20px;border:1px solid rgba(107,222,255,.28);box-shadow:0 20px 64px rgba(0,0,0,.42);object-fit:contain}
+.holo-team-photo + .holo-contact{margin-top:clamp(30px,4vw,56px)}
+@media(max-width:480px){.holo-team-photo{margin-top:42px}.holo-team-photo img{border-radius:14px}}
