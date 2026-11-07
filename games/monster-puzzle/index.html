@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ALBA SPACE — Monster Puzzle 3D</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js r128 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- React & ReactDOM 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel for JSX/TSX compilation in browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html, body, #root {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 20%, #1e295b 0%, #090d24 70%, #050714 100%);
+      font-family: 'Nunito', sans-serif;
+      color: #ffffff;
+    }
+    .font-title {
+      font-family: 'Fredoka', sans-serif;
+      letter-spacing: 0.03em;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 58, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(112, 181, 255, 0.28);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+    }
+    .btn-3d {
+      transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.15s ease;
+    }
+    .btn-3d:active {
+      transform: translateY(3px) scale(0.96);
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+    .animate-float {
+      animation: floatSlow 3.2s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.45); }
+      50% { box-shadow: 0 0 28px rgba(56, 189, 248, 0.9); }
+    }
+    .glow-ring {
+      animation: pulseGlow 2s infinite;
+    }
+    /* Custom scrollbar for modals */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.4); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.5); border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+    // ============================================================================
+    // 1. MULTI-LANGUAGE LOCALIZATION (RU / TR / EN) — ALBA SPACE STANDARD
+    // ============================================================================
+    const I18N = {
+      ru: {
+        universe: "ВСЕЛЕННАЯ ALBA SPACE",
+        title: "MONSTER PUZZLE",
+        subtitle: "Лара и Космические Монстрики",
+        play: "ИГРАТЬ",
+        dailyBtn: "МИССИЯ ДНЯ",
+        levelsBtn: "КАРТА УРОВНЕЙ",
+        collectionBtn: "АЛЬБА-ДЕКС (60)",
+        labBtn: "ЛАБОРАТОРИЯ",
+        settingsBtn: "НАСТРОЙКИ",
+        world1: "МИР 01: ЗЕЛЁНАЯ ДОЛИНА (АЛЬБАРИС)",
+        crystals: "Кристаллы",
+        moves: "Ходы",
+        par: "Норма",
+        ability: "СУПЕРСИЛА",
+        undo: "Отмена",
+        restart: "Заново",
+        hint: "Подсказка",
+        levelComplete: "УРОВЕНЬ ПРОЙДЕН!",
+        nextLevel: "СЛЕДУЮЩИЙ УРОВЕНЬ",
+        backToMenu: "В ГЛАВНОЕ МЕНЮ",
+        starsEarned: "Получено звёзд",
+        newMonsterUnlocked: "ОТКРЫТ НОВЫЙ МОНСТРИК!",
+        laraGuideTitle: "Лара • Навигатор Alba Space",
+        albamenAiTitle: "ИИ-Наставник Альбамэн",
+        gotIt: "ВПЕРЁД, КОСМО-ДРУГ! 🖖",
+        pauseTitle: "ПАУЗА",
+        resume: "ПРОДОЛЖИТЬ",
+        soundFx: "Звуковые эффекты",
+        music: "Космическая музыка",
+        highContrast: "Крупные подсказки клеток",
+        cloudSync: "Синхронизация AlbaSpace (Supabase)",
+        syncNow: "Синхронизировать прогресс",
+        sendReport: "Отправить диплом на Email (SMTP2go)",
+        dailyTitle: "ЕЖЕДНЕВНЫЙ КОСМИЧЕСКИЙ ВЫЗОВ",
+        dailyDesc: "Особая головоломка дня от Лары и Альбамэна! Награда: +50 энерго-кристаллов.",
+        labTitle: "КОСМИЧЕСКАЯ БАЗА ALBA MARS ÜSSÜ",
+        labDesc: "Украшай исследовательскую станцию Лары за собранные энерго-кристаллы!",
+        unlocked: "Открыто",
+        locked: "Закрыто",
+        buy: "Установить",
+        installed: "Установлено",
+        selectMonster: "Выбери монстрика или нажми на клетку рядом",
+        portalClosed: "Собери все кристаллы, чтобы открыть портал!",
+        portalOpen: "Портал открыт! Веди монстрика к выходу!",
+        elashaGreeting: "Shae, uzaydaş! Знания — твоя главная суперсила!"
+      },
+      tr: {
+        universe: "ALBA SPACE EVRENİ",
+        title: "MONSTER PUZZLE",
+        subtitle: "Lara ve Uzay Canavarları",
+        play: "OYNA",
+        dailyBtn: "GÜNÜN GÖREVİ",
+        levelsBtn: "SEVİYELER",
+        collectionBtn: "ALBA-DEX (60)",
+        labBtn: "LABORATUVAR",
+        settingsBtn: "AYARLAR",
+        world1: "DÜNYA 01: YEŞİL VADİ (ALBARİS)",
+        crystals: "Kristaller",
+        moves: "Hamle",
+        par: "Hedef",
+        ability: "SÜPER GÜÇ",
+        undo: "Geri Al",
+        restart: "Yeniden",
+        hint: "İpucu",
+        levelComplete: "SEVİYE TAMAMLANDI!",
+        nextLevel: "SONRAKİ SEVİYE",
+        backToMenu: "ANA MENÜ",
+        starsEarned: "Kazanılan Yıldız",
+        newMonsterUnlocked: "YENİ CANAVAR AÇILDI!",
+        laraGuideTitle: "Lara • Alba Space Rehberi",
+        albamenAiTitle: "Albamen AI Öğretmen",
+        gotIt: "HAZIRIM UZAYDAŞ! 🖖",
+        pauseTitle: "DURAKLATILDI",
+        resume: "DEVAM ET",
+        soundFx: "Ses Efektleri",
+        music: "Uzay Müziği",
+        highContrast: "Karo Rehberini Göster",
+        cloudSync: "AlbaSpace Bulut Senkronizasyonu",
+        syncNow: "İlerlemeyi Kaydet",
+        sendReport: "Başarı Belgesi Gönder (SMTP2go)",
+        dailyTitle: "GÜNLÜK UZAY GÖREVİ",
+        dailyDesc: "Lara ve Albamen'den günün özel bulmacası! Ödül: +50 enerji kristali.",
+        labTitle: "ALBA MARS ÜSSÜ LABORATUVARI",
+        labDesc: "Topladığın enerji kristalleriyle Lara'nın araştırma üssünü geliştir!",
+        unlocked: "Açık",
+        locked: "Kilitli",
+        buy: "Kur",
+        installed: "Kuruldu",
+        selectMonster: "Bir монстрик seçin veya komşu karoya dokunun",
+        portalClosed: "Portalı açmak için tüm kristalleri topla!",
+        portalOpen: "Portal açıldı! Çıkışa ilerle!",
+        elashaGreeting: "Uzaylarca selam uzaydaş! Bilgi senin en büyük süper gücün!"
+      },
+      en: {
+        universe: "ALBA SPACE UNIVERSE",
+        title: "MONSTER PUZZLE",
+        subtitle: "Lara & The Cosmic Monsters",
+        play: "PLAY NOW",
+        dailyBtn: "DAILY CHALLENGE",
+        levelsBtn: "LEVEL SELECT",
+        collectionBtn: "ALBA-DEX (60)",
+        labBtn: "MONSTER LAB",
+        settingsBtn: "SETTINGS",
+        world1: "WORLD 01: GREEN VALLEY (ALBARIS)",
+        crystals: "Crystals",
+        moves: "Moves",
+        par: "Target",
+        ability: "USE ABILITY",
+        undo: "Undo",
+        restart: "Restart",
+        hint: "Hint",
+        levelComplete: "LEVEL COMPLETED!",
+        nextLevel: "NEXT LEVEL",
+        backToMenu: "MAIN MENU",
+        starsEarned: "Stars Earned",
+        newMonsterUnlocked: "NEW MONSTER UNLOCKED!",
+        laraGuideTitle: "Lara • Alba Space Explorer",
+        albamenAiTitle: "Albamen AI Mentor",
+        gotIt: "LET'S GO, SPACE FRIEND! 🖖",
+        pauseTitle: "GAME PAUSED",
+        resume: "RESUME",
+        soundFx: "Sound Effects",
+        music: "Ambient Space Music",
+        highContrast: "Show Tile Guides",
+        cloudSync: "AlbaSpace Cloud Sync (Supabase)",
+        syncNow: "Sync Progress Now",
+        sendReport: "Email Certificate (SMTP2go)",
+        dailyTitle: "DAILY COSMIC CHALLENGE",
+        dailyDesc: "A special daily puzzle from Lara & Albamen! Reward: +50 Energy Crystals.",
+        labTitle: "ALBA MARS BASE LABORATORY",
+        labDesc: "Decorate Lara's space research station using collected energy crystals!",
+        unlocked: "Unlocked",
+        locked: "Locked",
+        buy: "Build",
+        installed: "Installed",
+        selectMonster: "Tap an adjacent tile or use controls to move",
+        portalClosed: "Collect all energy crystals to activate the portal!",
+        portalOpen: "Portal Open! Guide a monster to the exit!",
+        elashaGreeting: "Shae, space friend! Knowledge is your greatest superpower!"
+      }
+    };
+
+    // ============================================================================
+    // 2. MONSTER DEFINITIONS (5 CORE ELEMENTAL HEROES + 60 SHEET ARCHIVE)
+    // ============================================================================
+    const MONSTERS = {
+      flamo: {
+        id: "flamo",
+        sheetCode: "Ряд 2 • №1 (Огненный Рогатик)",
+        element: "fire",
+        color: "#ff6b1a",
+        accent: "#ffd166",
+        icon: "🔥",
+        name: { ru: "Фламо (Flamo)", tr: "Flamo (Ateş)", en: "Flamo" },
+        title: { ru: "Хранитель Пламени", tr: "Alev Muhafızı", en: "Flame Guardian" },
+        abilityName: { ru: "Тепловой импульс", tr: "Termal Dalga", en: "Thermal Pulse" },
+        desc: {
+          ru: "Круглый оранжевый монстрик с маленькими рожками и огненным хвостиком. Растапливает вековые ледяные глыбы и зажигает огненные маяки.",
+          tr: "Küçük boynuzlu, sevimli turuncu canavar. Buz bloklarını eritir ve ateş mekanizmalarını çalıştırır.",
+          en: "Round orange creature with tiny horns and a flame tail. Melts ice blocks and ignites fire mechanisms."
+        },
+        scienceNote: {
+          ru: "Факт Альбамэна: Днём на Меркурии так жарко (+430°C), что Фламо мог бы поджарить там космический омлет!",
+          tr: "Albamen Bilgisi: Merkür'ün gündüz yüzeyi o kadar sıcaktır ki üzerinde omlet pişirebilirsin!",
+          en: "Albamen Fact: Mercury's day side is so hot you could fry an omelet right on the rocks!"
+        }
+      },
+      frosty: {
+        id: "frosty",
+        sheetCode: "Ряд 1 • №5 / Ряд 6 • №4 (Крио-Пушистик)",
+        element: "ice",
+        color: "#38bdf8",
+        accent: "#e0f2fe",
+        icon: "❄️",
+        name: { ru: "Фрости (Frosty)", tr: "Frosty (Buzul)", en: "Frosty" },
+        title: { ru: "Мастер Крио-Кристаллов", tr: "Buz Kristali Ustası", en: "Cryo-Crystal Master" },
+        abilityName: { ru: "Крио-заморозка", tr: "Buz Köprüsü", en: "Cryo Freeze" },
+        desc: {
+          ru: "Светло-голубой монстрик с ледяными ушками-кристаллами. Мгновенно замораживает воду вокруг себя, создавая прочные ледяные мосты.",
+          tr: "Kristal kulaklı açık mavi sevimli canavar. Suyu dondurarak geçici buz köprüleri oluşturur.",
+          en: "Cute light-blue creature with crystal ears. Freezes adjacent water tiles into solid ice bridges."
+        },
+        scienceNote: {
+          ru: "Факт Альбамэна: Спутник Нептуна Тритон покрыт льдом и знаменит своими космическими крио-гейзерами!",
+          tr: "Albamen Bilgisi: Neptün'ün uydusu Triton buzlu yüzeye ve ünlü buz gayzerlerine sahiptir!",
+          en: "Albamen Fact: Neptune's moon Triton has a frozen surface with towering nitrogen ice geysers!"
+        }
+      },
+      volt: {
+        id: "volt",
+        sheetCode: "Ряд 2 • №8 (Жёлтый Импульс)",
+        element: "electric",
+        color: "#facc15",
+        accent: "#fef08a",
+        icon: "⚡",
+        name: { ru: "Вольт (Volt)", tr: "Volt (Şimşek)", en: "Volt" },
+        title: { ru: "Искровой Инженер", tr: "Elektrik Mühendisi", en: "Spark Engineer" },
+        abilityName: { ru: "Энерго-разряд", tr: "Enerji Şoku", en: "Energy Shock" },
+        desc: {
+          ru: "Озорной жёлтый монстрик с антеннами-молниями. Заряжает генераторы Альбариса, открывает энергетические двери и питает цепи.",
+          tr: "Şimşek antenli sarı canavar. Elektrik şalterlerini ve enerji kapılarını aktif eder.",
+          en: "Playful yellow creature with lightning antennae. Charges switches and opens energy barriers."
+        },
+        scienceNote: {
+          ru: "Факт Альбамэна: Никола Тесла мечтал о беспроводной передаче энергии, как это делает наш Вольт!",
+          tr: "Albamen Bilgisi: Nikola Tesla tıpkı Volt gibi kablosuz enerji aktarımını hayal etmişti!",
+          en: "Albamen Fact: Nikola Tesla pioneered alternating current and wireless energy concepts just like Volt!"
+        }
+      },
+      buddy: {
+        id: "buddy",
+        sheetCode: "Ряд 2 • №5 (Лесной Росток)",
+        element: "nature",
+        color: "#4ade80",
+        accent: "#bbf7d0",
+        icon: "🌿",
+        name: { ru: "Бадди (Buddy)", tr: "Buddy (Filiz)", en: "Buddy" },
+        title: { ru: "Ботаник Космического Леса", tr: "Uzay Ormanı Filizi", en: "Space Forest Botanist" },
+        abilityName: { ru: "Живой мост", tr: "Canlı Sarmaşık", en: "Living Vine Bridge" },
+        desc: {
+          ru: "Дружелюбный зелёный монстрик с ушками-листьями и цветами на макушке. Выращивает крепкие мосты из лиан через глубокие пропасти.",
+          tr: "Yaprak kulaklı yeşil dostumuz. Boşlukların üzerinde sarmaşık köprüler büyütür.",
+          en: "Friendly green creature with leaf ears. Grows living vine bridges across spore chasms."
+        },
+        scienceNote: {
+          ru: "Факт Альбамэна: В 2022 году команда ALBA Space отправила тысячи семян в стратосферу и высадила Космический лес ALBA!",
+          tr: "Albamen Bilgisi: ALBA Space stratosfere binlerce tohum gönderip ALBA Uzay Ormanı'nı kurdu!",
+          en: "Albamen Fact: ALBA Space launched thousands of seeds to the stratosphere and planted the ALBA Space Forest!"
+        }
+      },
+      puff: {
+        id: "puff",
+        sheetCode: "Ряд 3 • №7 (Облачный Пафф)",
+        element: "wind",
+        color: "#c084fc",
+        accent: "#f3e8ff",
+        icon: "🌪️",
+        name: { ru: "Пафф (Puff)", tr: "Puff (Rüzgar)", en: "Puff" },
+        title: { ru: "Повелитель Ветров", tr: "Rüzgar Ustası", en: "Wind Weaver" },
+        abilityName: { ru: "Вихревой толчок", tr: "Rüzgar İtişi", en: "Whirlwind Push" },
+        desc: {
+          ru: "Нежно-фиолетовый пушистый монстрик, похожий на облачко. Потоком ветра передвигает тяжёлые кубы на кнопки и сбрасывает их в пропасти.",
+          tr: "Bulut gibi yumuşak mor canavar. Rüzgar akımıyla kutuları iter ve boşlukları doldurur.",
+          en: "Pastel-purple cloud creature. Uses wind gusts to push heavy crates onto switches or into chasms."
+        },
+        scienceNote: {
+          ru: "Факт Альбамэна: Самые быстрые ветры в Солнечной системе дуют на ледяном гиганте Нептуне — до 2100 км/ч!",
+          tr: "Albamen Bilgisi: Güneş Sistemi'ndeki en hızlı rüzgarlar Neptün'de esiyor!",
+          en: "Albamen Fact: The fastest winds in our Solar System roar across Neptune at over 2,000 km/h!"
+        }
+      }
+    };
+
+    // Additional monsters from the 60-monster image sheet for the Alba-Dex Encyclopedia
+    const EXTRA_SHEET_MONSTERS = [
+      { code: "Ряд 1 • №1", name: "Люми-Флай", element: "Свет", color: "#60a5fa", desc: "Крылатый разведчик орбиты Альбариса, освещающий туманности." },
+      { code: "Ряд 1 • №4", name: "Орион-Грей", element: "Гравитация", color: "#fcd34d", desc: "Мудрый хранитель временных нитей Эла’ша с огромными глазами." },
+      { code: "Ряд 2 • №4", name: "Альба-Бот v1", element: "Кибер", color: "#93c5fd", desc: "Мини-дрон поддержки с базы ALBA Mars Üssü." },
+      { code: "Ряд 2 • №9", name: "Нео-Медуза", element: "Плазма", color: "#818cf8", desc: "Парит в верхних слоях атмосферы газовых гигантов." },
+      { code: "Ряд 3 • №1", name: "Аксо-Роуз", element: "Био-Вода", color: "#f472b6", desc: "Изучает минералы озера Салда и древние кратеры Марса." },
+      { code: "Ряд 3 • №6", name: "Цикло-Рубин", element: "Лазер", color: "#f87171", desc: "Одноглазый страж метеоритного пояса и карликовой планеты Церера." },
+      { code: "Ряд 4 • №7", name: "Окто-Скай", element: "Эфир", color: "#38bdf8", desc: "Умеет считывать золотую пластинку Вояджера-1." }
+    ];
+
+    // ============================================================================
+    // 3. TILE TYPES & DETERMINISTIC LEVEL CONFIGURATIONS (8 CAMPAIGN LEVELS)
+    // ============================================================================
+    // Tile Legend:
+    // 'W' = Wall (Solid rock/crystal border)
+    // '.' = Walkable Grass/Alien Floor
+    // '~' = Water (Frosty freezes into 'F' Frozen Floor)
+    // 'I' = Ice Block obstacle (Flamo melts into '.')
+    // 'B' = Fire Brazier (Flamo lights it -> 'B_LIT', opens Gate 'G')
+    // 'G' = Fire-locked Gate (opens when all 'B' are lit)
+    // 'T1','T2' = Electric Conduit / Switch (Volt shocks it -> opens 'D1','D2')
+    // 'D1','D2' = Energy Door (opens when matching 'T' is powered or Plate 'P' is pressed)
+    // 'V' = Spore Chasm (Buddy grows Vine Bridge 'V_BRIDGE' over it)
+    // 'H' = Pit / Deep Chasm (Puff can blow Crate into it -> 'H_FILLED')
+    // 'P' = Pressure Plate (opens 'D2' when a Crate or Monster stands on it)
+    // 'E' = Exit Portal (opens when all crystals collected)
+
+    const LEVELS = [
+      {
+        id: 1,
+        title: { ru: "Уровень 1: Первые шаги", tr: "Seviye 1: İlk Adımlar", en: "Level 1: First Steps" },
+        subtitle: { ru: "Знакомство с Ларой и Фламо", tr: "Lara ve Flamo ile Tanışma", en: "Meet Lara & Flamo" },
+        parMoves: 7,
+        unlocksMonster: "flamo",
+        laraIntro: {
+          ru: "Shae, космо-друг! Я Лара! Метеоритный дождь разбросал энерго-кристаллы по Зелёной Долине. Нажимай на соседние клетки или стрелки, чтобы провести Фламо к кристаллу и открыть портал!",
+          tr: "Uzaylarca selam uzaydaş! Ben Lara! Enerji kristulini toplamak ve çıkış portalına ulaşmak için komşu karolara dokun!",
+          en: "Shae, space friend! I'm Lara! A meteor shower scattered energy crystals across Green Valley. Tap adjacent tiles or use arrows to collect the crystal and reach the portal!"
+        },
+        hintText: {
+          ru: "Проведи Фламо вправо к сияющему голубому кристаллу (3,1), затем спустись вниз по проходу к порталу (4,3).",
+          tr: "Flamo'yu sağdaki kristale (3,1) götür, ardından aşağı inip portala (4,3) ulaş.",
+          en: "Move Flamo right to grab the glowing crystal at (3,1), then head down to the exit portal at (4,3)."
+        },
+        grid: [
+          ["W", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", ".", ".", "W"],
+          ["W", "W", "W", ".", "W", "W"],
+          ["W", ".", ".", ".", "E", "W"],
+          ["W", "W", "W", "W", "W", "W"]
+        ],
+        monsters: [{ id: "flamo", x: 1, z: 1 }],
+        crystals: [{ x: 3, z: 1 }],
+        crates: []
+      },
+      {
+        id: 2,
+        title: { ru: "Уровень 2: Ледяной путь", tr: "Seviye 2: Donmuş Patika", en: "Level 2: Frozen Path" },
+        subtitle: { ru: "Крио-сила монстрика Фрости", tr: "Frosty'nin Buz Gücü", en: "Frosty's Ice Power" },
+        parMoves: 12,
+        unlocksMonster: "frosty",
+        laraIntro: {
+          ru: "Смотри, это Фрости! Бурная река преградила путь к кристаллам. Подойди вплотную к воде и нажми кнопку «СУПЕРСИЛА» (❄️), чтобы превратить воду в ледяной мост!",
+          tr: "Bak, bu Frosty! Suyun yanına yaklaş ve 'SÜPER GÜÇ' (❄️) düğmesine basarak suyu dondurup buz köprüsü oluştur!",
+          en: "Meet Frosty! Deep water blocks the path. Step next to water tiles and press 'USE ABILITY' (❄️) to freeze the river into a solid ice bridge!"
+        },
+        hintText: {
+          ru: "Подойди на (2,1), нажми ❄️ СУПЕРСИЛА — вода на (3,1) замёрзнет! Возьми кристалл (4,1), вернись на (3,1), снова нажми ❄️, спустись на (3,3), возьми кристалл (2,3) и заморозь (4,3) перед выходом.",
+          tr: "(2,1) karosuna gelip ❄️ gücünü kullan. Kristali al, (3,1)'de tekrar ❄️ basıp aşağı in ve (4,3) suyunu dondurarak çıkışa git.",
+          en: "Step to (2,1) and press ❄️ Ability to freeze (3,1). Grab the crystal at (4,1), freeze (3,2) from (3,1), collect the second crystal at (2,3), and freeze (4,3) to reach the exit!"
+        },
+        grid: [
+          ["W", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", "~", ".", "W"],
+          ["W", ".", "W", "~", "W", "W"],
+          ["W", ".", ".", ".", "~", "W"],
+          ["W", "W", "W", "W", "E", "W"],
+          ["W", "W", "W", "W", "W", "W"]
+        ],
+        monsters: [{ id: "frosty", x: 1, z: 1 }],
+        crystals: [{ x: 4, z: 1 }, { x: 2, z: 3 }],
+        crates: []
+      },
+      {
+        id: 3,
+        title: { ru: "Уровень 3: Пылающие врата", tr: "Seviye 3: Ateş Kapısı", en: "Level 3: The Burning Gate" },
+        subtitle: { ru: "Тепловой импульс Фламо", tr: "Flamo'nun Alev Gücü", en: "Flamo's Melting Flame" },
+        parMoves: 16,
+        unlocksMonster: "flamo",
+        laraIntro: {
+          ru: "Древние льды сковали проход, а врата портала закрыты! Используй огненную способность Фламо (🔥), чтобы растопить ледяные кубы и зажечь Огненную Чашу у ворот!",
+          tr: "Buz blokları yolu kapatmış! Flamo'nun ateş gücünü (🔥) kullanarak buzları erit ve kapıyı açmak için ateş sunağını yak!",
+          en: "Ancient ice blocks the passage! Use Flamo's Fire Ability (🔥) to melt adjacent ice cubes and ignite the Fire Brazier to open the gate!"
+        },
+        hintText: {
+          ru: "Встань на (2,1) и нажми 🔥, чтобы растопить лёд (3,1). Забери кристалл (4,1), растопи лёд (3,2), возьми второй кристалл (1,3), затем встань на (3,3) и нажми 🔥, чтобы зажечь чашу (4,3) и открыть ворота (3,4)!",
+          tr: "(2,1)'den (3,1) buzunu erit, kristali al. (3,2) buzunu eritip aşağı in, (1,3) kristalini topla ve (3,3)'ten ateş sunağını (4,3) yakarak kapıyı aç!",
+          en: "Melt the ice at (3,1) and (3,2) with 🔥, grab both crystals at (4,1) and (1,3), then stand at (3,3) and press 🔥 to light the brazier at (4,3) and unlock the gate!"
+        },
+        grid: [
+          ["W", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", "I", ".", "W"],
+          ["W", ".", "W", "I", "W", "W"],
+          ["W", ".", ".", ".", "B", "W"],
+          ["W", "W", "W", "G", "E", "W"],
+          ["W", "W", "W", "W", "W", "W"]
+        ],
+        monsters: [{ id: "flamo", x: 1, z: 1 }],
+        crystals: [{ x: 4, z: 1 }, { x: 1, z: 3 }],
+        crates: []
+      },
+      {
+        id: 4,
+        title: { ru: "Уровень 4: Электрическая тайна", tr: "Seviye 4: Elektrik Gizemi", en: "Level 4: Electric Mystery" },
+        subtitle: { ru: "Инженерные цепи Вольта", tr: "Volt'un Enerji Devresi", en: "Volt's Energy Circuit" },
+        parMoves: 18,
+        unlocksMonster: "volt",
+        laraIntro: {
+          ru: "Знакомься, это Вольт! Лазерные барьеры закрывают кристаллы и портал. Подойди к катушкам-генераторам и активируй разряд Вольта (⚡), чтобы подать питание на двери!",
+          tr: "İşte Volt! Enerji kapılarını açmak için elektrik bobinlerinin yanına git ve Volt'un şimşek gücünü (⚡) kullan!",
+          en: "Say hello to Volt! Energy barriers block our way. Stand next to the electric coils and trigger Volt's Shock Ability (⚡) to power down the laser doors!"
+        },
+        hintText: {
+          ru: "Встань на (2,1) и заряди катушку (3,1) кнопкой ⚡ — откроются синие двери (2,3) и (4,2). Собери кристаллы (1,3) и (5,1), затем с клетки (5,2) заряди вторую катушку (5,3) и иди к выходу (5,4)!",
+          tr: "(2,1)'den ilk bobini (3,1) şarj et (⚡). (1,3) ve (5,1) kristallerini topla, (5,2)'den ikinci bobini (5,3) şarj edip (5,4) çıkışına ulaş!",
+          en: "Stand at (2,1) and shock coil (3,1) with ⚡ to open the blue doors. Collect crystals at (1,3) and (5,1), then shock coil (5,3) from (5,2) to open the final door!"
+        },
+        grid: [
+          ["W", "W", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", "T1", "W", ".", "W"],
+          ["W", ".", ".", ".", "D1", ".", "W"],
+          ["W", ".", "D1", ".", "W", "T2", "W"],
+          ["W", "W", "W", ".", "D2", "E", "W"],
+          ["W", "W", "W", "W", "W", "W", "W"]
+        ],
+        monsters: [{ id: "volt", x: 1, z: 1 }],
+        crystals: [{ x: 1, z: 3 }, { x: 5, z: 1 }],
+        crates: []
+      },
+      {
+        id: 5,
+        title: { ru: "Уровень 5: Живой мост", tr: "Seviye 5: Canlı Köprü", en: "Level 5: The Living Bridge" },
+        subtitle: { ru: "Ботаническая магия Бадди", tr: "Buddy'nin Doğa Gücü", en: "Buddy's Nature Bloom" },
+        parMoves: 16,
+        unlocksMonster: "buddy",
+        laraIntro: {
+          ru: "Это Бадди — друг всех растений! Там, где над пропастью кружатся зелёные споры, Бадди может вырастить живой мост из крепких лиан (🌿). Попробуй!",
+          tr: "Bu Buddy! Yeşil sporların uçuştuğu uçurumların yanında doğa gücünü (🌿) kullanarak canlı sarmaşık köprüler büyüt!",
+          en: "Here is Buddy! Wherever glowing green spores float above a chasm, Buddy can use Nature Ability (🌿) to grow a sturdy vine bridge!"
+        },
+        hintText: {
+          ru: "Встань на (2,1) и нажми 🌿 — вырастет мост на (3,1). Возьми кристалл (4,1), вырасти мост на (4,2), забери второй кристалл (1,3), затем с (4,3) вырасти мост на (4,4) и шаг1ни в портал (5,4)!",
+          tr: "(2,1)'den (3,1)'e köprü büyüt (🌿), kristali al. (4,1)'den (4,2)'ye köprü büyüt, (1,3) kristalini al ve (4,4)'e köprü kurup çıkışa git!",
+          en: "Grow a vine bridge at (3,1) from (2,1), collect the crystal at (4,1), grow a bridge at (4,2), grab the crystal at (1,3), then bridge (4,4) to reach the exit!"
+        },
+        grid: [
+          ["W", "W", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", "V", ".", "W", "W"],
+          ["W", "H", "H", "H", "V", "H", "W"],
+          ["W", ".", ".", ".", ".", "W", "W"],
+          ["W", "W", "H", "H", "V", "E", "W"],
+          ["W", "W", "W", "W", "W", "W", "W"]
+        ],
+        monsters: [{ id: "buddy", x: 1, z: 1 }],
+        crystals: [{ x: 4, z: 1 }, { x: 1, z: 3 }],
+        crates: []
+      },
+      {
+        id: 6,
+        title: { ru: "Уровень 6: Испытание ветром", tr: "Seviye 6: Rüzgar Testi", en: "Level 6: Wind Challenge" },
+        subtitle: { ru: "Воздушные потоки Паффа", tr: "Puff'ın Rüzgar Akımı", en: "Puff's Whirlwind Push" },
+        parMoves: 18,
+        unlocksMonster: "puff",
+        laraIntro: {
+          ru: "Встречай воздушного Паффа! Своим вихрем (🌪️) он толкает тяжёлые грузовые кубы вперёд. Сбрось один куб в пропасть, чтобы сделать мост, а второй отправь на нажимную плиту!",
+          tr: "Hava ustası Puff ile tanış! Rüzgar gücüyle (🌪️) kutuları uçuruma iterek köprü yap ve diğer kutuyu baskı plakasına gönder!",
+          en: "Meet Puff! His Whirlwind Ability (🌪️) blasts adjacent crates forward. Push the top crate into the chasm to form a bridge, and blow the lower crate onto the pressure plate!"
+        },
+        hintText: {
+          ru: "Встань на (2,1) и нажми 🌪️ — куб (3,1) упадёт в яму (4,1) и станет мостом! Забери кристалл (5,1), спустись по левому краю за кристаллом (1,4), встань на (2,3) и нажми 🌪️, чтобы куб (3,3) встал на плиту (5,3) и открыл дверь (4,4)!",
+          tr: "(2,1)'de 🌪️ basarak kutuyu (4,1) boşluğuna it ve (5,1) kristalini al. Sol yoldan (1,4) kristalini al, (2,3)'ten ikinci kutuyu (5,3) plakasına itip kapıyı aç!",
+          en: "From (2,1), use 🌪️ to push the crate into gap (4,1) and grab crystal (5,1). Go down the left side for crystal (1,4), then stand at (2,3) and use 🌪️ to slide the crate onto plate (5,3)!"
+        },
+        grid: [
+          ["W", "W", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", ".", "H", ".", "W"],
+          ["W", ".", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", ".", ".", "P", "W"],
+          ["W", ".", "W", ".", "D2", "E", "W"],
+          ["W", "W", "W", "W", "W", "W", "W"]
+        ],
+        monsters: [{ id: "puff", x: 1, z: 1 }],
+        crystals: [{ x: 5, z: 1 }, { x: 1, z: 4 }],
+        crates: [{ x: 3, z: 1 }, { x: 3, z: 3 }]
+      },
+      {
+        id: 7,
+        title: { ru: "Уровень 7: Командная работа", tr: "Seviye 7: Takım Çalışması", en: "Level 7: Teamwork" },
+        subtitle: { ru: "Фрости + Фламо + Вольт", tr: "Frosty + Flamo + Volt İşbirliği", en: "Frosty + Flamo + Volt" },
+        parMoves: 22,
+        unlocksMonster: null,
+        laraIntro: {
+          ru: "Настоящая миссия экипажа Alba Space! Переключайся между Фрости, Фламо и Вольтом на нижней панели. Сначала Фрости заморозит переправу, затем Фламо растопит лёд у генератора, а Вольт подаст ток на врата!",
+          tr: "Gerçek bir ekip görevi! Alt panelden canavarlar arasında geçiş yap: Frosty suyu dondursun, Flamo buzu eritsin ve Volt kapıyı açsın!",
+          en: "True Alba Space teamwork! Switch between Frosty, Flamo, and Volt using the bottom dock. Freeze the river with Frosty, melt the ice block with Flamo, and charge the coil with Volt!"
+        },
+        hintText: {
+          ru: "1) Выбери Фрости ❄️: заморозь воду (3,1), возьми кристалл (4,1) и заморозь переправу (3,3). 2) Выбери Фламо 🔥: перейди по льду (3,3) и растопи ледяной блок (4,3). 3) Выбери Вольта ⚡: дойди до (4,3), заряди катушку (5,3), забери кристалл (1,5) и шагни в портал (5,5)!",
+          tr: "1) Frosty ile (3,1) ve (3,3) sularını dondur, (4,1) kristalini al. 2) Flamo ile (4,3) buzunu erit. 3) Volt ile (5,3) bobinini şarj et, (1,5) kristalini alıp çıkışa ulaş!",
+          en: "1) Use Frosty ❄️ to freeze (3,1) & (3,3) and grab crystal (4,1). 2) Switch to Flamo 🔥, cross (3,3) and melt ice (4,3). 3) Switch to Volt ⚡, shock coil (5,3), grab crystal (1,5), and exit at (5,5)!"
+        },
+        grid: [
+          ["W", "W", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", "~", ".", "W", "W"],
+          ["W", ".", ".", "~", "W", "W", "W"],
+          ["W", ".", ".", "~", "I", "T1", "W"],
+          ["W", "W", "W", ".", "W", "W", "W"],
+          ["W", ".", ".", ".", "D1", "E", "W"],
+          ["W", "W", "W", "W", "W", "W", "W"]
+        ],
+        monsters: [
+          { id: "frosty", x: 1, z: 1 },
+          { id: "flamo", x: 1, z: 2 },
+          { id: "volt", x: 1, z: 3 }
+        ],
+        crystals: [{ x: 4, z: 1 }, { x: 1, z: 5 }],
+        crates: []
+      },
+      {
+        id: 8,
+        title: { ru: "Уровень 8: Хранитель кристалла", tr: "Seviye 8: Kristal Muhafızı", en: "Level 8: Crystal Guardian" },
+        subtitle: { ru: "Гранд-финал всей пятёрки героев!", tr: "5 Canavar Bir Arada Büyük Final!", en: "All 5 Heroes Grand Finale!" },
+        parMoves: 26,
+        unlocksMonster: null,
+        laraIntro: {
+          ru: "Финал Зелёной Долины! Здесь собралась вся наша пятёрка монстриков! Объедини способности Бадди 🌿, Фламо 🔥, Вольта ⚡, Паффа 🌪️ и Фрости ❄️, чтобы пробудить Главный Кристалл Альбариса!",
+          tr: "Yeşil Vadi'nin büyük finali! Beş монстриğin tüm güçlerini (🌿, 🔥, ⚡, 🌪️, ❄️) sırayla kullanarak ana portalı aç!",
+          en: "The Grand Finale of Green Valley! Command all 5 elemental monsters together (🌿, 🔥, ⚡, 🌪️, ❄️) to unlock the double-sealed Albaris Portal!"
+        },
+        hintText: {
+          ru: "1) Бадди 🌿 растит мост (3,1) и берёт кристалл (4,1). 2) Фламо 🔥 идёт на (5,1) и топит лёд (6,1). 3) Вольт ⚡ берёт кристалл (2,5), затем идёт на (6,1) и заряжает катушку (6,2) [открывает дверь D1]. 4) Пафф 🌪️ с клетки (4,3) толкает куб (5,3) на плиту (6,3) [открывает дверь D2]. 5) Фрости ❄️ замораживает воду (3,4) и идёт в портал (6,5)!",
+          tr: "1) Buddy (3,1) köprüsünü kurar. 2) Flamo (6,1) buzunu eritir. 3) Volt (2,5) kristalini alır ve (6,2) bobinini şarj eder. 4) Puff (4,3)'ten kutuyu (6,3) plakasına iter. 5) Frosty (3,4) suyunu dondurup (6,5) çıkışına ulaşır!",
+          en: "1) Buddy bridges (3,1) & gets crystal (4,1). 2) Flamo melts ice (6,1). 3) Volt grabs crystal (2,5) & shocks coil (6,2). 4) Puff blows crate (5,3) onto plate (6,3). 5) Frosty freezes (3,4) and enters exit (6,5)!"
+        },
+        grid: [
+          ["W", "W", "W", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", "V", ".", ".", "I", "W"],
+          ["W", ".", ".", "W", ".", "W", "T1", "W"],
+          ["W", ".", ".", ".", ".", ".", "P", "W"],
+          ["W", ".", ".", "~", "W", "W", "W", "W"],
+          ["W", ".", ".", ".", "D1", "D2", "E", "W"],
+          ["W", "W", "W", "W", "W", "W", "W", "W"]
+        ],
+        monsters: [
+          { id: "buddy", x: 1, z: 1 },
+          { id: "puff", x: 1, z: 2 },
+          { id: "flamo", x: 1, z: 3 },
+          { id: "frosty", x: 1, z: 4 },
+          { id: "volt", x: 1, z: 5 }
+        ],
+        crystals: [{ x: 4, z: 1 }, { x: 2, z: 5 }],
+        crates: [{ x: 5, z: 3 }]
+      }
+    ];
+
+    // Daily Challenge Level Generator (Deterministic based on date)
+    function getDailyChallengeLevel() {
+      const today = new Date().toISOString().slice(0, 10);
+      return {
+        id: 99,
+        isDaily: true,
+        dateStr: today,
+        title: {
+          ru: `Миссия дня (${today})`,
+          tr: `Günün Görevi (${today})`,
+          en: `Daily Challenge (${today})`
+        },
+        subtitle: {
+          ru: "Экспедиция к озеру Салда • +50 Кристаллов",
+          tr: "Salda Gölü Keşfi • +50 Kristal",
+          en: "Salda Lake Expedition • +50 Crystals"
+        },
+        parMoves: 16,
+        unlocksMonster: null,
+        laraIntro: {
+          ru: "Особое задание от папы Альбамэна! Образцы грунта с Марса сравнивают с породами турецкого озера Салда. Помоги Фрости, Фламо и Бадди собрать редкие кристаллы!",
+          tr: "Babam Albamen'den özel görev! Salda Gölü kraterinde Frosty, Flamo ve Buddy ile tüm kristalleri topla!",
+          en: "Special mission from my dad Albamen! Help Frosty, Flamo, and Buddy collect rare crystals in the Salda crater!"
+        },
+        hintText: {
+          ru: "Вырасти мост Бадди 🌿 на (3,1), заморозь воду Фрости ❄️ на (3,3) и растопи лёд Фламо 🔥 на (5,2), чтобы собрать оба кристалла и выйти на (5,4)!",
+          tr: "Buddy ile (3,1) köprüsünü kur, Frosty ile (3,3) suyunu dondur ve Flamo ile (5,2) buzunu erit!",
+          en: "Bridge (3,1) with Buddy 🌿, freeze (3,3) with Frosty ❄️, and melt (5,2) with Flamo 🔥!"
+        },
+        grid: [
+          ["W", "W", "W", "W", "W", "W", "W"],
+          ["W", ".", ".", "V", ".", ".", "W"],
+          ["W", ".", "W", "W", "W", "I", "W"],
+          ["W", ".", ".", "~", ".", ".", "W"],
+          ["W", "W", "W", "W", ".", "E", "W"],
+          ["W", "W", "W", "W", "W", "W", "W"]
+        ],
+        monsters: [
+          { id: "buddy", x: 1, z: 1 },
+          { id: "flamo", x: 1, z: 2 },
+          { id: "frosty", x: 1, z: 3 }
+        ],
+        crystals: [{ x: 4, z: 1 }, { x: 5, z: 3 }],
+        crates: []
+      };
+    }
+
+    // Monster Lab Decor Items (Reward progression)
+    const LAB_ITEMS = [
+      { id: "capsule", icon: "🛸", cost: 2, name: { ru: "Капсула Альбариса (Гёбекли-Тепе)", tr: "Albaris Kapsülü", en: "Albaris Bio-Capsule" } },
+      { id: "telescope", icon: "🔭", cost: 4, name: { ru: "Телескоп «James Webb Mini»", tr: "James Webb Teleskobu", en: "James Webb Holo-Scope" } },
+      { id: "tree", icon: "🌳", cost: 6, name: { ru: "Яблоня Марса (Росток ALBA)", tr: "Mars Elma Ağacı", en: "First Mars Apple Tree" } },
+      { id: "rover", icon: "🤖", cost: 8, name: { ru: "Ровер Perseverance (Azim)", tr: "Azim Gezgini (Rover)", en: "Perseverance Rover" } },
+      { id: "voyager", icon: "💿", cost: 12, name: { ru: "Золотая пластинка Вояджера-1", tr: "Voyager-1 Altın Plak", en: "Voyager-1 Golden Record" } }
+    ];
+
+    // ============================================================================
+    // 4. WEB AUDIO SYNTHESIZER (ORIGINAL PROCEDURAL SOUND ENGINE)
+    // ============================================================================
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.sfxEnabled = true;
+        this.musicEnabled = false;
+        this.musicInterval = null;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === "suspended") {
+          this.ctx.resume();
+        }
+      }
+
+      playTone(freq, type = "sine", duration = 0.15, vol = 0.12, slideTo = null) {
+        if (!this.sfxEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        if (slideTo) {
+          osc.frequency.exponentialRampToValueAtTime(slideTo, now + duration);
+        }
+        gain.gain.setValueAtTime(vol, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration);
+      }
+
+      playMove() {
+        this.playTone(320, "sine", 0.09, 0.1, 480);
+      }
+
+      playBump() {
+        this.playTone(130, "triangle", 0.12, 0.14, 90);
+      }
+
+      playCrystal() {
+        this.playTone(587.33, "sine", 0.12, 0.14);
+        setTimeout(() => this.playTone(880, "sine", 0.15, 0.14), 70);
+        setTimeout(() => this.playTone(1174.66, "triangle", 0.28, 0.16), 140);
+      }
+
+      playAbility(element) {
+        if (element === "fire") {
+          this.playTone(220, "sawtooth", 0.25, 0.12, 660);
+        } else if (element === "ice") {
+          this.playTone(987.77, "sine", 0.18, 0.12, 1480);
+          setTimeout(() => this.playTone(1318.5, "triangle", 0.22, 0.12), 90);
+        } else if (element === "electric") {
+          this.playTone(440, "square", 0.08, 0.1, 880);
+          setTimeout(() => this.playTone(660, "square", 0.14, 0.1, 1320), 70);
+        } else if (element === "nature") {
+          [392, 493.88, 587.33, 783.99].forEach((f, i) =>
+            setTimeout(() => this.playTone(f, "sine", 0.18, 0.11), i * 55)
+          );
+        } else if (element === "wind") {
+          this.playTone(280, "triangle", 0.28, 0.14, 560);
+        }
+      }
+
+      playVictory() {
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((n, idx) => {
+          setTimeout(() => this.playTone(n, "triangle", 0.26, 0.16), idx * 110);
+        });
+      }
+
+      playClick() {
+        this.playTone(520, "sine", 0.05, 0.08, 620);
+      }
+
+      toggleMusic(enable) {
+        this.musicEnabled = enable;
+        if (this.musicInterval) {
+          clearInterval(this.musicInterval);
+          this.musicInterval = null;
+        }
+        if (enable) {
+          this.init();
+          const scale = [261.63, 329.63, 392.00, 493.88, 523.25, 659.25];
+          let step = 0;
+          this.musicInterval = setInterval(() => {
+            if (!this.musicEnabled) return;
+            const f = scale[step % scale.length];
+            this.playTone(f, "sine", 0.65, 0.035);
+            step++;
+          }, 800);
+        }
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    // ============================================================================
+    // 5. DETERMINISTIC PUZZLE ENGINE (PURE STATE CLONING & RULES)
+    // ============================================================================
+    function cloneLevelState(level) {
+      return {
+        grid: level.grid.map(row => [...row]),
+        monsters: level.monsters.map(m => ({ ...m, dir: 0 })),
+        crystals: level.crystals.map(c => ({ ...c, collected: false })),
+        crates: (level.crates || []).map(k => ({ ...k })),
+        activeMonsterIdx: 0,
+        moves: 0,
+        completed: false
+      };
+    }
+
+    function isGateOpen(grid) {
+      // Gate 'G' opens if no unlit 'B' remains on the board
+      for (let r = 0; r < grid.length; r++) {
+        for (let c = 0; c < grid[r].length; c++) {
+          if (grid[r][c] === "B") return false;
+        }
+      }
+      return true;
+    }
+
+    function isDoorOpen(state, doorCode) {
+      // 'D1' opens when 'T1_ON' exists on board
+      // 'D2' opens when 'T2_ON' exists OR any crate/monster is on 'P'
+      if (doorCode === "D1") {
+        return state.grid.some(row => row.includes("T1_ON"));
+      }
+      if (doorCode === "D2") {
+        const t2On = state.grid.some(row => row.includes("T2_ON"));
+        if (t2On) return true;
+        // Check if any crate or monster stands on 'P'
+        for (let r = 0; r < state.grid.length; r++) {
+          for (let c = 0; c < state.grid[r].length; c++) {
+            if (state.grid[r][c] === "P") {
+              const hasCrate = state.crates.some(k => k.x === c && k.z === r);
+              const hasMonster = state.monsters.some(m => m.x === c && m.z === r);
+              if (hasCrate || hasMonster) return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    function canWalkOnTile(state, x, z, ignoreMonsterIdx = -1) {
+      const rows = state.grid.length;
+      const cols = state.grid[0].length;
+      if (z < 0 || z >= rows || x < 0 || x >= cols) return false;
+
+      // Check another monster occupying tile
+      if (state.monsters.some((m, idx) => idx !== ignoreMonsterIdx && m.x === x && m.z === z)) {
+        return false;
+      }
+
+      // Check crate occupying tile
+      if (state.crates.some(k => k.x === x && k.z === z)) {
+        return false;
+      }
+
+      const cell = state.grid[z][x];
+      if (
+        cell === "." ||
+        cell === "F" ||        // Frozen water bridge
+        cell === "V_BRIDGE" || // Grown vine bridge
+        cell === "H_FILLED" || // Crate-filled pit
+        cell === "P" ||        // Pressure plate
+        cell === "E"           // Exit portal
+      ) {
+        return true;
+      }
+      if (cell === "G") return isGateOpen(state.grid);
+      if (cell === "D1") return isDoorOpen(state, "D1");
+      if (cell === "D2") return isDoorOpen(state, "D2");
+
+      return false;
+    }
+
+    // ============================================================================
+    // 6. THREE.JS 3D BOARD & PROCEDURAL MONSTER RENDERER COMPONENT
+    // ============================================================================
+    function ThreePuzzleCanvas({
+      levelState,
+      onTileClick,
+      onMonsterSelect,
+      showGuides,
+      effectEvent,
+      cameraZoom
+    }) {
+      const mountRef = useRef(null);
+      const sceneRef = useRef(null);
+      const cameraRef = useRef(null);
+      const rendererRef = useRef(null);
+      const boardGroupRef = useRef(null);
+      const monsterMeshesRef = useRef({});
+      const crystalMeshesRef = useRef([]);
+      const crateMeshesRef = useRef([]);
+      const portalMeshRef = useRef(null);
+      const particlesRef = useRef([]);
+      const clickTargetsRef = useRef([]);
+
+      // Helper: create cute procedural 3D monster mesh matching the 5 elemental heroes
+      const buildMonsterMesh = useCallback((monsterId) => {
+        const group = new THREE.Group();
+        const mInfo = MONSTERS[monsterId] || MONSTERS.flamo;
+        const mainMat = new THREE.MeshStandardMaterial({
+          color: mInfo.color,
+          roughness: 0.35,
+          metalness: 0.1
+        });
+        const accentMat = new THREE.MeshStandardMaterial({
+          color: mInfo.accent,
+          emissive: mInfo.color,
+          emissiveIntensity: 0.35,
+          roughness: 0.25
+        });
+
+        // Body
+        const bodyGeo = new THREE.SphereGeometry(0.34, 24, 24);
+        const body = new THREE.Mesh(bodyGeo, mainMat);
+        body.scale.set(1, 0.92, 0.95);
+        body.position.y = 0.36;
+        body.castShadow = true;
+        group.add(body);
+
+        // Belly patch
+        const bellyGeo = new THREE.SphereGeometry(0.24, 16, 16);
+        const belly = new THREE.Mesh(bellyGeo, accentMat);
+        belly.position.set(0, 0.32, 0.16);
+        belly.scale.set(0.85, 0.78, 0.5);
+        group.add(belly);
+
+        // Big expressive eyes
+        const eyeWhiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const pupilMat = new THREE.MeshBasicMaterial({ color: 0x111827 });
+        const sparkleMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+        [-0.12, 0.12].forEach((ex) => {
+          const eyeGroup = new THREE.Group();
+          eyeGroup.position.set(ex, 0.45, 0.28);
+
+          const eyeW = new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 16), eyeWhiteMat);
+          eyeW.scale.set(1, 1.1, 0.6);
+          eyeGroup.add(eyeW);
+
+          const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.052, 12, 12), pupilMat);
+          pupil.position.set(0, 0, 0.035);
+          eyeGroup.add(pupil);
+
+          const spark = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 8), sparkleMat);
+          spark.position.set(0.02, 0.025, 0.075);
+          eyeGroup.add(spark);
+
+          group.add(eyeGroup);
+        });
+
+        // Cute feet
+        [-0.14, 0.14].forEach((fx) => {
+          const foot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), mainMat);
+          foot.scale.set(1, 0.6, 1.3);
+          foot.position.set(fx, 0.07, 0.05);
+          group.add(foot);
+        });
+
+        // Elemental signature features
+        if (monsterId === "flamo") {
+          // Two cute horns + flame tail
+          const hornGeo = new THREE.ConeGeometry(0.06, 0.18, 12);
+          [-0.16, 0.16].forEach((hx, i) => {
+            const horn = new THREE.Mesh(hornGeo, accentMat);
+            horn.position.set(hx, 0.68, 0);
+            horn.rotation.z = i === 0 ? 0.35 : -0.35;
+            group.add(horn);
+          });
+          const tail = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.26, 12), accentMat);
+          tail.position.set(0, 0.3, -0.34);
+          tail.rotation.x = -0.8;
+          group.add(tail);
+        } else if (monsterId === "frosty") {
+          // Crystal ears & crown shard
+          const shardGeo = new THREE.OctahedronGeometry(0.11, 0);
+          [-0.22, 0, 0.22].forEach((sx, idx) => {
+            const shard = new THREE.Mesh(shardGeo, accentMat);
+            shard.position.set(sx, idx === 1 ? 0.74 : 0.64, 0);
+            shard.scale.set(0.7, 1.3, 0.7);
+            group.add(shard);
+          });
+        } else if (monsterId === "volt") {
+          // Lightning antennae
+          const antGeo = new THREE.CylinderGeometry(0.025, 0.04, 0.26, 8);
+          [-0.14, 0.14].forEach((ax, i) => {
+            const ant = new THREE.Mesh(antGeo, accentMat);
+            ant.position.set(ax, 0.72, 0);
+            ant.rotation.z = i === 0 ? 0.3 : -0.3;
+            const tip = new THREE.Mesh(new THREE.OctahedronGeometry(0.07, 0), accentMat);
+            tip.position.set(0, 0.14, 0);
+            ant.add(tip);
+            group.add(ant);
+          });
+        } else if (monsterId === "buddy") {
+          // Leaf ears & tiny flower on top
+          const leafGeo = new THREE.SphereGeometry(0.12, 12, 12);
+          [-0.22, 0.22].forEach((lx, i) => {
+            const leaf = new THREE.Mesh(leafGeo, accentMat);
+            leaf.scale.set(1.4, 0.35, 0.8);
+            leaf.position.set(lx, 0.64, 0);
+            leaf.rotation.z = i === 0 ? 0.5 : -0.5;
+            group.add(leaf);
+          });
+          const flower = new THREE.Mesh(
+            new THREE.SphereGeometry(0.075, 12, 12),
+            new THREE.MeshBasicMaterial({ color: 0xf472b6 })
+          );
+          flower.position.set(0, 0.72, 0);
+          group.add(flower);
+        } else if (monsterId === "puff") {
+          // Fluffy cloud puffs around body + floating ears
+          const puffPositions = [
+            [-0.24, 0.38, 0],
+            [0.24, 0.38, 0],
+            [0, 0.58, -0.12],
+            [-0.18, 0.68, 0],
+            [0.18, 0.68, 0]
+          ];
+          puffPositions.forEach(([px, py, pz]) => {
+            const p = new THREE.Mesh(new THREE.SphereGeometry(0.13, 14, 14), accentMat);
+            p.position.set(px, py, pz);
+            group.add(p);
+          });
+        }
+
+        // Selection ring under active monster
+        const ringGeo = new THREE.RingGeometry(0.36, 0.45, 32);
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: 0x38bdf8,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.0
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = -Math.PI / 2;
+        ring.position.y = 0.03;
+        ring.name = "selectionRing";
+        group.add(ring);
+
+        return group;
+      }, []);
+
+      // Initialize Three.js Scene
+      useEffect(() => {
+        const container = mountRef.current;
+        if (!container) return;
+
+        const scene = new THREE.Scene();
+        sceneRef.current = scene;
+
+        const width = container.clientWidth || window.innerWidth;
+        const height = container.clientHeight || window.innerHeight;
+        const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+        cameraRef.current = camera;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.innerHTML = "";
+        container.appendChild(renderer.domElement);
+        rendererRef.current = renderer;
+
+        // Lighting
+        const hemiLight = new THREE.HemisphereLight(0xdbeafe, 0x1e1b4b, 0.85);
+        scene.add(hemiLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.95);
+        dirLight.position.set(6, 12, 8);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 1024;
+        dirLight.shadow.mapSize.height = 1024;
+        scene.add(dirLight);
+
+        const boardGroup = new THREE.Group();
+        scene.add(boardGroup);
+        boardGroupRef.current = boardGroup;
+
+        // Animation Loop
+        let frameId;
+        const clock = new THREE.Clock();
+
+        const animate = () => {
+          frameId = requestAnimationFrame(animate);
+          const t = clock.getElapsedTime();
+
+          // Animate Monsters (smooth lerp position + idle bounce)
+          Object.values(monsterMeshesRef.current).forEach((mObj, idx) => {
+            if (!mObj || !mObj.mesh) return;
+            mObj.mesh.position.x += (mObj.targetX - mObj.mesh.position.x) * 0.22;
+            mObj.mesh.position.z += (mObj.targetZ - mObj.mesh.position.z) * 0.22;
+            const hopDist = Math.hypot(
+              mObj.targetX - mObj.mesh.position.x,
+              mObj.targetZ - mObj.mesh.position.z
+            );
+            const hopHeight = Math.sin(Math.min(hopDist * Math.PI, Math.PI)) * 0.35;
+            const idleBounce = Math.sin(t * 4 + idx) * 0.035;
+            mObj.mesh.position.y = Math.max(0, hopHeight + idleBounce);
+
+            // Pulse active selection ring
+            const ring = mObj.mesh.getObjectByName("selectionRing");
+            if (ring) {
+              ring.material.opacity = mObj.isActive ? 0.65 + Math.sin(t * 6) * 0.25 : 0.0;
+              ring.scale.setScalar(mObj.isActive ? 1 + Math.sin(t * 5) * 0.06 : 1);
+            }
+          });
+
+          // Animate Crystals
+          crystalMeshesRef.current.forEach((cMesh, i) => {
+            if (cMesh && cMesh.visible) {
+              cMesh.rotation.y = t * 2.2 + i;
+              cMesh.position.y = 0.45 + Math.sin(t * 3.5 + i) * 0.08;
+            }
+          });
+
+          // Animate Crates smooth slide
+          crateMeshesRef.current.forEach((kObj) => {
+            if (kObj && kObj.mesh) {
+              kObj.mesh.position.x += (kObj.targetX - kObj.mesh.position.x) * 0.25;
+              kObj.mesh.position.z += (kObj.targetZ - kObj.mesh.position.z) * 0.25;
+            }
+          });
+
+          // Animate Exit Portal Vortex
+          if (portalMeshRef.current) {
+            portalMeshRef.current.rotation.z = t * 2.5;
+            const scalePulse = 1 + Math.sin(t * 4) * 0.07;
+            portalMeshRef.current.scale.set(scalePulse, scalePulse, 1);
+          }
+
+          // Animate transient ability particles
+          for (let i = particlesRef.current.length - 1; i >= 0; i--) {
+            const p = particlesRef.current[i];
+            p.life -= 0.035;
+            p.mesh.position.add(p.vel);
+            p.mesh.scale.setScalar(Math.max(0.01, p.life));
+            if (p.life <= 0) {
+              boardGroup.remove(p.mesh);
+              particlesRef.current.splice(i, 1);
+            }
+          }
+
+          renderer.render(scene, camera);
+        };
+        animate();
+
+        const handleResize = () => {
+          if (!container || !rendererRef.current || !cameraRef.current) return;
+          const w = container.clientWidth;
+          const h = container.clientHeight;
+          cameraRef.current.aspect = w / h;
+          cameraRef.current.updateProjectionMatrix();
+          rendererRef.current.setSize(w, h);
+        };
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+          cancelAnimationFrame(frameId);
+          window.removeEventListener("resize", handleResize);
+          renderer.dispose();
+        };
+      }, []);
+
+      // Spawn particle burst when ability or crystal collection triggers
+      useEffect(() => {
+        if (!effectEvent || !boardGroupRef.current) return;
+        const { x, z, color } = effectEvent;
+        const rows = levelState.grid.length;
+        const cols = levelState.grid[0].length;
+        const wx = x - (cols - 1) / 2;
+        const wz = z - (rows - 1) / 2;
+
+        for (let i = 0; i < 18; i++) {
+          const geo = new THREE.OctahedronGeometry(0.09, 0);
+          const mat = new THREE.MeshBasicMaterial({ color: color || 0x38bdf8 });
+          const mesh = new THREE.Mesh(geo, mat);
+          mesh.position.set(wx, 0.4, wz);
+          const angle = (Math.PI * 2 * i) / 18;
+          const speed = 0.04 + Math.random() * 0.05;
+          const vel = new THREE.Vector3(
+            Math.cos(angle) * speed,
+            0.03 + Math.random() * 0.05,
+            Math.sin(angle) * speed
+          );
+          boardGroupRef.current.add(mesh);
+          particlesRef.current.push({ mesh, vel, life: 1.0 });
+        }
+      }, [effectEvent]);
+
+      // Rebuild / Update 3D Board whenever levelState changes
+      useEffect(() => {
+        const boardGroup = boardGroupRef.current;
+        const camera = cameraRef.current;
+        if (!boardGroup || !camera || !levelState) return;
+
+        const rows = levelState.grid.length;
+        const cols = levelState.grid[0].length;
+
+        // Adjust Camera to frame board nicely on both portrait phones and desktop
+        const aspect = camera.aspect || 1;
+        const maxDim = Math.max(cols, rows);
+        const portraitBoost = aspect < 0.85 ? 1.38 : 1.05;
+        const dist = maxDim * 1.18 * portraitBoost * (cameraZoom || 1);
+        camera.position.set(0, dist * 0.92, dist * 0.76);
+        camera.lookAt(0, -0.2, 0.2);
+
+        // Clear static board tiles while preserving smooth monster meshes
+        const toRemove = [];
+        boardGroup.children.forEach((ch) => {
+          if (!ch.userData?.isMonster && !ch.userData?.isParticle) {
+            toRemove.push(ch);
+          }
+        });
+        toRemove.forEach((ch) => boardGroup.remove(ch));
+        clickTargetsRef.current = [];
+        crystalMeshesRef.current = [];
+        crateMeshesRef.current = [];
+
+        const activeMonster = levelState.monsters[levelState.activeMonsterIdx];
+        const allCrystalsCollected = levelState.crystals.every((c) => c.collected);
+
+        // Build Tiles
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const cell = levelState.grid[r][c];
+            const wx = c - (cols - 1) / 2;
+            const wz = r - (rows - 1) / 2;
+
+            // Base tile
+            let tileColor = (r + c) % 2 === 0 ? 0x34d399 : 0x10b981;
+            let tileHeight = 0.24;
+            let tileY = -0.12;
+
+            if (cell === "W") {
+              tileColor = 0x334155;
+            } else if (cell === "~") {
+              tileColor = 0x0284c7;
+              tileHeight = 0.16;
+              tileY = -0.16;
+            } else if (cell === "F") {
+              tileColor = 0x7dd3fc;
+            } else if (cell === "V" || cell === "H") {
+              tileColor = 0x0f172a;
+              tileHeight = 0.06;
+              tileY = -0.22;
+            } else if (cell === "V_BRIDGE") {
+              tileColor = 0x22c55e;
+            } else if (cell === "H_FILLED") {
+              tileColor = 0xb45309;
+            }
+
+            const tileGeo = new THREE.BoxGeometry(0.94, tileHeight, 0.94);
+            const tileMat = new THREE.MeshStandardMaterial({
+              color: tileColor,
+              roughness: cell === "F" || cell === "~" ? 0.15 : 0.65,
+              metalness: cell === "F" ? 0.3 : 0.08
+            });
+            const tileMesh = new THREE.Mesh(tileGeo, tileMat);
+            tileMesh.position.set(wx, tileY, wz);
+            tileMesh.receiveShadow = true;
+            tileMesh.userData = { gridX: c, gridZ: r };
+            boardGroup.add(tileMesh);
+            clickTargetsRef.current.push(tileMesh);
+
+            // Highlight valid adjacent moves for active monster
+            if (showGuides && activeMonster) {
+              const distMan = Math.abs(activeMonster.x - c) + Math.abs(activeMonster.z - r);
+              if (distMan === 1 && canWalkOnTile(levelState, c, r, levelState.activeMonsterIdx)) {
+                const guideGeo = new THREE.RingGeometry(0.18, 0.28, 24);
+                const guideMat = new THREE.MeshBasicMaterial({
+                  color: 0xfef08a,
+                  side: THREE.DoubleSide,
+                  transparent: true,
+                  opacity: 0.75
+                });
+                const guide = new THREE.Mesh(guideGeo, guideMat);
+                guide.rotation.x = -Math.PI / 2;
+                guide.position.set(wx, 0.02, wz);
+                boardGroup.add(guide);
+              }
+            }
+
+            // Special Environmental Objects on Tile
+            if (cell === "W") {
+              // Stylized rounded rock wall + occasional alien mushroom/tree on border
+              const wallGeo = new THREE.BoxGeometry(0.88, 0.55, 0.88);
+              const wallMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.7 });
+              const wall = new THREE.Mesh(wallGeo, wallMat);
+              wall.position.set(wx, 0.26, wz);
+              wall.castShadow = true;
+              wall.receiveShadow = true;
+              boardGroup.add(wall);
+
+              if ((r + c) % 3 === 0) {
+                const cap = new THREE.Mesh(
+                  new THREE.SphereGeometry(0.22, 12, 12),
+                  new THREE.MeshStandardMaterial({
+                    color: 0xa855f7,
+                    emissive: 0x7e22ce,
+                    emissiveIntensity: 0.35
+                  })
+                );
+                cap.scale.set(1, 0.55, 1);
+                cap.position.set(wx, 0.62, wz);
+                boardGroup.add(cap);
+              }
+            } else if (cell === "I") {
+              // Translucent Ice Block
+              const iceGeo = new THREE.BoxGeometry(0.78, 0.72, 0.78);
+              const iceMat = new THREE.MeshStandardMaterial({
+                color: 0x38bdf8,
+                emissive: 0x0284c7,
+                emissiveIntensity: 0.25,
+                transparent: true,
+                opacity: 0.82,
+                roughness: 0.1
+              });
+              const ice = new THREE.Mesh(iceGeo, iceMat);
+              ice.position.set(wx, 0.36, wz);
+              ice.castShadow = true;
+              ice.userData = { gridX: c, gridZ: r };
+              boardGroup.add(ice);
+              clickTargetsRef.current.push(ice);
+            } else if (cell === "B" || cell === "B_LIT") {
+              // Fire Brazier
+              const ped = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.28, 0.35, 0.36, 16),
+                new THREE.MeshStandardMaterial({ color: 0x78350f })
+              );
+              ped.position.set(wx, 0.18, wz);
+              boardGroup.add(ped);
+
+              if (cell === "B_LIT") {
+                const flame = new THREE.Mesh(
+                  new THREE.ConeGeometry(0.22, 0.48, 12),
+                  new THREE.MeshBasicMaterial({ color: 0xff6b1a })
+                );
+                flame.position.set(wx, 0.52, wz);
+                boardGroup.add(flame);
+              }
+            } else if (cell === "G") {
+              const open = isGateOpen(levelState.grid);
+              if (!open) {
+                const gate = new THREE.Mesh(
+                  new THREE.BoxGeometry(0.85, 0.65, 0.22),
+                  new THREE.MeshStandardMaterial({
+                    color: 0xf97316,
+                    emissive: 0xea580c,
+                    emissiveIntensity: 0.4
+                  })
+                );
+                gate.position.set(wx, 0.32, wz);
+                boardGroup.add(gate);
+              }
+            } else if (cell.startsWith("T")) {
+              // Electric Tesla Coil
+              const powered = cell.endsWith("_ON");
+              const coil = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.18, 0.28, 0.55, 16),
+                new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.6 })
+              );
+              coil.position.set(wx, 0.28, wz);
+              const orb = new THREE.Mesh(
+                new THREE.SphereGeometry(0.18, 16, 16),
+                new THREE.MeshBasicMaterial({ color: powered ? 0xfacc15 : 0x475569 })
+              );
+              orb.position.set(0, 0.34, 0);
+              coil.add(orb);
+              boardGroup.add(coil);
+            } else if (cell === "D1" || cell === "D2") {
+              const open = isDoorOpen(levelState, cell);
+              if (!open) {
+                const doorColor = cell === "D1" ? 0x38bdf8 : 0xc084fc;
+                const laser = new THREE.Mesh(
+                  new THREE.BoxGeometry(0.86, 0.58, 0.16),
+                  new THREE.MeshBasicMaterial({
+                    color: doorColor,
+                    transparent: true,
+                    opacity: 0.72
+                  })
+                );
+                laser.position.set(wx, 0.3, wz);
+                boardGroup.add(laser);
+              }
+            } else if (cell === "V") {
+              // Spore markers floating in chasm
+              const spore = new THREE.Mesh(
+                new THREE.SphereGeometry(0.12, 10, 10),
+                new THREE.MeshBasicMaterial({ color: 0x4ade80 })
+              );
+              spore.position.set(wx, 0.12, wz);
+              boardGroup.add(spore);
+            } else if (cell === "P") {
+              // Pressure Plate
+              const plate = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.32, 0.35, 0.08, 20),
+                new THREE.MeshStandardMaterial({
+                  color: 0xc084fc,
+                  emissive: 0x9333ea,
+                  emissiveIntensity: 0.35
+                })
+              );
+              plate.position.set(wx, 0.04, wz);
+              boardGroup.add(plate);
+            } else if (cell === "E") {
+              // Exit Portal (ALBA Space Ring style)
+              const portalGroup = new THREE.Group();
+              portalGroup.position.set(wx, 0.42, wz);
+              const torus = new THREE.Mesh(
+                new THREE.TorusGeometry(0.34, 0.06, 16, 32),
+                new THREE.MeshBasicMaterial({
+                  color: allCrystalsCollected ? 0x38bdf8 : 0x64748b
+                })
+              );
+              portalGroup.add(torus);
+              if (allCrystalsCollected) {
+                const inner = new THREE.Mesh(
+                  new THREE.CircleGeometry(0.29, 24),
+                  new THREE.MeshBasicMaterial({
+                    color: 0x60a5fa,
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.65
+                  })
+                );
+                portalGroup.add(inner);
+              }
+              portalMeshRef.current = portalGroup;
+              boardGroup.add(portalGroup);
+            }
+          }
+        }
+
+        // Build Crystals
+        levelState.crystals.forEach((cr) => {
+          if (cr.collected) return;
+          const wx = cr.x - (cols - 1) / 2;
+          const wz = cr.z - (rows - 1) / 2;
+          const cGeo = new THREE.OctahedronGeometry(0.24, 0);
+          const cMat = new THREE.MeshStandardMaterial({
+            color: 0x38bdf8,
+            emissive: 0x0284c7,
+            emissiveIntensity: 0.6,
+            roughness: 0.1,
+            metalness: 0.3
+          });
+          const cMesh = new THREE.Mesh(cGeo, cMat);
+          cMesh.scale.set(0.85, 1.35, 0.85);
+          cMesh.position.set(wx, 0.45, wz);
+          cMesh.castShadow = true;
+          boardGroup.add(cMesh);
+          crystalMeshesRef.current.push(cMesh);
+        });
+
+        // Build Movable Crates
+        levelState.crates.forEach((kr) => {
+          const wx = kr.x - (cols - 1) / 2;
+          const wz = kr.z - (rows - 1) / 2;
+          const kGeo = new THREE.BoxGeometry(0.68, 0.68, 0.68);
+          const kMat = new THREE.MeshStandardMaterial({
+            color: 0xf59e0b,
+            roughness: 0.45
+          });
+          const kMesh = new THREE.Mesh(kGeo, kMat);
+          kMesh.position.set(wx, 0.34, wz);
+          kMesh.castShadow = true;
+          kMesh.userData = { gridX: kr.x, gridZ: kr.z };
+          boardGroup.add(kMesh);
+          clickTargetsRef.current.push(kMesh);
+          crateMeshesRef.current.push({ mesh: kMesh, targetX: wx, targetZ: wz });
+        });
+
+        // Sync or Create Monster Meshes
+        const activeIds = new Set(levelState.monsters.map((m) => m.id));
+        Object.keys(monsterMeshesRef.current).forEach((id) => {
+          if (!activeIds.has(id)) {
+            boardGroup.remove(monsterMeshesRef.current[id].mesh);
+            delete monsterMeshesRef.current[id];
+          }
+        });
+
+        levelState.monsters.forEach((m, idx) => {
+          const wx = m.x - (cols - 1) / 2;
+          const wz = m.z - (rows - 1) / 2;
+          if (!monsterMeshesRef.current[m.id]) {
+            const mesh = buildMonsterMesh(m.id);
+            mesh.position.set(wx, 0, wz);
+            mesh.userData = { isMonster: true, monsterIdx: idx };
+            boardGroup.add(mesh);
+            monsterMeshesRef.current[m.id] = {
+              mesh,
+              targetX: wx,
+              targetZ: wz,
+              isActive: idx === levelState.activeMonsterIdx
+            };
+          } else {
+            const mObj = monsterMeshesRef.current[m.id];
+            mObj.targetX = wx;
+            mObj.targetZ = wz;
+            mObj.isActive = idx === levelState.activeMonsterIdx;
+            mObj.mesh.userData.monsterIdx = idx;
+          }
+        });
+      }, [levelState, showGuides, cameraZoom, buildMonsterMesh]);
+
+      // Pointer / Touch Raycasting & Swipe Handler
+      const pointerDownRef = useRef(null);
+
+      const handlePointerDown = (e) => {
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        pointerDownRef.current = { x: clientX, y: clientY };
+      };
+
+      const handlePointerUp = (e) => {
+        if (!pointerDownRef.current) return;
+        const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+        const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+        const dx = clientX - pointerDownRef.current.x;
+        const dy = clientY - pointerDownRef.current.y;
+        pointerDownRef.current = null;
+
+        // If user swiped noticeably, move in swipe direction
+        if (Math.hypot(dx, dy) > 36) {
+          if (Math.abs(dx) > Math.abs(dy)) {
+            onTileClick(dx > 0 ? "RIGHT" : "LEFT", null);
+          } else {
+            onTileClick(dy > 0 ? "DOWN" : "UP", null);
+          }
+          return;
+        }
+
+        // Otherwise raycast tap on 3D board
+        const container = mountRef.current;
+        const camera = cameraRef.current;
+        if (!container || !camera) return;
+
+        const rect = container.getBoundingClientRect();
+        const mouse = new THREE.Vector2(
+          ((clientX - rect.left) / rect.width) * 2 - 1,
+          -((clientY - rect.top) / rect.height) * 2 + 1
+        );
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouse, camera);
+
+        // Check if tapped directly on a monster to switch active monster
+        const monsterRootMeshes = Object.values(monsterMeshesRef.current).map((o) => o.mesh);
+        const mHits = raycaster.intersectObjects(monsterRootMeshes, true);
+        if (mHits.length > 0) {
+          let obj = mHits[0].object;
+          while (obj && !obj.userData?.isMonster) obj = obj.parent;
+          if (obj && typeof obj.userData?.monsterIdx === "number") {
+            onMonsterSelect(obj.userData.monsterIdx);
+            return;
+          }
+        }
+
+        // Check tile tap
+        const hits = raycaster.intersectObjects(clickTargetsRef.current, false);
+        if (hits.length > 0) {
+          const { gridX, gridZ } = hits[0].object.userData;
+          if (typeof gridX === "number" && typeof gridZ === "number") {
+            onTileClick(null, { x: gridX, z: gridZ });
+          }
+        }
+      };
+
+      return (
+        <div
+          ref={mountRef}
+          onMouseDown={handlePointerDown}
+          onMouseUp={handlePointerUp}
+          onTouchStart={handlePointerDown}
+          onTouchEnd={handlePointerUp}
+          className="w-full h-full cursor-pointer touch-none"
+        />
+      );
+    }
+
+    // ============================================================================
+    // 7. SVG AVATARS: LARA (WITH ALBA SPACE EMBLEM & SHOULDER NODES) + CAPSULE
+    // ============================================================================
+    function AlbaSpaceLogoSVG({ size = 40 }) {
+      return (
+        <svg width={size} height={size} viewBox="0 0 100 100" className="drop-shadow-lg">
+          <defs>
+            <linearGradient id="albaBlue" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#0ea5e9" />
+              <stop offset="100%" stopColor="#0284c7" />
+            </linearGradient>
+            <linearGradient id="albaSilver" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#f8fafc" />
+              <stop offset="100%" stopColor="#94a3b8" />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="52" r="38" fill="url(#albaBlue)" stroke="url(#albaSilver)" strokeWidth="5" />
+          <path d="M50 8 L16 92 L30 92 L50 38 L70 92 L84 92 Z" fill="url(#albaSilver)" />
+          <path d="M14 92 C32 64, 56 64, 92 10 C68 55, 48 68, 20 88 Z" fill="#ef4444" />
+        </svg>
+      );
+    }
+
+
+    // ==========================================================================
+    // 8. COMPLETE GAME UI, STATE MANAGEMENT AND ABILITY RULES
+    // ==========================================================================
+    const STORAGE_KEY = "albaspace_monster_puzzle_v1";
+    const loadProgress = () => {
+      try {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        return {
+          stars: data.stars || {},
+          bestMoves: data.bestMoves || {},
+          wallet: Number.isFinite(data.wallet) ? data.wallet : 0,
+          installed: Array.isArray(data.installed) ? data.installed : [],
+          dailyCompleted: data.dailyCompleted || ""
+        };
+      } catch (_) { return { stars: {}, bestMoves: {}, wallet: 0, installed: [], dailyCompleted: "" }; }
+    };
+    const copyState = (state) => ({
+      ...state,
+      grid: state.grid.map(row => [...row]),
+      monsters: state.monsters.map(m => ({ ...m })),
+      crystals: state.crystals.map(c => ({ ...c })),
+      crates: state.crates.map(c => ({ ...c }))
+    });
+    const neighbours = [[1,0],[-1,0],[0,1],[0,-1]];
+    const langNames = { ru: "Русский", tr: "Türkçe", en: "English" };
+    const EXTRA_UI = {
+      ru: { back: "Назад", choose: "Выбрать уровень", level: "Уровень", totalStars: "Звёзды", energy: "Энерго-кристаллы", dailyFinished: "Миссия дня завершена", localSave: "Прогресс сохраняется на этом устройстве", localNotice: "Облачная синхронизация и отправка диплома пока не подключены.", noAbility: "Рядом нет объекта для этой способности", victory: "Космическая победа!", campaign: "Кампания", today: "Сегодня", free: "Игра бесплатна", guide: "Инструкция", resume: "Продолжить", levels: "Карта уровней", keyboard: "Стрелки / WASD — движение; пробел — суперсила", playAgain: "Повторить", completeAll: "Все уровни пройдены!", collectionDesc: "Исследуй героев, их суперсилы и космические факты.", labDesc: "Строй собственную космическую лабораторию за кристаллы.", unlockHint: "Открой предыдущий уровень", progress: "Прогресс", maxStars: "Лучший результат", settingsDesc: "Настройки этого браузера", dailyAlready: "Награда за сегодняшнюю миссию уже получена.", crystalHint: "Собери все кристаллы и войди в портал.", close: "Закрыть", localTitle: "Локальное сохранение" },
+      tr: { back: "Geri", choose: "Seviye Seç", level: "Seviye", totalStars: "Yıldızlar", energy: "Enerji Kristalleri", dailyFinished: "Günlük görev tamamlandı", localSave: "İlerlemen bu cihazda saklanır", localNotice: "Bulut eşitleme ve e-posta sertifikası henüz bağlı değil.", noAbility: "Yakında uygun bir hedef yok", victory: "Uzay Zaferi!", campaign: "Macera", today: "Bugün", free: "Ücretsiz oyun", guide: "Yönergeler", resume: "Devam Et", levels: "Seviye Haritası", keyboard: "Oklar / WASD: hareket; Boşluk: süper güç", playAgain: "Tekrar Oyna", completeAll: "Bütün seviyeler tamamlandı!", collectionDesc: "Kahramanları, güçlerini ve uzay bilgilerini keşfet.", labDesc: "Kristallerinle kendi uzay laboratuvarını kur.", unlockHint: "Önceki seviyeyi tamamla", progress: "İlerleme", maxStars: "En iyi sonuç", settingsDesc: "Tarayıcı ayarları", dailyAlready: "Bugünkü görev ödülünü zaten aldın.", crystalHint: "Tüm kristalleri topla ve portala gir.", close: "Kapat", localTitle: "Yerel kayıt" },
+      en: { back: "Back", choose: "Choose Level", level: "Level", totalStars: "Stars", energy: "Energy Crystals", dailyFinished: "Daily mission completed", localSave: "Progress is stored on this device", localNotice: "Cloud sync and email certificates are not connected yet.", noAbility: "No target for this ability nearby", victory: "Cosmic Victory!", campaign: "Campaign", today: "Today", free: "Free to play", guide: "Instructions", resume: "Resume", levels: "Level Map", keyboard: "Arrows / WASD to move; Space to use ability", playAgain: "Play Again", completeAll: "All levels complete!", collectionDesc: "Discover the heroes, their powers, and space facts.", labDesc: "Build your own space laboratory with crystals.", unlockHint: "Complete the previous level", progress: "Progress", maxStars: "Best result", settingsDesc: "Settings for this browser", dailyAlready: "Today's mission reward has already been claimed.", crystalHint: "Collect every crystal, then enter the portal.", close: "Close", localTitle: "Local save" }
+    };
+
+    function App() {
+      const [lang, setLang] = useState(() => {
+        const fromUrl = new URLSearchParams(window.location.search).get("lang");
+        return I18N[fromUrl] ? fromUrl : (I18N[localStorage.getItem("alba_monster_lang")] ? localStorage.getItem("alba_monster_lang") : "tr");
+      });
+      const [view, setView] = useState("menu");
+      const [progress, setProgress] = useState(loadProgress);
+      const [level, setLevel] = useState(LEVELS[0]);
+      const [levelState, setLevelState] = useState(() => cloneLevelState(LEVELS[0]));
+      const [history, setHistory] = useState([]);
+      const [modal, setModal] = useState(null);
+      const [effectEvent, setEffectEvent] = useState(null);
+      const [message, setMessage] = useState("");
+      const [showGuides, setShowGuides] = useState(true);
+      const [sfx, setSfx] = useState(true);
+      const [music, setMusic] = useState(false);
+      const rewardRef = useRef(new Set());
+      const t = I18N[lang];
+      const u = EXTRA_UI[lang];
+      const progressCount = LEVELS.filter(l => progress.stars[l.id]).length;
+      const unlockedLevel = Math.min(LEVELS.length, 1 + progressCount);
+      const isDaily = Boolean(level.isDaily);
+      const levelKey = isDaily ? `daily-${level.dateStr}` : String(level.id);
+      const remaining = levelState.crystals.filter(c => !c.collected).length;
+      const active = levelState.monsters[levelState.activeMonsterIdx];
+      const activeInfo = MONSTERS[active?.id] || MONSTERS.flamo;
+      const reachedBest = progress.stars[levelKey] || 0;
+
+      useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (_) {} }, [progress]);
+      useEffect(() => { try { localStorage.setItem("alba_monster_lang", lang); } catch (_) {} }, [lang]);
+      useEffect(() => { sound.sfxEnabled = sfx; }, [sfx]);
+      useEffect(() => { sound.toggleMusic(music); return () => sound.toggleMusic(false); }, [music]);
+
+      const launch = useCallback((nextLevel) => {
+        sound.playClick();
+        setLevel(nextLevel);
+        setLevelState(cloneLevelState(nextLevel));
+        setHistory([]);
+        setMessage("");
+        setEffectEvent(null);
+        setModal("intro");
+        setView("game");
+      }, []);
+      const goMenu = () => { sound.playClick(); setModal(null); setView("menu"); };
+      const changeView = (next) => { sound.playClick(); setModal(null); setView(next); };
+
+      function performMove(direction, clickedTile) {
+        if (modal || levelState.completed || view !== "game") return;
+        const current = levelState;
+        const monster = current.monsters[current.activeMonsterIdx];
+        if (!monster) return;
+        let dx = 0, dz = 0;
+        if (direction === "LEFT") dx = -1;
+        else if (direction === "RIGHT") dx = 1;
+        else if (direction === "UP") dz = -1;
+        else if (direction === "DOWN") dz = 1;
+        else if (clickedTile) {
+          dx = clickedTile.x - monster.x;
+          dz = clickedTile.z - monster.z;
+        }
+        if (Math.abs(dx) + Math.abs(dz) !== 1) return;
+        const x = monster.x + dx, z = monster.z + dz;
+        if (!canWalkOnTile(current, x, z, current.activeMonsterIdx)) { sound.playBump(); return; }
+        const next = copyState(current);
+        next.monsters[next.activeMonsterIdx].x = x;
+        next.monsters[next.activeMonsterIdx].z = z;
+        next.moves++;
+        let pickedUp = false;
+        next.crystals.forEach(c => { if (!c.collected && c.x === x && c.z === z) { c.collected = true; pickedUp = true; } });
+        const clear = next.crystals.every(c => c.collected);
+        if (clear && next.grid[z][x] === "E") next.completed = true;
+        setHistory(old => [...old.slice(-79), current]);
+        setLevelState(next);
+        if (pickedUp) { sound.playCrystal(); setEffectEvent({ x, z, color: 0x38bdf8, at: Date.now() }); }
+        else sound.playMove();
+        setMessage("");
+      }
+
+      function useAbility() {
+        if (modal || levelState.completed || view !== "game") return;
+        const current = levelState;
+        const m = current.monsters[current.activeMonsterIdx];
+        const next = copyState(current);
+        const element = MONSTERS[m.id]?.element;
+        let hit = false;
+        let burst = { x: m.x, z: m.z, color: MONSTERS[m.id]?.color || "#38bdf8", at: Date.now() };
+        for (const [dx,dz] of neighbours) {
+          const x = m.x + dx, z = m.z + dz;
+          const cell = next.grid[z]?.[x];
+          if (!cell) continue;
+          if (element === "fire" && cell === "I") { next.grid[z][x] = "."; hit = true; }
+          else if (element === "fire" && cell === "B") { next.grid[z][x] = "B_LIT"; hit = true; }
+          else if (element === "ice" && cell === "~") { next.grid[z][x] = "F"; hit = true; }
+          else if (element === "nature" && cell === "V") { next.grid[z][x] = "V_BRIDGE"; hit = true; }
+          else if (element === "electric" && (cell === "T1" || cell === "T2")) { next.grid[z][x] = cell + "_ON"; hit = true; }
+          else if (element === "wind") {
+            const k = next.crates.findIndex(c => c.x === x && c.z === z);
+            if (k >= 0) {
+              let cx = x, cz = z;
+              let moved = false;
+              // A gust pushes until a pressure plate, a filled pit, or the last safe square.
+              for (let step=0; step<12; step++) {
+                const nx = cx + dx, nz = cz + dz;
+                const target = next.grid[nz]?.[nx];
+                if (target === "H") {
+                  next.grid[nz][nx] = "H_FILLED";
+                  next.crates.splice(k, 1);
+                  moved = true;
+                  break;
+                }
+                if (!canWalkOnTile(next, nx, nz)) break;
+                if (next.crates.some((c, i) => i !== k && c.x === nx && c.z === nz)) break;
+                cx = nx; cz = nz; moved = true;
+                next.crates[k].x = cx;
+                next.crates[k].z = cz;
+                if (target === "P") break;
+              }
+              if (moved) hit = true;
+            }
+          }
+        }
+        if (!hit) { sound.playBump(); setMessage(u.noAbility); return; }
+        next.moves++;
+        setHistory(old => [...old.slice(-79), current]);
+        setLevelState(next);
+        setEffectEvent(burst);
+        sound.playAbility(element);
+        setMessage("");
+      }
+      function selectMonster(index) {
+        if (modal || levelState.completed || view !== "game") return;
+        if (index < 0 || index >= levelState.monsters.length) return;
+        setLevelState(prev => ({ ...prev, activeMonsterIdx: index }));
+        sound.playClick();
+      }
+      function undoMove() {
+        if (!history.length || modal || levelState.completed) return;
+        setLevelState(history[history.length - 1]);
+        setHistory(old => old.slice(0,-1));
+        sound.playClick();
+      }
+      function restart() { launch(level); setModal(null); }
+
+      useEffect(() => {
+        if (!levelState.completed || view !== "game") return;
+        const key = levelKey;
+        if (rewardRef.current.has(key + ":" + levelState.moves)) return;
+        rewardRef.current.add(key + ":" + levelState.moves);
+        const stars = levelState.moves <= level.parMoves ? 3 : levelState.moves <= level.parMoves * 1.5 ? 2 : 1;
+        setProgress(prev => {
+          const oldStars = prev.stars[key] || 0;
+          const firstWin = !oldStars;
+          const walletReward = firstWin ? (isDaily ? 50 : 5) : 0;
+          return {
+            ...prev,
+            stars: { ...prev.stars, [key]: Math.max(oldStars, stars) },
+            bestMoves: { ...prev.bestMoves, [key]: Math.min(prev.bestMoves[key] || Infinity, levelState.moves) },
+            wallet: prev.wallet + walletReward,
+            dailyCompleted: isDaily ? level.dateStr : prev.dailyCompleted
+          };
+        });
+        sound.playVictory();
+        setModal("victory");
+      }, [levelState.completed, levelState.moves, view, levelKey]);
+
+      useEffect(() => {
+        if (view !== "game") return;
+        const keyHandler = event => {
+          if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(event.key)) event.preventDefault();
+          if (event.key === "Escape") { setModal(m => m === "pause" ? null : "pause"); return; }
+          if (modal) return;
+          const keys = { ArrowUp: "UP", w: "UP", W: "UP", ArrowDown: "DOWN", s: "DOWN", S: "DOWN", ArrowLeft: "LEFT", a: "LEFT", A: "LEFT", ArrowRight: "RIGHT", d: "RIGHT", D: "RIGHT" };
+          if (keys[event.key]) performMove(keys[event.key], null);
+          if (event.key === " " || event.key === "Enter") useAbility();
+          if (event.key >= "1" && event.key <= "5") selectMonster(Number(event.key) - 1);
+          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") { event.preventDefault(); undoMove(); }
+        };
+        window.addEventListener("keydown", keyHandler);
+        return () => window.removeEventListener("keydown", keyHandler);
+      }, [view, modal, levelState, history]);
+
+      const header = (
+        <header className="flex items-center justify-between gap-2 border-b border-sky-500/20 bg-slate-950/70 px-3 py-2 md:px-6">
+          <div className="flex items-center gap-2 min-w-0">
+            <AlbaSpaceLogoSVG size={42} />
+            <div className="leading-tight min-w-0"><div className="text-[10px] font-extrabold tracking-[.17em] text-cyan-300">ALBA SPACE</div><div className="text-sm sm:text-xl font-title font-bold truncate">MONSTER PUZZLE 3D</div></div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="hidden sm:inline rounded-full bg-yellow-400/10 px-3 py-1 text-sm font-bold text-yellow-200">⭐ {Object.values(progress.stars).reduce((a,b)=>a+b,0)}</span>
+            <span className="hidden sm:inline rounded-full bg-cyan-400/10 px-3 py-1 text-sm font-bold text-cyan-200">💎 {progress.wallet}</span>
+            <select aria-label="Language" value={lang} onChange={e => setLang(e.target.value)} className="rounded-xl border border-sky-500/30 bg-slate-800 px-2 py-2 text-xs sm:text-sm text-white">
+              {Object.keys(langNames).map(l => <option key={l} value={l}>{langNames[l]}</option>)}
+            </select>
+            <a href="/games/index.html" className="rounded-xl border border-white/20 px-3 py-2 text-xs sm:text-sm font-bold text-white hover:bg-white/10">ALBA ↗</a>
+          </div>
+        </header>
+      );
+      const button = (label, onClick, icon, extra = "") => <button onClick={onClick} className={`btn-3d rounded-2xl border border-sky-300/30 bg-gradient-to-r from-sky-500 to-blue-700 px-5 py-3 font-extrabold shadow-lg shadow-sky-900/30 hover:brightness-110 ${extra}`}>{icon ? `${icon}  ` : ""}{label}</button>;
+      const backButton = (target="menu") => <button className="rounded-lg border border-slate-500/50 px-3 py-2 text-sm font-bold hover:bg-slate-800" onClick={() => changeView(target)}>← {u.back}</button>;
+
+      return (
+        <div className="w-full h-full flex flex-col overflow-hidden">
+          {header}
+          {view === "menu" && <main className="flex-1 overflow-y-auto p-4 md:p-8 flex justify-center">
+            <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center">
+              <section className="flex flex-col gap-5 py-8">
+                <div className="inline-flex self-start rounded-full bg-sky-500/15 border border-sky-400/40 px-4 py-2 text-xs font-black tracking-widest text-sky-200">🪐 {t.universe}</div>
+                <h1 className="font-title text-5xl md:text-7xl font-bold leading-tight drop-shadow-2xl">MONSTER <span className="text-cyan-300">PUZZLE</span></h1>
+                <p className="text-2xl font-title text-white/90">{t.subtitle}</p>
+                <p className="text-slate-300 text-sm md:text-base max-w-xl">{u.crystalHint} 🔥 ❄️ ⚡ 🌿 🌪️</p>
+                <div className="flex flex-wrap gap-3">{button(t.play, () => launch(LEVELS[Math.min(progressCount, LEVELS.length-1)]), "🚀")}{button(t.dailyBtn, () => launch(getDailyChallengeLevel()), "🌠", "!bg-gradient-to-r !from-violet-600 !to-indigo-800")}</div>
+                <div className="grid grid-cols-2 gap-3 text-sm">{[["🗺️", t.levelsBtn, "levels"],["📖",t.collectionBtn,"collection"],["🧪",t.labBtn,"lab"],["⚙️",t.settingsBtn,"settings"]].map(([icon,text,page]) => <button key={page} onClick={() => changeView(page)} className="glass-panel rounded-2xl px-4 py-4 text-left font-bold hover:border-sky-300/60">{icon} {text}</button>)}</div>
+                <div className="text-xs text-slate-400">{u.localSave} · {u.free}</div>
+              </section>
+              <section className="glass-panel rounded-[32px] p-7 flex flex-col items-center gap-6 animate-float">
+                <div className="text-center"><div className="font-title text-2xl font-bold">🌌 ALBARIS</div><div className="text-sky-200 text-sm">{t.world1}</div></div>
+                <div className="grid grid-cols-3 gap-3 w-full max-w-sm">{Object.values(MONSTERS).map((m,i) => <div key={m.id} className="aspect-square flex items-center justify-center rounded-3xl shadow-xl border border-white/20 text-5xl" style={{ background: `radial-gradient(circle at 35% 25%,${m.color}bb, #1e293b)` }}>{m.icon}</div>)}</div>
+                <div className="flex gap-5 font-black text-lg"><span>⭐ {Object.values(progress.stars).reduce((a,b)=>a+b,0)}</span><span>💎 {progress.wallet}</span><span>🏆 {progressCount}/8</span></div>
+                <p className="text-sm text-center text-slate-300">{t.laraGuideTitle} • {t.albamenAiTitle}</p>
+              </section>
+            </div>
+          </main>}
+          {view === "levels" && <main className="flex-1 overflow-y-auto p-4 md:p-8"><div className="max-w-6xl mx-auto">
+            <div className="flex justify-between items-center gap-3 mb-5">{backButton()}<h2 className="font-title text-xl md:text-3xl font-bold">🗺️ {u.levels}</h2><span className="text-sm text-sky-200">{progressCount}/8</span></div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">{LEVELS.map(l => { const locked = l.id > unlockedLevel; const earned = progress.stars[l.id] || 0; return <button disabled={locked} key={l.id} onClick={()=>launch(l)} className={`glass-panel text-left rounded-3xl p-5 min-h-[165px] flex flex-col justify-between ${locked ? "opacity-55 cursor-not-allowed" : "hover:border-cyan-300"}`}><div className="flex justify-between"><span className="text-3xl">{locked ? "🔒" : ["🔥","❄️","🔥","⚡","🌿","🌪️","🪐","🏆"][l.id-1]}</span><strong className="text-cyan-300">#{String(l.id).padStart(2,"0")}</strong></div><div className="font-title font-bold mt-3">{l.title[lang]}</div><div className="text-xs text-slate-300 mt-1">{l.subtitle[lang]}</div><div className="text-yellow-300 mt-3 tracking-widest">{earned ? "★".repeat(earned) + "☆".repeat(3-earned) : "☆☆☆"}</div></button> })}</div>
+          </div></main>}
+          {view === "collection" && <main className="flex-1 overflow-y-auto p-4 md:p-8"><div className="max-w-6xl mx-auto"><div className="flex gap-4 items-center mb-6">{backButton()}<h2 className="font-title text-xl md:text-3xl">📖 {t.collectionBtn}</h2></div><p className="text-slate-300 mb-5">{u.collectionDesc}</p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">{Object.values(MONSTERS).map(m => <article key={m.id} className="glass-panel rounded-2xl p-5"><div className="text-6xl mb-2">{m.icon}</div><h3 className="font-title text-xl font-bold" style={{color:m.accent}}>{m.name[lang]}</h3><p className="text-xs text-slate-300 mb-3">{m.title[lang]} • {m.abilityName[lang]}</p><p className="text-sm text-slate-100 mb-3">{m.desc[lang]}</p><p className="text-xs text-cyan-200">{m.scienceNote[lang]}</p></article>)}</div>
+            <h3 className="font-title mt-8 text-xl mb-3">ALBA-DEX — 60</h3><div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">{EXTRA_SHEET_MONSTERS.map((m,i)=><div key={i} className="glass-panel rounded-xl p-4"><div className="font-bold" style={{color:m.color}}>{m.name}</div><p className="text-xs text-slate-400 mt-1">{m.code} · {m.element}</p><p className="text-xs text-slate-300 mt-2">{m.desc}</p></div>)}</div><p className="text-xs text-slate-400 mt-3">5 + {EXTRA_SHEET_MONSTERS.length} / 60</p>
+          </div></main>}
+          {view === "lab" && <main className="flex-1 overflow-y-auto p-4 md:p-8"><div className="max-w-4xl mx-auto"><div className="flex items-center justify-between gap-3 mb-6">{backButton()}<h2 className="font-title text-xl md:text-2xl">🧪 {t.labBtn}</h2><span className="text-cyan-200 font-bold">💎 {progress.wallet}</span></div><p className="text-slate-300 mb-6">{u.labDesc}</p><div className="grid md:grid-cols-2 gap-4">{LAB_ITEMS.map(item => {const installed=progress.installed.includes(item.id);return <div key={item.id} className="glass-panel rounded-2xl p-5 flex items-center justify-between gap-3"><div><div className="text-4xl mb-2">{item.icon}</div><h3 className="font-bold">{item.name[lang]}</h3><p className="text-cyan-300">💎 {item.cost}</p></div><button disabled={installed || progress.wallet < item.cost} className="rounded-xl bg-sky-600 px-4 py-3 font-bold disabled:opacity-50" onClick={()=>setProgress(p=>({...p,wallet:p.wallet-item.cost,installed:[...p.installed,item.id]}))}>{installed ? t.installed : t.buy}</button></div>})}</div></div></main>}
+          {view === "settings" && <main className="flex-1 overflow-y-auto p-5 md:p-8"><div className="max-w-xl mx-auto">{backButton()}<h2 className="font-title text-3xl mt-5 mb-5">⚙️ {t.settingsBtn}</h2><p className="text-slate-300 mb-5">{u.settingsDesc}</p><div className="glass-panel rounded-3xl p-6 space-y-5"><label className="flex items-center justify-between gap-5"><span>{t.soundFx}</span><input type="checkbox" checked={sfx} onChange={e=>setSfx(e.target.checked)} className="h-5 w-5" /></label><label className="flex items-center justify-between gap-5"><span>{t.music}</span><input type="checkbox" checked={music} onChange={e=>setMusic(e.target.checked)} className="h-5 w-5" /></label><label className="flex items-center justify-between gap-5"><span>{t.highContrast}</span><input type="checkbox" checked={showGuides} onChange={e=>setShowGuides(e.target.checked)} className="h-5 w-5" /></label><hr className="border-white/10" /><p className="font-bold text-sky-200">💾 {u.localTitle}</p><p className="text-sm">{u.localSave}</p><p className="text-xs text-slate-400">{u.localNotice}</p></div></div></main>}
+          {view === "game" && <main className="flex-1 min-h-0 flex flex-col">
+            <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-slate-900/70 border-b border-white/10">
+              <button onClick={()=>setModal("pause")} className="rounded-xl border border-white/20 px-3 py-2 font-extrabold text-sm">☰ {t.pauseTitle}</button>
+              <span className="font-title text-sm sm:text-lg font-bold truncate">{level.title[lang]}</span>
+              <div className="flex items-center gap-3 text-xs sm:text-sm font-bold"><span>💎 {levelState.crystals.length-remaining}/{levelState.crystals.length}</span><span>👣 {levelState.moves}</span><span>🎯 {level.parMoves}</span></div>
+            </div>
+            <div className="relative flex-1 min-h-[170px] overflow-hidden bg-[radial-gradient(ellipse_at_center,#273a74_0%,#0b1230_60%,#050714_100%)]">
+              <ThreePuzzleCanvas levelState={levelState} onTileClick={performMove} onMonsterSelect={selectMonster} showGuides={showGuides} effectEvent={effectEvent} cameraZoom={1} />
+              <div className="pointer-events-none absolute top-2 left-2 rounded-xl bg-slate-950/70 px-3 py-2 text-xs text-cyan-100 max-w-[220px]">{remaining ? t.portalClosed : t.portalOpen}</div>
+              {message && <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-xl bg-red-950/90 px-3 py-2 text-xs">{message}</div>}
+            </div>
+            <div className="border-t border-sky-500/20 bg-slate-950/90 px-2 sm:px-4 py-2 space-y-2">
+              <div className="flex gap-2 justify-center overflow-x-auto">{levelState.monsters.map((m,i)=> <button key={m.id} onClick={()=>selectMonster(i)} className={`min-w-[76px] rounded-xl border px-3 py-1 text-center ${i===levelState.activeMonsterIdx?"border-cyan-300 bg-sky-800/70":"border-white/20 bg-slate-900"}`}><div className="text-xl">{MONSTERS[m.id].icon}</div><div className="text-[10px] font-bold">{MONSTERS[m.id].name[lang].split(" ")[0]}</div></button>)}</div>
+              <div className="flex items-center justify-center gap-2 sm:gap-5">
+                <div className="grid grid-cols-3 gap-1 shrink-0"><span></span><button aria-label="Up" onClick={()=>performMove("UP")} className="rounded-xl bg-slate-700 w-10 h-9 sm:w-12 sm:h-10">▲</button><span></span><button aria-label="Left" onClick={()=>performMove("LEFT")} className="rounded-xl bg-slate-700 w-10 h-9 sm:w-12 sm:h-10">◀</button><button aria-label="Down" onClick={()=>performMove("DOWN")} className="rounded-xl bg-slate-700 w-10 h-9 sm:w-12 sm:h-10">▼</button><button aria-label="Right" onClick={()=>performMove("RIGHT")} className="rounded-xl bg-slate-700 w-10 h-9 sm:w-12 sm:h-10">▶</button></div>
+                <button onClick={useAbility} className="btn-3d rounded-2xl bg-gradient-to-br from-fuchsia-500 to-violet-700 border border-white/30 px-3 sm:px-6 h-[80px] text-sm font-extrabold shadow-lg"><span className="block text-2xl">{activeInfo.icon}</span>{t.ability}</button>
+                <div className="flex flex-col gap-1"><button onClick={undoMove} disabled={!history.length} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs disabled:opacity-40">↶ {t.undo}</button><button onClick={()=>setModal("hint")} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs">💡 {t.hint}</button><button onClick={restart} className="rounded-lg border border-white/20 px-3 py-1.5 text-xs">↻ {t.restart}</button></div>
+              </div>
+              <p className="hidden sm:block text-center text-[11px] text-slate-400">{u.keyboard}</p>
+            </div>
+          </main>}
+          {modal && <div className="fixed inset-0 z-50 bg-[#020617dd] flex items-center justify-center p-4" role="dialog" aria-modal="true"><div className="glass-panel w-full max-w-lg rounded-[30px] p-6 sm:p-8 max-h-[85vh] overflow-y-auto text-center">
+            {modal === "intro" && <><div className="text-5xl mb-4">👩‍🚀</div><h2 className="font-title text-xl sm:text-2xl font-bold text-sky-200 mb-4">{t.laraGuideTitle}</h2><p className="text-slate-100 mb-4">{level.laraIntro[lang]}</p><p className="text-xs text-slate-400 mb-5">{u.keyboard}</p>{button(t.gotIt,()=>setModal(null),"🖖")}</>}
+            {modal === "hint" && <><div className="text-5xl mb-4">💡</div><h2 className="font-title text-2xl font-bold mb-4">{t.albamenAiTitle}</h2><p className="text-slate-100 mb-6 text-left">{level.hintText[lang]}</p>{button(u.close,()=>setModal(null))}</>}
+            {modal === "pause" && <><div className="text-5xl mb-4">🪐</div><h2 className="font-title text-3xl font-bold mb-6">{t.pauseTitle}</h2><div className="flex flex-col gap-3">{button(t.resume,()=>setModal(null),"▶")}{button(t.restart,restart,"↻")}<button onClick={goMenu} className="rounded-2xl border border-white/20 px-5 py-3 font-bold">⌂ {t.backToMenu}</button></div></>}
+            {modal === "victory" && <><div className="text-6xl mb-4">🏆</div><h2 className="font-title text-3xl font-bold text-yellow-300 mb-3">{t.levelComplete}</h2><p className="text-xl font-bold mb-2">{u.victory}</p><div className="text-4xl text-yellow-300 my-5 tracking-wider">{"★".repeat(reachedBest || 1)}{"☆".repeat(3-(reachedBest || 1))}</div><p className="mb-5 text-slate-300">{t.moves}: {levelState.moves} · {t.par}: {level.parMoves}</p><div className="flex flex-col gap-3">{!isDaily && level.id < LEVELS.length && button(t.nextLevel,()=>launch(LEVELS[level.id]),"🚀")}{button(u.playAgain,restart,"↻")}<button className="rounded-xl border border-white/20 px-4 py-3 font-bold" onClick={goMenu}>⌂ {t.backToMenu}</button></div></>}
+          </div></div>}
+        </div>
+      );
+    }
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
