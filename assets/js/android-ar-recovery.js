@@ -30,7 +30,12 @@
   function enhance(viewer) {
     if (wired.has(viewer) || !viewer.hasAttribute('ar') || viewer.closest('[data-no-alba-ar-fix]')) return;
     wired.add(viewer);
-    const applyMode = () => viewer.setAttribute('ar-modes', canUseNative(viewer) ? WEBXR : 'webxr quick-look');
+    const applyMode = () => {
+      const source = viewer.getAttribute('src') || viewer.getAttribute('data-src') || '';
+      // A blob: model is restricted to browser WebXR. It cannot be handed off
+      // to a separate Android app, which has no access to the blob URL.
+      viewer.setAttribute('ar-modes', /^blob:/i.test(source) ? 'webxr' : (canUseNative(viewer) ? WEBXR : 'webxr'));
+    };
     applyMode();
     let notice, timeout, pending = false, left = false, clickedAt = 0, hiddenAt = 0;
     const cancel = () => { clearTimeout(timeout); timeout = null; };
