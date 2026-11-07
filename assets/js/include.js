@@ -5,7 +5,7 @@ runAfterDomReady(() => {
   if (document.querySelector('model-viewer') &&
       !document.querySelector('script[data-alba-android-ar-recovery]')) {
     const androidAR = document.createElement('script');
-    androidAR.src = '/assets/js/android-ar-recovery.js?v=20261030-ar4';
+    androidAR.src = '/assets/js/android-ar-recovery.js?v=20261107-ar5';
     androidAR.defer = true;
     androidAR.dataset.albaAndroidArRecovery = 'true';
     document.head.appendChild(androidAR);
@@ -1378,7 +1378,7 @@ if (document.querySelector('model-viewer') ||
     document.querySelector('script[data-model-preloader]') ||
     document.querySelector('script[data-alba-model-player]')) {
   const scannerBtnScript = document.createElement('script');
-  scannerBtnScript.src = '/assets/js/scanner-button.js';
+  scannerBtnScript.src = '/assets/js/scanner-button.js?v=20261107-ar5';
   scannerBtnScript.defer = true;
   document.head.appendChild(scannerBtnScript);
 }
