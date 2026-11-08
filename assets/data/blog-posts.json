@@ -1324,6 +1324,41 @@
           "url": "/rus/blog/wow-sinyali-evrenden-gelen-72-saniyelik-gizem.html"
         }
       }
+    },
+    {
+      "slug": "kasim-gokyuzu-taurid-ve-leonid-meteor-yagmurlari-basliyor",
+      "category": "uzay",
+      "publishAt": "2026-11-08T21:33:54+03:00",
+      "cover": "/assets/images/blog/kasim-gokyuzu-taurid-ve-leonid-meteor-yagmurlari-basliyor-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Aslı Bolat",
+        "en": "Aslı Bolat",
+        "ru": "Aslı Bolat"
+      },
+      "authorRole": {
+        "tr": "Astronom ve Eğitmen",
+        "en": "Astronomer and Educator",
+        "ru": "Астроном и преподаватель",
+        "ar": "عالمة فلك ومدرِّبة"
+      },
+      "locales": {
+        "tr": {
+          "title": "Kasım Gökyüzü: Taurid ve Leonid Meteor Yağmurları Başlıyor!",
+          "excerpt": "Kasım ayı, gökyüzü gözlemcileri için yılın en heyecan verici dönemlerinden birini beraberinde getiriyor. Sonbaharın serin gecelerinde iki farklı meteo",
+          "url": "/blog/kasim-gokyuzu-taurid-ve-leonid-meteor-yagmurlari-basliyor.html"
+        },
+        "en": {
+          "title": "November Sky: The Taurid and Leonid Meteor",
+          "excerpt": "Showers Begin!",
+          "url": "/eng/blog/kasim-gokyuzu-taurid-ve-leonid-meteor-yagmurlari-basliyor.html"
+        },
+        "ru": {
+          "title": "Ноябрьское небо: начинаются метеорные",
+          "excerpt": "потоки Тауриды и Леониды!",
+          "url": "/rus/blog/kasim-gokyuzu-taurid-ve-leonid-meteor-yagmurlari-basliyor.html"
+        }
+      }
     }
   ]
 }
