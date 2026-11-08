@@ -1359,6 +1359,41 @@
           "url": "/rus/blog/kasim-gokyuzu-taurid-ve-leonid-meteor-yagmurlari-basliyor.html"
         }
       }
+    },
+    {
+      "slug": "telefonundaki-mavi-nokta-einsteina-borclu-peki-uzayda-konum-nasil-bulunuyor",
+      "category": "uzay",
+      "publishAt": "2026-11-08T21:55:57+03:00",
+      "cover": "/assets/images/blog/telefonundaki-mavi-nokta-einsteina-borclu-peki-uzayda-konum-nasil-bulunuyor-cover.jpg",
+      "readingMinutes": 3,
+      "author": {
+        "tr": "Ali Batuhan Özsürmeli",
+        "en": "Ali Batuhan Özsürmeli",
+        "ru": "Ali Batuhan Özsürmeli"
+      },
+      "authorRole": {
+        "tr": "Misafir Yazar",
+        "en": "Guest Writer",
+        "ru": "Приглашённый автор",
+        "ar": "كاتب ضيف"
+      },
+      "locales": {
+        "tr": {
+          "title": "Telefonundaki Mavi Nokta Einstein'a Borçlu: Peki Uzayda Konum Nasıl Bulunuyor?",
+          "excerpt": "Uzayda Konum Nasıl Bulunuyor?",
+          "url": "/blog/telefonundaki-mavi-nokta-einsteina-borclu-peki-uzayda-konum-nasil-bulunuyor.html"
+        },
+        "en": {
+          "title": "The Blue Dot on Your Phone Owes a Debt",
+          "excerpt": "to Einstein: So How Is Position Found in",
+          "url": "/eng/blog/telefonundaki-mavi-nokta-einsteina-borclu-peki-uzayda-konum-nasil-bulunuyor.html"
+        },
+        "ru": {
+          "title": "Синяя точка в вашем телефоне в долгу",
+          "excerpt": "перед Эйнштейном: как же определяют",
+          "url": "/rus/blog/telefonundaki-mavi-nokta-einsteina-borclu-peki-uzayda-konum-nasil-bulunuyor.html"
+        }
+      }
     }
   ]
 }
