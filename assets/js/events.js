@@ -107,8 +107,6 @@
 
   function escapeHtml(str) {return String(str || '').replace(/[&<>'\"]/g, function (c) {return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;' }[c];});}
   function categoryLabel(data, key) {var c = data.categories[key];return c ? (c[LOCALE] || c.tr) : key;}
-  function passHref() {if (LOCALE === 'en') return '/eng/experience-pass.html';if (LOCALE === 'ru') return '/rus/experience-pass.html';return '/experience-pass.html';}
-
   function localizedEvent(event) {
     var loc = event.locales[LOCALE] || event.locales.tr;
     if (LOCALE !== 'ru') return loc;
@@ -125,13 +123,6 @@
       highlights: translated.highlights || loc.highlights || [],
       url: '/rus/etkinlikler/event.html?slug=' + encodeURIComponent(event.slug)
     };
-  }
-
-  function ensurePassCtaStyles() {
-    if (document.getElementById('events-pass-cta-style')) return;
-    var style = document.createElement('style');style.id = 'events-pass-cta-style';
-    style.textContent = '.events-pass-cta-wrap{margin:4px 0 30px;display:flex;justify-content:center}.events-pass-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:12px 20px;border-radius:14px;background:#0ea5e9;color:#001018;text-decoration:none;font-weight:800;box-shadow:0 12px 34px rgba(14,165,233,.22);transition:transform .18s ease,box-shadow .18s ease}.events-pass-cta:hover{transform:translateY(-2px);box-shadow:0 16px 42px rgba(14,165,233,.34)}.events-pass-cta:focus-visible{outline:2px solid #e0f2fe;outline-offset:3px}@media(max-width:560px){.events-pass-cta{width:100%;box-sizing:border-box;text-align:center}}';
-    document.head.appendChild(style);
   }
 
   function renderGrid(filter) {
@@ -181,5 +172,5 @@
     }).catch(function () {el.innerHTML = '<p class="events-empty">' + UI.empty + '</p>';});
   }
 
-  document.addEventListener('DOMContentLoaded', function () {ensurePassCtaStyles();initTabs();renderGrid(activeFilter);renderArticle();});
+  document.addEventListener('DOMContentLoaded', function () {initTabs();renderGrid(activeFilter);renderArticle();});
 })();
