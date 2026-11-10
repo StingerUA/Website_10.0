@@ -8,7 +8,8 @@ const trProducts = [
   { title: "Alba Space Pullover Hoodie", price: "980.00 TL", image: "/assets/images/hoodie.png", link: "product-hoodie.html" },
   { title: "Katlaç/Sonsuz Küp", price: "120.00 TL", image: "/assets/images/hat.png", link: "product-hat.html" },
   { title: "Kitap PDF", price: "200.00 TL", image: "/assets/images/albamenvelara1.png", link: "product-albamenvelara1.html" },
-  { title: "Kitap", price: "1000.00 TL", image: "/assets/images/albamenvelara.jpg", link: "product-albamenvelara.html" }
+  { title: "Kitap", price: "1000.00 TL", image: "/assets/images/albamenvelara.jpg", link: "product-albamenvelara.html" },
+  { title: "AR 3D models", price: "50.00 TL", image: "/assets/images/Gemini_Generated_Image_yk5xbwyk5xbwyk5x.png", link: "/product-ar3dmodels.html" }
 ];
 
 const enProducts = [
@@ -20,7 +21,8 @@ const enProducts = [
   { title: "Alba Space Pullover Hoodie", price: "980.00 TL", image: "/assets/images/hoodie.png", link: "/eng/product-hoodie.html" },
   { title: "Katlaç/Sonsuz Küp", price: "120.00 TL", image: "/assets/images/hat.png", link: "/eng/product-hat.html" },
   { title: "Book PDF", price: "200.00 TL", image: "/assets/images/albamenvelara1.png", link: "/eng/product-albamenvelara1.html" },
-  { title: "Book", price: "1000.00 TL", image: "/assets/images/albamenvelara.jpg", link: "/eng/product-albamenvelara.html" }
+  { title: "Book", price: "1000.00 TL", image: "/assets/images/albamenvelara.jpg", link: "/eng/product-albamenvelara.html" },
+  { title: "AR 3D models", price: "50.00 TL", image: "/assets/images/Gemini_Generated_Image_yk5xbwyk5xbwyk5x.png", link: "/eng/product-ar3dmodels.html" }
 ];
 
 const ruProducts = [
@@ -32,7 +34,14 @@ const ruProducts = [
   { title: "Худи Alba Space", price: "980.00 TL", image: "/assets/images/hoodie.png", link: "/rus/product-hoodie.html" },
   { title: "Бесконечный куб", price: "120.00 TL", image: "/assets/images/hat.png", link: "/rus/product-hat.html" },
   { title: "Книга PDF", price: "200.00 TL", image: "/assets/images/albamenvelara1.png", link: "/rus/product-albamenvelara1.html" },
-  { title: "Книга", price: "1000.00 TL", image: "/assets/images/albamenvelara.jpg", link: "/rus/product-albamenvelara.html" }
+  { title: "Книга", price: "1000.00 TL", image: "/assets/images/albamenvelara.jpg", link: "/rus/product-albamenvelara.html" },
+  { title: "AR 3D-модели", price: "50.00 TL", image: "/assets/images/Gemini_Generated_Image_yk5xbwyk5xbwyk5x.png", link: "/rus/product-ar3dmodels.html" }
+];
+
+const arProducts = [
+  { title: "كتاب", price: "1000.00 TL", image: "/assets/images/albamenvelara.jpg", link: "/ar/product-albamenvelara.html" },
+  { title: "كتاب PDF", price: "200.00 TL", image: "/assets/images/albamenvelara1.png", link: "/ar/product-albamenvelara1.html" },
+  { title: "نماذج AR ثلاثية الأبعاد", price: "50.00 TL", image: "/assets/images/Gemini_Generated_Image_yk5xbwyk5xbwyk5x.png", link: "/ar/product-ar3dmodels.html" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -45,6 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
         products = enProducts;
     } else if (lang === 'ru') {
         products = ruProducts;
+    } else if (lang === 'ar') {
+        products = arProducts;
     }
     
     const currentPath = window.location.pathname;
