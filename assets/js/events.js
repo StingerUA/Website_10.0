@@ -140,10 +140,8 @@
       var now = new Date();
       var events = data.events.filter(function (event) {var hasEnded = new Date(event.endAt) < now;return filter === 'past' ? hasEnded : !hasEnded;}).sort(function (a, b) {if (filter === 'past') return new Date(b.endAt) - new Date(a.endAt);return new Date(a.startAt) - new Date(b.startAt);});
       if (!events.length) {grid.innerHTML = '<p class="events-empty">' + (filter === 'past' ? UI.emptyPast : UI.emptyUpcoming) + '</p>';return;}
-      grid.innerHTML = events.map(function (event) {
-        var loc = localizedEvent(event);var coverClass = event.coverFit === 'contain' ? ' events-card-cover--contain' : '';
-        return '<a class="events-card" href="' + loc.url + '"><div class="events-card-cover' + coverClass + '"><img src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '" loading="lazy"></div><div class="events-card-body"><span class="events-card-tag">' + escapeHtml(categoryLabel(data, event.category)) + '</span><h3 class="events-card-title">' + escapeHtml(loc.title) + '</h3><p class="events-card-excerpt">' + escapeHtml(loc.excerpt) + '</p><div class="events-card-meta">' + escapeHtml(fmtDateRange(event.startAt, event.endAt)) + '</div></div></a>';
-      }).join('');
+      grid.innerHTML = '<p class="events-empty">' + UI.empty + '</p>';
+
     }).catch(function () {grid.innerHTML = '<p class="events-empty">' + UI.empty + '</p>';});
   }
 
@@ -176,7 +174,6 @@
         '<h1 class="events-article-title">' + escapeHtml(loc.title) + '</h1>' +
         '<div class="events-article-meta"><span>' + escapeHtml(fmtDateRange(event.startAt, event.endAt)) + '</span><span>•</span><span>' + escapeHtml(location) + '</span><span>•</span><span>' + escapeHtml(event.contact) + '</span></div>' +
         '<img class="events-article-cover' + (event.coverFit === 'contain' ? ' events-article-cover--contain' : '') + '" src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '">' +
-        (['icturkiye2026-international-brokerage-event','tubitak-4009-osmaniye-bahce-kizlac-2026','its-istanbul-2026','tubitak-4009-baltakoy-2026'].indexOf(event.slug) === -1 ? '<div class="events-pass-cta-wrap"><a class="events-pass-cta" href="' + passHref() + '">🎟️ ' + escapeHtml(UI.buyPass) + '</a></div>' : '') +
         '<div class="events-article-body"><p><strong>' + escapeHtml(loc.hero) + '</strong></p>' + body +
         '<div class="events-highlights"><h3>' + escapeHtml(UI.upcoming) + '</h3><ul>' + highlights + '</ul></div>' +
         '<div class="events-highlights"><h3>' + escapeHtml(UI.organizers) + '</h3><ul>' + organizerHtml + '</ul></div>' +
