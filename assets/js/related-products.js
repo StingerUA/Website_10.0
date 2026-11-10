@@ -60,7 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const currentPath = window.location.pathname;
 
-    const availableProducts = products.filter(p => p.link !== currentPath);
+    const allowedProduct = /product-(albamenvelara|albamenvelara1|ar3dmodels)\.html$/i;
+    const currentFile = currentPath.split('/').pop();
+    const availableProducts = products.filter(p => allowedProduct.test(p.link) && p.link.split('/').pop() !== currentFile);
 
     const shuffled = availableProducts.sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, 3);
