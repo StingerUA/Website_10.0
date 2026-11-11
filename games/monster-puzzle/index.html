@@ -14,7 +14,7 @@
   <!-- Babel for JSX/TSX compilation in browser -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;700;800;900&family=Noto+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -33,9 +33,21 @@
       font-family: 'Nunito', sans-serif;
       color: #ffffff;
     }
+    /* Turkish interface: use a font with complete Turkish glyph coverage (İ, ı, Ş, ş, Ğ, ğ, Ç, ç, Ö, ö, Ü, ü). */
+    html[lang="tr"] body,
+    html[lang="tr"] body button,
+    html[lang="tr"] body input,
+    html[lang="tr"] body select,
+    html[lang="tr"] body textarea {
+      font-family: 'Noto Sans', sans-serif;
+    }
     .font-title {
       font-family: 'Fredoka', sans-serif;
       letter-spacing: 0.03em;
+    }
+    html[lang="tr"] .font-title {
+      font-family: 'Noto Sans', sans-serif;
+      letter-spacing: 0;
     }
     .glass-panel {
       background: rgba(15, 23, 58, 0.78);
@@ -1636,7 +1648,10 @@
       const reachedBest = progress.stars[levelKey] || 0;
 
       useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (_) {} }, [progress]);
-      useEffect(() => { try { localStorage.setItem("alba_monster_lang", lang); } catch (_) {} }, [lang]);
+      useEffect(() => {
+        document.documentElement.lang = lang;
+        try { localStorage.setItem("alba_monster_lang", lang); } catch (_) {}
+      }, [lang]);
       useEffect(() => { sound.sfxEnabled = sfx; }, [sfx]);
       useEffect(() => { sound.toggleMusic(music); return () => sound.toggleMusic(false); }, [music]);
 
