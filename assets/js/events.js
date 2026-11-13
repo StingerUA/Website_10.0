@@ -107,6 +107,8 @@
 
   function escapeHtml(str) {return String(str || '').replace(/[&<>'\"]/g, function (c) {return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;' }[c];});}
   function categoryLabel(data, key) {var c = data.categories[key];return c ? (c[LOCALE] || c.tr) : key;}
+  function passHref() {if (LOCALE === 'en') return '/eng/experience-pass.html';if (LOCALE === 'ru') return '/rus/experience-pass.html';return '/experience-pass.html';}
+
   function localizedEvent(event) {
     var loc = event.locales[LOCALE] || event.locales.tr;
     if (LOCALE !== 'ru') return loc;
@@ -125,13 +127,23 @@
     };
   }
 
+  function ensurePassCtaStyles() {
+    if (document.getElementById('events-pass-cta-style')) return;
+    var style = document.createElement('style');style.id = 'events-pass-cta-style';
+    style.textContent = '.events-pass-cta-wrap{margin:4px 0 30px;display:flex;justify-content:center}.events-pass-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:12px 20px;border-radius:14px;background:#0ea5e9;color:#001018;text-decoration:none;font-weight:800;box-shadow:0 12px 34px rgba(14,165,233,.22);transition:transform .18s ease,box-shadow .18s ease}.events-pass-cta:hover{transform:translateY(-2px);box-shadow:0 16px 42px rgba(14,165,233,.34)}.events-pass-cta:focus-visible{outline:2px solid #e0f2fe;outline-offset:3px}@media(max-width:560px){.events-pass-cta{width:100%;box-sizing:border-box;text-align:center}}';
+    document.head.appendChild(style);
+  }
+
   function renderGrid(filter) {
     var grid = document.getElementById('events-grid');if (!grid) return;
     fetch(DATA_URL).then(function (res) { return res.json(); }).then(function (data) {
       var now = new Date();
       var events = data.events.filter(function (event) {var hasEnded = new Date(event.endAt) < now;return filter === 'past' ? hasEnded : !hasEnded;}).sort(function (a, b) {if (filter === 'past') return new Date(b.endAt) - new Date(a.endAt);return new Date(a.startAt) - new Date(b.startAt);});
       if (!events.length) {grid.innerHTML = '<p class="events-empty">' + (filter === 'past' ? UI.emptyPast : UI.emptyUpcoming) + '</p>';return;}
-      grid.innerHTML = '<p class="events-empty">' + UI.empty + '</p>';
+      grid.innerHTML = events.map(function (event) {
+        var loc = localizedEvent(event);var coverClass = event.coverFit === 'contain' ? ' events-card-cover--contain' : '';
+        return '<a class="events-card" href="' + loc.url + '"><div class="events-card-cover' + coverClass + '"><img src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '" loading="lazy"></div><div class="events-card-body"><span class="events-card-tag">' + escapeHtml(categoryLabel(data, event.category)) + '</span><h3 class="events-card-title">' + escapeHtml(loc.title) + '</h3><p class="events-card-excerpt">' + escapeHtml(loc.excerpt) + '</p><div class="events-card-meta">' + escapeHtml(fmtDateRange(event.startAt, event.endAt)) + '</div></div></a>';
+      }).join('');
 
     }).catch(function () {grid.innerHTML = '<p class="events-empty">' + UI.empty + '</p>';});
   }
@@ -165,6 +177,7 @@
         '<h1 class="events-article-title">' + escapeHtml(loc.title) + '</h1>' +
         '<div class="events-article-meta"><span>' + escapeHtml(fmtDateRange(event.startAt, event.endAt)) + '</span><span>•</span><span>' + escapeHtml(location) + '</span><span>•</span><span>' + escapeHtml(event.contact) + '</span></div>' +
         '<img class="events-article-cover' + (event.coverFit === 'contain' ? ' events-article-cover--contain' : '') + '" src="' + event.cover + '" alt="' + escapeHtml(loc.title) + '">' +
+        (['icturkiye2026-international-brokerage-event','tubitak-4009-osmaniye-bahce-kizlac-2026','its-istanbul-2026','tubitak-4009-baltakoy-2026'].indexOf(event.slug) === -1 ? '<div class="events-pass-cta-wrap"><a class="events-pass-cta" href="' + passHref() + '">🎟️ ' + escapeHtml(UI.buyPass) + '</a></div>' : '') +
         '<div class="events-article-body"><p><strong>' + escapeHtml(loc.hero) + '</strong></p>' + body +
         '<div class="events-highlights"><h3>' + escapeHtml(UI.upcoming) + '</h3><ul>' + highlights + '</ul></div>' +
         '<div class="events-highlights"><h3>' + escapeHtml(UI.organizers) + '</h3><ul>' + organizerHtml + '</ul></div>' +
@@ -172,5 +185,5 @@
     }).catch(function () {el.innerHTML = '<p class="events-empty">' + UI.empty + '</p>';});
   }
 
-  document.addEventListener('DOMContentLoaded', function () {initTabs();renderGrid(activeFilter);renderArticle();});
+  document.addEventListener('DOMContentLoaded', function () {ensurePassCtaStyles();initTabs();renderGrid(activeFilter);renderArticle();});
 })();
