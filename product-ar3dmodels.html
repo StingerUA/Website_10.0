@@ -144,11 +144,15 @@
     const quantity = Math.max(1, parseInt((qtyInput && qtyInput.value) || '1', 10) || 1);
     const price = (document.querySelector('.product-price-current') && document.querySelector('.product-price-current').textContent.trim()) || '';
     const language = (document.documentElement.lang || 'tr').toLowerCase().slice(0, 2);
-    const templates = {};
-    const buildMessage = templates[language] || templates.tr;
-    const message = buildMessage(productName, quantity, price);
-    const url = 'https://wa.me/905387781018?text=' + encodeURIComponent(message);
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const templates = {
+      tr: 'Merhaba, "{name}" ürününü WhatsApp üzerinden satın almak istiyorum.\\nAdet: {qty}\\nFiyat: {price}\\nÖdeme adımlarını paylaşabilir misiniz?',
+      ru: 'Здравствуйте! Хочу приобрести товар «{name}» и оплатить через WhatsApp.\\nКоличество: {qty}\\nЦена: {price}\\nПожалуйста, сообщите, как произвести оплату.',
+      en: 'Hello! I would like to purchase "{name}" and arrange payment via WhatsApp.\\nQuantity: {qty}\\nPrice: {price}\\nPlease send me the payment instructions.',
+      ar: 'مرحبًا، أود شراء "{name}" وإتمام الدفع عبر واتساب.\\nالكمية: {qty}\\nالسعر: {price}\\nيرجى إرسال تعليمات الدفع.'
+    };
+    const message = (templates[language] || templates.tr)
+      .replaceAll('{name}', productName).replaceAll('{qty}', String(quantity)).replaceAll('{price}', price);
+    window.open('https://wa.me/905387781018?text=' + encodeURIComponent(message), '_blank', 'noopener,noreferrer');
   });
 })();
 </script>
