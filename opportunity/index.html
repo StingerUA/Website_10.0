@@ -196,32 +196,11 @@ Ve belki insanlığın Mars'taki bir sonraki büyük adımında sizin emeğiniz 
     <div class="model-gate">
       <model-viewer id="opportunityModel" data-src="/assets/models/opportunity.glb" data-model-name="opportunity" camera-controls ar ar-modes="webxr scene-viewer quick-look" auto-rotate></model-viewer>
 
-      <div id="modelLoginOverlay" class="model-overlay">
-        <p>3D modeli görüntülemek için giriş yapmalısınız.</p>
-        <a href="/account-menu.html">Giriş Yap</a>
-      </div>
     </div>
       
   </div>
 
   <div data-include="/footer-tr.html"></div>
-
-  <!-- СКРИПТ ПРОВЕРКИ АВТОРИЗАЦИИ -->
-  <script>
-    document.addEventListener("DOMContentLoaded", async function() {
-      const API_BASE = "https://albaspace-api.nncdecdgc.workers.dev";
-      const overlay = document.getElementById('modelLoginOverlay');
-      
-      try {
-        const res = await fetch(`${API_BASE}/me`, { credentials: 'include' });
-        if (res.ok) {
-          overlay.style.display = 'none';
-        }
-      } catch (e) {
-        console.debug('Auth check failed', e);
-      }
-    });
-  </script>
 
   <!-- Model Viewer Fix Script - Direct initialization -->
   <script>
