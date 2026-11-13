@@ -293,3 +293,45 @@
   .related-section { margin-top: 44px; }
   .product-title { font-size: 26px; }
 }
+
+/* WhatsApp payment action on product pages */
+.btn-whatsapp-pay {
+  flex: 1 1 150px;
+  min-width: 130px;
+  min-height: 52px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 14px;
+  background: #25D366;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .025em;
+  text-align: center;
+  text-decoration: none;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.btn-whatsapp-pay:hover {
+  background: #1da851;
+  color: #fff;
+  box-shadow: 0 5px 16px rgba(37, 211, 102, .28);
+  transform: translateY(-1px);
+}
+.btn-whatsapp-pay svg { width: 18px; height: 18px; flex: 0 0 18px; }
+@media (max-width: 600px) {
+  .btn-add-cart, .btn-buy-now, .btn-whatsapp-pay {
+    flex: 1 1 calc(50% - 5px);
+    min-width: 120px;
+    font-size: 11px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
