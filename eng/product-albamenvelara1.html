@@ -81,6 +81,7 @@
 <button class="btn-add-cart" data-add-label="ADD TO CART" data-added-label="✓ ADDED!" data-product-id="albamenvelara-pdf" data-product-image="/assets/images/albamenvelara1.png" data-product-name="Book PDF — Albamen and Lara" data-product-price="200.00" id="addToCartBtn">
             ADD TO CART
           </button>
+<a id="whatsappPayBtn" class="btn-whatsapp-pay" href="https://wa.me/905387781018" target="_blank" rel="noopener noreferrer" aria-label="Pay via WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.52 3.48A11.8 11.8 0 0 0 12.04 0C5.5 0 .18 5.32.18 11.86c0 2.09.55 4.13 1.6 5.93L.08 24l6.37-1.67a11.9 11.9 0 0 0 5.59 1.42h.01c6.54 0 11.86-5.32 11.86-11.86 0-3.17-1.23-6.15-3.39-8.41ZM12.05 21.7h-.01a9.85 9.85 0 0 1-5.02-1.37l-.36-.21-3.78.99 1.01-3.69-.23-.38a9.8 9.8 0 0 1-1.51-5.18c0-5.45 4.44-9.89 9.9-9.89a9.8 9.8 0 0 1 7 2.9 9.8 9.8 0 0 1 2.9 6.99c0 5.46-4.44 9.9-9.9 9.9Zm5.43-7.41c-.3-.15-1.77-.87-2.05-.97-.28-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.8-1.49-1.78-1.66-2.08-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.5 1.69.64.71.23 1.36.2 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35Z"/></svg><span>Pay via WhatsApp</span></a>
 <a class="btn-buy-now" href="https://www.shopier.com/albaspaceshop/46494654" rel="noopener noreferrer" target="_blank">BUY NOW</a>
 </div>
 </div>
@@ -130,5 +131,26 @@
     });
   </script>
 <script defer="" src="/assets/js/related-products.js"></script>
+<script>
+(function () {
+  const button = document.getElementById('whatsappPayBtn');
+  if (!button) return;
+  button.addEventListener('click', function (event) {
+    event.preventDefault();
+    const addButton = document.getElementById('addToCartBtn');
+    const productName = (addButton && addButton.dataset.productName) ||
+      (document.querySelector('.product-title') && document.querySelector('.product-title').textContent.trim()) || document.title;
+    const qtyInput = document.getElementById('qtyInput');
+    const quantity = Math.max(1, parseInt((qtyInput && qtyInput.value) || '1', 10) || 1);
+    const price = (document.querySelector('.product-price-current') && document.querySelector('.product-price-current').textContent.trim()) || '';
+    const language = (document.documentElement.lang || 'tr').toLowerCase().slice(0, 2);
+    const templates = {};
+    const buildMessage = templates[language] || templates.tr;
+    const message = buildMessage(productName, quantity, price);
+    const url = 'https://wa.me/905387781018?text=' + encodeURIComponent(message);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  });
+})();
+</script>
 </body>
 </html>
